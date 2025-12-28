@@ -1,0 +1,84 @@
+{
+  "input": {
+    "name": "Enthralling Hold",
+    "manaCost": "{3}{U}{U}",
+    "typeLine": "Enchantment — Aura",
+    "oracleText": "Enchant creature\nYou can't choose an untapped creature as this spell's target as you cast it.\nYou control enchanted creature.",
+    "power": null,
+    "toughness": null,
+    "colors": [ "U" ],
+    "colorIdentity": [ "U" ]
+  },
+  "output": {
+    "name": "Enthralling Hold",
+    "typeLine": {
+      "raw": "Enchantment — Aura",
+      "supertypes": [ ],
+      "types": [ "Enchantment" ],
+      "subtypes": [ "Aura" ]
+    },
+    "oracle": {
+      "rawText": "Enchant creature\nYou can't choose an untapped creature as this spell's target as you cast it.\nYou control enchanted creature.",
+      "abilities": [
+        {
+          "kind": "static",
+          "keywordSource": "Enchant",
+          "effect": {
+            "effectType": "enchantRestriction",
+            "legalTargets": {
+              "cardTypes": [ "creature" ]
+            }
+          }
+        },
+        {
+          "kind": "static",
+          "effect": {
+            "effectType": "targetingRestriction",
+            "restriction": "cantTargetUnless",
+            "condition": {
+              "characteristic": "tapped",
+              "value": true
+            },
+            "appliesWhen": "casting",
+            "target": {
+              "kind": "Target",
+              "filter": {
+                "cardTypes": [ "creature" ]
+              }
+            }
+          }
+        },
+        {
+          "kind": "static",
+          "effect": {
+            "effectType": "gainControl",
+            "target": {
+              "kind": "EnchantedOrEquipped"
+            }
+          }
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{3}{U}{U}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 3 },
+          { "kind": "colored", "colors": [ "U" ], "isPhyrexian": false, "isSnow": false },
+          { "kind": "colored", "colors": [ "U" ], "isPhyrexian": false, "isSnow": false }
+        ],
+        "manaValue": 5,
+        "isVariable": false
+      },
+      {
+        "kind": "colors",
+        "colors": [ "U" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "U" ]
+      }
+    ]
+  }
+}

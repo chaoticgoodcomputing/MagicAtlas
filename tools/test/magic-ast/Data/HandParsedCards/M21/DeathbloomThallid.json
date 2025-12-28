@@ -1,0 +1,77 @@
+{
+  "input": {
+    "name": "Deathbloom Thallid",
+    "manaCost": "{2}{B}",
+    "typeLine": "Creature — Fungus",
+    "oracleText": "When this creature dies, create a 1/1 green Saproling creature token.",
+    "power": "3",
+    "toughness": "2",
+    "colors": [ "B" ],
+    "colorIdentity": [ "B" ]
+  },
+  "output": {
+    "name": "Deathbloom Thallid",
+    "typeLine": {
+      "raw": "Creature — Fungus",
+      "types": [ "Creature" ],
+      "subtypes": [ "Fungus" ]
+    },
+    "oracle": {
+      "rawText": "When this creature dies, create a 1/1 green Saproling creature token.",
+      "abilities": [
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "When",
+            "event": "Dies",
+            "filter": {
+              "cardTypes": [ "creature" ]
+            }
+          },
+          "effects": [
+            {
+              "effectType": "createToken",
+              "count": {
+                "quantityType": "literal",
+                "value": 1
+              },
+              "token": {
+                "power": "1",
+                "toughness": "1",
+                "colors": [ "G" ],
+                "types": [ "creature" ],
+                "subtypes": [ "Saproling" ],
+                "isCopy": false
+              },
+              "isOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{2}{B}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 2 },
+          { "kind": "colored", "colors": [ "B" ] }
+        ],
+        "manaValue": 3
+      },
+      {
+        "kind": "colors",
+        "colors": [ "B" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "B" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "3", "value": 3 },
+        "toughness": { "valueType": "fixed", "raw": "2", "value": 2 }
+      }
+    ]
+  }
+}

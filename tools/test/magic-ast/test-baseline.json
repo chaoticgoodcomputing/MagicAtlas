@@ -1,0 +1,89 @@
+{
+  "timestamp": "2025-12-07T22:29:28.896954Z",
+  "testResults": {
+    "HandParsedCards/M21/BasrisLieutenant": {
+      "passed": false
+    },
+    "HandParsedCards/M21/SanctumOfStoneFangs": {
+      "passed": false
+    },
+    "HandParsedCards/ChatterfangSquirrelGeneral": {
+      "passed": false
+    },
+    "HandParsedCards/DMR/MysticRemora": {
+      "passed": false
+    },
+    "HandParsedCards/M21/VitoThornOfTheDuskRose": {
+      "passed": false
+    },
+    "HandParsedCards/JMP/RhysticStudy": {
+      "passed": false
+    },
+    "HandParsedCards/SLD/DeadpoolTradingCard": {
+      "passed": false
+    },
+    "HandParsedCards/M21/ChandrasIncinerator": {
+      "passed": false
+    },
+    "HandParsedCards/CLB/WilsonRefinedGrizzly": {
+      "passed": false
+    },
+    "HandParsedCards/M21/QuirionDryad": {
+      "passed": false
+    },
+    "HandParsedCards/LlanowarElves": {
+      "passed": false
+    },
+    "HandParsedCards/M21/Hobblefiend": {
+      "passed": false
+    },
+    "HandParsedCards/M21/NiambiEsteemedSpeaker": {
+      "passed": false
+    },
+    "MalformedParsedCards/CompletelyGarbledAbility": {
+      "passed": false
+    },
+    "HandParsedCards/M21/BarrinTolarianArchmage": {
+      "passed": false
+    },
+    "HandParsedCards/2X2/ManaVault": {
+      "passed": false
+    },
+    "HandParsedCards/TLA/PlanetariumOfWanShiTong": {
+      "passed": false
+    },
+    "HandParsedCards/M21/BaneslayerAngel": {
+      "passed": false
+    },
+    "HandParsedCards/M21/DeathbloomThallid": {
+      "passed": true
+    },
+    "HandParsedCards/TLA/WanShiTongLibrarian": {
+      "passed": false
+    },
+    "HandParsedCards/M21/ReadTheTides": {
+      "passed": false
+    },
+    "MalformedParsedCards/UnparsedEffectInActivatedAbility": {
+      "passed": false
+    },
+    "MalformedParsedCards/MixedValidAndInvalidAbilities": {
+      "passed": false
+    },
+    "HandParsedCards/M21/EnthrallingHold": {
+      "passed": false
+    },
+    "HandParsedCards/M21/RookieMistake": {
+      "passed": false
+    },
+    "HandParsedCards/M21/WishcoinCrab": {
+      "passed": true
+    },
+    "HandParsedCards/GrizzlyBears": {
+      "passed": true
+    },
+    "HandParsedCards/CMM/DarettiScrapSavant": {
+      "passed": false
+    }
+  }
+}

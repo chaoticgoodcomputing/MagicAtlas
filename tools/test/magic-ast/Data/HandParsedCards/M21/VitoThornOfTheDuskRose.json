@@ -1,0 +1,104 @@
+{
+  "input": {
+    "name": "Vito, Thorn of the Dusk Rose",
+    "manaCost": "{2}{B}",
+    "typeLine": "Legendary Creature — Vampire Cleric",
+    "oracleText": "Whenever you gain life, target opponent loses that much life.\n{3}{B}{B}: Creatures you control gain lifelink until end of turn.",
+    "power": "1",
+    "toughness": "3",
+    "colors": [ "B" ],
+    "colorIdentity": [ "B" ]
+  },
+  "output": {
+    "name": "Vito, Thorn of the Dusk Rose",
+    "typeLine": {
+      "raw": "Legendary Creature — Vampire Cleric",
+      "supertypes": [ "Legendary" ],
+      "types": [ "Creature" ],
+      "subtypes": [ "Vampire", "Cleric" ]
+    },
+    "oracle": {
+      "rawText": "Whenever you gain life, target opponent loses that much life.\n{3}{B}{B}: Creatures you control gain lifelink until end of turn.",
+      "abilities": [
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "Whenever",
+            "event": "GainsLife",
+            "filter": {
+              "controller": "You"
+            }
+          },
+          "effects": [
+            {
+              "effectType": "loseLife",
+              "amount": {
+                "quantityType": "derived",
+                "derivedFrom": "LifeGained"
+              },
+              "player": {
+                "kind": "Target",
+                "filter": {
+                  "cardTypes": [ "player" ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "activated",
+          "costs": [
+            {
+              "costType": "mana",
+              "symbols": [
+                { "kind": "generic", "genericAmount": 3 },
+                { "kind": "colored", "colors": [ "B" ] },
+                { "kind": "colored", "colors": [ "B" ] }
+              ]
+            }
+          ],
+          "effects": [
+            {
+              "effectType": "gainAbility",
+              "target": {
+                "kind": "Each",
+                "filter": {
+                  "cardTypes": [ "creature" ],
+                  "controller": "You"
+                }
+              },
+              "abilityText": "lifelink",
+              "duration": {
+                "durationType": "untilEndOfTurn"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{2}{B}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 2 },
+          { "kind": "colored", "colors": [ "B" ] }
+        ],
+        "manaValue": 3
+      },
+      {
+        "kind": "colors",
+        "colors": [ "B" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "B" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "1", "value": 1 },
+        "toughness": { "valueType": "fixed", "raw": "3", "value": 3 }
+      }
+    ]
+  }
+}

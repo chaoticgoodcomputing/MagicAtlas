@@ -1,0 +1,77 @@
+{
+  "input": {
+    "name": "Rhystic Study",
+    "manaCost": "{2}{U}",
+    "typeLine": "Enchantment",
+    "oracleText": "Whenever an opponent casts a spell, you may draw a card unless that player pays {1}.",
+    "power": null,
+    "toughness": null,
+    "colors": [ "U" ],
+    "colorIdentity": [ "U" ]
+  },
+  "output": {
+    "name": "Rhystic Study",
+    "typeLine": {
+      "raw": "Enchantment",
+      "types": [ "Enchantment" ]
+    },
+    "oracle": {
+      "rawText": "Whenever an opponent casts a spell, you may draw a card unless that player pays {1}.",
+      "abilities": [
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "Whenever",
+            "event": "SpellCast",
+            "filter": {
+              "controller": "Opponent"
+            }
+          },
+          "effects": [
+            {
+              "effectType": "drawCards",
+              "count": {
+                "quantityType": "literal",
+                "value": 1
+              },
+              "player": {
+                "kind": "You"
+              },
+              "isOptional": true,
+              "unlessClause": {
+                "player": {
+                  "kind": "ThatPlayer"
+                },
+                "cost": {
+                  "costType": "mana",
+                  "symbols": [
+                    { "kind": "generic", "genericAmount": 1 }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{2}{U}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 2 },
+          { "kind": "colored", "colors": [ "U" ] }
+        ],
+        "manaValue": 3
+      },
+      {
+        "kind": "colors",
+        "colors": [ "U" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "U" ]
+      }
+    ]
+  }
+}

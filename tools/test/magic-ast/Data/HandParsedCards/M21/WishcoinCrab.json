@@ -1,0 +1,48 @@
+{
+  "input": {
+    "name": "Wishcoin Crab",
+    "manaCost": "{3}{U}",
+    "typeLine": "Creature — Crab",
+    "oracleText": "",
+    "power": "2",
+    "toughness": "5",
+    "colors": [ "U" ],
+    "colorIdentity": [ "U" ]
+  },
+  "output": {
+    "name": "Wishcoin Crab",
+    "typeLine": {
+      "raw": "Creature — Crab",
+      "types": [ "Creature" ],
+      "subtypes": [ "Crab" ]
+    },
+    "oracle": {
+      "rawText": "",
+      "abilities": [ ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{3}{U}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 3 },
+          { "kind": "colored", "colors": [ "U" ] }
+        ],
+        "manaValue": 4
+      },
+      {
+        "kind": "colors",
+        "colors": [ "U" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "U" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
+        "toughness": { "valueType": "fixed", "raw": "5", "value": 5 }
+      }
+    ]
+  }
+}

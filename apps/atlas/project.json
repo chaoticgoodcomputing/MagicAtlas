@@ -1,0 +1,49 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "atlas",
+  "sourceRoot": "apps/atlas",
+  "targets": {
+    "run": {
+      "//": "Run the Atlas pipelines. Defaults to full setup, but the name of a pipeline can be passed in as an argument to run a specific pipeline.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "dotnet run"
+        ],
+        "cwd": "apps/atlas",
+        "parallel": false
+      }
+    },
+    "purge": {
+      "//": "Purges all auto-generated data files from the project",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "find Data/_02_Intermediate/Datasets -mindepth 1 -type f ! -name '.gitkeep' -delete",
+          "find Data/_03_Primary/Datasets -mindepth 1 -type f ! -name '.gitkeep' -delete",
+          "find Data/_04_Feature/Datasets -mindepth 1 -type f ! -name '.gitkeep' -delete",
+          "find Data/_05_ModelInput/Datasets -mindepth 1 -type f ! -name '.gitkeep' -delete",
+          "find Data/_06_Models/Datasets -mindepth 1 -type f ! -name '.gitkeep' -delete",
+          "find Data/_07_ModelOutput/Datasets -mindepth 1 -type f ! -name '.gitkeep' -delete",
+          "find Data/_08_Reporting/Datasets -mindepth 1 -type f ! -name '.gitkeep' -delete"
+        ],
+        "cwd": "apps/atlas",
+        "parallel": false
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot}",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "format:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot} --check",
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  }
+}

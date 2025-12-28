@@ -1,0 +1,105 @@
+{
+  "name": "atlas-site",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/atlas-site",
+  "targets": {
+    "serve": {
+      "//": "Start the Quartz development server with hot reload at localhost:8080",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "node quartz/bootstrap-cli.mjs build --serve --output ../../dist/atlas-site"
+        ],
+        "cwd": "apps/atlas-site",
+        "parallel": false
+      },
+      "configurations": {
+        "production": {
+          "commands": [
+            "node quartz/bootstrap-cli.mjs build --serve --output ../../dist/atlas-site --concurrency=4"
+          ]
+        }
+      }
+    },
+    "build": {
+      "//": "Build the static site to dist/atlas-site directory",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "node quartz/bootstrap-cli.mjs build --output ../../dist/atlas-site"
+        ],
+        "cwd": "apps/atlas-site",
+        "parallel": false
+      },
+      "outputs": [ "{workspaceRoot}/dist/atlas-site" ]
+    },
+    "clean": {
+      "//": "Remove the dist/atlas-site directory and .quartz-cache",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "rm -rf ../../dist/atlas-site .quartz-cache"
+        ],
+        "cwd": "apps/atlas-site",
+        "parallel": false
+      }
+    },
+    "sync": {
+      "//": "Sync content folder with git repository",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "node quartz/bootstrap-cli.mjs sync"
+        ],
+        "cwd": "apps/atlas-site",
+        "parallel": false
+      }
+    },
+    "update": {
+      "//": "Update Quartz to the latest version",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "node quartz/bootstrap-cli.mjs update"
+        ],
+        "cwd": "apps/atlas-site",
+        "parallel": false
+      }
+    },
+    "format": {
+      "//": "Format all files using Prettier",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npx prettier . --write"
+        ],
+        "cwd": "apps/atlas-site",
+        "parallel": false
+      }
+    },
+    "format:check": {
+      "//": "Check formatting without making changes",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npx prettier . --check"
+        ],
+        "cwd": "apps/atlas-site",
+        "parallel": false
+      }
+    },
+    "lint": {
+      "//": "Run TypeScript type checking",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "tsc --noEmit"
+        ],
+        "cwd": "apps/atlas-site",
+        "parallel": false
+      }
+    }
+  },
+  "tags": [ "type:app", "scope:site" ]
+}

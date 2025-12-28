@@ -1,0 +1,88 @@
+{
+  "input": {
+    "name": "Baneslayer Angel",
+    "manaCost": "{3}{W}{W}",
+    "typeLine": "Creature — Angel",
+    "oracleText": "Flying, first strike, lifelink, protection from Demons and from Dragons",
+    "power": "5",
+    "toughness": "5",
+    "colors": [ "W" ],
+    "colorIdentity": [ "W" ]
+  },
+  "output": {
+    "name": "Baneslayer Angel",
+    "typeLine": {
+      "raw": "Creature — Angel",
+      "supertypes": [ ],
+      "types": [ "Creature" ],
+      "subtypes": [ "Angel" ]
+    },
+    "oracle": {
+      "rawText": "Flying, first strike, lifelink, protection from Demons and from Dragons",
+      "abilities": [
+        {
+          "kind": "static",
+          "keywordSource": "Flying",
+          "effect": {
+            "effectType": "evasion",
+            "canBeBlockedBy": {
+              "cardTypes": [ "creature" ],
+              "characteristics": [ "flying", "reach" ]
+            }
+          }
+        },
+        {
+          "kind": "static",
+          "keywordSource": "First strike",
+          "effect": {
+            "effectType": "combatDamageTiming",
+            "timing": "First"
+          }
+        },
+        {
+          "kind": "static",
+          "keywordSource": "Lifelink",
+          "effect": {
+            "effectType": "lifelink"
+          }
+        },
+        {
+          "kind": "static",
+          "keywordSource": "Protection",
+          "effect": {
+            "effectType": "protection",
+            "from": [
+              { "kind": "Subtype", "value": "Demons" },
+              { "kind": "Subtype", "value": "Dragons" }
+            ]
+          }
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{3}{W}{W}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 3 },
+          { "kind": "colored", "colors": [ "W" ] },
+          { "kind": "colored", "colors": [ "W" ] }
+        ],
+        "manaValue": 5
+      },
+      {
+        "kind": "colors",
+        "colors": [ "W" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "W" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "5", "value": 5 },
+        "toughness": { "valueType": "fixed", "raw": "5", "value": 5 }
+      }
+    ]
+  }
+}

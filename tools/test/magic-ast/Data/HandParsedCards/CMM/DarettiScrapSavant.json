@@ -1,0 +1,152 @@
+{
+  "input": {
+    "name": "Daretti, Scrap Savant",
+    "manaCost": "{3}{R}",
+    "typeLine": "Legendary Planeswalker — Daretti",
+    "oracleText": "+2: Discard up to two cards, then draw that many cards.\n−2: Sacrifice an artifact. If you do, return target artifact card from your graveyard to the battlefield.\n−10: You get an emblem with \"Whenever an artifact is put into your graveyard from the battlefield, return that card to the battlefield at the beginning of the next end step.\"\nDaretti, Scrap Savant can be your commander.",
+    "power": null,
+    "toughness": null,
+    "colors": [ "R" ],
+    "colorIdentity": [ "R" ],
+    "loyalty": "3"
+  },
+  "output": {
+    "name": "Daretti, Scrap Savant",
+    "typeLine": {
+      "raw": "Legendary Planeswalker — Daretti",
+      "supertypes": [ "Legendary" ],
+      "types": [ "Planeswalker" ],
+      "subtypes": [ "Daretti" ]
+    },
+    "oracle": {
+      "rawText": "+2: Discard up to two cards, then draw that many cards.\n−2: Sacrifice an artifact. If you do, return target artifact card from your graveyard to the battlefield.\n−10: You get an emblem with \"Whenever an artifact is put into your graveyard from the battlefield, return that card to the battlefield at the beginning of the next end step.\"\nDaretti, Scrap Savant can be your commander.",
+      "abilities": [
+        {
+          "kind": "activated",
+          "loyaltyCost": 2,
+          "costs": [ ],
+          "effects": [
+            {
+              "effectType": "discardCards",
+              "count": {
+                "quantityType": "upTo",
+                "maximum": 2
+              },
+              "player": {
+                "kind": "You"
+              },
+              "ifYouDo": {
+                "effectType": "drawCards",
+                "count": {
+                  "quantityType": "derived",
+                  "derivedFrom": "Other",
+                  "source": "cards discarded this way"
+                },
+                "player": {
+                  "kind": "You"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "activated",
+          "loyaltyCost": -2,
+          "costs": [ ],
+          "effects": [
+            {
+              "effectType": "sacrifice",
+              "target": {
+                "kind": "You"
+              },
+              "filter": {
+                "cardTypes": [ "artifact" ]
+              },
+              "count": {
+                "quantityType": "literal",
+                "value": 1
+              },
+              "ifYouDo": {
+                "effectType": "returnToBattlefield",
+                "target": {
+                  "kind": "Target",
+                  "filter": {
+                    "cardTypes": [ "artifact" ],
+                    "zone": "Graveyard"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "activated",
+          "loyaltyCost": -10,
+          "costs": [ ],
+          "effects": [
+            {
+              "effectType": "createEmblem",
+              "emblem": {
+                "abilities": [
+                  {
+                    "kind": "triggered",
+                    "trigger": {
+                      "timing": "Whenever",
+                      "event": "PutIntoGraveyard",
+                      "filter": {
+                        "cardTypes": [ "artifact" ],
+                        "zone": "Battlefield",
+                        "controller": "You"
+                      }
+                    },
+                    "effects": [
+                      {
+                        "effectType": "returnToBattlefield",
+                        "target": {
+                          "kind": "It"
+                        },
+                        "duration": {
+                          "durationType": "atBeginningOfNextEndStep"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "kind": "static",
+          "effect": {
+            "effectType": "commanderDesignation"
+          }
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{3}{R}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 3 },
+          { "kind": "colored", "colors": [ "R" ] }
+        ],
+        "manaValue": 4
+      },
+      {
+        "kind": "colors",
+        "colors": [ "R" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "R" ]
+      },
+      {
+        "kind": "loyalty",
+        "raw": "3",
+        "startingLoyalty": 3
+      }
+    ]
+  }
+}

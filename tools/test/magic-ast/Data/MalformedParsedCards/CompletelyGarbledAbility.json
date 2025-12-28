@@ -1,0 +1,63 @@
+{
+  "input": {
+    "name": "Garbled Goblin",
+    "manaCost": "{1}{R}",
+    "typeLine": "Creature — Goblin",
+    "oracleText": "Xyzzy plugh and also qwertyuiop forever.",
+    "power": "2",
+    "toughness": "1",
+    "colors": [ "R" ],
+    "colorIdentity": [ "R" ]
+  },
+  "output": {
+    "name": "Garbled Goblin",
+    "typeLine": {
+      "raw": "Creature — Goblin",
+      "types": [ "Creature" ],
+      "subtypes": [ "Goblin" ]
+    },
+    "oracle": {
+      "rawText": "Xyzzy plugh and also qwertyuiop forever.",
+      "abilities": [
+        {
+          "kind": "unparsed",
+          "sourceSpan": { "start": 0, "length": 41, "end": 41 },
+          "rawText": "Xyzzy plugh and also qwertyuiop forever.",
+          "diagnostics": [
+            {
+              "severity": "error",
+              "message": "Unrecognized ability text",
+              "location": { "start": 0, "length": 41, "end": 41 },
+              "pattern": "UnknownAbility"
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{1}{R}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 1 },
+          { "kind": "colored", "colors": [ "R" ] }
+        ],
+        "manaValue": 2,
+        "isVariable": false
+      },
+      {
+        "kind": "colors",
+        "colors": [ "R" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "R" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
+        "toughness": { "valueType": "fixed", "raw": "1", "value": 1 }
+      }
+    ]
+  }
+}

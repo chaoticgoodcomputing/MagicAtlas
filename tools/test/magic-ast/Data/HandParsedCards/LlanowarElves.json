@@ -1,0 +1,63 @@
+{
+  "input": {
+    "name": "Llanowar Elves",
+    "manaCost": "{G}",
+    "typeLine": "Creature — Elf Druid",
+    "oracleText": "{T}: Add {G}.",
+    "power": "1",
+    "toughness": "1",
+    "colors": [ "G" ],
+    "colorIdentity": [ "G" ]
+  },
+  "output": {
+    "name": "Llanowar Elves",
+    "typeLine": {
+      "raw": "Creature — Elf Druid",
+      "types": [ "Creature" ],
+      "subtypes": [ "Elf", "Druid" ]
+    },
+    "oracle": {
+      "rawText": "{T}: Add {G}.",
+      "abilities": [
+        {
+          "kind": "activated",
+          "costs": [
+            { "costType": "tap" }
+          ],
+          "effects": [
+            {
+              "effectType": "addMana",
+              "mana": "{G}",
+              "anyColor": false
+            }
+          ],
+          "isManaAbility": true
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{G}",
+        "symbols": [
+          { "kind": "colored", "colors": [ "G" ], "isPhyrexian": false, "isSnow": false }
+        ],
+        "manaValue": 1,
+        "isVariable": false
+      },
+      {
+        "kind": "colors",
+        "colors": [ "G" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "G" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "1", "value": 1 },
+        "toughness": { "valueType": "fixed", "raw": "1", "value": 1 }
+      }
+    ]
+  }
+}

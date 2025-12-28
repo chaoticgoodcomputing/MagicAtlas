@@ -1,0 +1,112 @@
+{
+  "input": {
+    "name": "Mana Vault",
+    "manaCost": "{1}",
+    "typeLine": "Artifact",
+    "oracleText": "This artifact doesn't untap during your untap step.\nAt the beginning of your upkeep, you may pay {4}. If you do, untap this artifact.\nAt the beginning of your draw step, if this artifact is tapped, it deals 1 damage to you.\n{T}: Add {C}{C}{C}.",
+    "power": null,
+    "toughness": null,
+    "colors": [ ],
+    "colorIdentity": [ ]
+  },
+  "output": {
+    "name": "Mana Vault",
+    "typeLine": {
+      "raw": "Artifact",
+      "types": [ "Artifact" ]
+    },
+    "oracle": {
+      "rawText": "This artifact doesn't untap during your untap step.\nAt the beginning of your upkeep, you may pay {4}. If you do, untap this artifact.\nAt the beginning of your draw step, if this artifact is tapped, it deals 1 damage to you.\n{T}: Add {C}{C}{C}.",
+      "abilities": [
+        {
+          "kind": "static",
+          "effect": {
+            "effectType": "doesntUntap",
+            "whoseUntapStep": "your"
+          }
+        },
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "At",
+            "event": "BeginningOfUpkeep",
+            "filter": {
+              "controller": "You"
+            }
+          },
+          "effects": [
+            {
+              "effectType": "untap",
+              "target": {
+                "kind": "Self"
+              },
+              "isOptional": true
+            }
+          ],
+          "instructions": [ "you may pay {4}" ]
+        },
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "At",
+            "event": "BeginningOfDrawStep",
+            "filter": {
+              "controller": "You"
+            }
+          },
+          "interveningIf": {
+            "text": "this artifact is tapped"
+          },
+          "effects": [
+            {
+              "effectType": "dealDamage",
+              "amount": {
+                "quantityType": "literal",
+                "value": 1
+              },
+              "target": {
+                "kind": "You"
+              },
+              "source": {
+                "kind": "Self"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "activated",
+          "costs": [
+            {
+              "costType": "tap"
+            }
+          ],
+          "effects": [
+            {
+              "effectType": "addMana",
+              "mana": "{C}{C}{C}"
+            }
+          ],
+          "isManaAbility": true
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{1}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 1 }
+        ],
+        "manaValue": 1
+      },
+      {
+        "kind": "colors",
+        "colors": [ ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ ]
+      }
+    ]
+  }
+}

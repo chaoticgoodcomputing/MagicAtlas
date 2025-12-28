@@ -1,0 +1,58 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "defaultBase": "main",
+  "namedInputs": {
+    "default": [ "{projectRoot}/**/*", "sharedGlobals" ],
+    "production": [
+      "default",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/eslint.config.js"
+    ],
+    "sharedGlobals": [ ]
+  },
+  "targetDefaults": {
+    "build": {
+      "cache": true,
+      "dependsOn": [ "^build" ],
+      "inputs": [ "production", "^production" ]
+    },
+    "test": {
+      "cache": true,
+      "inputs": [ "default", "^production", "{workspaceRoot}/test.runsettings" ]
+    },
+    "lint": {
+      "cache": true,
+      "inputs": [ "default", "{workspaceRoot}/.eslintrc.json" ]
+    },
+    "format": {
+      "cache": true
+    },
+    "format:check": {
+      "cache": true
+    }
+  },
+  "plugins": [
+    {
+      "plugin": "@nx-dotnet/core",
+      "options": {
+        "inferProjects": true
+      }
+    },
+    {
+      "plugin": "@nx/js",
+      "options": {
+        "analyzeSourceFiles": true
+      }
+    }
+  ],
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [ "build", "test", "lint", "format", "format:check" ]
+      }
+    }
+  }
+}

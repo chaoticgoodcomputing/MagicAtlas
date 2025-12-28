@@ -1,0 +1,76 @@
+{
+  "input": {
+    "name": "Partially Parsed Paladin",
+    "manaCost": "{2}{W}{W}",
+    "typeLine": "Creature — Human Knight",
+    "oracleText": "Flying\n@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
+    "power": "3",
+    "toughness": "3",
+    "colors": [ "W" ],
+    "colorIdentity": [ "W" ]
+  },
+  "output": {
+    "name": "Partially Parsed Paladin",
+    "typeLine": {
+      "raw": "Creature — Human Knight",
+      "types": [ "Creature" ],
+      "subtypes": [ "Human", "Knight" ]
+    },
+    "oracle": {
+      "rawText": "Flying\n@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
+      "abilities": [
+        {
+          "kind": "static",
+          "keywordSource": "Flying",
+          "effect": {
+            "effectType": "evasion",
+            "canBeBlockedBy": {
+              "cardTypes": [ "creature" ],
+              "characteristics": [ "flying", "reach" ]
+            },
+            "isOptional": false
+          }
+        },
+        {
+          "kind": "unparsed",
+          "sourceSpan": { "start": 7, "length": 47, "end": 54 },
+          "rawText": "@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
+          "diagnostics": [
+            {
+              "severity": "error",
+              "message": "Unrecognized ability text",
+              "location": { "start": 7, "length": 47, "end": 54 },
+              "pattern": "UnknownAbility"
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{2}{W}{W}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 2 },
+          { "kind": "colored", "colors": [ "W" ] },
+          { "kind": "colored", "colors": [ "W" ] }
+        ],
+        "manaValue": 4,
+        "isVariable": false
+      },
+      {
+        "kind": "colors",
+        "colors": [ "W" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "W" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "3", "value": 3 },
+        "toughness": { "valueType": "fixed", "raw": "3", "value": 3 }
+      }
+    ]
+  }
+}

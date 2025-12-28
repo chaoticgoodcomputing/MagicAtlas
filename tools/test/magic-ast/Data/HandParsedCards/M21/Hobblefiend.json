@@ -1,0 +1,91 @@
+{
+  "input": {
+    "name": "Hobblefiend",
+    "manaCost": "{1}{R}",
+    "typeLine": "Creature — Devil",
+    "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\n{1}, Sacrifice another creature: Put a +1/+1 counter on this creature.",
+    "power": "2",
+    "toughness": "1",
+    "colors": [ "R" ],
+    "colorIdentity": [ "R" ]
+  },
+  "output": {
+    "name": "Hobblefiend",
+    "typeLine": {
+      "raw": "Creature — Devil",
+      "types": [ "Creature" ],
+      "subtypes": [ "Devil" ]
+    },
+    "oracle": {
+      "rawText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\n{1}, Sacrifice another creature: Put a +1/+1 counter on this creature.",
+      "abilities": [
+        {
+          "kind": "static",
+          "keywordSource": "Trample",
+          "effect": {
+            "effectType": "trample"
+          }
+        },
+        {
+          "kind": "activated",
+          "costs": [
+            {
+              "costType": "mana",
+              "symbols": [
+                { "kind": "generic", "genericAmount": 1 }
+              ]
+            },
+            {
+              "costType": "sacrifice",
+              "filter": {
+                "cardTypes": [ "creature" ],
+                "characteristics": [ "another" ]
+              },
+              "quantity": {
+                "quantityType": "literal",
+                "value": 1
+              }
+            }
+          ],
+          "effects": [
+            {
+              "effectType": "putCounters",
+              "target": {
+                "kind": "Self"
+              },
+              "counterType": "+1/+1",
+              "count": {
+                "quantityType": "literal",
+                "value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{1}{R}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 1 },
+          { "kind": "colored", "colors": [ "R" ] }
+        ],
+        "manaValue": 2
+      },
+      {
+        "kind": "colors",
+        "colors": [ "R" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "R" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
+        "toughness": { "valueType": "fixed", "raw": "1", "value": 1 }
+      }
+    ]
+  }
+}

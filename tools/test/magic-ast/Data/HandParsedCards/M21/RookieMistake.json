@@ -1,0 +1,88 @@
+{
+  "input": {
+    "name": "Rookie Mistake",
+    "manaCost": "{U}",
+    "typeLine": "Instant",
+    "oracleText": "Until end of turn, target creature gets +0/+2 and another target creature gets -2/-0.",
+    "power": null,
+    "toughness": null,
+    "colors": [ "U" ],
+    "colorIdentity": [ "U" ]
+  },
+  "output": {
+    "name": "Rookie Mistake",
+    "typeLine": {
+      "raw": "Instant",
+      "types": [ "Instant" ]
+    },
+    "oracle": {
+      "rawText": "Until end of turn, target creature gets +0/+2 and another target creature gets -2/-0.",
+      "abilities": [
+        {
+          "kind": "spell",
+          "effects": [
+            {
+              "effectType": "modifyPT",
+              "target": {
+                "kind": "Target",
+                "filter": {
+                  "cardTypes": [ "creature" ]
+                }
+              },
+              "powerModifier": {
+                "quantityType": "literal",
+                "value": 0
+              },
+              "toughnessModifier": {
+                "quantityType": "literal",
+                "value": 2
+              },
+              "duration": {
+                "durationType": "untilEndOfTurn"
+              }
+            },
+            {
+              "effectType": "modifyPT",
+              "target": {
+                "kind": "Target",
+                "filter": {
+                  "cardTypes": [ "creature" ],
+                  "characteristics": [ "another" ]
+                }
+              },
+              "powerModifier": {
+                "quantityType": "literal",
+                "value": -2
+              },
+              "toughnessModifier": {
+                "quantityType": "literal",
+                "value": 0
+              },
+              "duration": {
+                "durationType": "untilEndOfTurn"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{U}",
+        "symbols": [
+          { "kind": "colored", "colors": [ "U" ] }
+        ],
+        "manaValue": 1
+      },
+      {
+        "kind": "colors",
+        "colors": [ "U" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "U" ]
+      }
+    ]
+  }
+}

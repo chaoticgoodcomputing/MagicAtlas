@@ -1,0 +1,49 @@
+{
+  "input": {
+    "name": "Grizzly Bears",
+    "manaCost": "{1}{G}",
+    "typeLine": "Creature — Bear",
+    "oracleText": null,
+    "power": "2",
+    "toughness": "2",
+    "colors": [ "G" ],
+    "colorIdentity": [ "G" ]
+  },
+  "output": {
+    "name": "Grizzly Bears",
+    "typeLine": {
+      "raw": "Creature — Bear",
+      "types": [ "Creature" ],
+      "subtypes": [ "Bear" ]
+    },
+    "oracle": {
+      "rawText": "",
+      "abilities": [ ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{1}{G}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 1, "isPhyrexian": false, "isSnow": false },
+          { "kind": "colored", "colors": [ "G" ], "isPhyrexian": false, "isSnow": false }
+        ],
+        "manaValue": 2,
+        "isVariable": false
+      },
+      {
+        "kind": "colors",
+        "colors": [ "G" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "G" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
+        "toughness": { "valueType": "fixed", "raw": "2", "value": 2 }
+      }
+    ]
+  }
+}

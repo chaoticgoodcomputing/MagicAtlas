@@ -1,0 +1,103 @@
+{
+  "input": {
+    "name": "Planetarium of Wan Shi Tong",
+    "manaCost": "{6}",
+    "typeLine": "Legendary Artifact",
+    "oracleText": "{1}, {T}: Scry 2.\nWhenever you scry or surveil, look at the top card of your library. You may cast that card without paying its mana cost. Do this only once each turn. (Look at the card after you scry or surveil.)",
+    "power": null,
+    "toughness": null,
+    "colors": [ ],
+    "colorIdentity": [ ]
+  },
+  "output": {
+    "name": "Planetarium of Wan Shi Tong",
+    "typeLine": {
+      "raw": "Legendary Artifact",
+      "supertypes": [ "Legendary" ],
+      "types": [ "Artifact" ]
+    },
+    "oracle": {
+      "rawText": "{1}, {T}: Scry 2.\nWhenever you scry or surveil, look at the top card of your library. You may cast that card without paying its mana cost. Do this only once each turn. (Look at the card after you scry or surveil.)",
+      "abilities": [
+        {
+          "kind": "activated",
+          "costs": [
+            {
+              "costType": "mana",
+              "symbols": [
+                { "kind": "generic", "genericAmount": 1 }
+              ]
+            },
+            {
+              "costType": "tap"
+            }
+          ],
+          "effects": [
+            {
+              "effectType": "scry",
+              "count": {
+                "quantityType": "literal",
+                "value": 2
+              }
+            }
+          ]
+        },
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "Whenever",
+            "event": "ScryOrSurveil",
+            "filter": {
+              "controller": "You"
+            }
+          },
+          "effects": [
+            {
+              "effectType": "composite",
+              "effects": [
+                {
+                  "effectType": "lookAtCards",
+                  "player": {
+                    "kind": "You"
+                  },
+                  "count": {
+                    "quantityType": "literal",
+                    "value": 1
+                  },
+                  "zone": "Library",
+                  "location": "Top"
+                },
+                {
+                  "effectType": "castWithoutPaying",
+                  "target": {
+                    "kind": "It"
+                  },
+                  "isOptional": true
+                }
+              ]
+            }
+          ],
+          "restrictions": [ "OnlyOnceEachTurn" ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{6}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 6 }
+        ],
+        "manaValue": 6
+      },
+      {
+        "kind": "colors",
+        "colors": [ ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ ]
+      }
+    ]
+  }
+}

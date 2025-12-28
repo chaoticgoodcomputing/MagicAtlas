@@ -1,0 +1,77 @@
+{
+  "input": {
+    "name": "Sanctum of Stone Fangs",
+    "manaCost": "{1}{B}",
+    "typeLine": "Legendary Enchantment — Shrine",
+    "oracleText": "At the beginning of your first main phase, each opponent loses X life and you gain X life, where X is the number of Shrines you control.",
+    "power": null,
+    "toughness": null,
+    "colors": [ "B" ],
+    "colorIdentity": [ "B" ]
+  },
+  "output": {
+    "name": "Sanctum of Stone Fangs",
+    "typeLine": {
+      "raw": "Legendary Enchantment — Shrine",
+      "supertypes": [ "Legendary" ],
+      "types": [ "Enchantment" ],
+      "subtypes": [ "Shrine" ]
+    },
+    "oracle": {
+      "rawText": "At the beginning of your first main phase, each opponent loses X life and you gain X life, where X is the number of Shrines you control.",
+      "abilities": [
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "At",
+            "event": "BeginningOfPreCombatMainPhase",
+            "filter": {
+              "controller": "You"
+            }
+          },
+          "effects": [
+            {
+              "effectType": "loseLife",
+              "amount": {
+                "quantityType": "count",
+                "countOf": "Shrines you control"
+              },
+              "player": {
+                "kind": "EachOpponent"
+              }
+            },
+            {
+              "effectType": "gainLife",
+              "amount": {
+                "quantityType": "count",
+                "countOf": "Shrines you control"
+              },
+              "player": {
+                "kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{1}{B}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 1 },
+          { "kind": "colored", "colors": [ "B" ] }
+        ],
+        "manaValue": 2
+      },
+      {
+        "kind": "colors",
+        "colors": [ "B" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "B" ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "input": {
+    "name": "Barrin, Tolarian Archmage",
+    "manaCost": "{1}{U}{U}",
+    "typeLine": "Legendary Creature — Human Wizard",
+    "oracleText": "When Barrin enters, return up to one other target creature or planeswalker to its owner's hand.\nAt the beginning of your end step, if a permanent was put into your hand from the battlefield this turn, draw a card.",
+    "power": "2",
+    "toughness": "2",
+    "colors": [ "U" ],
+    "colorIdentity": [ "U" ]
+  },
+  "output": {
+    "name": "Barrin, Tolarian Archmage",
+    "typeLine": {
+      "raw": "Legendary Creature — Human Wizard",
+      "supertypes": [ "Legendary" ],
+      "types": [ "Creature" ],
+      "subtypes": [ "Human", "Wizard" ]
+    },
+    "oracle": {
+      "rawText": "When Barrin enters, return up to one other target creature or planeswalker to its owner's hand.\nAt the beginning of your end step, if a permanent was put into your hand from the battlefield this turn, draw a card.",
+      "abilities": [
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "When",
+            "event": "Enters",
+            "filter": {
+              "cardTypes": [ "creature" ]
+            }
+          },
+          "effects": [
+            {
+              "effectType": "returnToHand",
+              "target": {
+                "kind": "Target",
+                "filter": {
+                  "cardTypes": [ "creature", "planeswalker" ],
+                  "characteristics": [ "other" ]
+                }
+              },
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "At",
+            "event": "BeginningOfEndStep",
+            "filter": {
+              "controller": "You"
+            }
+          },
+          "interveningIf": {
+            "text": "a permanent was put into your hand from the battlefield this turn"
+          },
+          "effects": [
+            {
+              "effectType": "drawCards",
+              "count": {
+                "quantityType": "literal",
+                "value": 1
+              },
+              "player": {
+                "kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{1}{U}{U}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 1 },
+          { "kind": "colored", "colors": [ "U" ] },
+          { "kind": "colored", "colors": [ "U" ] }
+        ],
+        "manaValue": 3
+      },
+      {
+        "kind": "colors",
+        "colors": [ "U" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "U" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
+        "toughness": { "valueType": "fixed", "raw": "2", "value": 2 }
+      }
+    ]
+  }
+}

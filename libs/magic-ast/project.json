@@ -1,0 +1,34 @@
+{
+  "name": "magic-ast",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/magic-ast",
+  "targets": {
+    "build": {
+      "//": "Build the MagicAST library",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "dotnet build"
+        ],
+        "cwd": "libs/magic-ast",
+        "parallel": false
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot}",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "format:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot} --check",
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  },
+  "tags": [ "type:library", "scope:magic-ast" ]
+}

@@ -1,0 +1,68 @@
+{
+  "input": {
+    "name": "Broken Blademaster",
+    "manaCost": "{3}{R}{R}",
+    "typeLine": "Creature — Human Warrior",
+    "oracleText": "{T}: $$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
+    "power": "4",
+    "toughness": "2",
+    "colors": [ "R" ],
+    "colorIdentity": [ "R" ]
+  },
+  "output": {
+    "name": "Broken Blademaster",
+    "typeLine": {
+      "raw": "Creature — Human Warrior",
+      "types": [ "Creature" ],
+      "subtypes": [ "Human", "Warrior" ]
+    },
+    "oracle": {
+      "rawText": "{T}: $$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
+      "abilities": [
+        {
+          "kind": "activated",
+          "costs": [
+            {
+              "costType": "tap"
+            }
+          ],
+          "effects": [
+            {
+              "effectType": "unparsed",
+              "sourceSpan": { "start": 4, "length": 36, "end": 40 },
+              "rawText": "$$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
+              "isOptional": false
+            }
+          ],
+          "isManaAbility": false
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{3}{R}{R}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 3 },
+          { "kind": "colored", "colors": [ "R" ] },
+          { "kind": "colored", "colors": [ "R" ] }
+        ],
+        "manaValue": 5,
+        "isVariable": false
+      },
+      {
+        "kind": "colors",
+        "colors": [ "R" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "R" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "4", "value": 4 },
+        "toughness": { "valueType": "fixed", "raw": "2", "value": 2 }
+      }
+    ]
+  }
+}

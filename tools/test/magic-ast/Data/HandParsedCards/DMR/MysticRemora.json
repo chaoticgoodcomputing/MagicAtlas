@@ -1,0 +1,124 @@
+{
+  "input": {
+    "name": "Mystic Remora",
+    "manaCost": "{U}",
+    "typeLine": "Enchantment",
+    "oracleText": "Cumulative upkeep {1} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhenever an opponent casts a noncreature spell, you may draw a card unless that player pays {4}.",
+    "power": null,
+    "toughness": null,
+    "colors": [ "U" ],
+    "colorIdentity": [ "U" ]
+  },
+  "output": {
+    "name": "Mystic Remora",
+    "typeLine": {
+      "raw": "Enchantment",
+      "types": [ "Enchantment" ]
+    },
+    "oracle": {
+      "rawText": "Cumulative upkeep {1} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhenever an opponent casts a noncreature spell, you may draw a card unless that player pays {4}.",
+      "abilities": [
+        {
+          "kind": "triggered",
+          "keywordSource": "Cumulative upkeep",
+          "trigger": {
+            "timing": "At",
+            "event": "BeginningOfUpkeep",
+            "filter": {
+              "controller": "You"
+            }
+          },
+          "effects": [
+            {
+              "effectType": "composite",
+              "effects": [
+                {
+                  "effectType": "putCounters",
+                  "target": {
+                    "kind": "Self"
+                  },
+                  "counterType": "age",
+                  "count": {
+                    "quantityType": "literal",
+                    "value": 1
+                  }
+                },
+                {
+                  "effectType": "sacrifice",
+                  "target": {
+                    "kind": "Self"
+                  },
+                  "unlessClause": {
+                    "player": {
+                      "kind": "You"
+                    },
+                    "cost": {
+                      "costType": "mana",
+                      "symbols": [
+                        { "kind": "generic", "genericAmount": 1 }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "instructions": [ "pay its upkeep cost for each age counter on it" ]
+        },
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "Whenever",
+            "event": "SpellCast",
+            "filter": {
+              "controller": "Opponent",
+              "characteristics": [ "noncreature" ]
+            }
+          },
+          "effects": [
+            {
+              "effectType": "drawCards",
+              "count": {
+                "quantityType": "literal",
+                "value": 1
+              },
+              "player": {
+                "kind": "You"
+              },
+              "isOptional": true,
+              "unlessClause": {
+                "player": {
+                  "kind": "ThatPlayer"
+                },
+                "cost": {
+                  "costType": "mana",
+                  "symbols": [
+                    { "kind": "generic", "genericAmount": 4 }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{U}",
+        "symbols": [
+          { "kind": "colored", "colors": [ "U" ] }
+        ],
+        "manaValue": 1
+      },
+      {
+        "kind": "colors",
+        "colors": [ "U" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "U" ]
+      }
+    ]
+  }
+}

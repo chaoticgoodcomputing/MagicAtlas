@@ -1,0 +1,133 @@
+{
+  "input": {
+    "name": "Niambi, Esteemed Speaker",
+    "manaCost": "{W}{U}",
+    "typeLine": "Legendary Creature — Human Cleric",
+    "oracleText": "Flash\nWhen Niambi enters, you may return another target creature you control to its owner's hand. If you do, you gain life equal to that creature's mana value.\n{1}{W}{U}, {T}, Discard a legendary card: Draw two cards.",
+    "power": "2",
+    "toughness": "1",
+    "colors": [ "U", "W" ],
+    "colorIdentity": [ "U", "W" ]
+  },
+  "output": {
+    "name": "Niambi, Esteemed Speaker",
+    "typeLine": {
+      "raw": "Legendary Creature — Human Cleric",
+      "supertypes": [ "Legendary" ],
+      "types": [ "Creature" ],
+      "subtypes": [ "Human", "Cleric" ]
+    },
+    "oracle": {
+      "rawText": "Flash\nWhen Niambi enters, you may return another target creature you control to its owner's hand. If you do, you gain life equal to that creature's mana value.\n{1}{W}{U}, {T}, Discard a legendary card: Draw two cards.",
+      "abilities": [
+        {
+          "kind": "static",
+          "keywordSource": "Flash",
+          "effect": {
+            "effectType": "timingModification",
+            "modification": "Grant",
+            "timing": "Instant"
+          }
+        },
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "When",
+            "event": "Enters",
+            "filter": {
+              "cardTypes": [ "creature" ]
+            }
+          },
+          "effects": [
+            {
+              "effectType": "returnToHand",
+              "target": {
+                "kind": "Target",
+                "filter": {
+                  "cardTypes": [ "creature" ],
+                  "controller": "You",
+                  "characteristics": [ "another" ]
+                }
+              },
+              "isOptional": true,
+              "ifYouDo": {
+                "effectType": "gainLife",
+                "amount": {
+                  "quantityType": "derived",
+                  "derivedFrom": "ManaValue",
+                  "source": "that creature"
+                },
+                "player": {
+                  "kind": "You"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "activated",
+          "costs": [
+            {
+              "costType": "mana",
+              "symbols": [
+                { "kind": "generic", "genericAmount": 1 },
+                { "kind": "colored", "colors": [ "W" ] },
+                { "kind": "colored", "colors": [ "U" ] }
+              ]
+            },
+            {
+              "costType": "tap"
+            },
+            {
+              "costType": "discard",
+              "filter": {
+                "supertypes": [ "Legendary" ],
+                "cardTypes": [ "card" ]
+              },
+              "quantity": {
+                "quantityType": "literal",
+                "value": 1
+              }
+            }
+          ],
+          "effects": [
+            {
+              "effectType": "drawCards",
+              "count": {
+                "quantityType": "literal",
+                "value": 2
+              },
+              "player": {
+                "kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{W}{U}",
+        "symbols": [
+          { "kind": "colored", "colors": [ "W" ] },
+          { "kind": "colored", "colors": [ "U" ] }
+        ],
+        "manaValue": 2
+      },
+      {
+        "kind": "colors",
+        "colors": [ "U", "W" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "U", "W" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
+        "toughness": { "valueType": "fixed", "raw": "1", "value": 1 }
+      }
+    ]
+  }
+}

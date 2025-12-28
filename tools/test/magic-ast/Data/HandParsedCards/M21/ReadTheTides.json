@@ -1,0 +1,86 @@
+{
+  "input": {
+    "name": "Read the Tides",
+    "manaCost": "{5}{U}",
+    "typeLine": "Sorcery",
+    "oracleText": "Choose one —\n• Draw three cards.\n• Return up to two target creatures to their owners' hands.",
+    "power": null,
+    "toughness": null,
+    "colors": [ "U" ],
+    "colorIdentity": [ "U" ]
+  },
+  "output": {
+    "name": "Read the Tides",
+    "typeLine": {
+      "raw": "Sorcery",
+      "types": [ "Sorcery" ]
+    },
+    "oracle": {
+      "rawText": "Choose one —\n• Draw three cards.\n• Return up to two target creatures to their owners' hands.",
+      "abilities": [
+        {
+          "kind": "modal",
+          "modeSelection": {
+            "minimum": 1,
+            "maximum": 1
+          },
+          "modes": [
+            {
+              "ability": {
+                "kind": "spell",
+                "effects": [
+                  {
+                    "effectType": "drawCards",
+                    "count": {
+                      "quantityType": "literal",
+                      "value": 3
+                    },
+                    "player": {
+                      "kind": "You"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "ability": {
+                "kind": "spell",
+                "effects": [
+                  {
+                    "effectType": "returnToHand",
+                    "target": {
+                      "kind": "Target",
+                      "filter": {
+                        "cardTypes": [ "creature" ]
+                      }
+                    },
+                    "isOptional": true
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{5}{U}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 5 },
+          { "kind": "colored", "colors": [ "U" ] }
+        ],
+        "manaValue": 6
+      },
+      {
+        "kind": "colors",
+        "colors": [ "U" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "U" ]
+      }
+    ]
+  }
+}

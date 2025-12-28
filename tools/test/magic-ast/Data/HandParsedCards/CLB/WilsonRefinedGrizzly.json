@@ -1,0 +1,117 @@
+{
+  "input": {
+    "name": "Wilson, Refined Grizzly",
+    "manaCost": "{1}{G}",
+    "typeLine": "Legendary Creature — Bear Warrior",
+    "oracleText": "This spell can't be countered.\nVigilance, reach, trample\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nChoose a Background (You can have a Background as a second commander.)",
+    "power": "2",
+    "toughness": "2",
+    "colors": [ "G" ],
+    "colorIdentity": [ "G" ]
+  },
+  "output": {
+    "name": "Wilson, Refined Grizzly",
+    "typeLine": {
+      "raw": "Legendary Creature — Bear Warrior",
+      "supertypes": [ "Legendary" ],
+      "types": [ "Creature" ],
+      "subtypes": [ "Bear", "Warrior" ]
+    },
+    "oracle": {
+      "rawText": "This spell can't be countered.\nVigilance, reach, trample\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nChoose a Background (You can have a Background as a second commander.)",
+      "abilities": [
+        {
+          "kind": "spell",
+          "effects": [
+            {
+              "effectType": "cantBeCountered"
+            }
+          ]
+        },
+        {
+          "kind": "static",
+          "keywordSource": "Vigilance",
+          "effect": {
+            "effectType": "vigilance"
+          }
+        },
+        {
+          "kind": "static",
+          "keywordSource": "Reach",
+          "effect": {
+            "effectType": "reach"
+          }
+        },
+        {
+          "kind": "static",
+          "keywordSource": "Trample",
+          "effect": {
+            "effectType": "trample"
+          }
+        },
+        {
+          "kind": "triggered",
+          "keywordSource": "Ward",
+          "trigger": {
+            "timing": "Whenever",
+            "event": "BecomesTarget",
+            "filter": {
+              "controller": "Opponent"
+            }
+          },
+          "effects": [
+            {
+              "effectType": "counterSpell",
+              "target": {
+                "kind": "It"
+              },
+              "unlessClause": {
+                "player": {
+                  "kind": "ThatPlayer"
+                },
+                "cost": {
+                  "costType": "mana",
+                  "symbols": [
+                    { "kind": "generic", "genericAmount": 2 }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "static",
+          "keywordSource": "Choose a Background",
+          "effect": {
+            "effectType": "partner",
+            "partnerType": "ChooseABackground"
+          }
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{1}{G}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 1 },
+          { "kind": "colored", "colors": [ "G" ] }
+        ],
+        "manaValue": 2
+      },
+      {
+        "kind": "colors",
+        "colors": [ "G" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "G" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
+        "toughness": { "valueType": "fixed", "raw": "2", "value": 2 }
+      }
+    ]
+  }
+}

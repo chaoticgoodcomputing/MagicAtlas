@@ -1,0 +1,58 @@
+{
+  "name": "test-magic-ast",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "tools/test/magic-ast",
+  "targets": {
+    "build": {
+      "//": "Build the MagicAST test project",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "dotnet build"
+        ],
+        "cwd": "tools/test/magic-ast",
+        "parallel": false
+      },
+      "dependsOn": [ "^build" ]
+    },
+    "test": {
+      "//": "Run MagicAST tests with ratcheting baseline enforcement",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "bash scripts/run-ratchet-tests.sh"
+        ],
+        "cwd": "tools/test/magic-ast",
+        "parallel": false
+      },
+      "configurations": {
+        "baseline": {
+          "commands": [
+            "UPDATE_BASELINE=true dotnet test"
+          ]
+        },
+        "raw": {
+          "commands": [
+            "dotnet test"
+          ]
+        }
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot}",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "format:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot} --check",
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  },
+  "tags": [ "type:test", "scope:magic-ast" ]
+}

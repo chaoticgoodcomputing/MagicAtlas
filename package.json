@@ -1,0 +1,21 @@
+{
+  "name": "MagicAtlas",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "nx g @nx-dotnet/core:restore"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.26.2+sha256.63b50a4ba15cde20006ddba5d9e21fd623e23f094c9f63bb15f686b0e496aed6",
+  "dependencies": {
+    "nx": "^22.3.3"
+  },
+  "devDependencies": {
+    "@nx-dotnet/core": "^3.0.2",
+    "@nx/js": "22.3.3"
+  }
+}

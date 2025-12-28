@@ -1,0 +1,98 @@
+{
+  "input": {
+    "name": "Chandra's Incinerator",
+    "manaCost": "{5}{R}",
+    "typeLine": "Creature — Elemental",
+    "oracleText": "This spell costs {X} less to cast, where X is the total amount of noncombat damage dealt to your opponents this turn.\nTrample\nWhenever a source you control deals noncombat damage to an opponent, this creature deals that much damage to target creature or planeswalker that player controls.",
+    "power": "6",
+    "toughness": "6",
+    "colors": [ "R" ],
+    "colorIdentity": [ "R" ]
+  },
+  "output": {
+    "name": "Chandra's Incinerator",
+    "typeLine": {
+      "raw": "Creature — Elemental",
+      "supertypes": [ ],
+      "types": [ "Creature" ],
+      "subtypes": [ "Elemental" ]
+    },
+    "oracle": {
+      "rawText": "This spell costs {X} less to cast, where X is the total amount of noncombat damage dealt to your opponents this turn.\nTrample\nWhenever a source you control deals noncombat damage to an opponent, this creature deals that much damage to target creature or planeswalker that player controls.",
+      "abilities": [
+        {
+          "kind": "static",
+          "effect": {
+            "effectType": "costReduction",
+            "amount": {
+              "quantityType": "derived",
+              "derivedFrom": "DamageDealt",
+              "source": "noncombat damage dealt to your opponents this turn"
+            },
+            "basedOn": "noncombat damage dealt to your opponents this turn"
+          }
+        },
+        {
+          "kind": "static",
+          "keywordSource": "Trample",
+          "effect": {
+            "effectType": "trample"
+          }
+        },
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "Whenever",
+            "event": "NoncombatDamageDealt",
+            "filter": {
+              "controller": "You"
+            }
+          },
+          "effects": [
+            {
+              "effectType": "dealDamage",
+              "amount": {
+                "quantityType": "derived",
+                "derivedFrom": "DamageDealt"
+              },
+              "source": {
+                "kind": "Self"
+              },
+              "target": {
+                "kind": "Target",
+                "filter": {
+                  "cardTypes": [ "creature", "planeswalker" ],
+                  "controller": "Opponent"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{5}{R}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 5 },
+          { "kind": "colored", "colors": [ "R" ] }
+        ],
+        "manaValue": 6
+      },
+      {
+        "kind": "colors",
+        "colors": [ "R" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "R" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "6", "value": 6 },
+        "toughness": { "valueType": "fixed", "raw": "6", "value": 6 }
+      }
+    ]
+  }
+}

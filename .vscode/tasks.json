@@ -1,0 +1,32 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // Main task: "Starts the Quartz development server with hot reload",
+      "label": "atlas-site:serve",
+      "type": "shell",
+      "command": "nx run atlas-site:serve",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "."
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Quartz",
+          "endsPattern": "listening at"
+        }
+      },
+      "options": {
+        "shell": {
+          "executable": "zsh",
+          "args": [ "-l", "-c" ]
+        }
+      }
+    }
+  ]
+}

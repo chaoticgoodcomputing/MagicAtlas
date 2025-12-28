@@ -1,0 +1,131 @@
+{
+  "input": {
+    "name": "Deadpool, Trading Card",
+    "manaCost": "{2}{B}{R}",
+    "typeLine": "Legendary Creature — Mutant Mercenary Hero",
+    "oracleText": "As Deadpool enters, you may exchange his text box and another creature's.\nAt the beginning of your upkeep, you lose 3 life.\n{3}, Sacrifice this creature: Each other player draws a card.",
+    "power": "5",
+    "toughness": "3",
+    "colors": [ "B", "R" ],
+    "colorIdentity": [ "B", "R" ]
+  },
+  "output": {
+    "name": "Deadpool, Trading Card",
+    "typeLine": {
+      "raw": "Legendary Creature — Mutant Mercenary Hero",
+      "supertypes": [ "Legendary" ],
+      "types": [ "Creature" ],
+      "subtypes": [ "Mutant", "Mercenary", "Hero" ]
+    },
+    "oracle": {
+      "rawText": "As Deadpool enters, you may exchange his text box and another creature's.\nAt the beginning of your upkeep, you lose 3 life.\n{3}, Sacrifice this creature: Each other player draws a card.",
+      "abilities": [
+        {
+          "kind": "static",
+          "effect": {
+            "effectType": "replacement",
+            "event": {
+              "eventType": "zoneChange",
+              "destinationZone": "Battlefield"
+            },
+            "originalEventOccurs": true,
+            "replacement": {
+              "effectType": "exchangeCharacteristic",
+              "characteristic": "TextBox",
+              "first": {
+                "kind": "Self"
+              },
+              "second": {
+                "kind": "Another",
+                "filter": {
+                  "cardTypes": [ "creature" ]
+                }
+              },
+              "isOptional": true
+            }
+          }
+        },
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "At",
+            "event": "BeginningOfUpkeep",
+            "filter": {
+              "controller": "You"
+            }
+          },
+          "effects": [
+            {
+              "effectType": "loseLife",
+              "amount": {
+                "quantityType": "literal",
+                "value": 3
+              },
+              "player": {
+                "kind": "You"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "activated",
+          "costs": [
+            {
+              "costType": "mana",
+              "symbols": [
+                { "kind": "generic", "genericAmount": 3 }
+              ]
+            },
+            {
+              "costType": "sacrifice",
+              "filter": {
+                "cardTypes": [ "creature" ]
+              },
+              "quantity": {
+                "quantityType": "literal",
+                "value": 1
+              }
+            }
+          ],
+          "effects": [
+            {
+              "effectType": "drawCards",
+              "count": {
+                "quantityType": "literal",
+                "value": 1
+              },
+              "player": {
+                "kind": "EachOtherPlayer"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{2}{B}{R}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 2 },
+          { "kind": "colored", "colors": [ "B" ] },
+          { "kind": "colored", "colors": [ "R" ] }
+        ],
+        "manaValue": 4
+      },
+      {
+        "kind": "colors",
+        "colors": [ "B", "R" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "B", "R" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "5", "value": 5 },
+        "toughness": { "valueType": "fixed", "raw": "3", "value": 3 }
+      }
+    ]
+  }
+}

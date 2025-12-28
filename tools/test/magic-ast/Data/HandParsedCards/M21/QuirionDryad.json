@@ -1,0 +1,74 @@
+{
+  "input": {
+    "name": "Quirion Dryad",
+    "manaCost": "{1}{G}",
+    "typeLine": "Creature — Dryad",
+    "oracleText": "Whenever you cast a spell that's white, blue, black, or red, put a +1/+1 counter on this creature.",
+    "power": "1",
+    "toughness": "1",
+    "colors": [ "G" ],
+    "colorIdentity": [ "G" ]
+  },
+  "output": {
+    "name": "Quirion Dryad",
+    "typeLine": {
+      "raw": "Creature — Dryad",
+      "types": [ "Creature" ],
+      "subtypes": [ "Dryad" ]
+    },
+    "oracle": {
+      "rawText": "Whenever you cast a spell that's white, blue, black, or red, put a +1/+1 counter on this creature.",
+      "abilities": [
+        {
+          "kind": "triggered",
+          "trigger": {
+            "timing": "Whenever",
+            "event": "SpellCast",
+            "filter": {
+              "cardTypes": [ "spell" ],
+              "colors": [ "W", "U", "B", "R" ],
+              "controller": "You"
+            }
+          },
+          "effects": [
+            {
+              "effectType": "putCounters",
+              "target": {
+                "kind": "Self"
+              },
+              "counterType": "+1/+1",
+              "count": {
+                "quantityType": "literal",
+                "value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": [
+      {
+        "kind": "manaCost",
+        "raw": "{1}{G}",
+        "symbols": [
+          { "kind": "generic", "genericAmount": 1 },
+          { "kind": "colored", "colors": [ "G" ] }
+        ],
+        "manaValue": 2
+      },
+      {
+        "kind": "colors",
+        "colors": [ "G" ]
+      },
+      {
+        "kind": "colorIdentity",
+        "colorIdentity": [ "G" ]
+      },
+      {
+        "kind": "creatureStats",
+        "power": { "valueType": "fixed", "raw": "1", "value": 1 },
+        "toughness": { "valueType": "fixed", "raw": "1", "value": 1 }
+      }
+    ]
+  }
+}
