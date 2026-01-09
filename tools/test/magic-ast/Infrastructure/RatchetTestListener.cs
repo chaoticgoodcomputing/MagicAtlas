@@ -26,11 +26,11 @@ public sealed class RatchetTestTracker
     // This ensures the baseline is committed to source control, not in dist/
     var testAssemblyPath = typeof(RatchetTestTracker).Assembly.Location;
     var assemblyDir = Path.GetDirectoryName(testAssemblyPath)!;
-    
+
     // Find the test project directory by looking for the .csproj file
     // Navigate up from assembly location until we find tests/MagicAST.Tests/
     var projectRoot = FindProjectRoot(assemblyDir);
-    
+
     // Store baseline in the test project directory (source tree)
     _baselinePath = Path.Combine(projectRoot, BaselineFileName);
 
@@ -81,7 +81,7 @@ public sealed class RatchetTestTracker
       repoRoot = parent;
     }
 
-    return Path.Combine(repoRoot, "tests", "MagicAST.Tests");
+    return Path.Combine(repoRoot, "tools", "test", "magic-ast");
   }
 
   /// <summary>
@@ -111,24 +111,24 @@ public sealed class RatchetTestTracker
     // Print summary
     PrintSummary(comparison);
 
-    // Update baseline if requested
-    if (_updateBaseline)
+    // Update baseline if no regressions OR if explicitly requested
+    if (!comparison.HasRegressions || _updateBaseline)
     {
       var newBaseline = new TestBaseline
       {
         Timestamp = DateTime.UtcNow,
         TestResults = _currentResults
-          .Select(kvp => new KeyValuePair<string, TestResult>(
-            kvp.Key,
-            new TestResult { Passed = kvp.Value }
-          ))
+          .Select(
+            kvp =>
+              new KeyValuePair<string, TestResult>(kvp.Key, new TestResult { Passed = kvp.Value })
+          )
           .ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
       };
       newBaseline.Save(_baselinePath);
       TestContext.Progress.WriteLine($"\n✓ Baseline updated: {_baselinePath}");
     }
 
-    // Fail the test run ONLY if there are regressions
+    // Fail the test run ONLY if there are regressions AND we're not in baseline mode
     if (comparison.HasRegressions && !_updateBaseline)
     {
       throw new Exception(

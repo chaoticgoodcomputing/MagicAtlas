@@ -38,10 +38,15 @@ public class MalformedParsedCardTests
     var ast = testCase.GetOutput();
     var actualJson = JsonSerializer.Serialize(ast, _testOptions);
     var actualNode = JsonNode.Parse(actualJson);
+    var passed = JsonComparer.AreEqual(actualNode, expectedNode);
+
+    // Record result in ratchet tracker
+    var testName = $"MalformedParsedCards/{testCase.Name}/RoundTrip";
+    RatchetTestTracker.Instance.RecordResult(testName, passed);
 
     // Assert - compare JSON structures, not string representations
     Assert.That(
-      JsonComparer.AreEqual(actualNode, expectedNode),
+      passed,
       Is.True,
       $"Round-trip serialization failed for {testCase.Name}.\n"
         + $"Expected:\n{JsonComparer.FormatForDisplay(expectedNode)}\n\n"

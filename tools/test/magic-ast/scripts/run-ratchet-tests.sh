@@ -42,6 +42,13 @@ if grep -q "RESULT: PASSED - No regressions detected" "$output_file"; then
     exit 0
 fi
 
+# In baseline update mode, always exit 0 after baseline is saved
+if [ "${UPDATE_BASELINE:-false}" = "true" ] && grep -q "✓ Baseline updated:" "$output_file"; then
+    echo ""
+    echo "✅ BASELINE UPDATE SUCCESS: Baseline updated with current test state"
+    exit 0
+fi
+
 # If we get here, something went wrong with the test run itself
 # (e.g., compilation error, test infrastructure failure)
 echo ""

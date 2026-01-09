@@ -1,88 +1,364 @@
 {
-  "timestamp": "2025-12-07T22:29:28.896954Z",
+  "timestamp": "2026-01-09T21:29:44.169053Z",
   "testResults": {
-    "HandParsedCards/M21/BasrisLieutenant": {
+    "OracleLines/SLD/DeadpoolTradingCard/Line2": {
       "passed": false
     },
-    "HandParsedCards/M21/SanctumOfStoneFangs": {
+    "OracleLines/ChatterfangSquirrelGeneral/Line1": {
+      "passed": true
+    },
+    "HandParsedCards/DMR/MysticRemora/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/M21/BasrisLieutenant/Line1": {
       "passed": false
     },
-    "HandParsedCards/ChatterfangSquirrelGeneral": {
-      "passed": false
+    "OracleLines/M21/Hobblefiend/Line1": {
+      "passed": true
     },
-    "HandParsedCards/DMR/MysticRemora": {
-      "passed": false
+    "KeywordExpander/Expand_ThrowsForUnknownKeyword": {
+      "passed": true
     },
-    "HandParsedCards/M21/VitoThornOfTheDuskRose": {
-      "passed": false
+    "KeywordExpander/Lifelink_ExpandsToLifelinkEffect": {
+      "passed": true
     },
-    "HandParsedCards/JMP/RhysticStudy": {
-      "passed": false
-    },
-    "HandParsedCards/SLD/DeadpoolTradingCard": {
+    "MalformedParsedCards/UnparsedEffectInActivatedAbility": {
       "passed": false
     },
     "HandParsedCards/M21/ChandrasIncinerator": {
       "passed": false
     },
-    "HandParsedCards/CLB/WilsonRefinedGrizzly": {
+    "HandParsedCards/M21/RookieMistake": {
       "passed": false
     },
-    "HandParsedCards/M21/QuirionDryad": {
-      "passed": false
+    "HandParsedCards/CMM/DarettiScrapSavant/RoundTrip": {
+      "passed": true
     },
-    "HandParsedCards/LlanowarElves": {
-      "passed": false
-    },
-    "HandParsedCards/M21/Hobblefiend": {
-      "passed": false
-    },
-    "HandParsedCards/M21/NiambiEsteemedSpeaker": {
-      "passed": false
-    },
-    "MalformedParsedCards/CompletelyGarbledAbility": {
-      "passed": false
-    },
-    "HandParsedCards/M21/BarrinTolarianArchmage": {
-      "passed": false
-    },
-    "HandParsedCards/2X2/ManaVault": {
-      "passed": false
+    "KeywordExpander/CanExpand_ReturnsFalseForUnknownKeywords": {
+      "passed": true
     },
     "HandParsedCards/TLA/PlanetariumOfWanShiTong": {
       "passed": false
     },
-    "HandParsedCards/M21/BaneslayerAngel": {
-      "passed": false
-    },
-    "HandParsedCards/M21/DeathbloomThallid": {
+    "KeywordExpander/Protection_FromMultipleSubtypes_ExpandsCorrectly": {
       "passed": true
     },
-    "HandParsedCards/TLA/WanShiTongLibrarian": {
+    "OracleLines/M21/BasrisLieutenant/Line3": {
       "passed": false
     },
-    "HandParsedCards/M21/ReadTheTides": {
-      "passed": false
+    "KeywordExpander/FirstStrike_ExpandsToCombatDamageTimingEffect": {
+      "passed": true
     },
-    "MalformedParsedCards/UnparsedEffectInActivatedAbility": {
+    "KeywordExpander/CanExpand_ReturnsTrueForRegisteredKeywords": {
+      "passed": true
+    },
+    "OracleLines/M21/NiambiEsteemedSpeaker/Line3": {
+      "passed": true
+    },
+    "HandParsedCards/M21/SanctumOfStoneFangs/RoundTrip": {
+      "passed": true
+    },
+    "KeywordExpander/Protection_FromSingleColor_ExpandsCorrectly": {
+      "passed": true
+    },
+    "OracleLines/CMM/DarettiScrapSavant/Line1": {
       "passed": false
     },
     "MalformedParsedCards/MixedValidAndInvalidAbilities": {
       "passed": false
     },
-    "HandParsedCards/M21/EnthrallingHold": {
+    "OracleLines/CMM/DarettiScrapSavant/Line2": {
       "passed": false
     },
-    "HandParsedCards/M21/RookieMistake": {
+    "HandParsedCards/LlanowarElves": {
+      "passed": true
+    },
+    "OracleLines/M21/EnthrallingHold/Line2": {
       "passed": false
+    },
+    "HandParsedCards/M21/QuirionDryad/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/TLA/PlanetariumOfWanShiTong/Line1": {
+      "passed": true
+    },
+    "KeywordExpander/Protection_FromEverything_ExpandsCorrectly": {
+      "passed": true
+    },
+    "HandParsedCards/M21/VitoThornOfTheDuskRose": {
+      "passed": false
+    },
+    "OracleLines/CLB/WilsonRefinedGrizzly/Line4": {
+      "passed": false
+    },
+    "MalformedParsedCards/CompletelyGarbledAbility/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/M21/RookieMistake/Line1": {
+      "passed": false
+    },
+    "OracleLines/TLA/PlanetariumOfWanShiTong/Line2": {
+      "passed": false
+    },
+    "OracleLines/M21/ChandrasIncinerator/Line2": {
+      "passed": true
+    },
+    "HandParsedCards/TLA/PlanetariumOfWanShiTong/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/CMM/DarettiScrapSavant/Line3": {
+      "passed": false
+    },
+    "HandParsedCards/M21/BarrinTolarianArchmage": {
+      "passed": false
+    },
+    "HandParsedCards/TLA/WanShiTongLibrarian": {
+      "passed": false
+    },
+    "OracleLines/2X2/ManaVault/Line4": {
+      "passed": true
     },
     "HandParsedCards/M21/WishcoinCrab": {
       "passed": true
     },
-    "HandParsedCards/GrizzlyBears": {
+    "HandParsedCards/M21/DeathbloomThallid/RoundTrip": {
+      "passed": true
+    },
+    "HandParsedCards/CLB/WilsonRefinedGrizzly": {
+      "passed": false
+    },
+    "HandParsedCards/M21/EnthrallingHold": {
+      "passed": false
+    },
+    "OracleLines/JMP/RhysticStudy/Line1": {
+      "passed": false
+    },
+    "OracleLines/TLA/WanShiTongLibrarian/Line2": {
+      "passed": true
+    },
+    "HandParsedCards/ChatterfangSquirrelGeneral/RoundTrip": {
+      "passed": true
+    },
+    "HandParsedCards/ChatterfangSquirrelGeneral": {
+      "passed": false
+    },
+    "HandParsedCards/LlanowarElves/RoundTrip": {
+      "passed": true
+    },
+    "KeywordExpander/Expand_ThrowsWhenParameterRequiredButMissing": {
+      "passed": true
+    },
+    "HandParsedCards/TLA/WanShiTongLibrarian/RoundTrip": {
+      "passed": true
+    },
+    "HandParsedCards/JMP/RhysticStudy/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/TLA/WanShiTongLibrarian/Line1": {
+      "passed": true
+    },
+    "HandParsedCards/M21/BasrisLieutenant/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/M21/ChandrasIncinerator/Line3": {
+      "passed": false
+    },
+    "OracleLines/2X2/ManaVault/Line2": {
+      "passed": false
+    },
+    "KeywordExpander/Flying_ExpandsToEvasionEffect": {
+      "passed": true
+    },
+    "OracleLines/M21/VitoThornOfTheDuskRose/Line1": {
+      "passed": false
+    },
+    "OracleLines/SLD/DeadpoolTradingCard/Line3": {
+      "passed": false
+    },
+    "HandParsedCards/M21/NiambiEsteemedSpeaker/RoundTrip": {
+      "passed": true
+    },
+    "HandParsedCards/DMR/MysticRemora": {
+      "passed": false
+    },
+    "MalformedParsedCards/UnparsedEffectInActivatedAbility/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/TLA/WanShiTongLibrarian/Line4": {
+      "passed": false
+    },
+    "HandParsedCards/M21/BarrinTolarianArchmage/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/M21/BaneslayerAngel/Line1": {
+      "passed": true
+    },
+    "OracleLines/M21/BarrinTolarianArchmage/Line1": {
+      "passed": false
+    },
+    "HandParsedCards/M21/ReadTheTides": {
+      "passed": false
+    },
+    "OracleLines/M21/SanctumOfStoneFangs/Line1": {
+      "passed": false
+    },
+    "HandParsedCards/SLD/DeadpoolTradingCard": {
+      "passed": false
+    },
+    "HandParsedCards/M21/EnthrallingHold/RoundTrip": {
       "passed": true
     },
     "HandParsedCards/CMM/DarettiScrapSavant": {
+      "passed": false
+    },
+    "HandParsedCards/M21/DeathbloomThallid": {
+      "passed": true
+    },
+    "HandParsedCards/GrizzlyBears/RoundTrip": {
+      "passed": true
+    },
+    "HandParsedCards/SLD/DeadpoolTradingCard/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/M21/NiambiEsteemedSpeaker/Line2": {
+      "passed": false
+    },
+    "HandParsedCards/M21/SanctumOfStoneFangs": {
+      "passed": false
+    },
+    "OracleLines/CLB/WilsonRefinedGrizzly/Line3": {
+      "passed": false
+    },
+    "HandParsedCards/JMP/RhysticStudy": {
+      "passed": false
+    },
+    "HandParsedCards/M21/WishcoinCrab/RoundTrip": {
+      "passed": true
+    },
+    "HandParsedCards/M21/RookieMistake/RoundTrip": {
+      "passed": true
+    },
+    "MalformedParsedCards/CompletelyGarbledAbility": {
+      "passed": false
+    },
+    "HandParsedCards/M21/BasrisLieutenant": {
+      "passed": false
+    },
+    "HandParsedCards/M21/ReadTheTides/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/M21/EnthrallingHold/Line1": {
+      "passed": false
+    },
+    "OracleLines/M21/NiambiEsteemedSpeaker/Line1": {
+      "passed": true
+    },
+    "HandParsedCards/M21/BaneslayerAngel/RoundTrip": {
+      "passed": true
+    },
+    "HandParsedCards/2X2/ManaVault/RoundTrip": {
+      "passed": true
+    },
+    "HandParsedCards/M21/ChandrasIncinerator/RoundTrip": {
+      "passed": true
+    },
+    "HandParsedCards/CLB/WilsonRefinedGrizzly/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/DMR/MysticRemora/Line1": {
+      "passed": false
+    },
+    "OracleLines/CLB/WilsonRefinedGrizzly/Line1": {
+      "passed": false
+    },
+    "HandParsedCards/M21/Hobblefiend/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/LlanowarElves/Line1": {
+      "passed": true
+    },
+    "OracleLines/M21/VitoThornOfTheDuskRose/Line2": {
+      "passed": false
+    },
+    "OracleLines/M21/EnthrallingHold/Line3": {
+      "passed": false
+    },
+    "MalformedParsedCards/MixedValidAndInvalidAbilities/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/CMM/DarettiScrapSavant/Line4": {
+      "passed": false
+    },
+    "HandParsedCards/M21/NiambiEsteemedSpeaker": {
+      "passed": false
+    },
+    "HandParsedCards/M21/BaneslayerAngel": {
+      "passed": true
+    },
+    "HandParsedCards/2X2/ManaVault": {
+      "passed": false
+    },
+    "HandParsedCards/M21/Hobblefiend": {
+      "passed": false
+    },
+    "OracleLines/CLB/WilsonRefinedGrizzly/Line2": {
+      "passed": true
+    },
+    "OracleLines/2X2/ManaVault/Line1": {
+      "passed": false
+    },
+    "OracleLines/ChatterfangSquirrelGeneral/Line3": {
+      "passed": false
+    },
+    "OracleLines/M21/BarrinTolarianArchmage/Line2": {
+      "passed": false
+    },
+    "OracleLines/M21/ChandrasIncinerator/Line1": {
+      "passed": false
+    },
+    "OracleLines/SLD/DeadpoolTradingCard/Line1": {
+      "passed": false
+    },
+    "KeywordExpander/Vigilance_ExpandsToVigilanceEffect": {
+      "passed": true
+    },
+    "HandParsedCards/M21/QuirionDryad": {
+      "passed": false
+    },
+    "OracleLines/M21/QuirionDryad/Line1": {
+      "passed": false
+    },
+    "OracleLines/M21/DeathbloomThallid/Line1": {
+      "passed": true
+    },
+    "KeywordExpander/DoubleStrike_ExpandsToCombatDamageTimingBoth": {
+      "passed": true
+    },
+    "OracleLines/M21/BasrisLieutenant/Line2": {
+      "passed": false
+    },
+    "HandParsedCards/M21/VitoThornOfTheDuskRose/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/TLA/WanShiTongLibrarian/Line3": {
+      "passed": false
+    },
+    "OracleLines/ChatterfangSquirrelGeneral/Line2": {
+      "passed": false
+    },
+    "OracleLines/M21/ReadTheTides/Line1": {
+      "passed": false
+    },
+    "OracleLines/DMR/MysticRemora/Line2": {
+      "passed": false
+    },
+    "OracleLines/M21/Hobblefiend/Line2": {
+      "passed": false
+    },
+    "HandParsedCards/GrizzlyBears": {
+      "passed": true
+    },
+    "OracleLines/2X2/ManaVault/Line3": {
       "passed": false
     }
   }

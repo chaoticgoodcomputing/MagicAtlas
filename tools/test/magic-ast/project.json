@@ -29,7 +29,7 @@
       "configurations": {
         "baseline": {
           "commands": [
-            "UPDATE_BASELINE=true dotnet test"
+            "UPDATE_BASELINE=true bash scripts/run-ratchet-tests.sh"
           ]
         },
         "raw": {
