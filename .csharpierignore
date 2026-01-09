@@ -1,0 +1,2 @@
+# Ignore external reference documentation
+docs/reference/misc/external/**

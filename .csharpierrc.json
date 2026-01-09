@@ -1,0 +1,10 @@
+{
+  "printWidth": 100,
+  "useTabs": false,
+  "tabWidth": 2,
+  "endOfLine": "lf",
+  "preprocessorSymbolSets": [ ],
+  "exclude": [
+    "docs/reference/misc/external/**"
+  ]
+}

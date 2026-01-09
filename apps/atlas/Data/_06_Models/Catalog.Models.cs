@@ -17,7 +17,7 @@ public partial class Catalog
   public ICatalogEntry<byte[]> MiniLmOnnxModel =>
     GetOrCreateEntry(
       () =>
-        CatalogEntriesMLNet.MLNet.OnnxModel(
+        CatalogEntriesMLNet.OnnxModel(
           label: "MiniLmOnnxModel",
           filePath: $"{_basePath}/_06_Models/Datasets/Pretrained/all-MiniLM-L6-v2/model.onnx"
         )

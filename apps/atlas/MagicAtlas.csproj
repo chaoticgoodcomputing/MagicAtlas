@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="Flowthru" Version="0.1.*" />
+    <PackageReference Include="Flowthru.Integrations.MLNet" Version="0.1.*" />
+    <PackageReference Include="Flowthru.Extensions.ML" Version="0.1.*" />
   </ItemGroup>
 
   <ItemGroup>

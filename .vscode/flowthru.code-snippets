@@ -1,0 +1,63 @@
+{
+	// Place your flowthru workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+
+	"FlowthruPipeline": {
+		"scope": "csharp",
+		"prefix": "_pipeline",
+		"body": [
+			"using Flowthru.Pipelines;",
+			"using $1",
+			"",
+			"public static class ${RELATIVE_FILEPATH/.*?(\\w+).cs$/$1/}",
+			"{",
+			"  public static Pipeline Create(Catalog catalog)",
+			"  {",
+			"    return PipelineBuilder.CreatePipeline(pipeline =>",
+			"    {",
+			"      pipeline.AddNode(",
+			"        label: \"$2\",",
+			"        description: \"\"\"",
+			"          $3",
+			"        \"\"\",",
+			"        transform: $4.Create(),",
+			"        input: $5,",
+			"        output: $6",
+			"      );",
+			"    });",
+			"  }",
+			"}",
+		],
+		"description": "Creates a basic Flowthru pipeline structure."
+	},
+	"FlowthruNode": {
+		"scope": "csharp",
+		"prefix": "_node",
+		"body": [
+			"using $1",
+			"",
+			"namespace $2",
+			"",
+			"/// <summary>",
+			"/// $5",
+			"/// </summary>",
+			"public static class ${RELATIVE_FILEPATH/.*?(\\w+).cs$/$1/}",
+			"{",
+			"  public static Func<$3, Task<$4>> Create()",
+			"  {",
+			"    return async (input) =>",
+			"    {",
+			"",
+			"      var result = new $4()",
+			"      return await Task.FromResult(result);",
+			"    };",
+			"  }",
+			"}",
+		],
+		"description": "Creates a basic Flowthru node structure."
+	}
+}

@@ -1,5 +1,6 @@
 {
   "recommendations": [
-    "nrwl.angular-console"
+    "ms-dotnettools.vscode-dotnet-pack",
+    "csharpier.csharpier-vscode"
   ]
 }

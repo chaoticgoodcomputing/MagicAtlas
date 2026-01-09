@@ -1,0 +1,22 @@
+{
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "name": "dotnet",
+  "sourceRoot": "apps",
+  "targets": {
+    "restore": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [ "dotnet restore" ],
+        "parallel": false
+      },
+      "configurations": {
+        "force": {
+          "commands": [
+            "dotnet nuget locals all --clear",
+            "dotnet restore --force"
+          ]
+        }
+      }
+    }
+  }
+}
