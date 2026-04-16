@@ -1,4 +1,4 @@
-using Flowthru.Abstractions;
+using Flowthru.Core.Abstractions;
 using MagicAtlas.Data.Enums.Card;
 
 namespace MagicAtlas.Data._02_Intermediate.Schemas;

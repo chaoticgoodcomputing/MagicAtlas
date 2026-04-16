@@ -5,6 +5,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,22 +13,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flowthru" Version="0.1.*" />
-    <PackageReference Include="Flowthru.Integrations.MLNet" Version="0.1.*" />
-    <PackageReference Include="Flowthru.Extensions.ML" Version="0.1.*" />
+    <PackageReference Include="Flowthru" Version="0.6.*" />
+    <PackageReference Include="Flowthru.Extensions.EFCore" Version="0.6.*" />
+    <PackageReference Include="Flowthru.Extensions.Python" Version="0.6.*" />
+    <PackageReference Include="Flowthru.Extensions.Metadata.Json" Version="0.6.*" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.*" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.*" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.ML.Tokenizers" Version="1.0.3" />
-    <PackageReference Include="Plotly.NET" Version="5.1.0" />
-    <PackageReference Include="Plotly.NET.CSharp" Version="0.13.0" />
-    <PackageReference Include="Plotly.NET.ImageExport" Version="6.1.0" />
   </ItemGroup>
 
 </Project>

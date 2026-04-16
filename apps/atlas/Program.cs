@@ -1,97 +1,98 @@
-using Flowthru.Application;
+using Flowthru.Core.Cli;
+using Flowthru.Core.Services;
+using Flowthru.Extensions.Python;
+using Flowthru.Extensions.Python.Execution;
+using Flowthru.Extensions.Python.Runtime;
+using Flowthru.Extensions.Python.Services;
 using MagicAtlas.Data;
-using MagicAtlas.Pipelines;
 using MagicAtlas.Pipelines.CardProcessing;
-using MagicAtlas.Pipelines.EmbeddingAnalytics;
-using MagicAtlas.Pipelines.EmbeddingReductions;
-using MagicAtlas.Pipelines.EmbeddingViz;
-using MagicAtlas.Pipelines.MagicAstTesting;
-using MagicAtlas.Pipelines.OracleExploration;
-using MagicAtlas.Pipelines.OracleTextEmebdding;
+using MagicAtlas.Pipelines.OracleEmbedding;
 using MagicAtlas.Pipelines.RulesProcessing;
-using MagicAtlas.Pipelines.UmapExploration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace MagicAtlas;
 
 public class Program
 {
-  public static async Task<int> Main(string[] args)
-  {
-    var app = FlowthruApplication.Create(
+  public static Task<int> Main(string[] args) =>
+    FlowthruCli.RunStandaloneAsync(
       args,
-      builder =>
-      {
-        builder.UseConfiguration();
-
-        builder
-          .RegisterPipeline<Catalog>(label: "RulesProcessing", pipeline: RulesProcessing.Create)
-          .WithDescription("Processes MTG comprehensive rules into structured JSON");
-
-        builder
-          .RegisterPipelineWithConfiguration<Catalog, CardProcessing.Params>(
-            label: "CardProcessing",
-            pipeline: CardProcessing.Create,
-            configurationSection: "Flowthru:Pipelines:CardProcessing"
-          )
-          .WithDescription("Processes Scryfall card data and preps for analysis");
-
-        builder
-          .RegisterPipeline<Catalog>(
-            label: "OracleTextEmbedding",
-            pipeline: OracleTextEmebdding.Create
-          )
-          .WithDescription("Generates BERT embeddings for oracle text analysis");
-
-        builder
-          .RegisterPipelineWithConfiguration<Catalog, EmbeddingAnalytics.Params>(
-            label: "EmbeddingAnalytics",
-            pipeline: EmbeddingAnalytics.Create,
-            configurationSection: "Flowthru:Pipelines:EmbeddingAnalytics"
-          )
-          .WithDescription("Analyzes card embeddings through nearest neighbor search");
-
-        builder
-          .RegisterPipelineWithConfiguration<Catalog, EmbeddingReductions.Params>(
-            label: "EmbeddingReductions",
-            pipeline: EmbeddingReductions.Create,
-            configurationSection: "Flowthru:Pipelines:EmbeddingReductions"
-          )
-          .WithDescription("Performs PCA dimensionality reduction on oracle text embeddings");
-
-        builder
-          .RegisterPipelineWithConfiguration<Catalog, EmbeddingViz.Params>(
-            label: "EmbeddingViz",
-            pipeline: EmbeddingViz.Create,
-            configurationSection: "Flowthru:Pipelines:EmbeddingViz"
-          )
-          .WithDescription("Creates enhanced UMAP visualizations with card metadata (color, CMC)");
-
-        builder
-          .RegisterPipeline<Catalog>(label: "OracleExploration", pipeline: OracleExploration.Create)
-          .WithDescription("Creates enhanced UMAP visualizations with card metadata (color, CMC)");
-
-        builder
-          .RegisterPipelineWithConfiguration<Catalog, UmapExploration.Params>(
-            label: "UmapExploration",
-            pipeline: UmapExploration.Create,
-            configurationSection: "Flowthru:Pipelines:UmapExploration"
-          )
-          .WithDescription(
-            "Explores UMAP hyperparameter sensitivity through grid search visualization"
-          );
-
-        builder
-          .RegisterPipelineWithConfiguration<Catalog, MagicAstTesting.Params>(
-            label: "MagicAST",
-            pipeline: MagicAstTesting.Create,
-            configurationSection: "Flowthru:Pipelines:MagicAstTesting"
-          )
-          .WithDescription(
-            "Tests MagicAST parsing by sampling cards and generating AST analysis with diagnostics"
-          );
-      }
+      services => ConfigureServices(services, ResolveProjectDirectory())
     );
 
-    return await app.RunAsync();
+  // `dotnet run --project apps/atlas` leaves CWD at the caller, and Nx redirects build
+  // output to `dist/apps/atlas/net10.0/` (not `bin/Debug/net10.0/`), so we can't rely on a
+  // fixed "../../.." walk. Instead, search upward from the assembly location for the csproj.
+  private static string ResolveProjectDirectory()
+  {
+    var dir = new DirectoryInfo(AppContext.BaseDirectory);
+    while (dir is not null)
+    {
+      if (File.Exists(Path.Combine(dir.FullName, "MagicAtlas.csproj"))) return dir.FullName;
+      dir = dir.Parent;
+    }
+    var cwd = new DirectoryInfo(Directory.GetCurrentDirectory());
+    while (cwd is not null)
+    {
+      var candidate = Path.Combine(cwd.FullName, "apps", "atlas", "MagicAtlas.csproj");
+      if (File.Exists(candidate)) return Path.GetDirectoryName(candidate)!;
+      cwd = cwd.Parent;
+    }
+    throw new InvalidOperationException("Could not locate MagicAtlas.csproj.");
+  }
+
+  private static void ConfigureServices(IServiceCollection services, string basePath)
+  {
+    services.AddLogging(logging =>
+    {
+      logging.AddConsole();
+      logging.SetMinimumLevel(LogLevel.Information);
+    });
+
+    // Instantiate the Python subprocess executor directly. Flowthru 0.6.0's AddFlowthru
+    // throws if no flows are registered, so we can't spin a temp provider just to resolve
+    // IPythonExecutor. Match the sample's "Phase 6 workaround" and pass the executor into
+    // OracleEmbedding.Create(...) below.
+    var pythonOptions = new PythonRuntimeOptions
+    {
+      VenvPath = Path.Combine(basePath, ".venv"),
+    };
+    pythonOptions.ModuleSearchPaths.Add(basePath);
+    var executor = new SubprocessPythonExecutor(
+      pythonOptions,
+      NullLogger<SubprocessPythonExecutor>.Instance
+    );
+
+    services.AddFlowthru(flowthru =>
+    {
+      flowthru.UseConfiguration(opts => opts.ConfigurationPath = basePath);
+      flowthru.RegisterCatalog(_ => new Catalog(Path.Combine(basePath, "Data")));
+      flowthru.UsePython(python =>
+      {
+        python.ModuleSearchPaths.Add(basePath);
+        python.VenvPath = Path.Combine(basePath, ".venv");
+      });
+
+      flowthru
+        .RegisterFlow(label: "RulesProcessing", flow: RulesProcessing.Create)
+        .WithDescription("Processes MTG comprehensive rules into structured JSON");
+
+      flowthru
+        .RegisterFlow(
+          label: "CardProcessing",
+          flow: CardProcessing.Create,
+          configurationSection: "Flowthru:Pipelines:CardProcessing"
+        )
+        .WithDescription("Processes Scryfall card data and preps for analysis");
+
+      flowthru
+        .RegisterFlow(
+          label: "OracleEmbedding",
+          flow: (Catalog catalog) => OracleEmbedding.Create(catalog, executor)
+        )
+        .WithDescription("BERT + UMAP (Python): produces dumps/atlas-points.json for the API");
+    });
   }
 }

@@ -1,4 +1,4 @@
-using Flowthru.Data;
+using Flowthru.Core.Data;
 using MagicAtlas.Data._01_Raw.Schemas;
 
 namespace MagicAtlas.Data;
@@ -10,10 +10,10 @@ public partial class Catalog
   ///
   /// Retrieved from https://magic.wizards.com/en/rules
   /// </summary>
-  public ICatalogEntry<string> RawRules =>
-    GetOrCreateEntry(
+  public IItem<string> RawRules =>
+    CreateItem(
       () =>
-        CatalogEntries.Single.Text(
+        ItemFactory.Single.Text(
           label: "RawRules",
           filePath: $"{_basePath}/_01_Raw/Datasets/mtg-rules.txt"
         )
@@ -24,10 +24,10 @@ public partial class Catalog
   ///
   /// Retrieved from Scryfall's bulk data export at https://scryfall.com/docs/api/card-symbols
   /// </summary>
-  public ICatalogEntry<RawScryfallCardSymbolList> RawCardSymbols =>
-    GetOrCreateEntry(
+  public IItem<RawScryfallCardSymbolList> RawCardSymbols =>
+    CreateItem(
       () =>
-        CatalogEntries.Single.Json<RawScryfallCardSymbolList>(
+        ItemFactory.Single.Json<RawScryfallCardSymbolList>(
           label: "RawCardSymbols",
           filePath: $"{_basePath}/_01_Raw/Datasets/oracle-card-symbols.json"
         )
@@ -38,10 +38,10 @@ public partial class Catalog
   ///
   /// Retrieved from Scryfall's bulk data export at https://scryfall.com/docs/api/bulk-data
   /// </summary>
-  public ICatalogEntry<IEnumerable<RawScryfallCard>> RawCards =>
-    GetOrCreateEntry(
+  public IItem<IEnumerable<RawScryfallCard>> RawCards =>
+    CreateItem(
       () =>
-        CatalogEntries.Enumerable.Json<RawScryfallCard>(
+        ItemFactory.Enumerable.Json<RawScryfallCard>(
           label: "RawCards",
           filePath: $"{_basePath}/_01_Raw/Datasets/oracle-cards.json"
         )

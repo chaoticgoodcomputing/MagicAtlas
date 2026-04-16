@@ -1,4 +1,4 @@
-using Flowthru.Data;
+using Flowthru.Core.Data;
 using MagicAtlas.Data._02_Intermediate.Schemas;
 
 namespace MagicAtlas.Data;
@@ -13,10 +13,10 @@ public partial class Catalog
   /// Processed card symbols with strong types.
   /// Persisted to disk as JSON.
   /// </summary>
-  public ICatalogEntry<CardSymbolDictionary> ProcessedCardSymbols =>
-    GetOrCreateEntry(
+  public IItem<CardSymbolDictionary> ProcessedCardSymbols =>
+    CreateItem(
       () =>
-        CatalogEntries.Single.Json<CardSymbolDictionary>(
+        ItemFactory.Single.Json<CardSymbolDictionary>(
           label: "ProcessedCardSymbols",
           filePath: $"{_basePath}/_02_Intermediate/Datasets/card-symbols.json"
         )
@@ -27,16 +27,16 @@ public partial class Catalog
   /// Stored in memory only (not persisted to disk due to size).
   /// Contains 35,000+ card objects with full type safety.
   /// </summary>
-  public ICatalogEntry<CardCollection> ProcessedCards =>
-    GetOrCreateEntry(() => CatalogEntries.Single.Memory<CardCollection>(label: "ProcessedCards"));
+  public IItem<CardCollection> ProcessedCards =>
+    CreateItem(() => ItemFactory.Single.Memory<CardCollection>(label: "ProcessedCards"));
 
   /// <summary>
   /// Introduction section.
   /// </summary>
-  public ICatalogEntry<string> Intro =>
-    GetOrCreateEntry(
+  public IItem<string> Intro =>
+    CreateItem(
       () =>
-        CatalogEntries.Single.Text(
+        ItemFactory.Single.Text(
           label: "Intro",
           filePath: $"{_basePath}/_02_Intermediate/Datasets/RulesSections/intro.txt"
         )
@@ -45,10 +45,10 @@ public partial class Catalog
   /// <summary>
   /// Table of contents section.
   /// </summary>
-  public ICatalogEntry<string> TableOfContents =>
-    GetOrCreateEntry(
+  public IItem<string> TableOfContents =>
+    CreateItem(
       () =>
-        CatalogEntries.Single.Text(
+        ItemFactory.Single.Text(
           label: "TableOfContents",
           filePath: $"{_basePath}/_02_Intermediate/Datasets/RulesSections/toc.txt"
         )
@@ -57,10 +57,10 @@ public partial class Catalog
   /// <summary>
   /// Rules section (numbered rules only).
   /// </summary>
-  public ICatalogEntry<string> RulesText =>
-    GetOrCreateEntry(
+  public IItem<string> RulesText =>
+    CreateItem(
       () =>
-        CatalogEntries.Single.Text(
+        ItemFactory.Single.Text(
           label: "RulesText",
           filePath: $"{_basePath}/_02_Intermediate/Datasets/RulesSections/rules.txt"
         )
@@ -69,10 +69,10 @@ public partial class Catalog
   /// <summary>
   /// Glossary section.
   /// </summary>
-  public ICatalogEntry<string> GlossaryText =>
-    GetOrCreateEntry(
+  public IItem<string> GlossaryText =>
+    CreateItem(
       () =>
-        CatalogEntries.Single.Text(
+        ItemFactory.Single.Text(
           label: "GlossaryText",
           filePath: $"{_basePath}/_02_Intermediate/Datasets/RulesSections/glossary.txt"
         )
@@ -81,10 +81,10 @@ public partial class Catalog
   /// <summary>
   /// Credits section.
   /// </summary>
-  public ICatalogEntry<string> Credits =>
-    GetOrCreateEntry(
+  public IItem<string> Credits =>
+    CreateItem(
       () =>
-        CatalogEntries.Single.Text(
+        ItemFactory.Single.Text(
           label: "Credits",
           filePath: $"{_basePath}/_02_Intermediate/Datasets/RulesSections/credits.txt"
         )

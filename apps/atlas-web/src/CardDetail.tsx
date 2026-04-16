@@ -1,9 +1,12 @@
 import { useQuery } from "@apollo/client";
 import { CARD_QUERY } from "./queries";
+import { ManaCost } from "./ManaCost";
+import { Rulings } from "./Rulings";
 
 type CardDetailNode = {
   id: string;
   name: string;
+  oracleId: string | null;
   manaCost: string | null;
   typeLine: string | null;
   oracleText: string | null;
@@ -47,16 +50,27 @@ export function CardDetail({ id, onBack }: { id: string; onBack: () => void }) {
         {card.imageUriLarge && <img src={card.imageUriLarge} alt={card.name} />}
         <div>
           <h2 style={{ marginTop: 0 }}>
-            {card.name} {card.manaCost && <small style={{ color: "#9aa3bd" }}>{card.manaCost}</small>}
+            {card.name}{" "}
+            {card.manaCost && (
+              <span style={{ marginLeft: "0.5rem" }}>
+                <ManaCost value={card.manaCost} />
+              </span>
+            )}
           </h2>
           <p style={{ color: "#9aa3bd", marginTop: 0 }}>{card.typeLine}</p>
 
-          {card.oracleText && <div className="oracle">{card.oracleText}</div>}
+          {card.oracleText && (
+            <div className="oracle">
+              {card.oracleText.split("\n").map((line, i) => (
+                <p key={i} style={{ margin: "0 0 0.5em" }}>
+                  <ManaCost value={line} />
+                </p>
+              ))}
+            </div>
+          )}
 
           {(card.power || card.toughness) && (
-            <p>
-              <strong>P/T:</strong> {card.power}/{card.toughness}
-            </p>
+            <p><strong>P/T:</strong> {card.power}/{card.toughness}</p>
           )}
           {card.loyalty && <p><strong>Loyalty:</strong> {card.loyalty}</p>}
           {card.keywords.length > 0 && (
@@ -77,6 +91,8 @@ export function CardDetail({ id, onBack }: { id: string; onBack: () => void }) {
           <p style={{ marginTop: "1rem" }}>
             <a href={card.scryfallUri} target="_blank" rel="noreferrer">View on Scryfall →</a>
           </p>
+
+          {card.oracleId && <Rulings oracleId={card.oracleId} />}
         </div>
       </div>
     </>
