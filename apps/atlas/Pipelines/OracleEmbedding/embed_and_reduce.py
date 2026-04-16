@@ -1,11 +1,12 @@
-"""Embed oracle text with a BERT sentence-transformer, then reduce to 2D via UMAP.
+"""Embed each oracle-text fragment with a BERT sentence-transformer, then reduce to 2D via UMAP.
 
-Input:  DataFrame of FilteredCardCoreData rows — we only need `Id` and `OracleText`.
-Output: DataFrame with columns [id, x, y, text_type].
+Input:  DataFrame of OracleInput rows — one row per ability fragment
+        (card_id, text, text_type). A single card can contribute multiple rows.
+Output: DataFrame with columns [card_id, x, y, text_type] — one point per fragment.
 
 The sentence-transformer model (all-MiniLM-L6-v2, ~90 MB) is downloaded on first run and
-cached under ~/.cache/huggingface. UMAP fit+transform on ~30K 384-dim vectors takes a minute
-on CPU.
+cached under ~/.cache/huggingface. UMAP fit+transform on ~60K 384-dim vectors takes a
+couple minutes on CPU.
 """
 from __future__ import annotations
 
@@ -17,20 +18,21 @@ logger = logging.getLogger(__name__)
 
 
 @step(inputs=["OracleInputs"], outputs="AtlasPoints")
-def embed_and_reduce(cards: pd.DataFrame) -> pd.DataFrame:
+def embed_and_reduce(fragments: pd.DataFrame) -> pd.DataFrame:
     # Lazy imports — these pull in ~GB of torch/transformers so we don't want them
     # loaded when Flowthru is just inspecting the module at pipeline-graph time.
     from sentence_transformers import SentenceTransformer
     import umap
 
-    logger.info("Input: %d cards", len(cards))
+    logger.info("Input: %d fragments across %d cards",
+                len(fragments), fragments["card_id"].nunique())
 
-    texts = cards["oracle_text"].fillna("").astype(str).tolist()
+    texts = fragments["text"].fillna("").astype(str).tolist()
 
     logger.info("Loading sentence-transformer (all-MiniLM-L6-v2)...")
     model = SentenceTransformer("all-MiniLM-L6-v2")
 
-    logger.info("Encoding %d oracle texts...", len(texts))
+    logger.info("Encoding %d fragments...", len(texts))
     embeddings = model.encode(
         texts,
         batch_size=64,
@@ -52,8 +54,8 @@ def embed_and_reduce(cards: pd.DataFrame) -> pd.DataFrame:
     logger.info("UMAP output shape: %s", coords.shape)
 
     return pd.DataFrame({
-        "id": cards["id"],
+        "card_id": fragments["card_id"],
         "x": coords[:, 0].astype(float),
         "y": coords[:, 1].astype(float),
-        "text_type": "oracle",
+        "text_type": fragments["text_type"],
     })

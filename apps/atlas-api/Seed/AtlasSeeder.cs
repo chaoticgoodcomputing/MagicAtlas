@@ -296,10 +296,10 @@ public sealed class AtlasSeeder
 
             batch.Add(new AtlasPointRow
             {
-                Id = raw.Id,
+                CardId = raw.CardId,
                 X = raw.X,
                 Y = raw.Y,
-                TextType = raw.TextType ?? "oracle",
+                TextType = raw.TextType ?? "passive",
             });
 
             if (batch.Count >= 1000)
@@ -321,7 +321,7 @@ public sealed class AtlasSeeder
 
     private sealed class RawAtlasPoint
     {
-        [JsonPropertyName("id")] public Guid Id { get; set; }
+        [JsonPropertyName("card_id")] public Guid CardId { get; set; }
         [JsonPropertyName("x")] public double X { get; set; }
         [JsonPropertyName("y")] public double Y { get; set; }
         [JsonPropertyName("text_type")] public string? TextType { get; set; }

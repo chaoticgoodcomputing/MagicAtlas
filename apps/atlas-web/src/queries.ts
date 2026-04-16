@@ -115,7 +115,7 @@ export const ATLAS_POINTS_QUERY = gql`
       atlas {
         atlasPointRows(first: 50000) {
           totalCount
-          nodes { id x y textType }
+          nodes { id cardId x y textType }
         }
       }
     }

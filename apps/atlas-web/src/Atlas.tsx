@@ -4,7 +4,7 @@ import createScatterplot from "regl-scatterplot";
 import { ATLAS_POINTS_QUERY } from "./queries";
 import { CardDetail } from "./CardDetail";
 
-type Point = { id: string; x: number; y: number; textType: string };
+type Point = { id: string; cardId: string; x: number; y: number; textType: string };
 
 type AtlasPointsResponse = {
   discover: { atlas: { atlasPointRows: { totalCount: number; nodes: Point[] } } };
@@ -12,13 +12,15 @@ type AtlasPointsResponse = {
 
 // regl-scatterplot expects points as [x, y, categoryIndex] tuples, normalised to [-1, 1].
 // Colors are indexed by categoryIndex.
-const TEXT_TYPES = ["oracle", "keyword", "triggered", "activated", "passive"] as const;
+// Order matches the ability classifier's output. Colors loosely mirror the
+// original UMAP screenshot (keyword=blue, activated=red, triggered=orange, passive=purple).
+const TEXT_TYPES = ["keyword", "named_triggered", "triggered", "activated", "passive"] as const;
 const COLORS: [number, number, number, number][] = [
-  [0.48, 0.69, 1.0, 0.85], // oracle — blue
-  [0.60, 0.40, 0.90, 0.85], // keyword — purple
-  [1.00, 0.64, 0.30, 0.85], // triggered — orange
+  [0.30, 0.50, 0.95, 0.85], // keyword — blue
+  [0.30, 0.80, 0.55, 0.85], // named_triggered — green
+  [1.00, 0.70, 0.20, 0.85], // triggered — orange/yellow
   [0.95, 0.30, 0.30, 0.85], // activated — red
-  [0.30, 0.80, 0.55, 0.85], // passive — green
+  [0.60, 0.40, 0.85, 0.75], // passive — purple
 ];
 
 function normalize(points: Point[]): [number, number, number][] {
@@ -51,9 +53,28 @@ export function Atlas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const scatterplotRef = useRef<ReturnType<typeof createScatterplot> | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [enabledTypes, setEnabledTypes] = useState<Set<string>>(
+    () => new Set(TEXT_TYPES)
+  );
 
-  const points = data?.discover.atlas.atlasPointRows.nodes ?? [];
+  const allPoints = data?.discover.atlas.atlasPointRows.nodes ?? [];
+  // Filter BEFORE normalizing so the layout auto-fits to the visible subset.
+  const points = useMemo(
+    () => allPoints.filter((p) => enabledTypes.has(p.textType)),
+    [allPoints, enabledTypes]
+  );
   const pointsData = useMemo(() => normalize(points), [points]);
+
+  const toggleType = (t: string) => {
+    setEnabledTypes((prev) => {
+      const next = new Set(prev);
+      if (next.has(t)) next.delete(t);
+      else next.add(t);
+      // Keep at least one category on.
+      if (next.size === 0) return new Set([t]);
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (!canvasRef.current || pointsData.length === 0) return;
@@ -69,6 +90,7 @@ export function Atlas() {
       height,
       pointSize: 3,
       pointColor: COLORS,
+      colorBy: "valueA", // the 3rd element of each [x, y, categoryIndex] tuple
       opacity: 0.85,
       lassoColor: [1, 1, 1, 0.2],
     });
@@ -79,7 +101,7 @@ export function Atlas() {
     scatterplot.subscribe("pointOver", (pointIndex: number) => {
       canvas.style.cursor = "pointer";
       const p = points[pointIndex];
-      if (p) canvas.title = p.id;
+      if (p) canvas.title = `${p.textType} · ${p.cardId}`;
     });
     scatterplot.subscribe("pointOut", () => {
       canvas.style.cursor = "default";
@@ -88,7 +110,7 @@ export function Atlas() {
     scatterplot.subscribe("select", ({ points: indices }: { points: number[] }) => {
       if (indices.length > 0) {
         const p = points[indices[0]];
-        if (p) setSelectedId(p.id);
+        if (p) setSelectedId(p.cardId);
       }
     });
 
@@ -115,19 +137,32 @@ export function Atlas() {
   return (
     <div className="atlas-container">
       <div className="atlas-meta">
-        <span>{points.length.toLocaleString()} cards · scroll to zoom · drag to pan · click a point</span>
+        <span>
+          {points.length.toLocaleString()}
+          {points.length !== allPoints.length && ` of ${allPoints.length.toLocaleString()}`}
+          {" "}fragments · scroll to zoom · drag to pan · click a point
+        </span>
         <div className="legend">
-          {TEXT_TYPES.map((t, i) => (
-            <span key={t} className="legend-item">
-              <span
-                className="legend-swatch"
-                style={{
-                  background: `rgba(${Math.round(COLORS[i][0] * 255)}, ${Math.round(COLORS[i][1] * 255)}, ${Math.round(COLORS[i][2] * 255)}, 0.9)`,
-                }}
-              />
-              {t}
-            </span>
-          ))}
+          {TEXT_TYPES.map((t, i) => {
+            const active = enabledTypes.has(t);
+            return (
+              <button
+                key={t}
+                type="button"
+                className={`legend-item${active ? " active" : ""}`}
+                onClick={() => toggleType(t)}
+                title={active ? `Hide ${t}` : `Show ${t}`}
+              >
+                <span
+                  className="legend-swatch"
+                  style={{
+                    background: `rgba(${Math.round(COLORS[i][0] * 255)}, ${Math.round(COLORS[i][1] * 255)}, ${Math.round(COLORS[i][2] * 255)}, 0.9)`,
+                  }}
+                />
+                {t.replace(/_/g, " ")}
+              </button>
+            );
+          })}
         </div>
       </div>
       <canvas ref={canvasRef} className="atlas-canvas" />

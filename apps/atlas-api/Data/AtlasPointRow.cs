@@ -5,20 +5,23 @@ using Trax.Effect.Attributes;
 namespace MagicAtlas.Api.Data;
 
 /// <summary>
-/// A card's 2D position in UMAP-reduced oracle-text embedding space.
-/// Populated from <c>dumps/atlas-points.json</c>, which the MagicAtlas Flowthru pipeline
-/// (OracleEmbedding flow, sentence-transformers + umap-learn) produces.
+/// A single oracle-text fragment's 2D position in UMAP-reduced BERT embedding space.
+/// One card can have multiple rows (one per ability: keyword, triggered, activated, etc.),
+/// so the primary key is synthetic and <see cref="CardId"/> is the link back.
 /// </summary>
 [TraxQueryModel(
     Namespace = GraphQLNamespaces.Atlas,
-    Description = "A card's 2D position in oracle-text embedding space (UMAP output)."
+    Description = "A 2D position for one ability fragment of a card in oracle-text embedding space."
 )]
 [Table("atlas_points", Schema = "atlas")]
 public class AtlasPointRow
 {
     [Key]
     [Column("id")]
-    public Guid Id { get; set; }
+    public long Id { get; set; }
+
+    [Column("card_id")]
+    public Guid CardId { get; set; }
 
     [Column("x")]
     public double X { get; set; }
@@ -26,7 +29,7 @@ public class AtlasPointRow
     [Column("y")]
     public double Y { get; set; }
 
-    /// <summary>Ability-type classification of the embedded text (currently always "oracle").</summary>
+    /// <summary>keyword | named_triggered | triggered | activated | passive</summary>
     [Column("text_type")]
-    public string TextType { get; set; } = "oracle";
+    public string TextType { get; set; } = "passive";
 }
