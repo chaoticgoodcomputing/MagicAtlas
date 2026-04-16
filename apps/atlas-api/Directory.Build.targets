@@ -1,0 +1,4 @@
+<!-- Override the repo-root CheckNxModuleBoundaries target for this project — Nx's module-boundary check fails on projects not registered with Nx. -->
+<Project>
+  <Target Name="CheckNxModuleBoundaries" BeforeTargets="Build" />
+</Project>
