@@ -180,7 +180,19 @@ a { color: #7bb0ff; }
   align-items: center;
   gap: 0.3rem;
   text-transform: capitalize;
+  background: transparent;
+  border: 1px solid transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  cursor: pointer;
+  opacity: 0.35;
+  transition: opacity 0.12s ease, border-color 0.12s ease;
 }
+.legend-item:hover { border-color: #4b5575; }
+.legend-item.active { opacity: 1; border-color: #2a2f42; }
 .legend-swatch {
   width: 10px;
   height: 10px;

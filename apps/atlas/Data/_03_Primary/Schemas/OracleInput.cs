@@ -3,15 +3,25 @@ using Flowthru.Core.Abstractions;
 namespace MagicAtlas.Data._03_Primary.Schemas;
 
 /// <summary>
-/// The minimal oracle-text payload fed to the Python embedding step.
-/// Deliberately Arrow-friendly (no <c>decimal</c>, no nested types) because the row
-/// ships to a Python subprocess via Apache Arrow.
+/// A single oracle-text fragment fed to the Python embedding step — one row per ability,
+/// not per card. A card with "Flying / When this enters, draw a card. / {T}: add {G}." yields
+/// three rows with text types "keyword", "triggered", and "activated" respectively.
 /// </summary>
+/// <remarks>
+/// Deliberately Arrow-friendly (no <c>decimal</c>, no nested types) because the row ships to a
+/// Python subprocess via Apache Arrow.
+/// </remarks>
 public record OracleInput : IStructuredSerializable, IFlatSchema
 {
-  [SerializedLabel("id")]
-  public required Guid Id { get; init; }
+  /// <summary>The Scryfall card id. NOT unique across rows — multiple fragments per card.</summary>
+  [SerializedLabel("card_id")]
+  public required Guid CardId { get; init; }
 
-  [SerializedLabel("oracle_text")]
-  public string OracleText { get; init; } = "";
+  /// <summary>The cleaned ability text (reminder-parentheticals stripped).</summary>
+  [SerializedLabel("text")]
+  public required string Text { get; init; }
+
+  /// <summary>One of: keyword, named_triggered, triggered, activated, passive.</summary>
+  [SerializedLabel("text_type")]
+  public required string TextType { get; init; }
 }

@@ -32,5 +32,10 @@ public class AtlasDbContext : DbContext
         set.HasIndex(s => s.Code).IsUnique();
         set.HasIndex(s => s.ReleasedAt);
         set.HasIndex(s => s.SetType);
+
+        var atlasPoint = modelBuilder.Entity<AtlasPointRow>();
+        atlasPoint.Property(a => a.Id).ValueGeneratedOnAdd();
+        atlasPoint.HasIndex(a => a.CardId);
+        atlasPoint.HasIndex(a => a.TextType);
     }
 }
