@@ -1,22 +1,55 @@
 import { useState } from "react";
+import { Atlas } from "./Atlas";
 import { CardList } from "./CardList";
 import { CardDetail } from "./CardDetail";
+import { SetList } from "./SetList";
+import { SymbolsProvider } from "./ManaCost";
+
+type View = "atlas" | "cards" | "sets";
 
 export function App() {
+  const [view, setView] = useState<View>("atlas");
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   return (
-    <div className="layout">
-      <div className="header">
-        <h1>Magic Atlas</h1>
-        <small>Scryfall oracle catalog · GraphQL via Trax</small>
-      </div>
+    <SymbolsProvider>
+      <div className="layout">
+        <div className="header">
+          <div>
+            <h1>Magic Atlas</h1>
+            <small>Scryfall oracle catalog · GraphQL via Trax</small>
+          </div>
+          <nav className="tabs">
+            <button
+              className={view === "atlas" ? "active" : ""}
+              onClick={() => { setView("atlas"); setSelectedId(null); }}
+            >
+              Atlas
+            </button>
+            <button
+              className={view === "cards" ? "active" : ""}
+              onClick={() => { setView("cards"); setSelectedId(null); }}
+            >
+              Cards
+            </button>
+            <button
+              className={view === "sets" ? "active" : ""}
+              onClick={() => { setView("sets"); setSelectedId(null); }}
+            >
+              Sets
+            </button>
+          </nav>
+        </div>
 
-      {selectedId ? (
-        <CardDetail id={selectedId} onBack={() => setSelectedId(null)} />
-      ) : (
-        <CardList onSelect={setSelectedId} />
-      )}
-    </div>
+        {view === "atlas" && <Atlas />}
+        {view === "cards" &&
+          (selectedId ? (
+            <CardDetail id={selectedId} onBack={() => setSelectedId(null)} />
+          ) : (
+            <CardList onSelect={setSelectedId} />
+          ))}
+        {view === "sets" && <SetList />}
+      </div>
+    </SymbolsProvider>
   );
 }

@@ -1,8 +1,8 @@
-using Flowthru.Data;
+using Flowthru.Core.Data;
 
 namespace MagicAtlas.Data;
 
-public partial class Catalog : DataCatalogBase
+public partial class Catalog : CatalogAbstract
 {
   private readonly string _basePath;
 

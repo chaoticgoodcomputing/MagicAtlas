@@ -1,4 +1,4 @@
-using Flowthru.Data;
+using Flowthru.Core.Data;
 using MagicAtlas.Data._03_Primary.Schemas;
 
 namespace MagicAtlas.Data;
@@ -12,10 +12,10 @@ public partial class Catalog
   /// <summary>
   /// Parsed hierarchical rules structure.
   /// </summary>
-  public ICatalogEntry<RulesStructure> ParsedRules =>
-    GetOrCreateEntry(
+  public IItem<RulesStructure> ParsedRules =>
+    CreateItem(
       () =>
-        CatalogEntries.Single.Json<RulesStructure>(
+        ItemFactory.Single.Json<RulesStructure>(
           label: "ParsedRules",
           filePath: $"{_basePath}/_03_Primary/Datasets/rules-structure.json"
         )
@@ -24,10 +24,10 @@ public partial class Catalog
   /// <summary>
   /// Parsed glossary as term-definition pairs.
   /// </summary>
-  public ICatalogEntry<GlossaryEntries> ParsedGlossary =>
-    GetOrCreateEntry(
+  public IItem<GlossaryEntries> ParsedGlossary =>
+    CreateItem(
       () =>
-        CatalogEntries.Single.Json<GlossaryEntries>(
+        ItemFactory.Single.Json<GlossaryEntries>(
           label: "ParsedGlossary",
           filePath: $"{_basePath}/_03_Primary/Datasets/glossary.json"
         )
@@ -37,10 +37,10 @@ public partial class Catalog
   /// Filtered card core data (analysis-relevant fields).
   /// Persisted to disk as JSON.
   /// </summary>
-  public ICatalogEntry<IEnumerable<CardCoreData>> FilteredCardCoreData =>
-    GetOrCreateEntry(
+  public IItem<IEnumerable<CardCoreData>> FilteredCardCoreData =>
+    CreateItem(
       () =>
-        CatalogEntries.Enumerable.Json<CardCoreData>(
+        ItemFactory.Enumerable.Json<CardCoreData>(
           label: "FilteredCardCoreData",
           filePath: $"{_basePath}/_03_Primary/Datasets/filtered-cards-core.json"
         )
@@ -50,12 +50,35 @@ public partial class Catalog
   /// Filtered card metadata (non-analysis fields).
   /// Persisted to disk as JSON (metadata is not flat tabular data).
   /// </summary>
-  public ICatalogEntry<IEnumerable<CardMetadata>> FilteredCardMetadata =>
-    GetOrCreateEntry(
+  public IItem<IEnumerable<CardMetadata>> FilteredCardMetadata =>
+    CreateItem(
       () =>
-        CatalogEntries.Enumerable.Json<CardMetadata>(
+        ItemFactory.Enumerable.Json<CardMetadata>(
           label: "FilteredCardMetadata",
           filePath: $"{_basePath}/_03_Primary/Datasets/filtered-cards-metadata.json"
+        )
+    );
+
+  /// <summary>
+  /// Minimal oracle-text projection fed to the Python embedding step.
+  /// Memory-only — exists solely to decouple CardCoreData (which has non-Arrow-friendly
+  /// fields like <c>decimal Cmc</c>) from the Python subprocess handoff.
+  /// </summary>
+  public IItem<IEnumerable<OracleInput>> OracleInputs =>
+    CreateItem(
+      () => ItemFactory.Enumerable.Memory<OracleInput>(label: "OracleInputs")
+    );
+
+  /// <summary>
+  /// 2D UMAP projection of oracle-text BERT embeddings — consumed by the atlas-api.
+  /// Persisted to the shared <c>dumps/</c> folder so the API can load without a direct DB coupling.
+  /// </summary>
+  public IItem<IEnumerable<AtlasPoint>> AtlasPoints =>
+    CreateItem(
+      () =>
+        ItemFactory.Enumerable.Json<AtlasPoint>(
+          label: "AtlasPoints",
+          filePath: $"{_basePath}/../../../dumps/atlas-points.json"
         )
     );
 }

@@ -12,7 +12,8 @@
     "@apollo/client": "^3.11.8",
     "graphql": "^16.9.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "regl-scatterplot": "^1.15.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",

@@ -106,5 +106,164 @@ a { color: #7bb0ff; }
 }
 
 .detail img { width: 100%; border-radius: 8px; }
-.detail .oracle { white-space: pre-wrap; line-height: 1.5; }
+.detail .oracle { line-height: 1.5; }
 .detail .back { background: none; border: none; color: #7bb0ff; cursor: pointer; padding: 0; margin-bottom: 1rem; }
+
+/* Mana symbols */
+.mana-cost { display: inline-flex; align-items: center; gap: 2px; }
+.mana-pip {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.1em;
+  display: inline-block;
+}
+
+/* Tabs */
+.header { display: flex; gap: 1rem; align-items: center; }
+.header > div { flex: 1; }
+.tabs { display: flex; gap: 0.25rem; }
+.tabs button {
+  background: #1b1e2c;
+  border: 1px solid #2a2f42;
+  color: inherit;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.tabs button.active { background: #2a2f42; border-color: #4b5575; }
+
+/* Rulings */
+.rulings { margin-top: 2rem; }
+.rulings h3 { border-bottom: 1px solid #2a2f42; padding-bottom: 0.4rem; }
+.rulings ul { list-style: none; padding: 0; margin: 0; }
+.rulings li { padding: 0.6rem 0; border-bottom: 1px solid #1b1e2c; }
+.rulings li:last-child { border-bottom: none; }
+.rulings .ruling-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.78rem;
+  color: #9aa3bd;
+}
+.rulings .source { text-transform: uppercase; letter-spacing: 0.05em; }
+.rulings p { margin: 0.35rem 0 0; line-height: 1.45; }
+
+/* Atlas (WebGL scatter) */
+.atlas-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 180px);
+  min-height: 500px;
+}
+.atlas-canvas {
+  width: 100%;
+  height: 100%;
+  background: #0b0d14;
+  border-radius: 8px;
+  cursor: grab;
+}
+.atlas-canvas:active { cursor: grabbing; }
+.atlas-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  color: #9aa3bd;
+  font-size: 0.85rem;
+}
+.legend {
+  display: flex;
+  gap: 0.75rem;
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  text-transform: capitalize;
+}
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.empty-atlas {
+  background: #1b1e2c;
+  border: 1px solid #2a2f42;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+}
+.empty-atlas pre {
+  background: #0b0d14;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: #7bb0ff;
+}
+
+/* Slide-in drawer for card detail */
+.drawer {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  justify-content: flex-end;
+}
+.drawer-panel {
+  width: min(640px, 100%);
+  height: 100%;
+  background: #141622;
+  overflow-y: auto;
+  padding: 2rem;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
+  animation: slideIn 180ms ease-out;
+}
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Sets grid */
+.set-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+.set {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #1b1e2c;
+  border: 1px solid #2a2f42;
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.12s ease, transform 0.12s ease;
+}
+.set:hover { border-color: #4b5575; transform: translateY(-1px); }
+.set-icon {
+  width: 36px;
+  height: 36px;
+  filter: invert(1);
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+.set-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.set-meta strong {
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.set-meta span {
+  font-size: 0.78rem;
+  color: #9aa3bd;
+}
