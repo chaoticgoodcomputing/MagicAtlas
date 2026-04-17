@@ -170,7 +170,12 @@ export function Atlas() {
       {selectedId && (
         <aside className="drawer" onClick={(e) => e.target === e.currentTarget && setSelectedId(null)}>
           <div className="drawer-panel">
-            <CardDetail id={selectedId} onBack={() => setSelectedId(null)} />
+            <CardDetail
+              key={selectedId}
+              id={selectedId}
+              onBack={() => setSelectedId(null)}
+              onSelect={setSelectedId}
+            />
           </div>
         </aside>
       )}

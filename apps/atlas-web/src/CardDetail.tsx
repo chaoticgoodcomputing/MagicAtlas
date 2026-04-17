@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { CARD_QUERY } from "./queries";
 import { ManaCost } from "./ManaCost";
 import { Rulings } from "./Rulings";
+import { NearestCards } from "./NearestCards";
 
 type CardDetailNode = {
   id: string;
@@ -32,7 +33,15 @@ type CardResponse = {
   discover: { atlas: { cardRows: { nodes: CardDetailNode[] } } };
 };
 
-export function CardDetail({ id, onBack }: { id: string; onBack: () => void }) {
+export function CardDetail({
+  id,
+  onBack,
+  onSelect,
+}: {
+  id: string;
+  onBack: () => void;
+  onSelect?: (id: string) => void;
+}) {
   const { data, loading, error } = useQuery<CardResponse>(CARD_QUERY, {
     variables: { id },
   });
@@ -93,6 +102,8 @@ export function CardDetail({ id, onBack }: { id: string; onBack: () => void }) {
           </p>
 
           {card.oracleId && <Rulings oracleId={card.oracleId} />}
+
+          {onSelect && <NearestCards cardId={card.id} onSelect={onSelect} />}
         </div>
       </div>
     </>

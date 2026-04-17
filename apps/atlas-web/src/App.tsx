@@ -44,7 +44,12 @@ export function App() {
         {view === "atlas" && <Atlas />}
         {view === "cards" &&
           (selectedId ? (
-            <CardDetail id={selectedId} onBack={() => setSelectedId(null)} />
+            <CardDetail
+              key={selectedId}
+              id={selectedId}
+              onBack={() => setSelectedId(null)}
+              onSelect={setSelectedId}
+            />
           ) : (
             <CardList onSelect={setSelectedId} />
           ))}

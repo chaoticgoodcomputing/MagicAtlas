@@ -109,6 +109,24 @@ export const SETS_QUERY = gql`
   }
 `;
 
+export const CARDS_BY_IDS_QUERY = gql`
+  query CardsByIds($ids: [UUID!]!) {
+    discover {
+      atlas {
+        cardRows(where: { id: { in: $ids } }, first: 200) {
+          nodes {
+            id
+            name
+            typeLine
+            manaCost
+            imageUriNormal
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const ATLAS_POINTS_QUERY = gql`
   query AtlasPoints {
     discover {
