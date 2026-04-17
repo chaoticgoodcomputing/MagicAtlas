@@ -102,10 +102,12 @@ export function CardDetail({
           </p>
 
           {card.oracleId && <Rulings oracleId={card.oracleId} />}
-
-          {onSelect && <NearestCards cardId={card.id} onSelect={onSelect} />}
         </div>
       </div>
+
+      {/* Pulled out of .detail so the neighbor scroll gets the full drawer width
+          rather than being squeezed into the 1fr text column (~300px). */}
+      {onSelect && <NearestCards cardId={card.id} onSelect={onSelect} />}
     </>
   );
 }
