@@ -14,6 +14,15 @@ namespace MagicAtlas.Data._03_Primary.Schemas;
 [FlowthruSchema]
 public partial record OracleInput
 {
+  /// <summary>
+  /// Globally-unique identifier for this fragment, assigned at projection time. The join key for
+  /// every downstream artifact (BERT vectors, 2D atlas points, cluster assignments, cluster
+  /// labels) — replaces the prior reliance on row alignment between flows. Regenerated each
+  /// pipeline run; not stable across runs.
+  /// </summary>
+  [SerializedLabel("point_id")]
+  public required Guid PointId { get; init; }
+
   /// <summary>The Scryfall card id. NOT unique across rows — multiple fragments per card.</summary>
   [SerializedLabel("card_id")]
   public required Guid CardId { get; init; }

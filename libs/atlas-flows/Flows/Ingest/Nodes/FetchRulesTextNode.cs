@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using Flowthru.Step;
 
-namespace MagicAtlas.Flows.RulesProcessing.Nodes;
+namespace MagicAtlas.Flows.Ingest.Nodes;
 
 /// <summary>
 /// Source step that resolves and fetches the current MTG comprehensive rules text. Wizards' rules

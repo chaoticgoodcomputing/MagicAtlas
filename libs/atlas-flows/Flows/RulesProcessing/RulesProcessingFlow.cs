@@ -6,23 +6,16 @@ using MagicAtlas.Flows.RulesProcessing.Nodes;
 namespace MagicAtlas.Flows.RulesProcessing;
 
 /// <summary>
-/// Parses the MTG comprehensive rules text file into structured JSON: a hierarchical rules
-/// tree plus a flat glossary dictionary. Pure C# — text/regex processing only, no Python.
+/// Parses the MTG comprehensive rules text file (produced by the <c>Ingest</c> flow) into
+/// structured JSON: a hierarchical rules tree plus a flat glossary dictionary. Pure C# —
+/// text/regex processing only, no Python and no HTTP.
 /// </summary>
 public static class RulesProcessingFlow
 {
-  public static BuiltFlow Create(Catalog catalog, HttpClient httpClient)
+  public static BuiltFlow Create(Catalog catalog)
   {
     return FlowBuilder.CreateFlow("RulesProcessing", pipeline =>
     {
-      // Source step: resolve the current MTG rules .txt URL by scraping
-      // https://magic.wizards.com/en/rules, fetch the body, and park it in RawRules.
-      pipeline.AddStep<string>(
-        label: "FetchRulesText",
-        transform: FetchRulesTextNode.Create(httpClient),
-        outputs: catalog.RawRules
-      );
-
       // Node 1: split raw text into 5 sections
       pipeline.AddStep<
         string,

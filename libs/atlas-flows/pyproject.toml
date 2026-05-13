@@ -4,11 +4,27 @@ version = "0.1.0"
 description = "Python steps for the MagicAtlas Flowthru pipeline (BERT embedding + UMAP reduction)"
 requires-python = ">=3.11"
 dependencies = [
+  # GPU-accelerated UMAP + HDBSCAN (RAPIDS, CUDA 13 wheels from NVIDIA's PyPI index below).
+  # hdbscan / umap-learn are kept as CPU fallbacks; we import cuml first and fall back if its
+  # import fails (e.g. on a CPU-only host).
+  "cuml-cu13>=26.4.0",
+  "hdbscan>=0.8.33",
   "pandas>=2.0.0",
   "pyarrow>=18.0.0",
+  "plotly>=5.20.0",
+  "scikit-learn>=1.4.0",
   "sentence-transformers>=3.0.0",
   "umap-learn>=0.5.5",
 ]
 
 [tool.uv]
 package = false
+
+# RAPIDS wheels live on NVIDIA's PyPI mirror, not the public index.
+[[tool.uv.index]]
+name = "nvidia"
+url = "https://pypi.nvidia.com/"
+explicit = true
+
+[tool.uv.sources]
+cuml-cu13 = { index = "nvidia" }

@@ -27,10 +27,19 @@ public static class OracleEmbeddingFlow
       );
 
       pipeline.AddPythonStep(
-        label: "EmbedAndReduce",
-        module: "Flows.OracleEmbedding.embed_and_reduce",
-        function: "embed_and_reduce",
+        label: "EmbedOracleText",
+        module: "Flows.OracleEmbedding.embed_oracle_text",
+        function: "embed_oracle_text",
         input: catalog.OracleInputs,
+        output: catalog.BertEmbeddings,
+        executor: executor
+      );
+
+      pipeline.AddPythonStep(
+        label: "ReduceToTwoD",
+        module: "Flows.OracleEmbedding.reduce_to_2d",
+        function: "reduce_to_2d",
+        input: catalog.BertEmbeddings,
         output: catalog.AtlasPoints,
         executor: executor
       );

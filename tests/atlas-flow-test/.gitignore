@@ -1,7 +1,8 @@
 # Generated metadata
 Metadata/
 
-# Flowthru's HTTP-cached storage medium (conditional-GET cache for upstream raw resources)
+# 24h TTL cache for the Ingest flow's upstream GETs (Scryfall + Wizards). Written by
+# FilesystemHttpCacheHandler — see tests/atlas-flow-test/FilesystemHttpCacheHandler.cs.
 .http-cache/
 
 # Ignore all generated data artifacts
@@ -10,7 +11,6 @@ Data/**
 # Un-ignore layer directories and their Schemas subdirectories so git can traverse them
 !Data/*/
 !Data/*/Schemas/
-!Data/_01_Raw/Datasets/
 
 # Allow raw input dataset files
 !Data/_01_Raw/Datasets/*

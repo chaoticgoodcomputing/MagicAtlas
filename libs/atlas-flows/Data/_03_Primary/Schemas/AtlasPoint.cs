@@ -10,6 +10,13 @@ namespace MagicAtlas.Data._03_Primary.Schemas;
 [FlowthruSchema]
 public partial record AtlasPoint
 {
+  /// <summary>
+  /// Globally-unique fragment identifier — the join key for cluster assignments and labels.
+  /// Sourced from the upstream <c>OracleInput.PointId</c>, preserved through embedding + reduction.
+  /// </summary>
+  [SerializedLabel("point_id")]
+  public required Guid PointId { get; init; }
+
   [SerializedLabel("card_id")]
   public required Guid CardId { get; init; }
 

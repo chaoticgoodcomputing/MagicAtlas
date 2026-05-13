@@ -3,12 +3,12 @@ using System.Text.Json;
 using Flowthru.Step;
 using MagicAtlas.Data._01_Raw.Schemas;
 
-namespace MagicAtlas.Flows.CardProcessing.Nodes;
+namespace MagicAtlas.Flows.Ingest.Nodes;
 
 /// <summary>
 /// Source step that fetches Scryfall's card-symbology JSON from
-/// <c>https://api.scryfall.com/symbology</c> and parks it in the in-memory
-/// <c>RawCardSymbols</c> catalog item. Uses an injected <see cref="HttpClient"/> directly because
+/// <c>https://api.scryfall.com/symbology</c> and parks it in the <c>RawCardSymbols</c> catalog
+/// item. Uses an injected <see cref="HttpClient"/> directly because
 /// <see cref="JsonSingletonBuilder{T}"/> doesn't compose with Flowthru's HTTP storage-medium
 /// resolver in 0.17.x — once that gap is closed we can collapse this step into a plain HTTP
 /// catalog item.

@@ -56,12 +56,32 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Minimal oracle-text projection fed to the Python embedding step.
-  /// Memory-only — exists solely to decouple CardCoreData (which has non-Arrow-friendly
-  /// fields like <c>decimal Cmc</c>) from the Python subprocess handoff.
+  /// Minimal oracle-text projection fed to the Python embedding step. Persisted (not memory-only)
+  /// because the Clustering flow's <c>generate_ctfidf_labels</c> step re-reads the per-fragment
+  /// text long after the embedding step has run, and we want that step to be runnable in
+  /// isolation (e.g. when re-labeling with a different backend).
   /// </summary>
   public IItem<IEnumerable<OracleInput>> OracleInputs =>
-    CreateItem(() => Item.Of<IEnumerable<OracleInput>>("OracleInputs").Memory().Build());
+    CreateItem(() =>
+      Item.Of<IEnumerable<OracleInput>>("OracleInputs")
+        .Json()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/oracle-inputs.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Sentence-transformer (all-MiniLM-L6-v2, 384-dim float32) embeddings of each oracle-text
+  /// fragment. The shared intermediate between the 2D-UMAP display reduction and the 5D-UMAP +
+  /// HDBSCAN clustering reduction — BERT encode runs once, both reductions read this file.
+  /// Parquet (~80 MB) because JSON would be unworkable at ~50K × 384 floats.
+  /// </summary>
+  public IItem<IEnumerable<BertEmbedding>> BertEmbeddings =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<BertEmbedding>>("BertEmbeddings")
+        .Parquet()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/bert-embeddings.parquet")
+        .Build()
+    );
 
   /// <summary>
   /// 2D UMAP projection of oracle-text BERT embeddings — consumed by the atlas-api.
@@ -73,6 +93,32 @@ public partial class Catalog
       Item.Of<IEnumerable<AtlasPoint>>("AtlasPoints")
         .Json()
         .AtPath($"{_basePath}/_03_Primary/Datasets/atlas-points.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Per-point cluster assignments produced by the Clustering flow's HDBSCAN step over a 5D-UMAP
+  /// reduction of <see cref="BertEmbeddings"/>. One row per fragment, joinable to
+  /// <see cref="AtlasPoints"/> / <see cref="OracleInputs"/> on <c>point_id</c>.
+  /// </summary>
+  public IItem<IEnumerable<ClusterAssignment>> ClusterAssignments =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<ClusterAssignment>>("ClusterAssignments")
+        .Json()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/cluster-assignments.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Per-cluster labels. Backend-agnostic schema (see <see cref="ClusterLabel"/>) so this single
+  /// catalog item can hold output from c-TF-IDF today and an LLM labeler tomorrow without
+  /// downstream code changes.
+  /// </summary>
+  public IItem<IEnumerable<ClusterLabel>> ClusterLabels =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<ClusterLabel>>("ClusterLabels")
+        .Json()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/cluster-labels.json")
         .Build()
     );
 }

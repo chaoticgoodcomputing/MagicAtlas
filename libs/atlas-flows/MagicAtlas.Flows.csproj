@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="Flowthru" Version="0.17.*" />
-    <PackageReference Include="Flowthru.Extensions.Http" Version="0.17.*" />
     <PackageReference Include="Flowthru.Extensions.Python" Version="0.17.*" />
   </ItemGroup>
 

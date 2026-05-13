@@ -47,6 +47,7 @@ public static partial class ProjectOracleInputNode
 
       yield return new OracleInput
       {
+        PointId = Guid.NewGuid(),
         CardId = card.Id,
         Text = line,
         TextType = Classify(line),
