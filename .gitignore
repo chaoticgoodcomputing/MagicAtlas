@@ -282,3 +282,5 @@ apps/atlas/Metadata/
 apps/atlas/.venv/
 **/__pycache__/
 *.pyc
+
+.claude/worktrees
