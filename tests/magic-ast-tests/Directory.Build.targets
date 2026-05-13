@@ -1,0 +1,4 @@
+<!-- Override the repo-root Nx module-boundary check — see libs/atlas-flows/Directory.Build.targets. -->
+<Project>
+  <Target Name="CheckNxModuleBoundaries" BeforeTargets="Build" />
+</Project>

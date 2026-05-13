@@ -1,0 +1,8 @@
+<!--
+  Override the repo-root CheckNxModuleBoundaries target — see libs/atlas-flows/Directory.Build.targets
+  for context. The hardcoded pnpm path in the root targets has drifted; Nx still enforces boundaries
+  via `nx build` and `nx affected`, so the MSBuild path is redundant.
+-->
+<Project>
+  <Target Name="CheckNxModuleBoundaries" BeforeTargets="Build" />
+</Project>

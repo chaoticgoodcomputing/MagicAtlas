@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>MagicAtlas</RootNamespace>
+    <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Flowthru" Version="0.17.*" />
+    <PackageReference Include="Flowthru.Extensions.Http" Version="0.17.*" />
+    <PackageReference Include="Flowthru.Extensions.Python" Version="0.17.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="pyproject.toml" />
+    <None Include="Flows/**/*.py" />
+  </ItemGroup>
+
+</Project>

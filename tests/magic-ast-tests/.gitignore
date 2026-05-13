@@ -1,0 +1,19 @@
+# Generated metadata
+Metadata/
+
+# Ignore all generated data artifacts
+Data/**
+
+# Un-ignore layer directories and their Schemas subdirectories so git can traverse them
+!Data/*/
+!Data/*/Schemas/
+!Data/_01_Raw/Datasets/
+
+# Allow raw input dataset files
+!Data/_01_Raw/Datasets/*
+
+# Allow all schema and catalog .cs files
+!Data/**/*.cs
+
+# Un-ignore all .gitkeep files anywhere
+!**/.gitkeep

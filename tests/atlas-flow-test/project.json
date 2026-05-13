@@ -1,0 +1,43 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "atlas-flow-test",
+  "sourceRoot": "tests/atlas-flow-test",
+  "projectType": "application",
+  "targets": {
+    "run": {
+      "//": "Run the atlas pipeline harness. Pass --flows X,Y to limit, or no args for full run.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run"],
+        "cwd": "tests/atlas-flow-test",
+        "parallel": false
+      }
+    },
+    "purge": {
+      "//": "Wipe all auto-generated data files from intermediate/primary layers.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "find Data/_02_Intermediate/Datasets -mindepth 1 -type f ! -name '.gitkeep' -delete",
+          "find Data/_03_Primary/Datasets -mindepth 1 -type f ! -name '.gitkeep' -delete"
+        ],
+        "cwd": "tests/atlas-flow-test",
+        "parallel": false
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot}",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "format:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot} --check",
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  }
+}

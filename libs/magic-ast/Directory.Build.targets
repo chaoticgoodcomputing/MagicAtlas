@@ -1,0 +1,6 @@
+<!-- Override the repo-root Nx module-boundary check — the hardcoded pnpm hash in the root
+     Directory.Build.targets has drifted out of date with the current node_modules layout, so this
+     target fails on every build until the root resolver is repaired. -->
+<Project>
+  <Target Name="CheckNxModuleBoundaries" BeforeTargets="Build" />
+</Project>

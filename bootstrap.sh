@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────
-# Bootstrap everything that isn't in git: Scryfall bulk data, the pipeline
-# raw-input symlinks, and the Python venv for the OracleEmbedding step.
+# Bootstrap the bits that aren't in git and can't be pulled by the pipeline
+# itself: the Python venv (sentence-transformers + UMAP), and the atlas-api's
+# Scryfall oracle-cards seed file at dumps/oracle-cards.json.
+#
+# What's NO LONGER in this script (handled by the Flowthru pipeline directly):
+#   • Pipeline's RawCards / RawCardSymbols / RawRules — the atlas-flows lib
+#     now auto-fetches all three over HTTP, with Flowthru's conditional-GET
+#     caching under tests/atlas-flow-test/.http-cache/.
 #
 # What's NOT in this script (because the running API handles it):
 #   • Rulings, Sets, and card-Symbology — AtlasSeeder fetches these from
@@ -15,14 +21,15 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DUMPS="$REPO_ROOT/dumps"
-RAW="$REPO_ROOT/apps/atlas/Data/_01_Raw/Datasets"
 
 echo "→ Creating data directories"
-mkdir -p "$DUMPS" "$RAW"
+mkdir -p "$DUMPS"
 
-# ── 1. Scryfall oracle-cards bulk (~165 MB) ──────────────────────────
-# Consumed by both the API seeder (dumps/) and the Flowthru pipeline (_01_Raw/).
-# We fetch once into dumps/ and symlink into the pipeline's expected location.
+# ── 1. Scryfall oracle-cards bulk (~165 MB) for atlas-api seeder ─────
+# The atlas-api's AtlasSeeder reads dumps/oracle-cards.json on first start
+# to populate its card table. The Flowthru pipeline auto-fetches its own
+# copy through Flowthru.Extensions.Http and doesn't share this file.
+# TODO: migrate the API seeder to HTTP-direct too, and remove this step.
 if [[ -f "$DUMPS/oracle-cards.json" ]]; then
   echo "✓ dumps/oracle-cards.json already present"
 else
@@ -33,35 +40,15 @@ else
   curl -L --progress-bar -o "$DUMPS/oracle-cards.json" "$URL"
 fi
 
-if [[ -e "$RAW/oracle-cards.json" ]]; then
-  echo "✓ _01_Raw/Datasets/oracle-cards.json already present"
-else
-  echo "→ Symlinking oracle-cards.json into the pipeline's raw inputs"
-  ln -sf "$DUMPS/oracle-cards.json" "$RAW/oracle-cards.json"
-fi
-
-# ── 2. Scryfall symbology (tiny) ─────────────────────────────────────
-# Only the pipeline's RawCardSymbols catalog entry reads this file. The API
-# fetches symbology via the HTTP API at seed time, so we don't put it in dumps/.
-if [[ -f "$RAW/oracle-card-symbols.json" ]]; then
-  echo "✓ _01_Raw/Datasets/oracle-card-symbols.json already present"
-else
-  echo "→ Downloading Scryfall symbology"
-  curl -s -o "$RAW/oracle-card-symbols.json" https://api.scryfall.com/symbology
-fi
-
-# ── 3. MTG comprehensive rules (optional, only for RulesProcessing) ──
-if [[ ! -f "$RAW/mtg-rules.txt" ]]; then
-  echo "ℹ mtg-rules.txt not downloaded (only needed for RulesProcessing flow)."
-  echo "  Grab it from https://magic.wizards.com/en/rules if you want to run that flow."
-fi
-
-# ── 4. Python venv for the OracleEmbedding step ──────────────────────
-VENV="$REPO_ROOT/apps/atlas/.venv"
+# ── 2. Python venv for the OracleEmbedding step ──────────────────────
+# Lives alongside the lib's pyproject.toml so the Flowthru host (configured by
+# tests/atlas-flow-test/Program.cs) can resolve both module search paths and the venv
+# from a single libs/atlas-flows location.
+VENV="$REPO_ROOT/libs/atlas-flows/.venv"
 if [[ -d "$VENV" ]]; then
-  echo "✓ Python venv already present at apps/atlas/.venv"
+  echo "✓ Python venv already present at libs/atlas-flows/.venv"
 else
-  echo "→ Creating Python venv at apps/atlas/.venv"
+  echo "→ Creating Python venv at libs/atlas-flows/.venv"
   python3 -m venv "$VENV"
 fi
 
@@ -84,10 +71,11 @@ echo "────────────────────────�
 echo "Bootstrap complete. To bring the atlas online end-to-end:"
 echo ""
 echo "  1. docker compose -f apps/atlas-api/docker-compose.yml up -d"
-echo "  2. dotnet run --project apps/atlas -- --flows CardProcessing,OracleEmbedding"
-echo "       (first run downloads the BERT model ~90 MB; UMAP takes ~2 min)"
+echo "  2. dotnet run --project tests/atlas-flow-test"
+echo "       (auto-fetches Scryfall bulk + symbology + MTG rules over HTTP;"
+echo "        first run downloads the BERT model ~90 MB; UMAP takes ~2 min)"
 echo "  3. dotnet run --project apps/atlas-api"
-echo "       (seeds all five tables on first run from Scryfall + dumps/)"
+echo "       (seeds all five tables on first run from Scryfall + atlas-flow-test outputs)"
 echo "  4. cd apps/atlas-web && pnpm install && pnpm dev"
 echo "       (open http://localhost:5173)"
 echo "───────────────────────────────────────────────────────────────"

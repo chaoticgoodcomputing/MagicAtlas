@@ -1,0 +1,30 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "magic-ast-tests",
+  "sourceRoot": "tests/magic-ast-tests",
+  "projectType": "application",
+  "targets": {
+    "run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run"],
+        "cwd": "tests/magic-ast-tests",
+        "parallel": false
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot}",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "format:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot} --check",
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  }
+}
