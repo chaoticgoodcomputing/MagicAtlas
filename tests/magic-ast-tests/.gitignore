@@ -10,7 +10,7 @@ Data/**
 !Data/_01_Raw/Datasets/
 
 # Allow raw input dataset files
-!Data/_01_Raw/Datasets/*
+!Data/_01_Raw/Datasets/Curated/**/*
 
 # Allow all schema and catalog .cs files
 !Data/**/*.cs

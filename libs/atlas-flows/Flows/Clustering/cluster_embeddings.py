@@ -1,21 +1,16 @@
-"""HDBSCAN clustering over a moderately-reduced UMAP projection of the BERT vectors.
+"""HDBSCAN clustering over the 5D-UMAP-reduced embeddings.
 
-Input:  DataFrame [point_id, card_id, text_type, embedding] — full-dim sentence-transformer output
-        with each row's vector packed as a little-endian byte blob (see BertEmbedding.cs).
+Input:  DataFrame [point_id, vector] — 5D byte-packed embeddings produced by
+        `reduce_to_five_d` (see ClusteringEmbedding.cs).
 Output: DataFrame [point_id, cluster_id] — `cluster_id == -1` for HDBSCAN noise.
 
-Two-stage reduction is the standard recipe for this stack:
-  1. UMAP to ~5 dims preserves enough semantic structure for density-based clustering while
-     killing the curse-of-dimensionality that hurts HDBSCAN on raw 384-dim vectors.
-  2. HDBSCAN on the 5D output — variable-shape clusters, noise bucket, no fixed-k needed.
-Display is handled separately by `Flows.OracleEmbedding.reduce_to_2d`, which runs its own UMAP
-to 2D off the same `BertEmbeddings` input.
+Pure clustering — UMAP lives in its own step (`reduce_to_five_d`) so the reduction can be reused
+by the ModelEvaluations flow and re-tuned independently of HDBSCAN parameters.
 
-Uses RAPIDS cuML's UMAP + HDBSCAN on GPU when available, falling back to umap-learn + hdbscan on
-CPU otherwise. cuML's HDBSCAN only supports euclidean metric, which is what we want post-UMAP
-anyway. Both backends produce comparable cluster topologies; cluster IDs are not stable across
-backend swaps (HDBSCAN doesn't guarantee stable cluster numbering even between runs of the same
-backend).
+Uses RAPIDS cuML's HDBSCAN on GPU when available, falling back to hdbscan on CPU otherwise.
+cuML's HDBSCAN only supports euclidean metric, which is what we want post-UMAP anyway. Both
+backends produce comparable cluster topologies; cluster IDs are not stable across backend swaps
+(HDBSCAN doesn't guarantee stable cluster numbering even between runs of the same backend).
 """
 from __future__ import annotations
 
@@ -26,37 +21,6 @@ import pandas as pd
 from flowthru import step
 
 logger = logging.getLogger(__name__)
-
-
-def _make_umap_reducer():
-    try:
-        from cuml.manifold import UMAP as CumlUMAP
-
-        return (
-            CumlUMAP(
-                n_components=5,
-                n_neighbors=15,
-                # BERTopic recommendation for clustering-target UMAPs — tighter local structure
-                # helps HDBSCAN separate dense regions.
-                min_dist=0.0,
-                metric="cosine",
-                random_state=42,
-            ),
-            "cuml",
-        )
-    except ImportError:
-        import umap
-
-        return (
-            umap.UMAP(
-                n_components=5,
-                n_neighbors=15,
-                min_dist=0.0,
-                metric="cosine",
-                random_state=42,
-            ),
-            "umap-learn",
-        )
 
 
 def _make_hdbscan_clusterer():
@@ -86,32 +50,20 @@ def _make_hdbscan_clusterer():
         )
 
 
-@step(inputs=["BertEmbeddings"], outputs="ClusterAssignments")
-def cluster_embeddings(embeddings: pd.DataFrame) -> pd.DataFrame:
-    # Unpack the byte-blob embeddings (see BertEmbedding.cs). Each row is 384
-    # little-endian float32s = 1,536 bytes.
+def _cluster_impl(embeddings: pd.DataFrame) -> pd.DataFrame:
+    # Unpack the 5D byte-blob vectors (see ClusteringEmbedding.cs). 20 bytes per row = 5
+    # little-endian float32s.
     vectors = np.stack(
-        [np.frombuffer(b, dtype="<f4") for b in embeddings["embedding"]]
+        [np.frombuffer(b, dtype="<f4") for b in embeddings["vector"]]
     )
     logger.info("Input: %d vectors of dim %d", *vectors.shape)
 
-    reducer, umap_backend = _make_umap_reducer()
-    logger.info(
-        "UMAP -> 5D for clustering via %s (n_neighbors=15, min_dist=0.0, cosine)...",
-        umap_backend,
-    )
-    reduced = reducer.fit_transform(vectors)
-    if hasattr(reduced, "get"):
-        reduced = reduced.get()
-    reduced = np.asarray(reduced)
-    logger.info("Reduced shape: %s", reduced.shape)
-
-    clusterer, hdb_backend = _make_hdbscan_clusterer()
+    clusterer, backend = _make_hdbscan_clusterer()
     logger.info(
         "HDBSCAN via %s (min_cluster_size=30, min_samples=5, euclidean)...",
-        hdb_backend,
+        backend,
     )
-    cluster_ids = clusterer.fit_predict(reduced)
+    cluster_ids = clusterer.fit_predict(vectors)
     if hasattr(cluster_ids, "get"):
         cluster_ids = cluster_ids.get()
     cluster_ids = np.asarray(cluster_ids).astype(int)
@@ -129,3 +81,13 @@ def cluster_embeddings(embeddings: pd.DataFrame) -> pd.DataFrame:
         "point_id": embeddings["point_id"],
         "cluster_id": cluster_ids,
     })
+
+
+@step(inputs=["ClusteringEmbeddings"], outputs="ClusterAssignments")
+def cluster_embeddings(embeddings: pd.DataFrame) -> pd.DataFrame:
+    return _cluster_impl(embeddings)
+
+
+@step(inputs=["FineTunedClusteringEmbeddings"], outputs="FineTunedClusterAssignments")
+def cluster_embeddings_finetuned(embeddings: pd.DataFrame) -> pd.DataFrame:
+    return _cluster_impl(embeddings)

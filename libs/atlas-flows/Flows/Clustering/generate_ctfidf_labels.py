@@ -39,10 +39,7 @@ _LABEL_HEAD = 3
 _NOISE_LABEL = "(noise)"
 
 
-@step(inputs=["ClusterAssignments", "OracleInputs"], outputs="ClusterLabels")
-def generate_ctfidf_labels(
-    assignments: pd.DataFrame, fragments: pd.DataFrame
-) -> pd.DataFrame:
+def _safe_generate(assignments: pd.DataFrame, fragments: pd.DataFrame) -> pd.DataFrame:
     import sys
     import traceback as _tb
 
@@ -161,6 +158,23 @@ def _generate_impl(
     # proper nullable string column even when every value is missing.
     df["description"] = df["description"].astype("string")
     return df
+
+
+@step(inputs=["ClusterAssignments", "OracleInputs"], outputs="ClusterLabels")
+def generate_ctfidf_labels(
+    assignments: pd.DataFrame, fragments: pd.DataFrame
+) -> pd.DataFrame:
+    return _safe_generate(assignments, fragments)
+
+
+@step(
+    inputs=["FineTunedClusterAssignments", "OracleInputs"],
+    outputs="FineTunedClusterLabels",
+)
+def generate_ctfidf_labels_finetuned(
+    assignments: pd.DataFrame, fragments: pd.DataFrame
+) -> pd.DataFrame:
+    return _safe_generate(assignments, fragments)
 
 
 def _english_stopwords() -> frozenset:

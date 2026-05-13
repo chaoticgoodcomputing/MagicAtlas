@@ -30,7 +30,7 @@ public static class OracleEmbeddingFlow
         label: "EmbedOracleText",
         module: "Flows.OracleEmbedding.embed_oracle_text",
         function: "embed_oracle_text",
-        input: catalog.OracleInputs,
+        input: (catalog.OracleInputs, catalog.DefaultEmbeddingModel),
         output: catalog.BertEmbeddings,
         executor: executor
       );
@@ -41,6 +41,25 @@ public static class OracleEmbeddingFlow
         function: "reduce_to_2d",
         input: catalog.BertEmbeddings,
         output: catalog.AtlasPoints,
+        executor: executor
+      );
+
+      // ─── Fine-tuned variant ───
+      pipeline.AddPythonStep(
+        label: "EmbedOracleTextFineTuned",
+        module: "Flows.OracleEmbedding.embed_oracle_text",
+        function: "embed_oracle_text_finetuned",
+        input: (catalog.OracleInputs, catalog.FineTunedEmbeddingModel),
+        output: catalog.FineTunedBertEmbeddings,
+        executor: executor
+      );
+
+      pipeline.AddPythonStep(
+        label: "ReduceToTwoDFineTuned",
+        module: "Flows.OracleEmbedding.reduce_to_2d",
+        function: "reduce_to_2d_finetuned",
+        input: catalog.FineTunedBertEmbeddings,
+        output: catalog.FineTunedAtlasPoints,
         executor: executor
       );
     });

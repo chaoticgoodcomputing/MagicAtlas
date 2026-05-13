@@ -5,7 +5,9 @@ using Flowthru.Step.Python;
 using MagicAtlas.Data;
 using MagicAtlas.Flows.CardProcessing;
 using MagicAtlas.Flows.Clustering;
+using MagicAtlas.Flows.FineTune;
 using MagicAtlas.Flows.Ingest;
+using MagicAtlas.Flows.ModelEvaluations;
 using MagicAtlas.Flows.OracleEmbedding;
 using MagicAtlas.Flows.Reporting;
 using MagicAtlas.Flows.RulesProcessing;
@@ -65,6 +67,12 @@ public class Program
   private static void ConfigureServices(IServiceCollection services, string basePath)
   {
     var dataPath = Path.Combine(basePath, "Data");
+
+    // Surface the data root to Python steps via env var. The subprocess Python inherits this,
+    // and steps that materialize sidecar artifacts (e.g. the FineTune flow writing model files
+    // under _06_Models/) construct absolute paths off it. Avoids each Python step learning
+    // the catalog's `_basePath` indirectly.
+    Environment.SetEnvironmentVariable("MAGIC_ATLAS_DATA", dataPath);
 
     // libs/atlas-flows lives two levels up from this harness; it owns the pyproject.toml,
     // the .venv created from it, and the Python step modules referenced by AddPythonStep.
@@ -164,6 +172,15 @@ public class Program
 
       flowthru
         .RegisterFlow<Catalog, IPythonExecutor>(
+          "FineTune",
+          FineTuneFlow.Create
+        )
+        .WithDescription(
+          "Owns the embedding-model lifecycle (download base + future fine-tune)"
+        );
+
+      flowthru
+        .RegisterFlow<Catalog, IPythonExecutor>(
           "OracleEmbedding",
           OracleEmbeddingFlow.Create
         )
@@ -178,6 +195,15 @@ public class Program
         )
         .WithDescription(
           "UMAP→5D + HDBSCAN + c-TF-IDF (Python): produces cluster assignments and labels"
+        );
+
+      flowthru
+        .RegisterFlow<Catalog, IPythonExecutor>(
+          "ModelEvaluations",
+          ModelEvaluationsFlow.Create
+        )
+        .WithDescription(
+          "Scores embedding-model variants against centroid-distance assertions in 5D UMAP space"
         );
 
       flowthru

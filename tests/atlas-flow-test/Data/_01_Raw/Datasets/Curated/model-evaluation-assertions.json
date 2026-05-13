@@ -1,0 +1,9 @@
+[
+  {
+    "name": "evasion_class_flying_menace",
+    "group_a_pattern": "\\bflying\\b",
+    "group_b_pattern": "\\bmenace\\b",
+    "expect": "closer_than",
+    "baseline_group_pattern": "\\btrample\\b"
+  }
+]

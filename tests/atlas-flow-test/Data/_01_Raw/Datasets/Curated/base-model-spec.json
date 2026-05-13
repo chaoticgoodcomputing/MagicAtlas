@@ -1,0 +1,4 @@
+{
+  "default_repo_id": "sentence-transformers/all-MiniLM-L6-v2",
+  "finetune_base_repo_id": "sentence-transformers/all-mpnet-base-v2"
+}

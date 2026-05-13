@@ -14,7 +14,7 @@ public partial class Catalog
     CreateItem(() =>
       Item.Of<string>("RawRules")
         .Text()
-        .AtPath($"{_basePath}/_01_Raw/Datasets/mtg-rules.txt")
+        .AtPath($"{_basePath}/_01_Raw/Datasets/External/mtg-rules.txt")
         .Build()
     );
 
@@ -26,7 +26,7 @@ public partial class Catalog
     CreateItem(() =>
       Item.Of<RawScryfallCardSymbolList>("RawCardSymbols")
         .Json()
-        .AtPath($"{_basePath}/_01_Raw/Datasets/symbology.json")
+        .AtPath($"{_basePath}/_01_Raw/Datasets/External/symbology.json")
         .Build()
     );
 
@@ -40,7 +40,65 @@ public partial class Catalog
     CreateItem(() =>
       Item.Of<IEnumerable<RawScryfallCard>>("RawCards")
         .Json()
-        .AtPath($"{_basePath}/_01_Raw/Datasets/oracle-cards.json")
+        .AtPath($"{_basePath}/_01_Raw/Datasets/External/oracle-cards.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Hand-authored keyword definitions that override or supplement the parsed CR glossary
+  /// during training-pair construction. See <see cref="CuratedDefinition"/>.
+  /// </summary>
+  public IItem<IEnumerable<CuratedDefinition>> CuratedDefinitions =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<CuratedDefinition>>("CuratedDefinitions")
+        .Json()
+        .AtPath($"{_basePath}/_01_Raw/Datasets/Curated/curated-definitions.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Hand-authored hard-negative triplets for fine-tuning. See <see cref="CuratedTriplet"/>.
+  /// </summary>
+  public IItem<IEnumerable<CuratedTriplet>> CuratedTriplets =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<CuratedTriplet>>("CuratedTriplets")
+        .Json()
+        .AtPath($"{_basePath}/_01_Raw/Datasets/Curated/curated-triplets.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Glossary entries to drop during training-pair construction. See <see cref="GlossaryExclusion"/>.
+  /// </summary>
+  public IItem<IEnumerable<GlossaryExclusion>> GlossaryExclusions =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<GlossaryExclusion>>("GlossaryExclusions")
+        .Json()
+        .AtPath($"{_basePath}/_01_Raw/Datasets/Curated/glossary-exclusions.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Declarative tests scored by the <c>ModelEvaluations</c> flow. See
+  /// <see cref="ModelEvaluationAssertion"/>.
+  /// </summary>
+  public IItem<IEnumerable<ModelEvaluationAssertion>> ModelEvaluationAssertions =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<ModelEvaluationAssertion>>("ModelEvaluationAssertions")
+        .Json()
+        .AtPath($"{_basePath}/_01_Raw/Datasets/Curated/model-evaluation-assertions.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Names the HuggingFace repos used as the default-variant model and the fine-tune base.
+  /// See <see cref="BaseModelSpec"/>.
+  /// </summary>
+  public IItem<BaseModelSpec> BaseModelSpec =>
+    CreateItem(() =>
+      Item.Of<BaseModelSpec>("BaseModelSpec")
+        .Json()
+        .AtPath($"{_basePath}/_01_Raw/Datasets/Curated/base-model-spec.json")
         .Build()
     );
 }

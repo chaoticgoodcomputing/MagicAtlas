@@ -30,10 +30,19 @@ public static class ClusteringFlow
     return FlowBuilder.CreateFlow("Clustering", pipeline =>
     {
       pipeline.AddPythonStep(
+        label: "ReduceToFiveD",
+        module: "Flows.Clustering.reduce_to_five_d",
+        function: "reduce_to_five_d",
+        input: catalog.BertEmbeddings,
+        output: catalog.ClusteringEmbeddings,
+        executor: executor
+      );
+
+      pipeline.AddPythonStep(
         label: "ClusterEmbeddings",
         module: "Flows.Clustering.cluster_embeddings",
         function: "cluster_embeddings",
-        input: catalog.BertEmbeddings,
+        input: catalog.ClusteringEmbeddings,
         output: catalog.ClusterAssignments,
         executor: executor
       );
@@ -44,6 +53,34 @@ public static class ClusteringFlow
         function: "generate_ctfidf_labels",
         input: (catalog.ClusterAssignments, catalog.OracleInputs),
         output: catalog.ClusterLabels,
+        executor: executor
+      );
+
+      // ─── Fine-tuned variant ───
+      pipeline.AddPythonStep(
+        label: "ReduceToFiveDFineTuned",
+        module: "Flows.Clustering.reduce_to_five_d",
+        function: "reduce_to_five_d_finetuned",
+        input: catalog.FineTunedBertEmbeddings,
+        output: catalog.FineTunedClusteringEmbeddings,
+        executor: executor
+      );
+
+      pipeline.AddPythonStep(
+        label: "ClusterEmbeddingsFineTuned",
+        module: "Flows.Clustering.cluster_embeddings",
+        function: "cluster_embeddings_finetuned",
+        input: catalog.FineTunedClusteringEmbeddings,
+        output: catalog.FineTunedClusterAssignments,
+        executor: executor
+      );
+
+      pipeline.AddPythonStep(
+        label: "GenerateCTfIdfLabelsFineTuned",
+        module: "Flows.Clustering.generate_ctfidf_labels",
+        function: "generate_ctfidf_labels_finetuned",
+        input: (catalog.FineTunedClusterAssignments, catalog.OracleInputs),
+        output: catalog.FineTunedClusterLabels,
         executor: executor
       );
     });

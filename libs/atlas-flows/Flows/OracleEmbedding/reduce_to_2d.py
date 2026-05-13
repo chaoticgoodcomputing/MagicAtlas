@@ -52,13 +52,13 @@ def _make_umap_reducer(n_components: int):
         )
 
 
-@step(inputs=["BertEmbeddings"], outputs="AtlasPoints")
-def reduce_to_2d(embeddings: pd.DataFrame) -> pd.DataFrame:
+def _reduce_to_2d_impl(embeddings: pd.DataFrame) -> pd.DataFrame:
     # Unpack the byte-blob embeddings (see BertEmbedding.cs remarks). Each row is 384
     # little-endian float32s = 1,536 bytes.
+    # Embeddings packed as float16 — cast to float32 for UMAP compatibility.
     vectors = np.stack(
-        [np.frombuffer(b, dtype="<f4") for b in embeddings["embedding"]]
-    )
+        [np.frombuffer(b, dtype="<f2") for b in embeddings["embedding"]]
+    ).astype(np.float32)
     logger.info("Input: %d vectors of dim %d", *vectors.shape)
 
     reducer, backend = _make_umap_reducer(n_components=2)
@@ -80,3 +80,13 @@ def reduce_to_2d(embeddings: pd.DataFrame) -> pd.DataFrame:
         "y": coords[:, 1].astype(float),
         "text_type": embeddings["text_type"],
     })
+
+
+@step(inputs=["BertEmbeddings"], outputs="AtlasPoints")
+def reduce_to_2d(embeddings: pd.DataFrame) -> pd.DataFrame:
+    return _reduce_to_2d_impl(embeddings)
+
+
+@step(inputs=["FineTunedBertEmbeddings"], outputs="FineTunedAtlasPoints")
+def reduce_to_2d_finetuned(embeddings: pd.DataFrame) -> pd.DataFrame:
+    return _reduce_to_2d_impl(embeddings)

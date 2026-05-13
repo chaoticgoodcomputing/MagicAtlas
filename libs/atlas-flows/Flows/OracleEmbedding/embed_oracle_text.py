@@ -1,10 +1,18 @@
-"""Encode each oracle-text fragment to a 384-dim BERT vector (sentence-transformers all-MiniLM-L6-v2).
+"""Encode each oracle-text fragment to a sentence-transformer vector using a catalog-managed model.
 
-Input:  DataFrame of OracleInput rows (point_id, card_id, text, text_type).
-Output: DataFrame [point_id, card_id, text_type, embedding] — embedding is a numpy float32 array.
+Inputs:
+    fragments: DataFrame of OracleInput rows (point_id, card_id, text, text_type). Reminder-
+               text parentheticals are already stripped upstream in ProjectOracleInputNode, so
+               the model sees the bare mechanical text.
+    model_ref: ModelArtifactRef record — { Path, RepoId, Variant }. The Python step loads
+               directly from `Path` on disk; model bytes don't transit Flowthru's marshaller.
 
-Materialized so both the 2D-UMAP display reduction and the Clustering flow's 5D-UMAP+HDBSCAN
-reduction can read these vectors without re-running BERT.
+Output: DataFrame [point_id, card_id, text_type, embedding] — embedding packed as a
+        little-endian byte blob (see BertEmbedding.cs).
+
+Two parallel @step entries differ only in input/output catalog item names — both delegate to
+`_embed_impl`. Wiring is done in C# (OracleEmbeddingFlow.cs) which binds each entry to the
+default-variant or fine-tuned-variant catalog item pair.
 """
 from __future__ import annotations
 
@@ -17,36 +25,49 @@ from flowthru import step
 logger = logging.getLogger(__name__)
 
 
-@step(inputs=["OracleInputs"], outputs="BertEmbeddings")
-def embed_oracle_text(fragments: pd.DataFrame) -> pd.DataFrame:
-    # Lazy import — pulls in ~GB of torch/transformers.
+def _embed_impl(fragments: pd.DataFrame, model_ref: dict) -> pd.DataFrame:
     from sentence_transformers import SentenceTransformer
 
-    logger.info("Input: %d fragments across %d cards",
-                len(fragments), fragments["card_id"].nunique())
+    model_path = model_ref["Path"]
+    variant = model_ref.get("Variant", "?")
+    logger.info(
+        "Input: %d fragments across %d cards; model=%s @ %s",
+        len(fragments), fragments["card_id"].nunique(), variant, model_path,
+    )
+
+    model = SentenceTransformer(model_path)
 
     texts = fragments["text"].fillna("").astype(str).tolist()
-
-    logger.info("Loading sentence-transformer (all-MiniLM-L6-v2)...")
-    model = SentenceTransformer("all-MiniLM-L6-v2")
-
-    logger.info("Encoding %d fragments...", len(texts))
+    dim = model.get_embedding_dimension() if hasattr(model, "get_embedding_dimension") else model.get_sentence_embedding_dimension()
+    logger.info("Encoding %d fragments (dim=%d)...", len(texts), dim)
     embeddings = model.encode(
         texts,
         batch_size=64,
         show_progress_bar=True,
         convert_to_numpy=True,
         normalize_embeddings=True,
-    ).astype(np.float32)
+    ).astype(np.float16)
     logger.info("Embeddings shape: %s (dtype %s)", embeddings.shape, embeddings.dtype)
 
-    # Pack each row's 384 float32s into a little-endian byte blob. Reason: Flowthru's parquet
-    # serializer requires IFlatSchema, and a typed float[] is classified as nested — `byte[]` is
-    # the one array form considered flat (Tier 3 opaque blob). 1,536 bytes per row.
-    blobs = [vec.astype("<f4").tobytes() for vec in embeddings]
+    # Pack each row's float16s into a little-endian byte blob (2 bytes/elem). float16 halves
+    # the embedding payload (critical for the 768-dim mpnet variant: float32 × 54k rows hits
+    # System.Text.Json's value-length limit at the C# ↔ Python boundary, ~226 MB). Precision
+    # loss is negligible for normalized embeddings used in similarity / clustering. Schema
+    # change: byte[] vector blob is now (dim × 2) bytes per row instead of (dim × 4).
+    blobs = [vec.astype("<f2").tobytes() for vec in embeddings]
     return pd.DataFrame({
         "point_id": fragments["point_id"],
         "card_id": fragments["card_id"],
         "text_type": fragments["text_type"],
         "embedding": blobs,
     })
+
+
+@step(inputs=["OracleInputs", "DefaultEmbeddingModel"], outputs="BertEmbeddings")
+def embed_oracle_text(fragments: pd.DataFrame, model_ref: dict) -> pd.DataFrame:
+    return _embed_impl(fragments, model_ref)
+
+
+@step(inputs=["OracleInputs", "FineTunedEmbeddingModel"], outputs="FineTunedBertEmbeddings")
+def embed_oracle_text_finetuned(fragments: pd.DataFrame, model_ref: dict) -> pd.DataFrame:
+    return _embed_impl(fragments, model_ref)
