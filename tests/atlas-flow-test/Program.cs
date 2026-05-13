@@ -103,7 +103,8 @@ public class Program
     // previously-fetched upstream bytes (oracle bulk JSON, symbology, rules .txt) from
     // `{harness}/.http-cache/` instead of re-downloading. The TTL matches Scryfall's daily bulk
     // rotation cadence; an expired entry on the next run triggers a normal refetch.
-    var httpCachePath = Path.Combine(basePath, ".http-cache");
+    var httpCachePath = Path.Combine(basePath, "Data/_01_Raw/Datasets/External/.http-cache");
+
     // Factory deliberately not disposed — the HttpClient (and its handler's logger) outlives this
     // method via closure capture into the flow factories, and the process owns both for its
     // lifetime; the OS reclaims on exit.

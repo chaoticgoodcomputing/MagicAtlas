@@ -38,12 +38,37 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Final standalone Plotly HTML document for the atlas embedding scatter, opened directly in a
-  /// browser. Written as a single text file containing inline Plotly.js for offline viewing.
+  /// Fine-tuned-model counterpart to <see cref="AtlasReportingPoints"/>. Same schema; sourced
+  /// from <c>FineTunedAtlasPoints</c> so the Reporting flow can render both variants without
+  /// duplicating downstream join logic.
+  /// </summary>
+  public IItem<IEnumerable<ReportingPoint>> FineTunedAtlasReportingPoints =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<ReportingPoint>>("FineTunedAtlasReportingPoints")
+        .Json()
+        .AtPath($"{_basePath}/_08_Reporting/Datasets/finetuned-atlas-reporting-points.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Default-model Plotly HTML. Written to <c>base.html</c> as the comparison baseline; the
+  /// fine-tuned variant lands at <c>index.html</c> (see <see cref="FineTunedAtlasPlotHtml"/>).
   /// </summary>
   public IItem<string> AtlasPlotHtml =>
     CreateItem(() =>
       Item.Of<string>("AtlasPlotHtml")
+        .Text()
+        .AtPath($"{_basePath}/_08_Reporting/Datasets/base.html")
+        .Build()
+    );
+
+  /// <summary>
+  /// Fine-tuned-model Plotly HTML. Written to <c>index.html</c> as the primary atlas — the
+  /// fine-tuned mpnet is the better model per the ModelEvaluations suite.
+  /// </summary>
+  public IItem<string> FineTunedAtlasPlotHtml =>
+    CreateItem(() =>
+      Item.Of<string>("FineTunedAtlasPlotHtml")
         .Text()
         .AtPath($"{_basePath}/_08_Reporting/Datasets/index.html")
         .Build()

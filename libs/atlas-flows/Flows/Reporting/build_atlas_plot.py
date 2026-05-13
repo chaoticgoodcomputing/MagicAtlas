@@ -100,11 +100,7 @@ def _annotation_text(label: str, keywords_json: str) -> str:
     return head[: _ANNOTATION_TEXT_LIMIT - 1] + "…"
 
 
-@step(
-    inputs=["AtlasReportingPoints", "AtlasCardHoverInfo", "ClusterAssignments", "ClusterLabels"],
-    outputs="AtlasPlotHtml",
-)
-def build_atlas_plot(
+def _build_atlas_plot_impl(
     points: pd.DataFrame,
     hover: pd.DataFrame,
     assignments: pd.DataFrame,
@@ -156,6 +152,37 @@ def build_atlas_plot(
     html = fig.to_html(include_plotlyjs="inline", full_html=True)
     logger.info("Produced %d-byte standalone HTML", len(html))
     return html
+
+
+@step(
+    inputs=["AtlasReportingPoints", "AtlasCardHoverInfo", "ClusterAssignments", "ClusterLabels"],
+    outputs="AtlasPlotHtml",
+)
+def build_atlas_plot(
+    points: pd.DataFrame,
+    hover: pd.DataFrame,
+    assignments: pd.DataFrame,
+    labels: pd.DataFrame,
+) -> str:
+    return _build_atlas_plot_impl(points, hover, assignments, labels)
+
+
+@step(
+    inputs=[
+        "FineTunedAtlasReportingPoints",
+        "AtlasCardHoverInfo",
+        "FineTunedClusterAssignments",
+        "FineTunedClusterLabels",
+    ],
+    outputs="FineTunedAtlasPlotHtml",
+)
+def build_atlas_plot_finetuned(
+    points: pd.DataFrame,
+    hover: pd.DataFrame,
+    assignments: pd.DataFrame,
+    labels: pd.DataFrame,
+) -> str:
+    return _build_atlas_plot_impl(points, hover, assignments, labels)
 
 
 def _build_color_id_traces(merged: pd.DataFrame) -> List[go.Scattergl]:

@@ -8,24 +8,18 @@ using MagicAtlas.Flows.Reporting.Nodes;
 namespace MagicAtlas.Flows.Reporting;
 
 /// <summary>
-/// Renders an interactive Plotly HTML scatter of the atlas embedding with a dropdown selector
-/// for color scheme (cluster_id vs. WUBRG color identity). Joins four upstream inputs on
-/// <c>point_id</c> / <c>card_id</c> in Python:
+/// Renders interactive Plotly HTML scatters of the atlas embedding for both model variants.
+/// Default-model output lands at <c>base.html</c>; fine-tuned-model output lands at
+/// <c>index.html</c> (the primary atlas — fine-tuned mpnet outperforms default MiniLM on the
+/// ModelEvaluations suite). Each variant joins four upstream inputs on <c>point_id</c> /
+/// <c>card_id</c> in Python: reporting points, hover metadata, cluster assignments, cluster
+/// labels. The hover metadata is model-agnostic and shared across both variants.
 /// </summary>
-/// <list type="bullet">
-/// <item><see cref="Catalog.AtlasPoints"/> (via <see cref="Catalog.AtlasReportingPoints"/>) —
-/// the 2D coordinates, <c>text_type</c> stripped.</item>
-/// <item><see cref="Catalog.FilteredCardCoreData"/> (via <see cref="Catalog.AtlasCardHoverInfo"/>) —
-/// flat per-card metadata for hover-over.</item>
-/// <item><see cref="Catalog.ClusterAssignments"/> — per-point cluster id.</item>
-/// <item><see cref="Catalog.ClusterLabels"/> — backend-agnostic cluster labels; whatever
-/// labeler (c-TF-IDF, LLM, future) wrote this file, reporting just reads <c>label</c>.</item>
-/// </list>
 /// <remarks>
 /// The reporting input shapes (<see cref="ReportingPoint"/>, <c>ClusterAssignment</c>,
-/// <c>ClusterLabel</c>) are deliberately model- and backend-agnostic. Swapping embedding models
-/// or label backends doesn't require flow changes — write the same shapes to the same catalog
-/// items and re-run <c>--flow Reporting</c>.
+/// <c>ClusterLabel</c>) are deliberately model- and backend-agnostic — both variants reuse the
+/// same projection node and Python impl; the two <c>@step</c> entries differ only in catalog
+/// bindings.
 /// </remarks>
 public static class ReportingFlow
 {
@@ -38,6 +32,13 @@ public static class ReportingFlow
         transform: ProjectReportingPointsNode.Create(),
         inputs: catalog.AtlasPoints,
         outputs: catalog.AtlasReportingPoints
+      );
+
+      pipeline.AddStep<IEnumerable<AtlasPoint>, IEnumerable<ReportingPoint>>(
+        label: "ProjectReportingPointsFineTuned",
+        transform: ProjectReportingPointsNode.Create(),
+        inputs: catalog.FineTunedAtlasPoints,
+        outputs: catalog.FineTunedAtlasReportingPoints
       );
 
       pipeline.AddStep<IEnumerable<CardCoreData>, IEnumerable<CardHoverInfo>>(
@@ -58,6 +59,20 @@ public static class ReportingFlow
           catalog.ClusterLabels
         ),
         output: catalog.AtlasPlotHtml,
+        executor: executor
+      );
+
+      pipeline.AddPythonStep(
+        label: "BuildAtlasPlotFineTuned",
+        module: "Flows.Reporting.build_atlas_plot",
+        function: "build_atlas_plot_finetuned",
+        input: (
+          catalog.FineTunedAtlasReportingPoints,
+          catalog.AtlasCardHoverInfo,
+          catalog.FineTunedClusterAssignments,
+          catalog.FineTunedClusterLabels
+        ),
+        output: catalog.FineTunedAtlasPlotHtml,
         executor: executor
       );
     });
