@@ -30,16 +30,9 @@ from flowthru import step
 
 logger = logging.getLogger(__name__)
 
-# Top-N largest clusters get a centroid text annotation. The noise cluster is always excluded;
-# adding annotations for every one of ~500 clusters produces an unreadable wall of text and
-# defeats the point of the lens. 50 is a reasonable balance: covers the bulk of the points by
-# size while leaving the visual breathable.
-_MAX_ANNOTATIONS = 50
-
-# Per-cluster annotation text is the first keyword from c-TF-IDF (or the LLM-equivalent),
-# trimmed to keep the overlay legible. The full multi-keyword label remains on hover.
-_ANNOTATION_TEXT_LIMIT = 36
-
+# Color palette and similar aesthetic constants stay in-source — they're brand decisions, not
+# tuning knobs. Knobs that meaningfully change legibility (annotation count/length, marker size
+# and opacity, hover truncation) come from ReportingConfig via appsettings.json.
 _COLOR_ID_PALETTE: Dict[str, str] = {
     "": "#9CA3AF",
     "W": "#F9E79F",
@@ -57,7 +50,7 @@ def _color_id_color(identity: str) -> str:
     return _GOLD
 
 
-def _truncate(text: object, limit: int = 220) -> str:
+def _truncate(text: object, limit: int) -> str:
     if text is None or (isinstance(text, float) and pd.isna(text)):
         return ""
     s = str(text).replace("\n", " · ")
@@ -86,7 +79,7 @@ def _identity_sort_key(s: str) -> Tuple[int, str]:
     return (len(s), s)
 
 
-def _annotation_text(label: str, keywords_json: str) -> str:
+def _annotation_text(label: str, keywords_json: str, text_limit: int) -> str:
     """Prefer the first keyword (highest-c-TF-IDF n-gram); fall back to the label head."""
     try:
         kws = json.loads(keywords_json) if keywords_json else []
@@ -95,9 +88,9 @@ def _annotation_text(label: str, keywords_json: str) -> str:
     head = kws[0] if kws else label
     if not head:
         return ""
-    if len(head) <= _ANNOTATION_TEXT_LIMIT:
+    if len(head) <= text_limit:
         return head
-    return head[: _ANNOTATION_TEXT_LIMIT - 1] + "…"
+    return head[: text_limit - 1] + "…"
 
 
 def _build_atlas_plot_impl(
@@ -105,7 +98,13 @@ def _build_atlas_plot_impl(
     hover: pd.DataFrame,
     assignments: pd.DataFrame,
     labels: pd.DataFrame,
+    config: dict,
 ) -> str:
+    max_annotations = int(config["MaxAnnotations"])
+    annotation_text_limit = int(config["AnnotationTextLimit"])
+    marker_size = int(config["MarkerSize"])
+    marker_opacity = float(config["MarkerOpacity"])
+    oracle_truncate_limit = int(config["OracleHoverTruncateLimit"])
     logger.info(
         "Inputs: %d points, %d hover rows, %d assignments, %d labels",
         len(points),
@@ -126,13 +125,17 @@ def _build_atlas_plot_impl(
     merged["name"] = merged["name"].fillna("(unknown)")
 
     merged["_hover_pt"] = [_format_pt(p, t) for p, t in zip(merged["power"], merged["toughness"])]
-    merged["_hover_oracle"] = merged["oracle_text"].map(_truncate)
+    merged["_hover_oracle"] = merged["oracle_text"].map(
+        lambda t: _truncate(t, oracle_truncate_limit)
+    )
     merged["_hover_mana"] = merged["mana_cost"].fillna("")
 
-    color_id_traces = _build_color_id_traces(merged)
+    color_id_traces = _build_color_id_traces(merged, marker_size, marker_opacity)
     logger.info("Built %d color-identity traces", len(color_id_traces))
 
-    annotations = _build_cluster_annotations(merged, labels)
+    annotations = _build_cluster_annotations(
+        merged, labels, max_annotations, annotation_text_limit
+    )
     logger.info("Built %d cluster centroid annotations", len(annotations))
 
     fig = go.Figure(data=color_id_traces)
@@ -155,7 +158,13 @@ def _build_atlas_plot_impl(
 
 
 @step(
-    inputs=["AtlasReportingPoints", "AtlasCardHoverInfo", "ClusterAssignments", "ClusterLabels"],
+    inputs=[
+        "AtlasReportingPoints",
+        "AtlasCardHoverInfo",
+        "ClusterAssignments",
+        "ClusterLabels",
+        "ReportingConfig",
+    ],
     outputs="AtlasPlotHtml",
 )
 def build_atlas_plot(
@@ -163,8 +172,9 @@ def build_atlas_plot(
     hover: pd.DataFrame,
     assignments: pd.DataFrame,
     labels: pd.DataFrame,
+    config: dict,
 ) -> str:
-    return _build_atlas_plot_impl(points, hover, assignments, labels)
+    return _build_atlas_plot_impl(points, hover, assignments, labels, config)
 
 
 @step(
@@ -173,6 +183,7 @@ def build_atlas_plot(
         "AtlasCardHoverInfo",
         "FineTunedClusterAssignments",
         "FineTunedClusterLabels",
+        "ReportingConfig",
     ],
     outputs="FineTunedAtlasPlotHtml",
 )
@@ -181,11 +192,14 @@ def build_atlas_plot_finetuned(
     hover: pd.DataFrame,
     assignments: pd.DataFrame,
     labels: pd.DataFrame,
+    config: dict,
 ) -> str:
-    return _build_atlas_plot_impl(points, hover, assignments, labels)
+    return _build_atlas_plot_impl(points, hover, assignments, labels, config)
 
 
-def _build_color_id_traces(merged: pd.DataFrame) -> List[go.Scattergl]:
+def _build_color_id_traces(
+    merged: pd.DataFrame, marker_size: int, marker_opacity: float
+) -> List[go.Scattergl]:
     combos = sorted(merged["color_identity"].fillna("").unique(), key=_identity_sort_key)
     traces: List[go.Scattergl] = []
     for combo in combos:
@@ -200,8 +214,8 @@ def _build_color_id_traces(merged: pd.DataFrame) -> List[go.Scattergl]:
                 name=f"{_color_id_legend(combo)} ({len(subset)})",
                 marker=dict(
                     color=_color_id_color(combo),
-                    size=4,
-                    opacity=0.7,
+                    size=marker_size,
+                    opacity=marker_opacity,
                     line=dict(width=0.3, color="#1f2937"),
                 ),
                 customdata=subset[
@@ -220,7 +234,12 @@ def _build_color_id_traces(merged: pd.DataFrame) -> List[go.Scattergl]:
     return traces
 
 
-def _build_cluster_annotations(merged: pd.DataFrame, labels: pd.DataFrame) -> List[dict]:
+def _build_cluster_annotations(
+    merged: pd.DataFrame,
+    labels: pd.DataFrame,
+    max_annotations: int,
+    annotation_text_limit: int,
+) -> List[dict]:
     """Top-N largest clusters → text annotations at the per-cluster (x, y) centroid."""
     # Centroid per cluster from the actual rendered point positions.
     centroids = (
@@ -233,13 +252,13 @@ def _build_cluster_annotations(merged: pd.DataFrame, labels: pd.DataFrame) -> Li
     labels_indexed = (
         labels[labels["cluster_id"] != -1]
         .sort_values("size", ascending=False)
-        .head(_MAX_ANNOTATIONS)
+        .head(max_annotations)
         .merge(centroids, on="cluster_id", how="inner")
     )
 
     annotations: List[dict] = []
     for row in labels_indexed.itertuples(index=False):
-        text = _annotation_text(row.label, row.keywords)
+        text = _annotation_text(row.label, row.keywords, annotation_text_limit)
         if not text:
             continue
         annotations.append(

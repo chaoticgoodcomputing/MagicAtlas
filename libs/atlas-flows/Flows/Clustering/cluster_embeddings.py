@@ -1,7 +1,10 @@
 """HDBSCAN clustering over the 5D-UMAP-reduced embeddings.
 
-Input:  DataFrame [point_id, vector] — 5D byte-packed embeddings produced by
-        `reduce_to_five_d` (see ClusteringEmbedding.cs).
+Inputs:
+    embeddings: DataFrame [point_id, vector] — 5D byte-packed embeddings produced by
+                `reduce_to_five_d` (see ClusteringEmbedding.cs).
+    config:     ClusteringConfig record — uses `Hdbscan.MinClusterSize` and `Hdbscan.MinSamples`.
+
 Output: DataFrame [point_id, cluster_id] — `cluster_id == -1` for HDBSCAN noise.
 
 Pure clustering — UMAP lives in its own step (`reduce_to_five_d`) so the reduction can be reused
@@ -22,17 +25,22 @@ from flowthru import step
 
 logger = logging.getLogger(__name__)
 
+# euclidean / eom aren't tuning knobs — they're algorithm-fixed by cuML's HDBSCAN support and
+# the BERTopic-style methodology. Surfacing them to config would invite invalid combinations.
+_METRIC = "euclidean"
+_CLUSTER_SELECTION_METHOD = "eom"
 
-def _make_hdbscan_clusterer():
+
+def _make_hdbscan_clusterer(min_cluster_size: int, min_samples: int):
     try:
         from cuml.cluster import HDBSCAN as CumlHDBSCAN
 
         return (
             CumlHDBSCAN(
-                min_cluster_size=30,
-                min_samples=5,
-                metric="euclidean",
-                cluster_selection_method="eom",
+                min_cluster_size=min_cluster_size,
+                min_samples=min_samples,
+                metric=_METRIC,
+                cluster_selection_method=_CLUSTER_SELECTION_METHOD,
             ),
             "cuml",
         )
@@ -41,16 +49,19 @@ def _make_hdbscan_clusterer():
 
         return (
             hdbscan.HDBSCAN(
-                min_cluster_size=30,
-                min_samples=5,
-                metric="euclidean",
-                cluster_selection_method="eom",
+                min_cluster_size=min_cluster_size,
+                min_samples=min_samples,
+                metric=_METRIC,
+                cluster_selection_method=_CLUSTER_SELECTION_METHOD,
             ),
             "hdbscan",
         )
 
 
-def _cluster_impl(embeddings: pd.DataFrame) -> pd.DataFrame:
+def _cluster_impl(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
+    min_cluster_size = int(config["HdbscanMinClusterSize"])
+    min_samples = int(config["HdbscanMinSamples"])
+
     # Unpack the 5D byte-blob vectors (see ClusteringEmbedding.cs). 20 bytes per row = 5
     # little-endian float32s.
     vectors = np.stack(
@@ -58,10 +69,12 @@ def _cluster_impl(embeddings: pd.DataFrame) -> pd.DataFrame:
     )
     logger.info("Input: %d vectors of dim %d", *vectors.shape)
 
-    clusterer, backend = _make_hdbscan_clusterer()
+    clusterer, backend = _make_hdbscan_clusterer(
+        min_cluster_size=min_cluster_size, min_samples=min_samples
+    )
     logger.info(
-        "HDBSCAN via %s (min_cluster_size=30, min_samples=5, euclidean)...",
-        backend,
+        "HDBSCAN via %s (min_cluster_size=%d, min_samples=%d, %s)...",
+        backend, min_cluster_size, min_samples, _METRIC,
     )
     cluster_ids = clusterer.fit_predict(vectors)
     if hasattr(cluster_ids, "get"):
@@ -83,11 +96,14 @@ def _cluster_impl(embeddings: pd.DataFrame) -> pd.DataFrame:
     })
 
 
-@step(inputs=["ClusteringEmbeddings"], outputs="ClusterAssignments")
-def cluster_embeddings(embeddings: pd.DataFrame) -> pd.DataFrame:
-    return _cluster_impl(embeddings)
+@step(inputs=["ClusteringEmbeddings", "ClusteringConfig"], outputs="ClusterAssignments")
+def cluster_embeddings(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
+    return _cluster_impl(embeddings, config)
 
 
-@step(inputs=["FineTunedClusteringEmbeddings"], outputs="FineTunedClusterAssignments")
-def cluster_embeddings_finetuned(embeddings: pd.DataFrame) -> pd.DataFrame:
-    return _cluster_impl(embeddings)
+@step(
+    inputs=["FineTunedClusteringEmbeddings", "ClusteringConfig"],
+    outputs="FineTunedClusterAssignments",
+)
+def cluster_embeddings_finetuned(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
+    return _cluster_impl(embeddings, config)

@@ -27,7 +27,12 @@ public static class ModelEvaluationsFlow
         label: "EvaluateDefaultModel",
         module: "Flows.ModelEvaluations.evaluate_model",
         function: "evaluate_default",
-        input: (catalog.ClusteringEmbeddings, catalog.OracleInputs, catalog.ModelEvaluationAssertions),
+        input: (
+          catalog.ClusteringEmbeddings,
+          catalog.OracleInputs,
+          catalog.ModelEvaluationAssertions,
+          catalog.ModelEvaluationsConfig
+        ),
         output: catalog.ModelEvaluation,
         executor: executor
       );
@@ -36,7 +41,12 @@ public static class ModelEvaluationsFlow
         label: "EvaluateFineTunedModel",
         module: "Flows.ModelEvaluations.evaluate_model",
         function: "evaluate_finetuned",
-        input: (catalog.FineTunedClusteringEmbeddings, catalog.OracleInputs, catalog.ModelEvaluationAssertions),
+        input: (
+          catalog.FineTunedClusteringEmbeddings,
+          catalog.OracleInputs,
+          catalog.ModelEvaluationAssertions,
+          catalog.ModelEvaluationsConfig
+        ),
         output: catalog.FineTunedModelEvaluation,
         executor: executor
       );

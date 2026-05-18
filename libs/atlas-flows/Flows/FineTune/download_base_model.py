@@ -1,7 +1,7 @@
 """Populate the DefaultEmbeddingModel catalog reference by downloading a sentence-transformer
 checkpoint from HuggingFace into `_06_Models/<variant>/` and emitting a metadata ref.
 
-Input:  BaseModelSpec record — uses `DefaultRepoId`.
+Input:  FineTuneConfig record — uses `DefaultRepoId` and `DefaultVariant`.
 Output: ModelArtifactRef record — { path, repo_id, variant } pointing to the on-disk model dir.
 
 Why-not-bytes: Flowthru's subprocess marshaller pipes payloads through a JSON envelope, and a
@@ -24,15 +24,14 @@ logger = logging.getLogger(__name__)
 
 # Only the files SentenceTransformer needs at inference time. Skipping ONNX / OpenVINO /
 # pytorch_model.bin / TensorFlow weights keeps the model dir under ~100 MB for MiniLM and
-# ~450 MB for mpnet.
+# ~450 MB for mpnet. Not a tuning knob — fixed by what sentence-transformers needs at load
+# time, so it stays in code rather than in FineTuneConfig.
 _ALLOW_PATTERNS = (
     "*.json",
     "vocab.txt",
     "model.safetensors",
     "1_Pooling/*",
 )
-
-_VARIANT = "default-minilm-l6-v2"
 
 
 def _models_dir() -> Path:
@@ -44,13 +43,14 @@ def _models_dir() -> Path:
     return Path(data_root) / "_06_Models"
 
 
-@step(inputs=["BaseModelSpec"], outputs="DefaultEmbeddingModel")
-def download_base_model(spec) -> dict:
+@step(inputs=["FineTuneConfig"], outputs="DefaultEmbeddingModel")
+def download_base_model(config) -> dict:
     from huggingface_hub import snapshot_download
 
     # Scalar IItem<T> records arrive keyed by C# PascalCase property names.
-    repo_id = spec["DefaultRepoId"]
-    target = _models_dir() / _VARIANT
+    repo_id = config["DefaultRepoId"]
+    variant = config["DefaultVariant"]
+    target = _models_dir() / variant
 
     logger.info("Downloading %s into %s ...", repo_id, target)
     snapshot_path = Path(snapshot_download(
@@ -79,4 +79,4 @@ def download_base_model(spec) -> dict:
     logger.info("Materialized %d files at %s", n_files, target)
     # Scalar IItem<T> records are deserialized by C# property name (PascalCase), NOT the
     # [SerializedLabel] snake_case (which only applies to tabular columns).
-    return {"Path": str(target), "RepoId": repo_id, "Variant": _VARIANT}
+    return {"Path": str(target), "RepoId": repo_id, "Variant": variant}

@@ -110,24 +110,36 @@ def _evaluate_impl(
 
 
 @step(
-    inputs=["ClusteringEmbeddings", "OracleInputs", "ModelEvaluationAssertions"],
+    inputs=[
+        "ClusteringEmbeddings",
+        "OracleInputs",
+        "ModelEvaluationAssertions",
+        "ModelEvaluationsConfig",
+    ],
     outputs="ModelEvaluation",
 )
 def evaluate_default(
     embeddings: pd.DataFrame,
     oracle: pd.DataFrame,
     assertions: pd.DataFrame,
+    config: dict,
 ) -> pd.DataFrame:
-    return _evaluate_impl(embeddings, oracle, assertions, "default-minilm-l6-v2")
+    return _evaluate_impl(embeddings, oracle, assertions, config["DefaultVariantLabel"])
 
 
 @step(
-    inputs=["FineTunedClusteringEmbeddings", "OracleInputs", "ModelEvaluationAssertions"],
+    inputs=[
+        "FineTunedClusteringEmbeddings",
+        "OracleInputs",
+        "ModelEvaluationAssertions",
+        "ModelEvaluationsConfig",
+    ],
     outputs="FineTunedModelEvaluation",
 )
 def evaluate_finetuned(
     embeddings: pd.DataFrame,
     oracle: pd.DataFrame,
     assertions: pd.DataFrame,
+    config: dict,
 ) -> pd.DataFrame:
-    return _evaluate_impl(embeddings, oracle, assertions, "mtg-mpnet-v1")
+    return _evaluate_impl(embeddings, oracle, assertions, config["FineTunedVariantLabel"])

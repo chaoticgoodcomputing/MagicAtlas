@@ -56,7 +56,8 @@ public static class ReportingFlow
           catalog.AtlasReportingPoints,
           catalog.AtlasCardHoverInfo,
           catalog.ClusterAssignments,
-          catalog.ClusterLabels
+          catalog.ClusterLabels,
+          catalog.ReportingConfig
         ),
         output: catalog.AtlasPlotHtml,
         executor: executor
@@ -70,7 +71,8 @@ public static class ReportingFlow
           catalog.FineTunedAtlasReportingPoints,
           catalog.AtlasCardHoverInfo,
           catalog.FineTunedClusterAssignments,
-          catalog.FineTunedClusterLabels
+          catalog.FineTunedClusterLabels,
+          catalog.ReportingConfig
         ),
         output: catalog.FineTunedAtlasPlotHtml,
         executor: executor

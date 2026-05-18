@@ -33,7 +33,7 @@ public static class ClusteringFlow
         label: "ReduceToFiveD",
         module: "Flows.Clustering.reduce_to_five_d",
         function: "reduce_to_five_d",
-        input: catalog.BertEmbeddings,
+        input: (catalog.BertEmbeddings, catalog.ClusteringConfig),
         output: catalog.ClusteringEmbeddings,
         executor: executor
       );
@@ -42,7 +42,7 @@ public static class ClusteringFlow
         label: "ClusterEmbeddings",
         module: "Flows.Clustering.cluster_embeddings",
         function: "cluster_embeddings",
-        input: catalog.ClusteringEmbeddings,
+        input: (catalog.ClusteringEmbeddings, catalog.ClusteringConfig),
         output: catalog.ClusterAssignments,
         executor: executor
       );
@@ -51,7 +51,7 @@ public static class ClusteringFlow
         label: "GenerateCTfIdfLabels",
         module: "Flows.Clustering.generate_ctfidf_labels",
         function: "generate_ctfidf_labels",
-        input: (catalog.ClusterAssignments, catalog.OracleInputs),
+        input: (catalog.ClusterAssignments, catalog.OracleInputs, catalog.ClusteringConfig),
         output: catalog.ClusterLabels,
         executor: executor
       );
@@ -61,7 +61,7 @@ public static class ClusteringFlow
         label: "ReduceToFiveDFineTuned",
         module: "Flows.Clustering.reduce_to_five_d",
         function: "reduce_to_five_d_finetuned",
-        input: catalog.FineTunedBertEmbeddings,
+        input: (catalog.FineTunedBertEmbeddings, catalog.ClusteringConfig),
         output: catalog.FineTunedClusteringEmbeddings,
         executor: executor
       );
@@ -70,7 +70,7 @@ public static class ClusteringFlow
         label: "ClusterEmbeddingsFineTuned",
         module: "Flows.Clustering.cluster_embeddings",
         function: "cluster_embeddings_finetuned",
-        input: catalog.FineTunedClusteringEmbeddings,
+        input: (catalog.FineTunedClusteringEmbeddings, catalog.ClusteringConfig),
         output: catalog.FineTunedClusterAssignments,
         executor: executor
       );
@@ -79,7 +79,7 @@ public static class ClusteringFlow
         label: "GenerateCTfIdfLabelsFineTuned",
         module: "Flows.Clustering.generate_ctfidf_labels",
         function: "generate_ctfidf_labels_finetuned",
-        input: (catalog.FineTunedClusterAssignments, catalog.OracleInputs),
+        input: (catalog.FineTunedClusterAssignments, catalog.OracleInputs, catalog.ClusteringConfig),
         output: catalog.FineTunedClusterLabels,
         executor: executor
       );

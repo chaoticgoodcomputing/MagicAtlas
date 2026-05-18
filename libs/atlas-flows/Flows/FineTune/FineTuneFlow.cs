@@ -28,7 +28,7 @@ public static class FineTuneFlow
         label: "DownloadBaseModel",
         module: "Flows.FineTune.download_base_model",
         function: "download_base_model",
-        input: catalog.BaseModelSpec,
+        input: catalog.FineTuneConfig,
         output: catalog.DefaultEmbeddingModel,
         executor: executor
       );
@@ -50,7 +50,8 @@ public static class FineTuneFlow
           catalog.CardOracleTexts,
           catalog.CuratedDefinitions,
           catalog.CuratedTriplets,
-          catalog.GlossaryExclusions
+          catalog.GlossaryExclusions,
+          catalog.FineTuneConfig
         ),
         output: catalog.TrainingPairs,
         executor: executor
@@ -60,7 +61,7 @@ public static class FineTuneFlow
         label: "FineTuneEmbeddingModel",
         module: "Flows.FineTune.fine_tune_embedding_model",
         function: "fine_tune_embedding_model",
-        input: (catalog.TrainingPairs, catalog.BaseModelSpec),
+        input: (catalog.TrainingPairs, catalog.FineTuneConfig),
         output: catalog.FineTunedEmbeddingModel,
         executor: executor
       );

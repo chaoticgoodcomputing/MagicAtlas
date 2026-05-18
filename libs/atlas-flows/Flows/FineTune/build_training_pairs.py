@@ -181,6 +181,7 @@ _SEED_TRIPLETS: list[dict] = [
         "CuratedDefinitions",
         "CuratedTriplets",
         "GlossaryExclusions",
+        "FineTuneConfig",
     ],
     outputs="TrainingPairs",
 )
@@ -191,7 +192,9 @@ def build_training_pairs(
     curated_defs: pd.DataFrame,
     curated_triplets: pd.DataFrame,
     exclusions: pd.DataFrame,
+    config: dict,
 ) -> pd.DataFrame:
+    triplet_weight = float(config["TripletWeight"])
     logger.info(
         "Inputs: glossary=%d bytes, rules=%d bytes, %d cards, "
         "%d curated defs, %d curated triplets, %d exclusions",
@@ -278,7 +281,7 @@ def build_training_pairs(
             "anchor": trip["anchor"],
             "positive": trip["positive"],
             "negative": trip["negative"],
-            "weight": 1.5,  # boost over plain positives
+            "weight": triplet_weight,  # boost over plain positives
             "source": "template:seed",
         })
     for _, row in curated_triplets.iterrows():
@@ -286,7 +289,7 @@ def build_training_pairs(
             "anchor": str(row["anchor"]),
             "positive": str(row["positive"]),
             "negative": str(row["negative"]),
-            "weight": 1.5,
+            "weight": triplet_weight,
             "source": "curated_triplet",
         })
     logger.info("Tier 3 (triplets): %d rows", len(rows) - n_before_tier3)

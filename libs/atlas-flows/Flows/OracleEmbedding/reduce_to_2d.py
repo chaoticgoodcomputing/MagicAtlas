@@ -1,10 +1,13 @@
 """UMAP-reduce the per-fragment BERT vectors to 2D for the atlas display.
 
-Input:  DataFrame [point_id, card_id, text_type, embedding] — embedding is the byte-blob form
-        (see BertEmbedding.cs). Decoded here back to float32 vectors.
+Inputs:
+    embeddings: DataFrame [point_id, card_id, text_type, embedding] — embedding is the byte-blob
+                form (see BertEmbedding.cs). Decoded here back to float32 vectors.
+    config:     OracleEmbeddingConfig record — uses `Umap2D.NNeighbors` and `Umap2D.MinDist`.
+
 Output: DataFrame [point_id, card_id, x, y, text_type] — one row per fragment.
 
-A sibling step (`Flows.Clustering.cluster_embeddings`) runs its own UMAP at a higher
+A sibling step (`Flows.Clustering.reduce_to_five_d`) runs its own UMAP at a higher
 target-dimensionality on the same input for HDBSCAN; this 2D reduction is purely for the scatter.
 
 Uses RAPIDS cuML's UMAP on GPU when available, falling back to umap-learn on CPU otherwise. The
@@ -21,8 +24,13 @@ from flowthru import step
 
 logger = logging.getLogger(__name__)
 
+# Algorithm-fixed knobs — not surfaced to config because changing them isn't a tuning operation
+# but a topology change.
+_METRIC = "cosine"
+_RANDOM_STATE = 42
 
-def _make_umap_reducer(n_components: int):
+
+def _make_umap_reducer(n_components: int, n_neighbors: int, min_dist: float):
     """Returns (reducer, backend_name). Prefers cuML; falls back to umap-learn."""
     try:
         from cuml.manifold import UMAP as CumlUMAP
@@ -30,10 +38,10 @@ def _make_umap_reducer(n_components: int):
         return (
             CumlUMAP(
                 n_components=n_components,
-                n_neighbors=15,
-                min_dist=0.1,
-                metric="cosine",
-                random_state=42,
+                n_neighbors=n_neighbors,
+                min_dist=min_dist,
+                metric=_METRIC,
+                random_state=_RANDOM_STATE,
             ),
             "cuml",
         )
@@ -43,28 +51,33 @@ def _make_umap_reducer(n_components: int):
         return (
             umap.UMAP(
                 n_components=n_components,
-                n_neighbors=15,
-                min_dist=0.1,
-                metric="cosine",
-                random_state=42,
+                n_neighbors=n_neighbors,
+                min_dist=min_dist,
+                metric=_METRIC,
+                random_state=_RANDOM_STATE,
             ),
             "umap-learn",
         )
 
 
-def _reduce_to_2d_impl(embeddings: pd.DataFrame) -> pd.DataFrame:
-    # Unpack the byte-blob embeddings (see BertEmbedding.cs remarks). Each row is 384
-    # little-endian float32s = 1,536 bytes.
-    # Embeddings packed as float16 — cast to float32 for UMAP compatibility.
+def _reduce_to_2d_impl(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
+    n_neighbors = int(config["Umap2DNNeighbors"])
+    min_dist = float(config["Umap2DMinDist"])
+
+    # Embeddings packed as float16 — cast to float32 for UMAP compatibility. Each row is
+    # `dim` little-endian float16s, where dim depends on the source model (384 for MiniLM,
+    # 768 for mpnet).
     vectors = np.stack(
         [np.frombuffer(b, dtype="<f2") for b in embeddings["embedding"]]
     ).astype(np.float32)
     logger.info("Input: %d vectors of dim %d", *vectors.shape)
 
-    reducer, backend = _make_umap_reducer(n_components=2)
+    reducer, backend = _make_umap_reducer(
+        n_components=2, n_neighbors=n_neighbors, min_dist=min_dist
+    )
     logger.info(
-        "Running UMAP via %s (n_components=2, n_neighbors=15, min_dist=0.1, cosine)...",
-        backend,
+        "Running UMAP via %s (n_components=2, n_neighbors=%d, min_dist=%g, %s)...",
+        backend, n_neighbors, min_dist, _METRIC,
     )
     coords = reducer.fit_transform(vectors)
     # cuML returns a cupy array; normalize to numpy for downstream pandas/json.
@@ -82,11 +95,14 @@ def _reduce_to_2d_impl(embeddings: pd.DataFrame) -> pd.DataFrame:
     })
 
 
-@step(inputs=["BertEmbeddings"], outputs="AtlasPoints")
-def reduce_to_2d(embeddings: pd.DataFrame) -> pd.DataFrame:
-    return _reduce_to_2d_impl(embeddings)
+@step(inputs=["BertEmbeddings", "OracleEmbeddingConfig"], outputs="AtlasPoints")
+def reduce_to_2d(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
+    return _reduce_to_2d_impl(embeddings, config)
 
 
-@step(inputs=["FineTunedBertEmbeddings"], outputs="FineTunedAtlasPoints")
-def reduce_to_2d_finetuned(embeddings: pd.DataFrame) -> pd.DataFrame:
-    return _reduce_to_2d_impl(embeddings)
+@step(
+    inputs=["FineTunedBertEmbeddings", "OracleEmbeddingConfig"],
+    outputs="FineTunedAtlasPoints",
+)
+def reduce_to_2d_finetuned(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
+    return _reduce_to_2d_impl(embeddings, config)

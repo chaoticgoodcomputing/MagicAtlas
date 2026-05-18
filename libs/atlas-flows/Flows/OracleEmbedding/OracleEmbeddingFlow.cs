@@ -30,7 +30,7 @@ public static class OracleEmbeddingFlow
         label: "EmbedOracleText",
         module: "Flows.OracleEmbedding.embed_oracle_text",
         function: "embed_oracle_text",
-        input: (catalog.OracleInputs, catalog.DefaultEmbeddingModel),
+        input: (catalog.OracleInputs, catalog.DefaultEmbeddingModel, catalog.OracleEmbeddingConfig),
         output: catalog.BertEmbeddings,
         executor: executor
       );
@@ -39,7 +39,7 @@ public static class OracleEmbeddingFlow
         label: "ReduceToTwoD",
         module: "Flows.OracleEmbedding.reduce_to_2d",
         function: "reduce_to_2d",
-        input: catalog.BertEmbeddings,
+        input: (catalog.BertEmbeddings, catalog.OracleEmbeddingConfig),
         output: catalog.AtlasPoints,
         executor: executor
       );
@@ -49,7 +49,7 @@ public static class OracleEmbeddingFlow
         label: "EmbedOracleTextFineTuned",
         module: "Flows.OracleEmbedding.embed_oracle_text",
         function: "embed_oracle_text_finetuned",
-        input: (catalog.OracleInputs, catalog.FineTunedEmbeddingModel),
+        input: (catalog.OracleInputs, catalog.FineTunedEmbeddingModel, catalog.OracleEmbeddingConfig),
         output: catalog.FineTunedBertEmbeddings,
         executor: executor
       );
@@ -58,7 +58,7 @@ public static class OracleEmbeddingFlow
         label: "ReduceToTwoDFineTuned",
         module: "Flows.OracleEmbedding.reduce_to_2d",
         function: "reduce_to_2d_finetuned",
-        input: catalog.FineTunedBertEmbeddings,
+        input: (catalog.FineTunedBertEmbeddings, catalog.OracleEmbeddingConfig),
         output: catalog.FineTunedAtlasPoints,
         executor: executor
       );

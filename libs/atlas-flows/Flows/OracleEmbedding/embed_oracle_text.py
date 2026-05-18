@@ -6,6 +6,7 @@ Inputs:
                the model sees the bare mechanical text.
     model_ref: ModelArtifactRef record — { Path, RepoId, Variant }. The Python step loads
                directly from `Path` on disk; model bytes don't transit Flowthru's marshaller.
+    config:    OracleEmbeddingConfig record — uses `EmbedBatchSize`.
 
 Output: DataFrame [point_id, card_id, text_type, embedding] — embedding packed as a
         little-endian byte blob (see BertEmbedding.cs).
@@ -25,11 +26,12 @@ from flowthru import step
 logger = logging.getLogger(__name__)
 
 
-def _embed_impl(fragments: pd.DataFrame, model_ref: dict) -> pd.DataFrame:
+def _embed_impl(fragments: pd.DataFrame, model_ref: dict, config: dict) -> pd.DataFrame:
     from sentence_transformers import SentenceTransformer
 
     model_path = model_ref["Path"]
     variant = model_ref.get("Variant", "?")
+    batch_size = int(config["EmbedBatchSize"])
     logger.info(
         "Input: %d fragments across %d cards; model=%s @ %s",
         len(fragments), fragments["card_id"].nunique(), variant, model_path,
@@ -39,10 +41,10 @@ def _embed_impl(fragments: pd.DataFrame, model_ref: dict) -> pd.DataFrame:
 
     texts = fragments["text"].fillna("").astype(str).tolist()
     dim = model.get_embedding_dimension() if hasattr(model, "get_embedding_dimension") else model.get_sentence_embedding_dimension()
-    logger.info("Encoding %d fragments (dim=%d)...", len(texts), dim)
+    logger.info("Encoding %d fragments (dim=%d, batch=%d)...", len(texts), dim, batch_size)
     embeddings = model.encode(
         texts,
-        batch_size=64,
+        batch_size=batch_size,
         show_progress_bar=True,
         convert_to_numpy=True,
         normalize_embeddings=True,
@@ -63,11 +65,17 @@ def _embed_impl(fragments: pd.DataFrame, model_ref: dict) -> pd.DataFrame:
     })
 
 
-@step(inputs=["OracleInputs", "DefaultEmbeddingModel"], outputs="BertEmbeddings")
-def embed_oracle_text(fragments: pd.DataFrame, model_ref: dict) -> pd.DataFrame:
-    return _embed_impl(fragments, model_ref)
+@step(
+    inputs=["OracleInputs", "DefaultEmbeddingModel", "OracleEmbeddingConfig"],
+    outputs="BertEmbeddings",
+)
+def embed_oracle_text(fragments: pd.DataFrame, model_ref: dict, config: dict) -> pd.DataFrame:
+    return _embed_impl(fragments, model_ref, config)
 
 
-@step(inputs=["OracleInputs", "FineTunedEmbeddingModel"], outputs="FineTunedBertEmbeddings")
-def embed_oracle_text_finetuned(fragments: pd.DataFrame, model_ref: dict) -> pd.DataFrame:
-    return _embed_impl(fragments, model_ref)
+@step(
+    inputs=["OracleInputs", "FineTunedEmbeddingModel", "OracleEmbeddingConfig"],
+    outputs="FineTunedBertEmbeddings",
+)
+def embed_oracle_text_finetuned(fragments: pd.DataFrame, model_ref: dict, config: dict) -> pd.DataFrame:
+    return _embed_impl(fragments, model_ref, config)

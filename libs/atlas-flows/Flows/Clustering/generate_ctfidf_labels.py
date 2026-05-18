@@ -34,17 +34,17 @@ from flowthru import step
 
 logger = logging.getLogger(__name__)
 
-_TOP_KEYWORDS = 8
-_LABEL_HEAD = 3
 _NOISE_LABEL = "(noise)"
 
 
-def _safe_generate(assignments: pd.DataFrame, fragments: pd.DataFrame) -> pd.DataFrame:
+def _safe_generate(
+    assignments: pd.DataFrame, fragments: pd.DataFrame, config: dict
+) -> pd.DataFrame:
     import sys
     import traceback as _tb
 
     try:
-        return _generate_impl(assignments, fragments)
+        return _generate_impl(assignments, fragments, config)
     except Exception:
         # Flowthru's subprocess executor wraps the worker's traceback in an opaque .NET
         # message ("Exception has been thrown by the target of an invocation"); dump our own
@@ -56,10 +56,16 @@ def _safe_generate(assignments: pd.DataFrame, fragments: pd.DataFrame) -> pd.Dat
 
 
 def _generate_impl(
-    assignments: pd.DataFrame, fragments: pd.DataFrame
+    assignments: pd.DataFrame, fragments: pd.DataFrame, config: dict
 ) -> pd.DataFrame:
     import sklearn
     from sklearn.feature_extraction.text import CountVectorizer
+
+    top_keywords = int(config["CTfIdfTopKeywords"])
+    label_head = int(config["CTfIdfLabelHead"])
+    ngram_min = int(config["CTfIdfNgramMin"])
+    ngram_max = int(config["CTfIdfNgramMax"])
+    min_df = int(config["CTfIdfMinDf"])
 
     merged = assignments.merge(fragments, on="point_id", validate="one_to_one")
     logger.info(
@@ -83,9 +89,9 @@ def _generate_impl(
     # uniformly across clusters, so a hand-curated MTG stoplist would risk filtering actual
     # signal (a graveyard-recursion cluster *should* surface "graveyard" highly).
     vectorizer = CountVectorizer(
-        ngram_range=(1, 3),
+        ngram_range=(ngram_min, ngram_max),
         stop_words=list(_english_stopwords()),
-        min_df=2,
+        min_df=min_df,
         token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z\-']{1,}\b",
     )
     counts = vectorizer.fit_transform(docs_by_cluster["text"])
@@ -123,17 +129,17 @@ def _generate_impl(
             continue
 
         scores = ctfidf[idx]
-        # argsort ascending → take the last _TOP_KEYWORDS for descending.
+        # argsort ascending → take the last `top_keywords` for descending.
         ranked = np.argsort(scores)[::-1]
         keywords: List[str] = []
         for term_idx in ranked:
             if scores[term_idx] <= 0:
                 break
             keywords.append(str(vocab[term_idx]))
-            if len(keywords) >= _TOP_KEYWORDS:
+            if len(keywords) >= top_keywords:
                 break
 
-        label = ", ".join(keywords[:_LABEL_HEAD]) if keywords else "(no terms)"
+        label = ", ".join(keywords[:label_head]) if keywords else "(no terms)"
         rows.append(
             {
                 "cluster_id": cluster_id,
@@ -160,21 +166,24 @@ def _generate_impl(
     return df
 
 
-@step(inputs=["ClusterAssignments", "OracleInputs"], outputs="ClusterLabels")
+@step(
+    inputs=["ClusterAssignments", "OracleInputs", "ClusteringConfig"],
+    outputs="ClusterLabels",
+)
 def generate_ctfidf_labels(
-    assignments: pd.DataFrame, fragments: pd.DataFrame
+    assignments: pd.DataFrame, fragments: pd.DataFrame, config: dict
 ) -> pd.DataFrame:
-    return _safe_generate(assignments, fragments)
+    return _safe_generate(assignments, fragments, config)
 
 
 @step(
-    inputs=["FineTunedClusterAssignments", "OracleInputs"],
+    inputs=["FineTunedClusterAssignments", "OracleInputs", "ClusteringConfig"],
     outputs="FineTunedClusterLabels",
 )
 def generate_ctfidf_labels_finetuned(
-    assignments: pd.DataFrame, fragments: pd.DataFrame
+    assignments: pd.DataFrame, fragments: pd.DataFrame, config: dict
 ) -> pd.DataFrame:
-    return _safe_generate(assignments, fragments)
+    return _safe_generate(assignments, fragments, config)
 
 
 def _english_stopwords() -> frozenset:

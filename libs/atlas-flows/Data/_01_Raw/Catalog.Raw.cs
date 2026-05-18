@@ -90,15 +90,4 @@ public partial class Catalog
         .Build()
     );
 
-  /// <summary>
-  /// Names the HuggingFace repos used as the default-variant model and the fine-tune base.
-  /// See <see cref="BaseModelSpec"/>.
-  /// </summary>
-  public IItem<BaseModelSpec> BaseModelSpec =>
-    CreateItem(() =>
-      Item.Of<BaseModelSpec>("BaseModelSpec")
-        .Json()
-        .AtPath($"{_basePath}/_01_Raw/Datasets/Curated/base-model-spec.json")
-        .Build()
-    );
 }

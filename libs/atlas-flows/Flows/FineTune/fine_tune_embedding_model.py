@@ -1,13 +1,15 @@
 """Fine-tune the embedding model on the MTG-domain training corpus.
 
 Inputs:
-    pairs: DataFrame[anchor, positive, negative?, weight, source] — output of
-           build_training_pairs. Currently trains over (anchor, positive) only with
-           MultipleNegativesRankingLoss; the small handful of seed triplets is dropped into
-           the same dataset as plain pairs (the explicit negative becomes an extra in-batch
-           datum). Once the curated-triplet count grows, split into a second dataset and use
-           mixed-loss training.
-    spec:  BaseModelSpec record — uses `FineTuneBaseRepoId` (default mpnet-base-v2).
+    pairs:  DataFrame[anchor, positive, negative?, weight, source] — output of
+            build_training_pairs. Currently trains over (anchor, positive) only with
+            MultipleNegativesRankingLoss; the small handful of seed triplets is dropped into
+            the same dataset as plain pairs (the explicit negative becomes an extra in-batch
+            datum). Once the curated-triplet count grows, split into a second dataset and use
+            mixed-loss training.
+    config: FineTuneConfig record — `FineTuneBaseRepoId`, `FineTuneVariant`, and nested
+            `TrainingArgs` (epochs/batch/warmup/lr/logging-steps/fp16). Sourced from
+            `Flowthru:Flows:FineTune` in appsettings.json via the harness sidecar.
 
 Output: ModelArtifactRef — { path, repo_id, variant } pointing to the on-disk fine-tuned
         model dir under `_06_Models/`.
@@ -32,8 +34,6 @@ logger = logging.getLogger(__name__)
 # between MPNet's parameter detection and DataParallel's replica handling).
 os.environ.setdefault("CUDA_VISIBLE_DEVICES", "0")
 
-_VARIANT = "mtg-mpnet-v1"
-
 
 def _models_dir() -> Path:
     data_root = os.environ.get("MAGIC_ATLAS_DATA")
@@ -45,10 +45,10 @@ def _models_dir() -> Path:
 
 
 @step(
-    inputs=["TrainingPairs", "BaseModelSpec"],
+    inputs=["TrainingPairs", "FineTuneConfig"],
     outputs="FineTunedEmbeddingModel",
 )
-def fine_tune_embedding_model(pairs: pd.DataFrame, spec: dict) -> dict:
+def fine_tune_embedding_model(pairs: pd.DataFrame, config: dict) -> dict:
     import torch
     from datasets import Dataset
     from sentence_transformers import (
@@ -64,7 +64,9 @@ def fine_tune_embedding_model(pairs: pd.DataFrame, spec: dict) -> dict:
         torch.cuda.device_count(),
     )
 
-    base_repo = spec["FineTuneBaseRepoId"]
+    base_repo = config["FineTuneBaseRepoId"]
+    variant = config["FineTuneVariant"]
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.info("Loading fine-tune base %s on %s...", base_repo, device)
     model = SentenceTransformer(base_repo, device=device)
@@ -94,26 +96,23 @@ def fine_tune_embedding_model(pairs: pd.DataFrame, spec: dict) -> dict:
     train_dataset = Dataset.from_list(pair_rows)
     loss = losses.MultipleNegativesRankingLoss(model)
 
-    # batch_size=8 + fp16 fits mpnet (110M params) on an 11.6 GiB GPU. MNR pulls in-batch
-    # negatives so a smaller batch shrinks the negative pool per anchor — acceptable given the
-    # corpus size; bigger GPUs can crank batch_size back up to 32+.
-    target = _models_dir() / _VARIANT
+    target = _models_dir() / variant
     if target.exists():
         shutil.rmtree(target)
     target.mkdir(parents=True)
 
     args = SentenceTransformerTrainingArguments(
         output_dir=str(target / "_trainer"),
-        num_train_epochs=2,
-        per_device_train_batch_size=8,
-        warmup_ratio=0.1,
-        learning_rate=2e-5,
-        logging_steps=20,
+        num_train_epochs=config["TrainNumEpochs"],
+        per_device_train_batch_size=config["TrainPerDeviceBatchSize"],
+        warmup_ratio=config["TrainWarmupRatio"],
+        learning_rate=config["TrainLearningRate"],
+        logging_steps=config["TrainLoggingSteps"],
         save_strategy="no",
         report_to="none",
         dataloader_drop_last=False,
         max_steps=-1,
-        fp16=True,
+        fp16=config["TrainFp16"],
     )
     trainer = SentenceTransformerTrainer(
         model=model,
@@ -121,7 +120,10 @@ def fine_tune_embedding_model(pairs: pd.DataFrame, spec: dict) -> dict:
         train_dataset=train_dataset,
         loss=loss,
     )
-    logger.info("Starting fit (2 epochs, MNR over pairs+triplets-as-pairs)...")
+    logger.info(
+        "Starting fit (%d epochs, MNR over pairs+triplets-as-pairs)...",
+        config["TrainNumEpochs"],
+    )
     trainer.train()
     logger.info("Fit complete; writing model to %s", target)
 
@@ -132,4 +134,4 @@ def fine_tune_embedding_model(pairs: pd.DataFrame, spec: dict) -> dict:
         shutil.rmtree(scratch)
 
     # Scalar record output uses C# PascalCase property names on deserialization.
-    return {"Path": str(target), "RepoId": base_repo, "Variant": _VARIANT}
+    return {"Path": str(target), "RepoId": base_repo, "Variant": variant}
