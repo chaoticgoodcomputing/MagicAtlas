@@ -47,7 +47,7 @@ public static class OracleEmbeddingFlow
       // ─── Fine-tuned variant ───
       pipeline.AddPythonStep(
         label: "EmbedOracleTextFineTuned",
-        module: "Flows.OracleEmbedding.embed_oracle_text",
+        module: "Flows.OracleEmbedding.embed_oracle_text_finetuned",
         function: "embed_oracle_text_finetuned",
         input: (catalog.OracleInputs, catalog.FineTunedEmbeddingModel, catalog.OracleEmbeddingConfig),
         output: catalog.FineTunedBertEmbeddings,
@@ -56,7 +56,7 @@ public static class OracleEmbeddingFlow
 
       pipeline.AddPythonStep(
         label: "ReduceToTwoDFineTuned",
-        module: "Flows.OracleEmbedding.reduce_to_2d",
+        module: "Flows.OracleEmbedding.reduce_to_2d_finetuned",
         function: "reduce_to_2d_finetuned",
         input: (catalog.FineTunedBertEmbeddings, catalog.OracleEmbeddingConfig),
         output: catalog.FineTunedAtlasPoints,

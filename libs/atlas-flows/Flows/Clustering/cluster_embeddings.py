@@ -1,9 +1,11 @@
-"""HDBSCAN clustering over the 5D-UMAP-reduced embeddings.
+"""HDBSCAN clustering over the default-variant 5D-UMAP-reduced embeddings. The fine-tuned
+variant lives in `cluster_embeddings_finetuned.py`; both files share `_cluster_impl` via
+import. Split for Flowthru's Python source generator (one @step per .py file in 0.18.2).
 
 Inputs:
     embeddings: DataFrame [point_id, vector] — 5D byte-packed embeddings produced by
                 `reduce_to_five_d` (see ClusteringEmbedding.cs).
-    config:     ClusteringConfig record — uses `Hdbscan.MinClusterSize` and `Hdbscan.MinSamples`.
+    config:     ClusteringConfig record — uses `HdbscanMinClusterSize` and `HdbscanMinSamples`.
 
 Output: DataFrame [point_id, cluster_id] — `cluster_id == -1` for HDBSCAN noise.
 
@@ -96,14 +98,10 @@ def _cluster_impl(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
     })
 
 
-@step(inputs=["ClusteringEmbeddings", "ClusteringConfig"], outputs="ClusterAssignments")
-def cluster_embeddings(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
-    return _cluster_impl(embeddings, config)
-
-
 @step(
-    inputs=["FineTunedClusteringEmbeddings", "ClusteringConfig"],
-    outputs="FineTunedClusterAssignments",
+    inputs=["ClusteringEmbeddings", "ClusteringConfig"],
+    outputs="ClusterAssignments",
+    cacheable=True,
 )
-def cluster_embeddings_finetuned(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
+def cluster_embeddings(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
     return _cluster_impl(embeddings, config)

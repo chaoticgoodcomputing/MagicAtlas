@@ -10,11 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flowthru" Version="0.17.*" />
-    <PackageReference Include="Flowthru.Cli" Version="0.17.*" />
-    <PackageReference Include="Flowthru.Extensions.Python" Version="0.17.*" />
-    <PackageReference Include="Flowthru.Extensions.Metadata.Json" Version="0.17.*" />
-    <PackageReference Include="Flowthru.Extensions.Metadata.Mermaid" Version="0.17.*" />
+    <PackageReference Include="Flowthru.Core" Version="0.18.*" />
+    <PackageReference Include="Flowthru.Cli" Version="0.18.*" />
+    <PackageReference Include="Flowthru.Extensions.Python" Version="0.18.*" />
+    <PackageReference Include="Flowthru.Extensions.Metadata.Json" Version="0.18.*" />
+    <PackageReference Include="Flowthru.Extensions.Metadata.Mermaid" Version="0.18.*" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.*" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.*" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.*" />

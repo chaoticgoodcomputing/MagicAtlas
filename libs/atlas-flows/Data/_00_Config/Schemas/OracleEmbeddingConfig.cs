@@ -12,11 +12,11 @@ namespace MagicAtlas.Data._00_Config.Schemas;
 public partial record OracleEmbeddingConfig
 {
   /// <summary>Per-call batch size for <c>SentenceTransformer.encode</c>.</summary>
-  public required int EmbedBatchSize { get; init; }
+  public int EmbedBatchSize { get; init; }
 
   /// <summary>UMAP <c>n_neighbors</c> for the 2D atlas-display reduction.</summary>
-  public required int Umap2DNNeighbors { get; init; }
+  public int Umap2DNNeighbors { get; init; }
 
   /// <summary>UMAP <c>min_dist</c> for the 2D atlas-display reduction (typically 0.1).</summary>
-  public required double Umap2DMinDist { get; init; }
+  public double Umap2DMinDist { get; init; }
 }

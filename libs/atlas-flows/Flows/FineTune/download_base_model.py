@@ -43,7 +43,7 @@ def _models_dir() -> Path:
     return Path(data_root) / "_06_Models"
 
 
-@step(inputs=["FineTuneConfig"], outputs="DefaultEmbeddingModel")
+@step(inputs=["FineTuneConfig"], outputs="DefaultEmbeddingModel", cacheable=True)
 def download_base_model(config) -> dict:
     from huggingface_hub import snapshot_download
 
@@ -51,6 +51,15 @@ def download_base_model(config) -> dict:
     repo_id = config["DefaultRepoId"]
     variant = config["DefaultVariant"]
     target = _models_dir() / variant
+
+    # In-step idempotency: if the model dir already has the inference-time files, emit the
+    # existing ref and skip the HF round-trip + filesystem copy. Not `cacheable=True` on the
+    # @step decorator because the model dir is an un-tracked side effect — Flowthru's cache
+    # plan only sees the ModelArtifactRef sidecar, so a cache hit could serve a stale ref to
+    # a deleted directory.
+    if (target / "config.json").exists() and (target / "1_Pooling" / "config.json").exists():
+        logger.info("Model dir %s already exists; skipping HuggingFace fetch.", target)
+        return {"Path": str(target), "RepoId": repo_id, "Variant": variant}
 
     logger.info("Downloading %s into %s ...", repo_id, target)
     snapshot_path = Path(snapshot_download(

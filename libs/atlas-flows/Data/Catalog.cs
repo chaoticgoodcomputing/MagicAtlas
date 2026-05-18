@@ -1,4 +1,5 @@
 using Flowthru.Data.Catalog;
+using Microsoft.Extensions.Configuration;
 
 namespace MagicAtlas.Data;
 
@@ -24,9 +25,11 @@ namespace MagicAtlas.Data;
 public partial class Catalog : CatalogAbstract
 {
   private readonly string _basePath;
+  private readonly IConfiguration _configuration;
 
-  public Catalog(string basePath)
+  public Catalog(string basePath, IConfiguration configuration)
   {
     _basePath = basePath;
+    _configuration = configuration;
   }
 }

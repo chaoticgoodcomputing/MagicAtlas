@@ -65,7 +65,7 @@ public static class ReportingFlow
 
       pipeline.AddPythonStep(
         label: "BuildAtlasPlotFineTuned",
-        module: "Flows.Reporting.build_atlas_plot",
+        module: "Flows.Reporting.build_atlas_plot_finetuned",
         function: "build_atlas_plot_finetuned",
         input: (
           catalog.FineTunedAtlasReportingPoints,

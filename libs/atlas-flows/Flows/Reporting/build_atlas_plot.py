@@ -166,28 +166,9 @@ def _build_atlas_plot_impl(
         "ReportingConfig",
     ],
     outputs="AtlasPlotHtml",
+    cacheable=True,
 )
 def build_atlas_plot(
-    points: pd.DataFrame,
-    hover: pd.DataFrame,
-    assignments: pd.DataFrame,
-    labels: pd.DataFrame,
-    config: dict,
-) -> str:
-    return _build_atlas_plot_impl(points, hover, assignments, labels, config)
-
-
-@step(
-    inputs=[
-        "FineTunedAtlasReportingPoints",
-        "AtlasCardHoverInfo",
-        "FineTunedClusterAssignments",
-        "FineTunedClusterLabels",
-        "ReportingConfig",
-    ],
-    outputs="FineTunedAtlasPlotHtml",
-)
-def build_atlas_plot_finetuned(
     points: pd.DataFrame,
     hover: pd.DataFrame,
     assignments: pd.DataFrame,

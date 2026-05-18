@@ -11,8 +11,8 @@ namespace MagicAtlas.Data._00_Config.Schemas;
 public partial record ModelEvaluationsConfig
 {
   /// <summary>Variant label written into <c>ModelEvaluationResult.ModelVariant</c> for the default chain.</summary>
-  public required string DefaultVariantLabel { get; init; }
+  public string DefaultVariantLabel { get; init; } = "";
 
   /// <summary>Variant label written into <c>ModelEvaluationResult.ModelVariant</c> for the fine-tuned chain.</summary>
-  public required string FineTunedVariantLabel { get; init; }
+  public string FineTunedVariantLabel { get; init; } = "";
 }

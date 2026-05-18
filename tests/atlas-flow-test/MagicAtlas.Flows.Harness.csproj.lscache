@@ -238,19 +238,13 @@ Program.cs
  apache.arrow.scalars/23.0.0/lib/net8.0/Apache.Arrow.Scalars.dll
  apache.arrow/23.0.0/lib/net8.0/Apache.Arrow.dll
  communitytoolkit.highperformance/8.4.1/lib/net8.0/CommunityToolkit.HighPerformance.dll
- csvhelper/33.0.1/lib/net8.0/CsvHelper.dll
- exceldatareader.dataset/3.7.0/lib/netstandard2.1/ExcelDataReader.DataSet.dll
- exceldatareader/3.7.0/lib/netstandard2.1/ExcelDataReader.dll
- flowthru.cli/0.17.5/lib/net10.0/Flowthru.Cli.dll
- flowthru.extensions.csv/0.17.5/lib/net10.0/Flowthru.Extensions.Csv.dll
- flowthru.extensions.excel/0.17.5/lib/net10.0/Flowthru.Extensions.Excel.dll
- flowthru.extensions.metadata.json/0.17.5/lib/net10.0/Flowthru.Extensions.Metadata.Json.dll
- flowthru.extensions.metadata.mermaid/0.17.5/lib/net10.0/Flowthru.Extensions.Metadata.Mermaid.dll
- flowthru.extensions.parquet/0.17.5/lib/net10.0/Flowthru.Extensions.Parquet.dll
- flowthru.extensions.python/0.17.5/lib/net10.0/
+ flowthru.cli/0.18.2/lib/net10.0/Flowthru.Cli.dll
+ flowthru.extensions.metadata.json/0.18.2/lib/net10.0/Flowthru.Extensions.Metadata.Json.dll
+ flowthru.extensions.metadata.mermaid/0.18.2/lib/net10.0/Flowthru.Extensions.Metadata.Mermaid.dll
+ flowthru.extensions.parquet/0.18.2/lib/net10.0/Flowthru.Extensions.Parquet.dll
+ flowthru.extensions.python/0.18.2/lib/net10.0/
   Flowthru.Core.dll
   Flowthru.Extensions.Python.dll
- flowthru/0.17.5/lib/net10.0/Flowthru.dll
  k4os.compression.lz4/1.3.8/lib/net6.0/K4os.Compression.LZ4.dll
  microsoft.extensions.configuration.abstractions/10.0.8/lib/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll
  microsoft.extensions.configuration.binder/10.0.8/lib/net10.0/Microsoft.Extensions.Configuration.Binder.dll
@@ -285,11 +279,11 @@ Program.cs
 <DOTNET>/sdk/10.0.104/Sdks/Microsoft.NET.Sdk/analyzers/
  Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll
  Microsoft.CodeAnalysis.NetAnalyzers.dll
-<NUGET>/flowthru.core/0.17.5/analyzers/dotnet/cs/
+<NUGET>/flowthru.core/0.18.2/analyzers/dotnet/cs/
  Flowthru.Core.CodeFixes.dll
  Flowthru.Core.SourceGenerators.dll
 <NUGET>/
- flowthru.extensions.python/0.17.5/analyzers/dotnet/cs/Flowthru.Extensions.Python.SourceGenerators.dll
+ flowthru.extensions.python/0.18.2/analyzers/dotnet/cs/Flowthru.Extensions.Python.SourceGenerators.dll
  microsoft.extensions.logging.abstractions/10.0.8/analyzers/dotnet/roslyn4.4/cs/Microsoft.Extensions.Logging.Generators.dll
  microsoft.extensions.options/10.0.8/analyzers/dotnet/roslyn4.4/cs/Microsoft.Extensions.Options.SourceGeneration.dll
 

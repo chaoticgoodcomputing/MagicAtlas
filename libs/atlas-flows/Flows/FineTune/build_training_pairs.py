@@ -184,6 +184,7 @@ _SEED_TRIPLETS: list[dict] = [
         "FineTuneConfig",
     ],
     outputs="TrainingPairs",
+    cacheable=True,
 )
 def build_training_pairs(
     glossary_text: str,

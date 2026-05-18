@@ -59,7 +59,7 @@ public static class ClusteringFlow
       // ─── Fine-tuned variant ───
       pipeline.AddPythonStep(
         label: "ReduceToFiveDFineTuned",
-        module: "Flows.Clustering.reduce_to_five_d",
+        module: "Flows.Clustering.reduce_to_five_d_finetuned",
         function: "reduce_to_five_d_finetuned",
         input: (catalog.FineTunedBertEmbeddings, catalog.ClusteringConfig),
         output: catalog.FineTunedClusteringEmbeddings,
@@ -68,7 +68,7 @@ public static class ClusteringFlow
 
       pipeline.AddPythonStep(
         label: "ClusterEmbeddingsFineTuned",
-        module: "Flows.Clustering.cluster_embeddings",
+        module: "Flows.Clustering.cluster_embeddings_finetuned",
         function: "cluster_embeddings_finetuned",
         input: (catalog.FineTunedClusteringEmbeddings, catalog.ClusteringConfig),
         output: catalog.FineTunedClusterAssignments,
@@ -77,7 +77,7 @@ public static class ClusteringFlow
 
       pipeline.AddPythonStep(
         label: "GenerateCTfIdfLabelsFineTuned",
-        module: "Flows.Clustering.generate_ctfidf_labels",
+        module: "Flows.Clustering.generate_ctfidf_labels_finetuned",
         function: "generate_ctfidf_labels_finetuned",
         input: (catalog.FineTunedClusterAssignments, catalog.OracleInputs, catalog.ClusteringConfig),
         output: catalog.FineTunedClusterLabels,

@@ -15,17 +15,17 @@ namespace MagicAtlas.Data._00_Config.Schemas;
 public partial record ReportingConfig
 {
   /// <summary>Top-N largest clusters that get a centroid text annotation.</summary>
-  public required int MaxAnnotations { get; init; }
+  public int MaxAnnotations { get; init; }
 
   /// <summary>Character cap on each centroid annotation before ellipsis.</summary>
-  public required int AnnotationTextLimit { get; init; }
+  public int AnnotationTextLimit { get; init; }
 
   /// <summary>Scatter marker size in pixels.</summary>
-  public required int MarkerSize { get; init; }
+  public int MarkerSize { get; init; }
 
   /// <summary>Scatter marker opacity (0–1).</summary>
-  public required double MarkerOpacity { get; init; }
+  public double MarkerOpacity { get; init; }
 
   /// <summary>Character cap on oracle text shown in the hover tooltip.</summary>
-  public required int OracleHoverTruncateLimit { get; init; }
+  public int OracleHoverTruncateLimit { get; init; }
 }

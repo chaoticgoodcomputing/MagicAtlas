@@ -1,4 +1,8 @@
-"""Encode each oracle-text fragment to a sentence-transformer vector using a catalog-managed model.
+"""Encode each oracle-text fragment to a sentence-transformer vector using the default
+sentence-transformer model. The fine-tuned variant lives in `embed_oracle_text_finetuned.py`
+and imports `_embed_impl` from here — split into two files so each @step decorator can be
+picked up by Flowthru's Python source generator, which only registers the first @step per .py
+file for the cache plan.
 
 Inputs:
     fragments: DataFrame of OracleInput rows (point_id, card_id, text, text_type). Reminder-
@@ -10,10 +14,6 @@ Inputs:
 
 Output: DataFrame [point_id, card_id, text_type, embedding] — embedding packed as a
         little-endian byte blob (see BertEmbedding.cs).
-
-Two parallel @step entries differ only in input/output catalog item names — both delegate to
-`_embed_impl`. Wiring is done in C# (OracleEmbeddingFlow.cs) which binds each entry to the
-default-variant or fine-tuned-variant catalog item pair.
 """
 from __future__ import annotations
 
@@ -68,14 +68,7 @@ def _embed_impl(fragments: pd.DataFrame, model_ref: dict, config: dict) -> pd.Da
 @step(
     inputs=["OracleInputs", "DefaultEmbeddingModel", "OracleEmbeddingConfig"],
     outputs="BertEmbeddings",
+    cacheable=True,
 )
 def embed_oracle_text(fragments: pd.DataFrame, model_ref: dict, config: dict) -> pd.DataFrame:
-    return _embed_impl(fragments, model_ref, config)
-
-
-@step(
-    inputs=["OracleInputs", "FineTunedEmbeddingModel", "OracleEmbeddingConfig"],
-    outputs="FineTunedBertEmbeddings",
-)
-def embed_oracle_text_finetuned(fragments: pd.DataFrame, model_ref: dict, config: dict) -> pd.DataFrame:
     return _embed_impl(fragments, model_ref, config)

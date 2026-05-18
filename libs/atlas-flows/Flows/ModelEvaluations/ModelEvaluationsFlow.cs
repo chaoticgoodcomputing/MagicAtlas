@@ -39,7 +39,7 @@ public static class ModelEvaluationsFlow
 
       pipeline.AddPythonStep(
         label: "EvaluateFineTunedModel",
-        module: "Flows.ModelEvaluations.evaluate_model",
+        module: "Flows.ModelEvaluations.evaluate_model_finetuned",
         function: "evaluate_finetuned",
         input: (
           catalog.FineTunedClusteringEmbeddings,

@@ -117,6 +117,7 @@ def _evaluate_impl(
         "ModelEvaluationsConfig",
     ],
     outputs="ModelEvaluation",
+    cacheable=True,
 )
 def evaluate_default(
     embeddings: pd.DataFrame,
@@ -127,19 +128,3 @@ def evaluate_default(
     return _evaluate_impl(embeddings, oracle, assertions, config["DefaultVariantLabel"])
 
 
-@step(
-    inputs=[
-        "FineTunedClusteringEmbeddings",
-        "OracleInputs",
-        "ModelEvaluationAssertions",
-        "ModelEvaluationsConfig",
-    ],
-    outputs="FineTunedModelEvaluation",
-)
-def evaluate_finetuned(
-    embeddings: pd.DataFrame,
-    oracle: pd.DataFrame,
-    assertions: pd.DataFrame,
-    config: dict,
-) -> pd.DataFrame:
-    return _evaluate_impl(embeddings, oracle, assertions, config["FineTunedVariantLabel"])

@@ -22,9 +22,13 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Processed cards with strong types.
-  /// Stored in memory only (not persisted to disk due to size).
-  /// Contains 35,000+ card objects with full type safety.
+  /// Processed cards with strong types — ~35k card objects with full type safety. Stored
+  /// in-memory only: persisting CardCollection to JSON fails because the record uses init-only
+  /// properties that System.Text.Json's default deserializer can't round-trip. The
+  /// <c>.Memory()</c> adapter is deliberately non-fingerprintable, which cascades uncacheable
+  /// through every downstream step in the 0.18.x cache plan — fix would require swapping to a
+  /// serializer-friendly schema (or writing custom JsonConverters) so the item can be
+  /// disk-persisted and fingerprinted.
   /// </summary>
   public IItem<CardCollection> ProcessedCards =>
     CreateItem(() => Item.Of<CardCollection>("ProcessedCards").Memory().Build());

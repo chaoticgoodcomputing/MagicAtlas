@@ -1,9 +1,12 @@
-"""UMAP-reduce the per-fragment BERT vectors to 2D for the atlas display.
+"""UMAP-reduce the default-variant BERT vectors to 2D for the atlas display. The fine-tuned
+variant lives in `reduce_to_2d_finetuned.py`; both files share `_reduce_to_2d_impl` via import.
+Split for Flowthru's Python source generator, which only registers the first @step per .py
+file in 0.18.2.
 
 Inputs:
     embeddings: DataFrame [point_id, card_id, text_type, embedding] — embedding is the byte-blob
                 form (see BertEmbedding.cs). Decoded here back to float32 vectors.
-    config:     OracleEmbeddingConfig record — uses `Umap2D.NNeighbors` and `Umap2D.MinDist`.
+    config:     OracleEmbeddingConfig record — uses `Umap2DNNeighbors` and `Umap2DMinDist`.
 
 Output: DataFrame [point_id, card_id, x, y, text_type] — one row per fragment.
 
@@ -95,14 +98,10 @@ def _reduce_to_2d_impl(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
     })
 
 
-@step(inputs=["BertEmbeddings", "OracleEmbeddingConfig"], outputs="AtlasPoints")
-def reduce_to_2d(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
-    return _reduce_to_2d_impl(embeddings, config)
-
-
 @step(
-    inputs=["FineTunedBertEmbeddings", "OracleEmbeddingConfig"],
-    outputs="FineTunedAtlasPoints",
+    inputs=["BertEmbeddings", "OracleEmbeddingConfig"],
+    outputs="AtlasPoints",
+    cacheable=True,
 )
-def reduce_to_2d_finetuned(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
+def reduce_to_2d(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
     return _reduce_to_2d_impl(embeddings, config)

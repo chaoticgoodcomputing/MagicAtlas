@@ -1,10 +1,10 @@
-using System.Text.Json;
+using Flowthru.Caching;
 using Flowthru.Cli;
+using Flowthru.Data.Catalog;
 using Flowthru.Diagnostics;
 using Flowthru.Hosting;
 using Flowthru.Step.Python;
 using MagicAtlas.Data;
-using MagicAtlas.Data._00_Config.Schemas;
 using MagicAtlas.Flows.CardProcessing;
 using MagicAtlas.Flows.Clustering;
 using MagicAtlas.Flows.FineTune;
@@ -45,33 +45,6 @@ public class Program
   /// builds drop outputs under <c>dist/tests/atlas-flow-test/</c>, not next to the csproj) or the
   /// caller's CWD. Walks upward looking for the csproj.
   /// </summary>
-  private static readonly JsonSerializerOptions _sidecarJsonOptions = new()
-  {
-    WriteIndented = true
-  };
-
-  /// <summary>
-  /// Bind a <c>Flowthru:Flows:&lt;name&gt;</c> section to <typeparamref name="T"/> and write it
-  /// out as JSON to <paramref name="outputPath"/>. The bind enforces <c>required</c> members on
-  /// the POCO, so a malformed appsettings fails here rather than later inside a Python step.
-  /// </summary>
-  private static void MaterializeConfigSidecar<T>(
-    IConfiguration configuration, string sectionPath, string outputPath
-  ) where T : class
-  {
-    var section = configuration.GetSection(sectionPath);
-    if (!section.Exists())
-    {
-      throw new InvalidOperationException(
-        $"Required configuration section is missing: {sectionPath}");
-    }
-    var bound = section.Get<T>()
-      ?? throw new InvalidOperationException(
-        $"Failed to bind {sectionPath} to {typeof(T).Name}");
-    Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
-    File.WriteAllText(outputPath, JsonSerializer.Serialize(bound, _sidecarJsonOptions));
-  }
-
   private static string ResolveHarnessDirectory()
   {
     const string csproj = "MagicAtlas.Flows.Harness.csproj";
@@ -117,26 +90,6 @@ public class Program
       .Build();
     services.AddSingleton<IConfiguration>(configuration);
 
-    // Materialize the per-flow configuration sections into JSON sidecars under
-    // _00_Config/Datasets/. The catalog items in Catalog.Config.cs point at these files, so both
-    // C# transforms (via closure if a flow wires it) and Python steps (via scalar IItem<T>
-    // input) read identical values from a single source of truth — appsettings.json.
-    MaterializeConfigSidecar<FineTuneConfig>(
-      configuration, "Flowthru:Flows:FineTune",
-      Path.Combine(dataPath, "_00_Config/Datasets/finetune.json"));
-    MaterializeConfigSidecar<OracleEmbeddingConfig>(
-      configuration, "Flowthru:Flows:OracleEmbedding",
-      Path.Combine(dataPath, "_00_Config/Datasets/oracle-embedding.json"));
-    MaterializeConfigSidecar<ClusteringConfig>(
-      configuration, "Flowthru:Flows:Clustering",
-      Path.Combine(dataPath, "_00_Config/Datasets/clustering.json"));
-    MaterializeConfigSidecar<ReportingConfig>(
-      configuration, "Flowthru:Flows:Reporting",
-      Path.Combine(dataPath, "_00_Config/Datasets/reporting.json"));
-    MaterializeConfigSidecar<ModelEvaluationsConfig>(
-      configuration, "Flowthru:Flows:ModelEvaluations",
-      Path.Combine(dataPath, "_00_Config/Datasets/model-evaluations.json"));
-
     services.AddLogging(logging =>
     {
       logging.AddConsole();
@@ -180,10 +133,23 @@ public class Program
 
     services.AddFlowthru(flowthru =>
     {
-      flowthru.RegisterCatalog(_ => new Catalog(dataPath));
+      flowthru.RegisterCatalog(sp => new Catalog(
+        dataPath, sp.GetRequiredService<IConfiguration>()
+      ));
       flowthru.RegisterCatalog(sp => new CardProcessingFlowConfig(
         sp.GetRequiredService<IConfiguration>()
       ));
+
+      // Enable smart caching (0.18.x). The cache manifest tracks per-step composite identities
+      // (source-hash + input fingerprints) and short-circuits steps whose inputs and code
+      // haven't changed since the last successful run. Python steps participate iff they're
+      // marked `cacheable=True` on the `@step` decorator (see Flows/**/<step>.py).
+      flowthru.UseCacheStorage(_ =>
+        Item.Of<CacheManifest>("flowthru.cache")
+          .Json()
+          .AtPath(Path.Combine(basePath, ".flowthru", "cache.json"))
+          .Build()
+      );
 
       flowthru.ConfigureMetadata(meta =>
       {

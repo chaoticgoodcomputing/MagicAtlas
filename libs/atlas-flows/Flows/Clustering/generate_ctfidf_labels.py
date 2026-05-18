@@ -169,18 +169,9 @@ def _generate_impl(
 @step(
     inputs=["ClusterAssignments", "OracleInputs", "ClusteringConfig"],
     outputs="ClusterLabels",
+    cacheable=True,
 )
 def generate_ctfidf_labels(
-    assignments: pd.DataFrame, fragments: pd.DataFrame, config: dict
-) -> pd.DataFrame:
-    return _safe_generate(assignments, fragments, config)
-
-
-@step(
-    inputs=["FineTunedClusterAssignments", "OracleInputs", "ClusteringConfig"],
-    outputs="FineTunedClusterLabels",
-)
-def generate_ctfidf_labels_finetuned(
     assignments: pd.DataFrame, fragments: pd.DataFrame, config: dict
 ) -> pd.DataFrame:
     return _safe_generate(assignments, fragments, config)

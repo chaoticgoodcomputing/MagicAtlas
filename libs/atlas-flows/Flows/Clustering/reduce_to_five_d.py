@@ -1,10 +1,13 @@
-"""UMAP-reduce the per-fragment BERT vectors to 5D for HDBSCAN clustering and model evaluation.
+"""UMAP-reduce the default-variant BERT vectors to 5D for HDBSCAN clustering and model evaluation.
+The fine-tuned variant lives in `reduce_to_five_d_finetuned.py`; both files share
+`_reduce_to_five_d_impl` via import. Split for Flowthru's Python source generator (one @step
+per .py file in 0.18.2).
 
 Inputs:
     embeddings: DataFrame [point_id, card_id, text_type, embedding] — `embedding` is the
                 byte-blob form produced by `embed_oracle_text` (little-endian float16, 2 bytes
                 per element; row width depends on the source model).
-    config:     ClusteringConfig record — uses `Umap5D.NNeighbors` and `Umap5D.MinDist`.
+    config:     ClusteringConfig record — uses `Umap5DNNeighbors` and `Umap5DMinDist`.
 
 Output: DataFrame [point_id, vector] — `vector` is the byte-blob form of the 5D UMAP coordinates
         (20 bytes = 5 little-endian float32s), see ClusteringEmbedding.cs.
@@ -97,14 +100,10 @@ def _reduce_to_five_d_impl(embeddings: pd.DataFrame, config: dict) -> pd.DataFra
     })
 
 
-@step(inputs=["BertEmbeddings", "ClusteringConfig"], outputs="ClusteringEmbeddings")
-def reduce_to_five_d(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
-    return _reduce_to_five_d_impl(embeddings, config)
-
-
 @step(
-    inputs=["FineTunedBertEmbeddings", "ClusteringConfig"],
-    outputs="FineTunedClusteringEmbeddings",
+    inputs=["BertEmbeddings", "ClusteringConfig"],
+    outputs="ClusteringEmbeddings",
+    cacheable=True,
 )
-def reduce_to_five_d_finetuned(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
+def reduce_to_five_d(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
     return _reduce_to_five_d_impl(embeddings, config)

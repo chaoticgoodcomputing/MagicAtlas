@@ -20,30 +20,30 @@ namespace MagicAtlas.Data._00_Config.Schemas;
 public partial record FineTuneConfig
 {
   /// <summary>HuggingFace repo id for the default (un-fine-tuned) embedder.</summary>
-  public required string DefaultRepoId { get; init; }
+  public string DefaultRepoId { get; init; } = "";
 
   /// <summary>On-disk directory name under <c>_06_Models/</c> for the default variant.</summary>
-  public required string DefaultVariant { get; init; }
+  public string DefaultVariant { get; init; } = "";
 
   /// <summary>HuggingFace repo id used as the fine-tune starting point.</summary>
-  public required string FineTuneBaseRepoId { get; init; }
+  public string FineTuneBaseRepoId { get; init; } = "";
 
   /// <summary>On-disk directory name under <c>_06_Models/</c> for the fine-tuned variant.</summary>
-  public required string FineTuneVariant { get; init; }
+  public string FineTuneVariant { get; init; } = "";
 
   // ── SentenceTransformer training-loop knobs ──
 
-  public required int TrainNumEpochs { get; init; }
-  public required int TrainPerDeviceBatchSize { get; init; }
-  public required double TrainWarmupRatio { get; init; }
-  public required double TrainLearningRate { get; init; }
-  public required int TrainLoggingSteps { get; init; }
-  public required bool TrainFp16 { get; init; }
+  public int TrainNumEpochs { get; init; }
+  public int TrainPerDeviceBatchSize { get; init; }
+  public double TrainWarmupRatio { get; init; }
+  public double TrainLearningRate { get; init; }
+  public int TrainLoggingSteps { get; init; }
+  public bool TrainFp16 { get; init; }
 
   /// <summary>
   /// Multiplier applied to <c>(anchor, positive)</c> pairs originating from a curated triplet.
   /// Triplets carry an explicit hard negative so they're stronger signal than auto-extracted
   /// pairs; the loss-side weighting bumps their effective contribution to MNR.
   /// </summary>
-  public required double TripletWeight { get; init; }
+  public double TripletWeight { get; init; }
 }

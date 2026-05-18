@@ -47,6 +47,7 @@ def _models_dir() -> Path:
 @step(
     inputs=["TrainingPairs", "FineTuneConfig"],
     outputs="FineTunedEmbeddingModel",
+    cacheable=True,
 )
 def fine_tune_embedding_model(pairs: pd.DataFrame, config: dict) -> dict:
     import torch
@@ -66,6 +67,18 @@ def fine_tune_embedding_model(pairs: pd.DataFrame, config: dict) -> dict:
 
     base_repo = config["FineTuneBaseRepoId"]
     variant = config["FineTuneVariant"]
+    target = _models_dir() / variant
+
+    # In-step idempotency: if the fine-tuned model dir already has the inference-time files,
+    # emit the existing ref and skip training. Not `cacheable=True` on the @step decorator
+    # because the model dir is an un-tracked side effect — Flowthru's cache plan only sees
+    # the ModelArtifactRef sidecar, so a cache hit could serve a stale ref to a deleted dir.
+    # Wipe the dir manually (or run `--no-cache`) to force a fresh train; corpus or
+    # hyperparameter changes still need explicit re-training too — the input fingerprints
+    # don't reach into this short-circuit.
+    if (target / "config.json").exists() and (target / "1_Pooling" / "config.json").exists():
+        logger.info("Fine-tuned model dir %s already exists; skipping training.", target)
+        return {"Path": str(target), "RepoId": base_repo, "Variant": variant}
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.info("Loading fine-tune base %s on %s...", base_repo, device)
@@ -96,7 +109,6 @@ def fine_tune_embedding_model(pairs: pd.DataFrame, config: dict) -> dict:
     train_dataset = Dataset.from_list(pair_rows)
     loss = losses.MultipleNegativesRankingLoss(model)
 
-    target = _models_dir() / variant
     if target.exists():
         shutil.rmtree(target)
     target.mkdir(parents=True)
