@@ -5,7 +5,7 @@ namespace MagicAtlas.Data._03_Primary.Schemas;
 /// <summary>
 /// Card-level oracle text with reminder parentheticals intact — the input shape the FineTune
 /// flow's training-pair builder needs to extract reminder-text → glossary paraphrase pairs.
-/// Sibling to <see cref="OracleInput"/>, which is fragment-level with parentheticals stripped.
+/// Sibling to <see cref="OracleLine"/>, which is line-level with parentheticals stripped.
 /// </summary>
 /// <remarks>
 /// Arrow-friendly flat projection of <see cref="CardCoreData"/>: only the three scalar fields

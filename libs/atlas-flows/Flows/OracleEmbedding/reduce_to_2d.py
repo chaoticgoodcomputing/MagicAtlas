@@ -1,21 +1,23 @@
-"""UMAP-reduce the default-variant BERT vectors to 2D for the atlas display. The fine-tuned
-variant lives in `reduce_to_2d_finetuned.py`; both files share `_reduce_to_2d_impl` via import.
-Split for Flowthru's Python source generator, which only registers the first @step per .py
-file in 0.18.2.
+"""UMAP-reduce the encoded oracle texts to 2D for the atlas display. The fine-tuned variant
+lives in `reduce_to_2d_finetuned.py`; both files share `_reduce_to_2d_impl` via import.
 
 Inputs:
-    embeddings: DataFrame [point_id, card_id, text_type, embedding] — embedding is the byte-blob
-                form (see BertEmbedding.cs). Decoded here back to float32 vectors.
-    config:     OracleEmbeddingConfig record — uses `Umap2DNNeighbors` and `Umap2DMinDist`.
+    lines:    DataFrame of OracleLine rows [line_id, card_id, text] — the per-line inventory.
+    encoded:  DataFrame of EncodedText rows [text, embedding] — the encoder cache, one row per
+              unique text. Embedding is little-endian float16 bytes (decoded here to float32).
+    config:   OracleEmbeddingConfig record — uses `Umap2DNNeighbors`, `Umap2DMinDist`, and
+              `UmapJitterSigma`.
 
-Output: DataFrame [point_id, card_id, x, y, text_type] — one row per fragment.
+Output: DataFrame [line_id, x, y] — one row per OracleLine.
 
-A sibling step (`Flows.Clustering.reduce_to_five_d`) runs its own UMAP at a higher
-target-dimensionality on the same input for HDBSCAN; this 2D reduction is purely for the scatter.
+Joins lines × encoded on `text`, applies pre-UMAP Gaussian jitter (sigma scaled per-vector by
+embedding norm so identical-text lines from many cards don't collapse to one atlas dot), then
+runs UMAP. A sibling step (`Flows.Clustering.reduce_to_five_d`) runs its own UMAP at higher
+target-dimensionality on the same join for HDBSCAN; this 2D reduction is purely for the scatter.
 
 Uses RAPIDS cuML's UMAP on GPU when available, falling back to umap-learn on CPU otherwise. The
-two implementations don't produce identical coordinates (cuML uses a different initialization
-strategy under the hood), but the topology is equivalent.
+two implementations don't produce identical coordinates (different initialization under the
+hood), but the topology is equivalent.
 """
 from __future__ import annotations
 
@@ -63,17 +65,55 @@ def _make_umap_reducer(n_components: int, n_neighbors: int, min_dist: float):
         )
 
 
-def _reduce_to_2d_impl(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
+def _broadcast_and_jitter(
+    lines: pd.DataFrame, encoded: pd.DataFrame, jitter_sigma: float
+) -> tuple[pd.Series, np.ndarray]:
+    """Join lines × encoded on text, decode the byte-blob to float32, apply Gaussian jitter
+    scaled per-row by the embedding norm. Returns (line_ids in input order, jittered vectors).
+
+    Why jitter: with the encoder-dedup optimization, lines sharing identical text receive the
+    SAME embedding vector. Without noise, UMAP maps duplicates to identical (x, y) and the
+    scatter plot collapses many cards to a single dot. Tiny noise (sigma ≪ vector norm)
+    preserves the topology while spreading duplicates into a tight ball after UMAP.
+    """
+    merged = lines.merge(encoded, on="text", how="left", validate="many_to_one")
+    missing = merged["embedding"].isna().sum()
+    if missing:
+        # Should never happen: encoder runs over the full unique-text set. Loud failure beats
+        # silent NaN downstream.
+        raise RuntimeError(
+            f"{missing} oracle lines have no matching encoded text — encoder cache out of "
+            f"sync with OracleLines. Re-run EmbedOracleText."
+        )
+
+    vectors = np.stack(
+        [np.frombuffer(b, dtype="<f2") for b in merged["embedding"]]
+    ).astype(np.float32)
+
+    if jitter_sigma > 0:
+        rng = np.random.default_rng(_RANDOM_STATE)
+        # Per-row norm so jitter scales with the embedding magnitude — for normalized embeddings
+        # (||v|| = 1) this is just `jitter_sigma`, but the formulation generalizes if upstream
+        # ever stops normalizing.
+        norms = np.linalg.norm(vectors, axis=1, keepdims=True)
+        noise = rng.normal(0.0, jitter_sigma, vectors.shape).astype(np.float32) * norms
+        vectors = vectors + noise
+
+    return merged["line_id"], vectors
+
+
+def _reduce_to_2d_impl(
+    lines: pd.DataFrame, encoded: pd.DataFrame, config: dict
+) -> pd.DataFrame:
     n_neighbors = int(config["Umap2DNNeighbors"])
     min_dist = float(config["Umap2DMinDist"])
+    jitter_sigma = float(config["UmapJitterSigma"])
 
-    # Embeddings packed as float16 — cast to float32 for UMAP compatibility. Each row is
-    # `dim` little-endian float16s, where dim depends on the source model (384 for MiniLM,
-    # 768 for mpnet).
-    vectors = np.stack(
-        [np.frombuffer(b, dtype="<f2") for b in embeddings["embedding"]]
-    ).astype(np.float32)
-    logger.info("Input: %d vectors of dim %d", *vectors.shape)
+    line_ids, vectors = _broadcast_and_jitter(lines, encoded, jitter_sigma)
+    logger.info(
+        "Input: %d lines × %d unique texts → %d vectors of dim %d (jitter_sigma=%g)",
+        len(lines), len(encoded), *vectors.shape, jitter_sigma,
+    )
 
     reducer, backend = _make_umap_reducer(
         n_components=2, n_neighbors=n_neighbors, min_dist=min_dist
@@ -83,25 +123,24 @@ def _reduce_to_2d_impl(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
         backend, n_neighbors, min_dist, _METRIC,
     )
     coords = reducer.fit_transform(vectors)
-    # cuML returns a cupy array; normalize to numpy for downstream pandas/json.
     if hasattr(coords, "get"):
         coords = coords.get()
     coords = np.asarray(coords)
     logger.info("UMAP output shape: %s", coords.shape)
 
     return pd.DataFrame({
-        "point_id": embeddings["point_id"],
-        "card_id": embeddings["card_id"],
+        "line_id": line_ids.values,
         "x": coords[:, 0].astype(float),
         "y": coords[:, 1].astype(float),
-        "text_type": embeddings["text_type"],
     })
 
 
 @step(
-    inputs=["BertEmbeddings", "OracleEmbeddingConfig"],
+    inputs=["OracleLines", "EncodedTexts", "OracleEmbeddingConfig"],
     outputs="AtlasPoints",
     cacheable=True,
 )
-def reduce_to_2d(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
-    return _reduce_to_2d_impl(embeddings, config)
+def reduce_to_2d(
+    lines: pd.DataFrame, encoded: pd.DataFrame, config: dict
+) -> pd.DataFrame:
+    return _reduce_to_2d_impl(lines, encoded, config)

@@ -5,10 +5,10 @@ using MagicAtlas.Data._08_Reporting.Schemas;
 namespace MagicAtlas.Flows.Reporting.Nodes;
 
 /// <summary>
-/// Strips the embedding-specific <c>text_type</c> field from <see cref="AtlasPoint"/> rows,
-/// producing the model-agnostic <see cref="ReportingPoint"/> shape the Reporting flow joins
-/// against card metadata. Multiple atlas points per card (one per fragment) are preserved — the
-/// Plotly step shows each fragment as its own dot.
+/// Identity projection from <see cref="AtlasPoint"/> to <see cref="ReportingPoint"/>. The shapes
+/// are intentionally identical today — keeping the projection step gives reporting a stable
+/// view that survives upstream schema tweaks (e.g. when a future variant adds columns to
+/// <c>AtlasPoint</c>, the reporting layer ignores them by construction).
 /// </summary>
 [FlowthruStep]
 public static class ProjectReportingPointsNode
@@ -22,8 +22,7 @@ public static class ProjectReportingPointsNode
         points
           .Select(p => new ReportingPoint
           {
-            PointId = p.PointId,
-            CardId = p.CardId,
+            LineId = p.LineId,
             X = p.X,
             Y = p.Y,
           })

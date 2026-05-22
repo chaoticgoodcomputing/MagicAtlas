@@ -3,141 +3,333 @@
   "Steps": {
     "FetchOracleCardsBulk": {
       "Value": "8324C12655D42691",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "FetchRulesText": {
       "Value": "98C6641777B04FCC",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "DownloadBaseModel": {
       "Value": "E11CCE13E5386F13",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "ParseCards": {
-      "Value": "85905A94510DDC7E",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "3BAF17F7BD188BB2",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "SplitRulesIntoMajorSections": {
-      "Value": "B819EE846E7E9518",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "55C33B1629936B29",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "FilterAndSplitCards": {
+      "Value": "6EB710B551202F68",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ProjectCardOracleText": {
+      "Value": "099A1352874B8D02",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ProjectOracleLines": {
+      "Value": "E8C6B0A28FDB73E1",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ProjectCardHoverInfo": {
+      "Value": "C92073E33D4A96F7",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "BuildTrainingPairs": {
+      "Value": "2EC84D4DFDEFCE4C",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "EmbedOracleText": {
+      "Value": "097E23715ECC9EDF",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "FineTuneEmbeddingModel": {
+      "Value": "C0BCB3619ED7FD54",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ReduceToTwoD": {
+      "Value": "DAE845EEEAFCA582",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ReduceToFiveD": {
+      "Value": "C56272EE43B0929D",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "EmbedOracleTextFineTuned": {
+      "Value": "FC65B5175C3A2260",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ClusterEmbeddings": {
+      "Value": "556269CF3FBCB0DC",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "EvaluateDefaultModel": {
+      "Value": "C88A1D55AE83BC0A",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ReduceToTwoDFineTuned": {
+      "Value": "4BF5BC7EE4F02517",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ReduceToFiveDFineTuned": {
+      "Value": "C5ABDA15BBF4AF31",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "GenerateCTfIdfLabels": {
+      "Value": "43A9657AC8D3D007",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ClusterEmbeddingsFineTuned": {
+      "Value": "51EADB832B59D47B",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "EvaluateFineTunedModel": {
+      "Value": "4AD2A14122F9C646",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "KeywordClusterReport": {
+      "Value": "5AC948D5B4CBB662",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "GenerateCTfIdfLabelsFineTuned": {
+      "Value": "58C11FFB5A64DC22",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "FineTunedKeywordClusterReport": {
+      "Value": "8EF4CC82302272DD",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "FetchCardSymbols": {
+      "Value": "84359FF46F23B38C",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ParseCardSymbols": {
+      "Value": "42461265368E00E7",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ParseRulesIntoHierarchy": {
+      "Value": "E433A6D1F294BC49",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ParseGlossaryIntoDictionary": {
+      "Value": "154BD0AA5C0F4298",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ProjectReportingPoints": {
+      "Value": "194818744DEEB95F",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ProjectReportingPointsFineTuned": {
+      "Value": "6C7FCC0EC1CE07D3",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "BuildAtlasPlot": {
+      "Value": "EC73B4D15DD5CBD4",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "BuildAtlasPlotFineTuned": {
+      "Value": "7A2E782A566D3F9E",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     }
   },
   "Items": {
     "RawCards": {
-      "Value": "f00c78020af2854dd05fadbe5a558127f5b4a41fcc5e63dbea8f61deecef9b1b",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "f3efdfef0d097e7f76f66ca322ecacb440cfeeb586e8783c2513d766422e004b",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "RawRules": {
-      "Value": "7c2e34966e04f38a4ff006022c7b66932c0fdca94193ae4e66ebe33bcbe068d9",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "bc30ad6c916e8d489d64834b9d897d717eef43a268e4a4b0494cfd37c3ad8f72",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "FineTuneConfig": {
       "Value": "22DFE6B967F3DF67",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "DefaultEmbeddingModel": {
-      "Value": "225e419b409fbda2cc3129627ddfe4c2559180722dd2dbe8d1aa0d47cdbfb341",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "acce9d7cde39415f1e209c2b6c5ab9b97b333749777b34e31ce7c56b6dac3f45",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "ProcessedCards": {
-      "Value": "bbad54ac827fcf271cbf79081a4b213cd4e39a2dd8209ddd08b3e4386449ee56",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "53785338843f1c914ef87fb2ef301eee9a1d0044146d96dae6e61069d9fe1f36",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "Intro": {
-      "Value": "978531b13ba4a4abf52fffe73859f907f5bba51a70e44239c5d49b7189b560a0",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "bf7bf17db8d46fcf202e48c1a57ad9399f2c32694f8c396226f41f5588c08fe1",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "TableOfContents": {
-      "Value": "5252c0beef1cef70906870918f820edc55ecb29f5f2a92dbf2571b716a5be467",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "09deaa7228b0794d9f4695b42525bce8f2a93063d78231a1010a1262515d700a",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "RulesText": {
-      "Value": "5d6ab3510037bb4d98531ee271abf14925e2e39df0e2c140d5994cad8873b330",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "46b7d5c4368ae2169091e6e67f405e6d4ab76dd6a29d52656513a7872973c57a",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "GlossaryText": {
-      "Value": "c091a1fc8140fdbf793aacad07dbfd6837dc9b122285cb9e449fa7ec0d095502",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "93b9ba9627b9d76a7ba78008149a5a838f54cd943f10e777fd16eb3ace0ed594",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "Credits": {
-      "Value": "93b4c1e41e012cc8353018af3b79a1a011a316113897e639c2d36129d1cc56ef",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "04c269c107c8e477c9d4368e08b69ec9ba0e2a4f490e4d9c4aeef6bd749dbfb3",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "FilteredCardCoreData": {
-      "Value": "8ec579dddba7484cc69df568953f587dffa84618d8c611bcd6df0507f461cf82",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "1e45e6f262b1ff480a29bfb98f426f359b9d9793fd62d33cb0bd2b2d95b1c44c",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "FilteredCardMetadata": {
-      "Value": "8862f239e4398cbc08d7ca32c49567f5a81ac02b41e6482f126739f6bfd3166f",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "fccc229e7727b484d7f06a979635fab97734f8ab3494292284669d88d828c452",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "CardOracleTexts": {
-      "Value": "818856721b96ba5fad2333d25dca50db20766f02894570564f92440bfc93e47f",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "5423fe2464acf32eb092fc17625947f05b8696079e9374b2aacb9c54d1f865cc",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
-    "OracleInputs": {
-      "Value": "cad25bd9d7457c0bf75aeb0371a3cb58292dcc066eaed9b79b82a489ea6766c3",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+    "KeywordVocabulary": {
+      "Value": "691dab3e5ceccdd9354a75f355e623d725199c9e5b87db1aa029f6adc73f670f",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "OracleLines": {
+      "Value": "029d42fe57534ec282b73428a0f7c73661ca10b131ee154cb56e68a214cac30b",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "BarrelDetectionReport": {
+      "Value": "5ce7b7a3e673db7c3aa0e8ee9be2183a6c0c54715f6ab0fbd52cfdb4a41faf23",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "AtlasCardHoverInfo": {
+      "Value": "b301ad095a560e5d31e195b9e686e8ebf5360f3fbf88d82eb2783c71e6a79bad",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "CuratedDefinitions": {
       "Value": "302410768265a7132547ab35ef4ee30657347a298c11af0353fc765de2c3bb69",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "CuratedTriplets": {
       "Value": "597737d8a941e855ba6b80582224128ff9dbca15e6016fe0f7d69526dd2e738c",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "GlossaryExclusions": {
       "Value": "34a05e1a990f983f4f53069ef3222a16064af491fcfc6ffcb0ae46e80e9dbae0",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "TrainingPairs": {
-      "Value": "37f557f1506e1633700e466b28f5baa3b4451df4bc4e8201e03b0f4e682f74db",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "b22783e4be8f7d78500b3137e4fad2a02bf5eedb527203cc99e033b89f720e6d",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "OracleEmbeddingConfig": {
-      "Value": "E89E2BFCB7EEB949",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "7F69CD605EFE0848",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
-    "BertEmbeddings": {
-      "Value": "0f42305d3680a0b273fc5e4ce64d0cb57c5ac11136e7751f5b6cbd0b224ecbb2",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+    "EncodedTexts": {
+      "Value": "d53b00da13f36d36407843107421f3c192d930f3690fd6ab9de0111d71253727",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "FineTunedEmbeddingModel": {
-      "Value": "63f002ea8e05d49f647b1deadbcca84f20a523ca6c146936c0196e3980fcfe94",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "aaae6b82e59ce79747cd5d3e2a9833e5b47bfe9343eb45eca806b2fbea7fae33",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "AtlasPoints": {
+      "Value": "49e92c5195be13a417d83d8b2f139fdda90f6e57e47fa56736e6067f59df53a4",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "ClusteringConfig": {
-      "Value": "16DB072D5AA33EEE",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "11EC27DAC5D79EBA",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "ClusteringEmbeddings": {
-      "Value": "f0bdb9bd60ca4aafe0a77e346b037df24ae5a026b98908b90e9e50ea63c55d09",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "eeb11db7a09cfb377be44a11a5d96fdb1001bbc86f31142032b42ab894b7def5",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
-    "FineTunedBertEmbeddings": {
-      "Value": "3d2d614e77855227cadd6f590af92dfef56fa20f138d150f42360b8599cfea90",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+    "FineTunedEncodedTexts": {
+      "Value": "87f0448c348d66c71b16fa787462c44b2e9eb8d724b66f59c1636742fa8743d9",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ClusterAssignments": {
+      "Value": "e28141e1d381daa51b8eac19ca9903eab35e73d96cba9ead84029540a35c0956",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "ModelEvaluationAssertions": {
       "Value": "3f151aae302dea00a76889573c7880884cd20709d402173173ac676ccd2e92a5",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "ModelEvaluationsConfig": {
       "Value": "FBC1BA5A2EB2AA35",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "ModelEvaluation": {
-      "Value": "72f843b2a53de45d2b8e675920ab98a512a0d0a2cb52286b53aa4ff400ca324d",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "387159f25adbf47ca6a59632206ffff8e18c32d30af1a2d7569da1116363d5f6",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "FineTunedAtlasPoints": {
+      "Value": "174f92283e05862ef8e61f38a8dc65e615232717f159d50845db0f89972db9e2",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "FineTunedClusteringEmbeddings": {
-      "Value": "bbacd697b372a00f9be14bb98876f1de42656eecc4c6bdbc63fef30f0b9e5168",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "920d21b806efad01b3a47bacb08b0bc15c57c9b3964d0e3b04fd66f51fc08eca",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ClusterLabels": {
+      "Value": "fc12bef409119cb9ce5a9f50cb9257be213e3daac4bd46e5bc83ca92975fa426",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "FineTunedClusterAssignments": {
+      "Value": "82932d09a3ad0b45ab619ee015e9101e2dab9940d486919a685664f1e9eced65",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "FineTunedModelEvaluation": {
-      "Value": "ecc8eb8e2f56dcf08b5dbb0266ba9cdf361d9a56dbafbeea7e6663d71e6badd6",
-      "RecordedAt": "2026-05-18T16:44:05.8184249+00:00"
+      "Value": "e1e82836e9aa5f52d125c92954098fcc09d19fa820920d3acf1f5f18eb51532f",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "KeywordClusterReport": {
+      "Value": "20b61c6b57d7a64ae549b52300f88423a670262fd285394a01332426d48aab6c",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "FineTunedClusterLabels": {
+      "Value": "10a6a5e21dde326300e8a0d6b156a5a7f99df7fd65ec48ab8ff7c3c2cf57c61d",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "FineTunedKeywordClusterReport": {
+      "Value": "6ec087cb8e7f91bf00323d68982f4fe8cb30fc1d7afbe3f368e254fe46c6286f",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "RawCardSymbols": {
+      "Value": "e7a85691573d11f721f6c911bf272d4b83c6c468eb1dde33c613dbd94bb929d3",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ProcessedCardSymbols": {
+      "Value": "ca99305b7f97161212b083f6b00572d07a167f2a594ca696dcb50e526847534d",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ParsedRules": {
+      "Value": "535b257989cbef659db69cdc48517087b870323fa356291ddab01562990bb78a",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ParsedGlossary": {
+      "Value": "e1adfc91661bae3b1ee6a91ce7538d8af6fb5f439e5559b1c8fd9e031a165f49",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "AtlasReportingPoints": {
+      "Value": "8302e248755c9e1a8a7c421ee344bb9e2a403e7535d0d74a46263415d09d3eea",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "FineTunedAtlasReportingPoints": {
+      "Value": "385d486b0fd91c0d87b3156bbd1d0f4380e2ec5e8f17fbe9d39483c56d39dbdc",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "ReportingConfig": {
+      "Value": "4B31717BA5F45211",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "AtlasPlotHtml": {
+      "Value": "9268350bd260ff8120528a833ec12693ac56ea790208c65498d01dd56fa4da63",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "FineTunedAtlasPlotHtml": {
+      "Value": "67a9e83132ca657f6707f420085b7c7649ca16a1144071936f58df808646606c",
+      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     }
   }
 }

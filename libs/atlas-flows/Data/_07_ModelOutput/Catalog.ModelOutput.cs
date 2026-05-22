@@ -30,4 +30,36 @@ public partial class Catalog
         .AtPath($"{_basePath}/_07_ModelOutput/Datasets/fine-tuned-model-evaluation.json")
         .Build()
     );
+
+  /// <summary>
+  /// Diagnostic snapshot of <c>ProjectOracleLinesNode</c>'s barrel-detection pass — barrel/
+  /// borderline counts plus sample lines. One report per pipeline run; not per-variant
+  /// because barrel detection is model-agnostic (operates on raw oracle text, not embeddings).
+  /// </summary>
+  public IItem<BarrelDetectionReport> BarrelDetectionReport =>
+    CreateItem(() =>
+      Item.Of<BarrelDetectionReport>("BarrelDetectionReport")
+        .Json()
+        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/barrel-detection-report.json")
+        .Build()
+    );
+
+  /// <summary>Post-clustering per-keyword diagnostic for the default model — one row per
+  /// Scryfall keyword with anchor cluster, member count, top neighbors, and outlier sample.</summary>
+  public IItem<IEnumerable<KeywordClusterReport>> KeywordClusterReport =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<KeywordClusterReport>>("KeywordClusterReport")
+        .Json()
+        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/keyword-cluster-report.json")
+        .Build()
+    );
+
+  /// <summary>Fine-tuned-model counterpart to <see cref="KeywordClusterReport"/>.</summary>
+  public IItem<IEnumerable<KeywordClusterReport>> FineTunedKeywordClusterReport =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<KeywordClusterReport>>("FineTunedKeywordClusterReport")
+        .Json()
+        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/fine-tuned-keyword-cluster-report.json")
+        .Build()
+    );
 }

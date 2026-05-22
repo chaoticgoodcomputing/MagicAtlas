@@ -5,23 +5,21 @@ using MagicAtlas.Data;
 namespace MagicAtlas.Flows.Clustering;
 
 /// <summary>
-/// Discovers and labels semantic clusters of MTG ability fragments. Reads the shared
-/// <see cref="Catalog.BertEmbeddings"/> intermediate (so it never re-runs the expensive BERT
-/// encode) and produces two complementary artifacts:
+/// Discovers and labels semantic clusters of MTG oracle-text lines. Reads the shared
+/// <see cref="Catalog.EncodedTexts"/> encoder cache (so the BERT encode never re-runs) plus
+/// <see cref="Catalog.OracleLines"/> for the line-level identity, and produces:
 /// </summary>
 /// <list type="number">
-/// <item><see cref="Catalog.ClusterAssignments"/> — per-point cluster IDs (HDBSCAN over a 5D
-/// UMAP reduction of the embeddings; <c>-1</c> = noise).</item>
-/// <item><see cref="Catalog.ClusterLabels"/> — generic per-cluster label records produced by a
-/// c-TF-IDF backend (the BERTopic-style approach). The schema is backend-agnostic — a future
-/// LLM labeler step can write the same shape with a different <c>source</c>, and downstream
-/// consumers (Reporting, future API) need no code changes.</item>
+/// <item><see cref="Catalog.ClusterAssignments"/> — per-line cluster IDs (HDBSCAN over a 5D
+/// UMAP reduction of the encoded vectors; <c>-1</c> = noise).</item>
+/// <item><see cref="Catalog.ClusterLabels"/> — generic per-cluster label records from c-TF-IDF.
+/// Backend-agnostic schema; a future LLM labeler can write the same shape unchanged.</item>
 /// </list>
 /// <remarks>
 /// Lives as its own flow rather than as tail steps of OracleEmbedding because (a) clustering
 /// strategy is independent of the embedding strategy and we want to be able to swap either in
-/// isolation, and (b) future model-comparison work will run multiple clustering configurations
-/// against the same embeddings.
+/// isolation, and (b) future model-comparison work runs multiple clustering configurations
+/// against the same encoded texts.
 /// </remarks>
 public static class ClusteringFlow
 {
@@ -33,7 +31,7 @@ public static class ClusteringFlow
         label: "ReduceToFiveD",
         module: "Flows.Clustering.reduce_to_five_d",
         function: "reduce_to_five_d",
-        input: (catalog.BertEmbeddings, catalog.ClusteringConfig),
+        input: (catalog.OracleLines, catalog.EncodedTexts, catalog.ClusteringConfig),
         output: catalog.ClusteringEmbeddings,
         executor: executor
       );
@@ -51,7 +49,7 @@ public static class ClusteringFlow
         label: "GenerateCTfIdfLabels",
         module: "Flows.Clustering.generate_ctfidf_labels",
         function: "generate_ctfidf_labels",
-        input: (catalog.ClusterAssignments, catalog.OracleInputs, catalog.ClusteringConfig),
+        input: (catalog.ClusterAssignments, catalog.OracleLines, catalog.ClusteringConfig),
         output: catalog.ClusterLabels,
         executor: executor
       );
@@ -61,7 +59,7 @@ public static class ClusteringFlow
         label: "ReduceToFiveDFineTuned",
         module: "Flows.Clustering.reduce_to_five_d_finetuned",
         function: "reduce_to_five_d_finetuned",
-        input: (catalog.FineTunedBertEmbeddings, catalog.ClusteringConfig),
+        input: (catalog.OracleLines, catalog.FineTunedEncodedTexts, catalog.ClusteringConfig),
         output: catalog.FineTunedClusteringEmbeddings,
         executor: executor
       );
@@ -79,7 +77,7 @@ public static class ClusteringFlow
         label: "GenerateCTfIdfLabelsFineTuned",
         module: "Flows.Clustering.generate_ctfidf_labels_finetuned",
         function: "generate_ctfidf_labels_finetuned",
-        input: (catalog.FineTunedClusterAssignments, catalog.OracleInputs, catalog.ClusteringConfig),
+        input: (catalog.FineTunedClusterAssignments, catalog.OracleLines, catalog.ClusteringConfig),
         output: catalog.FineTunedClusterLabels,
         executor: executor
       );

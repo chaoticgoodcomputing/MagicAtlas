@@ -54,6 +54,7 @@ public static class ReportingFlow
         function: "build_atlas_plot",
         input: (
           catalog.AtlasReportingPoints,
+          catalog.OracleLines,
           catalog.AtlasCardHoverInfo,
           catalog.ClusterAssignments,
           catalog.ClusterLabels,
@@ -69,6 +70,7 @@ public static class ReportingFlow
         function: "build_atlas_plot_finetuned",
         input: (
           catalog.FineTunedAtlasReportingPoints,
+          catalog.OracleLines,
           catalog.AtlasCardHoverInfo,
           catalog.FineTunedClusterAssignments,
           catalog.FineTunedClusterLabels,

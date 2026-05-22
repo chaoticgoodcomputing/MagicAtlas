@@ -29,7 +29,7 @@ public static class ModelEvaluationsFlow
         function: "evaluate_default",
         input: (
           catalog.ClusteringEmbeddings,
-          catalog.OracleInputs,
+          catalog.OracleLines,
           catalog.ModelEvaluationAssertions,
           catalog.ModelEvaluationsConfig
         ),
@@ -43,11 +43,46 @@ public static class ModelEvaluationsFlow
         function: "evaluate_finetuned",
         input: (
           catalog.FineTunedClusteringEmbeddings,
-          catalog.OracleInputs,
+          catalog.OracleLines,
           catalog.ModelEvaluationAssertions,
           catalog.ModelEvaluationsConfig
         ),
         output: catalog.FineTunedModelEvaluation,
+        executor: executor
+      );
+
+      // ── Per-keyword diagnostic reports — one per model variant. ──
+      pipeline.AddPythonStep(
+        label: "KeywordClusterReport",
+        module: "Flows.ModelEvaluations.keyword_cluster_report",
+        function: "keyword_cluster_report",
+        input: (
+          catalog.KeywordVocabulary,
+          catalog.OracleLines,
+          catalog.AtlasPoints,
+          catalog.ClusterAssignments,
+          catalog.ClusterLabels,
+          catalog.AtlasCardHoverInfo,
+          catalog.ModelEvaluationsConfig
+        ),
+        output: catalog.KeywordClusterReport,
+        executor: executor
+      );
+
+      pipeline.AddPythonStep(
+        label: "FineTunedKeywordClusterReport",
+        module: "Flows.ModelEvaluations.keyword_cluster_report_finetuned",
+        function: "keyword_cluster_report_finetuned",
+        input: (
+          catalog.KeywordVocabulary,
+          catalog.OracleLines,
+          catalog.FineTunedAtlasPoints,
+          catalog.FineTunedClusterAssignments,
+          catalog.FineTunedClusterLabels,
+          catalog.AtlasCardHoverInfo,
+          catalog.ModelEvaluationsConfig
+        ),
+        output: catalog.FineTunedKeywordClusterReport,
         executor: executor
       );
     });

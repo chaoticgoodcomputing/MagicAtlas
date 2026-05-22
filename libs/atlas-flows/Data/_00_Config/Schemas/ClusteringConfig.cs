@@ -39,4 +39,11 @@ public partial record ClusteringConfig
 
   /// <summary>Minimum document frequency (across cluster pseudo-docs) for a token to be kept.</summary>
   public int CTfIdfMinDf { get; init; }
+
+  /// <summary>
+  /// Pre-UMAP Gaussian jitter sigma applied per row (scaled by the embedding norm). Same
+  /// rationale as <c>OracleEmbeddingConfig.UmapJitterSigma</c>: spreads identical-text lines
+  /// after dedup. Default <c>0.0001</c>; set to <c>0</c> to disable.
+  /// </summary>
+  public double UmapJitterSigma { get; init; }
 }

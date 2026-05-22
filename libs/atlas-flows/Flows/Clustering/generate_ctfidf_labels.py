@@ -1,8 +1,8 @@
 """c-TF-IDF cluster labeling — the canonical BERTopic-style approach.
 
 Inputs:
-    assignments: DataFrame [point_id, cluster_id]
-    fragments:   DataFrame [point_id, card_id, text, text_type]
+    assignments: DataFrame [line_id, cluster_id]
+    lines:       DataFrame [line_id, card_id, text]
 Output:
     DataFrame conforming to the ClusterLabel schema:
         [cluster_id, label, description, keywords, size, source, source_version]
@@ -38,13 +38,13 @@ _NOISE_LABEL = "(noise)"
 
 
 def _safe_generate(
-    assignments: pd.DataFrame, fragments: pd.DataFrame, config: dict
+    assignments: pd.DataFrame, lines: pd.DataFrame, config: dict
 ) -> pd.DataFrame:
     import sys
     import traceback as _tb
 
     try:
-        return _generate_impl(assignments, fragments, config)
+        return _generate_impl(assignments, lines, config)
     except Exception:
         # Flowthru's subprocess executor wraps the worker's traceback in an opaque .NET
         # message ("Exception has been thrown by the target of an invocation"); dump our own
@@ -56,7 +56,7 @@ def _safe_generate(
 
 
 def _generate_impl(
-    assignments: pd.DataFrame, fragments: pd.DataFrame, config: dict
+    assignments: pd.DataFrame, lines: pd.DataFrame, config: dict
 ) -> pd.DataFrame:
     import sklearn
     from sklearn.feature_extraction.text import CountVectorizer
@@ -67,7 +67,7 @@ def _generate_impl(
     ngram_max = int(config["CTfIdfNgramMax"])
     min_df = int(config["CTfIdfMinDf"])
 
-    merged = assignments.merge(fragments, on="point_id", validate="one_to_one")
+    merged = assignments.merge(lines, on="line_id", validate="one_to_one")
     logger.info(
         "Labeling %d clusters across %d points (%d noise)",
         merged["cluster_id"].nunique(),
@@ -167,14 +167,14 @@ def _generate_impl(
 
 
 @step(
-    inputs=["ClusterAssignments", "OracleInputs", "ClusteringConfig"],
+    inputs=["ClusterAssignments", "OracleLines", "ClusteringConfig"],
     outputs="ClusterLabels",
     cacheable=True,
 )
 def generate_ctfidf_labels(
-    assignments: pd.DataFrame, fragments: pd.DataFrame, config: dict
+    assignments: pd.DataFrame, lines: pd.DataFrame, config: dict
 ) -> pd.DataFrame:
-    return _safe_generate(assignments, fragments, config)
+    return _safe_generate(assignments, lines, config)
 
 
 def _english_stopwords() -> frozenset:

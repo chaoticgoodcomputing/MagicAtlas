@@ -1,7 +1,6 @@
 """Fine-tuned-model counterpart to `evaluate_model.py`. Identical logic — only the catalog
 item bindings and the variant-label field differ. Split into its own file so Flowthru's Python
-source generator picks up the `cacheable=True` opt-in (the generator only registers the first
-@step per .py file in 0.18.2).
+source generator picks up the `cacheable=True` opt-in.
 """
 from __future__ import annotations
 
@@ -14,7 +13,7 @@ from Flows.ModelEvaluations.evaluate_model import _evaluate_impl
 @step(
     inputs=[
         "FineTunedClusteringEmbeddings",
-        "OracleInputs",
+        "OracleLines",
         "ModelEvaluationAssertions",
         "ModelEvaluationsConfig",
     ],
@@ -23,8 +22,8 @@ from Flows.ModelEvaluations.evaluate_model import _evaluate_impl
 )
 def evaluate_finetuned(
     embeddings: pd.DataFrame,
-    oracle: pd.DataFrame,
+    lines: pd.DataFrame,
     assertions: pd.DataFrame,
     config: dict,
 ) -> pd.DataFrame:
-    return _evaluate_impl(embeddings, oracle, assertions, config["FineTunedVariantLabel"])
+    return _evaluate_impl(embeddings, lines, assertions, config["FineTunedVariantLabel"])

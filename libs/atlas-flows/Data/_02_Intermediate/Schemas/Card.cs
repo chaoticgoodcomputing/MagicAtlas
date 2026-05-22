@@ -160,7 +160,7 @@ public partial record Card
   /// Parsed from the type line by splitting on em dash (—), en dash (–), or hyphen (-).
   /// Contains the types appearing before the dash separator.
   /// </remarks>
-  public HashSet<string> Types { get; init; } = new();
+  public List<string> Types { get; init; } = new();
 
   /// <summary>
   /// The subtypes parsed from the type line (e.g., "Elf", "Druid", "Aura").
@@ -169,7 +169,7 @@ public partial record Card
   /// Parsed from the type line by splitting on em dash (—), en dash (–), or hyphen (-).
   /// Contains the subtypes appearing after the dash separator.
   /// </remarks>
-  public HashSet<string> Subtypes { get; init; } = new();
+  public List<string> Subtypes { get; init; } = new();
 
   /// <summary>
   /// The Oracle text for this card, if any.

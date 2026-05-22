@@ -19,4 +19,12 @@ public partial record OracleEmbeddingConfig
 
   /// <summary>UMAP <c>min_dist</c> for the 2D atlas-display reduction (typically 0.1).</summary>
   public double Umap2DMinDist { get; init; }
+
+  /// <summary>
+  /// Pre-UMAP Gaussian jitter sigma applied per row (scaled by the embedding norm). Spreads
+  /// identical-text lines into a tight ball rather than collapsing them to a single (x, y).
+  /// Default <c>0.0001</c> is well below the typical norm of normalized embeddings (1.0), so
+  /// non-duplicate vectors stay topologically unchanged. Set to <c>0</c> to disable.
+  /// </summary>
+  public double UmapJitterSigma { get; init; }
 }

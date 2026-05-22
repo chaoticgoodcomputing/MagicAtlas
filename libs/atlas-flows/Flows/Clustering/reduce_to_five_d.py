@@ -1,27 +1,25 @@
-"""UMAP-reduce the default-variant BERT vectors to 5D for HDBSCAN clustering and model evaluation.
+"""UMAP-reduce the encoded oracle texts to 5D for HDBSCAN clustering and model evaluation.
 The fine-tuned variant lives in `reduce_to_five_d_finetuned.py`; both files share
-`_reduce_to_five_d_impl` via import. Split for Flowthru's Python source generator (one @step
-per .py file in 0.18.2).
+`_reduce_to_five_d_impl` via import.
 
 Inputs:
-    embeddings: DataFrame [point_id, card_id, text_type, embedding] — `embedding` is the
-                byte-blob form produced by `embed_oracle_text` (little-endian float16, 2 bytes
-                per element; row width depends on the source model).
-    config:     ClusteringConfig record — uses `Umap5DNNeighbors` and `Umap5DMinDist`.
+    lines:    DataFrame of OracleLine rows [line_id, card_id, text].
+    encoded:  DataFrame of EncodedText rows [text, embedding] — the encoder cache.
+    config:   ClusteringConfig record — uses `Umap5DNNeighbors`, `Umap5DMinDist`, and
+              `UmapJitterSigma`.
 
-Output: DataFrame [point_id, vector] — `vector` is the byte-blob form of the 5D UMAP coordinates
+Output: DataFrame [line_id, vector] — `vector` is the byte-blob form of the 5D UMAP coordinates
         (20 bytes = 5 little-endian float32s), see ClusteringEmbedding.cs.
 
 Hoisted out of `cluster_embeddings.py` so the (slow) UMAP doesn't re-run every time clustering
 parameters or the eval suite change, and so ModelEvaluations can read the same 5D coordinates the
 clusterer saw without redundant work.
 
-Uses RAPIDS cuML's UMAP on GPU when available, falling back to umap-learn on CPU otherwise. The
-two implementations don't produce identical coordinates (different initialization under the hood),
-but the topology is equivalent and downstream HDBSCAN parameters are stable across them.
+Joins lines × encoded on `text` and applies pre-UMAP Gaussian jitter (same rationale as
+`reduce_to_2d.py`).
 
-BERTopic-style note on min_dist: the recommended 0.0 (vs. 0.1 for the 2D atlas-display reduction)
-produces tighter local structure that helps HDBSCAN separate dense regions.
+BERTopic-style note on min_dist: the recommended 0.0 (vs. 0.1 for the 2D atlas-display
+reduction) produces tighter local structure that helps HDBSCAN separate dense regions.
 """
 from __future__ import annotations
 
@@ -30,6 +28,8 @@ import logging
 import numpy as np
 import pandas as pd
 from flowthru import step
+
+from Flows.OracleEmbedding.reduce_to_2d import _broadcast_and_jitter
 
 logger = logging.getLogger(__name__)
 
@@ -68,16 +68,18 @@ def _make_umap_reducer(n_neighbors: int, min_dist: float):
         )
 
 
-def _reduce_to_five_d_impl(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
+def _reduce_to_five_d_impl(
+    lines: pd.DataFrame, encoded: pd.DataFrame, config: dict
+) -> pd.DataFrame:
     n_neighbors = int(config["Umap5DNNeighbors"])
     min_dist = float(config["Umap5DMinDist"])
+    jitter_sigma = float(config["UmapJitterSigma"])
 
-    # Embeddings are packed as little-endian float16 (2 bytes/elem) — see embed_oracle_text.py.
-    # Cast to float32 for UMAP (cuML's UMAP doesn't accept float16 directly).
-    vectors = np.stack(
-        [np.frombuffer(b, dtype="<f2") for b in embeddings["embedding"]]
-    ).astype(np.float32)
-    logger.info("Input: %d vectors of dim %d", *vectors.shape)
+    line_ids, vectors = _broadcast_and_jitter(lines, encoded, jitter_sigma)
+    logger.info(
+        "Input: %d lines × %d unique texts → %d vectors of dim %d (jitter_sigma=%g)",
+        len(lines), len(encoded), *vectors.shape, jitter_sigma,
+    )
 
     reducer, backend = _make_umap_reducer(n_neighbors=n_neighbors, min_dist=min_dist)
     logger.info(
@@ -91,19 +93,21 @@ def _reduce_to_five_d_impl(embeddings: pd.DataFrame, config: dict) -> pd.DataFra
     logger.info("Reduced shape: %s (dtype %s)", reduced.shape, reduced.dtype)
 
     # Pack each row's 5 float32s into a little-endian byte blob (20 bytes per row). Same
-    # rationale as BertEmbedding.Embedding — Flowthru's parquet serializer needs IFlatSchema,
+    # rationale as EncodedText.Embedding — Flowthru's parquet serializer needs IFlatSchema,
     # and byte[] is the only flat-classified array form.
     blobs = [vec.astype("<f4").tobytes() for vec in reduced]
     return pd.DataFrame({
-        "point_id": embeddings["point_id"],
+        "line_id": line_ids.values,
         "vector": blobs,
     })
 
 
 @step(
-    inputs=["BertEmbeddings", "ClusteringConfig"],
+    inputs=["OracleLines", "EncodedTexts", "ClusteringConfig"],
     outputs="ClusteringEmbeddings",
     cacheable=True,
 )
-def reduce_to_five_d(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
-    return _reduce_to_five_d_impl(embeddings, config)
+def reduce_to_five_d(
+    lines: pd.DataFrame, encoded: pd.DataFrame, config: dict
+) -> pd.DataFrame:
+    return _reduce_to_five_d_impl(lines, encoded, config)

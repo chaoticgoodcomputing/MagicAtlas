@@ -56,30 +56,46 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Minimal oracle-text projection fed to the Python embedding step. Persisted (not memory-only)
-  /// because the Clustering flow's <c>generate_ctfidf_labels</c> step re-reads the per-fragment
-  /// text long after the embedding step has run, and we want that step to be runnable in
-  /// isolation (e.g. when re-labeling with a different backend).
+  /// Sorted distinct set of Scryfall keyword strings observed across the filtered card corpus.
+  /// Derived from <c>FilteredCardCoreData.Keywords</c>; used by <c>ProjectOracleLines</c> for
+  /// barrel detection and by the keyword-cluster reports for anchor identification.
   /// </summary>
-  public IItem<IEnumerable<OracleInput>> OracleInputs =>
+  public IItem<KeywordVocabulary> KeywordVocabulary =>
     CreateItem(() =>
-      Item.Of<IEnumerable<OracleInput>>("OracleInputs")
+      Item.Of<KeywordVocabulary>("KeywordVocabulary")
         .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/oracle-inputs.json")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/keyword-vocabulary.json")
         .Build()
     );
 
   /// <summary>
-  /// Sentence-transformer (all-MiniLM-L6-v2, 384-dim float32) embeddings of each oracle-text
-  /// fragment. The shared intermediate between the 2D-UMAP display reduction and the 5D-UMAP +
-  /// HDBSCAN clustering reduction — BERT encode runs once, both reductions read this file.
-  /// Parquet (~80 MB) because JSON would be unworkable at ~50K × 384 floats.
+  /// One row per oracle-text line, fed to the Python embedding pipeline as the line-of-text
+  /// inventory. The pipeline's central join key: every downstream artifact (encoded vectors,
+  /// atlas points, cluster assignments, cluster labels) keys on <c>LineId</c> and reaches back
+  /// to <c>CardId</c> via this table. Persisted (not memory-only) because reporting,
+  /// clustering, and the eval suite all re-read it long after the embed step has run.
   /// </summary>
-  public IItem<IEnumerable<BertEmbedding>> BertEmbeddings =>
+  public IItem<IEnumerable<OracleLine>> OracleLines =>
     CreateItem(() =>
-      Item.Of<IEnumerable<BertEmbedding>>("BertEmbeddings")
+      Item.Of<IEnumerable<OracleLine>>("OracleLines")
+        .Json()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/oracle-lines.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Persisted encoder cache for the default-variant sentence-transformer model — one row per
+  /// unique oracle-text string. <c>EmbedOracleText</c> deduplicates <see cref="OracleLines"/> by
+  /// <c>Text</c>, runs the model only over the unique set, and writes the result here. The 2D /
+  /// 5D UMAP steps consume <c>OracleLines + EncodedTexts</c> together and broadcast the cached
+  /// vectors back to per-line rows just before jitter+UMAP. Parquet because the embedding column
+  /// is a binary blob and ~30K unique strings × 384 floats would be unworkable in JSON.
+  /// </summary>
+  public IItem<IEnumerable<EncodedText>> EncodedTexts =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<EncodedText>>("EncodedTexts")
         .Parquet()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/bert-embeddings.parquet")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/encoded-texts.parquet")
         .Build()
     );
 
@@ -97,9 +113,9 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Per-point cluster assignments produced by the Clustering flow's HDBSCAN step over a 5D-UMAP
-  /// reduction of <see cref="BertEmbeddings"/>. One row per fragment, joinable to
-  /// <see cref="AtlasPoints"/> / <see cref="OracleInputs"/> on <c>point_id</c>.
+  /// Per-line cluster assignments produced by the Clustering flow's HDBSCAN step over a 5D-UMAP
+  /// reduction of the encoded texts. One row per <see cref="OracleLines"/> row, joinable to
+  /// <see cref="AtlasPoints"/> on <c>line_id</c>.
   /// </summary>
   public IItem<IEnumerable<ClusterAssignment>> ClusterAssignments =>
     CreateItem(() =>
@@ -123,7 +139,7 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// 5D UMAP-reduced view of <see cref="BertEmbeddings"/> — the shared intermediate between the
+  /// 5D UMAP-reduced view of the encoded oracle lines — the shared intermediate between the
   /// Clustering flow's HDBSCAN step and the ModelEvaluations flow's centroid-distance metric.
   /// Hoisted out of the clusterer so a model change can be evaluated without re-running the
   /// (slow) UMAP, and so HDBSCAN parameters can be retuned in isolation.
@@ -139,7 +155,7 @@ public partial class Catalog
   /// <summary>
   /// Card-level oracle text with reminder parentheticals intact — the input shape the FineTune
   /// flow's training-pair builder needs to extract reminder-text paraphrase pairs. Sibling to
-  /// <see cref="OracleInputs"/>, which is fragment-level with parentheticals stripped.
+  /// <see cref="OracleLines"/>, which is line-level with parentheticals stripped.
   /// </summary>
   public IItem<IEnumerable<CardOracleText>> CardOracleTexts =>
     CreateItem(() =>
@@ -170,17 +186,18 @@ public partial class Catalog
   // leave the unqualified names as the default-variant aliases and namespace only the new
   // sibling items.
 
-  /// <summary>BERT vectors produced by the fine-tuned MTG-tuned embedding model.
-  /// Same schema as <see cref="BertEmbeddings"/>; downstream steps treat them interchangeably.</summary>
-  public IItem<IEnumerable<BertEmbedding>> FineTunedBertEmbeddings =>
+  /// <summary>Persisted encoder cache for the fine-tuned variant. Same shape and rationale as
+  /// <see cref="EncodedTexts"/>; downstream steps consume whichever variant matches the model
+  /// they're attached to.</summary>
+  public IItem<IEnumerable<EncodedText>> FineTunedEncodedTexts =>
     CreateItem(() =>
-      Item.Of<IEnumerable<BertEmbedding>>("FineTunedBertEmbeddings")
+      Item.Of<IEnumerable<EncodedText>>("FineTunedEncodedTexts")
         .Parquet()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-bert-embeddings.parquet")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-encoded-texts.parquet")
         .Build()
     );
 
-  /// <summary>5D UMAP of <see cref="FineTunedBertEmbeddings"/>. Same schema as
+  /// <summary>5D UMAP of <see cref="FineTunedEncodedTexts"/>. Same schema as
   /// <see cref="ClusteringEmbeddings"/>.</summary>
   public IItem<IEnumerable<ClusteringEmbedding>> FineTunedClusteringEmbeddings =>
     CreateItem(() =>
@@ -190,7 +207,7 @@ public partial class Catalog
         .Build()
     );
 
-  /// <summary>2D atlas points produced from <see cref="FineTunedBertEmbeddings"/>. Same schema
+  /// <summary>2D atlas points produced from <see cref="FineTunedEncodedTexts"/>. Same schema
   /// as <see cref="AtlasPoints"/>.</summary>
   public IItem<IEnumerable<AtlasPoint>> FineTunedAtlasPoints =>
     CreateItem(() =>

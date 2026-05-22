@@ -1,7 +1,6 @@
 """Fine-tuned-model counterpart to `generate_ctfidf_labels.py`. Identical logic — only the
 catalog item bindings differ. Split into its own file so Flowthru's Python source generator
-picks up the `cacheable=True` opt-in (the generator only registers the first @step per .py
-file in 0.18.2).
+picks up the `cacheable=True` opt-in.
 """
 from __future__ import annotations
 
@@ -12,11 +11,11 @@ from Flows.Clustering.generate_ctfidf_labels import _safe_generate
 
 
 @step(
-    inputs=["FineTunedClusterAssignments", "OracleInputs", "ClusteringConfig"],
+    inputs=["FineTunedClusterAssignments", "OracleLines", "ClusteringConfig"],
     outputs="FineTunedClusterLabels",
     cacheable=True,
 )
 def generate_ctfidf_labels_finetuned(
-    assignments: pd.DataFrame, fragments: pd.DataFrame, config: dict
+    assignments: pd.DataFrame, lines: pd.DataFrame, config: dict
 ) -> pd.DataFrame:
-    return _safe_generate(assignments, fragments, config)
+    return _safe_generate(assignments, lines, config)

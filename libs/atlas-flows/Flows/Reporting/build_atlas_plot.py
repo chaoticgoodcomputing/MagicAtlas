@@ -4,10 +4,12 @@ annotations placed at each top-N cluster's 2D centroid (no cluster-based color e
 position-density structure already shows the clusters, the annotations name them).
 
 Inputs:
-    points:      DataFrame [point_id, card_id, x, y]
+    points:      DataFrame [line_id, x, y]
+    lines:       DataFrame [line_id, card_id, text] — used purely as the line_id → card_id
+                 lookup; reaches CardHoverInfo from there.
     hover:       DataFrame [card_id, name, mana_cost, cmc, type_line, color_identity, power,
                             toughness, oracle_text]
-    assignments: DataFrame [point_id, cluster_id]
+    assignments: DataFrame [line_id, cluster_id]
     labels:      DataFrame [cluster_id, label, description, keywords, size, source,
                             source_version]
 
@@ -95,6 +97,7 @@ def _annotation_text(label: str, keywords_json: str, text_limit: int) -> str:
 
 def _build_atlas_plot_impl(
     points: pd.DataFrame,
+    lines: pd.DataFrame,
     hover: pd.DataFrame,
     assignments: pd.DataFrame,
     labels: pd.DataFrame,
@@ -106,8 +109,9 @@ def _build_atlas_plot_impl(
     marker_opacity = float(config["MarkerOpacity"])
     oracle_truncate_limit = int(config["OracleHoverTruncateLimit"])
     logger.info(
-        "Inputs: %d points, %d hover rows, %d assignments, %d labels",
+        "Inputs: %d points, %d lines, %d hover rows, %d assignments, %d labels",
         len(points),
+        len(lines),
         len(hover),
         len(assignments),
         len(labels),
@@ -115,8 +119,11 @@ def _build_atlas_plot_impl(
 
     label_by_cluster = dict(zip(labels["cluster_id"].astype(int), labels["label"].astype(str)))
 
+    # line_id is the join key; reach card_id via OracleLines, then card metadata via hover.
+    line_to_card = lines[["line_id", "card_id"]]
     merged = (
-        points.merge(assignments, on="point_id", how="left", validate="one_to_one")
+        points.merge(assignments, on="line_id", how="left", validate="one_to_one")
+        .merge(line_to_card, on="line_id", how="left", validate="one_to_one")
         .merge(hover, on="card_id", how="left", validate="many_to_one")
     )
     merged["cluster_id"] = merged["cluster_id"].fillna(-1).astype(int)
@@ -160,6 +167,7 @@ def _build_atlas_plot_impl(
 @step(
     inputs=[
         "AtlasReportingPoints",
+        "OracleLines",
         "AtlasCardHoverInfo",
         "ClusterAssignments",
         "ClusterLabels",
@@ -170,12 +178,13 @@ def _build_atlas_plot_impl(
 )
 def build_atlas_plot(
     points: pd.DataFrame,
+    lines: pd.DataFrame,
     hover: pd.DataFrame,
     assignments: pd.DataFrame,
     labels: pd.DataFrame,
     config: dict,
 ) -> str:
-    return _build_atlas_plot_impl(points, hover, assignments, labels, config)
+    return _build_atlas_plot_impl(points, lines, hover, assignments, labels, config)
 
 
 def _build_color_id_traces(

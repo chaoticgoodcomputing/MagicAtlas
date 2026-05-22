@@ -1,8 +1,8 @@
 """Score an embedding model against declarative pairwise-distance assertions in the 5D UMAP space.
 
 Inputs:
-    embeddings: DataFrame [point_id, vector] — 5D byte-packed clustering embeddings.
-    oracle:     DataFrame [point_id, card_id, text, text_type] — oracle fragments.
+    embeddings: DataFrame [line_id, vector] — 5D byte-packed clustering embeddings.
+    lines:      DataFrame [line_id, card_id, text] — oracle lines (regex matched against text).
     assertions: DataFrame [name, group_a_pattern, group_b_pattern, expect, baseline_group_pattern].
 
 Output: DataFrame of ModelEvaluationResult rows.
@@ -29,25 +29,25 @@ logger = logging.getLogger(__name__)
 
 def _evaluate_impl(
     embeddings: pd.DataFrame,
-    oracle: pd.DataFrame,
+    lines: pd.DataFrame,
     assertions: pd.DataFrame,
     variant_label: str,
 ) -> pd.DataFrame:
     logger.info(
-        "Inputs: %d embedded fragments, %d oracle rows, %d assertions; variant=%s",
-        len(embeddings), len(oracle), len(assertions), variant_label,
+        "Inputs: %d embedded lines, %d oracle-line rows, %d assertions; variant=%s",
+        len(embeddings), len(lines), len(assertions), variant_label,
     )
 
     vectors = np.stack([np.frombuffer(b, dtype="<f4") for b in embeddings["vector"]])
-    idx_by_point = {pid: i for i, pid in enumerate(embeddings["point_id"])}
+    idx_by_line = {lid: i for i, lid in enumerate(embeddings["line_id"])}
 
-    oracle = oracle.copy()
-    oracle["vec_idx"] = oracle["point_id"].map(idx_by_point)
-    missing = oracle["vec_idx"].isna().sum()
+    lines = lines.copy()
+    lines["vec_idx"] = lines["line_id"].map(idx_by_line)
+    missing = lines["vec_idx"].isna().sum()
     if missing:
-        logger.warning("Dropping %d oracle rows with no matching embedding", missing)
-    oracle = oracle.dropna(subset=["vec_idx"])
-    oracle["vec_idx"] = oracle["vec_idx"].astype(int)
+        logger.warning("Dropping %d oracle-line rows with no matching embedding", missing)
+    lines = lines.dropna(subset=["vec_idx"])
+    lines["vec_idx"] = lines["vec_idx"].astype(int)
 
     results: list[dict] = []
     for _, row in assertions.iterrows():
@@ -60,9 +60,9 @@ def _evaluate_impl(
             logger.warning("Skipping assertion %s: invalid regex (%s)", name, e)
             continue
 
-        mask_a = oracle["text"].str.contains(pat_a, na=False, regex=True)
-        mask_b = oracle["text"].str.contains(pat_b, na=False, regex=True)
-        mask_base = oracle["text"].str.contains(pat_base, na=False, regex=True)
+        mask_a = lines["text"].str.contains(pat_a, na=False, regex=True)
+        mask_b = lines["text"].str.contains(pat_b, na=False, regex=True)
+        mask_base = lines["text"].str.contains(pat_base, na=False, regex=True)
 
         n_a, n_b, n_base = int(mask_a.sum()), int(mask_b.sum()), int(mask_base.sum())
 
@@ -73,9 +73,9 @@ def _evaluate_impl(
             )
             continue
 
-        centroid_a = vectors[oracle.loc[mask_a, "vec_idx"].values].mean(axis=0)
-        centroid_b = vectors[oracle.loc[mask_b, "vec_idx"].values].mean(axis=0)
-        centroid_base = vectors[oracle.loc[mask_base, "vec_idx"].values].mean(axis=0)
+        centroid_a = vectors[lines.loc[mask_a, "vec_idx"].values].mean(axis=0)
+        centroid_b = vectors[lines.loc[mask_b, "vec_idx"].values].mean(axis=0)
+        centroid_base = vectors[lines.loc[mask_base, "vec_idx"].values].mean(axis=0)
 
         d_ab = float(np.sum((centroid_a - centroid_b) ** 2))
         d_a_base = float(np.sum((centroid_a - centroid_base) ** 2))
@@ -112,7 +112,7 @@ def _evaluate_impl(
 @step(
     inputs=[
         "ClusteringEmbeddings",
-        "OracleInputs",
+        "OracleLines",
         "ModelEvaluationAssertions",
         "ModelEvaluationsConfig",
     ],
@@ -121,10 +121,10 @@ def _evaluate_impl(
 )
 def evaluate_default(
     embeddings: pd.DataFrame,
-    oracle: pd.DataFrame,
+    lines: pd.DataFrame,
     assertions: pd.DataFrame,
     config: dict,
 ) -> pd.DataFrame:
-    return _evaluate_impl(embeddings, oracle, assertions, config["DefaultVariantLabel"])
+    return _evaluate_impl(embeddings, lines, assertions, config["DefaultVariantLabel"])
 
 

@@ -3,11 +3,11 @@ variant lives in `cluster_embeddings_finetuned.py`; both files share `_cluster_i
 import. Split for Flowthru's Python source generator (one @step per .py file in 0.18.2).
 
 Inputs:
-    embeddings: DataFrame [point_id, vector] — 5D byte-packed embeddings produced by
+    embeddings: DataFrame [line_id, vector] — 5D byte-packed embeddings produced by
                 `reduce_to_five_d` (see ClusteringEmbedding.cs).
     config:     ClusteringConfig record — uses `HdbscanMinClusterSize` and `HdbscanMinSamples`.
 
-Output: DataFrame [point_id, cluster_id] — `cluster_id == -1` for HDBSCAN noise.
+Output: DataFrame [line_id, cluster_id] — `cluster_id == -1` for HDBSCAN noise.
 
 Pure clustering — UMAP lives in its own step (`reduce_to_five_d`) so the reduction can be reused
 by the ModelEvaluations flow and re-tuned independently of HDBSCAN parameters.
@@ -93,7 +93,7 @@ def _cluster_impl(embeddings: pd.DataFrame, config: dict) -> pd.DataFrame:
     )
 
     return pd.DataFrame({
-        "point_id": embeddings["point_id"],
+        "line_id": embeddings["line_id"],
         "cluster_id": cluster_ids,
     })
 
