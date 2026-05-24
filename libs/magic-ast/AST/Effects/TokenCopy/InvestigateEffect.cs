@@ -1,32 +1,23 @@
-namespace MagicAST.AST.Effects.ZoneChange;
+namespace MagicAST.AST.Effects.TokenCopy;
 
 using System.Text.Json.Serialization;
-using MagicAST.AST.Abilities;
-using MagicAST.AST.Quantities;
-using MagicAST.AST.References;
-using MagicAST.Serialization.DiscriminatorAttributes;
 using MagicAST.AST.Effects.Traits;
+using MagicAST.AST.Quantities;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
-/// "exile [target]"
+/// "investigate" — Rule 701.28. Create a Clue token (an artifact with
+/// "{2}, Sacrifice this artifact: Draw a card."). MAST records the keyword
+/// action; the Clue token is conventionally inferred from rules text.
 /// </summary>
-[OracleEffect("exile")]
-public sealed record ExileEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+[OracleEffect("investigate")]
+public sealed record InvestigateEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 {
-  public required ObjectReference Target { get; init; }
-
   /// <summary>
-  /// "until [condition]" for temporary exile
+  /// How many Clue tokens to create. Defaults to one if omitted.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public string? ReturnCondition { get; init; }
-
-  /// <summary>
-  /// "exile [target] with [N] [type] counters on it" — counters placed on
-  /// the card as part of the exile action (suspend-like patterns).
-  /// </summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public CounterPlacement? WithCounters { get; init; }
+  public Quantity? Count { get; init; }
 
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
   public bool IsOptional { get; init; }

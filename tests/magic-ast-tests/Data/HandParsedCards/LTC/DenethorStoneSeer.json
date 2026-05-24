@@ -54,26 +54,38 @@
           ]
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 30,
-            "Length": 106,
-            "End": 136
-          },
-          "RawText": "{3}{R}, {T}, Sacrifice Denethor: Target player becomes the monarch. Denethor deals 3 damage to any target.",
-          "Diagnostics": [
+          "Kind": "activated",
+          "Costs": [
             {
-              "Severity": "error",
-              "Message": "Activated ability parser not yet implemented",
-              "Location": {
-                "Start": 30,
-                "Length": 106,
-                "End": 136
-              },
-              "RawText": "{3}{R}, {T}, Sacrifice Denethor: Target player becomes the monarch. Denethor deals 3 damage to any target.",
-              "Pattern": "ComplexTargeting"
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 3 },
+                { "Kind": "colored", "Colors": ["R"] }
+              ]
+            },
+            { "CostType": "tap" },
+            {
+              "CostType": "sacrifice",
+              "Filter": { "Characteristics": ["this permanent"] },
+              "Quantity": { "QuantityType": "literal", "Value": 1 }
             }
-          ]
+          ],
+          "Effects": [
+            {
+              "EffectType": "becomeMonarch",
+              "Player": {
+                "Kind": "Target",
+                "Filter": { "CardTypes": ["player"] }
+              }
+            },
+            {
+              "EffectType": "dealDamage",
+              "Amount": { "QuantityType": "literal", "Value": 3 },
+              "Source": { "Kind": "Self" },
+              "Target": { "Kind": "AnyTarget" }
+            }
+          ],
+          "IsManaAbility": false
         }
       ]
     },

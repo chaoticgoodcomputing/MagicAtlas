@@ -32,16 +32,22 @@
           }
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": { "Start": 7, "Length": 75, "End": 82 },
-          "RawText": "At the beginning of your upkeep, each player draws a card and loses 1 life.",
-          "Diagnostics": [
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfUpkeep",
+            "Filter": { "Controller": "You" }
+          },
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Triggered ability parser not yet implemented",
-              "Location": { "Start": 7, "Length": 75, "End": 82 },
-              "RawText": "At the beginning of your upkeep, each player draws a card and loses 1 life.",
-              "Pattern": "UnparsedTriggered"
+              "EffectType": "drawCards",
+              "Count": { "QuantityType": "literal", "Value": 1 },
+              "Player": { "Kind": "EachPlayer" }
+            },
+            {
+              "EffectType": "loseLife",
+              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Player": { "Kind": "EachPlayer" }
             }
           ]
         }

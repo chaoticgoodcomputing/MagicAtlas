@@ -48,16 +48,32 @@
           }
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": { "Start": 0, "Length": 241, "End": 241 },
-          "RawText": "The Last Centurion — When you cast this spell from anywhere other than exile, exile it with three time counters on it. It gains suspend. Then investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
-          "Diagnostics": [
+          "Kind": "triggered",
+          "AbilityWord": "The Last Centurion",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "SpellCast",
+            "Filter": {
+              "Controller": "You",
+              "Characteristics": ["this spell from anywhere other than exile"]
+            }
+          },
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Static ability parser not yet implemented",
-              "Location": { "Start": 0, "Length": 241, "End": 241 },
-              "RawText": "The Last Centurion — When you cast this spell from anywhere other than exile, exile it with three time counters on it. It gains suspend. Then investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
-              "Pattern": "AmbiguousStructure"
+              "EffectType": "exile",
+              "Target": { "Kind": "It" },
+              "WithCounters": {
+                "CounterType": "time",
+                "Count": { "QuantityType": "literal", "Value": 3 }
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": { "Kind": "It" },
+              "AbilityText": "suspend"
+            },
+            {
+              "EffectType": "investigate"
             }
           ]
         }

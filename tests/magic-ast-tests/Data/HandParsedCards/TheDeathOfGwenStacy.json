@@ -26,16 +26,14 @@
             {
               "Numbers": [1],
               "Body": {
-                "Kind": "unparsed",
-                "SourceSpan": { "Start": 93, "Length": 24, "End": 117 },
-                "RawText": "Destroy target creature.",
-                "Diagnostics": [
+                "Kind": "spell",
+                "Effects": [
                   {
-                    "Severity": "error",
-                    "Message": "Spell ability parser couldn't recognise effect",
-                    "Location": { "Start": 93, "Length": 24, "End": 117 },
-                    "RawText": "Destroy target creature.",
-                    "Pattern": "UnparsedSpell"
+                    "EffectType": "destroy",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": { "CardTypes": ["creature"] }
+                    }
                   }
                 ]
               }
@@ -43,16 +41,21 @@
             {
               "Numbers": [2],
               "Body": {
-                "Kind": "unparsed",
-                "SourceSpan": { "Start": 123, "Length": 69, "End": 192 },
-                "RawText": "Each player may discard a card. Each player who doesn't loses 3 life.",
-                "Diagnostics": [
+                "Kind": "spell",
+                "Effects": [
                   {
-                    "Severity": "error",
-                    "Message": "Static ability parser not yet implemented",
-                    "Location": { "Start": 123, "Length": 69, "End": 192 },
-                    "RawText": "Each player may discard a card. Each player who doesn't loses 3 life.",
-                    "Pattern": "AmbiguousStructure"
+                    "EffectType": "discardCards",
+                    "Count": { "QuantityType": "literal", "Value": 1 },
+                    "Player": { "Kind": "EachPlayer" },
+                    "IsOptional": true
+                  },
+                  {
+                    "EffectType": "loseLife",
+                    "Amount": { "QuantityType": "literal", "Value": 3 },
+                    "Player": {
+                      "Kind": "EachPlayer",
+                      "Filter": { "Characteristics": ["who didn't discard a card"] }
+                    }
                   }
                 ]
               }
@@ -60,16 +63,18 @@
             {
               "Numbers": [3],
               "Body": {
-                "Kind": "unparsed",
-                "SourceSpan": { "Start": 199, "Length": 47, "End": 246 },
-                "RawText": "Exile any number of target players' graveyards.",
-                "Diagnostics": [
+                "Kind": "spell",
+                "Effects": [
                   {
-                    "Severity": "error",
-                    "Message": "Spell ability parser couldn't recognise effect",
-                    "Location": { "Start": 199, "Length": 47, "End": 246 },
-                    "RawText": "Exile any number of target players' graveyards.",
-                    "Pattern": "UnparsedSpell"
+                    "EffectType": "exile",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": ["card"],
+                        "Zone": "Graveyard",
+                        "Characteristics": ["in any number of target players' graveyards"]
+                      }
+                    }
                   }
                 ]
               }

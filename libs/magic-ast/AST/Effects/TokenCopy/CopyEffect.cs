@@ -16,10 +16,11 @@ public sealed record CopyEffect : Effect, IOptionalEffect, IDurativeEffect, IPre
   public required ObjectReference Target { get; init; }
 
   /// <summary>
-  /// Modifications to the copy.
+  /// "Except"-clauses applied to the copy — power/toughness overrides,
+  /// type additions, ability additions.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public IReadOnlyList<string>? Modifications { get; init; }
+  public IReadOnlyList<CopyModification>? Modifications { get; init; }
 
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
   public bool IsOptional { get; init; }

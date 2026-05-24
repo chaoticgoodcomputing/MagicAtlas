@@ -69,6 +69,13 @@ public sealed record ObjectFilter
   public Comparison? ManaValueComparison { get; init; }
 
   /// <summary>
+  /// Backward-looking lifecycle predicate restricting the filter.
+  /// e.g., "a creature dealt damage by Zurgo this turn".
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public HistoryPredicate? History { get; init; }
+
+  /// <summary>
   /// Location in source text. Only present for unparsed or partially-parsed nodes.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

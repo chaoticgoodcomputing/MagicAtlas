@@ -49,24 +49,17 @@
             },
             {
               "Ability": {
-                "Kind": "unparsed",
-                "SourceSpan": {
-                  "Start": 80,
-                  "Length": 56,
-                  "End": 136
-                },
-                "RawText": "Put your commander into your hand from the command zone.",
-                "Diagnostics": [
+                "Kind": "spell",
+                "Effects": [
                   {
-                    "Severity": "error",
-                    "Message": "Spell ability parser couldn't recognise effect",
-                    "Location": {
-                      "Start": 80,
-                      "Length": 56,
-                      "End": 136
-                    },
-                    "RawText": "Put your commander into your hand from the command zone.",
-                    "Pattern": "UnparsedSpell"
+                    "EffectType": "returnToHand",
+                    "Target": {
+                      "Kind": "Designated",
+                      "Filter": {
+                        "Characteristics": ["your commander"],
+                        "Zone": "CommandZone"
+                      }
+                    }
                   }
                 ]
               }
@@ -75,26 +68,17 @@
           "AllowDuplicates": false
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 137,
-            "Length": 54,
-            "End": 191
-          },
-          "RawText": "Entwine {2} (Choose both if you pay the entwine cost.)",
-          "Diagnostics": [
-            {
-              "Severity": "error",
-              "Message": "Static ability parser not yet implemented",
-              "Location": {
-                "Start": 137,
-                "Length": 54,
-                "End": 191
-              },
-              "RawText": "Entwine {2} (Choose both if you pay the entwine cost.)",
-              "Pattern": "ConditionalEffect"
+          "Kind": "static",
+          "KeywordSource": "Entwine",
+          "Effect": {
+            "EffectType": "entwine",
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 2 }
+              ]
             }
-          ]
+          }
         }
       ]
     },

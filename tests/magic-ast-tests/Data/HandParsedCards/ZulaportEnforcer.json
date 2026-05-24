@@ -44,18 +44,14 @@
               "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
               "Abilities": [
                 {
-                  "Kind": "unparsed",
-                  "SourceSpan": { "Start": 104, "Length": 57, "End": 161 },
-                  "RawText": "This creature can't be blocked except by black creatures.",
-                  "Diagnostics": [
-                    {
-                      "Severity": "error",
-                      "Message": "Static ability parser not yet implemented",
-                      "Location": { "Start": 104, "Length": 57, "End": 161 },
-                      "RawText": "This creature can't be blocked except by black creatures.",
-                      "Pattern": "AmbiguousStructure"
+                  "Kind": "static",
+                  "Effect": {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": ["creature"],
+                      "Colors": ["B"]
                     }
-                  ]
+                  }
                 }
               ]
             }

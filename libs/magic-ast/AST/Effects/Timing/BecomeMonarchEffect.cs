@@ -1,32 +1,23 @@
-namespace MagicAST.AST.Effects.ZoneChange;
+namespace MagicAST.AST.Effects.Timing;
 
 using System.Text.Json.Serialization;
-using MagicAST.AST.Abilities;
-using MagicAST.AST.Quantities;
+using MagicAST.AST.Effects.Traits;
 using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
-using MagicAST.AST.Effects.Traits;
 
 /// <summary>
-/// "exile [target]"
+/// "[Player] becomes the monarch." Rule 716 — the monarch designation is a
+/// per-game status assigned to exactly one player at a time. MAST records the
+/// descriptive instruction; the consequent draw-at-end-step / combat-damage
+/// transfer rules are engine territory.
 /// </summary>
-[OracleEffect("exile")]
-public sealed record ExileEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+[OracleEffect("becomeMonarch")]
+public sealed record BecomeMonarchEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 {
-  public required ObjectReference Target { get; init; }
-
   /// <summary>
-  /// "until [condition]" for temporary exile
+  /// The player who becomes the monarch.
   /// </summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public string? ReturnCondition { get; init; }
-
-  /// <summary>
-  /// "exile [target] with [N] [type] counters on it" — counters placed on
-  /// the card as part of the exile action (suspend-like patterns).
-  /// </summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public CounterPlacement? WithCounters { get; init; }
+  public required ObjectReference Player { get; init; }
 
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
   public bool IsOptional { get; init; }

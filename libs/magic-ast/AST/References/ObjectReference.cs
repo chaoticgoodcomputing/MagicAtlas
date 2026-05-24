@@ -86,4 +86,7 @@ public enum ObjectReferenceKind
 
   /// <summary>"each other player" - all players except the controller</summary>
   EachOtherPlayer,
+
+  /// <summary>A specific named or designated object — e.g. "your commander", "the monarch". Use Filter to describe which.</summary>
+  Designated,
 }

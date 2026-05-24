@@ -37,30 +37,30 @@
           }
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": { "Start": 41, "Length": 43, "End": 84 },
-          "RawText": "During your turn, Zurgo has indestructible.",
-          "Diagnostics": [
-            {
-              "Severity": "error",
-              "Message": "Static ability parser not yet implemented",
-              "Location": { "Start": 41, "Length": 43, "End": 84 },
-              "RawText": "During your turn, Zurgo has indestructible.",
-              "Pattern": "AmbiguousStructure"
-            }
-          ]
+          "Kind": "static",
+          "Condition": { "Text": "During your turn" },
+          "Effect": { "EffectType": "indestructible" }
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": { "Start": 85, "Length": 87, "End": 172 },
-          "RawText": "Whenever a creature dealt damage by Zurgo this turn dies, put a +1/+1 counter on Zurgo.",
-          "Diagnostics": [
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "History": {
+                "PredicateType": "dealtDamageBy",
+                "Source": { "Kind": "Self" },
+                "Timeframe": "this turn"
+              }
+            }
+          },
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Failed to parse Unparsed ability",
-              "Location": { "Start": 85, "Length": 87, "End": 172 },
-              "RawText": "Whenever a creature dealt damage by Zurgo this turn dies, put a +1/+1 counter on Zurgo.",
-              "Pattern": "UnparsedUnparsed"
+              "EffectType": "putCounters",
+              "Target": { "Kind": "Self" },
+              "CounterType": "+1/+1",
+              "Count": { "QuantityType": "literal", "Value": 1 }
             }
           ]
         }

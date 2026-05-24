@@ -142,6 +142,9 @@ public enum TriggerEvent
   /// <summary>A permanent becomes untapped</summary>
   BecomesUntapped,
 
+  /// <summary>A Vehicle becomes crewed (Rule 702.122)</summary>
+  BecomesCrewed,
+
   /// <summary>A permanent transforms</summary>
   Transforms,
 

@@ -1,32 +1,24 @@
-namespace MagicAST.AST.Effects.ZoneChange;
+namespace MagicAST.AST.Effects.Keyword;
 
 using System.Text.Json.Serialization;
-using MagicAST.AST.Abilities;
-using MagicAST.AST.Quantities;
-using MagicAST.AST.References;
-using MagicAST.Serialization.DiscriminatorAttributes;
+using MagicAST.AST.Costs;
 using MagicAST.AST.Effects.Traits;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
-/// "exile [target]"
+/// Entwine effect: a modal spell's "Entwine [cost]" keyword. Paying the entwine
+/// cost in addition to the spell's mana cost lets the controller choose all
+/// modes instead of the usual subset. Rule 702.41. MAST records only the
+/// keyword's presence and its cost parameter; the mode-selection override is
+/// engine territory, not described by the oracle line itself.
 /// </summary>
-[OracleEffect("exile")]
-public sealed record ExileEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+[OracleEffect("entwine")]
+public sealed record EntwineEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 {
-  public required ObjectReference Target { get; init; }
-
   /// <summary>
-  /// "until [condition]" for temporary exile
+  /// The additional cost paid to choose all modes of the modal spell.
   /// </summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public string? ReturnCondition { get; init; }
-
-  /// <summary>
-  /// "exile [target] with [N] [type] counters on it" — counters placed on
-  /// the card as part of the exile action (suspend-like patterns).
-  /// </summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public CounterPlacement? WithCounters { get; init; }
+  public required Cost Cost { get; init; }
 
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
   public bool IsOptional { get; init; }
