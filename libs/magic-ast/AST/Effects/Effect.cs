@@ -25,36 +25,7 @@ using MagicAST.Serialization;
 /// </summary>
 [PolymorphicBase("effectType")]
 [JsonConverter(typeof(PolymorphicReflectionConverter<Effect>))]
-public abstract record Effect
-{
-  /// <summary>
-  /// Duration of this effect, if temporary.
-  /// </summary>
-  [JsonPropertyName("duration")]
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Duration? Duration { get; init; }
-
-  /// <summary>
-  /// Whether this effect is optional ("you may...").
-  /// </summary>
-  [JsonPropertyName("isOptional")]
-  public bool IsOptional { get; init; }
-
-  /// <summary>
-  /// Secondary effect that happens "if you do" perform the main effect.
-  /// </summary>
-  [JsonPropertyName("ifYouDo")]
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDo { get; init; }
-
-  /// <summary>
-  /// "Unless [player] pays [cost]" clause that can prevent this effect.
-  /// Common in cards like Rhystic Study, Mystic Remora, Ward.
-  /// </summary>
-  [JsonPropertyName("unlessClause")]
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public UnlessClause? UnlessClause { get; init; }
-}
+public abstract record Effect;
 
 /// <summary>
 /// Represents an "unless [player] pays [cost]" clause.

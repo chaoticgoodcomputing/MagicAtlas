@@ -5,17 +5,37 @@ using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
+using MagicAST.AST.Effects.Traits;
 
 /// <summary>
 /// "You get an emblem with [abilities]"
 /// Rule 114
 /// </summary>
 [OracleEffect("createEmblem")]
-public sealed record CreateEmblemEffect : Effect
+public sealed record CreateEmblemEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 {
   /// <summary>
   /// The emblem definition with its abilities.
   /// </summary>
   [JsonPropertyName("emblem")]
   public required EmblemDefinition Emblem { get; init; }
+
+  /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
+  [JsonPropertyName("isOptional")]
+  public bool IsOptional { get; init; }
+
+  /// <summary>Optional follow-up effect contingent on the controller choosing to perform this one. (IOptionalEffect)</summary>
+  [JsonPropertyName("ifYouDo")]
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Effect? IfYouDo { get; init; }
+
+  /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
+  [JsonPropertyName("duration")]
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Duration? Duration { get; init; }
+
+  /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
+  [JsonPropertyName("unlessClause")]
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public UnlessClause? UnlessClause { get; init; }
 }
