@@ -1,0 +1,76 @@
+{
+  "Input": {
+    "Name": "Stormfist Crusader",
+    "ManaCost": "{1}{B}{R}",
+    "TypeLine": "Legendary Creature — Human Knight",
+    "OracleText": "Menace\nAt the beginning of your upkeep, each player draws a card and loses 1 life.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [ "B", "R" ],
+    "ColorIdentity": [ "B", "R" ]
+  },
+  "Output": {
+    "Name": "Stormfist Crusader",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Knight",
+      "Supertypes": [ "Legendary" ],
+      "Types": [ "Creature" ],
+      "Subtypes": [ "Human", "Knight" ]
+    },
+    "Oracle": {
+      "RawText": "Menace\nAt the beginning of your upkeep, each player draws a card and loses 1 life.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Menace",
+          "Effect": {
+            "EffectType": "evasion",
+            "CanBeBlockedBy": {
+              "CardTypes": [ "creature" ]
+            },
+            "MinimumBlockers": 2
+          }
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": { "Start": 7, "Length": 75, "End": 82 },
+          "RawText": "At the beginning of your upkeep, each player draws a card and loses 1 life.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Triggered ability parser not yet implemented",
+              "Location": { "Start": 7, "Length": 75, "End": 82 },
+              "RawText": "At the beginning of your upkeep, each player draws a card and loses 1 life.",
+              "Pattern": "UnparsedTriggered"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": [ "B" ] },
+          { "Kind": "colored", "Colors": [ "R" ] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [ "B", "R" ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [ "B", "R" ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}

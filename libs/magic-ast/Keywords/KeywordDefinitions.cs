@@ -43,6 +43,29 @@ public static class KeywordDefinitions
       },
     };
 
+  /// <summary>
+  /// Menace: This creature can't be blocked except by two or more creatures.
+  /// Rule 702.110. Evasion keyword whose distinguishing feature is a minimum
+  /// blocker count rather than a characteristic filter on the blockers.
+  /// </summary>
+  public static KeywordDefinition Menace { get; } =
+    new()
+    {
+      Name = "Menace",
+      RuleReference = "702.110",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Menace",
+        Effect = new EvasionEffect
+        {
+          CanBeBlockedBy = new ObjectFilter { CardTypes = ["creature"] },
+          MinimumBlockers = 2,
+        },
+      },
+    };
+
   // ═══════════════════════════════════════════════════════════════════════════
   // COMBAT DAMAGE TIMING KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -219,6 +242,7 @@ public static class KeywordDefinitions
   public static IReadOnlyList<KeywordDefinition> All { get; } =
     [
       Flying,
+      Menace,
       FirstStrike,
       DoubleStrike,
       Lifelink,
