@@ -5,32 +5,10 @@ namespace MagicAtlas.Data;
 
 /// <summary>
 /// Model evaluation outputs (Layer 7). One row per evaluated assertion per model variant —
-/// see <see cref="ModelEvaluationResult"/>. Two per-variant catalog items rather than one
-/// merged item so each pipeline run writes its own report and stale variants don't bleed into
-/// a combined file; cross-variant comparisons happen at read time downstream.
+/// post-gut, only the fine-tuned variant remains and base-model comparison plumbing was removed.
 /// </summary>
 public partial class Catalog
 {
-  /// <summary>Eval results for the default off-the-shelf model. Produced by ModelEvaluations
-  /// when the flow is run against <see cref="ClusteringEmbeddings"/>.</summary>
-  public IItem<IEnumerable<ModelEvaluationResult>> ModelEvaluation =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<ModelEvaluationResult>>("ModelEvaluation")
-        .Json()
-        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/model-evaluation.json")
-        .Build()
-    );
-
-  /// <summary>Eval results for the fine-tuned model. Produced by ModelEvaluations when the
-  /// flow is run against <see cref="FineTunedClusteringEmbeddings"/>.</summary>
-  public IItem<IEnumerable<ModelEvaluationResult>> FineTunedModelEvaluation =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<ModelEvaluationResult>>("FineTunedModelEvaluation")
-        .Json()
-        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/fine-tuned-model-evaluation.json")
-        .Build()
-    );
-
   /// <summary>
   /// Diagnostic snapshot of <c>ProjectOracleLinesNode</c>'s barrel-detection pass — barrel/
   /// borderline counts plus sample lines. One report per pipeline run; not per-variant
@@ -44,22 +22,54 @@ public partial class Catalog
         .Build()
     );
 
-  /// <summary>Post-clustering per-keyword diagnostic for the default model — one row per
-  /// Scryfall keyword with anchor cluster, member count, top neighbors, and outlier sample.</summary>
-  public IItem<IEnumerable<KeywordClusterReport>> KeywordClusterReport =>
+  /// <summary>Quality scorecard for HDBSCAN clustering measured against the canonical
+  /// line-attribution ground truth. Per-cluster rows + corpus-wide row.</summary>
+  public IItem<IEnumerable<ClusterCanonicalBenchmark>> ClusterCanonicalBenchmark =>
     CreateItem(() =>
-      Item.Of<IEnumerable<KeywordClusterReport>>("KeywordClusterReport")
+      Item.Of<IEnumerable<ClusterCanonicalBenchmark>>("ClusterCanonicalBenchmark")
         .Json()
-        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/keyword-cluster-report.json")
+        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/cluster-canonical-benchmark.json")
         .Build()
     );
 
-  /// <summary>Fine-tuned-model counterpart to <see cref="KeywordClusterReport"/>.</summary>
-  public IItem<IEnumerable<KeywordClusterReport>> FineTunedKeywordClusterReport =>
+  /// <summary>Per-canonical 2D-placement scorecard — radii, dispersion, centroid-based
+  /// silhouette, overlap rate. One row per canonical + an overall row (slug = "*").</summary>
+  public IItem<IEnumerable<CanonicalPlacementMetric>> CanonicalPlacementMetrics =>
     CreateItem(() =>
-      Item.Of<IEnumerable<KeywordClusterReport>>("FineTunedKeywordClusterReport")
+      Item.Of<IEnumerable<CanonicalPlacementMetric>>("CanonicalPlacementMetrics")
         .Json()
-        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/fine-tuned-keyword-cluster-report.json")
+        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/canonical-placement-metrics.json")
+        .Build()
+    );
+
+  /// <summary>Cross-level projection-quality scorecard — HD/5D/2D × Exploration/Exploitation
+  /// × 8 metrics in tidy long form. See <see cref="ProjectionQualityMetric"/>.</summary>
+  public IItem<IEnumerable<ProjectionQualityMetric>> ProjectionQualityMetrics =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<ProjectionQualityMetric>>("ProjectionQualityMetrics")
+        .Json()
+        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/projection-quality-metrics.json")
+        .Build()
+    );
+
+  /// <summary>Results of the 5D→2D UMAP sweep — tidy long form, one row per
+  /// (sweep_point, level, metric). Tuning-only artifact; not consumed by the production atlas.</summary>
+  public IItem<IEnumerable<UmapSweepResult>> UmapSweep2DResults =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<UmapSweepResult>>("UmapSweep2DResults")
+        .Json()
+        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/umap-sweep-2d-results.json")
+        .Build()
+    );
+
+  /// <summary>Results of the HD→5D supervised UMAP sweep — tidy long form. Per-combo metrics
+  /// at the 5D layer (where supervision lives) plus the downstream 2D layer (with default 2D
+  /// hyperparams) for end-to-end visibility.</summary>
+  public IItem<IEnumerable<UmapSweepResult>> UmapSweep5DResults =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<UmapSweepResult>>("UmapSweep5DResults")
+        .Json()
+        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/umap-sweep-5d-results.json")
         .Build()
     );
 }

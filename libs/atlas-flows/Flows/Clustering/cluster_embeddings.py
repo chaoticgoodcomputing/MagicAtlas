@@ -1,6 +1,4 @@
-"""HDBSCAN clustering over the default-variant 5D-UMAP-reduced embeddings. The fine-tuned
-variant lives in `cluster_embeddings_finetuned.py`; both files share `_cluster_impl` via
-import. Split for Flowthru's Python source generator (one @step per .py file in 0.18.2).
+"""HDBSCAN clustering over the 5D-UMAP-reduced embeddings.
 
 Inputs:
     embeddings: DataFrame [line_id, vector] — 5D byte-packed embeddings produced by
@@ -9,8 +7,8 @@ Inputs:
 
 Output: DataFrame [line_id, cluster_id] — `cluster_id == -1` for HDBSCAN noise.
 
-Pure clustering — UMAP lives in its own step (`reduce_to_five_d`) so the reduction can be reused
-by the ModelEvaluations flow and re-tuned independently of HDBSCAN parameters.
+Pure clustering — UMAP lives in its own step (`reduce_to_five_d`) so HDBSCAN parameters can
+be re-tuned independently of the supervised reduction.
 
 Uses RAPIDS cuML's HDBSCAN on GPU when available, falling back to hdbscan on CPU otherwise.
 cuML's HDBSCAN only supports euclidean metric, which is what we want post-UMAP anyway. Both

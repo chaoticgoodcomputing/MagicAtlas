@@ -78,16 +78,18 @@ public partial class Catalog
         .Build()
     );
 
+
   /// <summary>
-  /// Declarative tests scored by the <c>ModelEvaluations</c> flow. See
-  /// <see cref="ModelEvaluationAssertion"/>.
+  /// (oracle_id, tag_slug) rows pulled from Scryfall's Tagger taxonomy. Produced by the
+  /// standalone <c>scripts/scrape_scryfall_tags.py</c> helper (not a Flowthru step — manually
+  /// refreshed because Scryfall's API rate limits make per-pipeline-run refresh impractical;
+  /// see also <c>tag-index.json</c> in the same directory for per-tag metadata).
   /// </summary>
-  public IItem<IEnumerable<ModelEvaluationAssertion>> ModelEvaluationAssertions =>
+  public IItem<IEnumerable<TagAssignment>> ScryfallTagAssignments =>
     CreateItem(() =>
-      Item.Of<IEnumerable<ModelEvaluationAssertion>>("ModelEvaluationAssertions")
-        .Json()
-        .AtPath($"{_basePath}/_01_Raw/Datasets/Curated/model-evaluation-assertions.json")
+      Item.Of<IEnumerable<TagAssignment>>("ScryfallTagAssignments")
+        .Parquet()
+        .AtPath($"{_basePath}/_01_Raw/Datasets/scryfall-tags/assignments.parquet")
         .Build()
     );
-
 }

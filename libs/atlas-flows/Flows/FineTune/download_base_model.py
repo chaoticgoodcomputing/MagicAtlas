@@ -23,11 +23,15 @@ from flowthru import step
 logger = logging.getLogger(__name__)
 
 # Only the files SentenceTransformer needs at inference time. Skipping ONNX / OpenVINO /
-# pytorch_model.bin / TensorFlow weights keeps the model dir under ~100 MB for MiniLM and
-# ~450 MB for mpnet. Not a tuning knob — fixed by what sentence-transformers needs at load
-# time, so it stays in code rather than in FineTuneConfig.
+# pytorch_model.bin / TensorFlow weights keeps the model dir bounded (~500 MB for Nomic
+# v1.5). The `*.py` pattern is required for models that ship custom modeling code
+# (Nomic publishes `modeling_hf_nomic.py` and `configuration_hf_nomic.py` alongside the
+# weights — loading via SentenceTransformer with `trust_remote_code=True` reads those at
+# init time). Not a tuning knob — fixed by what sentence-transformers needs at load time,
+# so it stays in code rather than in FineTuneConfig.
 _ALLOW_PATTERNS = (
     "*.json",
+    "*.py",
     "vocab.txt",
     "model.safetensors",
     "1_Pooling/*",

@@ -34,6 +34,20 @@ public partial record BarrelDetectionReport
   [SerializedLabel("synthetic_keyword_lines_added")]
   public required int SyntheticKeywordLinesAdded { get; init; }
 
+  /// <summary>
+  /// Lines classified as <i>extended barrels</i> — compound keyword-variant lines like
+  /// <c>"Flying, protection from green"</c> whose non-keyword segments are parameterized
+  /// keyword variants (protection-from-X, hexproof-from-X, etc.) rather than sentence text.
+  /// Split into one OracleLine per segment, with parameterized text preserved verbatim.
+  /// Bare-keyword segments are dropped (already covered by the synthetic emission).
+  /// </summary>
+  [SerializedLabel("extended_barrel_lines")]
+  public required int ExtendedBarrelLines { get; init; }
+
+  /// <summary>Compound-line variant rows emitted by extended-barrel splitting.</summary>
+  [SerializedLabel("extended_barrel_segments_emitted")]
+  public required int ExtendedBarrelSegmentsEmitted { get; init; }
+
   /// <summary>Sample of lines classified as keyword barrels (for eyeball validation).</summary>
   [SerializedLabel("barrels")]
   public required List<BarrelExample> Barrels { get; init; }
@@ -41,6 +55,10 @@ public partial record BarrelDetectionReport
   /// <summary>Sample of borderline lines (contain a keyword segment but aren't barrels).</summary>
   [SerializedLabel("borderlines")]
   public required List<BorderlineExample> Borderlines { get; init; }
+
+  /// <summary>Sample of extended-barrel lines and the segments split out of them.</summary>
+  [SerializedLabel("extended_barrels")]
+  public required List<ExtendedBarrelExample> ExtendedBarrels { get; init; }
 }
 
 [FlowthruSchema]
@@ -76,4 +94,25 @@ public partial record BorderlineExample
   /// <summary>Comma-separated segments that DID match a keyword in vocabulary.</summary>
   [SerializedLabel("matched_segments")]
   public required List<string> MatchedSegments { get; init; }
+}
+
+[FlowthruSchema]
+public partial record ExtendedBarrelExample
+{
+  [SerializedLabel("card_id")]
+  public required Guid CardId { get; init; }
+
+  [SerializedLabel("card_name")]
+  public required string CardName { get; init; }
+
+  /// <summary>The original compound line (e.g. "Flying, protection from green").</summary>
+  [SerializedLabel("line")]
+  public required string Line { get; init; }
+
+  /// <summary>
+  /// Segments emitted as their own OracleLines, in original order. Bare keywords are absent
+  /// (they're covered by the synthetic emission); parameterized variants are preserved verbatim.
+  /// </summary>
+  [SerializedLabel("emitted_segments")]
+  public required List<string> EmittedSegments { get; init; }
 }

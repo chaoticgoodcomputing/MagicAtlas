@@ -12,12 +12,34 @@ namespace MagicAtlas.Data._00_Config.Schemas;
 [FlowthruSchema]
 public partial record ClusteringConfig
 {
-  // ── UMAP, 5D target for HDBSCAN ──
+  // ── UMAP, 5D target — the SUPERVISED structuring layer ──
+  // After the HD→5D→2D restructure, the 5D step carries supervision pressure (canonical-label
+  // categorical UMAP). The downstream 2D step is unsupervised topology preservation of this
+  // already-structured 5D space.
   public int Umap5DNNeighbors { get; init; }
 
   /// <summary>BERTopic recommendation for clustering-target UMAPs is 0.0 — tighter local
-  /// structure helps HDBSCAN separate dense regions.</summary>
+  /// structure helps HDBSCAN separate dense regions, and also gives the downstream unsupervised
+  /// 2D step a denser low-D manifold to project.</summary>
   public double Umap5DMinDist { get; init; }
+
+  /// <summary>
+  /// Master toggle for supervised UMAP at HD→5D. When <c>true</c>, the step passes
+  /// <c>LinePrimaryCanonicals</c> as the y label and applies <see cref="Umap5DSupervisionWeight"/>.
+  /// When <c>false</c>, the step runs purely unsupervised and the canonical input is ignored —
+  /// the 5D output reflects only the embedding's intrinsic structure. Useful for comparing
+  /// supervised vs unsupervised 5D in the eval scorecard.
+  /// </summary>
+  public bool Umap5DSupervised { get; init; } = true;
+
+  /// <summary>
+  /// Weight of the supervised canonical-label signal vs. the unsupervised X-similarity signal
+  /// in the HD→5D UMAP. Range <c>0</c>..<c>1</c>: <c>0</c> = pure unsupervised, <c>1</c> = pure
+  /// categorical. Only applied when <see cref="Umap5DSupervised"/> is <c>true</c>. With ~280
+  /// canonicals competing for 5 dimensions, supervision succeeds where it can't at 2D — 5 dims
+  /// have room for the leaf structure that 2D cannot fit. Default <c>0.7</c>.
+  /// </summary>
+  public double Umap5DSupervisionWeight { get; init; } = 0.7;
 
   // ── HDBSCAN ──
   public int HdbscanMinClusterSize { get; init; }

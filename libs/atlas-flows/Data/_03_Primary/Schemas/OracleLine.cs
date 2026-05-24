@@ -39,6 +39,14 @@ public partial record OracleLine
   [SerializedLabel("card_id")]
   public required Guid CardId { get; init; }
 
+  /// <summary>Scryfall <c>oracle_id</c> — across-printings stable identity copied through from
+  /// <see cref="CardCoreData.OracleId"/>. Nullable to match the upstream contract: reversible-
+  /// layout cards omit the card-level oracle_id. Carried here so downstream Python steps can
+  /// join against Scryfall-side taxonomies (e.g. otag assignments) without a separate
+  /// lookup-table input.</summary>
+  [SerializedLabel("oracle_id")]
+  public Guid? OracleId { get; init; }
+
   /// <summary>The cleaned ability text (reminder-parentheticals stripped upstream).</summary>
   [SerializedLabel("text")]
   public required string Text { get; init; }

@@ -84,75 +84,6 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Persisted encoder cache for the default-variant sentence-transformer model — one row per
-  /// unique oracle-text string. <c>EmbedOracleText</c> deduplicates <see cref="OracleLines"/> by
-  /// <c>Text</c>, runs the model only over the unique set, and writes the result here. The 2D /
-  /// 5D UMAP steps consume <c>OracleLines + EncodedTexts</c> together and broadcast the cached
-  /// vectors back to per-line rows just before jitter+UMAP. Parquet because the embedding column
-  /// is a binary blob and ~30K unique strings × 384 floats would be unworkable in JSON.
-  /// </summary>
-  public IItem<IEnumerable<EncodedText>> EncodedTexts =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<EncodedText>>("EncodedTexts")
-        .Parquet()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/encoded-texts.parquet")
-        .Build()
-    );
-
-  /// <summary>
-  /// 2D UMAP projection of oracle-text BERT embeddings — consumed by the atlas-api.
-  /// Lives in the harness's Primary layer under traditional Flowthru conventions; the API loads
-  /// it via its <c>Atlas:AtlasPointsPath</c> setting, decoupled from DB ingestion.
-  /// </summary>
-  public IItem<IEnumerable<AtlasPoint>> AtlasPoints =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<AtlasPoint>>("AtlasPoints")
-        .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/atlas-points.json")
-        .Build()
-    );
-
-  /// <summary>
-  /// Per-line cluster assignments produced by the Clustering flow's HDBSCAN step over a 5D-UMAP
-  /// reduction of the encoded texts. One row per <see cref="OracleLines"/> row, joinable to
-  /// <see cref="AtlasPoints"/> on <c>line_id</c>.
-  /// </summary>
-  public IItem<IEnumerable<ClusterAssignment>> ClusterAssignments =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<ClusterAssignment>>("ClusterAssignments")
-        .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/cluster-assignments.json")
-        .Build()
-    );
-
-  /// <summary>
-  /// Per-cluster labels. Backend-agnostic schema (see <see cref="ClusterLabel"/>) so this single
-  /// catalog item can hold output from c-TF-IDF today and an LLM labeler tomorrow without
-  /// downstream code changes.
-  /// </summary>
-  public IItem<IEnumerable<ClusterLabel>> ClusterLabels =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<ClusterLabel>>("ClusterLabels")
-        .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/cluster-labels.json")
-        .Build()
-    );
-
-  /// <summary>
-  /// 5D UMAP-reduced view of the encoded oracle lines — the shared intermediate between the
-  /// Clustering flow's HDBSCAN step and the ModelEvaluations flow's centroid-distance metric.
-  /// Hoisted out of the clusterer so a model change can be evaluated without re-running the
-  /// (slow) UMAP, and so HDBSCAN parameters can be retuned in isolation.
-  /// </summary>
-  public IItem<IEnumerable<ClusteringEmbedding>> ClusteringEmbeddings =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<ClusteringEmbedding>>("ClusteringEmbeddings")
-        .Parquet()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/clustering-embeddings.parquet")
-        .Build()
-    );
-
-  /// <summary>
   /// Card-level oracle text with reminder parentheticals intact — the input shape the FineTune
   /// flow's training-pair builder needs to extract reminder-text paraphrase pairs. Sibling to
   /// <see cref="OracleLines"/>, which is line-level with parentheticals stripped.
@@ -179,61 +110,132 @@ public partial class Catalog
         .Build()
     );
 
-  // -------- Fine-tuned variant siblings --------
-  // Same schemas as the default-variant items above; separate catalog entries so both pipelines
-  // can run in parallel and so downstream consumers can target one variant explicitly. Renaming
-  // the default items would cascade through the atlas-api and the public AtlasPoints path, so we
-  // leave the unqualified names as the default-variant aliases and namespace only the new
-  // sibling items.
-
-  /// <summary>Persisted encoder cache for the fine-tuned variant. Same shape and rationale as
-  /// <see cref="EncodedTexts"/>; downstream steps consume whichever variant matches the model
-  /// they're attached to.</summary>
-  public IItem<IEnumerable<EncodedText>> FineTunedEncodedTexts =>
+  /// <summary>Persisted encoder cache — one row per unique oracle-text string. EmbedOracleText
+  /// dedups OracleLines.Text, runs the model once per unique text, writes the result here. The
+  /// 5D / 2D UMAP steps broadcast cached vectors back to per-line rows via OracleLines join.</summary>
+  public IItem<IEnumerable<EncodedText>> EncodedTexts =>
     CreateItem(() =>
-      Item.Of<IEnumerable<EncodedText>>("FineTunedEncodedTexts")
+      Item.Of<IEnumerable<EncodedText>>("EncodedTexts")
         .Parquet()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-encoded-texts.parquet")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/encoded-texts.parquet")
         .Build()
     );
 
-  /// <summary>5D UMAP of <see cref="FineTunedEncodedTexts"/>. Same schema as
-  /// <see cref="ClusteringEmbeddings"/>.</summary>
-  public IItem<IEnumerable<ClusteringEmbedding>> FineTunedClusteringEmbeddings =>
+  /// <summary>5D UMAP of EncodedTexts (supervised by canonical labels). Structured intermediate
+  /// between HD and 2D — see Clustering.ReduceToFiveD for the rationale.</summary>
+  public IItem<IEnumerable<ClusteringEmbedding>> ClusteringEmbeddings =>
     CreateItem(() =>
-      Item.Of<IEnumerable<ClusteringEmbedding>>("FineTunedClusteringEmbeddings")
+      Item.Of<IEnumerable<ClusteringEmbedding>>("ClusteringEmbeddings")
         .Parquet()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-clustering-embeddings.parquet")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/clustering-embeddings.parquet")
         .Build()
     );
 
-  /// <summary>2D atlas points produced from <see cref="FineTunedEncodedTexts"/>. Same schema
-  /// as <see cref="AtlasPoints"/>.</summary>
-  public IItem<IEnumerable<AtlasPoint>> FineTunedAtlasPoints =>
+  /// <summary>2D atlas points (unsupervised projection of ClusteringEmbeddings). The atlas viz
+  /// surface — consumed by the atlas-api via Atlas:AtlasPointsPath.</summary>
+  public IItem<IEnumerable<AtlasPoint>> AtlasPoints =>
     CreateItem(() =>
-      Item.Of<IEnumerable<AtlasPoint>>("FineTunedAtlasPoints")
+      Item.Of<IEnumerable<AtlasPoint>>("AtlasPoints")
         .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-atlas-points.json")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/atlas-points.json")
         .Build()
     );
 
-  /// <summary>Per-point cluster assignments from clustering the fine-tuned variant. Same schema
-  /// as <see cref="ClusterAssignments"/>.</summary>
-  public IItem<IEnumerable<ClusterAssignment>> FineTunedClusterAssignments =>
+  /// <summary>Per-line HDBSCAN cluster assignments over ClusteringEmbeddings.</summary>
+  public IItem<IEnumerable<ClusterAssignment>> ClusterAssignments =>
     CreateItem(() =>
-      Item.Of<IEnumerable<ClusterAssignment>>("FineTunedClusterAssignments")
+      Item.Of<IEnumerable<ClusterAssignment>>("ClusterAssignments")
         .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-cluster-assignments.json")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/cluster-assignments.json")
         .Build()
     );
 
-  /// <summary>Per-cluster labels for the fine-tuned variant. Same schema as
-  /// <see cref="ClusterLabels"/>.</summary>
-  public IItem<IEnumerable<ClusterLabel>> FineTunedClusterLabels =>
+  /// <summary>Per-cluster c-TF-IDF labels. Backend-agnostic ClusterLabel shape.</summary>
+  public IItem<IEnumerable<ClusterLabel>> ClusterLabels =>
     CreateItem(() =>
-      Item.Of<IEnumerable<ClusterLabel>>("FineTunedClusterLabels")
+      Item.Of<IEnumerable<ClusterLabel>>("ClusterLabels")
         .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-cluster-labels.json")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/cluster-labels.json")
+        .Build()
+    );
+
+  // ── Tag-labeling artifacts ────────────────────────────────────────────────────────
+
+  /// <summary>Hand-curated archetype centroids — each TagExemplar's description+examples
+  /// embedded and mean-pooled.</summary>
+  public IItem<IEnumerable<TagCentroid>> ExemplarTagCentroids =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<TagCentroid>>("ExemplarTagCentroids")
+        .Parquet()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/exemplar-tag-centroids.parquet")
+        .Build()
+    );
+
+  /// <summary>Scryfall-tag centroids — for each curated otag canonical, the mean of all
+  /// tagged cards' line-level embeddings. Pairs with ExemplarTagCentroids as the candidate
+  /// pool for cluster labeling.</summary>
+  public IItem<IEnumerable<TagCentroid>> ScryfallTagCentroids =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<TagCentroid>>("ScryfallTagCentroids")
+        .Parquet()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/scryfall-tag-centroids.parquet")
+        .Build()
+    );
+
+  /// <summary>Line-level attribution of OracleLines to curated canonicals. Multiple attributions
+  /// per line (pattern + anchor + scryfall-inference + embedding-inference + fallback). Used
+  /// upstream of LinePrimaryCanonicals which picks one winner per line.</summary>
+  public IItem<IEnumerable<OracleLineCanonicalAssignment>> OracleLineCanonicalAssignments =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<OracleLineCanonicalAssignment>>("OracleLineCanonicalAssignments")
+        .Parquet()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/oracle-line-canonical-assignments.parquet")
+        .Build()
+    );
+
+  /// <summary>One row per oracle line with its single best canonical attribution (highest
+  /// confidence wins). The "ground truth" the rest of the pipeline uses for supervision,
+  /// reporting, and benchmarking.</summary>
+  public IItem<IEnumerable<LinePrimaryCanonical>> LinePrimaryCanonicals =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<LinePrimaryCanonical>>("LinePrimaryCanonicals")
+        .Parquet()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/line-primary-canonicals.parquet")
+        .Build()
+    );
+
+  /// <summary>Per-cluster candidate-set for the labeler — top-K tag candidates + sample
+  /// lines.</summary>
+  public IItem<IEnumerable<ClusterTagAffinity>> ClusterTagAffinity =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<ClusterTagAffinity>>("ClusterTagAffinity")
+        .Json()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/cluster-tag-affinity.json")
+        .Build()
+    );
+
+  /// <summary>Qwen-arbitrated cluster labels (same ClusterLabel shape as c-TF-IDF; separate
+  /// catalog item so both sources can be persisted side-by-side).</summary>
+  public IItem<IEnumerable<ClusterLabel>> TagAnchoredClusterLabels =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<ClusterLabel>>("TagAnchoredClusterLabels")
+        .Json()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/tag-anchored-cluster-labels.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Nested tree view of the Scryfall-tag curation, with each canonical positioned in the
+  /// hierarchy implied by its colon-delimited slug. The root list holds top-level archetypes
+  /// (anthem, ramp, removal, tribal, …); each entry's <c>Children</c> recursively holds the
+  /// sub-archetypes under it. Consumed by downstream report / test code that needs to reason
+  /// over the taxonomy as a tree rather than a flat list.
+  /// </summary>
+  public IItem<IEnumerable<TagHierarchyNode>> TagHierarchy =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<TagHierarchyNode>>("TagHierarchy")
+        .Json()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/tag-hierarchy.json")
         .Build()
     );
 }

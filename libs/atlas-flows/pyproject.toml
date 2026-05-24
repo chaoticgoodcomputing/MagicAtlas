@@ -17,6 +17,9 @@ dependencies = [
   "umap-learn>=0.5.5",
   "datasets>=4.8.5",
   "accelerate>=1.1.0",
+  # Required by Nomic's custom modeling code (`modeling_hf_nomic_bert.py`, fetched lazily
+  # via trust_remote_code from the nomic-ai/nomic-bert-2048 HF repo).
+  "einops>=0.7.0",
 ]
 
 [tool.uv]

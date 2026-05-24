@@ -41,6 +41,22 @@ public static partial class ProjectOracleLinesNode
   [GeneratedRegex(@"\s+(\{[X0-9]+\}|\d+)\s*$", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
   private static partial Regex MagnitudeSuffixPattern();
 
+  // Matches parameterized keyword variants: "protection from X", "hexproof from X", "ward from X".
+  // Conservatively bounded to the small set of MTG keywords that take a "from" parameter.
+  [GeneratedRegex(@"^(protection|hexproof|ward) from \S", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
+  private static partial Regex ParameterizedKeywordPattern();
+
+  // Sentence-level structure markers — if any segment of a candidate line has these, it's
+  // ability text, not a compound keyword-variant list. Activated-ability costs ("{T}:",
+  // "{2}:"), modal markers ("Choose"), trigger words ("When", "Whenever", "At the beginning"),
+  // and conditional clauses ("As long as", "If") all disqualify.
+  [GeneratedRegex(
+    @"[:.(]|\{[A-Z0-9X/]+\}|\b(when|whenever|at the beginning|if|as long|target|enchanted|equipped|each|create|put|deals|gain|lose|choose)\b",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase)]
+  private static partial Regex SentenceStructurePattern();
+
+  private const int CompoundLineMaxLength = 80;
+
   public static Func<
     IEnumerable<CardCoreData>,
     Task<(KeywordVocabulary, IEnumerable<OracleLine>, BarrelDetectionReport)>
@@ -69,9 +85,12 @@ public static partial class ProjectOracleLinesNode
     var lines = new List<OracleLine>(capacity: cards.Count * 4);
     var barrels = new List<BarrelExample>();
     var borderlines = new List<BorderlineExample>();
+    var extendedBarrels = new List<ExtendedBarrelExample>();
     int totalConsidered = 0;
     int barrelLinesDropped = 0;
     int borderlineLines = 0;
+    int extendedBarrelLines = 0;
+    int extendedBarrelSegmentsEmitted = 0;
     int syntheticAdded = 0;
 
     foreach (var card in cards)
@@ -125,9 +144,44 @@ public static partial class ProjectOracleLinesNode
               {
                 LineId = StableLineId("oracle", card.Id, lineSeq, line),
                 CardId = card.Id,
+                OracleId = card.OracleId,
                 Text = line,
               });
               lineSeq++;
+              break;
+
+            case LineKind.ExtendedBarrel:
+              extendedBarrelLines++;
+              // Split into one OracleLine per non-bare-keyword segment. Bare keyword segments
+              // are dropped because the synthetic-keyword emission below already covers them.
+              var emittedSegments = new List<string>();
+              foreach (var rawSeg in line.Split(','))
+              {
+                var segText = rawSeg.Trim();
+                if (segText.Length == 0) continue;
+                var normalizedSeg = NormalizeKeywordSegment(rawSeg);
+                if (keywordSet.Contains(normalizedSeg)) continue;
+                lines.Add(new OracleLine
+                {
+                  LineId = StableLineId("compound", card.Id, lineSeq, segText),
+                  CardId = card.Id,
+                  OracleId = card.OracleId,
+                  Text = segText,
+                });
+                lineSeq++;
+                emittedSegments.Add(segText);
+                extendedBarrelSegmentsEmitted++;
+              }
+              if (extendedBarrels.Count < BorderlineExampleSampleSize)
+              {
+                extendedBarrels.Add(new ExtendedBarrelExample
+                {
+                  CardId = card.Id,
+                  CardName = card.Name,
+                  Line = line,
+                  EmittedSegments = emittedSegments,
+                });
+              }
               break;
 
             case LineKind.Plain:
@@ -135,6 +189,7 @@ public static partial class ProjectOracleLinesNode
               {
                 LineId = StableLineId("oracle", card.Id, lineSeq, line),
                 CardId = card.Id,
+                OracleId = card.OracleId,
                 Text = line,
               });
               lineSeq++;
@@ -159,6 +214,7 @@ public static partial class ProjectOracleLinesNode
             // since a card's Scryfall keyword list shouldn't contain duplicates.
             LineId = StableLineId("keyword", card.Id, 0, canonical.ToLowerInvariant()),
             CardId = card.Id,
+            OracleId = card.OracleId,
             Text = canonical,
           });
           syntheticAdded++;
@@ -171,21 +227,27 @@ public static partial class ProjectOracleLinesNode
       TotalLinesConsidered = totalConsidered,
       BarrelLinesDropped = barrelLinesDropped,
       BorderlineLines = borderlineLines,
+      ExtendedBarrelLines = extendedBarrelLines,
+      ExtendedBarrelSegmentsEmitted = extendedBarrelSegmentsEmitted,
       SyntheticKeywordLinesAdded = syntheticAdded,
       Barrels = barrels,
       Borderlines = borderlines,
+      ExtendedBarrels = extendedBarrels,
     };
     return (new KeywordVocabulary { Keywords = vocabulary }, lines, report);
   }
 
-  private enum LineKind { Plain, Borderline, Barrel }
+  private enum LineKind { Plain, Borderline, ExtendedBarrel, Barrel }
 
   private record LineClassification(LineKind Kind, List<string> NormalizedSegments);
 
   /// <summary>
   /// A line is a <c>Barrel</c> iff every comma-separated segment normalizes to a known keyword.
-  /// It's <c>Borderline</c> iff at least one segment matches but the line still has at least
-  /// one non-keyword segment. Otherwise it's <c>Plain</c> (no keyword tokens detected).
+  /// It's an <c>ExtendedBarrel</c> iff every segment is either a known keyword or a
+  /// parameterized keyword variant (e.g. <c>"protection from green"</c>) AND the line has no
+  /// sentence-level structure — these are compound keyword-variant lists that should be split.
+  /// It's <c>Borderline</c> iff some-but-not-all segments match and it doesn't qualify as
+  /// extended (long ability text containing keywords). Otherwise <c>Plain</c>.
   /// </summary>
   private static LineClassification ClassifyLine(string line, HashSet<string> keywordSet)
   {
@@ -203,6 +265,27 @@ public static partial class ProjectOracleLinesNode
     }
     if (matchCount == 0) return new LineClassification(LineKind.Plain, matched);
     if (matchCount == segments.Length) return new LineClassification(LineKind.Barrel, matched);
+
+    // Borderline candidate. Promote to ExtendedBarrel if the non-keyword segments are all
+    // parameterized variants and the line lacks ability-text structure.
+    if (line.Length <= CompoundLineMaxLength && !SentenceStructurePattern().IsMatch(line))
+    {
+      bool allKeywordShaped = true;
+      foreach (var seg in segments)
+      {
+        var trimmed = seg.Trim();
+        if (trimmed.Length == 0) continue;
+        var normalized = NormalizeKeywordSegment(seg);
+        if (keywordSet.Contains(normalized)) continue;
+        if (ParameterizedKeywordPattern().IsMatch(trimmed)) continue;
+        allKeywordShaped = false;
+        break;
+      }
+      if (allKeywordShaped)
+      {
+        return new LineClassification(LineKind.ExtendedBarrel, matched);
+      }
+    }
     return new LineClassification(LineKind.Borderline, matched);
   }
 

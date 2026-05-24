@@ -4,15 +4,18 @@ using Flowthru.Data.Catalog;
 using Flowthru.Diagnostics;
 using Flowthru.Hosting;
 using Flowthru.Step.Python;
+using Flowthru.Validation.Runtime;
 using MagicAtlas.Data;
 using MagicAtlas.Flows.CardProcessing;
 using MagicAtlas.Flows.Clustering;
 using MagicAtlas.Flows.FineTune;
 using MagicAtlas.Flows.Ingest;
-using MagicAtlas.Flows.ModelEvaluations;
 using MagicAtlas.Flows.OracleEmbedding;
 using MagicAtlas.Flows.Reporting;
 using MagicAtlas.Flows.RulesProcessing;
+using MagicAtlas.Flows.TagLabeling;
+using MagicAtlas.Flows.Tuning;
+using MagicAtlas.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -90,6 +93,15 @@ public class Program
       .Build();
     services.AddSingleton<IConfiguration>(configuration);
 
+    // ── External services ──────────────────────────────────────────────────
+    // Ollama for cluster-labeling LLM calls. Endpoint and default model resolved from
+    // `Flowthru:Services:Ollama` in appsettings.json. Preflight inspector (below) probes
+    // /api/tags before any step runs and fails fast if the model isn't pulled.
+    services.Configure<OllamaServiceOptions>(
+      configuration.GetSection("Flowthru:Services:Ollama")
+    );
+    services.AddSingleton<IOllamaService, OllamaService>();
+
     services.AddLogging(logging =>
     {
       logging.AddConsole();
@@ -150,6 +162,18 @@ public class Program
           .AtPath(Path.Combine(basePath, ".flowthru", "cache.json"))
           .Build()
       );
+
+      // Preflight: reach Ollama before any step runs. Surfaces a friendly diagnostic if the
+      // endpoint is down or the configured model isn't pulled on the server.
+      flowthru.AddFlowServiceInspector<IOllamaService>(async (svc, ct) =>
+      {
+        var health = await svc.HealthCheckAsync(ct);
+        if (!health.EndpointReachable)
+          return Inspect.Fail(health.Diagnostic, source: "Ollama");
+        if (!health.ModelAvailable)
+          return Inspect.Fail(health.Diagnostic, source: "Ollama");
+        return Inspect.Pass();
+      });
 
       flowthru.ConfigureMetadata(meta =>
       {
@@ -215,12 +239,24 @@ public class Program
 
       flowthru
         .RegisterFlow<Catalog, IPythonExecutor>(
-          "ModelEvaluations",
-          ModelEvaluationsFlow.Create
+          "TagLabeling",
+          TagLabelingFlow.Create
         )
         .WithDescription(
-          "Scores embedding-model variants against centroid-distance assertions in 5D UMAP space"
+          "Deterministic cluster labeling: exemplar centroids + Scryfall centroids + per-cluster "
+            + "candidate ranking. Produces ClusterTagAffinity for downstream consumers. The LLM "
+            + "arbitration pass (QwenLabeling) is unregistered by default — re-enable when wanted."
         );
+
+      // QwenLabeling flow is intentionally unregistered. To turn the LLM arbitration step back
+      // on, uncomment the block below — IOllamaService is still wired in DI above and the
+      // preflight inspector still attaches.
+      // flowthru
+      //   .RegisterFlow<Catalog, IOllamaService>(
+      //     "QwenLabeling",
+      //     QwenLabelingFlow.Create
+      //   )
+      //   .WithDescription("Qwen arbitration of ClusterTagAffinity → TagAnchoredClusterLabels.");
 
       flowthru
         .RegisterFlow<Catalog, IPythonExecutor>(
@@ -229,6 +265,16 @@ public class Program
         )
         .WithDescription(
           "Renders the atlas embedding as a standalone Plotly HTML (index.html)"
+        );
+
+      flowthru
+        .RegisterFlow<Catalog, IPythonExecutor>(
+          "Tuning",
+          TuningFlow.Create
+        )
+        .WithDescription(
+          "UMAP hyperparameter sweep — SweepUmap2D (5D→2D unsupervised) + SweepUmap5D "
+            + "(HD→5D supervised + default 2D). Tuning-only; outputs sweep scorecards."
         );
     });
   }

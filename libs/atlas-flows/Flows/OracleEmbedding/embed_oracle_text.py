@@ -1,9 +1,7 @@
-"""Deduplicate oracle lines by Text, encode each unique string once with the default
-sentence-transformer model, and emit an EncodedTexts row per unique input. This is the
-persisted encoder cache — the 2D / 5D UMAP steps consume (OracleLines + EncodedTexts) and
-broadcast the cached vectors back to per-line rows just before jitter+UMAP.
-
-The fine-tuned variant lives in `embed_oracle_text_finetuned.py` and shares `_embed_impl`.
+"""Deduplicate oracle lines by Text, encode each unique string once with the FineTunedEmbeddingModel,
+and emit an EncodedTexts row per unique input. This is the persisted encoder cache — the 5D
+UMAP step consumes (OracleLines + EncodedTexts) and broadcasts the cached vectors back to per-line
+rows just before jitter+UMAP.
 
 Inputs:
     lines:     DataFrame of OracleLine rows (line_id, card_id, text). Used only for the unique
@@ -46,15 +44,24 @@ def _embed_impl(lines: pd.DataFrame, model_ref: dict, config: dict) -> pd.DataFr
         len(lines), lines["card_id"].nunique(), len(unique_texts), variant, model_path,
     )
 
-    model = SentenceTransformer(model_path)
+    # Nomic models ship custom modeling code (`modeling_hf_nomic.py`) — `trust_remote_code=True`
+    # is required for SentenceTransformer to wire that in at load time.
+    model = SentenceTransformer(model_path, trust_remote_code=True)
     dim = (
         model.get_embedding_dimension()
         if hasattr(model, "get_embedding_dimension")
         else model.get_sentence_embedding_dimension()
     )
+
+    # Nomic v1.5 is trained with task-prefix conditioning: `clustering: ...` selects the
+    # representation tuned for embedding-space clustering (vs `search_query:`/`search_document:`
+    # for retrieval). The prefix is applied to encoder input only; the output `text` column
+    # stays raw so downstream joins on `OracleLines.text` work unchanged.
+    prefixed = [f"clustering: {t}" for t in unique_texts]
+
     logger.info("Encoding %d unique texts (dim=%d, batch=%d)...", len(unique_texts), dim, batch_size)
     embeddings = model.encode(
-        unique_texts,
+        prefixed,
         batch_size=batch_size,
         show_progress_bar=True,
         convert_to_numpy=True,

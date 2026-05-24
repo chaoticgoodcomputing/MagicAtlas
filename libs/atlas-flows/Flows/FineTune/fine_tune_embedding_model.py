@@ -34,6 +34,11 @@ logger = logging.getLogger(__name__)
 # between MPNet's parameter detection and DataParallel's replica handling).
 os.environ.setdefault("CUDA_VISIBLE_DEVICES", "0")
 
+# Reduces CUDA memory fragmentation during training — relevant for Nomic v1.5's larger
+# activation memory (SwiGLU + RoPE) on consumer GPUs (~12 GB). Suggested in PyTorch's OOM
+# error guidance.
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+
 
 def _models_dir() -> Path:
     data_root = os.environ.get("MAGIC_ATLAS_DATA")
@@ -82,32 +87,60 @@ def fine_tune_embedding_model(pairs: pd.DataFrame, config: dict) -> dict:
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.info("Loading fine-tune base %s on %s...", base_repo, device)
-    model = SentenceTransformer(base_repo, device=device)
+    # `trust_remote_code=True` is required for Nomic's custom modeling code; harmless for
+    # other base models.
+    model = SentenceTransformer(base_repo, device=device, trust_remote_code=True)
 
-    # Treat triplets as pairs (drop the explicit negative). With only ~4 triplets in the
-    # corpus today, the signal is dominated by MNR's in-batch negatives anyway. When the
-    # curated-triplet count grows, split into a separate dataset and use mixed-loss training.
-    pair_rows = []
-    n_pos = n_trip_demoted = 0
+    # Mixed-loss training: split rows into positive-pairs and triplets, train each with its own
+    # MultipleNegativesRankingLoss. MNR with a 3-column dataset (anchor, positive, negative) uses
+    # the explicit negative as an additional in-batch hard negative — exactly what swap-triplets
+    # need to teach "Vampire ≠ Werewolf", "you ≠ your opponent", etc.
+    #
+    # Apply the `clustering:` task prefix to every training-pair string so the fine-tune
+    # refines the same prefix-conditioned representation that downstream OracleEmbedding
+    # and ExemplarCentroid steps use at inference. Training and inference must agree on the
+    # prefix — fine-tuning unprefixed strings would refine a *different* representation than
+    # the one we later infer against.
+    pair_rows: list[dict] = []
+    triplet_rows: list[dict] = []
     for _, row in pairs.iterrows():
-        anchor = str(row["anchor"])
-        positive = str(row["positive"])
+        anchor = f"clustering: {row['anchor']}"
+        positive = f"clustering: {row['positive']}"
         negative = row["negative"]
-        pair_rows.append({"anchor": anchor, "positive": positive})
         if negative is None or (isinstance(negative, float) and pd.isna(negative)):
-            n_pos += 1
+            pair_rows.append({"anchor": anchor, "positive": positive})
         else:
-            n_trip_demoted += 1
+            triplet_rows.append({
+                "anchor": anchor,
+                "positive": positive,
+                "negative": f"clustering: {negative}",
+            })
 
     logger.info(
-        "Training corpus: %d positive pairs + %d triplets-as-pairs = %d rows",
-        n_pos, n_trip_demoted, len(pair_rows),
+        "Training corpus: %d positive pairs + %d hard-negative triplets",
+        len(pair_rows), len(triplet_rows),
     )
-    if not pair_rows:
-        raise ValueError("No training pairs — refusing to fine-tune from empty corpus.")
+    if not pair_rows and not triplet_rows:
+        raise ValueError("No training data — refusing to fine-tune from empty corpus.")
 
-    train_dataset = Dataset.from_list(pair_rows)
-    loss = losses.MultipleNegativesRankingLoss(model)
+    # Build a dict of datasets + dict of losses; SentenceTransformerTrainer iterates them
+    # together, applying the corresponding loss to each batch from each named dataset.
+    train_datasets: dict = {}
+    losses_dict: dict = {}
+    if pair_rows:
+        train_datasets["pairs"] = Dataset.from_list(pair_rows)
+        losses_dict["pairs"] = losses.MultipleNegativesRankingLoss(model)
+    if triplet_rows:
+        train_datasets["triplets"] = Dataset.from_list(triplet_rows)
+        losses_dict["triplets"] = losses.MultipleNegativesRankingLoss(model)
+    # When only one of the two is populated, unwrap so the trainer takes the simpler form.
+    if len(train_datasets) == 1:
+        only_key = next(iter(train_datasets))
+        train_dataset = train_datasets[only_key]
+        loss = losses_dict[only_key]
+    else:
+        train_dataset = train_datasets
+        loss = losses_dict
 
     if target.exists():
         shutil.rmtree(target)
@@ -125,6 +158,10 @@ def fine_tune_embedding_model(pairs: pd.DataFrame, config: dict) -> dict:
         dataloader_drop_last=False,
         max_steps=-1,
         fp16=config["TrainFp16"],
+        # Recomputes activations during backprop instead of caching them — trades ~30% extra
+        # compute for ~half the activation memory. Needed for Nomic v1.5 on 12 GB-class GPUs;
+        # safe to leave on for smaller bases too.
+        gradient_checkpointing=True,
     )
     trainer = SentenceTransformerTrainer(
         model=model,
@@ -132,9 +169,13 @@ def fine_tune_embedding_model(pairs: pd.DataFrame, config: dict) -> dict:
         train_dataset=train_dataset,
         loss=loss,
     )
+    n_p = len(pair_rows)
+    n_t = len(triplet_rows)
     logger.info(
-        "Starting fit (%d epochs, MNR over pairs+triplets-as-pairs)...",
+        "Starting fit (%d epochs, MNR%s)...",
         config["TrainNumEpochs"],
+        f" mixed: {n_p} pairs + {n_t} triplets" if n_p and n_t else
+        f" pairs only ({n_p})" if n_p else f" triplets only ({n_t})",
     )
     trainer.train()
     logger.info("Fit complete; writing model to %s", target)
