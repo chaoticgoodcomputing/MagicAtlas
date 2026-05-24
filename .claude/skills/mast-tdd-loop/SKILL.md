@@ -111,7 +111,9 @@ Create `tests/magic-ast-tests/Data/HandParsedCards/{set}/{card-name}.json` conta
 nx run mast:test
 ```
 
-Red #1 appears as a `JsonException` thrown during `CardTestCase.GetOutput()` — i.e., **deserialization** of the hand-parsed JSON to `CardOutputAST`. Two flavors:
+**Red #1 doesn't always fire.** If your hand-parsed shape uses only AST primitives that already exist (`UntapEffect`, `ObjectFilter`, common discriminator strings, etc.), the deserialization succeeds on first attempt and you jump straight to Red #2. That's a sign the gap is purely a parser-rule gap, not a schema gap — keep going.
+
+When Red #1 does fire, it's a `JsonException` thrown during `CardTestCase.GetOutput()` — i.e., **deserialization** of the hand-parsed JSON to `CardOutputAST`. Two flavors:
 
 **3a. Unknown discriminator value**
 ```
