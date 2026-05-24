@@ -1,0 +1,126 @@
+{
+  "Input": {
+    "Name": "Denethor, Stone Seer",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Legendary Creature — Human Noble",
+    "OracleText": "When Denethor enters, scry 2.\n{3}{R}, {T}, Sacrifice Denethor: Target player becomes the monarch. Denethor deals 3 damage to any target.",
+    "Power": "1",
+    "Toughness": "3",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "R",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Denethor, Stone Seer",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Noble",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Noble"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When Denethor enters, scry 2.\n{3}{R}, {T}, Sacrifice Denethor: Target player becomes the monarch. Denethor deals 3 damage to any target.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "scry",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 30,
+            "Length": 106,
+            "End": 136
+          },
+          "RawText": "{3}{R}, {T}, Sacrifice Denethor: Target player becomes the monarch. Denethor deals 3 damage to any target.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Activated ability parser not yet implemented",
+              "Location": {
+                "Start": 30,
+                "Length": 106,
+                "End": 136
+              },
+              "RawText": "{3}{R}, {T}, Sacrifice Denethor: Target player becomes the monarch. Denethor deals 3 damage to any target.",
+              "Pattern": "ComplexTargeting"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
