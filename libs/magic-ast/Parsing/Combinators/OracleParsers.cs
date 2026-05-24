@@ -92,6 +92,26 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Menace" keyword.
+  /// Pattern: "Menace" [reminder]
+  /// Rule 702.110. Evasion ability requiring two or more blockers.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Menace = (
+    from keyword in Keyword("Menace")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Menace",
+      Effect = new EvasionEffect
+      {
+        CanBeBlockedBy = new ObjectFilter { CardTypes = ["creature"] },
+        MinimumBlockers = 2,
+      },
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Trample" keyword.
   /// Pattern: "Trample" [reminder]
   /// </summary>
@@ -392,6 +412,7 @@ public static class OracleParsers
   /// </summary>
   public static readonly TokenListParser<OracleToken, StaticAbility> SimpleKeyword = Flying
     .Try()
+    .Or(Menace)
     .Or(Vigilance)
     .Or(Trample)
     .Or(Haste)
