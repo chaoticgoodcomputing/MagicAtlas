@@ -55,7 +55,7 @@ Read these in order. They take five minutes and they save hours.
 
 3. **`libs/magic-ast/CONTRIBUTING.md`** — terminology, AST styling, attribute conventions for the magic-ast library.
 
-4. **`tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json`** — parsed MTG Comprehensive Rules glossary. **Consult this whenever oracle text uses an MTG-domain term** (e.g., "ward", "embalm", "scry", "step", "ability"). Use the rules-accurate definition, not vernacular.
+4. **`tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json`** — parsed MTG Comprehensive Rules glossary. **Consult this whenever oracle text uses an MTG-domain term** (e.g., "ward", "embalm", "scry", "step", "ability"). Use the rules-accurate definition, not vernacular. **Note for sub-agents in worktrees:** this file lives in the main repo's source tree and may not be present inside an agent worktree. If you can't read it locally, surface the gap rather than guessing — or `git show main:tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` from your worktree to read it.
 
 ## The cycle
 
@@ -92,36 +92,61 @@ Choose batch size based on the number of **non-overlapping** patterns. Two gaps 
 
 After dispatching, wait for every sub-agent to report back before continuing to Step 6.
 
-### Step 2 — `[sub]` Hand-parse the candidate
+### Step 2 — `[sub]` Hand-parse the candidate (gold AST, eventual-truth)
 
-Create `tests/magic-ast-tests/Data/HandParsedCards/{set}/{card-name}.json` containing:
+**The hand-parsed JSON is the gold AST — what a fully-implemented parser SHOULD eventually emit for this card.** It is not a snapshot of the current parser's output, and it is not partially populated with `UnparsedAbility` nodes where the parser currently falls short.
+
+This is the single most important rule of the loop. Get it wrong and the TDD direction inverts: the test "passes" by matching the parser's current limitations rather than driving the parser forward.
+
+**Forbidden in the gold output:**
+- `"Kind": "unparsed"` anywhere in `Output.Oracle.Abilities` (or nested inside Saga chapters, Modal options, Level-up stanzas, etc.).
+- Embedded `Diagnostics[]` arrays describing current parser failures.
+- `Pattern` strings copied from `FallbackParser.InferFailurePattern`.
+
+**Allowed and expected:**
+- AST node shapes that don't yet exist — create them in `libs/magic-ast/AST/` as Red #1 (see Step 3).
+- Abilities you can't fully spec — model them as descriptively as you can with existing nodes; use the `OtherHistoryPredicate`-style escape hatches sparingly; surface the design decision in your manifest.
+
+**Card-scope choice.** If the assigned candidate-line lives on a card with multiple complex abilities you can't reasonably gold-model in this session, you have two options:
+1. **Pick a simpler card** containing the same pattern in cleaner isolation. The triage report's `candidateLines[]` is sorted by `cleanlinessScore`; scan deeper for a card where the target line dominates.
+2. **Gold-AST every ability on the card.** Yes, even ones unrelated to your assigned pattern. The per-line test (`OracleLines/{set}/{card}/Line{n}`) gives you a clean win signal for *your* line going green; the per-card `Parser_ProducesExpectedOutput` stays stable-red on the ratchet until siblings also get taught. That's the ratchet's job.
+
+Prefer (1) when a simpler exemplar exists. Use (2) when the candidate is genuinely the cleanest one.
+
+**File location and casing:**
+
+Create `tests/magic-ast-tests/Data/HandParsedCards/{Set}/{CardName}.json` containing:
 
 ```json
 {
-  "input": {
-    "name": "...",
-    "manaCost": "{...}",
-    "typeLine": "...",
-    "oracleText": "...",
-    "power": "...",
-    "toughness": "...",
-    "colors": ["..."],
-    "colorIdentity": ["..."]
+  "Input": {
+    "Name": "...",
+    "ManaCost": "{...}",
+    "TypeLine": "...",
+    "OracleText": "...",
+    "Power": "...",
+    "Toughness": "...",
+    "Colors": ["..."],
+    "ColorIdentity": ["..."]
   },
-  "output": {
-    "name": "...",
-    "typeLine": { "raw": "...", "types": [...], "subtypes": [...] },
-    "oracle": { "rawText": "...", "abilities": [ /* AST */ ] },
-    "attributes": [ /* CardAttribute polymorphic list */ ]
+  "Output": {
+    "Name": "...",
+    "TypeLine": { "Raw": "...", "Types": [...], "Subtypes": [...] },
+    "Oracle": { "RawText": "...", "Abilities": [ /* AST */ ] },
+    "Attributes": [ /* CardAttribute polymorphic list */ ]
   }
 }
 ```
+
+**JSON casing convention:**
+- Property names: **PascalCase** (`Effects`, `Trigger`, `EffectType`, `Target`).
+- Discriminator string values: **camelCase** (`"EffectType": "dealDamage"`, `"Kind": "triggered"`, `"DurationType": "untilEndOfTurn"`).
 
 **Schema discipline:**
 - Reuse existing discriminator strings. Consult `GLOSSARY.md` first. Don't invent `"dealDamage"` if it's already there.
 - Convention for new discriminators is **camelCase** (matches every existing discriminator: `dealDamage`, `addMana`, `untilEndOfTurn`).
 - Model what the oracle text **says**, not what the rules **do**. No turn-state, priority, stack ordering, or layering fields.
-- For optional effect dimensions (duration, "you may" / "if you do", "unless [player] pays [cost]"): use the existing trait interfaces (`IDurativeEffect`, `IOptionalEffect`, `IPreventableEffect`). JSON property names: `duration`, `isOptional` / `ifYouDo`, `unlessClause`.
+- For optional effect dimensions (duration, "you may" / "if you do", "unless [player] pays [cost]"): use the existing trait interfaces (`IDurativeEffect`, `IOptionalEffect`, `IPreventableEffect`). JSON property names: `Duration`, `IsOptional` / `IfYouDo`, `UnlessClause`.
 
 ### Step 3 — `[sub]` Surface Red #1 (schema gap)
 
