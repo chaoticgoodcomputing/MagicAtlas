@@ -1,7 +1,10 @@
 namespace MagicAST.Parsing.Parsers;
 
+using System.Text.RegularExpressions;
 using MagicAST.AST;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.Effects.Combat;
+using MagicAST.AST.References;
 using MagicAST.Parsing.Combinators;
 using MagicAST.Parsing.Tokens;
 using Superpower;
@@ -50,6 +53,15 @@ public sealed class StaticAbilityParser : IAbilityParser
       return keywordAbilities;
     }
 
+    // "[Self] attacks each combat if able." — Rule 508-style attack requirement.
+    // Descriptive: records that the oracle line imposes a must-attack restriction
+    // on the named object. Does not model runtime enforcement.
+    var mustAttack = TryParseMustAttack(clause);
+    if (mustAttack != null)
+    {
+      return mustAttack;
+    }
+
     // Try other static ability patterns
     // TODO: Add more patterns as needed:
     // - "Enchant [descriptor]"
@@ -59,6 +71,39 @@ public sealed class StaticAbilityParser : IAbilityParser
 
     return null;
   }
+
+  /// <summary>
+  /// Recognizes "[Self] attacks each combat if able." where [Self] is either
+  /// the literal phrase "This creature"/"This permanent" or the card's own name
+  /// (any leading word(s) before "attacks"). Produces a <see cref="StaticAbility"/>
+  /// wrapping a <see cref="MustAttackEffect"/> targeting <c>Self</c>.
+  /// </summary>
+  /// <remarks>
+  /// Card-name-as-subject is the standard oracle-text convention for self-reference
+  /// in continuous abilities on a named permanent — the parser treats any leading
+  /// word(s) before <c>attacks</c> as a synonym for <c>Self</c> when the rest of the
+  /// line matches the restriction phrase.
+  /// </remarks>
+  private static IReadOnlyList<Ability>? TryParseMustAttack(OracleClause clause)
+  {
+    if (!_mustAttackPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MustAttackEffect { Target = ObjectReference.Self() },
+      },
+    ];
+  }
+
+  private static readonly Regex _mustAttackPattern = new(
+    @"^\s*\S.*?\s+attacks\s+each\s+combat\s+if\s+able\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   #region Keyword Parsing
 
