@@ -20,10 +20,26 @@ using Superpower.Model;
 /// - Complex activated abilities: {3}{B}{B}: Creatures you control gain lifelink until end of turn.
 /// - Loyalty abilities: +2: Discard up to two cards, then draw that many cards.
 /// </summary>
-public sealed partial class ActivatedAbilityParser
+[OracleAbilityParser(AbilityKind.Activated)]
+public sealed partial class ActivatedAbilityParser : IAbilityParser
 {
   private readonly ManaCostParser _manaCostParser = new();
   private readonly OracleTokenizer _tokenizer = new();
+  private readonly FallbackParser _fallback = new();
+
+  /// <inheritdoc/>
+  public IReadOnlyList<Ability> Parse(OracleClause clause, ClauseClassification classification)
+  {
+    var parsed = TryParse(clause, classification);
+    if (parsed is not null)
+    {
+      return [parsed];
+    }
+    return
+    [
+      _fallback.Parse(clause, classification, "Activated ability parser not yet implemented"),
+    ];
+  }
 
   /// <summary>
   /// Attempts to parse an activated ability from a clause.

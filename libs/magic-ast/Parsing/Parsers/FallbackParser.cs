@@ -11,8 +11,13 @@ using TextSpan = MagicAST.AST.TextSpan;
 /// <summary>
 /// Fallback parser that always succeeds by producing an UnparsedAbility.
 /// This ensures the parsing pipeline never fails completely.
+///
+/// Registered for <see cref="AbilityKind.Unparsed"/> in the
+/// <see cref="AbilityParserRegistry"/>. Also invoked internally by the other
+/// concrete parsers when their <c>TryParse</c> step fails.
 /// </summary>
-public sealed class FallbackParser
+[OracleAbilityParser(AbilityKind.Unparsed)]
+public sealed class FallbackParser : IAbilityParser
 {
   /// <summary>
   /// Creates an UnparsedAbility from a clause that couldn't be parsed.
@@ -39,6 +44,12 @@ public sealed class FallbackParser
       AbilityWord = classification.AbilityWord,
     };
   }
+
+  /// <inheritdoc/>
+  IReadOnlyList<Ability> IAbilityParser.Parse(
+    OracleClause clause,
+    ClauseClassification classification
+  ) => [Parse(clause, classification)];
 
   /// <summary>
   /// Creates a diagnostic for parse failure.

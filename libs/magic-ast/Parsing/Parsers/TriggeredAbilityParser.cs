@@ -18,8 +18,25 @@ using MagicAST.Parsing.Tokens;
 /// rather than overfitting to specific card text. Components are designed to be
 /// reusable across different trigger and effect patterns.
 /// </remarks>
-public sealed class TriggeredAbilityParser
+[OracleAbilityParser(AbilityKind.Triggered)]
+public sealed class TriggeredAbilityParser : IAbilityParser
 {
+  private readonly FallbackParser _fallback = new();
+
+  /// <inheritdoc/>
+  public IReadOnlyList<Ability> Parse(OracleClause clause, ClauseClassification classification)
+  {
+    var parsed = TryParse(clause, classification);
+    if (parsed is not null)
+    {
+      return [parsed];
+    }
+    return
+    [
+      _fallback.Parse(clause, classification, "Triggered ability parser not yet implemented"),
+    ];
+  }
+
   /// <summary>
   /// Attempts to parse a triggered ability from a clause.
   /// </summary>

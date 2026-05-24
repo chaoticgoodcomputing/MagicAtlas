@@ -15,9 +15,25 @@ using Superpower.Model;
 /// This parser uses monadic combinators from OracleParsers to parse keywords
 /// directly from token sequences, avoiding string manipulation.
 /// </remarks>
-public sealed class StaticAbilityParser
+[OracleAbilityParser(AbilityKind.Static)]
+public sealed class StaticAbilityParser : IAbilityParser
 {
   private readonly OracleTokenizer _tokenizer = new();
+  private readonly FallbackParser _fallback = new();
+
+  /// <inheritdoc/>
+  public IReadOnlyList<Ability> Parse(OracleClause clause, ClauseClassification classification)
+  {
+    var parsed = TryParse(clause, classification);
+    if (parsed is { Count: > 0 })
+    {
+      return parsed;
+    }
+    return
+    [
+      _fallback.Parse(clause, classification, "Static ability parser not yet implemented"),
+    ];
+  }
 
   /// <summary>
   /// Attempts to parse static abilities from a clause.
