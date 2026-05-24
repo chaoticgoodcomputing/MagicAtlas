@@ -1,8 +1,10 @@
 namespace MagicAST.Parsing.Parsers;
 
+using System.Text.RegularExpressions;
 using MagicAST.AST;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects;
+using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.Effects.TokenCopy;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
@@ -197,7 +199,42 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return new ObjectFilter { CardTypes = ["creature"] };
     }
 
+    // Self-by-name pattern, e.g. "When Denethor enters" / "Whenever Barrin dies".
+    // Oracle text uses the card's own short name to refer to itself; treat this
+    // as a self-reference resolved to a creature filter (matches the convention
+    // already used for "this creature" — MAST describes what the text says).
+    if (IsSelfByNameTrigger(text))
+    {
+      return new ObjectFilter { CardTypes = ["creature"] };
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// Detects the "[Self-name] enters/dies/attacks" shape, where the card refers
+  /// to itself by its own name rather than by "this creature". The heuristic:
+  /// after stripping the leading trigger timing keyword, the remaining trigger
+  /// text begins with one or more capitalized words and ends with a recognized
+  /// event verb. The parser does not currently have access to the card name, so
+  /// this is a structural match, not a name-equality check.
+  /// </summary>
+  private static bool IsSelfByNameTrigger(string triggerText)
+  {
+    // Strip the leading trigger timing keyword if present.
+    var stripped = Regex.Replace(
+      triggerText.Trim(),
+      @"^(When|Whenever|At)\s+",
+      string.Empty,
+      RegexOptions.IgnoreCase
+    );
+
+    // Capitalized name (one or more comma-free words), then an event verb.
+    return Regex.IsMatch(
+      stripped,
+      @"^[A-Z][A-Za-z'\-]*(?:\s+[A-Z][A-Za-z'\-]*)*\s+(enters|dies|attacks)\b",
+      RegexOptions.CultureInvariant
+    );
   }
 
   #endregion
@@ -217,12 +254,36 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return new List<Effect> { effect };
     }
 
+    var scry = TryParseScryEffect(effectText);
+    if (scry != null)
+    {
+      return new List<Effect> { scry };
+    }
+
     // Can add more effect types here:
     // - ParseDrawEffect(effectText)
     // - ParseGainLifeEffect(effectText)
     // - ParsePutCounterEffect(effectText)
 
     return null;
+  }
+
+  /// <summary>
+  /// Tries to parse "scry N" effects (Rule 701.18 — keyword action). Mirrors
+  /// the equivalent parser on <see cref="ActivatedAbilityParser"/>; eventually
+  /// these should be hoisted into a shared effect-parser combinator.
+  /// </summary>
+  private static ScryEffect? TryParseScryEffect(string effectText)
+  {
+    var trimmed = effectText.Trim().TrimEnd('.');
+    var match = Regex.Match(trimmed, @"^scry\s+(\d+)$", RegexOptions.IgnoreCase);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var count = int.Parse(match.Groups[1].Value);
+    return new ScryEffect { Count = LiteralQuantity.Of(count) };
   }
 
   /// <summary>
