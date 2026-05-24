@@ -1,6 +1,0 @@
-<!-- Override the repo-root Nx module-boundary check — the hardcoded pnpm hash in the root
-     Directory.Build.targets has drifted out of date with the current node_modules layout. Same
-     workaround as libs/atlas-flows, libs/magic-ast, and the two harnesses under tests/. -->
-<Project>
-  <Target Name="CheckNxModuleBoundaries" BeforeTargets="Build" />
-</Project>

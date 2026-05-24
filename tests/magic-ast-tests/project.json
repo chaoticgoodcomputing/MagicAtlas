@@ -1,13 +1,44 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "name": "magic-ast-tests",
+  "name": "mast",
   "sourceRoot": "tests/magic-ast-tests",
   "projectType": "application",
+  "tags": ["type:test", "scope:magic-ast"],
   "targets": {
-    "run": {
+    "build": {
+      "//": "Build the consolidated MagicAST test harness (NUnit ratchet + Flowthru triage flow).",
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["dotnet run"],
+        "commands": ["dotnet build"],
+        "cwd": "tests/magic-ast-tests",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "//": "Run the MagicAST ratchet (NUnit). Stable failures are tolerated; regressions block.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["bash scripts/run-ratchet-tests.sh"],
+        "cwd": "tests/magic-ast-tests",
+        "parallel": false
+      },
+      "configurations": {
+        "baseline": {
+          "//": "Accept the current state as the new baseline.",
+          "commands": ["UPDATE_BASELINE=true bash scripts/run-ratchet-tests.sh"]
+        },
+        "raw": {
+          "//": "Skip the ratchet listener; run dotnet test directly.",
+          "commands": ["dotnet test"]
+        }
+      }
+    },
+    "run": {
+      "//": "Run the MagicAstTriage Flowthru flow over the corpus and emit Data/_08_Reporting/triage-report.json.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run -- --flow MagicAstTriage"],
         "cwd": "tests/magic-ast-tests",
         "parallel": false
       }

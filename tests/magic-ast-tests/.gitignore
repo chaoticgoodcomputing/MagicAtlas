@@ -12,6 +12,11 @@ Data/**
 # Allow raw input dataset files
 !Data/_01_Raw/Datasets/Curated/**/*
 
+# Hand-parsed test fixtures (driven by the mast-tdd-loop skill) and malformed
+# corner cases that anchor the ratchet — the agent-facing source of truth.
+!Data/HandParsedCards/**/*
+!Data/MalformedParsedCards/**/*
+
 # Allow all schema and catalog .cs files
 !Data/**/*.cs
 

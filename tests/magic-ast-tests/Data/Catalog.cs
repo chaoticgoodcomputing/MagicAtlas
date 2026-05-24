@@ -19,13 +19,10 @@ public partial class Catalog : CatalogAbstract
   public Catalog(string basePath, string? ratchetBaselinePath = null)
   {
     _basePath = basePath;
-    // Default: read the existing tools/test/magic-ast baseline. The path is resolved relative
-    // to the data root, going up two levels to repo root then into tools/test/magic-ast/.
+    // Default: the consolidated baseline lives at the project root, one level above
+    // the data directory.
     _ratchetBaselinePath =
-      ratchetBaselinePath
-      ?? Path.GetFullPath(
-        Path.Combine(basePath, "..", "..", "..", "tools", "test", "magic-ast", "test-baseline.json")
-      );
+      ratchetBaselinePath ?? Path.Combine(basePath, "..", "test-baseline.json");
   }
 
   /// <summary>Smoke-test output slot — populated by <c>MagicAstSmokeFlow</c>'s single source step.</summary>

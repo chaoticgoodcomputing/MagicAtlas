@@ -69,17 +69,12 @@ public class Program
 
     var dataPath = Path.Combine(basePath, "Data");
 
-    // Ratchet baseline lives in the old tools/test/magic-ast project today;
-    // it'll move to tests/magic-ast-tests/test-baseline.json post-consolidation.
-    var ratchetBaselinePath = Path.GetFullPath(
-      Path.Combine(basePath, "..", "..", "tools", "test", "magic-ast", "test-baseline.json")
-    );
-
-    // Hand-parsed fixtures also currently live under tools/test/magic-ast; the
-    // aggregation step scans them to set CandidateLine.AlreadyHandParsed.
-    var handParsedFixturesRoot = Path.GetFullPath(
-      Path.Combine(basePath, "..", "..", "tools", "test", "magic-ast", "Data", "HandParsedCards")
-    );
+    // Ratchet baseline and hand-parsed fixtures both live in this project after
+    // the tools/test/magic-ast consolidation. The triage flow's aggregation step
+    // reads the baseline directly to fill in handParsedCoverage, and scans the
+    // fixtures directory to flag candidates as AlreadyHandParsed.
+    var ratchetBaselinePath = Path.Combine(basePath, "test-baseline.json");
+    var handParsedFixturesRoot = Path.Combine(dataPath, "HandParsedCards");
 
     services.AddFlowthru(flowthru =>
     {
