@@ -40,6 +40,22 @@ public sealed record OracleClause
   public IReadOnlyList<OracleClause>? ModalOptions { get; init; }
 
   /// <summary>
+  /// For a saga-preamble clause (the reminder paragraph that starts with
+  /// "(As this Saga enters..."), the chapter clauses that follow it. Each
+  /// chapter clause carries its <see cref="ChapterNumbers"/> (e.g., [1] or
+  /// [1, 2]) and has its "<roman> — " prefix stripped on the body side.
+  /// Null on every non-saga-preamble clause.
+  /// </summary>
+  public IReadOnlyList<OracleClause>? SagaChapters { get; init; }
+
+  /// <summary>
+  /// For a saga chapter body clause, the lore-counter numbers that fire it.
+  /// E.g. <c>[1]</c> for <c>"I — ..."</c>, <c>[1, 2]</c> for <c>"I, II — ..."</c>.
+  /// Null for clauses that aren't saga chapters.
+  /// </summary>
+  public IReadOnlyList<int>? ChapterNumbers { get; init; }
+
+  /// <summary>
   /// For level-up cards, the level range this clause applies to.
   /// </summary>
   public (int Min, int Max)? LevelRange { get; init; }
@@ -71,6 +87,36 @@ public sealed class ClauseSplitter
     for (var i = 0; i < paragraphs.Count; i++)
     {
       var (paragraphText, paragraphStart) = paragraphs[i];
+
+      // Saga preambles (parenthetical "(As this Saga enters..." paragraphs)
+      // may be followed by chapter paragraphs ("I — ...", "I, II — ...").
+      // Consume those greedily into a single saga-preamble clause carrying
+      // the chapters on its SagaChapters field.
+      if (IsSagaPreamble(paragraphText))
+      {
+        var chapterClauses = new List<OracleClause>();
+        var lookahead = i + 1;
+        while (lookahead < paragraphs.Count)
+        {
+          var (chapterText, chapterStart) = paragraphs[lookahead];
+          var parsedChapter = TryParseChapterParagraph(chapterText, chapterStart);
+          if (parsedChapter is null)
+          {
+            break;
+          }
+          chapterClauses.Add(parsedChapter);
+          lookahead++;
+        }
+
+        if (chapterClauses.Count > 0)
+        {
+          clauses.Add(
+            CreateClause(paragraphText, paragraphStart) with { SagaChapters = chapterClauses }
+          );
+          i = lookahead - 1;
+          continue;
+        }
+      }
 
       // Modal headers may be followed by bullet-prefixed option paragraphs.
       // Consume those greedily into a single modal-header clause carrying
@@ -106,6 +152,96 @@ public sealed class ClauseSplitter
   private static bool ContainsBullet(string text) => text.Contains('•');
 
   private static bool IsBulletOption(string text) => text.StartsWith("•");
+
+  /// <summary>
+  /// Saga preamble — the reminder paragraph that introduces the lore-counter
+  /// mechanic. Always wrapped in parentheses; always starts with "As this Saga
+  /// enters". Sometimes follows immediately with "Sacrifice after [Roman]" on
+  /// the same line, or "...and after your draw step, add a lore counter."
+  /// </summary>
+  private static bool IsSagaPreamble(string text) =>
+    text.StartsWith("(As this Saga enters", StringComparison.OrdinalIgnoreCase)
+    || text.StartsWith("(As this saga enters", StringComparison.OrdinalIgnoreCase);
+
+  /// <summary>
+  /// Parses a saga chapter paragraph like <c>"I — Effect."</c> or
+  /// <c>"I, II — Effect."</c> into an OracleClause whose RawText is the body
+  /// (post-em-dash) and whose ChapterNumbers field carries the chapter counts.
+  /// Returns null if the paragraph isn't a chapter header.
+  /// </summary>
+  private OracleClause? TryParseChapterParagraph(string text, int paragraphStart)
+  {
+    // Match: roman numerals (possibly comma-separated) followed by em-dash + body.
+    // Em-dash is U+2014; tolerate hyphen-with-spaces as a fallback.
+    var emDashIndex = text.IndexOf('—');
+    if (emDashIndex < 0)
+    {
+      return null;
+    }
+
+    var prefix = text[..emDashIndex].Trim();
+    var body = text[(emDashIndex + 1)..].TrimStart();
+
+    var numbers = TryParseChapterNumbers(prefix);
+    if (numbers is null || numbers.Count == 0)
+    {
+      return null;
+    }
+
+    var bodyStart = paragraphStart + (text.Length - body.Length);
+    return CreateClause(body, bodyStart) with { ChapterNumbers = numbers };
+  }
+
+  /// <summary>
+  /// Parses chapter prefixes like <c>"I"</c>, <c>"III"</c>, <c>"I, II"</c>,
+  /// <c>"II, III"</c> into a list of lore-counter numbers.
+  /// </summary>
+  private static IReadOnlyList<int>? TryParseChapterNumbers(string prefix)
+  {
+    var parts = prefix.Split(',');
+    var result = new List<int>(parts.Length);
+    foreach (var part in parts)
+    {
+      var trimmed = part.Trim();
+      var value = ParseRoman(trimmed);
+      if (value <= 0)
+      {
+        return null;
+      }
+      result.Add(value);
+    }
+    return result;
+  }
+
+  private static int ParseRoman(string roman)
+  {
+    // Saga chapters realistically run I-V. Wider Roman parsing isn't needed.
+    var values = new Dictionary<char, int>
+    {
+      ['I'] = 1,
+      ['V'] = 5,
+      ['X'] = 10,
+    };
+
+    int total = 0;
+    int previous = 0;
+    foreach (var ch in roman.ToUpperInvariant())
+    {
+      if (!values.TryGetValue(ch, out var current))
+      {
+        return -1;
+      }
+      total += current;
+      if (previous != 0 && previous < current)
+      {
+        // Subtractive notation: IV, IX. Adjust: we counted both, but the
+        // previous should have been negative.
+        total -= 2 * previous;
+      }
+      previous = current;
+    }
+    return total;
+  }
 
   private static string StripBullet(string text)
   {

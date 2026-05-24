@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-24T19:36:25.283646Z",
+  "timestamp": "2026-05-24T19:44:08.7599455Z",
   "testResults": {
     "MalformedParsedCards/MixedValidAndInvalidAbilities": {
       "passed": false
@@ -111,6 +111,9 @@
     },
     "HandParsedCards/CMM/DarettiScrapSavant": {
       "passed": false
+    },
+    "HandParsedCards/TheDeathOfGwenStacy/RoundTrip": {
+      "passed": true
     },
     "OracleLines/M21/BasrisLieutenant/Line1": {
       "passed": false
@@ -364,6 +367,9 @@
     "HandParsedCards/GrizzlyBears/RoundTrip": {
       "passed": true
     },
+    "HandParsedCards/TheDeathOfGwenStacy": {
+      "passed": true
+    },
     "HandParsedCards/RoadOfReturn": {
       "passed": true
     },
@@ -402,6 +408,9 @@
     },
     "HandParsedCards/SLD/DeadpoolTradingCard/RoundTrip": {
       "passed": true
+    },
+    "OracleLines/TheDeathOfGwenStacy/Line1": {
+      "passed": false
     },
     "MalformedParsedCards/CompletelyGarbledAbility": {
       "passed": false

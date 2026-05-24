@@ -112,6 +112,13 @@ public sealed class AbilityClassifier
       return new ClauseClassification { Kind = AbilityKind.Unparsed, Confidence = 1.0 };
     }
 
+    // Saga preamble clauses are pre-grouped by ClauseSplitter — they carry
+    // their chapters on SagaChapters. Route them straight to the saga parser.
+    if (clause.SagaChapters is { Count: > 0 })
+    {
+      return new ClauseClassification { Kind = AbilityKind.Saga, Confidence = 1.0 };
+    }
+
     // Check for ability word pattern: "Word —"
     var abilityWord = TryExtractAbilityWord(clause);
 
