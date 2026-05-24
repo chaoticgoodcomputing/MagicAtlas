@@ -52,6 +52,21 @@ public partial record MastRawScryfallCard
   [SerializedLabel("layout")]
   public string? Layout { get; init; }
 
+  /// <summary>
+  /// Format-legality map. Read by <c>ProjectToCardInputStep</c> to filter the
+  /// corpus to commander-legal cards. Scryfall values: "legal", "not_legal",
+  /// "restricted", "banned".
+  /// </summary>
+  [SerializedLabel("legalities")]
+  public Dictionary<string, string>? Legalities { get; init; }
+
+  /// <summary>
+  /// Game-platform list: "paper", "mtgo", "arena". Used to exclude
+  /// digital-only printings.
+  /// </summary>
+  [SerializedLabel("games")]
+  public List<string>? Games { get; init; }
+
   [SerializedLabel("card_faces")]
   public List<MastRawScryfallCardFace>? CardFaces { get; init; }
 }

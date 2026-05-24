@@ -186,6 +186,8 @@ Confirm the local ratchet is green:
 nx run mast:test
 ```
 
+The ratchet listener will rewrite `tests/magic-ast-tests/test-baseline.json` with your worktree's results — **that's fine and expected**. The orchestrator regenerates the baseline once after merging the whole batch, so don't `git restore` your local baseline update or worry about its timestamp drift. Just commit alongside the rest of your work; if there's a merge conflict on the baseline, the orchestrator handles it.
+
 Commit on the assigned branch. Then emit this manifest as your closing message and stop:
 
 ```markdown
