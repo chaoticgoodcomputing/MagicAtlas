@@ -21,21 +21,27 @@ If you are invoked directly by the user (no orchestrator above you), wear both h
 
 ## Quick start
 
-`[main]` orchestration:
+`[main]` orchestration (two judge gates, one batch):
 
-```bash
-# Read the situation
-cat tests/magic-ast-tests/Data/_08_Reporting/triage-report.json | jq '.topGaps[0:5]'
-cat libs/magic-ast/GLOSSARY.md | less
-# Then spawn N sub-agents via the Agent tool, one per gap.
+```
+Step 0  Rebase + refresh triage
+Step 1  Pick N non-overlapping candidates from topGaps
+Step 1.5  Enrich candidates inline (judge-pass-1) → docs/judgments/briefing-{date}.md
+Step 2  Dispatch N sub-agents (worktrees), each pointed at its briefing section
+Step 3-6 [sub] Hand-parse → Red #1 → Red #2 → green → manifest
+Step 7  Judge-pass-2 (mast-judge sub-agent) → docs/judgments/verdict-{date}.md
+        - PROCEED → continue to Step 8
+        - HALT (BLOCKING verdict) → do not merge, surface to human
+Step 8  Merge → ratchet → glossary → re-run triage → loop
 ```
 
 `[sub]` per-session:
 
 ```bash
-# 1) Read conventions
+# 1) Read conventions + your judge briefing
 cat libs/magic-ast/CONTRIBUTING.md
 cat libs/magic-ast/GLOSSARY.md
+cat docs/judgments/briefing-{date}.md   # your section establishes the rule facts
 # 2) Hand-parse the assigned fixture, then iterate:
 nx run mast:test
 # 3) Close Red #1 (schema), then Red #2 (parser). Re-run between iterations.
@@ -77,22 +83,64 @@ git rebase main
 
 The dispatch mechanism may branch your worktree from a stale ref. If you start writing code against pre-consolidation file paths (`tools/test/magic-ast/...`), or you can't find files the skill or your assignment references, that's the smell — stop and rebase.
 
-### Step 1 — `[main]` Pick gaps and dispatch
+### Step 1 — `[main]` Pick gaps
 
 Read `tests/magic-ast-tests/Data/_08_Reporting/triage-report.json`. Walk `topGaps[]` in rank order. For each gap you want to address this batch:
 
 - Select the cleanest exemplar from `candidateLines[]`: lowest `cleanlinessScore` (P-purity ratio — lower means the assigned pattern dominates this line's failures), shortest `lineLength` as tiebreaker. Skip lines with `alreadyHandParsed: true`.
-- Spawn a sub-agent via the `Agent` tool with `isolation: "worktree"`. The sub-agent prompt **must** include:
-  - The assigned pattern name and `projectedCoverageGain`.
-  - The full chosen candidate-line record (oracle text, source card metadata, cleanliness score, `input` DTO).
-  - A pointer to this skill (`use the mast-tdd-loop skill`) and the memory item names listed above.
-  - The branch name to commit on (e.g., `mast-tdd/{pattern-slug}`).
 
 Choose batch size based on the number of **non-overlapping** patterns. Two gaps that touch the same `relatedPatterns[]` should be serialized across batches, not paralleled, to avoid merge conflicts on the same parser file or trait interface.
 
-After dispatching, wait for every sub-agent to report back before continuing to Step 6.
+### Step 1.5 — `[main]` Enrich candidates with rules context (judge mode = inline)
 
-### Step 2 — `[sub]` Hand-parse the candidate (gold AST, eventual-truth)
+Before dispatching sub-agents, the orchestrator briefs each candidate with authoritative MTG rules context. This is **judge-pass-1 (enrichment)** — but the orchestrator acts as judge here rather than dispatching a sub-agent, because the local state already has the candidate picks and direct file access to the rules data. (Judge-pass-2 in Step 7 IS a separate sub-agent — different cost-benefit.)
+
+Write a single batch briefing to `docs/judgments/briefing-{YYYY-MM-DD}.md` (suffix `-N` if it already exists for today). One section per candidate. **Keep it light** — establish facts, don't prescribe AST shapes. ~200 words per candidate.
+
+For each candidate:
+
+1. Identify the MTG mechanic(s) the oracle line invokes (keyword ability, triggered event, keyword action, effect type, cost type).
+2. Look each mechanic up in `glossary.json` and `rules-structure.json`:
+   ```bash
+   jq '.terms.{Term}' tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json
+   jq '.sections[].subsections[] | select(.number == {N}) | .rules[] | select(.number == "{N.M}")' \
+     tests/atlas-flow-test/Data/_03_Primary/Datasets/rules-structure.json
+   ```
+3. Write a candidate briefing in this shape:
+
+```markdown
+## Candidate {n}: {Card Name} ({pattern})
+
+**Oracle:** "{oracle text of the candidate line}"
+
+### Relevant rules
+- **{Rule number} {Rule title}** — {subrule text or glossary def, ~1-2 sentences quoted from the rules data}
+- {additional rules as needed}
+
+### Anti-patterns
+- {1-3 bullets of specific things the sub-agent should NOT do, grounded in the rules}
+
+### Glossary gaps (if any)
+- {term} — referenced in oracle but missing from glossary.json. {what the sub-agent should do — usually surface in their manifest}
+```
+
+If a candidate's mechanic isn't in `glossary.json` at all (and the term is genuinely MTG-domain, not vernacular), do not dispatch the sub-agent — swap the candidate for a different one or escalate to the human.
+
+The briefing is **informative, not prescriptive**. The judge reports rule facts; the sub-agent owns the AST shape.
+
+### Step 2 — `[main]` Dispatch sub-agents
+
+Now dispatch. Spawn a sub-agent per candidate via the `Agent` tool with `isolation: "worktree"`. The sub-agent prompt **must** include:
+
+- The assigned pattern name and `projectedCoverageGain`.
+- The full chosen candidate-line record (oracle text, source card metadata, cleanliness score, `Input` DTO).
+- A pointer to this skill (`use the mast-tdd-loop skill`) and the memory item names listed above.
+- The branch name to commit on (e.g., `mast-tdd/{pattern-slug}`).
+- A **pointer to the briefing**: `read your section in docs/judgments/briefing-{date}.md — section "## Candidate {n}: {card}"`. By reference, not embedded; the briefing is canonical and the sub-agent can re-read mid-session.
+
+After dispatching, wait for every sub-agent to report back before continuing to Step 7.
+
+### Step 3 — `[sub]` Hand-parse the candidate (gold AST, eventual-truth)
 
 **The hand-parsed JSON is the gold AST — what a fully-implemented parser SHOULD eventually emit for this card.** It is not a snapshot of the current parser's output, and it is not partially populated with `UnparsedAbility` nodes where the parser currently falls short.
 
@@ -104,7 +152,7 @@ This is the single most important rule of the loop. Get it wrong and the TDD dir
 - `Pattern` strings copied from `FallbackParser.InferFailurePattern`.
 
 **Allowed and expected:**
-- AST node shapes that don't yet exist — create them in `libs/magic-ast/AST/` as Red #1 (see Step 3).
+- AST node shapes that don't yet exist — create them in `libs/magic-ast/AST/` as Red #1 (see Step 4).
 - Abilities you can't fully spec — model them as descriptively as you can with existing nodes; use the `OtherHistoryPredicate`-style escape hatches sparingly; surface the design decision in your manifest.
 
 **Card-scope choice.** If the assigned candidate-line lives on a card with multiple complex abilities you can't reasonably gold-model in this session, you have two options:
@@ -148,7 +196,7 @@ Create `tests/magic-ast-tests/Data/HandParsedCards/{Set}/{CardName}.json` contai
 - Model what the oracle text **says**, not what the rules **do**. No turn-state, priority, stack ordering, or layering fields.
 - For optional effect dimensions (duration, "you may" / "if you do", "unless [player] pays [cost]"): use the existing trait interfaces (`IDurativeEffect`, `IOptionalEffect`, `IPreventableEffect`). JSON property names: `Duration`, `IsOptional` / `IfYouDo`, `UnlessClause`.
 
-### Step 3 — `[sub]` Surface Red #1 (schema gap)
+### Step 4 — `[sub]` Surface Red #1 (schema gap)
 
 ```bash
 nx run mast:test
@@ -192,7 +240,7 @@ Action: either
 
 Iterate until Red #1 clears. When the test moves from **errored** to **failed with a diff**, you've reached Red #2.
 
-### Step 4 — `[sub]` Surface Red #2 (parser gap)
+### Step 5 — `[sub]` Surface Red #2 (parser gap)
 
 Red #2 appears as `Parser_ProducesExpectedOutput` failing with a JSON diff between expected and actual ASTs. The parser is producing the wrong thing — typically an `UnparsedAbility` (with a diagnostic) instead of the structured node you authored.
 
@@ -203,7 +251,7 @@ Action: extend the appropriate `IAbilityParser` implementation in `libs/magic-as
 
 Iterate until both `Output_RoundTrip_ProducesIdenticalJson` and `Parser_ProducesExpectedOutput` pass for your fixture.
 
-### Step 5 — `[sub]` Report back
+### Step 6 — `[sub]` Report back
 
 Confirm the local ratchet is green:
 
@@ -233,9 +281,40 @@ Commit on the assigned branch. Then emit this manifest as your closing message a
 
 Do not regenerate `GLOSSARY.md`. Do not re-run triage. Do not touch any file outside your fixture + the AST/parser code you added or modified. The orchestrator owns those.
 
-### Step 6 — `[main]` Merge, validate, regenerate, re-triage
+### Step 7 — `[main]` Judge-pass-2 (rules-accuracy verify)
 
-After every sub-agent in the batch has reported (or bailed):
+Before merging, dispatch a sub-agent that uses the `mast-judge` skill to verify the rules-accuracy of the batch's output. This is the second judge pass — Step 1.5 established what the rules SAY; this one checks whether the sub-agents' work descriptively MATCHES what they said.
+
+Gather the scope: every fixture file and every AST node file touched across all reporting sub-agent branches:
+
+```bash
+# List files touched by any sub-agent branch in this batch
+git diff --name-only main..{branch} | grep -E '(tests/magic-ast-tests/Data/HandParsedCards/.*\.json|libs/magic-ast/AST/.*\.cs)$'
+```
+
+Dispatch the judge:
+
+```
+Agent({
+  description: "MAST judge — verify batch",
+  subagent_type: "claude",
+  # No worktree — judge reads files, no writes to AST source
+  prompt: "Use the mast-judge skill. Mode: verify. Scope: {list of file paths}.
+           Output path: docs/judgments/verdict-{date}.md.
+           After writing the verdict file, return PROCEED or HALT."
+})
+```
+
+Read the judge's closing message:
+
+- **PROCEED**: no BLOCKING verdicts. Continue to Step 8.
+- **HALT**: one or more BLOCKING verdicts. Do not merge. Surface the verdict report to the human along with the offending sub-agent branches — either the human or a follow-up sub-agent fixes the issues, then re-run Step 7. Do not auto-fix; the orchestrator does not have authority to mutate AST source on the judge's behalf.
+
+CONCERN-only verdicts proceed but should be summarized in the batch report (Step 8 substep below).
+
+### Step 8 — `[main]` Merge, validate, regenerate, re-triage
+
+After Step 7 returns PROCEED:
 
 ```bash
 # 1) Merge all reporting sub-agent branches in order.
@@ -254,7 +333,7 @@ nx run magic-ast:glossary
 nx run mast:run
 ```
 
-If step 2 fails, do not continue. Roll the merges back and investigate per the `[main]`-only stop conditions below.
+If substep 2 fails, do not continue. Roll the merges back and investigate per the `[main]`-only stop conditions below.
 
 Produce a batch-level report and decide whether to loop:
 
@@ -263,10 +342,15 @@ Produce a batch-level report and decide whether to loop:
 
 **Sub-agents dispatched:** {n}     **Bailed:** {n}     **Landed:** {n}
 **Branches merged:** {list}
+**Judge briefing:** `docs/judgments/briefing-{date}.md`
+**Judge verdict:** `docs/judgments/verdict-{date}.md` ({n CORRECT} / {n CONCERN} / {n BLOCKING})
 
 ### Cumulative landed
 - AST types: {flat union}
 - Parsers: {flat union}
+
+### Judge CONCERNs to track (if any)
+- {one-line summary per CONCERN, with the verdict file as the cite}
 
 ### Corpus-wide delta (post-triage rerun)
 - Total cards flipped green: {count}
@@ -305,7 +389,8 @@ Conditions:
 
 `[main]`-only conditions:
 
-- Post-merge ratchet (Step 6 substep 2) fails. Two sub-agents' edits conflict semantically even though each was green in isolation. Roll back the merges and either re-dispatch them serially or route to human.
+- Post-merge ratchet (Step 8 substep 2) fails. Two sub-agents' edits conflict semantically even though each was green in isolation. Roll back the merges and either re-dispatch them serially or route to human.
+- Judge-pass-2 returns HALT (one or more BLOCKING verdicts). Do not merge. Surface the verdict report at `docs/judgments/verdict-{date}.md` to the human along with the offending sub-agent branches.
 - Two sub-agents in the same batch claim the same `AbilityKind` for a new parser, or the same discriminator string for a new AST node. Serialize: pick one to land first, then re-dispatch the other against the post-merge tree.
 - Post-batch triage rerun shows fewer total parsing successes than the pre-batch state. Roll back the merges and investigate.
 - A pattern bucket consistently fails to shrink across multiple batches (suggests the bucket is too coarse and needs `FallbackParser.InferFailurePattern` to be refined). File a follow-up issue; that work is out of scope for this skill.
