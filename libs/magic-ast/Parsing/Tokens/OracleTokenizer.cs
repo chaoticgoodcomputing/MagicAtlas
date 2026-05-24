@@ -1,5 +1,6 @@
 namespace MagicAST.Parsing.Tokens;
 
+using MagicAST.Parsing.Tokens.Keywords;
 using Superpower;
 using Superpower.Model;
 using Superpower.Parsers;
@@ -7,42 +8,14 @@ using Superpower.Parsers;
 /// <summary>
 /// Tokenizer for Magic: The Gathering oracle text.
 /// Transforms character streams into token streams for parsing.
+///
+/// Structural keywords are discovered via reflection at startup from classes
+/// decorated with <see cref="StructuralKeywordAttribute"/>. To add a new
+/// keyword, create a new file under <c>Parsing/Tokens/Keywords/</c>; no edits
+/// to this file are required.
 /// </summary>
 public sealed class OracleTokenizer : Tokenizer<OracleToken>
 {
-  /// <summary>
-  /// Structural keywords that get special tokens.
-  /// Matched case-insensitively, longest match first.
-  /// </summary>
-  private static readonly (string Text, OracleToken Token)[] _structuralKeywords =
-  [
-    // Trigger timing (must come before shorter words)
-    ("Whenever", OracleToken.Whenever),
-    ("When", OracleToken.When),
-    ("At", OracleToken.At),
-    // Conditionals
-    ("Instead", OracleToken.Instead),
-    ("Unless", OracleToken.Unless),
-    ("Would", OracleToken.Would),
-    ("If", OracleToken.If),
-    // Modal/Choice
-    ("Choose", OracleToken.Choose),
-    ("Then", OracleToken.Then),
-    ("And", OracleToken.And),
-    ("Or", OracleToken.Or),
-    // References
-    ("Another", OracleToken.Another),
-    ("Target", OracleToken.Target),
-    ("Each", OracleToken.Each),
-    ("This", OracleToken.This),
-    ("That", OracleToken.That),
-    ("Your", OracleToken.Your),
-    ("You", OracleToken.You),
-    ("All", OracleToken.All),
-    ("Any", OracleToken.Any),
-    ("It", OracleToken.It),
-  ];
-
   /// <summary>
   /// Word numbers mapped to their numeric values.
   /// </summary>
@@ -473,13 +446,10 @@ public sealed class OracleTokenizer : Tokenizer<OracleToken>
     var wordSpan = start.Until(position);
     var word = wordSpan.ToStringValue();
 
-    // Check for structural keywords (case-insensitive)
-    foreach (var (text, token) in _structuralKeywords)
+    // Check for structural keywords via the reflection-discovered registry
+    if (StructuralKeywordRegistry.TryGet(word, out var keywordToken))
     {
-      if (string.Equals(word, text, StringComparison.OrdinalIgnoreCase))
-      {
-        return Result.Value(token, start, position);
-      }
+      return Result.Value(keywordToken, start, position);
     }
 
     // Check for word numbers
