@@ -1,18 +1,14 @@
 namespace MagicAST.AST.Abilities;
 
 using System.Text.Json.Serialization;
+using MagicAST.Serialization;
 
 /// <summary>
 /// Base type for all ability nodes in the AST.
 /// Abilities represent the functional components of card text.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "kind")]
-[JsonDerivedType(typeof(SpellAbility), "spell")]
-[JsonDerivedType(typeof(ActivatedAbility), "activated")]
-[JsonDerivedType(typeof(TriggeredAbility), "triggered")]
-[JsonDerivedType(typeof(StaticAbility), "static")]
-[JsonDerivedType(typeof(ModalAbility), "modal")]
-[JsonDerivedType(typeof(UnparsedAbility), "unparsed")]
+[PolymorphicBase("kind")]
+[JsonConverter(typeof(PolymorphicReflectionConverter<Ability>))]
 public abstract record Ability
 {
   /// <summary>

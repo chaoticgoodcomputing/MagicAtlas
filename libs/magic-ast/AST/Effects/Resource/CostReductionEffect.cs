@@ -4,11 +4,13 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Cost reduction effect: reduces the cost to cast this spell.
 /// "This spell costs {X} less to cast..." where X is determined by some condition.
 /// </summary>
+[OracleEffect("costReduction")]
 public sealed record CostReductionEffect : Effect
 {
   /// <summary>

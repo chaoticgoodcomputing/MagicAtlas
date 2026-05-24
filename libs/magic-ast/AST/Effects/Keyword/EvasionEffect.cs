@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Evasion effect: restricts what can block this creature.
@@ -11,6 +12,7 @@ using MagicAST.AST.References;
 /// "This creature can't be blocked except by [filter]"
 /// "This creature can't be blocked as long as [condition]"
 /// </summary>
+[OracleEffect("evasion")]
 public sealed record EvasionEffect : Effect
 {
   /// <summary>

@@ -3,11 +3,13 @@ namespace MagicAST.AST.Abilities;
 using System.Text.Json.Serialization;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Represents an activated ability: "[Cost]: [Effect.] [Instructions]"
 /// Rule 113.3b, Rule 602
 /// </summary>
+[OracleAbility("activated")]
 public sealed record ActivatedAbility : Ability
 {
   [JsonIgnore]

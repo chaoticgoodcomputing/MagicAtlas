@@ -2,11 +2,13 @@ namespace MagicAST.AST.Abilities;
 
 using System.Text.Json.Serialization;
 using MagicAST.Diagnostics;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Represents an ability that could not be fully parsed.
 /// Always contains the raw text and diagnostics explaining the failure.
 /// </summary>
+[OracleAbility("unparsed")]
 public sealed record UnparsedAbility : Ability
 {
   [JsonIgnore]

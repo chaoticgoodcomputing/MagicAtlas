@@ -4,20 +4,13 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization;
 
 /// <summary>
 /// Base type for events that can be replaced.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "eventType")]
-[JsonDerivedType(typeof(TokenCreationEvent), "tokenCreation")]
-[JsonDerivedType(typeof(CounterPlacementEvent), "counterPlacement")]
-[JsonDerivedType(typeof(DamageEvent), "damage")]
-[JsonDerivedType(typeof(DestructionEvent), "destruction")]
-[JsonDerivedType(typeof(DeathEvent), "death")]
-[JsonDerivedType(typeof(ZoneChangeEvent), "zoneChange")]
-[JsonDerivedType(typeof(LifeChangeEvent), "lifeChange")]
-[JsonDerivedType(typeof(UntapEvent), "untap")]
-[JsonDerivedType(typeof(GenericEvent), "generic")]
+[PolymorphicBase("eventType")]
+[JsonConverter(typeof(PolymorphicReflectionConverter<ReplacementEvent>))]
 public abstract record ReplacementEvent
 {
   /// <summary>

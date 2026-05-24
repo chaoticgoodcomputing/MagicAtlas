@@ -4,10 +4,12 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// "deals N damage to [target]"
 /// </summary>
+[OracleEffect("dealDamage")]
 public sealed record DealDamageEffect : Effect
 {
   [JsonPropertyName("amount")]

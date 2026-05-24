@@ -4,11 +4,13 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// A restriction on what can be targeted when casting a spell or activating an ability.
 /// e.g., "You can't choose an untapped creature as this spell's target"
 /// </summary>
+[OracleEffect("targetingRestriction")]
 public sealed record TargetingRestrictionEffect : Effect
 {
   /// <summary>

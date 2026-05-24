@@ -1,11 +1,13 @@
 namespace MagicAST.AST.Abilities;
 
 using System.Text.Json.Serialization;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Represents a modal ability where the player chooses between options.
 /// e.g., "Choose one —", "Choose two —", "Choose one or both —"
 /// </summary>
+[OracleAbility("modal")]
 public sealed record ModalAbility : Ability
 {
   [JsonIgnore]

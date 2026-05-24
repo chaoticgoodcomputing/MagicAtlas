@@ -4,10 +4,12 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// "You may cast [target] without paying its mana cost"
 /// </summary>
+[OracleEffect("castWithoutPaying")]
 public sealed record CastWithoutPayingEffect : Effect
 {
   /// <summary>

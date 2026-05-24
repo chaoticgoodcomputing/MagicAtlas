@@ -3,11 +3,13 @@ namespace MagicAST.AST.Abilities;
 using System.Text.Json.Serialization;
 using MagicAST.AST.Effects;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Represents a static ability: a statement that is simply true.
 /// Rule 113.3d, Rule 604
 /// </summary>
+[OracleAbility("static")]
 public sealed record StaticAbility : Ability
 {
   [JsonIgnore]

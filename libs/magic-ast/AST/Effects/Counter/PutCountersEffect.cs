@@ -4,10 +4,12 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// "put [count] [counter type] counters on [target]"
 /// </summary>
+[OracleEffect("putCounters")]
 public sealed record PutCountersEffect : Effect
 {
   [JsonPropertyName("target")]

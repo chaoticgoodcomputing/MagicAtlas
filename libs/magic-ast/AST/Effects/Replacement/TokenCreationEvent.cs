@@ -4,10 +4,12 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Token creation event: "one or more tokens would be created"
 /// </summary>
+[OracleReplacementEvent("tokenCreation")]
 public sealed record TokenCreationEvent : ReplacementEvent
 {
   /// <summary>

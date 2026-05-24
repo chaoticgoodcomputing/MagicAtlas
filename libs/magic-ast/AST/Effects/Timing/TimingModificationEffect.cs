@@ -4,11 +4,13 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Timing modification effect: changes when spells can be cast or abilities can be activated.
 /// Covers: Flash, "only as a sorcery", "any time you could cast an instant", phase restrictions, etc.
 /// </summary>
+[OracleEffect("timingModification")]
 public sealed record TimingModificationEffect : Effect
 {
   /// <summary>

@@ -4,12 +4,14 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Protection effect: comprehensive immunity from a quality.
 /// "This permanent can't be blocked, targeted, dealt damage, enchanted, or equipped by [quality]."
 /// Rule 702.16
 /// </summary>
+[OracleEffect("protection")]
 public sealed record ProtectionEffect : Effect
 {
   /// <summary>

@@ -4,11 +4,13 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// "[Permanent] doesn't untap during your untap step."
 /// A specific type of replacement effect that's common enough to warrant its own type.
 /// </summary>
+[OracleEffect("doesntUntap")]
 public sealed record DoesntUntapEffect : Effect
 {
   /// <summary>

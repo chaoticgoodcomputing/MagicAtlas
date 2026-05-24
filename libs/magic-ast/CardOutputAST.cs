@@ -3,6 +3,8 @@ namespace MagicAST;
 using System.Text.Json.Serialization;
 using MagicAST.AST;
 using MagicAST.AST.Costs;
+using MagicAST.Serialization;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// The complete output AST for a parsed card.
@@ -111,22 +113,14 @@ public sealed record TypeLineAST
 /// <summary>
 /// A polymorphic card attribute. Different card types have different attributes.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "kind")]
-[JsonDerivedType(typeof(ManaCostAttribute), "manaCost")]
-[JsonDerivedType(typeof(ColorsAttribute), "colors")]
-[JsonDerivedType(typeof(ColorIdentityAttribute), "colorIdentity")]
-[JsonDerivedType(typeof(CreatureStatsAttribute), "creatureStats")]
-[JsonDerivedType(typeof(LoyaltyAttribute), "loyalty")]
-[JsonDerivedType(typeof(DefenseAttribute), "defense")]
-[JsonDerivedType(typeof(AdditionalCostsAttribute), "additionalCosts")]
-[JsonDerivedType(typeof(AlternativeCostsAttribute), "alternativeCosts")]
-[JsonDerivedType(typeof(CostReductionsAttribute), "costReductions")]
-[JsonDerivedType(typeof(LayoutAttribute), "layout")]
+[PolymorphicBase("kind")]
+[JsonConverter(typeof(PolymorphicReflectionConverter<CardAttribute>))]
 public abstract record CardAttribute;
 
 /// <summary>
 /// Mana cost attribute (most non-land cards).
 /// </summary>
+[CardAttributeKind("manaCost")]
 public sealed record ManaCostAttribute : CardAttribute
 {
   [JsonPropertyName("raw")]
@@ -146,6 +140,7 @@ public sealed record ManaCostAttribute : CardAttribute
 /// <summary>
 /// Colors derived from mana cost or color indicator.
 /// </summary>
+[CardAttributeKind("colors")]
 public sealed record ColorsAttribute : CardAttribute
 {
   [JsonPropertyName("colors")]
@@ -155,6 +150,7 @@ public sealed record ColorsAttribute : CardAttribute
 /// <summary>
 /// Color identity (for Commander format).
 /// </summary>
+[CardAttributeKind("colorIdentity")]
 public sealed record ColorIdentityAttribute : CardAttribute
 {
   [JsonPropertyName("colorIdentity")]
@@ -164,6 +160,7 @@ public sealed record ColorIdentityAttribute : CardAttribute
 /// <summary>
 /// Creature power and toughness.
 /// </summary>
+[CardAttributeKind("creatureStats")]
 public sealed record CreatureStatsAttribute : CardAttribute
 {
   [JsonPropertyName("power")]
@@ -176,10 +173,8 @@ public sealed record CreatureStatsAttribute : CardAttribute
 /// <summary>
 /// A power or toughness value that may be fixed, variable, or derived.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "valueType")]
-[JsonDerivedType(typeof(FixedPTValue), "fixed")]
-[JsonDerivedType(typeof(VariablePTValue), "variable")]
-[JsonDerivedType(typeof(DerivedPTValue), "derived")]
+[PolymorphicBase("valueType")]
+[JsonConverter(typeof(PolymorphicReflectionConverter<PowerToughnessValue>))]
 public abstract record PowerToughnessValue
 {
   [JsonPropertyName("raw")]
@@ -189,6 +184,7 @@ public abstract record PowerToughnessValue
 /// <summary>
 /// A fixed numeric power/toughness value.
 /// </summary>
+[PowerToughnessKind("fixed")]
 public sealed record FixedPTValue : PowerToughnessValue
 {
   [JsonPropertyName("value")]
@@ -198,6 +194,7 @@ public sealed record FixedPTValue : PowerToughnessValue
 /// <summary>
 /// A variable power/toughness (just "*").
 /// </summary>
+[PowerToughnessKind("variable")]
 public sealed record VariablePTValue : PowerToughnessValue
 {
   [JsonPropertyName("derivedFrom")]
@@ -208,6 +205,7 @@ public sealed record VariablePTValue : PowerToughnessValue
 /// <summary>
 /// A derived power/toughness like "1+*" or "*+1".
 /// </summary>
+[PowerToughnessKind("derived")]
 public sealed record DerivedPTValue : PowerToughnessValue
 {
   [JsonPropertyName("baseValue")]
@@ -221,6 +219,7 @@ public sealed record DerivedPTValue : PowerToughnessValue
 /// <summary>
 /// Planeswalker starting loyalty.
 /// </summary>
+[CardAttributeKind("loyalty")]
 public sealed record LoyaltyAttribute : CardAttribute
 {
   [JsonPropertyName("raw")]
@@ -237,6 +236,7 @@ public sealed record LoyaltyAttribute : CardAttribute
 /// <summary>
 /// Battle defense value.
 /// </summary>
+[CardAttributeKind("defense")]
 public sealed record DefenseAttribute : CardAttribute
 {
   [JsonPropertyName("defense")]
@@ -246,6 +246,7 @@ public sealed record DefenseAttribute : CardAttribute
 /// <summary>
 /// Additional costs parsed from oracle text.
 /// </summary>
+[CardAttributeKind("additionalCosts")]
 public sealed record AdditionalCostsAttribute : CardAttribute
 {
   [JsonPropertyName("costs")]
@@ -255,6 +256,7 @@ public sealed record AdditionalCostsAttribute : CardAttribute
 /// <summary>
 /// Alternative costs parsed from oracle text.
 /// </summary>
+[CardAttributeKind("alternativeCosts")]
 public sealed record AlternativeCostsAttribute : CardAttribute
 {
   [JsonPropertyName("costs")]
@@ -264,6 +266,7 @@ public sealed record AlternativeCostsAttribute : CardAttribute
 /// <summary>
 /// Cost reductions parsed from oracle text.
 /// </summary>
+[CardAttributeKind("costReductions")]
 public sealed record CostReductionsAttribute : CardAttribute
 {
   [JsonPropertyName("reductions")]
@@ -273,6 +276,7 @@ public sealed record CostReductionsAttribute : CardAttribute
 /// <summary>
 /// Card layout for multi-faced cards.
 /// </summary>
+[CardAttributeKind("layout")]
 public sealed record LayoutAttribute : CardAttribute
 {
   [JsonPropertyName("layout")]

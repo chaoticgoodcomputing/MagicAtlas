@@ -4,10 +4,12 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// "create [count] [token description]"
 /// </summary>
+[OracleEffect("createToken")]
 public sealed record CreateTokenEffect : Effect
 {
   [JsonPropertyName("count")]

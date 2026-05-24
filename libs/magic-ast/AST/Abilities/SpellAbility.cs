@@ -2,11 +2,13 @@ namespace MagicAST.AST.Abilities;
 
 using System.Text.Json.Serialization;
 using MagicAST.AST.Effects;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Represents the effect text of an instant or sorcery spell.
 /// Rule 113.3a: Spell abilities are followed as instructions while resolving.
 /// </summary>
+[OracleAbility("spell")]
 public sealed record SpellAbility : Ability
 {
   [JsonIgnore]

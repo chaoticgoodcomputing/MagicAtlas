@@ -4,11 +4,13 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Exchange a characteristic between two objects.
 /// e.g., "exchange text boxes", "exchange power and toughness", "exchange control"
 /// </summary>
+[OracleEffect("exchangeCharacteristic")]
 public sealed record ExchangeCharacteristicEffect : Effect
 {
   /// <summary>

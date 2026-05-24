@@ -4,11 +4,13 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// "If [event] would [happen], [alternative] instead"
 /// Rule 614
 /// </summary>
+[OracleEffect("replacement")]
 public sealed record ReplacementEffect : Effect
 {
   /// <summary>

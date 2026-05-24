@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Trample effect: excess combat damage can be assigned to the defending player or planeswalker.
@@ -11,6 +12,7 @@ using MagicAST.AST.References;
 /// assign the rest of its damage to the player or planeswalker it's attacking."
 /// Rule 702.19
 /// </summary>
+[OracleEffect("trample")]
 public sealed record TrampleEffect : Effect
 {
   // Trample is a static ability with fixed semantics defined by rule 702.19.

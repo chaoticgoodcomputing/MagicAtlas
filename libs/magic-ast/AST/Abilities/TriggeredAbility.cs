@@ -3,11 +3,13 @@ namespace MagicAST.AST.Abilities;
 using System.Text.Json.Serialization;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Triggers;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Represents a triggered ability: "[When/Whenever/At] [trigger condition], [effect]"
 /// Rule 113.3c, Rule 603
 /// </summary>
+[OracleAbility("triggered")]
 public sealed record TriggeredAbility : Ability
 {
   [JsonIgnore]

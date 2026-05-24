@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Lifelink effect: damage dealt by this source causes its controller to gain that much life.
@@ -11,6 +12,7 @@ using MagicAST.AST.References;
 /// The source's controller (or owner if no controller) gains the life.
 /// Rule 702.15
 /// </summary>
+[OracleEffect("lifelink")]
 public sealed record LifelinkEffect : Effect
 {
   // Lifelink is a static ability with fixed semantics defined by rule 702.15.

@@ -1,22 +1,20 @@
 namespace MagicAST.AST.Quantities;
 
 using System.Text.Json.Serialization;
+using MagicAST.Serialization;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Base type for numeric quantities that may be literal, variable, or derived.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "quantityType")]
-[JsonDerivedType(typeof(LiteralQuantity), "literal")]
-[JsonDerivedType(typeof(VariableQuantity), "variable")]
-[JsonDerivedType(typeof(DerivedQuantity), "derived")]
-[JsonDerivedType(typeof(CountQuantity), "count")]
-[JsonDerivedType(typeof(UpToQuantity), "upTo")]
-[JsonDerivedType(typeof(CalculatedQuantity), "calculated")]
+[PolymorphicBase("quantityType")]
+[JsonConverter(typeof(PolymorphicReflectionConverter<Quantity>))]
 public abstract record Quantity;
 
 /// <summary>
 /// A literal numeric value like 1, 2, 3.
 /// </summary>
+[OracleQuantity("literal")]
 public sealed record LiteralQuantity : Quantity
 {
   /// <summary>
@@ -34,6 +32,7 @@ public sealed record LiteralQuantity : Quantity
 /// <summary>
 /// A variable quantity like X, Y, Z.
 /// </summary>
+[OracleQuantity("variable")]
 public sealed record VariableQuantity : Quantity
 {
   /// <summary>
@@ -51,6 +50,7 @@ public sealed record VariableQuantity : Quantity
 /// A quantity derived from a characteristic of an object.
 /// e.g., "equal to its power", "equal to the number of cards in your hand"
 /// </summary>
+[OracleQuantity("derived")]
 public sealed record DerivedQuantity : Quantity
 {
   /// <summary>
@@ -89,6 +89,7 @@ public enum DerivedKind
 /// A quantity that counts objects matching a filter.
 /// e.g., "the number of creatures you control"
 /// </summary>
+[OracleQuantity("count")]
 public sealed record CountQuantity : Quantity
 {
   /// <summary>
@@ -109,6 +110,7 @@ public sealed record CountQuantity : Quantity
 /// A quantity representing "up to N" choices.
 /// e.g., "discard up to two cards"
 /// </summary>
+[OracleQuantity("upTo")]
 public sealed record UpToQuantity : Quantity
 {
   /// <summary>
@@ -128,6 +130,7 @@ public sealed record UpToQuantity : Quantity
 /// A quantity derived from a calculation or expression.
 /// e.g., "half X rounded down", "twice that many"
 /// </summary>
+[OracleQuantity("calculated")]
 public sealed record CalculatedQuantity : Quantity
 {
   /// <summary>

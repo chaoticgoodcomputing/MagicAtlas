@@ -4,10 +4,12 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// "search your library for [filter]"
 /// </summary>
+[OracleEffect("searchLibrary")]
 public sealed record SearchLibraryEffect : Effect
 {
   [JsonPropertyName("filter")]

@@ -3,27 +3,21 @@ namespace MagicAST.AST.Costs;
 using System.Text.Json.Serialization;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Base type for all costs in Magic.
 /// Costs are what must be paid to cast spells or activate abilities.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "costType")]
-[JsonDerivedType(typeof(ManaCost), "mana")]
-[JsonDerivedType(typeof(TapCost), "tap")]
-[JsonDerivedType(typeof(UntapCost), "untap")]
-[JsonDerivedType(typeof(SacrificeCost), "sacrifice")]
-[JsonDerivedType(typeof(DiscardCost), "discard")]
-[JsonDerivedType(typeof(PayLifeCost), "payLife")]
-[JsonDerivedType(typeof(ExileCost), "exile")]
-[JsonDerivedType(typeof(RemoveCountersCost), "removeCounters")]
-[JsonDerivedType(typeof(TapPermanentsCost), "tapPermanents")]
-[JsonDerivedType(typeof(CompositeCost), "composite")]
+[PolymorphicBase("costType")]
+[JsonConverter(typeof(PolymorphicReflectionConverter<Cost>))]
 public abstract record Cost;
 
 /// <summary>
 /// A mana cost like "{2}{G}{G}" or "{X}{R}".
 /// </summary>
+[OracleCost("mana")]
 public sealed record ManaCost : Cost
 {
   /// <summary>
@@ -36,6 +30,7 @@ public sealed record ManaCost : Cost
 /// <summary>
 /// The tap symbol {T}.
 /// </summary>
+[OracleCost("tap")]
 public sealed record TapCost : Cost
 {
   /// <summary>
@@ -49,6 +44,7 @@ public sealed record TapCost : Cost
 /// <summary>
 /// The untap symbol {Q}.
 /// </summary>
+[OracleCost("untap")]
 public sealed record UntapCost : Cost
 {
   /// <summary>
@@ -62,6 +58,7 @@ public sealed record UntapCost : Cost
 /// <summary>
 /// "Sacrifice a [filter]" or "Sacrifice X [filter]s".
 /// </summary>
+[OracleCost("sacrifice")]
 public sealed record SacrificeCost : Cost
 {
   /// <summary>
@@ -80,6 +77,7 @@ public sealed record SacrificeCost : Cost
 /// <summary>
 /// "Discard a card" or "Discard X cards".
 /// </summary>
+[OracleCost("discard")]
 public sealed record DiscardCost : Cost
 {
   /// <summary>
@@ -98,6 +96,7 @@ public sealed record DiscardCost : Cost
 /// <summary>
 /// "Pay N life".
 /// </summary>
+[OracleCost("payLife")]
 public sealed record PayLifeCost : Cost
 {
   /// <summary>
@@ -110,6 +109,7 @@ public sealed record PayLifeCost : Cost
 /// <summary>
 /// "Exile [filter] from [zone]".
 /// </summary>
+[OracleCost("exile")]
 public sealed record ExileCost : Cost
 {
   /// <summary>
@@ -134,6 +134,7 @@ public sealed record ExileCost : Cost
 /// <summary>
 /// "Remove N counters from [target]".
 /// </summary>
+[OracleCost("removeCounters")]
 public sealed record RemoveCountersCost : Cost
 {
   /// <summary>
@@ -159,6 +160,7 @@ public sealed record RemoveCountersCost : Cost
 /// <summary>
 /// "Tap N untapped [filter]s you control".
 /// </summary>
+[OracleCost("tapPermanents")]
 public sealed record TapPermanentsCost : Cost
 {
   /// <summary>
@@ -178,6 +180,7 @@ public sealed record TapPermanentsCost : Cost
 /// Multiple costs combined with commas.
 /// e.g., "{2}{B}, {T}, Sacrifice a creature"
 /// </summary>
+[OracleCost("composite")]
 public sealed record CompositeCost : Cost
 {
   /// <summary>

@@ -4,10 +4,12 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// "copy [target]" or "create a copy of [target]"
 /// </summary>
+[OracleEffect("copy")]
 public sealed record CopyEffect : Effect
 {
   [JsonPropertyName("target")]

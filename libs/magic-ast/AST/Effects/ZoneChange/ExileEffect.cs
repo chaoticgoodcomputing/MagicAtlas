@@ -4,10 +4,12 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// "exile [target]"
 /// </summary>
+[OracleEffect("exile")]
 public sealed record ExileEffect : Effect
 {
   [JsonPropertyName("target")]
