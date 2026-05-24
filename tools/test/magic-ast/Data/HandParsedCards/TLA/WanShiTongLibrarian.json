@@ -1,87 +1,103 @@
 {
-  "input": {
-    "name": "Wan Shi Tong, Librarian",
-    "manaCost": "{X}{U}{U}",
-    "typeLine": "Legendary Creature — Bird Spirit",
-    "oracleText": "Flash\nFlying, vigilance\nWhen Wan Shi Tong enters, put X +1/+1 counters on him. Then draw half X cards, rounded down.\nWhenever an opponent searches their library, put a +1/+1 counter on Wan Shi Tong and draw a card.",
-    "power": "1",
-    "toughness": "1",
-    "colors": [ "U" ],
-    "colorIdentity": [ "U" ]
+  "Input": {
+    "Name": "Wan Shi Tong, Librarian",
+    "ManaCost": "{X}{U}{U}",
+    "TypeLine": "Legendary Creature \u2014 Bird Spirit",
+    "OracleText": "Flash\nFlying, vigilance\nWhen Wan Shi Tong enters, put X +1/+1 counters on him. Then draw half X cards, rounded down.\nWhenever an opponent searches their library, put a +1/+1 counter on Wan Shi Tong and draw a card.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
-  "output": {
-    "name": "Wan Shi Tong, Librarian",
-    "typeLine": {
-      "raw": "Legendary Creature — Bird Spirit",
-      "supertypes": [ "Legendary" ],
-      "types": [ "Creature" ],
-      "subtypes": [ "Bird", "Spirit" ]
+  "Output": {
+    "Name": "Wan Shi Tong, Librarian",
+    "TypeLine": {
+      "Raw": "Legendary Creature \u2014 Bird Spirit",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Bird",
+        "Spirit"
+      ]
     },
-    "oracle": {
-      "rawText": "Flash\nFlying, vigilance\nWhen Wan Shi Tong enters, put X +1/+1 counters on him. Then draw half X cards, rounded down.\nWhenever an opponent searches their library, put a +1/+1 counter on Wan Shi Tong and draw a card.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "Flash\nFlying, vigilance\nWhen Wan Shi Tong enters, put X +1/+1 counters on him. Then draw half X cards, rounded down.\nWhenever an opponent searches their library, put a +1/+1 counter on Wan Shi Tong and draw a card.",
+      "Abilities": [
         {
-          "kind": "static",
-          "keywordSource": "Flash",
-          "effect": {
-            "effectType": "timingModification",
-            "modification": "Grant",
-            "timing": "Instant"
+          "Kind": "static",
+          "KeywordSource": "Flash",
+          "Effect": {
+            "EffectType": "timingModification",
+            "Modification": "Grant",
+            "Timing": "Instant"
           }
         },
         {
-          "kind": "static",
-          "keywordSource": "Flying",
-          "effect": {
-            "effectType": "evasion",
-            "canBeBlockedBy": {
-              "cardTypes": [ "creature" ],
-              "characteristics": [ "flying", "reach" ]
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effect": {
+            "EffectType": "evasion",
+            "CanBeBlockedBy": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Characteristics": [
+                "flying",
+                "reach"
+              ]
             }
           }
         },
         {
-          "kind": "static",
-          "keywordSource": "Vigilance",
-          "effect": {
-            "effectType": "vigilance"
+          "Kind": "static",
+          "KeywordSource": "Vigilance",
+          "Effect": {
+            "EffectType": "vigilance"
           }
         },
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "When",
-            "event": "Enters"
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters"
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "composite",
-              "effects": [
+              "EffectType": "composite",
+              "Effects": [
                 {
-                  "effectType": "putCounters",
-                  "target": {
-                    "kind": "Self"
+                  "EffectType": "putCounters",
+                  "Target": {
+                    "Kind": "Self"
                   },
-                  "counterType": "+1/+1",
-                  "count": {
-                    "quantityType": "variable",
-                    "name": "X"
+                  "CounterType": "+1/+1",
+                  "Count": {
+                    "QuantityType": "variable",
+                    "Name": "X"
                   }
                 },
                 {
-                  "effectType": "drawCards",
-                  "count": {
-                    "quantityType": "calculated",
-                    "expression": "half X rounded down",
-                    "operation": "half",
-                    "rounding": "down",
-                    "baseQuantity": {
-                      "quantityType": "variable",
-                      "name": "X"
+                  "EffectType": "drawCards",
+                  "Count": {
+                    "QuantityType": "calculated",
+                    "Expression": "half X rounded down",
+                    "Operation": "half",
+                    "Rounding": "down",
+                    "BaseQuantity": {
+                      "QuantityType": "variable",
+                      "Name": "X"
                     }
                   },
-                  "player": {
-                    "kind": "You"
+                  "Player": {
+                    "Kind": "You"
                   }
                 }
               ]
@@ -89,37 +105,37 @@
           ]
         },
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "Whenever",
-            "event": "SearchesLibrary",
-            "filter": {
-              "controller": "Opponent"
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SearchesLibrary",
+            "Filter": {
+              "Controller": "Opponent"
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "composite",
-              "effects": [
+              "EffectType": "composite",
+              "Effects": [
                 {
-                  "effectType": "putCounters",
-                  "target": {
-                    "kind": "Self"
+                  "EffectType": "putCounters",
+                  "Target": {
+                    "Kind": "Self"
                   },
-                  "counterType": "+1/+1",
-                  "count": {
-                    "quantityType": "literal",
-                    "value": 1
+                  "CounterType": "+1/+1",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
                   }
                 },
                 {
-                  "effectType": "drawCards",
-                  "count": {
-                    "quantityType": "literal",
-                    "value": 1
+                  "EffectType": "drawCards",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
                   },
-                  "player": {
-                    "kind": "You"
+                  "Player": {
+                    "Kind": "You"
                   }
                 }
               ]
@@ -128,29 +144,53 @@
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{X}{U}{U}",
-        "symbols": [
-          { "kind": "variable" },
-          { "kind": "colored", "colors": [ "U" ] },
-          { "kind": "colored", "colors": [ "U" ] }
+        "Kind": "manaCost",
+        "Raw": "{X}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
-        "manaValue": 2
+        "ManaValue": 2
       },
       {
-        "kind": "colors",
-        "colors": [ "U" ]
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "U" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "1", "value": 1 },
-        "toughness": { "valueType": "fixed", "raw": "1", "value": 1 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

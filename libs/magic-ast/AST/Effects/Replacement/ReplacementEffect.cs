@@ -17,45 +17,37 @@ public sealed record ReplacementEffect : Effect, IOptionalEffect, IDurativeEffec
   /// <summary>
   /// The structured event being replaced/modified.
   /// </summary>
-  [JsonPropertyName("event")]
   public required ReplacementEvent Event { get; init; }
 
   /// <summary>
   /// Whether the original event still occurs (true for augmentation like Chatterfang,
   /// false for pure replacement like "exile it instead").
   /// </summary>
-  [JsonPropertyName("originalEventOccurs")]
   public bool OriginalEventOccurs { get; init; }
 
   /// <summary>
   /// The effect(s) that happen instead of or in addition to the original event.
   /// </summary>
-  [JsonPropertyName("replacement")]
   public required Effect Replacement { get; init; }
 
   /// <summary>
   /// Optional modifier to the original event (e.g., "twice that many" for Doubling Season).
   /// </summary>
-  [JsonPropertyName("modifier")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ReplacementModifier? Modifier { get; init; }
 
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
-  [JsonPropertyName("isOptional")]
   public bool IsOptional { get; init; }
 
   /// <summary>Optional follow-up effect contingent on the controller choosing to perform this one. (IOptionalEffect)</summary>
-  [JsonPropertyName("ifYouDo")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Effect? IfYouDo { get; init; }
 
   /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonPropertyName("duration")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Duration? Duration { get; init; }
 
   /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonPropertyName("unlessClause")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public UnlessClause? UnlessClause { get; init; }
 }

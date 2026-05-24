@@ -22,7 +22,6 @@ public sealed record EvasionEffect : Effect, IOptionalEffect, IDurativeEffect, I
   /// e.g., for Menace: two or more creatures
   /// Null means "can't be blocked" (unblockable).
   /// </summary>
-  [JsonPropertyName("canBeBlockedBy")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectFilter? CanBeBlockedBy { get; init; }
 
@@ -30,7 +29,6 @@ public sealed record EvasionEffect : Effect, IOptionalEffect, IDurativeEffect, I
   /// Minimum number of creatures required to block (for Menace-style effects).
   /// Null for most evasion abilities.
   /// </summary>
-  [JsonPropertyName("minimumBlockers")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public int? MinimumBlockers { get; init; }
 
@@ -38,26 +36,21 @@ public sealed record EvasionEffect : Effect, IOptionalEffect, IDurativeEffect, I
   /// For landwalk: the condition based on defending player's state.
   /// e.g., "defending player controls a Forest"
   /// </summary>
-  [JsonPropertyName("unblockableCondition")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public EvasionCondition? UnblockableCondition { get; init; }
 
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
-  [JsonPropertyName("isOptional")]
   public bool IsOptional { get; init; }
 
   /// <summary>Optional follow-up effect contingent on the controller choosing to perform this one. (IOptionalEffect)</summary>
-  [JsonPropertyName("ifYouDo")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Effect? IfYouDo { get; init; }
 
   /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonPropertyName("duration")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Duration? Duration { get; init; }
 
   /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonPropertyName("unlessClause")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public UnlessClause? UnlessClause { get; init; }
 }

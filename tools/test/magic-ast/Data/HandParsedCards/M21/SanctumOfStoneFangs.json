@@ -1,76 +1,98 @@
 {
-  "input": {
-    "name": "Sanctum of Stone Fangs",
-    "manaCost": "{1}{B}",
-    "typeLine": "Legendary Enchantment — Shrine",
-    "oracleText": "At the beginning of your first main phase, each opponent loses X life and you gain X life, where X is the number of Shrines you control.",
-    "power": null,
-    "toughness": null,
-    "colors": [ "B" ],
-    "colorIdentity": [ "B" ]
+  "Input": {
+    "Name": "Sanctum of Stone Fangs",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Legendary Enchantment \u2014 Shrine",
+    "OracleText": "At the beginning of your first main phase, each opponent loses X life and you gain X life, where X is the number of Shrines you control.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
-  "output": {
-    "name": "Sanctum of Stone Fangs",
-    "typeLine": {
-      "raw": "Legendary Enchantment — Shrine",
-      "supertypes": [ "Legendary" ],
-      "types": [ "Enchantment" ],
-      "subtypes": [ "Shrine" ]
+  "Output": {
+    "Name": "Sanctum of Stone Fangs",
+    "TypeLine": {
+      "Raw": "Legendary Enchantment \u2014 Shrine",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Shrine"
+      ]
     },
-    "oracle": {
-      "rawText": "At the beginning of your first main phase, each opponent loses X life and you gain X life, where X is the number of Shrines you control.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "At the beginning of your first main phase, each opponent loses X life and you gain X life, where X is the number of Shrines you control.",
+      "Abilities": [
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "At",
-            "event": "BeginningOfPreCombatMainPhase",
-            "filter": {
-              "controller": "You"
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfPreCombatMainPhase",
+            "Filter": {
+              "Controller": "You"
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "loseLife",
-              "amount": {
-                "quantityType": "count",
-                "countOf": "Shrines you control"
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "count",
+                "CountOf": "Shrines you control"
               },
-              "player": {
-                "kind": "EachOpponent"
+              "Player": {
+                "Kind": "EachOpponent"
               }
             },
             {
-              "effectType": "gainLife",
-              "amount": {
-                "quantityType": "count",
-                "countOf": "Shrines you control"
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "count",
+                "CountOf": "Shrines you control"
               },
-              "player": {
-                "kind": "You"
+              "Player": {
+                "Kind": "You"
               }
             }
           ]
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{1}{B}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 1 },
-          { "kind": "colored", "colors": [ "B" ] }
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
-        "manaValue": 2
+        "ManaValue": 2
       },
       {
-        "kind": "colors",
-        "colors": [ "B" ]
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "B" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

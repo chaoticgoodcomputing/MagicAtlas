@@ -10,34 +10,29 @@ public sealed record ManaSymbol
   /// <summary>
   /// The kind of mana symbol.
   /// </summary>
-  [JsonPropertyName("kind")]
   public required ManaSymbolKind Kind { get; init; }
 
   /// <summary>
   /// For colored mana, the color(s).
   /// </summary>
-  [JsonPropertyName("colors")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<ManaColor>? Colors { get; init; }
 
   /// <summary>
   /// For generic mana, the amount. For hybrid mana with generic, the generic portion.
   /// </summary>
-  [JsonPropertyName("genericAmount")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public int? GenericAmount { get; init; }
 
   /// <summary>
   /// True if this is a Phyrexian mana symbol (can be paid with 2 life).
   /// </summary>
-  [JsonPropertyName("isPhyrexian")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
   public bool IsPhyrexian { get; init; }
 
   /// <summary>
   /// True if this is a snow mana symbol {S}.
   /// </summary>
-  [JsonPropertyName("isSnow")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
   public bool IsSnow { get; init; }
 

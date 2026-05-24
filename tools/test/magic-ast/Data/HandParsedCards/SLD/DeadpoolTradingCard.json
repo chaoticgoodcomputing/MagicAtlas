@@ -1,130 +1,178 @@
 {
-  "input": {
-    "name": "Deadpool, Trading Card",
-    "manaCost": "{2}{B}{R}",
-    "typeLine": "Legendary Creature — Mutant Mercenary Hero",
-    "oracleText": "As Deadpool enters, you may exchange his text box and another creature's.\nAt the beginning of your upkeep, you lose 3 life.\n{3}, Sacrifice this creature: Each other player draws a card.",
-    "power": "5",
-    "toughness": "3",
-    "colors": [ "B", "R" ],
-    "colorIdentity": [ "B", "R" ]
+  "Input": {
+    "Name": "Deadpool, Trading Card",
+    "ManaCost": "{2}{B}{R}",
+    "TypeLine": "Legendary Creature \u2014 Mutant Mercenary Hero",
+    "OracleText": "As Deadpool enters, you may exchange his text box and another creature's.\nAt the beginning of your upkeep, you lose 3 life.\n{3}, Sacrifice this creature: Each other player draws a card.",
+    "Power": "5",
+    "Toughness": "3",
+    "Colors": [
+      "B",
+      "R"
+    ],
+    "ColorIdentity": [
+      "B",
+      "R"
+    ]
   },
-  "output": {
-    "name": "Deadpool, Trading Card",
-    "typeLine": {
-      "raw": "Legendary Creature — Mutant Mercenary Hero",
-      "supertypes": [ "Legendary" ],
-      "types": [ "Creature" ],
-      "subtypes": [ "Mutant", "Mercenary", "Hero" ]
+  "Output": {
+    "Name": "Deadpool, Trading Card",
+    "TypeLine": {
+      "Raw": "Legendary Creature \u2014 Mutant Mercenary Hero",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Mutant",
+        "Mercenary",
+        "Hero"
+      ]
     },
-    "oracle": {
-      "rawText": "As Deadpool enters, you may exchange his text box and another creature's.\nAt the beginning of your upkeep, you lose 3 life.\n{3}, Sacrifice this creature: Each other player draws a card.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "As Deadpool enters, you may exchange his text box and another creature's.\nAt the beginning of your upkeep, you lose 3 life.\n{3}, Sacrifice this creature: Each other player draws a card.",
+      "Abilities": [
         {
-          "kind": "static",
-          "effect": {
-            "effectType": "replacement",
-            "event": {
-              "eventType": "zoneChange",
-              "destinationZone": "Battlefield"
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "replacement",
+            "Event": {
+              "EventType": "zoneChange",
+              "DestinationZone": "Battlefield"
             },
-            "originalEventOccurs": true,
-            "replacement": {
-              "effectType": "exchangeCharacteristic",
-              "characteristic": "TextBox",
-              "first": {
-                "kind": "Self"
+            "OriginalEventOccurs": true,
+            "Replacement": {
+              "EffectType": "exchangeCharacteristic",
+              "Characteristic": "TextBox",
+              "First": {
+                "Kind": "Self"
               },
-              "second": {
-                "kind": "Another",
-                "filter": {
-                  "cardTypes": [ "creature" ]
+              "Second": {
+                "Kind": "Another",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
-              "isOptional": true
+              "IsOptional": true
             }
           }
         },
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "At",
-            "event": "BeginningOfUpkeep",
-            "filter": {
-              "controller": "You"
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfUpkeep",
+            "Filter": {
+              "Controller": "You"
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "loseLife",
-              "amount": {
-                "quantityType": "literal",
-                "value": 3
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
               },
-              "player": {
-                "kind": "You"
+              "Player": {
+                "Kind": "You"
               }
             }
           ]
         },
         {
-          "kind": "activated",
-          "costs": [
+          "Kind": "activated",
+          "Costs": [
             {
-              "costType": "mana",
-              "symbols": [
-                { "kind": "generic", "genericAmount": 3 }
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                }
               ]
             },
             {
-              "costType": "sacrifice",
-              "filter": {
-                "cardTypes": [ "creature" ]
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ]
               },
-              "quantity": {
-                "quantityType": "literal",
-                "value": 1
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
               }
             }
           ],
-          "effects": [
+          "Effects": [
             {
-              "effectType": "drawCards",
-              "count": {
-                "quantityType": "literal",
-                "value": 1
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
               },
-              "player": {
-                "kind": "EachOtherPlayer"
+              "Player": {
+                "Kind": "EachOtherPlayer"
               }
             }
           ]
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{2}{B}{R}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 2 },
-          { "kind": "colored", "colors": [ "B" ] },
-          { "kind": "colored", "colors": [ "R" ] }
+        "Kind": "manaCost",
+        "Raw": "{2}{B}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
-        "manaValue": 4
+        "ManaValue": 4
       },
       {
-        "kind": "colors",
-        "colors": [ "B", "R" ]
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "R"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "B", "R" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "R"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "5", "value": 5 },
-        "toughness": { "valueType": "fixed", "raw": "3", "value": 3 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

@@ -57,12 +57,12 @@ public sealed class CardTestCaseLoader
       ?? throw new InvalidOperationException($"Failed to parse JSON from {filePath}");
 
     var inputNode =
-      document["input"]
-      ?? throw new InvalidOperationException($"Missing 'input' property in {filePath}");
+      document["Input"]
+      ?? throw new InvalidOperationException($"Missing 'Input' property in {filePath}");
 
     var outputNode =
-      document["output"]
-      ?? throw new InvalidOperationException($"Missing 'output' property in {filePath}");
+      document["Output"]
+      ?? throw new InvalidOperationException($"Missing 'Output' property in {filePath}");
 
     // Use relative path from data directory as the test name
     var relativePath = Path.GetRelativePath(_testCasesDirectory, filePath);

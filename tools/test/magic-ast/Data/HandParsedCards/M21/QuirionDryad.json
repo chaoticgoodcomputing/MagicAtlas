@@ -1,73 +1,108 @@
 {
-  "input": {
-    "name": "Quirion Dryad",
-    "manaCost": "{1}{G}",
-    "typeLine": "Creature — Dryad",
-    "oracleText": "Whenever you cast a spell that's white, blue, black, or red, put a +1/+1 counter on this creature.",
-    "power": "1",
-    "toughness": "1",
-    "colors": [ "G" ],
-    "colorIdentity": [ "G" ]
+  "Input": {
+    "Name": "Quirion Dryad",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature \u2014 Dryad",
+    "OracleText": "Whenever you cast a spell that's white, blue, black, or red, put a +1/+1 counter on this creature.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
-  "output": {
-    "name": "Quirion Dryad",
-    "typeLine": {
-      "raw": "Creature — Dryad",
-      "types": [ "Creature" ],
-      "subtypes": [ "Dryad" ]
+  "Output": {
+    "Name": "Quirion Dryad",
+    "TypeLine": {
+      "Raw": "Creature \u2014 Dryad",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dryad"
+      ]
     },
-    "oracle": {
-      "rawText": "Whenever you cast a spell that's white, blue, black, or red, put a +1/+1 counter on this creature.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "Whenever you cast a spell that's white, blue, black, or red, put a +1/+1 counter on this creature.",
+      "Abilities": [
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "Whenever",
-            "event": "SpellCast",
-            "filter": {
-              "cardTypes": [ "spell" ],
-              "colors": [ "W", "U", "B", "R" ],
-              "controller": "You"
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell"
+              ],
+              "Colors": [
+                "W",
+                "U",
+                "B",
+                "R"
+              ],
+              "Controller": "You"
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "putCounters",
-              "target": {
-                "kind": "Self"
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
               },
-              "counterType": "+1/+1",
-              "count": {
-                "quantityType": "literal",
-                "value": 1
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
               }
             }
           ]
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{1}{G}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 1 },
-          { "kind": "colored", "colors": [ "G" ] }
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
-        "manaValue": 2
+        "ManaValue": 2
       },
       {
-        "kind": "colors",
-        "colors": [ "G" ]
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "G" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "1", "value": 1 },
-        "toughness": { "valueType": "fixed", "raw": "1", "value": 1 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

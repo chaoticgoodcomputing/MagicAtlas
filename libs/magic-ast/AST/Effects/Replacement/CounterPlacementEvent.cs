@@ -15,7 +15,6 @@ public sealed record CounterPlacementEvent : ReplacementEvent
   /// <summary>
   /// Type of counter (e.g., "+1/+1", "loyalty", or null for any).
   /// </summary>
-  [JsonPropertyName("counterType")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? CounterType { get; init; }
 }

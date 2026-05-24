@@ -1,68 +1,79 @@
 {
-  "input": {
-    "name": "Chandra's Incinerator",
-    "manaCost": "{5}{R}",
-    "typeLine": "Creature — Elemental",
-    "oracleText": "This spell costs {X} less to cast, where X is the total amount of noncombat damage dealt to your opponents this turn.\nTrample\nWhenever a source you control deals noncombat damage to an opponent, this creature deals that much damage to target creature or planeswalker that player controls.",
-    "power": "6",
-    "toughness": "6",
-    "colors": [ "R" ],
-    "colorIdentity": [ "R" ]
+  "Input": {
+    "Name": "Chandra's Incinerator",
+    "ManaCost": "{5}{R}",
+    "TypeLine": "Creature \u2014 Elemental",
+    "OracleText": "This spell costs {X} less to cast, where X is the total amount of noncombat damage dealt to your opponents this turn.\nTrample\nWhenever a source you control deals noncombat damage to an opponent, this creature deals that much damage to target creature or planeswalker that player controls.",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
-  "output": {
-    "name": "Chandra's Incinerator",
-    "typeLine": {
-      "raw": "Creature — Elemental",
-      "supertypes": [ ],
-      "types": [ "Creature" ],
-      "subtypes": [ "Elemental" ]
+  "Output": {
+    "Name": "Chandra's Incinerator",
+    "TypeLine": {
+      "Raw": "Creature \u2014 Elemental",
+      "Supertypes": [],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental"
+      ]
     },
-    "oracle": {
-      "rawText": "This spell costs {X} less to cast, where X is the total amount of noncombat damage dealt to your opponents this turn.\nTrample\nWhenever a source you control deals noncombat damage to an opponent, this creature deals that much damage to target creature or planeswalker that player controls.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "This spell costs {X} less to cast, where X is the total amount of noncombat damage dealt to your opponents this turn.\nTrample\nWhenever a source you control deals noncombat damage to an opponent, this creature deals that much damage to target creature or planeswalker that player controls.",
+      "Abilities": [
         {
-          "kind": "static",
-          "effect": {
-            "effectType": "costReduction",
-            "amount": {
-              "quantityType": "derived",
-              "derivedFrom": "DamageDealt",
-              "source": "noncombat damage dealt to your opponents this turn"
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "costReduction",
+            "Amount": {
+              "QuantityType": "derived",
+              "DerivedFrom": "DamageDealt",
+              "Source": "noncombat damage dealt to your opponents this turn"
             },
-            "basedOn": "noncombat damage dealt to your opponents this turn"
+            "BasedOn": "noncombat damage dealt to your opponents this turn"
           }
         },
         {
-          "kind": "static",
-          "keywordSource": "Trample",
-          "effect": {
-            "effectType": "trample"
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effect": {
+            "EffectType": "trample"
           }
         },
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "Whenever",
-            "event": "NoncombatDamageDealt",
-            "filter": {
-              "controller": "You"
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "NoncombatDamageDealt",
+            "Filter": {
+              "Controller": "You"
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "dealDamage",
-              "amount": {
-                "quantityType": "derived",
-                "derivedFrom": "DamageDealt"
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "DamageDealt"
               },
-              "source": {
-                "kind": "Self"
+              "Source": {
+                "Kind": "Self"
               },
-              "target": {
-                "kind": "Target",
-                "filter": {
-                  "cardTypes": [ "creature", "planeswalker" ],
-                  "controller": "Opponent"
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature",
+                    "planeswalker"
+                  ],
+                  "Controller": "Opponent"
                 }
               }
             }
@@ -70,28 +81,48 @@
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{5}{R}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 5 },
-          { "kind": "colored", "colors": [ "R" ] }
+        "Kind": "manaCost",
+        "Raw": "{5}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
-        "manaValue": 6
+        "ManaValue": 6
       },
       {
-        "kind": "colors",
-        "colors": [ "R" ]
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "R" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "6", "value": 6 },
-        "toughness": { "valueType": "fixed", "raw": "6", "value": 6 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        }
       }
     ]
   }

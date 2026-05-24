@@ -23,7 +23,7 @@ using MagicAST.Serialization;
 /// Base type for all effects in Magic.
 /// Effects are what happens when spells and abilities resolve.
 /// </summary>
-[PolymorphicBase("effectType")]
+[PolymorphicBase("EffectType")]
 [JsonConverter(typeof(PolymorphicReflectionConverter<Effect>))]
 public abstract record Effect;
 
@@ -35,12 +35,10 @@ public sealed record UnlessClause
   /// <summary>
   /// The player who can pay to prevent the effect.
   /// </summary>
-  [JsonPropertyName("player")]
   public required ObjectReference Player { get; init; }
 
   /// <summary>
   /// The cost that can be paid to prevent the effect.
   /// </summary>
-  [JsonPropertyName("cost")]
   public required Cost Cost { get; init; }
 }

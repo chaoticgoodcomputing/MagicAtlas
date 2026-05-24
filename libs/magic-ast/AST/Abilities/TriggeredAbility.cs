@@ -18,34 +18,29 @@ public sealed record TriggeredAbility : Ability
   /// <summary>
   /// The trigger condition that causes this ability to trigger.
   /// </summary>
-  [JsonPropertyName("trigger")]
   public required TriggerCondition Trigger { get; init; }
 
   /// <summary>
   /// Optional "intervening if" clause that must be true for the ability to trigger.
   /// Rule 603.4: "When/Whenever/At [trigger event], if [condition], [effect]."
   /// </summary>
-  [JsonPropertyName("interveningIf")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Condition? InterveningIf { get; init; }
 
   /// <summary>
   /// The effects that occur when this ability resolves.
   /// </summary>
-  [JsonPropertyName("effects")]
   public required IReadOnlyList<Effect> Effects { get; init; }
 
   /// <summary>
   /// Optional instructions or restrictions on the triggered ability.
   /// </summary>
-  [JsonPropertyName("instructions")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? Instructions { get; init; }
 
   /// <summary>
   /// Restrictions on the triggered ability, e.g., "only once each turn".
   /// </summary>
-  [JsonPropertyName("restrictions")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<TriggeredAbilityRestriction>? Restrictions { get; init; }
 }
@@ -75,7 +70,6 @@ public sealed record Condition
   /// <summary>
   /// The raw text of the condition.
   /// </summary>
-  [JsonPropertyName("text")]
   public required string Text { get; init; }
 
   // TODO: Add structured condition representation as parsing matures

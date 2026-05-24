@@ -11,13 +11,11 @@ public sealed record ObjectReference
   /// <summary>
   /// The kind of reference.
   /// </summary>
-  [JsonPropertyName("kind")]
   public required ObjectReferenceKind Kind { get; init; }
 
   /// <summary>
   /// Optional filter describing what objects this refers to.
   /// </summary>
-  [JsonPropertyName("filter")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectFilter? Filter { get; init; }
 

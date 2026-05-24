@@ -7,7 +7,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// <summary>
 /// How long an effect lasts.
 /// </summary>
-[PolymorphicBase("durationType")]
+[PolymorphicBase("DurationType")]
 [JsonConverter(typeof(PolymorphicReflectionConverter<Duration>))]
 public abstract record Duration;
 
@@ -29,7 +29,6 @@ public sealed record UntilYourNextTurnDuration : Duration;
 [OracleDuration("asLongAs")]
 public sealed record AsLongAsDuration : Duration
 {
-  [JsonPropertyName("condition")]
   public required string Condition { get; init; }
 }
 
@@ -45,7 +44,6 @@ public sealed record PermanentDuration : Duration;
 [OracleDuration("untilLeavesBattlefield")]
 public sealed record UntilLeavesBattlefieldDuration : Duration
 {
-  [JsonPropertyName("object")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Object { get; init; }
 }

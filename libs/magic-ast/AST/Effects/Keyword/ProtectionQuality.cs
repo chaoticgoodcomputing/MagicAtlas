@@ -13,14 +13,12 @@ public sealed record ProtectionQuality
   /// <summary>
   /// The kind of quality: color, cardType, subtype, characteristic, or "everything".
   /// </summary>
-  [JsonPropertyName("kind")]
   public required ProtectionQualityKind Kind { get; init; }
 
   /// <summary>
   /// The specific value (e.g., "red", "Demon", "artifact").
   /// Null for kind = "everything".
   /// </summary>
-  [JsonPropertyName("value")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Value { get; init; }
 }

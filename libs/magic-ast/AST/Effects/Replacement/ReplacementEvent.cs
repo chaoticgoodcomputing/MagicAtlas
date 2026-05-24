@@ -9,21 +9,19 @@ using MagicAST.Serialization;
 /// <summary>
 /// Base type for events that can be replaced.
 /// </summary>
-[PolymorphicBase("eventType")]
+[PolymorphicBase("EventType")]
 [JsonConverter(typeof(PolymorphicReflectionConverter<ReplacementEvent>))]
 public abstract record ReplacementEvent
 {
   /// <summary>
   /// Filter for what objects/players this event applies to.
   /// </summary>
-  [JsonPropertyName("affectedObjects")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectFilter? AffectedObjects { get; init; }
 
   /// <summary>
   /// Whose control/ownership this applies to.
   /// </summary>
-  [JsonPropertyName("controller")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectReference? Controller { get; init; }
 }

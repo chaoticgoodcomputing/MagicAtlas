@@ -1,62 +1,98 @@
 {
-  "input": {
-    "name": "Garbled Goblin",
-    "manaCost": "{1}{R}",
-    "typeLine": "Creature — Goblin",
-    "oracleText": "Xyzzy plugh and also qwertyuiop forever.",
-    "power": "2",
-    "toughness": "1",
-    "colors": [ "R" ],
-    "colorIdentity": [ "R" ]
+  "Input": {
+    "Name": "Garbled Goblin",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature \u2014 Goblin",
+    "OracleText": "Xyzzy plugh and also qwertyuiop forever.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
-  "output": {
-    "name": "Garbled Goblin",
-    "typeLine": {
-      "raw": "Creature — Goblin",
-      "types": [ "Creature" ],
-      "subtypes": [ "Goblin" ]
+  "Output": {
+    "Name": "Garbled Goblin",
+    "TypeLine": {
+      "Raw": "Creature \u2014 Goblin",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin"
+      ]
     },
-    "oracle": {
-      "rawText": "Xyzzy plugh and also qwertyuiop forever.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "Xyzzy plugh and also qwertyuiop forever.",
+      "Abilities": [
         {
-          "kind": "unparsed",
-          "sourceSpan": { "start": 0, "length": 41, "end": 41 },
-          "rawText": "Xyzzy plugh and also qwertyuiop forever.",
-          "diagnostics": [
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 41,
+            "End": 41
+          },
+          "RawText": "Xyzzy plugh and also qwertyuiop forever.",
+          "Diagnostics": [
             {
-              "severity": "error",
-              "message": "Unrecognized ability text",
-              "location": { "start": 0, "length": 41, "end": 41 },
-              "pattern": "UnknownAbility"
+              "Severity": "error",
+              "Message": "Unrecognized ability text",
+              "Location": {
+                "Start": 0,
+                "Length": 41,
+                "End": 41
+              },
+              "Pattern": "UnknownAbility"
             }
           ]
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{1}{R}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 1 },
-          { "kind": "colored", "colors": [ "R" ] }
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
-        "manaValue": 2,
-        "isVariable": false
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
-        "kind": "colors",
-        "colors": [ "R" ]
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "R" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
-        "toughness": { "valueType": "fixed", "raw": "1", "value": 1 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

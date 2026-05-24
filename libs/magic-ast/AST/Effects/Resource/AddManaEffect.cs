@@ -13,38 +13,31 @@ using MagicAST.AST.Effects.Traits;
 [OracleEffect("addMana")]
 public sealed record AddManaEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 {
-  [JsonPropertyName("mana")]
   public required string Mana { get; init; }
 
   /// <summary>
   /// For effects like "add one mana of any color"
   /// </summary>
-  [JsonPropertyName("anyColor")]
   public bool AnyColor { get; init; }
 
   /// <summary>
   /// For variable amounts
   /// </summary>
-  [JsonPropertyName("amount")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Quantity? Amount { get; init; }
 
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
-  [JsonPropertyName("isOptional")]
   public bool IsOptional { get; init; }
 
   /// <summary>Optional follow-up effect contingent on the controller choosing to perform this one. (IOptionalEffect)</summary>
-  [JsonPropertyName("ifYouDo")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Effect? IfYouDo { get; init; }
 
   /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonPropertyName("duration")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Duration? Duration { get; init; }
 
   /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonPropertyName("unlessClause")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public UnlessClause? UnlessClause { get; init; }
 }

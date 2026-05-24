@@ -13,13 +13,11 @@ public sealed record EvasionCondition
   /// <summary>
   /// The type of condition check.
   /// </summary>
-  [JsonPropertyName("conditionType")]
   public required EvasionConditionType ConditionType { get; init; }
 
   /// <summary>
   /// For "defendingPlayerControls": what they must control.
   /// </summary>
-  [JsonPropertyName("permanentFilter")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectFilter? PermanentFilter { get; init; }
 }

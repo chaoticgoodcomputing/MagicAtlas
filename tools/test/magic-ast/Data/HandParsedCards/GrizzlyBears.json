@@ -1,48 +1,80 @@
 {
-  "input": {
-    "name": "Grizzly Bears",
-    "manaCost": "{1}{G}",
-    "typeLine": "Creature — Bear",
-    "oracleText": null,
-    "power": "2",
-    "toughness": "2",
-    "colors": [ "G" ],
-    "colorIdentity": [ "G" ]
+  "Input": {
+    "Name": "Grizzly Bears",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature \u2014 Bear",
+    "OracleText": null,
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
-  "output": {
-    "name": "Grizzly Bears",
-    "typeLine": {
-      "raw": "Creature — Bear",
-      "types": [ "Creature" ],
-      "subtypes": [ "Bear" ]
+  "Output": {
+    "Name": "Grizzly Bears",
+    "TypeLine": {
+      "Raw": "Creature \u2014 Bear",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Bear"
+      ]
     },
-    "oracle": {
-      "rawText": "",
-      "abilities": [ ]
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{1}{G}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 1, "isPhyrexian": false, "isSnow": false },
-          { "kind": "colored", "colors": [ "G" ], "isPhyrexian": false, "isSnow": false }
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1,
+            "IsPhyrexian": false,
+            "IsSnow": false
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
         ],
-        "manaValue": 2,
-        "isVariable": false
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
-        "kind": "colors",
-        "colors": [ "G" ]
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "G" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
-        "toughness": { "valueType": "fixed", "raw": "2", "value": 2 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

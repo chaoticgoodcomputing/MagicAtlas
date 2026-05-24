@@ -15,6 +15,5 @@ public sealed record GenericEvent : ReplacementEvent
   /// <summary>
   /// Raw text description of the event.
   /// </summary>
-  [JsonPropertyName("description")]
   public required string Description { get; init; }
 }

@@ -1,67 +1,105 @@
 {
-  "input": {
-    "name": "Broken Blademaster",
-    "manaCost": "{3}{R}{R}",
-    "typeLine": "Creature — Human Warrior",
-    "oracleText": "{T}: $$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
-    "power": "4",
-    "toughness": "2",
-    "colors": [ "R" ],
-    "colorIdentity": [ "R" ]
+  "Input": {
+    "Name": "Broken Blademaster",
+    "ManaCost": "{3}{R}{R}",
+    "TypeLine": "Creature \u2014 Human Warrior",
+    "OracleText": "{T}: $$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
+    "Power": "4",
+    "Toughness": "2",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
-  "output": {
-    "name": "Broken Blademaster",
-    "typeLine": {
-      "raw": "Creature — Human Warrior",
-      "types": [ "Creature" ],
-      "subtypes": [ "Human", "Warrior" ]
+  "Output": {
+    "Name": "Broken Blademaster",
+    "TypeLine": {
+      "Raw": "Creature \u2014 Human Warrior",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Warrior"
+      ]
     },
-    "oracle": {
-      "rawText": "{T}: $$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
-      "abilities": [
+    "Oracle": {
+      "RawText": "{T}: $$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
+      "Abilities": [
         {
-          "kind": "activated",
-          "costs": [
+          "Kind": "activated",
+          "Costs": [
             {
-              "costType": "tap"
+              "CostType": "tap"
             }
           ],
-          "effects": [
+          "Effects": [
             {
-              "effectType": "unparsed",
-              "sourceSpan": { "start": 4, "length": 36, "end": 40 },
-              "rawText": "$$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
-              "isOptional": false
+              "EffectType": "unparsed",
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 36,
+                "End": 40
+              },
+              "RawText": "$$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
+              "IsOptional": false
             }
           ],
-          "isManaAbility": false
+          "IsManaAbility": false
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{3}{R}{R}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 3 },
-          { "kind": "colored", "colors": [ "R" ] },
-          { "kind": "colored", "colors": [ "R" ] }
+        "Kind": "manaCost",
+        "Raw": "{3}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
-        "manaValue": 5,
-        "isVariable": false
+        "ManaValue": 5,
+        "IsVariable": false
       },
       {
-        "kind": "colors",
-        "colors": [ "R" ]
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "R" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "4", "value": 4 },
-        "toughness": { "valueType": "fixed", "raw": "2", "value": 2 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

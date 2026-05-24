@@ -12,19 +12,16 @@ public sealed record TriggerCondition
   /// <summary>
   /// The timing word: When, Whenever, or At.
   /// </summary>
-  [JsonPropertyName("timing")]
   public required TriggerTiming Timing { get; init; }
 
   /// <summary>
   /// The event that causes this to trigger.
   /// </summary>
-  [JsonPropertyName("event")]
   public required TriggerEvent Event { get; init; }
 
   /// <summary>
   /// Optional filter for objects involved in the trigger.
   /// </summary>
-  [JsonPropertyName("filter")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectFilter? Filter { get; init; }
 }

@@ -1,61 +1,70 @@
 {
-  "input": {
-    "name": "Mystic Remora",
-    "manaCost": "{U}",
-    "typeLine": "Enchantment",
-    "oracleText": "Cumulative upkeep {1} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhenever an opponent casts a noncreature spell, you may draw a card unless that player pays {4}.",
-    "power": null,
-    "toughness": null,
-    "colors": [ "U" ],
-    "colorIdentity": [ "U" ]
+  "Input": {
+    "Name": "Mystic Remora",
+    "ManaCost": "{U}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Cumulative upkeep {1} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhenever an opponent casts a noncreature spell, you may draw a card unless that player pays {4}.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
-  "output": {
-    "name": "Mystic Remora",
-    "typeLine": {
-      "raw": "Enchantment",
-      "types": [ "Enchantment" ]
+  "Output": {
+    "Name": "Mystic Remora",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
     },
-    "oracle": {
-      "rawText": "Cumulative upkeep {1} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhenever an opponent casts a noncreature spell, you may draw a card unless that player pays {4}.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "Cumulative upkeep {1} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhenever an opponent casts a noncreature spell, you may draw a card unless that player pays {4}.",
+      "Abilities": [
         {
-          "kind": "triggered",
-          "keywordSource": "Cumulative upkeep",
-          "trigger": {
-            "timing": "At",
-            "event": "BeginningOfUpkeep",
-            "filter": {
-              "controller": "You"
+          "Kind": "triggered",
+          "KeywordSource": "Cumulative upkeep",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfUpkeep",
+            "Filter": {
+              "Controller": "You"
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "composite",
-              "effects": [
+              "EffectType": "composite",
+              "Effects": [
                 {
-                  "effectType": "putCounters",
-                  "target": {
-                    "kind": "Self"
+                  "EffectType": "putCounters",
+                  "Target": {
+                    "Kind": "Self"
                   },
-                  "counterType": "age",
-                  "count": {
-                    "quantityType": "literal",
-                    "value": 1
+                  "CounterType": "age",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
                   }
                 },
                 {
-                  "effectType": "sacrifice",
-                  "target": {
-                    "kind": "Self"
+                  "EffectType": "sacrifice",
+                  "Target": {
+                    "Kind": "Self"
                   },
-                  "unlessClause": {
-                    "player": {
-                      "kind": "You"
+                  "UnlessClause": {
+                    "Player": {
+                      "Kind": "You"
                     },
-                    "cost": {
-                      "costType": "mana",
-                      "symbols": [
-                        { "kind": "generic", "genericAmount": 1 }
+                    "Cost": {
+                      "CostType": "mana",
+                      "Symbols": [
+                        {
+                          "Kind": "generic",
+                          "GenericAmount": 1
+                        }
                       ]
                     }
                   }
@@ -63,37 +72,44 @@
               ]
             }
           ],
-          "instructions": [ "pay its upkeep cost for each age counter on it" ]
+          "Instructions": [
+            "pay its upkeep cost for each age counter on it"
+          ]
         },
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "Whenever",
-            "event": "SpellCast",
-            "filter": {
-              "controller": "Opponent",
-              "characteristics": [ "noncreature" ]
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "Controller": "Opponent",
+              "Characteristics": [
+                "noncreature"
+              ]
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "drawCards",
-              "count": {
-                "quantityType": "literal",
-                "value": 1
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
               },
-              "player": {
-                "kind": "You"
+              "Player": {
+                "Kind": "You"
               },
-              "isOptional": true,
-              "unlessClause": {
-                "player": {
-                  "kind": "ThatPlayer"
+              "IsOptional": true,
+              "UnlessClause": {
+                "Player": {
+                  "Kind": "ThatPlayer"
                 },
-                "cost": {
-                  "costType": "mana",
-                  "symbols": [
-                    { "kind": "generic", "genericAmount": 4 }
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 4
+                    }
                   ]
                 }
               }
@@ -102,22 +118,31 @@
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{U}",
-        "symbols": [
-          { "kind": "colored", "colors": [ "U" ] }
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
-        "manaValue": 1
+        "ManaValue": 1
       },
       {
-        "kind": "colors",
-        "colors": [ "U" ]
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "U" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

@@ -1,75 +1,122 @@
 {
-  "input": {
-    "name": "Partially Parsed Paladin",
-    "manaCost": "{2}{W}{W}",
-    "typeLine": "Creature — Human Knight",
-    "oracleText": "Flying\n@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
-    "power": "3",
-    "toughness": "3",
-    "colors": [ "W" ],
-    "colorIdentity": [ "W" ]
+  "Input": {
+    "Name": "Partially Parsed Paladin",
+    "ManaCost": "{2}{W}{W}",
+    "TypeLine": "Creature \u2014 Human Knight",
+    "OracleText": "Flying\n@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
-  "output": {
-    "name": "Partially Parsed Paladin",
-    "typeLine": {
-      "raw": "Creature — Human Knight",
-      "types": [ "Creature" ],
-      "subtypes": [ "Human", "Knight" ]
+  "Output": {
+    "Name": "Partially Parsed Paladin",
+    "TypeLine": {
+      "Raw": "Creature \u2014 Human Knight",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Knight"
+      ]
     },
-    "oracle": {
-      "rawText": "Flying\n@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "Flying\n@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
+      "Abilities": [
         {
-          "kind": "static",
-          "keywordSource": "Flying",
-          "effect": {
-            "effectType": "evasion",
-            "canBeBlockedBy": {
-              "cardTypes": [ "creature" ],
-              "characteristics": [ "flying", "reach" ]
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effect": {
+            "EffectType": "evasion",
+            "CanBeBlockedBy": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Characteristics": [
+                "flying",
+                "reach"
+              ]
             },
-            "isOptional": false
+            "IsOptional": false
           }
         },
         {
-          "kind": "unparsed",
-          "sourceSpan": { "start": 7, "length": 47, "end": 54 },
-          "rawText": "@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
-          "diagnostics": [
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 47,
+            "End": 54
+          },
+          "RawText": "@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
+          "Diagnostics": [
             {
-              "severity": "error",
-              "message": "Unrecognized ability text",
-              "location": { "start": 7, "length": 47, "end": 54 },
-              "pattern": "UnknownAbility"
+              "Severity": "error",
+              "Message": "Unrecognized ability text",
+              "Location": {
+                "Start": 7,
+                "Length": 47,
+                "End": 54
+              },
+              "Pattern": "UnknownAbility"
             }
           ]
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{2}{W}{W}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 2 },
-          { "kind": "colored", "colors": [ "W" ] },
-          { "kind": "colored", "colors": [ "W" ] }
+        "Kind": "manaCost",
+        "Raw": "{2}{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
-        "manaValue": 4,
-        "isVariable": false
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
-        "kind": "colors",
-        "colors": [ "W" ]
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "W" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "3", "value": 3 },
-        "toughness": { "valueType": "fixed", "raw": "3", "value": 3 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

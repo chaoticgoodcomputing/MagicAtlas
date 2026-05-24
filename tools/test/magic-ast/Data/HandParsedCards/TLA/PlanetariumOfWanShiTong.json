@@ -1,102 +1,114 @@
 {
-  "input": {
-    "name": "Planetarium of Wan Shi Tong",
-    "manaCost": "{6}",
-    "typeLine": "Legendary Artifact",
-    "oracleText": "{1}, {T}: Scry 2.\nWhenever you scry or surveil, look at the top card of your library. You may cast that card without paying its mana cost. Do this only once each turn. (Look at the card after you scry or surveil.)",
-    "power": null,
-    "toughness": null,
-    "colors": [ ],
-    "colorIdentity": [ ]
+  "Input": {
+    "Name": "Planetarium of Wan Shi Tong",
+    "ManaCost": "{6}",
+    "TypeLine": "Legendary Artifact",
+    "OracleText": "{1}, {T}: Scry 2.\nWhenever you scry or surveil, look at the top card of your library. You may cast that card without paying its mana cost. Do this only once each turn. (Look at the card after you scry or surveil.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
   },
-  "output": {
-    "name": "Planetarium of Wan Shi Tong",
-    "typeLine": {
-      "raw": "Legendary Artifact",
-      "supertypes": [ "Legendary" ],
-      "types": [ "Artifact" ]
+  "Output": {
+    "Name": "Planetarium of Wan Shi Tong",
+    "TypeLine": {
+      "Raw": "Legendary Artifact",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Artifact"
+      ]
     },
-    "oracle": {
-      "rawText": "{1}, {T}: Scry 2.\nWhenever you scry or surveil, look at the top card of your library. You may cast that card without paying its mana cost. Do this only once each turn. (Look at the card after you scry or surveil.)",
-      "abilities": [
+    "Oracle": {
+      "RawText": "{1}, {T}: Scry 2.\nWhenever you scry or surveil, look at the top card of your library. You may cast that card without paying its mana cost. Do this only once each turn. (Look at the card after you scry or surveil.)",
+      "Abilities": [
         {
-          "kind": "activated",
-          "costs": [
+          "Kind": "activated",
+          "Costs": [
             {
-              "costType": "mana",
-              "symbols": [
-                { "kind": "generic", "genericAmount": 1 }
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
               ]
             },
             {
-              "costType": "tap"
+              "CostType": "tap"
             }
           ],
-          "effects": [
+          "Effects": [
             {
-              "effectType": "scry",
-              "count": {
-                "quantityType": "literal",
-                "value": 2
+              "EffectType": "scry",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
               }
             }
           ]
         },
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "Whenever",
-            "event": "ScryOrSurveil",
-            "filter": {
-              "controller": "You"
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "ScryOrSurveil",
+            "Filter": {
+              "Controller": "You"
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "composite",
-              "effects": [
+              "EffectType": "composite",
+              "Effects": [
                 {
-                  "effectType": "lookAtCards",
-                  "player": {
-                    "kind": "You"
+                  "EffectType": "lookAtCards",
+                  "Player": {
+                    "Kind": "You"
                   },
-                  "count": {
-                    "quantityType": "literal",
-                    "value": 1
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
                   },
-                  "zone": "Library",
-                  "location": "Top"
+                  "Zone": "Library",
+                  "Location": "Top"
                 },
                 {
-                  "effectType": "castWithoutPaying",
-                  "target": {
-                    "kind": "It"
+                  "EffectType": "castWithoutPaying",
+                  "Target": {
+                    "Kind": "It"
                   },
-                  "isOptional": true
+                  "IsOptional": true
                 }
               ]
             }
           ],
-          "restrictions": [ "OnlyOnceEachTurn" ]
+          "Restrictions": [
+            "OnlyOnceEachTurn"
+          ]
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{6}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 6 }
+        "Kind": "manaCost",
+        "Raw": "{6}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 6
+          }
         ],
-        "manaValue": 6
+        "ManaValue": 6
       },
       {
-        "kind": "colors",
-        "colors": [ ]
+        "Kind": "colors",
+        "Colors": []
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
       }
     ]
   }

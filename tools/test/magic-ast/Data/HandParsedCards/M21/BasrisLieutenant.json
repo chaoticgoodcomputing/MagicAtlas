@@ -1,100 +1,124 @@
 {
-  "input": {
-    "name": "Basri's Lieutenant",
-    "manaCost": "{3}{W}",
-    "typeLine": "Creature — Human Knight",
-    "oracleText": "Vigilance, protection from multicolored\nWhen this creature enters, put a +1/+1 counter on target creature you control.\nWhenever this creature or another creature you control dies, if it had a +1/+1 counter on it, create a 2/2 white Knight creature token with vigilance.",
-    "power": "3",
-    "toughness": "4",
-    "colors": [ "W" ],
-    "colorIdentity": [ "W" ]
+  "Input": {
+    "Name": "Basri's Lieutenant",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Creature \u2014 Human Knight",
+    "OracleText": "Vigilance, protection from multicolored\nWhen this creature enters, put a +1/+1 counter on target creature you control.\nWhenever this creature or another creature you control dies, if it had a +1/+1 counter on it, create a 2/2 white Knight creature token with vigilance.",
+    "Power": "3",
+    "Toughness": "4",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
-  "output": {
-    "name": "Basri's Lieutenant",
-    "typeLine": {
-      "raw": "Creature — Human Knight",
-      "types": [ "Creature" ],
-      "subtypes": [ "Human", "Knight" ]
+  "Output": {
+    "Name": "Basri's Lieutenant",
+    "TypeLine": {
+      "Raw": "Creature \u2014 Human Knight",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Knight"
+      ]
     },
-    "oracle": {
-      "rawText": "Vigilance, protection from multicolored\nWhen this creature enters, put a +1/+1 counter on target creature you control.\nWhenever this creature or another creature you control dies, if it had a +1/+1 counter on it, create a 2/2 white Knight creature token with vigilance.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "Vigilance, protection from multicolored\nWhen this creature enters, put a +1/+1 counter on target creature you control.\nWhenever this creature or another creature you control dies, if it had a +1/+1 counter on it, create a 2/2 white Knight creature token with vigilance.",
+      "Abilities": [
         {
-          "kind": "static",
-          "keywordSource": "Vigilance",
-          "effect": {
-            "effectType": "vigilance"
+          "Kind": "static",
+          "KeywordSource": "Vigilance",
+          "Effect": {
+            "EffectType": "vigilance"
           }
         },
         {
-          "kind": "static",
-          "keywordSource": "Protection",
-          "effect": {
-            "effectType": "protection",
-            "from": [
-              { "kind": "Characteristic", "value": "multicolored" }
+          "Kind": "static",
+          "KeywordSource": "Protection",
+          "Effect": {
+            "EffectType": "protection",
+            "From": [
+              {
+                "Kind": "Characteristic",
+                "Value": "multicolored"
+              }
             ]
           }
         },
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "When",
-            "event": "Enters",
-            "filter": {
-              "cardTypes": [ "creature" ]
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "putCounters",
-              "target": {
-                "kind": "Target",
-                "filter": {
-                  "cardTypes": [ "creature" ],
-                  "controller": "You"
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
                 }
               },
-              "counterType": "+1/+1",
-              "count": {
-                "quantityType": "literal",
-                "value": 1
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
               }
             }
           ]
         },
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "Whenever",
-            "event": "Dies",
-            "filter": {
-              "cardTypes": [ "creature" ],
-              "controller": "You"
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Controller": "You"
             }
           },
-          "interveningIf": {
-            "text": "it had a +1/+1 counter on it"
+          "InterveningIf": {
+            "Text": "it had a +1/+1 counter on it"
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "createToken",
-              "count": {
-                "quantityType": "literal",
-                "value": 1
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
               },
-              "token": {
-                "power": "2",
-                "toughness": "2",
-                "colors": [ "W" ],
-                "types": [ "creature" ],
-                "subtypes": [ "Knight" ],
-                "abilities": [
+              "Token": {
+                "Power": "2",
+                "Toughness": "2",
+                "Colors": [
+                  "W"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Knight"
+                ],
+                "Abilities": [
                   {
-                    "kind": "static",
-                    "keywordSource": "Vigilance",
-                    "effect": {
-                      "effectType": "vigilance"
+                    "Kind": "static",
+                    "KeywordSource": "Vigilance",
+                    "Effect": {
+                      "EffectType": "vigilance"
                     }
                   }
                 ]
@@ -104,28 +128,48 @@
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{3}{W}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 3 },
-          { "kind": "colored", "colors": [ "W" ] }
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
-        "manaValue": 4
+        "ManaValue": 4
       },
       {
-        "kind": "colors",
-        "colors": [ "W" ]
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "W" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "3", "value": 3 },
-        "toughness": { "valueType": "fixed", "raw": "4", "value": 4 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
       }
     ]
   }

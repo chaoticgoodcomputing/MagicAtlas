@@ -1,78 +1,92 @@
 {
-  "input": {
-    "name": "Wilson, Refined Grizzly",
-    "manaCost": "{1}{G}",
-    "typeLine": "Legendary Creature — Bear Warrior",
-    "oracleText": "This spell can't be countered.\nVigilance, reach, trample\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nChoose a Background (You can have a Background as a second commander.)",
-    "power": "2",
-    "toughness": "2",
-    "colors": [ "G" ],
-    "colorIdentity": [ "G" ]
+  "Input": {
+    "Name": "Wilson, Refined Grizzly",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Legendary Creature \u2014 Bear Warrior",
+    "OracleText": "This spell can't be countered.\nVigilance, reach, trample\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nChoose a Background (You can have a Background as a second commander.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
-  "output": {
-    "name": "Wilson, Refined Grizzly",
-    "typeLine": {
-      "raw": "Legendary Creature — Bear Warrior",
-      "supertypes": [ "Legendary" ],
-      "types": [ "Creature" ],
-      "subtypes": [ "Bear", "Warrior" ]
+  "Output": {
+    "Name": "Wilson, Refined Grizzly",
+    "TypeLine": {
+      "Raw": "Legendary Creature \u2014 Bear Warrior",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Bear",
+        "Warrior"
+      ]
     },
-    "oracle": {
-      "rawText": "This spell can't be countered.\nVigilance, reach, trample\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nChoose a Background (You can have a Background as a second commander.)",
-      "abilities": [
+    "Oracle": {
+      "RawText": "This spell can't be countered.\nVigilance, reach, trample\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nChoose a Background (You can have a Background as a second commander.)",
+      "Abilities": [
         {
-          "kind": "spell",
-          "effects": [
+          "Kind": "spell",
+          "Effects": [
             {
-              "effectType": "cantBeCountered"
+              "EffectType": "cantBeCountered"
             }
           ]
         },
         {
-          "kind": "static",
-          "keywordSource": "Vigilance",
-          "effect": {
-            "effectType": "vigilance"
+          "Kind": "static",
+          "KeywordSource": "Vigilance",
+          "Effect": {
+            "EffectType": "vigilance"
           }
         },
         {
-          "kind": "static",
-          "keywordSource": "Reach",
-          "effect": {
-            "effectType": "reach"
+          "Kind": "static",
+          "KeywordSource": "Reach",
+          "Effect": {
+            "EffectType": "reach"
           }
         },
         {
-          "kind": "static",
-          "keywordSource": "Trample",
-          "effect": {
-            "effectType": "trample"
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effect": {
+            "EffectType": "trample"
           }
         },
         {
-          "kind": "triggered",
-          "keywordSource": "Ward",
-          "trigger": {
-            "timing": "Whenever",
-            "event": "BecomesTarget",
-            "filter": {
-              "controller": "Opponent"
+          "Kind": "triggered",
+          "KeywordSource": "Ward",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesTarget",
+            "Filter": {
+              "Controller": "Opponent"
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "counterSpell",
-              "target": {
-                "kind": "It"
+              "EffectType": "counterSpell",
+              "Target": {
+                "Kind": "It"
               },
-              "unlessClause": {
-                "player": {
-                  "kind": "ThatPlayer"
+              "UnlessClause": {
+                "Player": {
+                  "Kind": "ThatPlayer"
                 },
-                "cost": {
-                  "costType": "mana",
-                  "symbols": [
-                    { "kind": "generic", "genericAmount": 2 }
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    }
                   ]
                 }
               }
@@ -80,37 +94,57 @@
           ]
         },
         {
-          "kind": "static",
-          "keywordSource": "Choose a Background",
-          "effect": {
-            "effectType": "partner",
-            "partnerType": "ChooseABackground"
+          "Kind": "static",
+          "KeywordSource": "Choose a Background",
+          "Effect": {
+            "EffectType": "partner",
+            "PartnerType": "ChooseABackground"
           }
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{1}{G}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 1 },
-          { "kind": "colored", "colors": [ "G" ] }
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
-        "manaValue": 2
+        "ManaValue": 2
       },
       {
-        "kind": "colors",
-        "colors": [ "G" ]
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "G" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
-        "toughness": { "valueType": "fixed", "raw": "2", "value": 2 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

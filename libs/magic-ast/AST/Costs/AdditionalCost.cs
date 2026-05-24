@@ -13,28 +13,24 @@ public sealed record AdditionalCost
     /// <summary>
     /// The cost that must be paid.
     /// </summary>
-    [JsonPropertyName("cost")]
     public required Cost Cost { get; init; }
 
     /// <summary>
     /// Whether this additional cost is optional.
     /// e.g., "you may sacrifice a creature"
     /// </summary>
-    [JsonPropertyName("isOptional")]
     public bool IsOptional { get; init; }
 
     /// <summary>
     /// Alternative to the additional cost, if any.
     /// e.g., "reveal a Dinosaur card from your hand or pay {1}"
     /// </summary>
-    [JsonPropertyName("alternative")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Cost? Alternative { get; init; }
 
     /// <summary>
     /// Location in source text.
     /// </summary>
-    [JsonPropertyName("sourceSpan")]
     public required TextSpan SourceSpan { get; init; }
 }
 
@@ -46,20 +42,17 @@ public sealed record AlternativeCost
     /// <summary>
     /// The cost that can be paid instead.
     /// </summary>
-    [JsonPropertyName("cost")]
     public required Cost Cost { get; init; }
 
     /// <summary>
     /// Condition that must be met to use this alternative cost.
     /// </summary>
-    [JsonPropertyName("condition")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Condition { get; init; }
 
     /// <summary>
     /// Location in source text.
     /// </summary>
-    [JsonPropertyName("sourceSpan")]
     public required TextSpan SourceSpan { get; init; }
 }
 
@@ -72,27 +65,23 @@ public sealed record CostReduction
     /// <summary>
     /// The amount of the reduction.
     /// </summary>
-    [JsonPropertyName("amount")]
     public required Quantity Amount { get; init; }
 
     /// <summary>
     /// What the reduction is per.
     /// e.g., "for each creature you control"
     /// </summary>
-    [JsonPropertyName("per")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ObjectFilter? Per { get; init; }
 
     /// <summary>
     /// Condition for the reduction.
     /// </summary>
-    [JsonPropertyName("condition")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Condition { get; init; }
 
     /// <summary>
     /// Location in source text.
     /// </summary>
-    [JsonPropertyName("sourceSpan")]
     public required TextSpan SourceSpan { get; init; }
 }

@@ -18,7 +18,6 @@ public interface IPreventableEffect
   /// The "unless [player] pays [cost]" clause attached to this effect,
   /// or null if no such clause appears in the oracle text.
   /// </summary>
-  [JsonPropertyName("unlessClause")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   UnlessClause? UnlessClause { get; init; }
 }

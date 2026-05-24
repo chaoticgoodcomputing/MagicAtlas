@@ -15,6 +15,5 @@ public sealed record LifeChangeEvent : ReplacementEvent
   /// <summary>
   /// Whether this is life gain or life loss.
   /// </summary>
-  [JsonPropertyName("changeType")]
   public required string ChangeType { get; init; }
 }

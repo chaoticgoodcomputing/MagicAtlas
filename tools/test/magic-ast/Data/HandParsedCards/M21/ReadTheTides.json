@@ -1,60 +1,68 @@
 {
-  "input": {
-    "name": "Read the Tides",
-    "manaCost": "{5}{U}",
-    "typeLine": "Sorcery",
-    "oracleText": "Choose one —\n• Draw three cards.\n• Return up to two target creatures to their owners' hands.",
-    "power": null,
-    "toughness": null,
-    "colors": [ "U" ],
-    "colorIdentity": [ "U" ]
+  "Input": {
+    "Name": "Read the Tides",
+    "ManaCost": "{5}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Choose one \u2014\n\u2022 Draw three cards.\n\u2022 Return up to two target creatures to their owners' hands.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
-  "output": {
-    "name": "Read the Tides",
-    "typeLine": {
-      "raw": "Sorcery",
-      "types": [ "Sorcery" ]
+  "Output": {
+    "Name": "Read the Tides",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
     },
-    "oracle": {
-      "rawText": "Choose one —\n• Draw three cards.\n• Return up to two target creatures to their owners' hands.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "Choose one \u2014\n\u2022 Draw three cards.\n\u2022 Return up to two target creatures to their owners' hands.",
+      "Abilities": [
         {
-          "kind": "modal",
-          "modeSelection": {
-            "minimum": 1,
-            "maximum": 1
+          "Kind": "modal",
+          "ModeSelection": {
+            "Minimum": 1,
+            "Maximum": 1
           },
-          "modes": [
+          "Modes": [
             {
-              "ability": {
-                "kind": "spell",
-                "effects": [
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
                   {
-                    "effectType": "drawCards",
-                    "count": {
-                      "quantityType": "literal",
-                      "value": 3
+                    "EffectType": "drawCards",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 3
                     },
-                    "player": {
-                      "kind": "You"
+                    "Player": {
+                      "Kind": "You"
                     }
                   }
                 ]
               }
             },
             {
-              "ability": {
-                "kind": "spell",
-                "effects": [
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
                   {
-                    "effectType": "returnToHand",
-                    "target": {
-                      "kind": "Target",
-                      "filter": {
-                        "cardTypes": [ "creature" ]
+                    "EffectType": "returnToHand",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": [
+                          "creature"
+                        ]
                       }
                     },
-                    "isOptional": true
+                    "IsOptional": true
                   }
                 ]
               }
@@ -63,23 +71,35 @@
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{5}{U}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 5 },
-          { "kind": "colored", "colors": [ "U" ] }
+        "Kind": "manaCost",
+        "Raw": "{5}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
-        "manaValue": 6
+        "ManaValue": 6
       },
       {
-        "kind": "colors",
-        "colors": [ "U" ]
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "U" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

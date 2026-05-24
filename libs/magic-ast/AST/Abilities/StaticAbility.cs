@@ -18,14 +18,12 @@ public sealed record StaticAbility : Ability
   /// <summary>
   /// The continuous effect this static ability creates.
   /// </summary>
-  [JsonPropertyName("effect")]
   public required Effect Effect { get; init; }
 
   /// <summary>
   /// Optional condition for when this static ability applies.
   /// e.g., "as long as you control a Forest"
   /// </summary>
-  [JsonPropertyName("condition")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Condition? Condition { get; init; }
 
@@ -33,7 +31,6 @@ public sealed record StaticAbility : Ability
   /// Which objects this static ability affects.
   /// Null if it affects the object itself or the game in general.
   /// </summary>
-  [JsonPropertyName("affectedObjects")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectFilter? AffectedObjects { get; init; }
 }

@@ -13,12 +13,10 @@ public sealed record TargetingCondition
   /// <summary>
   /// The characteristic being checked (e.g., "tapped", "attacking").
   /// </summary>
-  [JsonPropertyName("characteristic")]
   public required string Characteristic { get; init; }
 
   /// <summary>
   /// The required value of the characteristic.
   /// </summary>
-  [JsonPropertyName("value")]
   public required bool Value { get; init; }
 }

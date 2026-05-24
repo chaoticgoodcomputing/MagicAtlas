@@ -19,14 +19,12 @@ public interface IOptionalEffect
   /// <summary>
   /// Whether this effect carries a "You may" prefix in oracle text.
   /// </summary>
-  [JsonPropertyName("isOptional")]
   bool IsOptional { get; init; }
 
   /// <summary>
   /// Optional secondary effect that runs "if you do" perform the main
   /// effect. Null when no continuation clause is present.
   /// </summary>
-  [JsonPropertyName("ifYouDo")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   Effect? IfYouDo { get; init; }
 }

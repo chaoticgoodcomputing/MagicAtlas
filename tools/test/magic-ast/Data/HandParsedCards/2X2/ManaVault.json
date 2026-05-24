@@ -1,111 +1,118 @@
 {
-  "input": {
-    "name": "Mana Vault",
-    "manaCost": "{1}",
-    "typeLine": "Artifact",
-    "oracleText": "This artifact doesn't untap during your untap step.\nAt the beginning of your upkeep, you may pay {4}. If you do, untap this artifact.\nAt the beginning of your draw step, if this artifact is tapped, it deals 1 damage to you.\n{T}: Add {C}{C}{C}.",
-    "power": null,
-    "toughness": null,
-    "colors": [ ],
-    "colorIdentity": [ ]
+  "Input": {
+    "Name": "Mana Vault",
+    "ManaCost": "{1}",
+    "TypeLine": "Artifact",
+    "OracleText": "This artifact doesn't untap during your untap step.\nAt the beginning of your upkeep, you may pay {4}. If you do, untap this artifact.\nAt the beginning of your draw step, if this artifact is tapped, it deals 1 damage to you.\n{T}: Add {C}{C}{C}.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
   },
-  "output": {
-    "name": "Mana Vault",
-    "typeLine": {
-      "raw": "Artifact",
-      "types": [ "Artifact" ]
+  "Output": {
+    "Name": "Mana Vault",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
     },
-    "oracle": {
-      "rawText": "This artifact doesn't untap during your untap step.\nAt the beginning of your upkeep, you may pay {4}. If you do, untap this artifact.\nAt the beginning of your draw step, if this artifact is tapped, it deals 1 damage to you.\n{T}: Add {C}{C}{C}.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "This artifact doesn't untap during your untap step.\nAt the beginning of your upkeep, you may pay {4}. If you do, untap this artifact.\nAt the beginning of your draw step, if this artifact is tapped, it deals 1 damage to you.\n{T}: Add {C}{C}{C}.",
+      "Abilities": [
         {
-          "kind": "static",
-          "effect": {
-            "effectType": "doesntUntap",
-            "whoseUntapStep": "your"
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "doesntUntap",
+            "WhoseUntapStep": "your"
           }
         },
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "At",
-            "event": "BeginningOfUpkeep",
-            "filter": {
-              "controller": "You"
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfUpkeep",
+            "Filter": {
+              "Controller": "You"
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "untap",
-              "target": {
-                "kind": "Self"
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Self"
               },
-              "isOptional": true
+              "IsOptional": true
             }
           ],
-          "instructions": [ "you may pay {4}" ]
+          "Instructions": [
+            "you may pay {4}"
+          ]
         },
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "At",
-            "event": "BeginningOfDrawStep",
-            "filter": {
-              "controller": "You"
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfDrawStep",
+            "Filter": {
+              "Controller": "You"
             }
           },
-          "interveningIf": {
-            "text": "this artifact is tapped"
+          "InterveningIf": {
+            "Text": "this artifact is tapped"
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "dealDamage",
-              "amount": {
-                "quantityType": "literal",
-                "value": 1
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
               },
-              "target": {
-                "kind": "You"
+              "Target": {
+                "Kind": "You"
               },
-              "source": {
-                "kind": "Self"
+              "Source": {
+                "Kind": "Self"
               }
             }
           ]
         },
         {
-          "kind": "activated",
-          "costs": [
+          "Kind": "activated",
+          "Costs": [
             {
-              "costType": "tap"
+              "CostType": "tap"
             }
           ],
-          "effects": [
+          "Effects": [
             {
-              "effectType": "addMana",
-              "mana": "{C}{C}{C}"
+              "EffectType": "addMana",
+              "Mana": "{C}{C}{C}"
             }
           ],
-          "isManaAbility": true
+          "IsManaAbility": true
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{1}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 1 }
+        "Kind": "manaCost",
+        "Raw": "{1}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          }
         ],
-        "manaValue": 1
+        "ManaValue": 1
       },
       {
-        "kind": "colors",
-        "colors": [ ]
+        "Kind": "colors",
+        "Colors": []
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
       }
     ]
   }

@@ -13,13 +13,11 @@ public sealed record ReplacementModifier
   /// <summary>
   /// The type of modification: "double", "triple", "plusOne", "plusX", etc.
   /// </summary>
-  [JsonPropertyName("type")]
   public required string Type { get; init; }
 
   /// <summary>
   /// For variable modifiers, the amount.
   /// </summary>
-  [JsonPropertyName("amount")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Quantity? Amount { get; init; }
 }

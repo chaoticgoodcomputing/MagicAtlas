@@ -17,13 +17,11 @@ public sealed record SpellAbility : Ability
   /// <summary>
   /// The effects that occur when this spell resolves.
   /// </summary>
-  [JsonPropertyName("effects")]
   public required IReadOnlyList<Effect> Effects { get; init; }
 
   /// <summary>
   /// Optional instructions that modify how the spell can be cast or resolved.
   /// </summary>
-  [JsonPropertyName("instructions")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? Instructions { get; init; }
 }

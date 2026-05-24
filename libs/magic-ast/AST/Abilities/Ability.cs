@@ -7,7 +7,7 @@ using MagicAST.Serialization;
 /// Base type for all ability nodes in the AST.
 /// Abilities represent the functional components of card text.
 /// </summary>
-[PolymorphicBase("kind")]
+[PolymorphicBase("Kind")]
 [JsonConverter(typeof(PolymorphicReflectionConverter<Ability>))]
 public abstract record Ability
 {
@@ -23,14 +23,12 @@ public abstract record Ability
   /// Ability words have no rules meaning but tie together similar abilities.
   /// Rule 207.2c
   /// </summary>
-  [JsonPropertyName("abilityWord")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? AbilityWord { get; init; }
 
   /// <summary>
   /// If this ability was expanded from a keyword, the keyword name.
   /// </summary>
-  [JsonPropertyName("keywordSource")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? KeywordSource { get; init; }
 
@@ -39,7 +37,6 @@ public abstract record Ability
   /// Rule 207.2: Reminder text has no rules meaning but aids comprehension.
   /// Preserved for round-tripping, display, and educational purposes.
   /// </summary>
-  [JsonPropertyName("reminder")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Parenthetical? Reminder { get; init; }
 }

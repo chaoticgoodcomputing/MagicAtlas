@@ -19,20 +19,17 @@ public sealed record ActivatedAbility : Ability
   /// The costs that must be paid to activate this ability.
   /// Everything before the colon.
   /// </summary>
-  [JsonPropertyName("costs")]
   public required IReadOnlyList<Cost> Costs { get; init; }
 
   /// <summary>
   /// The effects that occur when this ability resolves.
   /// </summary>
-  [JsonPropertyName("effects")]
   public required IReadOnlyList<Effect> Effects { get; init; }
 
   /// <summary>
   /// Restrictions on when/how this ability can be activated.
   /// e.g., "Activate only as a sorcery", "Activate only once each turn"
   /// </summary>
-  [JsonPropertyName("restrictions")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<ActivationRestriction>? Restrictions { get; init; }
 
@@ -40,14 +37,12 @@ public sealed record ActivatedAbility : Ability
   /// True if this is a mana ability (doesn't use the stack).
   /// Rule 605
   /// </summary>
-  [JsonPropertyName("isManaAbility")]
   public bool IsManaAbility { get; init; }
 
   /// <summary>
   /// For loyalty abilities, the loyalty cost (+N, -N, or 0).
   /// Null for non-loyalty abilities.
   /// </summary>
-  [JsonPropertyName("loyaltyCost")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public int? LoyaltyCost { get; init; }
 }

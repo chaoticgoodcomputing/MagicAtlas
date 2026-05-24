@@ -1,90 +1,125 @@
 {
-  "input": {
-    "name": "Hobblefiend",
-    "manaCost": "{1}{R}",
-    "typeLine": "Creature — Devil",
-    "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\n{1}, Sacrifice another creature: Put a +1/+1 counter on this creature.",
-    "power": "2",
-    "toughness": "1",
-    "colors": [ "R" ],
-    "colorIdentity": [ "R" ]
+  "Input": {
+    "Name": "Hobblefiend",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature \u2014 Devil",
+    "OracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\n{1}, Sacrifice another creature: Put a +1/+1 counter on this creature.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
-  "output": {
-    "name": "Hobblefiend",
-    "typeLine": {
-      "raw": "Creature — Devil",
-      "types": [ "Creature" ],
-      "subtypes": [ "Devil" ]
+  "Output": {
+    "Name": "Hobblefiend",
+    "TypeLine": {
+      "Raw": "Creature \u2014 Devil",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Devil"
+      ]
     },
-    "oracle": {
-      "rawText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\n{1}, Sacrifice another creature: Put a +1/+1 counter on this creature.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\n{1}, Sacrifice another creature: Put a +1/+1 counter on this creature.",
+      "Abilities": [
         {
-          "kind": "static",
-          "keywordSource": "Trample",
-          "effect": {
-            "effectType": "trample"
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effect": {
+            "EffectType": "trample"
           }
         },
         {
-          "kind": "activated",
-          "costs": [
+          "Kind": "activated",
+          "Costs": [
             {
-              "costType": "mana",
-              "symbols": [
-                { "kind": "generic", "genericAmount": 1 }
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
               ]
             },
             {
-              "costType": "sacrifice",
-              "filter": {
-                "cardTypes": [ "creature" ],
-                "characteristics": [ "another" ]
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "another"
+                ]
               },
-              "quantity": {
-                "quantityType": "literal",
-                "value": 1
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
               }
             }
           ],
-          "effects": [
+          "Effects": [
             {
-              "effectType": "putCounters",
-              "target": {
-                "kind": "Self"
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
               },
-              "counterType": "+1/+1",
-              "count": {
-                "quantityType": "literal",
-                "value": 1
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
               }
             }
           ]
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{1}{R}",
-        "symbols": [
-          { "kind": "generic", "genericAmount": 1 },
-          { "kind": "colored", "colors": [ "R" ] }
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
-        "manaValue": 2
+        "ManaValue": 2
       },
       {
-        "kind": "colors",
-        "colors": [ "R" ]
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "R" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
-        "toughness": { "valueType": "fixed", "raw": "1", "value": 1 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

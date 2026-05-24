@@ -1,62 +1,92 @@
 {
-  "input": {
-    "name": "Llanowar Elves",
-    "manaCost": "{G}",
-    "typeLine": "Creature — Elf Druid",
-    "oracleText": "{T}: Add {G}.",
-    "power": "1",
-    "toughness": "1",
-    "colors": [ "G" ],
-    "colorIdentity": [ "G" ]
+  "Input": {
+    "Name": "Llanowar Elves",
+    "ManaCost": "{G}",
+    "TypeLine": "Creature \u2014 Elf Druid",
+    "OracleText": "{T}: Add {G}.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
-  "output": {
-    "name": "Llanowar Elves",
-    "typeLine": {
-      "raw": "Creature — Elf Druid",
-      "types": [ "Creature" ],
-      "subtypes": [ "Elf", "Druid" ]
+  "Output": {
+    "Name": "Llanowar Elves",
+    "TypeLine": {
+      "Raw": "Creature \u2014 Elf Druid",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Druid"
+      ]
     },
-    "oracle": {
-      "rawText": "{T}: Add {G}.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "{T}: Add {G}.",
+      "Abilities": [
         {
-          "kind": "activated",
-          "costs": [
-            { "costType": "tap" }
-          ],
-          "effects": [
+          "Kind": "activated",
+          "Costs": [
             {
-              "effectType": "addMana",
-              "mana": "{G}",
-              "anyColor": false
+              "CostType": "tap"
             }
           ],
-          "isManaAbility": true
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{G}",
+              "AnyColor": false
+            }
+          ],
+          "IsManaAbility": true
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{G}",
-        "symbols": [
-          { "kind": "colored", "colors": [ "G" ], "isPhyrexian": false, "isSnow": false }
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
         ],
-        "manaValue": 1,
-        "isVariable": false
+        "ManaValue": 1,
+        "IsVariable": false
       },
       {
-        "kind": "colors",
-        "colors": [ "G" ]
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "G" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "1", "value": 1 },
-        "toughness": { "valueType": "fixed", "raw": "1", "value": 1 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

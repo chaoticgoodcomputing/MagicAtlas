@@ -46,19 +46,19 @@ public sealed class OracleLineTestCaseLoader
   private IEnumerable<OracleLineTestCase> ExtractOracleLines(CardTestCase cardTestCase)
   {
     // Get input oracle text
-    var oracleText = cardTestCase.InputNode["oracleText"]?.GetValue<string>();
+    var oracleText = cardTestCase.InputNode["OracleText"]?.GetValue<string>();
     if (string.IsNullOrWhiteSpace(oracleText))
     {
       yield break;
     }
 
     // Get expected output abilities
-    if (cardTestCase.OutputNode["oracle"] is not JsonObject outputOracle)
+    if (cardTestCase.OutputNode["Oracle"] is not JsonObject outputOracle)
     {
       yield break;
     }
 
-    if (outputOracle["abilities"] is not JsonArray abilities || abilities.Count == 0)
+    if (outputOracle["Abilities"] is not JsonArray abilities || abilities.Count == 0)
     {
       yield break;
     }

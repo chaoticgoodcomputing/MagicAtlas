@@ -17,7 +17,6 @@ public interface IDurativeEffect
   /// The duration clause associated with this effect, or null if none
   /// is declared in the oracle text.
   /// </summary>
-  [JsonPropertyName("duration")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   Duration? Duration { get; init; }
 }

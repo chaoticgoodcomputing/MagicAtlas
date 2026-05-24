@@ -1,132 +1,192 @@
 {
-  "input": {
-    "name": "Niambi, Esteemed Speaker",
-    "manaCost": "{W}{U}",
-    "typeLine": "Legendary Creature — Human Cleric",
-    "oracleText": "Flash\nWhen Niambi enters, you may return another target creature you control to its owner's hand. If you do, you gain life equal to that creature's mana value.\n{1}{W}{U}, {T}, Discard a legendary card: Draw two cards.",
-    "power": "2",
-    "toughness": "1",
-    "colors": [ "U", "W" ],
-    "colorIdentity": [ "U", "W" ]
+  "Input": {
+    "Name": "Niambi, Esteemed Speaker",
+    "ManaCost": "{W}{U}",
+    "TypeLine": "Legendary Creature \u2014 Human Cleric",
+    "OracleText": "Flash\nWhen Niambi enters, you may return another target creature you control to its owner's hand. If you do, you gain life equal to that creature's mana value.\n{1}{W}{U}, {T}, Discard a legendary card: Draw two cards.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "U",
+      "W"
+    ],
+    "ColorIdentity": [
+      "U",
+      "W"
+    ]
   },
-  "output": {
-    "name": "Niambi, Esteemed Speaker",
-    "typeLine": {
-      "raw": "Legendary Creature — Human Cleric",
-      "supertypes": [ "Legendary" ],
-      "types": [ "Creature" ],
-      "subtypes": [ "Human", "Cleric" ]
+  "Output": {
+    "Name": "Niambi, Esteemed Speaker",
+    "TypeLine": {
+      "Raw": "Legendary Creature \u2014 Human Cleric",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
     },
-    "oracle": {
-      "rawText": "Flash\nWhen Niambi enters, you may return another target creature you control to its owner's hand. If you do, you gain life equal to that creature's mana value.\n{1}{W}{U}, {T}, Discard a legendary card: Draw two cards.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "Flash\nWhen Niambi enters, you may return another target creature you control to its owner's hand. If you do, you gain life equal to that creature's mana value.\n{1}{W}{U}, {T}, Discard a legendary card: Draw two cards.",
+      "Abilities": [
         {
-          "kind": "static",
-          "keywordSource": "Flash",
-          "effect": {
-            "effectType": "timingModification",
-            "modification": "Grant",
-            "timing": "Instant"
+          "Kind": "static",
+          "KeywordSource": "Flash",
+          "Effect": {
+            "EffectType": "timingModification",
+            "Modification": "Grant",
+            "Timing": "Instant"
           }
         },
         {
-          "kind": "triggered",
-          "trigger": {
-            "timing": "When",
-            "event": "Enters",
-            "filter": {
-              "cardTypes": [ "creature" ]
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
-          "effects": [
+          "Effects": [
             {
-              "effectType": "returnToHand",
-              "target": {
-                "kind": "Target",
-                "filter": {
-                  "cardTypes": [ "creature" ],
-                  "controller": "You",
-                  "characteristics": [ "another" ]
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You",
+                  "Characteristics": [
+                    "another"
+                  ]
                 }
               },
-              "isOptional": true,
-              "ifYouDo": {
-                "effectType": "gainLife",
-                "amount": {
-                  "quantityType": "derived",
-                  "derivedFrom": "ManaValue",
-                  "source": "that creature"
+              "IsOptional": true,
+              "IfYouDo": {
+                "EffectType": "gainLife",
+                "Amount": {
+                  "QuantityType": "derived",
+                  "DerivedFrom": "ManaValue",
+                  "Source": "that creature"
                 },
-                "player": {
-                  "kind": "You"
+                "Player": {
+                  "Kind": "You"
                 }
               }
             }
           ]
         },
         {
-          "kind": "activated",
-          "costs": [
+          "Kind": "activated",
+          "Costs": [
             {
-              "costType": "mana",
-              "symbols": [
-                { "kind": "generic", "genericAmount": 1 },
-                { "kind": "colored", "colors": [ "W" ] },
-                { "kind": "colored", "colors": [ "U" ] }
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
               ]
             },
             {
-              "costType": "tap"
+              "CostType": "tap"
             },
             {
-              "costType": "discard",
-              "filter": {
-                "supertypes": [ "Legendary" ],
-                "cardTypes": [ "card" ]
+              "CostType": "discard",
+              "Filter": {
+                "Supertypes": [
+                  "Legendary"
+                ],
+                "CardTypes": [
+                  "card"
+                ]
               },
-              "quantity": {
-                "quantityType": "literal",
-                "value": 1
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
               }
             }
           ],
-          "effects": [
+          "Effects": [
             {
-              "effectType": "drawCards",
-              "count": {
-                "quantityType": "literal",
-                "value": 2
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
               },
-              "player": {
-                "kind": "You"
+              "Player": {
+                "Kind": "You"
               }
             }
           ]
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{W}{U}",
-        "symbols": [
-          { "kind": "colored", "colors": [ "W" ] },
-          { "kind": "colored", "colors": [ "U" ] }
+        "Kind": "manaCost",
+        "Raw": "{W}{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
-        "manaValue": 2
+        "ManaValue": 2
       },
       {
-        "kind": "colors",
-        "colors": [ "U", "W" ]
+        "Kind": "colors",
+        "Colors": [
+          "U",
+          "W"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "U", "W" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "W"
+        ]
       },
       {
-        "kind": "creatureStats",
-        "power": { "valueType": "fixed", "raw": "2", "value": 2 },
-        "toughness": { "valueType": "fixed", "raw": "1", "value": 1 }
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

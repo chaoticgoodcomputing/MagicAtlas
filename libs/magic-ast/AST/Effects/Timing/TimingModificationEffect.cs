@@ -17,27 +17,23 @@ public sealed record TimingModificationEffect : Effect, IOptionalEffect, IDurati
   /// <summary>
   /// Whether this grants expanded timing or restricts timing.
   /// </summary>
-  [JsonPropertyName("modification")]
   public required TimingModificationType Modification { get; init; }
 
   /// <summary>
   /// The timing being granted or restricted to.
   /// </summary>
-  [JsonPropertyName("timing")]
   public required TimingWindow Timing { get; init; }
 
   /// <summary>
   /// For phase-specific restrictions, which phase.
   /// e.g., "upkeep", "combat", "end step"
   /// </summary>
-  [JsonPropertyName("phase")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Phase { get; init; }
 
   /// <summary>
   /// Whose turn this applies to: "yours", "any", "opponents".
   /// </summary>
-  [JsonPropertyName("whoseTurn")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? WhoseTurn { get; init; }
 
@@ -45,7 +41,6 @@ public sealed record TimingModificationEffect : Effect, IOptionalEffect, IDurati
   /// If this grants timing to other abilities (like Leonin Shikari granting instant-speed equip),
   /// this filter describes which abilities are affected.
   /// </summary>
-  [JsonPropertyName("appliesTo")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectFilter? AppliesTo { get; init; }
 
@@ -53,7 +48,6 @@ public sealed record TimingModificationEffect : Effect, IOptionalEffect, IDurati
   /// Condition that must be met for the timing modification.
   /// e.g., "as long as The Wandering Emperor entered this turn"
   /// </summary>
-  [JsonPropertyName("condition")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Condition { get; init; }
 
@@ -61,26 +55,21 @@ public sealed record TimingModificationEffect : Effect, IOptionalEffect, IDurati
   /// Consequence if the modified timing is used.
   /// e.g., Armor of Thorns: "sacrifice it at the beginning of the next cleanup step"
   /// </summary>
-  [JsonPropertyName("consequence")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Effect? Consequence { get; init; }
 
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
-  [JsonPropertyName("isOptional")]
   public bool IsOptional { get; init; }
 
   /// <summary>Optional follow-up effect contingent on the controller choosing to perform this one. (IOptionalEffect)</summary>
-  [JsonPropertyName("ifYouDo")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Effect? IfYouDo { get; init; }
 
   /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonPropertyName("duration")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Duration? Duration { get; init; }
 
   /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonPropertyName("unlessClause")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public UnlessClause? UnlessClause { get; init; }
 }

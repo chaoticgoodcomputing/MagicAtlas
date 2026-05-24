@@ -1,87 +1,108 @@
 {
-  "input": {
-    "name": "Rookie Mistake",
-    "manaCost": "{U}",
-    "typeLine": "Instant",
-    "oracleText": "Until end of turn, target creature gets +0/+2 and another target creature gets -2/-0.",
-    "power": null,
-    "toughness": null,
-    "colors": [ "U" ],
-    "colorIdentity": [ "U" ]
+  "Input": {
+    "Name": "Rookie Mistake",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Until end of turn, target creature gets +0/+2 and another target creature gets -2/-0.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
-  "output": {
-    "name": "Rookie Mistake",
-    "typeLine": {
-      "raw": "Instant",
-      "types": [ "Instant" ]
+  "Output": {
+    "Name": "Rookie Mistake",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
     },
-    "oracle": {
-      "rawText": "Until end of turn, target creature gets +0/+2 and another target creature gets -2/-0.",
-      "abilities": [
+    "Oracle": {
+      "RawText": "Until end of turn, target creature gets +0/+2 and another target creature gets -2/-0.",
+      "Abilities": [
         {
-          "kind": "spell",
-          "effects": [
+          "Kind": "spell",
+          "Effects": [
             {
-              "effectType": "modifyPT",
-              "target": {
-                "kind": "Target",
-                "filter": {
-                  "cardTypes": [ "creature" ]
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
-              "powerModifier": {
-                "quantityType": "literal",
-                "value": 0
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 0
               },
-              "toughnessModifier": {
-                "quantityType": "literal",
-                "value": 2
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
               },
-              "duration": {
-                "durationType": "untilEndOfTurn"
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
               }
             },
             {
-              "effectType": "modifyPT",
-              "target": {
-                "kind": "Target",
-                "filter": {
-                  "cardTypes": [ "creature" ],
-                  "characteristics": [ "another" ]
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Characteristics": [
+                    "another"
+                  ]
                 }
               },
-              "powerModifier": {
-                "quantityType": "literal",
-                "value": -2
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": -2
               },
-              "toughnessModifier": {
-                "quantityType": "literal",
-                "value": 0
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
               },
-              "duration": {
-                "durationType": "untilEndOfTurn"
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
               }
             }
           ]
         }
       ]
     },
-    "attributes": [
+    "Attributes": [
       {
-        "kind": "manaCost",
-        "raw": "{U}",
-        "symbols": [
-          { "kind": "colored", "colors": [ "U" ] }
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
-        "manaValue": 1
+        "ManaValue": 1
       },
       {
-        "kind": "colors",
-        "colors": [ "U" ]
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
       },
       {
-        "kind": "colorIdentity",
-        "colorIdentity": [ "U" ]
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }
