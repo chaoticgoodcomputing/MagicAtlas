@@ -169,6 +169,22 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Storm" keyword.
+  /// Pattern: "Storm" [reminder]
+  /// Rule 702.40
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Storm = (
+    from keyword in Keyword("Storm")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Storm",
+      Effect = new StormEffect(),
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -360,6 +376,7 @@ public static class OracleParsers
     .Or(Lifelink)
     .Or(Reach)
     .Or(Flash)
+    .Or(Storm)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)

@@ -127,6 +127,35 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // SPELL-CAST TRIGGERED KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Storm: When you cast this spell, copy it for each other spell that was cast
+  /// before it this turn. You may choose new targets for the copies.
+  /// Rule 702.40
+  /// </summary>
+  /// <remarks>
+  /// Storm is rules-defined as a triggered ability. By the codebase convention
+  /// of attaching keyword expansions to <see cref="StaticAbility"/> with
+  /// KeywordSource set (mirroring Lifelink, Vigilance, etc.), the triggered
+  /// semantics live in the rules engine, not the AST.
+  /// </remarks>
+  public static KeywordDefinition Storm { get; } =
+    new()
+    {
+      Name = "Storm",
+      RuleReference = "702.40",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Storm",
+        Effect = new StormEffect(),
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // PROTECTION KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -164,6 +193,7 @@ public static class KeywordDefinitions
       DoubleStrike,
       Lifelink,
       Vigilance,
+      Storm,
       Protection,
       // More keywords can be added here as needed
     ];
