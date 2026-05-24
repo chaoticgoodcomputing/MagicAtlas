@@ -5,6 +5,7 @@ using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Damage;
 using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 
 /// <summary>
@@ -151,6 +152,35 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // VEHICLE KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Crew N: Tap any number of other untapped creatures you control with total
+  /// power N or more — this Vehicle becomes an artifact creature until end of turn.
+  /// Rule 702.122. Category is Activated because the comp-rules expansion is an
+  /// activated ability, but the oracle-text shorthand reads as a keyword
+  /// followed by a numeric parameter.
+  /// </summary>
+  public static KeywordDefinition Crew { get; } =
+    new()
+    {
+      Name = "Crew",
+      RuleReference = "702.122",
+      Category = KeywordCategory.Activated,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Crew",
+        Effect = new CrewEffect
+        {
+          Power = new LiteralQuantity { Value = ParseCrewPower(parameter) },
+        },
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -165,8 +195,27 @@ public static class KeywordDefinitions
       Lifelink,
       Vigilance,
       Protection,
+      Crew,
       // More keywords can be added here as needed
     ];
+
+  private static int ParseCrewPower(string? parameter)
+  {
+    if (string.IsNullOrWhiteSpace(parameter))
+    {
+      throw new ArgumentException("Crew requires a numeric parameter.", nameof(parameter));
+    }
+
+    if (!int.TryParse(parameter.Trim(), out var value))
+    {
+      throw new ArgumentException(
+        $"Crew parameter must be an integer, got '{parameter}'.",
+        nameof(parameter)
+      );
+    }
+
+    return value;
+  }
 
   /// <summary>
   /// Parses a protection parameter string into structured qualities.

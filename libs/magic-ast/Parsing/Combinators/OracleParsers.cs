@@ -8,6 +8,7 @@ using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Damage;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Timing;
+using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 using MagicAST.Parsing.Tokens;
 using Superpower;
@@ -344,6 +345,27 @@ public static class OracleParsers
       return new ProtectionQuality { Kind = ProtectionQualityKind.Subtype, Value = value };
     });
 
+  /// <summary>
+  /// Parser for "Crew N" keyword.
+  /// Pattern: "Crew" number [reminder]
+  /// Rule 702.122. Records the keyword's presence and parameter; MAST is
+  /// descriptive, so cost/resolution semantics aren't expanded here.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Crew = (
+    from keyword in Keyword("Crew")
+    from n in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Crew",
+      Effect = new CrewEffect
+      {
+        Power = new LiteralQuantity { Value = int.Parse(n.ToStringValue()) },
+      },
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -372,7 +394,7 @@ public static class OracleParsers
   /// Parses any parameterized keyword ability.
   /// </summary>
   public static readonly TokenListParser<OracleToken, StaticAbility> ParameterizedKeyword =
-    Protection.Try();
+    Protection.Try().Or(Crew.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).

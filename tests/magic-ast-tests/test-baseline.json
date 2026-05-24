@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-24T17:38:44.7333732Z",
+  "timestamp": "2026-05-24T17:59:00.6850576Z",
   "testResults": {
     "OracleLines/SLD/DeadpoolTradingCard/Line2": {
       "passed": false
@@ -20,6 +20,9 @@
       "passed": true
     },
     "KeywordExpander/Lifelink_ExpandsToLifelinkEffect": {
+      "passed": true
+    },
+    "OracleLines/OracleOfNectars/Line1": {
       "passed": true
     },
     "MalformedParsedCards/UnparsedEffectInActivatedAbility": {
@@ -48,6 +51,9 @@
     },
     "OracleLines/M21/BasrisLieutenant/Line3": {
       "passed": false
+    },
+    "HandParsedCards/OracleOfNectars/RoundTrip": {
+      "passed": true
     },
     "KeywordExpander/FirstStrike_ExpandsToCombatDamageTimingEffect": {
       "passed": true
@@ -225,6 +231,9 @@
     },
     "HandParsedCards/SLD/DeadpoolTradingCard/RoundTrip": {
       "passed": true
+    },
+    "HandParsedCards/OracleOfNectars": {
+      "passed": false
     },
     "OracleLines/M21/NiambiEsteemedSpeaker/Line2": {
       "passed": false

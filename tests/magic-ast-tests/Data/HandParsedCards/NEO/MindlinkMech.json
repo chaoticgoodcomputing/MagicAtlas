@@ -1,0 +1,125 @@
+{
+  "Input": {
+    "Name": "Mindlink Mech",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Artifact — Vehicle",
+    "OracleText": "Flying\nWhenever this Vehicle becomes crewed for the first time each turn, until end of turn, this Vehicle becomes a copy of target nonlegendary creature that crewed it this turn, except it's 4/3, it's a Vehicle artifact in addition to its other types, and it has flying.\nCrew 1",
+    "Power": "4",
+    "Toughness": "3",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Mindlink Mech",
+    "TypeLine": {
+      "Raw": "Artifact — Vehicle",
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Vehicle"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying\nWhenever this Vehicle becomes crewed for the first time each turn, until end of turn, this Vehicle becomes a copy of target nonlegendary creature that crewed it this turn, except it's 4/3, it's a Vehicle artifact in addition to its other types, and it has flying.\nCrew 1",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effect": {
+            "EffectType": "evasion",
+            "CanBeBlockedBy": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Characteristics": [
+                "flying",
+                "reach"
+              ]
+            }
+          }
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 263,
+            "End": 270
+          },
+          "RawText": "Whenever this Vehicle becomes crewed for the first time each turn, until end of turn, this Vehicle becomes a copy of target nonlegendary creature that crewed it this turn, except it's 4/3, it's a Vehicle artifact in addition to its other types, and it has flying.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Triggered ability parser not yet implemented",
+              "Location": {
+                "Start": 0,
+                "Length": 263,
+                "End": 263
+              },
+              "Pattern": "ComplexTargeting"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Crew",
+          "Effect": {
+            "EffectType": "crew",
+            "Power": {
+              "QuantityType": "literal",
+              "Value": 1
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
