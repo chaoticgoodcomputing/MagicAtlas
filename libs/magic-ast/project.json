@@ -28,6 +28,22 @@
         "command": "dotnet csharpier {projectRoot} --check",
         "cwd": "{workspaceRoot}"
       }
+    },
+    "glossary": {
+      "//": "Regenerate libs/magic-ast/GLOSSARY.md from AST type XML doc comments.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/generate-glossary.py",
+        "cwd": "libs/magic-ast"
+      }
+    },
+    "glossary:check": {
+      "//": "Verify GLOSSARY.md is up to date; fails the build if stale.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/generate-glossary.py --check",
+        "cwd": "libs/magic-ast"
+      }
     }
   },
   "tags": [ "type:library", "scope:magic-ast" ]
