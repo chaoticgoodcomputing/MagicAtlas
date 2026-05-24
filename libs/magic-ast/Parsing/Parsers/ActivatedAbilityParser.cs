@@ -204,9 +204,57 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return new List<Effect> { untapEffect };
     }
 
+    // Gain life
+    var gainLifeEffect = TryParseGainLifeEffect(effectPart);
+    if (gainLifeEffect != null)
+    {
+      return new List<Effect> { gainLifeEffect };
+    }
+
     // For now, we can't parse other effect types
     // Return null to signal that we need to fall back to unparsed
     return null;
+  }
+
+  /// <summary>
+  /// Tries to parse "You gain N life" effects, where N is a literal number,
+  /// number word, or a variable like X.
+  /// Patterns: "You gain X life.", "You gain 2 life.", "You gain three life."
+  /// </summary>
+  private GainLifeEffect? TryParseGainLifeEffect(string effectText)
+  {
+    var text = effectText.Trim().TrimEnd('.');
+    var match = Regex.Match(
+      text,
+      @"^You\s+gain\s+(?<amount>X|Y|Z|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var amountText = match.Groups["amount"].Value;
+    Quantity amount;
+    if (amountText.Equals("X", StringComparison.OrdinalIgnoreCase))
+    {
+      amount = VariableQuantity.X;
+    }
+    else if (amountText.Equals("Y", StringComparison.OrdinalIgnoreCase))
+    {
+      amount = VariableQuantity.Y;
+    }
+    else if (amountText.Equals("Z", StringComparison.OrdinalIgnoreCase))
+    {
+      amount = VariableQuantity.Z;
+    }
+    else
+    {
+      var count = ParseNumberWord(amountText) ?? 1;
+      amount = LiteralQuantity.Of(count);
+    }
+
+    return new GainLifeEffect { Amount = amount, Player = ObjectReference.You() };
   }
 
   /// <summary>
