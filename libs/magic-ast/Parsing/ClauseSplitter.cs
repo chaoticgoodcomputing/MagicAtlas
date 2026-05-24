@@ -32,6 +32,14 @@ public sealed record OracleClause
   public bool IsModalOption { get; init; }
 
   /// <summary>
+  /// For a modal-header clause (e.g. "Choose one —"), the option clauses
+  /// that belong to it. Null on every non-modal-header clause. Each option
+  /// clause has its bullet prefix stripped and is independently tokenized,
+  /// so the parser can dispatch each through the normal classifier path.
+  /// </summary>
+  public IReadOnlyList<OracleClause>? ModalOptions { get; init; }
+
+  /// <summary>
   /// For level-up cards, the level range this clause applies to.
   /// </summary>
   public (int Min, int Max)? LevelRange { get; init; }
@@ -58,15 +66,51 @@ public sealed class ClauseSplitter
     }
 
     var clauses = new List<OracleClause>();
-    var paragraphs = SplitIntoParagraphs(oracleText);
+    var paragraphs = SplitIntoParagraphs(oracleText).ToList();
 
-    foreach (var (paragraphText, paragraphStart) in paragraphs)
+    for (var i = 0; i < paragraphs.Count; i++)
     {
+      var (paragraphText, paragraphStart) = paragraphs[i];
+
+      // Modal headers may be followed by bullet-prefixed option paragraphs.
+      // Consume those greedily into a single modal-header clause carrying
+      // the options on its ModalOptions field.
+      if (IsModalHeader(paragraphText) && !ContainsBullet(paragraphText))
+      {
+        var lookaheadOptions = new List<OracleClause>();
+        var lookahead = i + 1;
+        while (lookahead < paragraphs.Count && IsBulletOption(paragraphs[lookahead].Text))
+        {
+          var (optText, optStart) = paragraphs[lookahead];
+          var stripped = StripBullet(optText);
+          lookaheadOptions.Add(CreateClause(stripped, optStart + (optText.Length - stripped.Length), isModalOption: true));
+          lookahead++;
+        }
+
+        if (lookaheadOptions.Count > 0)
+        {
+          // Emit one combined header clause with the options attached.
+          clauses.Add(CreateClause(paragraphText, paragraphStart) with { ModalOptions = lookaheadOptions });
+          i = lookahead - 1;
+          continue;
+        }
+      }
+
       var paragraphClauses = ProcessParagraph(paragraphText, paragraphStart);
       clauses.AddRange(paragraphClauses);
     }
 
     return clauses;
+  }
+
+  private static bool ContainsBullet(string text) => text.Contains('•');
+
+  private static bool IsBulletOption(string text) => text.StartsWith("•");
+
+  private static string StripBullet(string text)
+  {
+    var stripped = text.TrimStart('•');
+    return stripped.TrimStart();
   }
 
   /// <summary>
@@ -126,17 +170,18 @@ public sealed class ClauseSplitter
   }
 
   /// <summary>
-  /// Processes a modal paragraph into multiple clauses (header + options).
+  /// Processes a modal paragraph (inline bullets) into one combined modal-header clause.
   /// </summary>
   private IReadOnlyList<OracleClause> ProcessModalParagraph(
     string paragraphText,
     int paragraphStart
   )
   {
-    var clauses = new List<OracleClause>();
+    OracleClause? headerClause = null;
+    var options = new List<OracleClause>();
 
     // Split by bullet points
-    var parts = paragraphText.Split('\u2022'); // •
+    var parts = paragraphText.Split('•');
 
     // First part is the header (e.g., "Choose one —")
     if (parts.Length > 0)
@@ -144,7 +189,7 @@ public sealed class ClauseSplitter
       var header = parts[0].Trim();
       if (!string.IsNullOrEmpty(header))
       {
-        clauses.Add(CreateClause(header, paragraphStart));
+        headerClause = CreateClause(header, paragraphStart);
       }
     }
 
@@ -155,13 +200,20 @@ public sealed class ClauseSplitter
       var option = parts[i].Trim();
       if (!string.IsNullOrEmpty(option))
       {
-        clauses.Add(CreateClause(option, paragraphStart + offset, isModalOption: true));
+        options.Add(CreateClause(option, paragraphStart + offset, isModalOption: true));
       }
 
       offset += parts[i].Length + 1;
     }
 
-    return clauses;
+    if (headerClause is null)
+    {
+      return options;
+    }
+
+    return options.Count > 0
+      ? [headerClause with { ModalOptions = options }]
+      : [headerClause];
   }
 
   /// <summary>
