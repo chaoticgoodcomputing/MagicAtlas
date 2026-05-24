@@ -58,8 +58,8 @@ public sealed class RatchetTestTracker
     var dir = new DirectoryInfo(startPath);
     while (dir != null)
     {
-      // Look for MagicAST.Tests.csproj
-      if (dir.GetFiles("MagicAST.Tests.csproj").Length > 0)
+      // Look for MagicAtlas.Ast.Tests.csproj (consolidated project)
+      if (dir.GetFiles("MagicAtlas.Ast.Tests.csproj").Length > 0)
       {
         return dir.FullName;
       }
@@ -81,7 +81,7 @@ public sealed class RatchetTestTracker
       repoRoot = parent;
     }
 
-    return Path.Combine(repoRoot, "tools", "test", "magic-ast");
+    return Path.Combine(repoRoot, "tests", "magic-ast-tests");
   }
 
   /// <summary>

@@ -5,6 +5,7 @@ using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.CardFlow;
+using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Counter;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.Effects.Resource;
@@ -196,9 +197,62 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return new List<Effect> { gainAbilityEffect };
     }
 
+    // Untap target [subtype]
+    var untapEffect = TryParseUntapEffect(effectPart);
+    if (untapEffect != null)
+    {
+      return new List<Effect> { untapEffect };
+    }
+
     // For now, we can't parse other effect types
     // Return null to signal that we need to fall back to unparsed
     return null;
+  }
+
+  /// <summary>
+  /// Tries to parse "Untap target [subtype]" effects.
+  /// Pattern: "Untap target Forest.", "Untap target creature."
+  /// </summary>
+  /// <remarks>
+  /// First cut — recognises a single-token target subtype/cardtype and produces an
+  /// <see cref="UntapEffect"/> with an <see cref="ObjectFilter.Subtypes"/> entry.
+  /// More elaborate targeting (multiple subtypes, conditions, "up to N", etc.) is
+  /// out of scope for the smoke test and should land in a follow-up session.
+  /// </remarks>
+  private static UntapEffect? TryParseUntapEffect(string effectText)
+  {
+    var text = effectText.Trim();
+    if (text.EndsWith('.'))
+    {
+      text = text[..^1].Trim();
+    }
+
+    if (!text.StartsWith("Untap ", StringComparison.OrdinalIgnoreCase))
+    {
+      return null;
+    }
+
+    var remainder = text["Untap ".Length..].Trim();
+    if (!remainder.StartsWith("target ", StringComparison.OrdinalIgnoreCase))
+    {
+      return null;
+    }
+
+    var subtype = remainder["target ".Length..].Trim();
+    if (string.IsNullOrEmpty(subtype) || subtype.Contains(' '))
+    {
+      // Multi-word filter (e.g., "target tapped creature") — beyond this smoke-test cut.
+      return null;
+    }
+
+    return new UntapEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { Subtypes = [subtype] },
+      },
+    };
   }
 
   /// <summary>
