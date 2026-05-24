@@ -233,6 +233,34 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // PARTNER KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Partner with [Name]: A pair-binding variant of the Partner keyword. The
+  /// parameter is the literal name of the paired card (e.g., "Amy Pond").
+  /// Rule 702.124.
+  /// </summary>
+  public static KeywordDefinition PartnerWith { get; } =
+    new()
+    {
+      Name = "Partner with",
+      RuleReference = "702.124",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Name,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Partner with",
+        Effect = new PartnerEffect
+        {
+          PartnerType = PartnerType.PartnerWith,
+          PartnerName = parameter?.Trim(),
+        },
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -250,6 +278,7 @@ public static class KeywordDefinitions
       Storm,
       Protection,
       Crew,
+      PartnerWith,
       // More keywords can be added here as needed
     ];
 
