@@ -59,6 +59,24 @@ Read these in order. They take five minutes and they save hours.
 
 ## The cycle
 
+### Step 0 — `[sub]` Rebase your worktree onto main
+
+Before doing anything else, sanity-check that your worktree is current:
+
+```bash
+git log --oneline main..HEAD            # what's only on my branch
+git log --oneline HEAD..main            # what's on main but not in my worktree
+```
+
+If `main` is ahead of your worktree (commits exist on `main` that you don't have), **rebase before working**:
+
+```bash
+git fetch origin    # in case main has remote-only commits
+git rebase main
+```
+
+The dispatch mechanism may branch your worktree from a stale ref. If you start writing code against pre-consolidation file paths (`tools/test/magic-ast/...`), or you can't find files the skill or your assignment references, that's the smell — stop and rebase.
+
 ### Step 1 — `[main]` Pick gaps and dispatch
 
 Read `tests/magic-ast-tests/Data/_08_Reporting/triage-report.json`. Walk `topGaps[]` in rank order. For each gap you want to address this batch:
