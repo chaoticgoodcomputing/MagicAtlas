@@ -2,6 +2,7 @@ using Flowthru.Cli;
 using Flowthru.Hosting;
 using MagicAtlas.Ast.Tests.Data;
 using MagicAtlas.Ast.Tests.Flows.MagicAstSmoke;
+using MagicAtlas.Ast.Tests.Flows.MagicAstTriage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,8 +11,8 @@ namespace MagicAtlas.Ast.Tests;
 
 /// <summary>
 /// Entry point for the MagicAST test harness — a self-contained Flowthru project whose flows
-/// will, over time, validate the <c>MagicAST</c> oracle-text parser against gold-standard ASTs.
-/// Today it only houses a single smoke flow that proves the wiring works end-to-end.
+/// validate the <c>MagicAST</c> oracle-text parser and surface its current gaps for the TDD
+/// loop driven by the <c>mast-tdd-loop</c> skill.
 /// </summary>
 public class Program
 {
@@ -57,13 +58,52 @@ public class Program
       logging.SetMinimumLevel(LogLevel.Information);
     });
 
+    // HttpClient for the Scryfall bulk fetch. Closure-captured into the triage
+    // flow factory below — not DI-registered (atlas-flows' note: registering it
+    // would interfere with Flowthru's HttpStorageMediumProvider activation).
+    var httpClient = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
+    httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("MagicAtlas-MAST/0.1");
+    httpClient.DefaultRequestHeaders.Accept.Add(
+      new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json")
+    );
+
+    var dataPath = Path.Combine(basePath, "Data");
+
+    // Ratchet baseline lives in the old tools/test/magic-ast project today;
+    // it'll move to tests/magic-ast-tests/test-baseline.json post-consolidation.
+    var ratchetBaselinePath = Path.GetFullPath(
+      Path.Combine(basePath, "..", "..", "tools", "test", "magic-ast", "test-baseline.json")
+    );
+
+    // Hand-parsed fixtures also currently live under tools/test/magic-ast; the
+    // aggregation step scans them to set CandidateLine.AlreadyHandParsed.
+    var handParsedFixturesRoot = Path.GetFullPath(
+      Path.Combine(basePath, "..", "..", "tools", "test", "magic-ast", "Data", "HandParsedCards")
+    );
+
     services.AddFlowthru(flowthru =>
     {
-      flowthru.RegisterCatalog(_ => new Catalog());
+      flowthru.RegisterCatalog(_ => new Catalog(dataPath, ratchetBaselinePath));
 
       flowthru
         .RegisterFlow<Catalog>("MagicAstSmoke", MagicAstSmokeFlow.Create)
         .WithDescription("Placeholder smoke test that runs MagicAST.OracleParser over a fixed input.");
+
+      flowthru
+        .RegisterFlow<Catalog>(
+          "MagicAstTriage",
+          catalog =>
+            MagicAstTriageFlow.Create(
+              catalog,
+              httpClient,
+              ratchetBaselinePath,
+              handParsedFixturesRoot
+            )
+        )
+        .WithDescription(
+          "Fetches the Scryfall oracle-cards bulk, runs MagicAST over every card, and emits "
+            + "Data/_08_Reporting/triage-report.json — the input artifact for the mast-tdd-loop skill."
+        );
     });
   }
 }
