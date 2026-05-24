@@ -177,6 +177,20 @@ public sealed class AbilityClassifier
       };
     }
 
+    // Spell-style instruction verbs at clause start: imperative effect
+    // descriptions consistent with sorcery/instant resolution (Rule 113.3a).
+    // Also fires for modal option bodies dispatched through the registry, where
+    // each option is effectively a small spell ability nested inside a modal.
+    if (StartsWithSpellInstructionVerb(clause.RawText))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.80,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Default to static ability for declarative statements
     return new ClauseClassification
     {
@@ -185,6 +199,52 @@ public sealed class AbilityClassifier
       AbilityWord = abilityWord,
     };
   }
+
+  /// <summary>
+  /// Recognises clauses whose first word is a command-style action verb that
+  /// reads as a spell resolution instruction. The verb is checked at the
+  /// clause's very start; bullets and whitespace are tolerated to support
+  /// modal option bodies (<c>"• Return target permanent card ..."</c>).
+  /// </summary>
+  private static bool StartsWithSpellInstructionVerb(string rawText)
+  {
+    var trimmed = rawText.TrimStart('•', '•', ' ', '\t');
+    foreach (var verb in _spellInstructionVerbs)
+    {
+      if (
+        trimmed.StartsWith(verb + " ", StringComparison.OrdinalIgnoreCase)
+        || trimmed.Equals(verb, StringComparison.OrdinalIgnoreCase)
+      )
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static readonly string[] _spellInstructionVerbs =
+  [
+    "Counter",
+    "Destroy",
+    "Exile",
+    "Return",
+    "Deal",
+    "Draw",
+    "Discard",
+    "Search",
+    "Mill",
+    "Scry",
+    "Surveil",
+    "Create",
+    "Copy",
+    "Reveal",
+    "Look",
+    "Shuffle",
+    "Cast",
+    "Put",
+    "Tap",
+    "Untap",
+  ];
 
   /// <summary>
   /// Tries to extract an ability word from the clause.

@@ -31,24 +31,18 @@
           "Modes": [
             {
               "Ability": {
-                "Kind": "unparsed",
-                "SourceSpan": {
-                  "Start": 15,
-                  "Length": 62,
-                  "End": 77
-                },
-                "RawText": "Return target permanent card from your graveyard to your hand.",
-                "Diagnostics": [
+                "Kind": "spell",
+                "Effects": [
                   {
-                    "Severity": "error",
-                    "Message": "Static ability parser not yet implemented",
-                    "Location": {
-                      "Start": 15,
-                      "Length": 62,
-                      "End": 77
-                    },
-                    "RawText": "Return target permanent card from your graveyard to your hand.",
-                    "Pattern": "AmbiguousStructure"
+                    "EffectType": "returnToHand",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": ["permanent"],
+                        "Controller": "You",
+                        "Zone": "Graveyard"
+                      }
+                    }
                   }
                 ]
               }
@@ -65,14 +59,14 @@
                 "Diagnostics": [
                   {
                     "Severity": "error",
-                    "Message": "Static ability parser not yet implemented",
+                    "Message": "Spell ability parser couldn't recognise effect",
                     "Location": {
                       "Start": 80,
                       "Length": 56,
                       "End": 136
                     },
                     "RawText": "Put your commander into your hand from the command zone.",
-                    "Pattern": "AmbiguousStructure"
+                    "Pattern": "UnparsedSpell"
                   }
                 ]
               }
