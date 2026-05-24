@@ -56,9 +56,45 @@ public sealed record OracleClause
   public IReadOnlyList<int>? ChapterNumbers { get; init; }
 
   /// <summary>
+  /// For a level-up cluster head clause (one that <see cref="ClauseSplitter"/>
+  /// has pre-grouped), the LEVEL N-M stanzas attached to it. The head clause's
+  /// RawText is the "Level up {cost}" line (plus reminder text); the stanzas
+  /// carry the LEVEL ranges, P/T strings, and inner-ability sub-clauses.
+  /// Null on every non-level-up clause.
+  /// </summary>
+  public IReadOnlyList<LevelStanzaClause>? LevelUpStanzas { get; init; }
+
+  /// <summary>
   /// For level-up cards, the level range this clause applies to.
   /// </summary>
   public (int Min, int Max)? LevelRange { get; init; }
+}
+
+/// <summary>
+/// One pre-grouped LEVEL N-M stanza from a level-up cluster. Carries the
+/// raw P/T strings and the inner-ability sub-clauses; the parser converts
+/// these into <c>LevelStanza</c> AST nodes.
+/// </summary>
+public sealed record LevelStanzaClause
+{
+  /// <summary>Inclusive lower bound.</summary>
+  public required int MinLevel { get; init; }
+
+  /// <summary>Inclusive upper bound. Null for open-ended "N+" stanzas.</summary>
+  public int? MaxLevel { get; init; }
+
+  /// <summary>Raw power string from the P/T line (e.g. <c>"3"</c> or <c>"*"</c>).</summary>
+  public required string PowerText { get; init; }
+
+  /// <summary>Raw toughness string from the P/T line.</summary>
+  public required string ToughnessText { get; init; }
+
+  /// <summary>
+  /// Inner ability clauses for this stanza, in source order. Each gets
+  /// dispatched through <c>AbilityParserRegistry</c> to produce the body
+  /// abilities the creature has while in this level range.
+  /// </summary>
+  public IReadOnlyList<OracleClause> InnerAbilityClauses { get; init; } = [];
 }
 
 /// <summary>
@@ -87,6 +123,35 @@ public sealed class ClauseSplitter
     for (var i = 0; i < paragraphs.Count; i++)
     {
       var (paragraphText, paragraphStart) = paragraphs[i];
+
+      // Level-up cost paragraphs ("Level up {cost} (reminder)") start a
+      // multi-stanza superstructure. Consume the cost paragraph plus all
+      // following LEVEL stanza paragraphs (with their P/T and inner-ability
+      // bodies) into one cluster clause carrying LevelUpStanzas.
+      if (IsLevelUpCostParagraph(paragraphText))
+      {
+        var stanzas = new List<LevelStanzaClause>();
+        var lookahead = i + 1;
+        while (lookahead < paragraphs.Count)
+        {
+          var stanzaConsumed = TryConsumeLevelStanza(paragraphs, lookahead, out var stanza);
+          if (stanzaConsumed == 0 || stanza is null)
+          {
+            break;
+          }
+          stanzas.Add(stanza);
+          lookahead += stanzaConsumed;
+        }
+
+        if (stanzas.Count > 0)
+        {
+          clauses.Add(
+            CreateClause(paragraphText, paragraphStart) with { LevelUpStanzas = stanzas }
+          );
+          i = lookahead - 1;
+          continue;
+        }
+      }
 
       // Saga preambles (parenthetical "(As this Saga enters..." paragraphs)
       // may be followed by chapter paragraphs ("I — ...", "I, II — ...").
@@ -152,6 +217,117 @@ public sealed class ClauseSplitter
   private static bool ContainsBullet(string text) => text.Contains('•');
 
   private static bool IsBulletOption(string text) => text.StartsWith("•");
+
+  /// <summary>
+  /// Recognises the head paragraph of a Level Up cluster: a line that opens
+  /// with "Level up " (case-insensitive). Reminder text in parens is allowed
+  /// on the same line; it's part of the cost paragraph.
+  /// </summary>
+  private static bool IsLevelUpCostParagraph(string text) =>
+    text.StartsWith("Level up ", StringComparison.OrdinalIgnoreCase);
+
+  /// <summary>
+  /// Attempts to consume one LEVEL N-M (or N+) stanza starting at
+  /// <paramref name="startIndex"/> in the paragraph list. Returns the number
+  /// of paragraphs consumed; 0 means no stanza was consumed and the caller
+  /// should stop looking for further stanzas.
+  /// </summary>
+  /// <remarks>
+  /// Layout per stanza:
+  /// <code>
+  ///   LEVEL 1-2           ← header paragraph
+  ///   3/3                 ← P/T paragraph
+  ///   This creature has flying.   ← zero or more inner-ability paragraphs
+  ///                                  (stops on the next LEVEL header or EOF)
+  /// </code>
+  /// </remarks>
+  private int TryConsumeLevelStanza(
+    IReadOnlyList<(string Text, int Start)> paragraphs,
+    int startIndex,
+    out LevelStanzaClause? stanza
+  )
+  {
+    stanza = null;
+    if (startIndex >= paragraphs.Count)
+    {
+      return 0;
+    }
+
+    var headerRange = TryParseLevelRange(paragraphs[startIndex].Text);
+    if (!headerRange.HasValue)
+    {
+      return 0;
+    }
+    int min = headerRange.Value.Min;
+    int? max = headerRange.Value.Max == int.MaxValue ? (int?)null : headerRange.Value.Max;
+
+    // Next paragraph: P/T line.
+    if (startIndex + 1 >= paragraphs.Count)
+    {
+      return 0;
+    }
+    var ptText = paragraphs[startIndex + 1].Text;
+    var pt = TryParsePowerToughnessLine(ptText);
+    if (!pt.HasValue)
+    {
+      return 0;
+    }
+
+    int consumed = 2;
+    var innerClauses = new List<OracleClause>();
+    for (var j = startIndex + 2; j < paragraphs.Count; j++)
+    {
+      // Stop on next stanza header.
+      if (TryParseLevelRange(paragraphs[j].Text).HasValue)
+      {
+        break;
+      }
+      innerClauses.Add(CreateClause(paragraphs[j].Text, paragraphs[j].Start));
+      consumed++;
+    }
+
+    stanza = new LevelStanzaClause
+    {
+      MinLevel = min,
+      MaxLevel = max,
+      PowerText = pt.Value.Power,
+      ToughnessText = pt.Value.Toughness,
+      InnerAbilityClauses = innerClauses,
+    };
+    return consumed;
+  }
+
+  /// <summary>
+  /// Parses a P/T-only paragraph like <c>"3/3"</c> or <c>"*+1/2"</c> into
+  /// (power, toughness) raw strings. Returns null if the paragraph isn't a
+  /// pure P/T line.
+  /// </summary>
+  private static (string Power, string Toughness)? TryParsePowerToughnessLine(string text)
+  {
+    var trimmed = text.Trim();
+    var slash = trimmed.IndexOf('/');
+    if (slash <= 0 || slash >= trimmed.Length - 1)
+    {
+      return null;
+    }
+    var power = trimmed[..slash].Trim();
+    var toughness = trimmed[(slash + 1)..].Trim();
+    if (string.IsNullOrEmpty(power) || string.IsNullOrEmpty(toughness))
+    {
+      return null;
+    }
+    // Reject paragraphs that aren't pure P/T (e.g. "3/3 with flying").
+    // Either side may contain '+', '*', '-', digits — but no spaces, no
+    // alpha words.
+    if (HasInnerWhitespace(power) || HasInnerWhitespace(toughness))
+    {
+      return null;
+    }
+    return (power, toughness);
+  }
+
+  private static bool HasInnerWhitespace(string s) =>
+    s.Any(char.IsWhiteSpace);
 
   /// <summary>
   /// Saga preamble — the reminder paragraph that introduces the lore-counter

@@ -119,6 +119,13 @@ public sealed class AbilityClassifier
       return new ClauseClassification { Kind = AbilityKind.Saga, Confidence = 1.0 };
     }
 
+    // Level-up cluster head: ClauseSplitter has pre-grouped the cost
+    // paragraph with its LEVEL N-M stanzas. Route to the level-up parser.
+    if (clause.LevelUpStanzas is { Count: > 0 })
+    {
+      return new ClauseClassification { Kind = AbilityKind.LevelUp, Confidence = 1.0 };
+    }
+
     // Check for ability word pattern: "Word —"
     var abilityWord = TryExtractAbilityWord(clause);
 

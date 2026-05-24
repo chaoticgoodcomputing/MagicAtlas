@@ -1,0 +1,84 @@
+{
+  "Input": {
+    "Name": "Zulaport Enforcer",
+    "ManaCost": "{B}",
+    "TypeLine": "Creature — Human Warrior",
+    "OracleText": "Level up {4} ({4}: Put a level counter on this. Level up only as a sorcery.)\nLEVEL 1-2\n3/3\nLEVEL 3+\n5/5\nThis creature can't be blocked except by black creatures.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": ["Level Up"],
+    "Id": "1975d18a-df3f-4c1f-8fde-d11dabbc4adc",
+    "Layout": "leveler"
+  },
+  "Output": {
+    "Name": "Zulaport Enforcer",
+    "TypeLine": {
+      "Raw": "Creature — Human Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "Level up {4} ({4}: Put a level counter on this. Level up only as a sorcery.)\nLEVEL 1-2\n3/3\nLEVEL 3+\n5/5\nThis creature can't be blocked except by black creatures.",
+      "Abilities": [
+        {
+          "Kind": "levelUp",
+          "LevelUpCost": {
+            "Costs": [],
+            "Effects": [],
+            "IsManaAbility": false,
+            "KeywordSource": "Level up"
+          },
+          "Stanzas": [
+            {
+              "MinLevel": 1,
+              "MaxLevel": 2,
+              "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+              "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+              "Abilities": []
+            },
+            {
+              "MinLevel": 3,
+              "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
+              "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
+              "Abilities": [
+                {
+                  "Kind": "unparsed",
+                  "SourceSpan": { "Start": 104, "Length": 57, "End": 161 },
+                  "RawText": "This creature can't be blocked except by black creatures.",
+                  "Diagnostics": [
+                    {
+                      "Severity": "error",
+                      "Message": "Static ability parser not yet implemented",
+                      "Location": { "Start": 104, "Length": 57, "End": 161 },
+                      "RawText": "This creature can't be blocked except by black creatures.",
+                      "Pattern": "AmbiguousStructure"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}",
+        "Symbols": [{ "Kind": "colored", "Colors": ["B"] }],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      { "Kind": "colors", "Colors": ["B"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      },
+      { "Kind": "layout", "Layout": "leveler" }
+    ]
+  }
+}
