@@ -382,6 +382,31 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Partner with [Name]" keyword.
+  /// Pattern: "Partner" "with" Word+ [reminder]
+  /// Rule 702.124. The partner-name parameter is captured as the literal
+  /// joined string of Word tokens between "with" and either end-of-input or
+  /// optional reminder text. Names span multiple words (e.g., "Amy Pond",
+  /// "Brallin, Skyshark Rider"); commas and periods are not consumed.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> PartnerWith = (
+    from partner in Keyword("Partner")
+    from with_ in Keyword("with")
+    from nameWords in Token.EqualTo(OracleToken.Word).AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Partner with",
+      Effect = new PartnerEffect
+      {
+        PartnerType = PartnerType.PartnerWith,
+        PartnerName = string.Join(" ", nameWords.Select(t => t.ToStringValue())),
+      },
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -411,7 +436,7 @@ public static class OracleParsers
   /// Parses any parameterized keyword ability.
   /// </summary>
   public static readonly TokenListParser<OracleToken, StaticAbility> ParameterizedKeyword =
-    Protection.Try().Or(Crew.Try());
+    Protection.Try().Or(Crew.Try()).Or(PartnerWith.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
