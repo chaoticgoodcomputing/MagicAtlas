@@ -55,6 +55,13 @@ public sealed class SpellAbilityParser : IAbilityParser
     {
       return effect;
     }
+
+    effect = TryParseDestroyTargetTypeDisjunctionEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     return TryParseReturnFromGraveyardToHandEffect(trimmed);
   }
 
@@ -109,6 +116,79 @@ public sealed class SpellAbilityParser : IAbilityParser
       CardTypes = cardTypes,
       Characteristics = characteristics.Count > 0 ? characteristics : null,
     };
+  }
+
+  /// <summary>
+  /// "Destroy target [type1] or [type2]." / "Destroy target [type1], [type2], or [type3]."
+  /// Emits a <see cref="DestroyEffect"/> whose target carries an
+  /// <see cref="ObjectFilter"/> with <see cref="ObjectFilter.CardTypes"/> set to the
+  /// union of the listed card types (existing convention: a multi-element
+  /// <c>CardTypes</c> list is interpreted as a disjunction — see e.g. the destroy
+  /// rule on Demolish, "Destroy target artifact or land").
+  /// </summary>
+  /// <remarks>
+  /// Single-type destroy ("Destroy target creature") is intentionally not handled
+  /// here. Plain destroy is covered by other shapes (saga chapters, triggered
+  /// abilities) and flipping its parser status would cascade across fixtures that
+  /// currently expect <c>unparsed</c>.
+  /// </remarks>
+  private static DestroyEffect? TryParseDestroyTargetTypeDisjunctionEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Destroy\s+target\s+(?<types>[a-z]+(?:\s*,\s*[a-z]+)*\s+or\s+[a-z]+)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var cardTypes = SplitTypeDisjunction(m.Groups["types"].Value);
+    if (cardTypes.Count < 2)
+    {
+      return null;
+    }
+
+    return new DestroyEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = cardTypes },
+      },
+    };
+  }
+
+  /// <summary>
+  /// Splits a "[type1], [type2], or [typeN]" or "[type1] or [type2]" phrase into
+  /// the underlying card-type tokens, lowercased, in source order, with duplicates
+  /// removed (preserving first occurrence).
+  /// </summary>
+  private static List<string> SplitTypeDisjunction(string phrase)
+  {
+    // Normalise "X, Y, or Z" / "X or Y" into a flat list.
+    var withoutOr = Regex.Replace(
+      phrase,
+      @"\s*,?\s+or\s+",
+      ",",
+      RegexOptions.IgnoreCase
+    );
+    var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    var result = new List<string>();
+    foreach (var raw in withoutOr.Split(','))
+    {
+      var token = raw.Trim().ToLowerInvariant();
+      if (token.Length == 0)
+      {
+        continue;
+      }
+      if (seen.Add(token))
+      {
+        result.Add(token);
+      }
+    }
+    return result;
   }
 
   /// <summary>
