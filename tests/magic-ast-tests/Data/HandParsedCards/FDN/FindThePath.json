@@ -1,0 +1,105 @@
+{
+  "Input": {
+    "Name": "Find the Path",
+    "ManaCost": "{G}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant land\nEnchanted land has \"{T}: Add {G}{G}.\"",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Find the Path",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Supertypes": [],
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Enchant land\nEnchanted land has \"{T}: Add {G}{G}.\"",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effect": {
+            "EffectType": "enchantRestriction",
+            "LegalTargets": {
+              "CardTypes": [
+                "land"
+              ]
+            }
+          }
+        },
+        {
+          "Kind": "static",
+          "AffectedObjects": {
+            "Characteristics": [
+              "enchanted land"
+            ]
+          },
+          "Effect": {
+            "EffectType": "gainAbility",
+            "Target": {
+              "Kind": "EnchantedOrEquipped"
+            },
+            "GainedAbility": {
+              "Kind": "activated",
+              "Costs": [
+                {
+                  "CostType": "tap"
+                }
+              ],
+              "Effects": [
+                {
+                  "EffectType": "addMana",
+                  "Mana": "{G}{G}"
+                }
+              ],
+              "IsManaAbility": true
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}

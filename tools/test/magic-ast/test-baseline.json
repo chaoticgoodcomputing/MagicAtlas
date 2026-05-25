@@ -1,16 +1,7 @@
 {
-  "timestamp": "2026-05-25T07:06:01.0367206Z",
+  "timestamp": "2026-05-25T07:01:53.8590493Z",
   "testResults": {
     "MalformedParsedCards/MixedValidAndInvalidAbilities": {
-      "passed": false
-    },
-    "HandParsedCards/NEO/MindlinkMech/RoundTrip": {
-      "passed": true
-    },
-    "HandParsedCards/LTC/DenethorStoneSeer/RoundTrip": {
-      "passed": true
-    },
-    "OracleLines/RoadOfReturn/Line1": {
       "passed": false
     },
     "OracleLines/M21/BarrinTolarianArchmage/Line1": {
@@ -31,14 +22,11 @@
     "HandParsedCards/M21/Hobblefiend": {
       "passed": false
     },
-    "HandParsedCards/FDN/FindThePath/RoundTrip": {
+    "HandParsedCards/2X2/ManaVault/RoundTrip": {
       "passed": true
     },
     "HandParsedCards/M21/RookieMistake": {
       "passed": false
-    },
-    "HandParsedCards/2X2/ManaVault/RoundTrip": {
-      "passed": true
     },
     "HandParsedCards/CMM/DarettiScrapSavant/RoundTrip": {
       "passed": true
@@ -67,20 +55,11 @@
     "OracleLines/CLB/WilsonRefinedGrizzly/Line4": {
       "passed": false
     },
-    "HandParsedCards/WHO/RoryWilliams": {
-      "passed": false
-    },
     "HandParsedCards/TLA/WanShiTongLibrarian": {
       "passed": false
     },
-    "OracleLines/NEO/MindlinkMech/Line1": {
-      "passed": true
-    },
     "OracleLines/2X2/ManaVault/Line2": {
       "passed": false
-    },
-    "HandParsedCards/ArborElf": {
-      "passed": true
     },
     "OracleLines/TLA/PlanetariumOfWanShiTong/Line2": {
       "passed": false
@@ -103,38 +82,17 @@
     "OracleLines/CMM/DarettiScrapSavant/Line2": {
       "passed": false
     },
-    "OracleLines/OracleOfNectars/Line1": {
-      "passed": true
-    },
     "HandParsedCards/M21/QuirionDryad": {
       "passed": false
     },
     "HandParsedCards/M21/VitoThornOfTheDuskRose/RoundTrip": {
       "passed": true
     },
-    "OracleLines/FDN/FindThePath/Line2": {
-      "passed": true
-    },
     "HandParsedCards/SLD/DeadpoolTradingCard": {
-      "passed": false
-    },
-    "OracleLines/NEO/MindlinkMech/Line3": {
-      "passed": true
-    },
-    "HandParsedCards/KTK/ZurgoHelmsmasher/RoundTrip": {
-      "passed": true
-    },
-    "HandParsedCards/KTK/ZurgoHelmsmasher": {
       "passed": false
     },
     "HandParsedCards/CMM/DarettiScrapSavant": {
       "passed": false
-    },
-    "OracleLines/WHO/RoryWilliams/Line2": {
-      "passed": true
-    },
-    "HandParsedCards/TheDeathOfGwenStacy/RoundTrip": {
-      "passed": true
     },
     "OracleLines/M21/BasrisLieutenant/Line1": {
       "passed": false
@@ -145,19 +103,13 @@
     "OracleLines/ChatterfangSquirrelGeneral/Line3": {
       "passed": false
     },
+    "HandParsedCards/ATQ/MishrasHelix/RoundTrip": {
+      "passed": true
+    },
     "HandParsedCards/GrizzlyBears": {
       "passed": true
     },
-    "OracleLines/LTC/DenethorStoneSeer/Line2": {
-      "passed": false
-    },
-    "OracleLines/KTK/ZurgoHelmsmasher/Line3": {
-      "passed": false
-    },
     "OracleLines/M21/ChandrasIncinerator/Line3": {
-      "passed": false
-    },
-    "HandParsedCards/CLB/StormfistCrusader": {
       "passed": false
     },
     "OracleLines/M21/BasrisLieutenant/Line3": {
@@ -165,9 +117,6 @@
     },
     "OracleLines/ChatterfangSquirrelGeneral/Line1": {
       "passed": true
-    },
-    "HandParsedCards/ZulaportEnforcer": {
-      "passed": false
     },
     "HandParsedCards/M21/ReadTheTides/RoundTrip": {
       "passed": true
@@ -226,14 +175,8 @@
     "KeywordExpander/CanExpand_ReturnsFalseForUnknownKeywords": {
       "passed": true
     },
-    "OracleLines/WHO/RoryWilliams/Line1": {
-      "passed": true
-    },
     "OracleLines/CMM/DarettiScrapSavant/Line3": {
       "passed": false
-    },
-    "HandParsedCards/RoadOfReturn/RoundTrip": {
-      "passed": true
     },
     "OracleLines/M21/EnthrallingHold/Line3": {
       "passed": false
@@ -253,23 +196,11 @@
     "HandParsedCards/LlanowarElves": {
       "passed": true
     },
-    "OracleLines/NEO/MindlinkMech/Line2": {
-      "passed": false
-    },
-    "HandParsedCards/OracleOfNectars/RoundTrip": {
-      "passed": true
-    },
     "OracleLines/M21/QuirionDryad/Line1": {
       "passed": false
     },
     "HandParsedCards/M21/BasrisLieutenant": {
       "passed": false
-    },
-    "OracleLines/WHO/RoryWilliams/Line3": {
-      "passed": false
-    },
-    "HandParsedCards/CLB/StormfistCrusader/RoundTrip": {
-      "passed": true
     },
     "KeywordExpander/Lifelink_ExpandsToLifelinkEffect": {
       "passed": true
@@ -277,20 +208,14 @@
     "HandParsedCards/M21/BaneslayerAngel/RoundTrip": {
       "passed": true
     },
-    "HandParsedCards/M21/ChandrasIncinerator": {
-      "passed": false
-    },
     "HandParsedCards/CLB/WilsonRefinedGrizzly/RoundTrip": {
       "passed": true
     },
+    "HandParsedCards/M21/ChandrasIncinerator": {
+      "passed": false
+    },
     "HandParsedCards/M21/ChandrasIncinerator/RoundTrip": {
       "passed": true
-    },
-    "HandParsedCards/M14/demolish": {
-      "passed": true
-    },
-    "HandParsedCards/LTC/DenethorStoneSeer": {
-      "passed": false
     },
     "OracleLines/ChatterfangSquirrelGeneral/Line2": {
       "passed": false
@@ -309,12 +234,6 @@
     },
     "KeywordExpander/Expand_ThrowsWhenParameterRequiredButMissing": {
       "passed": true
-    },
-    "OracleLines/KTK/ZurgoHelmsmasher/Line2": {
-      "passed": true
-    },
-    "HandParsedCards/FDN/FindThePath": {
-      "passed": false
     },
     "OracleLines/DMR/MysticRemora/Line1": {
       "passed": false
@@ -340,6 +259,9 @@
     "OracleLines/TLA/WanShiTongLibrarian/Line2": {
       "passed": true
     },
+    "OracleLines/ATQ/MishrasHelix/Line1": {
+      "passed": true
+    },
     "HandParsedCards/M21/BarrinTolarianArchmage": {
       "passed": false
     },
@@ -349,13 +271,7 @@
     "OracleLines/M21/ReadTheTides/Line1": {
       "passed": false
     },
-    "OracleLines/ArborElf/Line1": {
-      "passed": true
-    },
     "KeywordExpander/Protection_FromMultipleSubtypes_ExpandsCorrectly": {
-      "passed": true
-    },
-    "HandParsedCards/M14/demolish/RoundTrip": {
       "passed": true
     },
     "OracleLines/M21/Hobblefiend/Line1": {
@@ -367,41 +283,14 @@
     "HandParsedCards/M21/BaneslayerAngel": {
       "passed": true
     },
-    "OracleLines/CLB/StormfistCrusader/Line2": {
-      "passed": false
-    },
-    "OracleLines/M14/demolish/Line1": {
-      "passed": true
-    },
     "HandParsedCards/TLA/WanShiTongLibrarian/RoundTrip": {
       "passed": true
-    },
-    "OracleLines/RoadOfReturn/Line2": {
-      "passed": false
     },
     "OracleLines/M21/RookieMistake/Line1": {
       "passed": false
     },
-    "OracleLines/ZulaportEnforcer/Line1": {
-      "passed": false
-    },
-    "HandParsedCards/OracleOfNectars": {
-      "passed": true
-    },
     "KeywordExpander/DoubleStrike_ExpandsToCombatDamageTimingBoth": {
       "passed": true
-    },
-    "OracleLines/FDN/FindThePath/Line1": {
-      "passed": false
-    },
-    "OracleLines/LTC/DenethorStoneSeer/Line1": {
-      "passed": true
-    },
-    "HandParsedCards/WHO/RoryWilliams/RoundTrip": {
-      "passed": true
-    },
-    "OracleLines/KTK/ZurgoHelmsmasher/Line4": {
-      "passed": false
     },
     "HandParsedCards/M21/Hobblefiend/RoundTrip": {
       "passed": true
@@ -410,6 +299,9 @@
       "passed": false
     },
     "HandParsedCards/TLA/PlanetariumOfWanShiTong": {
+      "passed": false
+    },
+    "HandParsedCards/ATQ/MishrasHelix": {
       "passed": false
     },
     "HandParsedCards/ChatterfangSquirrelGeneral/RoundTrip": {
@@ -424,25 +316,10 @@
     "HandParsedCards/DMR/MysticRemora/RoundTrip": {
       "passed": true
     },
-    "HandParsedCards/ArborElf/RoundTrip": {
-      "passed": true
-    },
     "HandParsedCards/M21/NiambiEsteemedSpeaker/RoundTrip": {
       "passed": true
     },
     "HandParsedCards/GrizzlyBears/RoundTrip": {
-      "passed": true
-    },
-    "HandParsedCards/TheDeathOfGwenStacy": {
-      "passed": false
-    },
-    "HandParsedCards/RoadOfReturn": {
-      "passed": false
-    },
-    "HandParsedCards/ZulaportEnforcer/RoundTrip": {
-      "passed": true
-    },
-    "OracleLines/CLB/StormfistCrusader/Line1": {
       "passed": true
     },
     "OracleLines/TLA/PlanetariumOfWanShiTong/Line1": {
@@ -452,9 +329,6 @@
       "passed": true
     },
     "HandParsedCards/JMP/RhysticStudy": {
-      "passed": false
-    },
-    "HandParsedCards/NEO/MindlinkMech": {
       "passed": false
     },
     "OracleLines/CLB/WilsonRefinedGrizzly/Line2": {
@@ -481,9 +355,6 @@
     "HandParsedCards/SLD/DeadpoolTradingCard/RoundTrip": {
       "passed": true
     },
-    "OracleLines/TheDeathOfGwenStacy/Line1": {
-      "passed": false
-    },
     "MalformedParsedCards/CompletelyGarbledAbility": {
       "passed": false
     },
@@ -492,9 +363,6 @@
     },
     "OracleLines/M21/BasrisLieutenant/Line2": {
       "passed": false
-    },
-    "OracleLines/KTK/ZurgoHelmsmasher/Line1": {
-      "passed": true
     },
     "KeywordExpander/FirstStrike_ExpandsToCombatDamageTimingEffect": {
       "passed": true
