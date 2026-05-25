@@ -147,8 +147,44 @@ public sealed class StaticAbilityParser : IAbilityParser
       return conditionalCostReduction;
     }
 
+    // "The \"legend rule\" doesn't apply." — Rule 704.5j state-based-action
+    // suppression (Mirror Gallery). Parameterless; the mere presence of the
+    // effect records the suppression.
+    var legendRuleSuppression = TryParseLegendRuleSuppression(clause);
+    if (legendRuleSuppression != null)
+    {
+      return legendRuleSuppression;
+    }
+
     return null;
   }
+
+  /// <summary>
+  /// "The \"legend rule\" doesn't apply." — Rule 704.5j. Emits a
+  /// <see cref="StaticAbility"/> wrapping a parameterless
+  /// <see cref="MagicAST.AST.Effects.Replacement.LegendRuleSuppressionEffect"/>.
+  /// The oracle uses curly or straight double-quotes around "legend rule";
+  /// the pattern accepts both shapes.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseLegendRuleSuppression(OracleClause clause)
+  {
+    if (!_legendRuleSuppressionPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Replacement.LegendRuleSuppressionEffect(),
+      },
+    ];
+  }
+
+  private static readonly Regex _legendRuleSuppressionPattern = new(
+    @"^\s*The\s+[""""“”]legend\s+rule[""""“”]\s+doesn'?t\s+apply\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   /// <summary>
   /// "This spell costs {N} less to cast during [your turn / each opponent's turn / ...]." —
