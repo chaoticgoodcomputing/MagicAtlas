@@ -72,6 +72,15 @@ public sealed class StaticAbilityParser : IAbilityParser
       return mustBeBlocked;
     }
 
+    // "[subject] blocks each combat if able." — blocker-side Rule 509.1c
+    // requirement (e.g., Grand Melee's "All creatures block each combat if
+    // able"). Mirrors TryParseMustAttack but lands on a MustBlockEffect.
+    var mustBlock = TryParseMustBlock(clause);
+    if (mustBlock != null)
+    {
+      return mustBlock;
+    }
+
     // "[filter] has \"[activated ability]\"." — Aura-style ability grant on the
     // enchanted/equipped object (Rule 113.6/113.10). The inner activated
     // ability is parsed by reusing ActivatedAbilityParser, so the recursive
@@ -502,35 +511,41 @@ public sealed class StaticAbilityParser : IAbilityParser
   }
 
   /// <summary>
-  /// Recognizes "[Self] attacks each combat if able." where [Self] is either
-  /// the literal phrase "This creature"/"This permanent" or the card's own name
-  /// (any leading word(s) before "attacks"). Produces a <see cref="StaticAbility"/>
-  /// wrapping a <see cref="MustAttackEffect"/> targeting <c>Self</c>.
+  /// Recognizes "[subject] attacks each combat if able." Subject may be the
+  /// literal phrase "This creature"/"This permanent" or the card's own name
+  /// (any leading word(s) before "attacks") — both mapped to <c>Self</c>;
+  /// or "All creatures", which targets every creature (<c>Each</c> with a
+  /// creature-typed filter, e.g. Grand Melee). Produces a
+  /// <see cref="StaticAbility"/> wrapping a <see cref="MustAttackEffect"/>.
   /// </summary>
   /// <remarks>
   /// Card-name-as-subject is the standard oracle-text convention for self-reference
   /// in continuous abilities on a named permanent — the parser treats any leading
-  /// word(s) before <c>attacks</c> as a synonym for <c>Self</c> when the rest of the
-  /// line matches the restriction phrase.
+  /// word(s) before <c>attacks</c> as a synonym for <c>Self</c> when the rest of
+  /// the line matches the restriction phrase. The "All creatures" variant is the
+  /// global Rule 508.1d shape used by symmetric attack-requirement enchantments.
   /// </remarks>
   private static IReadOnlyList<Ability>? TryParseMustAttack(OracleClause clause)
   {
-    if (!_mustAttackPattern.IsMatch(clause.RawText))
+    var match = _mustAttackPattern.Match(clause.RawText);
+    if (!match.Success)
     {
       return null;
     }
+
+    var target = ClassifyCombatRequirementSubject(match.Groups["subject"].Value);
 
     return
     [
       new StaticAbility
       {
-        Effect = new MustAttackEffect { Target = ObjectReference.Self() },
+        Effect = new MustAttackEffect { Target = target },
       },
     ];
   }
 
   private static readonly Regex _mustAttackPattern = new(
-    @"^\s*\S.*?\s+attacks\s+each\s+combat\s+if\s+able\.?\s*$",
+    @"^\s*(?<subject>\S.*?)\s+attacks?\s+each\s+combat\s+if\s+able\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -564,6 +579,59 @@ public sealed class StaticAbilityParser : IAbilityParser
     @"^\s*\S.*?\s+must\s+be\s+blocked\s+if\s+able\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
+
+  /// <summary>
+  /// Recognizes "[subject] blocks each combat if able." — the blocker-side
+  /// Rule 509.1c requirement. Mirrors <see cref="TryParseMustAttack"/>; subject
+  /// classification (Self vs. "All creatures") flows through the shared
+  /// <see cref="ClassifyCombatRequirementSubject"/> helper so attacker- and
+  /// blocker-side lines stay shape-aligned.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseMustBlock(OracleClause clause)
+  {
+    var match = _mustBlockPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var target = ClassifyCombatRequirementSubject(match.Groups["subject"].Value);
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MustBlockEffect { Target = target },
+      },
+    ];
+  }
+
+  private static readonly Regex _mustBlockPattern = new(
+    @"^\s*(?<subject>\S.*?)\s+blocks?\s+each\s+combat\s+if\s+able\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// Maps the captured subject phrase of a combat-requirement line onto the
+  /// matching <see cref="ObjectReference"/>. Lines like "All creatures" become
+  /// an <c>Each</c>-kinded reference with a creature filter (Grand Melee
+  /// shape); everything else — including the card's own name or "This
+  /// creature" / "This permanent" — collapses to <c>Self</c> (the
+  /// long-standing convention for self-referential continuous abilities).
+  /// </summary>
+  private static ObjectReference ClassifyCombatRequirementSubject(string subjectText)
+  {
+    var subject = subjectText.Trim();
+    if (subject.Equals("All creatures", StringComparison.OrdinalIgnoreCase))
+    {
+      return new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter { CardTypes = ["creature"] },
+      };
+    }
+    return ObjectReference.Self();
+  }
 
   /// <summary>
   /// Recognizes lines of the form
