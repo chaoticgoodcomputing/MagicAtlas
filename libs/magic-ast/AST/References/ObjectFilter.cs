@@ -27,10 +27,21 @@ public sealed record ObjectFilter
   public IReadOnlyList<string>? Supertypes { get; init; }
 
   /// <summary>
-  /// Colors to match.
+  /// Colors to match. An object passes the filter if it has at least one of
+  /// the listed colors. Do NOT use this to encode colorlessness — colorless
+  /// is the absence of color (Rule 105.1: "Colorless is not a color"). Use
+  /// <see cref="IsColorless"/> instead.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? Colors { get; init; }
+
+  /// <summary>
+  /// Filters to colorless objects (those with no colors at all). Rule 105.1.
+  /// Mutually exclusive with <see cref="Colors"/> in practice (a card cannot
+  /// be both colorless and have a color).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsColorless { get; init; }
 
   /// <summary>
   /// Who controls the objects: You, Opponent, Any.

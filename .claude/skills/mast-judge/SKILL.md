@@ -71,27 +71,42 @@ For each file in scope:
    - Is the field's type appropriate (e.g., `Quantity` for a count, `ObjectReference` for a targetable thing)?
 4. Render a verdict for the node.
 
-## Verdicts
+## Verdicts (strict PASS / FAIL)
 
-For every judged item, render exactly one verdict:
+Every judged item gets exactly one verdict. There is **no middle tier**. Either the work descriptively represents the rule with full structural fidelity, or it doesn't.
 
-### CORRECT
-The item descriptively represents the rule. Discriminators match terminology; fields capture the rule's structural requirements; no terminology drift.
+### PASS
+The item descriptively represents the rule. Discriminators match the rule's terminology word-for-word; fields capture the rule's structural requirements; rule citations are precise down to the subrule clause; no terminology drift; no free-text shortcuts where structure exists; no escape hatches; no unparsed nodes.
 
-### CONCERN
-Descriptive imprecision worth a follow-up but NOT blocking. Examples:
-- A field uses a free-text `Characteristics` entry where a structured predicate would be more accurate (gap with the AST family, not this item).
-- A rule citation is present but cites the parent rule (e.g., "702.111") when a subrule (e.g., "702.111b") would be more precise.
-- The AST is rules-accurate but the glossary entry has a richer definition the AST could carry more faithfully.
+### FAIL
+Anything that isn't PASS. Includes (non-exhaustive):
 
-### BLOCKING
-Rules misrepresentation that should be fixed before merging. Examples:
-- A claimed rule citation that doesn't exist in `rules-structure.json` or whose text contradicts the AST.
-- A discriminator string that names the wrong mechanic (e.g., "monarch" modeled as an emblem when rules say it's a player designation).
-- A required field per the rule is missing (e.g., a Menace effect without `MinimumBlockers`).
-- An ability's gold AST contains an effect that's semantically incompatible with the oracle text (e.g., `DestroyEffect` for "Exile target creature").
+**Imprecise rule citations.**
+- Citing a parent rule (e.g., `Rule 700.2`) when a subrule (e.g., `Rule 700.2b`) would be more precise. Cite to the clause that actually applies.
+- Citing a rule that doesn't exist in `rules-structure.json`, or whose text contradicts the AST.
 
-**BLOCKING halts the merge.** The orchestrator does not proceed to glossary regen + triage until all BLOCKING verdicts are addressed.
+**Free-text where structure exists.**
+- `Characteristics: ["enchanted land"]` when the same idea is expressible as `CardTypes: ["land"]` + `Target.Kind = EnchantedOrEquipped`. Free text in fixtures is an anti-pattern; structured oracle text does not have the ambiguity that free text introduces.
+- `Characteristics: ["creature or Vehicle"]` when an ObjectFilter disjunction (e.g., `Or: [...]`) is the right shape. Type disjunctions are strong typing — they need typed references.
+- `Characteristics: ["who didn't discard a card"]` when `IfYouDoNot` carries the structural concept.
+- Any `Color: ["C"]`-style encoding of "colorless" where the rule (CR 105.1) explicitly says colorless is not a color. The distinction is rules-load-bearing: "mana of any color" excludes colorless, and a judge would call a tournament violation if colorless mana were used to pay a colored cost.
+
+**Escape hatches.**
+- `KeywordReferenceEffect` for a keyword that should be a first-class structured effect.
+- Free-text `string` fields named `*Text`, `*Description`, `*Raw` that hold something a typed AST node could capture.
+- `OtherX`-style discriminated union catch-alls used in production data (they're acceptable as schema scaffolding for future migration, but a fixture using one in gold means the structured concrete is missing — that's a FAIL).
+
+**Unprocessed nodes in gold data.**
+- `"Kind": "unparsed"` anywhere in `Output.Oracle.Abilities`. Gold fixtures encode eventual-truth — what a complete parser would emit. Forbidden.
+- `"EffectType": "unparsed"` anywhere in a gold ability's `Effects[]`. Same principle: an `UnparsedEffect` in gold is a hole in the AST.
+- Any nested partial structure where one sub-effect is gold-modeled and another is unparsed.
+
+**Discriminator and terminology drift.**
+- A discriminator string that names the wrong mechanic (e.g., "monarch" modeled as an emblem when the rules call it a player designation).
+- A required parameter the rule mandates that the AST doesn't carry (e.g., a Menace effect without `MinimumBlockers`).
+- An effect type semantically incompatible with the oracle text (e.g., `DestroyEffect` for "Exile target creature").
+
+**FAIL halts the merge.** The orchestrator does not proceed to glossary regen + triage until all FAIL verdicts are addressed. The fix can be inline (the orchestrator addresses the items and re-renders) or via a follow-up sub-agent dispatched specifically to fix the FAILs.
 
 ## Output format
 
@@ -102,36 +117,31 @@ Write the verdict report to the specified path:
 
 **Date:** {ISO date}
 **Scope:** {N} files ({F} fixtures, {A} AST nodes)
-**Result:** {CORRECT / CONCERNS_ONLY / BLOCKING}
+**Result:** {PASS / FAIL}
 
 ## Summary
 
-- CORRECT: {n}
-- CONCERN: {n}
-- BLOCKING: {n}
+- PASS: {n}
+- FAIL: {n}
 
-## BLOCKING verdicts
+## FAIL verdicts
 
 {empty if none}
 
 ### {file path}
-**Verdict:** BLOCKING
+**Verdict:** FAIL
 **Issue:** {one-line summary}
-**Rule citation:** {rule number, e.g., 702.111b}
+**Rule citation:** {rule number, down to the subrule clause, e.g., 702.111b}
 **Rule text:** > {quoted subrule}
 **What the fixture/AST says:** {quoted snippet of gold AST or doc-comment}
 **Why this misrepresents the rule:** {1-2 sentences}
 **Suggested fix:** {specific, actionable — what to change in the fixture or AST file}
 
-## CONCERN verdicts
-
-{same shape as BLOCKING, but "Verdict: CONCERN"}
-
-## CORRECT verdicts
+## PASS verdicts
 
 One line per item:
 
-- `{path}` — CORRECT. {one-phrase rationale + rule cite, e.g., "models Rule 702.122 Crew with the required power-threshold parameter"}
+- `{path}` — PASS. {one-phrase rationale + rule cite to clause, e.g., "models Rule 702.122a Crew with the required power-threshold parameter"}
 
 ## Glossary gaps
 
@@ -167,9 +177,11 @@ Bail and surface to the orchestrator (don't render a partial report) if:
 After writing the verdict file, emit a short closing message (~100 words):
 
 - Path to the verdict report.
-- Counts: CORRECT / CONCERN / BLOCKING.
-- The single highest-severity item with one-line description.
-- Whether the orchestrator should proceed to merge (`PROCEED`) or halt (`HALT`).
+- Counts: PASS / FAIL.
+- The single most-impactful FAIL with one-line description (if any).
+- Whether the orchestrator should proceed (`PROCEED`) or halt (`HALT`).
+
+**PROCEED iff FAIL count is 0.** Any FAIL halts the loop until the items are addressed and the judge re-renders.
 
 The orchestrator reads only this closing message + the verdict file; everything else stays in the file.
 

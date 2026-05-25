@@ -307,10 +307,10 @@ Agent({
 
 Read the judge's closing message:
 
-- **PROCEED**: no BLOCKING verdicts. Continue to Step 8.
-- **HALT**: one or more BLOCKING verdicts. Do not merge. Surface the verdict report to the human along with the offending sub-agent branches — either the human or a follow-up sub-agent fixes the issues, then re-run Step 7. Do not auto-fix; the orchestrator does not have authority to mutate AST source on the judge's behalf.
+- **PROCEED**: judge rendered 0 FAILs. Continue to Step 8.
+- **HALT**: one or more FAIL verdicts. Do not merge. Address every FAIL — either inline (orchestrator fixes the items) or via a follow-up sub-agent dispatched specifically to remediate. Then re-run Step 7. The loop does not continue until the verdict is PASS.
 
-CONCERN-only verdicts proceed but should be summarized in the batch report (Step 8 substep below).
+The judge is strict binary PASS/FAIL; there is no "concern" tier. See `.claude/skills/mast-judge/SKILL.md` for the anti-pattern enumeration (free text, escape hatches, unparsed nodes, imprecise citations all FAIL).
 
 ### Step 8 — `[main]` Merge, validate, regenerate, re-triage
 

@@ -187,7 +187,7 @@ public sealed class StaticAbilityParser : IAbilityParser
       return null;
     }
 
-    var (target, affectedObjects) = ClassifyGrantTarget(filterText);
+    var target = ClassifyGrantTarget(filterText);
     if (target is null)
     {
       return null;
@@ -205,7 +205,6 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        AffectedObjects = affectedObjects,
         Effect = new GainAbilityEffect
         {
           Target = target,
@@ -242,25 +241,20 @@ public sealed class StaticAbilityParser : IAbilityParser
   }
 
   /// <summary>
-  /// Maps the noun-phrase left of "has" onto an ObjectReference target and
-  /// the corresponding <c>AffectedObjects</c> filter for the wrapping
-  /// <see cref="StaticAbility"/>. Today only the Aura-vocabulary phrases
-  /// ("enchanted [type]") are recognized; equipped/etc. land naturally
-  /// when their analogues come up.
+  /// Maps the noun-phrase left of "has" onto an ObjectReference target.
+  /// Today only the Aura-vocabulary phrases ("enchanted [type]", "equipped
+  /// [type]") are recognized; the target's <c>EnchantedOrEquipped</c> kind
+  /// already conveys the relationship — <c>AffectedObjects</c> would be
+  /// redundant free-text, so we don't emit one.
   /// </summary>
-  private static (ObjectReference? target, ObjectFilter? affectedObjects) ClassifyGrantTarget(
-    string filterText
-  )
+  private static ObjectReference? ClassifyGrantTarget(string filterText)
   {
     var lower = filterText.ToLowerInvariant();
     if (lower.StartsWith("enchanted ") || lower.StartsWith("equipped "))
     {
-      return (
-        new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
-        new ObjectFilter { Characteristics = [lower] }
-      );
+      return new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped };
     }
-    return (null, null);
+    return null;
   }
 
   // Anchors a single clause (no in-line newlines reach this layer — clauses

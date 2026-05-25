@@ -74,8 +74,7 @@
                 "Kind": "static",
                 "KeywordSource": "Suspend",
                 "Effect": {
-                  "EffectType": "keywordReference",
-                  "Keyword": "suspend"
+                  "EffectType": "suspend"
                 }
               }
             },

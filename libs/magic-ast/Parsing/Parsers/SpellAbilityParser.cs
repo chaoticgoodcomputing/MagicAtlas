@@ -121,38 +121,40 @@ public sealed class SpellAbilityParser : IAbilityParser
       characteristics.Add("noncreature");
     }
 
-    var colors = MapColorWord(colorWord);
+    var (colors, isColorless) = MapColorWord(colorWord);
 
     return new ObjectFilter
     {
       CardTypes = cardTypes,
       Characteristics = characteristics.Count > 0 ? characteristics : null,
       Colors = colors,
+      IsColorless = isColorless,
     };
   }
 
   /// <summary>
-  /// Maps an oracle-text color word (e.g. "colorless", "blue") to the
-  /// canonical single-letter color list used on <see cref="ObjectFilter.Colors"/>.
-  /// Returns null when no color word is present so the filter doesn't
-  /// over-specify.
+  /// Maps an oracle-text color word to either a colored-list or the
+  /// <see cref="ObjectFilter.IsColorless"/> flag. Colorlessness is the
+  /// absence of all colors (Rule 105.1: "Colorless is not a color"), so
+  /// it lands on its own axis rather than as a value in <c>Colors</c>.
+  /// Returns (null, null) when no color word is present.
   /// </summary>
-  private static IReadOnlyList<string>? MapColorWord(string? colorWord)
+  private static (IReadOnlyList<string>?, bool?) MapColorWord(string? colorWord)
   {
     if (string.IsNullOrWhiteSpace(colorWord))
     {
-      return null;
+      return (null, null);
     }
 
     return colorWord.ToLowerInvariant() switch
     {
-      "white" => ["W"],
-      "blue" => ["U"],
-      "black" => ["B"],
-      "red" => ["R"],
-      "green" => ["G"],
-      "colorless" => ["C"],
-      _ => null,
+      "white" => (new[] { "W" }, null),
+      "blue" => (new[] { "U" }, null),
+      "black" => (new[] { "B" }, null),
+      "red" => (new[] { "R" }, null),
+      "green" => (new[] { "G" }, null),
+      "colorless" => (null, true),
+      _ => (null, null),
     };
   }
 

@@ -42,11 +42,6 @@
         },
         {
           "Kind": "static",
-          "AffectedObjects": {
-            "Characteristics": [
-              "enchanted land"
-            ]
-          },
           "Effect": {
             "EffectType": "gainAbility",
             "Target": {

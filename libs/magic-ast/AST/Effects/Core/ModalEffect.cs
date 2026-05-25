@@ -19,7 +19,9 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// shape: each option is its own <see cref="Ability"/> (typically a
 /// <see cref="SpellAbility"/>) wrapped in a <see cref="ModalOption"/>.
 ///
-/// Rule 700.2 — modal preamble.
+/// Rule 700.2b — modal triggered abilities. The controller chooses the
+/// mode(s) as part of putting that ability on the stack.
+/// (See also Rule 700.2 for modal mechanics generally.)
 /// </summary>
 /// <remarks>
 /// This is the <see cref="Effect"/>-typed sibling of <see cref="ModalAbility"/>.
