@@ -201,6 +201,12 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseExileTypeDisjunctionEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     effect = TryParseSpellTapTargetEffect(trimmed);
     if (effect is not null)
     {
@@ -768,6 +774,49 @@ public sealed class SpellAbilityParser : IAbilityParser
     }
 
     return new DestroyEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = cardTypes },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Exile target [type1] or [type2]." / "Exile target [type1], [type2], or [type3]."
+  /// Mirrors <see cref="TryParseDestroyTargetTypeDisjunctionEffect"/> for the exile
+  /// keyword (Gravkill, "Exile target creature or Spacecraft"). A multi-element
+  /// <see cref="ObjectFilter.CardTypes"/> list is the convention for a type
+  /// disjunction on the target filter.
+  /// </summary>
+  /// <remarks>
+  /// Single-type exile ("Exile target creature") is intentionally not handled here;
+  /// other exile shapes (graveyards, saga chapters, triggered abilities) cover
+  /// those cases and flipping the single-target form would cascade across fixtures
+  /// that currently expect <c>unparsed</c>.
+  /// </remarks>
+  private static MagicAST.AST.Effects.ZoneChange.ExileEffect? TryParseExileTypeDisjunctionEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^Exile\s+target\s+(?<types>[a-z]+(?:\s*,\s*[a-z]+)*\s+or\s+[a-z]+)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var cardTypes = SplitTypeDisjunction(m.Groups["types"].Value);
+    if (cardTypes.Count < 2)
+    {
+      return null;
+    }
+
+    return new MagicAST.AST.Effects.ZoneChange.ExileEffect
     {
       Target = new ObjectReference
       {
