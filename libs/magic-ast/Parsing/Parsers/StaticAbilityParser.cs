@@ -113,7 +113,56 @@ public sealed class StaticAbilityParser : IAbilityParser
       return ward;
     }
 
+    // "This spell costs {X} less to cast, where X is ..." — cost reduction
+    // scaled by a derived quantity (Chandra's Incinerator shape).
+    var costReduction = TryParseCostReductionWhereX(clause);
+    if (costReduction != null)
+    {
+      return costReduction;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "This spell costs {X} less to cast, where X is the total amount of
+  /// noncombat damage dealt to your opponents this turn." — Chandra's
+  /// Incinerator's cost-reduction static. The right-hand definition of X is
+  /// captured as a <see cref="MagicAST.AST.Quantities.DerivedQuantity"/>
+  /// whose <see cref="MagicAST.AST.Quantities.DerivedKind"/> is
+  /// <c>DamageDealt</c>; the long source phrase lives on the same node's
+  /// <c>Source</c> string and on <see cref="MagicAST.AST.Effects.Resource.CostReductionEffect.BasedOn"/>.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseCostReductionWhereX(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*This\s+spell\s+costs\s+\{X\}\s+less\s+to\s+cast,\s+where\s+X\s+is\s+(?:the\s+total\s+amount\s+of\s+)?(?<source>.+?)\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    var source = match.Groups["source"].Value.Trim();
+    var derivedKind = source.Contains("damage", StringComparison.OrdinalIgnoreCase)
+      ? MagicAST.AST.Quantities.DerivedKind.DamageDealt
+      : MagicAST.AST.Quantities.DerivedKind.Other;
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Resource.CostReductionEffect
+        {
+          Amount = new MagicAST.AST.Quantities.DerivedQuantity
+          {
+            DerivedFrom = derivedKind,
+            Source = source,
+          },
+          BasedOn = source,
+        },
+      },
+    ];
   }
 
   /// <summary>

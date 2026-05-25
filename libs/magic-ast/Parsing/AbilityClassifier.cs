@@ -1,5 +1,6 @@
 namespace MagicAST.Parsing;
 
+using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
 using MagicAST.Parsing.Tokens;
 using Superpower.Model;
@@ -251,13 +252,17 @@ public sealed class AbilityClassifier
       };
     }
 
-    // "This spell can't be countered." / "This spell costs ..." are
-    // properties of the spell itself, not the permanent that resolves from
-    // it. Route to the spell parser so the EffectType lands inside
-    // SpellAbility.Effects rather than as a top-level static.
+    // "This spell can't be countered." is a property of the resolving spell;
+    // route it to the spell parser so the EffectType lands inside
+    // SpellAbility.Effects rather than as a top-level static. Other
+    // "This spell ..." phrasings (e.g., "This spell costs {X} less to cast")
+    // are static cost-modification effects and remain Static.
     if (
-      clause.RawText.TrimStart()
-        .StartsWith("This spell", StringComparison.OrdinalIgnoreCase)
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*This\s+spell\s+can'?t\s+be\s+countered",
+        RegexOptions.IgnoreCase
+      )
     )
     {
       return new ClauseClassification
