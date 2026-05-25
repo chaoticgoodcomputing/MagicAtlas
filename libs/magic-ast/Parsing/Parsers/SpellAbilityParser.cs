@@ -687,9 +687,11 @@ public sealed class SpellAbilityParser : IAbilityParser
   /// <summary>
   /// "Counter target spell." / "Counter target sorcery spell." /
   /// "Counter target instant spell." / "Counter target colorless spell." /
-  /// "Counter target [color] spell." (Rule 701.6, with the targeted spell's
-  /// color restriction modeled as a structural <see cref="ObjectFilter.Colors"/>
-  /// filter on the target reference.)
+  /// "Counter target [color] spell." /
+  /// "Counter target [colorA] or [colorB] spell." (Rule 701.6, with the
+  /// targeted spell's color restriction modeled as a structural
+  /// <see cref="ObjectFilter.Colors"/> filter on the target reference; a
+  /// two-color disjunction becomes a two-element <c>Colors</c> list.)
   /// Optionally followed by an "unless its controller pays {X}" tail (e.g.
   /// Clash of Wills), surfaced as a structured <see cref="UnlessClause"/> with
   /// the targeted spell's controller as the payer and the spell's variable
@@ -699,7 +701,7 @@ public sealed class SpellAbilityParser : IAbilityParser
   {
     var m = Regex.Match(
       text,
-      @"^Counter\s+target\s+(?<filter>(?<color>colorless|multicolored|white|blue|black|red|green)?\s*(?<type>instant|sorcery|creature|noncreature)?\s*spell(\s+with\s+converted\s+mana\s+cost.*)?)(?:\s+unless\s+its\s+controller\s+pays\s+\{(?<unlessx>[A-Za-z])\})?$",
+      @"^Counter\s+target\s+(?<filter>(?<color>colorless|multicolored|white|blue|black|red|green)?(?:\s+or\s+(?<color2>white|blue|black|red|green))?\s*(?<type>instant|sorcery|creature|noncreature)?\s*spell(\s+with\s+converted\s+mana\s+cost.*)?)(?:\s+unless\s+its\s+controller\s+pays\s+\{(?<unlessx>[A-Za-z])\})?$",
       RegexOptions.IgnoreCase
     );
     if (!m.Success)
@@ -707,10 +709,16 @@ public sealed class SpellAbilityParser : IAbilityParser
       return null;
     }
 
-    var filter = BuildSpellFilter(
-      m.Groups["filter"].Value,
-      m.Groups["color"].Success ? m.Groups["color"].Value : null
-    );
+    var colorWords = new List<string>();
+    if (m.Groups["color"].Success)
+    {
+      colorWords.Add(m.Groups["color"].Value);
+    }
+    if (m.Groups["color2"].Success)
+    {
+      colorWords.Add(m.Groups["color2"].Value);
+    }
+    var filter = BuildSpellFilter(m.Groups["filter"].Value, colorWords);
     UnlessClause? unless = null;
     if (m.Groups["unlessx"].Success)
     {
@@ -728,14 +736,17 @@ public sealed class SpellAbilityParser : IAbilityParser
   }
 
   /// <summary>
-  /// Builds an <see cref="ObjectFilter"/> for "target [color] [card-type] spell"
+  /// Builds an <see cref="ObjectFilter"/> for "target [color(s)] [card-type] spell"
   /// where each qualifier is optional. The card-type qualifier (instant /
   /// sorcery / creature / noncreature) lands on <see cref="ObjectFilter.Characteristics"/>;
-  /// the color qualifier lands on <see cref="ObjectFilter.Colors"/> as the
-  /// canonical letter code (W/U/B/R/G/C) so color filtering remains a
-  /// structured axis rather than free-text.
+  /// each color qualifier lands on <see cref="ObjectFilter.Colors"/> as a
+  /// canonical letter code (W/U/B/R/G) so color filtering stays structured rather
+  /// than free-text. Multiple color words (e.g. "red or green") merge into a
+  /// single <c>Colors</c> list — the convention for color disjunction on a
+  /// targeted spell mirrors the multi-element <c>CardTypes</c> convention for
+  /// type disjunction (see <see cref="TryParseDestroyTargetTypeDisjunctionEffect"/>).
   /// </summary>
-  private static ObjectFilter BuildSpellFilter(string filterText, string? colorWord)
+  private static ObjectFilter BuildSpellFilter(string filterText, IReadOnlyList<string> colorWords)
   {
     var characteristics = new List<string>();
     var cardTypes = new List<string> { "spell" };
@@ -754,7 +765,26 @@ public sealed class SpellAbilityParser : IAbilityParser
       characteristics.Add("noncreature");
     }
 
-    var (colors, isColorless, isMulticolored) = MapColorWord(colorWord);
+    List<string>? colors = null;
+    bool? isColorless = null;
+    bool? isMulticolored = null;
+    foreach (var word in colorWords)
+    {
+      var (mappedColors, mappedColorless, mappedMulticolored) = MapColorWord(word);
+      if (mappedColors is not null)
+      {
+        colors ??= new List<string>();
+        foreach (var c in mappedColors)
+        {
+          if (!colors.Contains(c))
+          {
+            colors.Add(c);
+          }
+        }
+      }
+      isColorless ??= mappedColorless;
+      isMulticolored ??= mappedMulticolored;
+    }
 
     return new ObjectFilter
     {
