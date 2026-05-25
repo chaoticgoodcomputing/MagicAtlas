@@ -355,6 +355,30 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "[Self] deals N damage to ..." — self-by-name spell-resolution dealDamage.
+    // Take Down's modal options ("Take Down deals 4 damage to target creature
+    // with flying.") open with the card's own name rather than a recognised
+    // imperative verb, so they slip past <c>StartsWithSpellInstructionVerb</c>
+    // and would otherwise default to Static. The leading capitalised subject +
+    // "deals N damage to ..." frame is unambiguously a spell-resolution effect
+    // (Rule 113.3a) — same self-by-name convention used elsewhere (e.g.
+    // <see cref="ActivatedAbilityParser"/>'s Denethor burn tail).
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*[A-Z]\S*(?:\s+\S+)*?\s+deals?\s+\S+\s+damage\s+to\s+",
+        RegexOptions.None
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "This spell can't be countered." is a property of the resolving spell;
     // route it to the spell parser so the EffectType lands inside
     // SpellAbility.Effects rather than as a top-level static. Other

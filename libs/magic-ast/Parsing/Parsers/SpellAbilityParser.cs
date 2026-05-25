@@ -338,7 +338,65 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseSelfDealsDamageToFilteredCreatureEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "[Self] deals N damage to target/each [type] with [characteristic]." —
+  /// Take Down's two modal options. Self-source detected by leading-capital
+  /// subject. "with [characteristic]" lands on Characteristics escape hatch.
+  /// </summary>
+  private static MagicAST.AST.Effects.Damage.DealDamageEffect? TryParseSelfDealsDamageToFilteredCreatureEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^(?<subject>\S.*?)\s+deals?\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+damage\s+to\s+(?<det>target|each)\s+(?<type>creature|artifact|enchantment|land|planeswalker|permanent)\s+(?<chars>with\s+\S.*?)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    var subject = m.Groups["subject"].Value;
+    if (subject.Length == 0 || !char.IsUpper(subject[0]))
+    {
+      return null;
+    }
+
+    var rawAmount = m.Groups["amount"].Value.ToLowerInvariant();
+    int amount = rawAmount switch
+    {
+      "one" => 1, "two" => 2, "three" => 3, "four" => 4, "five" => 5,
+      "six" => 6, "seven" => 7, "eight" => 8, "nine" => 9, "ten" => 10,
+      _ => int.Parse(rawAmount),
+    };
+
+    var kind = m.Groups["det"].Value.Equals("each", StringComparison.OrdinalIgnoreCase)
+      ? ObjectReferenceKind.Each
+      : ObjectReferenceKind.Target;
+
+    return new MagicAST.AST.Effects.Damage.DealDamageEffect
+    {
+      Amount = LiteralQuantity.Of(amount),
+      Source = ObjectReference.Self(),
+      Target = new ObjectReference
+      {
+        Kind = kind,
+        Filter = new ObjectFilter
+        {
+          CardTypes = [m.Groups["type"].Value.ToLowerInvariant()],
+          Characteristics = [m.Groups["chars"].Value.Trim()],
+        },
+      },
+    };
   }
 
   /// <summary>
