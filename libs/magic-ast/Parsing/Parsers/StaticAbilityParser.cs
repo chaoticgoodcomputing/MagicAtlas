@@ -82,12 +82,197 @@ public sealed class StaticAbilityParser : IAbilityParser
       return grantedAbility;
     }
 
-    // Try other static ability patterns
-    // TODO: Add more patterns as needed:
-    // - "Enchant [descriptor]"
-    // - "This spell can't be countered"
-    // - "This [permanent] doesn't untap during your untap step"
-    // - Replacement effects
+    // "This artifact doesn't untap during your untap step." (Rule 701.20)
+    // Encodes the possessive ("your" / "its controller's") on
+    // <see cref="DoesntUntapEffect.WhoseUntapStep"/> for downstream consumers.
+    var doesntUntap = TryParseDoesntUntap(clause);
+    if (doesntUntap != null)
+    {
+      return doesntUntap;
+    }
+
+    // "This creature can't be blocked except by [filter]." — Rule 509-style evasion.
+    var evasion = TryParseEvasion(clause);
+    if (evasion != null)
+    {
+      return evasion;
+    }
+
+    // "Enchant [filter]." — Aura legal-target restriction (Rule 702.5).
+    var enchant = TryParseEnchant(clause);
+    if (enchant != null)
+    {
+      return enchant;
+    }
+
+    return null;
+  }
+
+  /// <summary>
+  /// Matches "This [permanent] doesn't untap during [possessive] untap step." and
+  /// produces a <see cref="StaticAbility"/> wrapping a <see cref="DoesntUntapEffect"/>.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseDoesntUntap(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*This\s+(?:permanent|creature|artifact|enchantment|land)\s+doesn'?t\s+untap\s+during\s+(?<possessive>your|its\s+controller'?s)\s+untap\s+step\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    var possessive = match.Groups["possessive"].Value.Trim();
+    // Normalise "its controller's" → "its controller's" (preserve apostrophe);
+    // gold uses the literal possessive token so case-fold to lower-case "your".
+    if (possessive.Equals("your", StringComparison.OrdinalIgnoreCase))
+    {
+      possessive = "your";
+    }
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Control.DoesntUntapEffect
+        {
+          WhoseUntapStep = possessive,
+        },
+      },
+    ];
+  }
+
+  /// <summary>
+  /// Matches "This creature can't be blocked except by [colour] creatures." —
+  /// a structured evasion restriction (Rule 509). Builds a
+  /// <see cref="EvasionEffect.CanBeBlockedBy"/> filter that captures the
+  /// colour and card-type qualifiers in the "except by" tail.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEvasion(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*This\s+(?:creature|permanent)\s+can'?t\s+be\s+blocked\s+except\s+by\s+(?<tail>.+?)\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var tail = match.Groups["tail"].Value.ToLowerInvariant();
+    var colors = new List<string>();
+    var colorMap = new Dictionary<string, string>
+    {
+      ["white"] = "W",
+      ["blue"] = "U",
+      ["black"] = "B",
+      ["red"] = "R",
+      ["green"] = "G",
+    };
+    foreach (var (name, code) in colorMap)
+    {
+      if (Regex.IsMatch(tail, $@"\b{name}\b"))
+      {
+        colors.Add(code);
+      }
+    }
+    var cardTypes = new List<string>();
+    foreach (var t in new[] { "creature", "permanent", "artifact" })
+    {
+      if (Regex.IsMatch(tail, $@"\b{t}s?\b"))
+      {
+        cardTypes.Add(t);
+      }
+    }
+
+    var canBeBlockedBy = new ObjectFilter
+    {
+      CardTypes = cardTypes.Count > 0 ? cardTypes : null,
+      Colors = colors.Count > 0 ? colors : null,
+    };
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Keyword.EvasionEffect { CanBeBlockedBy = canBeBlockedBy },
+      },
+    ];
+  }
+
+  /// <summary>
+  /// Matches a bare "Enchant [target descriptor]" line — the Aura legal-target
+  /// declaration (Rule 702.5). The descriptor is mapped onto an
+  /// <see cref="ObjectFilter"/> covering the common shapes ("creature", "land",
+  /// "permanent"); more elaborate shapes (e.g. "Enchant creature you control")
+  /// land their qualifiers on the filter axes.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEnchant(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*Enchant\s+(?<descriptor>.+?)\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var descriptor = match.Groups["descriptor"].Value.Trim().ToLowerInvariant();
+    if (descriptor.Length == 0)
+    {
+      return null;
+    }
+
+    var filter = BuildEnchantFilter(descriptor);
+    if (filter is null)
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        KeywordSource = "Enchant",
+        Effect = new MagicAST.AST.Effects.Combat.EnchantRestrictionEffect
+        {
+          LegalTargets = filter,
+        },
+      },
+    ];
+  }
+
+  /// <summary>
+  /// Builds an <see cref="ObjectFilter"/> from the descriptor noun-phrase that
+  /// follows the <c>Enchant</c> keyword. Returns null for descriptors the
+  /// parser doesn't yet recognise so the fallback path can report the gap.
+  /// </summary>
+  private static ObjectFilter? BuildEnchantFilter(string descriptor)
+  {
+    // Strip leading "a "/"an " articles that appear in some printings.
+    var d = Regex.Replace(descriptor, @"^(?:a|an)\s+", "", RegexOptions.IgnoreCase).Trim();
+
+    ControllerFilter? controller = null;
+    if (d.EndsWith(" you control"))
+    {
+      controller = ControllerFilter.You;
+      d = d[..^" you control".Length].Trim();
+    }
+    else if (d.EndsWith(" an opponent controls"))
+    {
+      controller = ControllerFilter.Opponent;
+      d = d[..^" an opponent controls".Length].Trim();
+    }
+
+    // Simple-noun shape: "creature", "land", "permanent", "artifact", "enchantment".
+    var simpleTypes = new[] { "creature", "land", "permanent", "artifact", "enchantment", "planeswalker", "player" };
+    if (simpleTypes.Contains(d))
+    {
+      return new ObjectFilter { CardTypes = [d], Controller = controller };
+    }
 
     return null;
   }

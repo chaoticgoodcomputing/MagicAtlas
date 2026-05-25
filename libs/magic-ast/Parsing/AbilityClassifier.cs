@@ -205,6 +205,55 @@ public sealed class AbilityClassifier
       };
     }
 
+    // Lines beginning with "Until end of turn, ..." are resolution
+    // instructions on the spell, not declarative statics — the duration
+    // clause is parsed as part of the effect by SpellAbilityParser.
+    if (
+      clause.RawText.TrimStart()
+        .StartsWith("Until end of turn", StringComparison.OrdinalIgnoreCase)
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "Each player ..." instructional sentences on the spell (Rule 113.3a) —
+    // discard prompts, life-loss conditionals, etc. Static doesn't fit; the
+    // text is an imperative resolution step.
+    if (
+      clause.RawText.TrimStart()
+        .StartsWith("Each player", StringComparison.OrdinalIgnoreCase)
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.80,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "This spell can't be countered." / "This spell costs ..." are
+    // properties of the spell itself, not the permanent that resolves from
+    // it. Route to the spell parser so the EffectType lands inside
+    // SpellAbility.Effects rather than as a top-level static.
+    if (
+      clause.RawText.TrimStart()
+        .StartsWith("This spell", StringComparison.OrdinalIgnoreCase)
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.80,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Default to static ability for declarative statements
     return new ClauseClassification
     {
