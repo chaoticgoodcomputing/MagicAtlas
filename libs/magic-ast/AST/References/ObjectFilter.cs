@@ -54,6 +54,19 @@ public sealed record ObjectFilter
   public bool? IsMulticolored { get; init; }
 
   /// <summary>
+  /// Filters to monocolored objects (those with exactly one color). Rule 105.3
+  /// ("An object is the color or colors of the mana symbols in its mana cost,
+  /// regardless of the cost of that mana ... If an object has exactly one of
+  /// these five colors, it is monocolored"). Parallel axis to
+  /// <see cref="IsMulticolored"/> and <see cref="IsColorless"/> — the "exactly
+  /// one color" constraint cannot be expressed by <see cref="Colors"/>, which
+  /// encodes "has any of these colors" (satisfied by multicolored objects that
+  /// happen to include a listed color).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsMonocolored { get; init; }
+
+  /// <summary>
   /// Who controls the objects: You, Opponent, Any.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
