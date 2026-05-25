@@ -1,0 +1,57 @@
+{
+  "Input": {
+    "Name": "Abandon Attachments",
+    "ManaCost": "{1}{U/R}",
+    "TypeLine": "Instant",
+    "OracleText": "You may discard a card. If you do, draw two cards.",
+    "Colors": ["R", "U"],
+    "ColorIdentity": ["U", "R"]
+  },
+  "Output": {
+    "Name": "Abandon Attachments",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "You may discard a card. If you do, draw two cards.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "discardCards",
+              "Count": { "QuantityType": "literal", "Value": 1 },
+              "Player": { "Kind": "You" },
+              "IsOptional": true,
+              "IfYouDo": {
+                "EffectType": "drawCards",
+                "Count": { "QuantityType": "literal", "Value": 2 },
+                "Player": { "Kind": "You" }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U/R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "hybrid", "Colors": ["U", "R"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U", "R"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "Input": {
+    "Name": "Thought Reflection",
+    "ManaCost": "{4}{U}{U}{U}",
+    "TypeLine": "Enchantment",
+    "OracleText": "If you would draw a card, draw two cards instead.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Thought Reflection",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "If you would draw a card, draw two cards instead.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "replacement",
+            "Event": {
+              "EventType": "drawCard",
+              "Player": { "Kind": "You" }
+            },
+            "OriginalEventOccurs": false,
+            "Replacement": {
+              "EffectType": "drawCards",
+              "Count": { "QuantityType": "literal", "Value": 2 },
+              "Player": { "Kind": "You" }
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{U}{U}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
