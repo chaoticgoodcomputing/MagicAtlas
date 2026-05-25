@@ -8,6 +8,7 @@ using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Core;
+using MagicAST.AST.Effects.Counter;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.Effects.Resource;
 using MagicAST.AST.Effects.ZoneChange;
@@ -110,6 +111,11 @@ public sealed class SpellAbilityParser : IAbilityParser
   /// </summary>
   private static IReadOnlyList<Effect>? TryParseEffects(string text)
   {
+    // Parenthetical reminder text (Rule 207.2) carries no rules meaning — it
+    // restates the keyword/effect for new players. Strip it before any rule
+    // fires so the gold AST (which omits reminder content) gets a clean line.
+    text = StripReminderText(text);
+
     // Effects that intrinsically split into multiple gold entries are matched
     // before the single-effect dispatch so the parser doesn't collapse them
     // into one composite by accident.
@@ -344,7 +350,89 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParsePutCounterOnTargetEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseScrySpellEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// Removes parenthesized reminder text (Rule 207.2) from a spell line. Reminder
+  /// text reiterates a keyword or counter's effect in italics and carries no
+  /// rules-text content of its own — the gold AST omits it entirely. Stripping
+  /// it here lets the per-effect recognizers see a clean line without each
+  /// regex having to tolerate a trailing parenthetical.
+  /// </summary>
+  private static string StripReminderText(string text)
+  {
+    // Non-greedy across balanced parentheses; reminder text never nests in
+    // practice, so a single pass suffices.
+    var stripped = Regex.Replace(text, @"\s*\([^)]*\)", string.Empty);
+    return stripped.Trim();
+  }
+
+  /// <summary>
+  /// "Put a [counter-type] counter on target [type]." — single-counter spell-side
+  /// put-counter (Boon of Safety: "Put a shield counter on target creature").
+  /// The counter type is captured verbatim and lowercased onto
+  /// <see cref="PutCountersEffect.CounterType"/>; the target filter is the
+  /// single card-type token. Count is fixed at 1 (literal) per the "a" article.
+  /// </summary>
+  /// <remarks>
+  /// Intentionally narrow: only the single-counter "a" article shape and a
+  /// single-token type filter. Multi-counter shapes ("Put two +1/+1 counters
+  /// on…") and +N/+N counters use distinct phrasing and are left for a
+  /// dedicated rule when a fixture demands them.
+  /// </remarks>
+  private static PutCountersEffect? TryParsePutCounterOnTargetEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Put\s+a\s+(?<counter>\w+)\s+counter\s+on\s+target\s+(?<type>creature|artifact|enchantment|land|planeswalker|permanent)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    return new PutCountersEffect
+    {
+      CounterType = m.Groups["counter"].Value.ToLowerInvariant(),
+      Count = LiteralQuantity.Of(1),
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = [m.Groups["type"].Value.ToLowerInvariant()] },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Scry N." — spell-side scry instruction (Boon of Safety's second clause).
+  /// Mirrors <see cref="ActivatedAbilityParser.TryParseScryEffect"/> but emits
+  /// no <c>Player</c> field — the scrying player is implicit (the spell's
+  /// controller, per Rule 701.18), and the gold fixture omits it.
+  /// </summary>
+  private static ScryEffect? TryParseScrySpellEffect(string text)
+  {
+    var m = Regex.Match(text, @"^Scry\s+(?<count>\d+)$", RegexOptions.IgnoreCase);
+    if (!m.Success)
+    {
+      return null;
+    }
+    return new ScryEffect
+    {
+      Count = LiteralQuantity.Of(int.Parse(m.Groups["count"].Value)),
+    };
   }
 
   /// <summary>
