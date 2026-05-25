@@ -7,6 +7,7 @@ using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Core;
 using MagicAST.AST.Effects.Modification;
+using MagicAST.AST.Effects.Resource;
 using MagicAST.AST.Effects.ZoneChange;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
@@ -193,7 +194,50 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseExileGraveyardsEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "Exile any number of target players' graveyards." — third chapter of
+  /// The Death of Gwen Stacy. The plural-possessive 'target players''
+  /// phrasing surfaces the cards in those graveyards as the actual target;
+  /// the gold AST encodes the player-modifier on the filter's
+  /// <see cref="ObjectFilter.Characteristics"/> while pinning
+  /// <see cref="ObjectFilter.Zone"/> to <see cref="Zone.Graveyard"/>.
+  /// </summary>
+  private static MagicAST.AST.Effects.ZoneChange.ExileEffect? TryParseExileGraveyardsEffect(
+    string text
+  )
+  {
+    if (
+      !Regex.IsMatch(
+        text,
+        @"^Exile\s+(?:any\s+number\s+of\s+)?target\s+players'?\s+graveyards?$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return null;
+    }
+    return new MagicAST.AST.Effects.ZoneChange.ExileEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["card"],
+          Zone = Zone.Graveyard,
+          Characteristics = ["in any number of target players' graveyards"],
+        },
+      },
+    };
   }
 
   /// <summary>
@@ -308,6 +352,8 @@ public sealed class SpellAbilityParser : IAbilityParser
   /// <summary>
   /// "Each player [may] discard a card." — each-player discard fragment used
   /// in spell text (e.g. the Death of Gwen Stacy first effect on Spider-Man).
+  /// Recognises the "Each player who doesn't loses N life." follow-up and
+  /// attaches it as <see cref="DiscardCardsEffect.IfYouDoNot"/>.
   /// </summary>
   private static MagicAST.AST.Effects.CardFlow.DiscardCardsEffect? TryParseDiscardEachPlayerEffect(string text)
   {
@@ -321,12 +367,39 @@ public sealed class SpellAbilityParser : IAbilityParser
       return null;
     }
     var isOptional = lower.Contains("may discard");
+
+    Effect? ifYouDoNot = null;
+    var follow = Regex.Match(
+      text,
+      @"Each\s+player\s+who\s+doesn'?t\s+loses?\s+(?<life>\d+|one|two|three|four|five)\s+life",
+      RegexOptions.IgnoreCase
+    );
+    if (follow.Success)
+    {
+      var raw = follow.Groups["life"].Value.ToLowerInvariant();
+      int life = raw switch
+      {
+        "one" => 1,
+        "two" => 2,
+        "three" => 3,
+        "four" => 4,
+        "five" => 5,
+        _ => int.Parse(raw),
+      };
+      ifYouDoNot = new MagicAST.AST.Effects.Resource.LoseLifeEffect
+      {
+        Amount = LiteralQuantity.Of(life),
+        Player = new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
+      };
+    }
+
     return new MagicAST.AST.Effects.CardFlow.DiscardCardsEffect
     {
       Count = LiteralQuantity.Of(1),
       Player = new ObjectReference { Kind = ObjectReferenceKind.EachPlayer },
       Random = false,
       IsOptional = isOptional,
+      IfYouDoNot = ifYouDoNot,
     };
   }
 
