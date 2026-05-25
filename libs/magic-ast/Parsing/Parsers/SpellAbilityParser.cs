@@ -3,8 +3,13 @@ namespace MagicAST.Parsing.Parsers;
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects;
+using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.Effects.Control;
+using MagicAST.AST.Effects.Core;
+using MagicAST.AST.Effects.Modification;
+using MagicAST.AST.Effects.Resource;
 using MagicAST.AST.Effects.ZoneChange;
+using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 using MagicAST.Parsing.Tokens;
 
@@ -28,8 +33,8 @@ public sealed class SpellAbilityParser : IAbilityParser
   /// <inheritdoc/>
   public IReadOnlyList<Ability> Parse(OracleClause clause, ClauseClassification classification)
   {
-    var effect = TryParseEffect(clause.RawText);
-    if (effect is null)
+    var effects = TryParseEffects(clause.RawText);
+    if (effects is null || effects.Count == 0)
     {
       return
       [
@@ -39,8 +44,87 @@ public sealed class SpellAbilityParser : IAbilityParser
 
     return
     [
-      new SpellAbility { Effects = [effect], AbilityWord = classification.AbilityWord },
+      new SpellAbility { Effects = effects, AbilityWord = classification.AbilityWord },
     ];
+  }
+
+  /// <summary>
+  /// Multi-effect dispatch: one spell line can carry several effects in the
+  /// gold AST (e.g. Rookie Mistake's pair of <c>modifyPT</c>s under a single
+  /// duration). We model that as a list returned from a single line of text;
+  /// single-effect routes still return one-element lists.
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseEffects(string text)
+  {
+    // Effects that intrinsically split into multiple gold entries are matched
+    // before the single-effect dispatch so the parser doesn't collapse them
+    // into one composite by accident.
+    var trimmed = text.Trim().TrimEnd('.').Trim();
+    var pair = TryParseModifyPTConjunctionEffectsList(trimmed);
+    if (pair is not null)
+    {
+      return pair;
+    }
+
+    var single = TryParseEffect(text);
+    if (single is null)
+    {
+      return null;
+    }
+    return [single];
+  }
+
+  /// <summary>
+  /// Rookie-Mistake shape returning the gold's flat two-element list directly.
+  /// Mirrors <see cref="TryParseModifyPTConjunctionEffect"/> but skips the
+  /// composite wrapper, so SpellAbility.Effects matches the fixture's shape.
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseModifyPTConjunctionEffectsList(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Until\s+end\s+of\s+turn,\s*target\s+creature\s+gets\s+(?<p1>[+-]\d+)/(?<t1>[+-]\d+)\s+and\s+another\s+target\s+creature\s+gets\s+(?<p2>[+-]\d+)/(?<t2>[+-]\d+)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    var p1 = int.Parse(m.Groups["p1"].Value);
+    var t1 = int.Parse(m.Groups["t1"].Value);
+    var p2 = int.Parse(m.Groups["p2"].Value);
+    var t2 = int.Parse(m.Groups["t2"].Value);
+
+    var duration = new MagicAST.AST.Effects.UntilEndOfTurnDuration();
+    return new List<Effect>
+    {
+      new MagicAST.AST.Effects.Modification.ModifyPTEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter { CardTypes = ["creature"] },
+        },
+        PowerModifier = LiteralQuantity.Of(p1),
+        ToughnessModifier = LiteralQuantity.Of(t1),
+        Duration = duration,
+      },
+      new MagicAST.AST.Effects.Modification.ModifyPTEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Characteristics = ["another"],
+          },
+        },
+        PowerModifier = LiteralQuantity.Of(p2),
+        ToughnessModifier = LiteralQuantity.Of(t2),
+        Duration = duration,
+      },
+    };
   }
 
   /// <summary>
@@ -62,7 +146,404 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
-    return TryParseReturnFromGraveyardToHandEffect(trimmed);
+    effect = TryParseReturnFromGraveyardToHandEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseDestroyTargetSimpleEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseDiscardEachPlayerEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseDrawCardsSimpleEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseModifyPTConjunctionEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseReturnCommanderToHandEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseCantBeCounteredEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseReturnTargetToHandEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseExileGraveyardsEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    return null;
+  }
+
+  /// <summary>
+  /// "Exile any number of target players' graveyards." — third chapter of
+  /// The Death of Gwen Stacy. The plural-possessive 'target players''
+  /// phrasing surfaces the cards in those graveyards as the actual target;
+  /// the gold AST encodes the player-modifier on the filter's
+  /// <see cref="ObjectFilter.Characteristics"/> while pinning
+  /// <see cref="ObjectFilter.Zone"/> to <see cref="Zone.Graveyard"/>.
+  /// </summary>
+  private static MagicAST.AST.Effects.ZoneChange.ExileEffect? TryParseExileGraveyardsEffect(
+    string text
+  )
+  {
+    if (
+      !Regex.IsMatch(
+        text,
+        @"^Exile\s+(?:any\s+number\s+of\s+)?target\s+players'?\s+graveyards?$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return null;
+    }
+    return new MagicAST.AST.Effects.ZoneChange.ExileEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["card"],
+          Zone = Zone.Graveyard,
+          Characteristics = ["in any number of target players' graveyards"],
+        },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Return up to two target creatures to their owners' hands." /
+  /// "Return target creature to its owner's hand." — battlefield-to-hand
+  /// returns at spell-resolution time. The "up to N" / "you may" prefix
+  /// flags <see cref="ReturnToHandEffect.IsOptional"/>.
+  /// </summary>
+  private static MagicAST.AST.Effects.ZoneChange.ReturnToHandEffect? TryParseReturnTargetToHandEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^Return\s+(?:(?<opt>up\s+to\s+\w+|you\s+may)\s+)?(?<target>(?:another\s+)?(?:up\s+to\s+\w+\s+)?target\s+(?:creature|artifact|enchantment|land|permanent|planeswalker)s?(?:\s+you\s+control)?)\s+to\s+(?:its?\s+owner'?s|their\s+owners'?|your)\s+hand(?:s)?$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    var lower = text.ToLowerInvariant();
+    var isOptional = m.Groups["opt"].Success || lower.Contains("you may return") || Regex.IsMatch(lower, @"return\s+up\s+to\s+");
+    var targetText = m.Groups["target"].Value.ToLowerInvariant();
+
+    var characteristics = new List<string>();
+    if (targetText.StartsWith("another "))
+    {
+      characteristics.Add("other");
+    }
+
+    var cardTypes = new List<string>();
+    foreach (var t in new[] { "creature", "artifact", "enchantment", "land", "permanent", "planeswalker" })
+    {
+      if (Regex.IsMatch(targetText, $@"\b{t}s?\b"))
+      {
+        cardTypes.Add(t);
+      }
+    }
+    if (cardTypes.Count == 0)
+    {
+      return null;
+    }
+    ControllerFilter? controller = targetText.Contains("you control") ? ControllerFilter.You : null;
+
+    return new MagicAST.AST.Effects.ZoneChange.ReturnToHandEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = cardTypes,
+          Characteristics = characteristics.Count > 0 ? characteristics : null,
+          Controller = controller,
+        },
+      },
+      IsOptional = isOptional,
+    };
+  }
+
+  /// <summary>
+  /// "This spell can't be countered." — encoded as a spell-level effect
+  /// rather than a static. (See <see cref="AbilityClassifier"/> for the
+  /// rationale: it's a property of the resolving spell, not of the
+  /// permanent that comes off the stack.)
+  /// </summary>
+  private static MagicAST.AST.Effects.Keyword.CantBeCounteredEffect? TryParseCantBeCounteredEffect(
+    string text
+  )
+  {
+    if (
+      !Regex.IsMatch(
+        text,
+        @"^This\s+spell\s+can'?t\s+be\s+countered$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return null;
+    }
+    return new MagicAST.AST.Effects.Keyword.CantBeCounteredEffect();
+  }
+
+  /// <summary>
+  /// "Destroy target creature." — single-type destroy spell. Disambiguates
+  /// from the disjunction shape above by requiring exactly one type token
+  /// in the target descriptor.
+  /// </summary>
+  private static MagicAST.AST.Effects.ZoneChange.DestroyEffect? TryParseDestroyTargetSimpleEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Destroy\s+target\s+(?<type>creature|artifact|enchantment|land|planeswalker|permanent)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    return new MagicAST.AST.Effects.ZoneChange.DestroyEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = [m.Groups["type"].Value.ToLowerInvariant()] },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Each player [may] discard a card." — each-player discard fragment used
+  /// in spell text (e.g. the Death of Gwen Stacy first effect on Spider-Man).
+  /// Recognises the "Each player who doesn't loses N life." follow-up and
+  /// attaches it as <see cref="DiscardCardsEffect.IfYouDoNot"/>.
+  /// </summary>
+  private static MagicAST.AST.Effects.CardFlow.DiscardCardsEffect? TryParseDiscardEachPlayerEffect(string text)
+  {
+    var lower = text.ToLowerInvariant();
+    if (!lower.StartsWith("each player"))
+    {
+      return null;
+    }
+    if (!Regex.IsMatch(lower, @"discard\s+a\s+card"))
+    {
+      return null;
+    }
+    var isOptional = lower.Contains("may discard");
+
+    Effect? ifYouDoNot = null;
+    var follow = Regex.Match(
+      text,
+      @"Each\s+player\s+who\s+doesn'?t\s+loses?\s+(?<life>\d+|one|two|three|four|five)\s+life",
+      RegexOptions.IgnoreCase
+    );
+    if (follow.Success)
+    {
+      var raw = follow.Groups["life"].Value.ToLowerInvariant();
+      int life = raw switch
+      {
+        "one" => 1,
+        "two" => 2,
+        "three" => 3,
+        "four" => 4,
+        "five" => 5,
+        _ => int.Parse(raw),
+      };
+      ifYouDoNot = new MagicAST.AST.Effects.Resource.LoseLifeEffect
+      {
+        Amount = LiteralQuantity.Of(life),
+        Player = new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
+      };
+    }
+
+    return new MagicAST.AST.Effects.CardFlow.DiscardCardsEffect
+    {
+      Count = LiteralQuantity.Of(1),
+      Player = new ObjectReference { Kind = ObjectReferenceKind.EachPlayer },
+      Random = false,
+      IsOptional = isOptional,
+      IfYouDoNot = ifYouDoNot,
+    };
+  }
+
+  /// <summary>
+  /// Plain "Draw [N] card(s)." used at the spell-resolution level (sorceries
+  /// like Read the Tides' modal options, or single-option spells).
+  /// </summary>
+  private static MagicAST.AST.Effects.CardFlow.DrawCardsEffect? TryParseDrawCardsSimpleEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Draw\s+(?<count>a|one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+cards?$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    var raw = m.Groups["count"].Value.ToLowerInvariant();
+    int n;
+    if (raw == "a" || raw == "one")
+    {
+      n = 1;
+    }
+    else if (int.TryParse(raw, out var asDigit))
+    {
+      n = asDigit;
+    }
+    else
+    {
+      n = raw switch
+      {
+        "two" => 2,
+        "three" => 3,
+        "four" => 4,
+        "five" => 5,
+        "six" => 6,
+        "seven" => 7,
+        "eight" => 8,
+        "nine" => 9,
+        "ten" => 10,
+        _ => 1,
+      };
+    }
+    return new MagicAST.AST.Effects.CardFlow.DrawCardsEffect
+    {
+      Count = LiteralQuantity.Of(n),
+      Player = ObjectReference.You(),
+    };
+  }
+
+  /// <summary>
+  /// Rookie-Mistake shape:
+  /// "Until end of turn, target creature gets +0/+2 and another target creature gets -2/-0."
+  /// Builds a single composite effect with two <see cref="ModifyPTEffect"/>s,
+  /// each sharing the "until end of turn" <see cref="Duration"/>.
+  /// </summary>
+  private static MagicAST.AST.Effects.Core.CompositeEffect? TryParseModifyPTConjunctionEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Until\s+end\s+of\s+turn,\s*target\s+creature\s+gets\s+(?<p1>[+-]\d+)/(?<t1>[+-]\d+)\s+and\s+another\s+target\s+creature\s+gets\s+(?<p2>[+-]\d+)/(?<t2>[+-]\d+)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    var p1 = int.Parse(m.Groups["p1"].Value);
+    var t1 = int.Parse(m.Groups["t1"].Value);
+    var p2 = int.Parse(m.Groups["p2"].Value);
+    var t2 = int.Parse(m.Groups["t2"].Value);
+
+    var duration = new MagicAST.AST.Effects.UntilEndOfTurnDuration();
+    var effects = new List<Effect>
+    {
+      new MagicAST.AST.Effects.Modification.ModifyPTEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter { CardTypes = ["creature"] },
+        },
+        PowerModifier = LiteralQuantity.Of(p1),
+        ToughnessModifier = LiteralQuantity.Of(t1),
+        Duration = duration,
+      },
+      new MagicAST.AST.Effects.Modification.ModifyPTEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Characteristics = ["another"],
+          },
+        },
+        PowerModifier = LiteralQuantity.Of(p2),
+        ToughnessModifier = LiteralQuantity.Of(t2),
+        Duration = duration,
+      },
+    };
+
+    // The fixture stores each modifyPT as a top-level entry in Effects[] —
+    // wrap them in a composite so SpellAbility.Effects keeps its single-entry
+    // shape but the gold's flat list comes through after expansion.
+    return new MagicAST.AST.Effects.Core.CompositeEffect { Effects = effects };
+  }
+
+  /// <summary>
+  /// "Put your commander into your hand from the command zone." — Road of Return's
+  /// commander-recall option. Encodes the destination zone implicitly via the
+  /// <see cref="ReturnToHandEffect"/> kind and the source zone explicitly on the
+  /// filter (<see cref="Zone.CommandZone"/>). The target uses
+  /// <see cref="ObjectReferenceKind.Designated"/> because oracle text refers to
+  /// "your commander" by designation, not by a creature filter.
+  /// </summary>
+  private static MagicAST.AST.Effects.ZoneChange.ReturnToHandEffect? TryParseReturnCommanderToHandEffect(
+    string text
+  )
+  {
+    if (
+      !Regex.IsMatch(
+        text,
+        @"^Put\s+your\s+commander\s+into\s+your\s+hand\s+from\s+the\s+command\s+zone$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return null;
+    }
+    return new MagicAST.AST.Effects.ZoneChange.ReturnToHandEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Designated,
+        Filter = new ObjectFilter
+        {
+          Characteristics = ["your commander"],
+          Zone = Zone.CommandZone,
+        },
+      },
+    };
   }
 
   /// <summary>

@@ -3,6 +3,7 @@ namespace MagicAST.Parsing.Parsers;
 using System.Text.RegularExpressions;
 using MagicAST.AST;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.References;
@@ -82,12 +83,378 @@ public sealed class StaticAbilityParser : IAbilityParser
       return grantedAbility;
     }
 
-    // Try other static ability patterns
-    // TODO: Add more patterns as needed:
-    // - "Enchant [descriptor]"
-    // - "This spell can't be countered"
-    // - "This [permanent] doesn't untap during your untap step"
-    // - Replacement effects
+    // "This artifact doesn't untap during your untap step." (Rule 701.20)
+    // Encodes the possessive ("your" / "its controller's") on
+    // <see cref="DoesntUntapEffect.WhoseUntapStep"/> for downstream consumers.
+    var doesntUntap = TryParseDoesntUntap(clause);
+    if (doesntUntap != null)
+    {
+      return doesntUntap;
+    }
+
+    // "This creature can't be blocked except by [filter]." — Rule 509-style evasion.
+    var evasion = TryParseEvasion(clause);
+    if (evasion != null)
+    {
+      return evasion;
+    }
+
+    // "Enchant [filter]." — Aura legal-target restriction (Rule 702.5).
+    var enchant = TryParseEnchant(clause);
+    if (enchant != null)
+    {
+      return enchant;
+    }
+
+    // "Ward {N}" / "Ward — [effect]" — emits a TriggeredAbility with
+    // KeywordSource="Ward", structured as the trigger Rule 702.21 expands to.
+    var ward = TryParseWardKeyword(clause);
+    if (ward != null)
+    {
+      return ward;
+    }
+
+    // "This spell costs {X} less to cast, where X is ..." — cost reduction
+    // scaled by a derived quantity (Chandra's Incinerator shape).
+    var costReduction = TryParseCostReductionWhereX(clause);
+    if (costReduction != null)
+    {
+      return costReduction;
+    }
+
+    // "During [period], [self] has [keyword]." — conditional static keyword
+    // (Zurgo's during-your-turn indestructibility).
+    var conditionalKeyword = TryParseConditionalSelfKeyword(clause);
+    if (conditionalKeyword != null)
+    {
+      return conditionalKeyword;
+    }
+
+    return null;
+  }
+
+  /// <summary>
+  /// "During your turn, [self] has [keyword]." — produces a static ability
+  /// guarded by a <see cref="MagicAST.AST.Abilities.Condition"/> whose text
+  /// preserves the duration clause. The keyword tail is wrapped in the
+  /// canonical effect node so the resulting ability mirrors the same shape
+  /// a non-conditional version of that keyword would carry.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseConditionalSelfKeyword(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*(?<cond>During\s+(?:your\s+turn|each\s+(?:opponent|player)'?s\s+turn|combat)),\s+(?<subject>\S.*?)\s+has\s+(?<kw>\w+(?:\s+\w+)?)\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    var kw = match.Groups["kw"].Value.ToLowerInvariant().Trim();
+    Effect? effect = kw switch
+    {
+      "indestructible" => new MagicAST.AST.Effects.Keyword.IndestructibleEffect(),
+      "haste" => new MagicAST.AST.Effects.Keyword.HasteEffect(),
+      "trample" => new MagicAST.AST.Effects.Keyword.TrampleEffect(),
+      "lifelink" => new MagicAST.AST.Effects.Damage.LifelinkEffect(),
+      "vigilance" => new MagicAST.AST.Effects.Keyword.VigilanceEffect(),
+      "reach" => new MagicAST.AST.Effects.Keyword.ReachEffect(),
+      _ => null,
+    };
+    if (effect is null)
+    {
+      return null;
+    }
+    var conditionText = match.Groups["cond"].Value.Trim();
+    return
+    [
+      new StaticAbility
+      {
+        Effect = effect,
+        Condition = new MagicAST.AST.Abilities.Condition { Text = conditionText },
+      },
+    ];
+  }
+
+  /// <summary>
+  /// "This spell costs {X} less to cast, where X is the total amount of
+  /// noncombat damage dealt to your opponents this turn." — Chandra's
+  /// Incinerator's cost-reduction static. The right-hand definition of X is
+  /// captured as a <see cref="MagicAST.AST.Quantities.DerivedQuantity"/>
+  /// whose <see cref="MagicAST.AST.Quantities.DerivedKind"/> is
+  /// <c>DamageDealt</c>; the long source phrase lives on the same node's
+  /// <c>Source</c> string and on <see cref="MagicAST.AST.Effects.Resource.CostReductionEffect.BasedOn"/>.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseCostReductionWhereX(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*This\s+spell\s+costs\s+\{X\}\s+less\s+to\s+cast,\s+where\s+X\s+is\s+(?:the\s+total\s+amount\s+of\s+)?(?<source>.+?)\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    var source = match.Groups["source"].Value.Trim();
+    var derivedKind = source.Contains("damage", StringComparison.OrdinalIgnoreCase)
+      ? MagicAST.AST.Quantities.DerivedKind.DamageDealt
+      : MagicAST.AST.Quantities.DerivedKind.Other;
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Resource.CostReductionEffect
+        {
+          Amount = new MagicAST.AST.Quantities.DerivedQuantity
+          {
+            DerivedFrom = derivedKind,
+            Source = source,
+          },
+          BasedOn = source,
+        },
+      },
+    ];
+  }
+
+  /// <summary>
+  /// "Ward {N}" / "Ward {X}{Y}" — Rule 702.21 keyword. The reminder-text
+  /// expansion is canonically "Whenever this permanent becomes the target of
+  /// a spell or ability an opponent controls, counter it unless that player
+  /// pays [cost]." The parser emits that triggered shape directly with
+  /// KeywordSource="Ward" so the resulting node mirrors how the same trigger
+  /// would land if printed verbatim on a card.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseWardKeyword(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*Ward\s+(?<cost>(?:\{[^}]+\})+)\s*(?<rest>.*)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var costStr = match.Groups["cost"].Value;
+    MagicAST.AST.Costs.ManaCost? wardCost;
+    try
+    {
+      var parsed = new ManaCostParser().Parse(costStr);
+      if (parsed.Symbols.Count == 0)
+      {
+        return null;
+      }
+      wardCost = new MagicAST.AST.Costs.ManaCost { Symbols = parsed.Symbols };
+    }
+    catch
+    {
+      return null;
+    }
+
+    Parenthetical? reminder = null;
+    var rest = match.Groups["rest"].Value.Trim();
+    if (rest.StartsWith('(') && rest.EndsWith(')'))
+    {
+      reminder = new Parenthetical { Text = rest };
+    }
+
+    var trigger = new MagicAST.AST.Triggers.TriggerCondition
+    {
+      Timing = MagicAST.AST.Triggers.TriggerTiming.Whenever,
+      Event = MagicAST.AST.Triggers.TriggerEvent.BecomesTarget,
+      Filter = new ObjectFilter { Controller = ControllerFilter.Opponent },
+    };
+
+    var counterSpell = new MagicAST.AST.Effects.Control.CounterSpellEffect
+    {
+      Target = new ObjectReference { Kind = ObjectReferenceKind.It },
+      UnlessClause = new MagicAST.AST.Effects.UnlessClause
+      {
+        Player = new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
+        Cost = wardCost,
+      },
+    };
+
+    return
+    [
+      new MagicAST.AST.Abilities.TriggeredAbility
+      {
+        KeywordSource = "Ward",
+        Trigger = trigger,
+        Effects = [counterSpell],
+        Reminder = reminder,
+      },
+    ];
+  }
+
+  /// <summary>
+  /// Matches "This [permanent] doesn't untap during [possessive] untap step." and
+  /// produces a <see cref="StaticAbility"/> wrapping a <see cref="DoesntUntapEffect"/>.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseDoesntUntap(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*This\s+(?:permanent|creature|artifact|enchantment|land)\s+doesn'?t\s+untap\s+during\s+(?<possessive>your|its\s+controller'?s)\s+untap\s+step\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    var possessive = match.Groups["possessive"].Value.Trim();
+    // Normalise "its controller's" → "its controller's" (preserve apostrophe);
+    // gold uses the literal possessive token so case-fold to lower-case "your".
+    if (possessive.Equals("your", StringComparison.OrdinalIgnoreCase))
+    {
+      possessive = "your";
+    }
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Control.DoesntUntapEffect
+        {
+          WhoseUntapStep = possessive,
+        },
+      },
+    ];
+  }
+
+  /// <summary>
+  /// Matches "This creature can't be blocked except by [colour] creatures." —
+  /// a structured evasion restriction (Rule 509). Builds a
+  /// <see cref="EvasionEffect.CanBeBlockedBy"/> filter that captures the
+  /// colour and card-type qualifiers in the "except by" tail.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEvasion(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*This\s+(?:creature|permanent)\s+can'?t\s+be\s+blocked\s+except\s+by\s+(?<tail>.+?)\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var tail = match.Groups["tail"].Value.ToLowerInvariant();
+    var colors = new List<string>();
+    var colorMap = new Dictionary<string, string>
+    {
+      ["white"] = "W",
+      ["blue"] = "U",
+      ["black"] = "B",
+      ["red"] = "R",
+      ["green"] = "G",
+    };
+    foreach (var (name, code) in colorMap)
+    {
+      if (Regex.IsMatch(tail, $@"\b{name}\b"))
+      {
+        colors.Add(code);
+      }
+    }
+    var cardTypes = new List<string>();
+    foreach (var t in new[] { "creature", "permanent", "artifact" })
+    {
+      if (Regex.IsMatch(tail, $@"\b{t}s?\b"))
+      {
+        cardTypes.Add(t);
+      }
+    }
+
+    var canBeBlockedBy = new ObjectFilter
+    {
+      CardTypes = cardTypes.Count > 0 ? cardTypes : null,
+      Colors = colors.Count > 0 ? colors : null,
+    };
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Keyword.EvasionEffect { CanBeBlockedBy = canBeBlockedBy },
+      },
+    ];
+  }
+
+  /// <summary>
+  /// Matches a bare "Enchant [target descriptor]" line — the Aura legal-target
+  /// declaration (Rule 702.5). The descriptor is mapped onto an
+  /// <see cref="ObjectFilter"/> covering the common shapes ("creature", "land",
+  /// "permanent"); more elaborate shapes (e.g. "Enchant creature you control")
+  /// land their qualifiers on the filter axes.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEnchant(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*Enchant\s+(?<descriptor>.+?)\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var descriptor = match.Groups["descriptor"].Value.Trim().ToLowerInvariant();
+    if (descriptor.Length == 0)
+    {
+      return null;
+    }
+
+    var filter = BuildEnchantFilter(descriptor);
+    if (filter is null)
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        KeywordSource = "Enchant",
+        Effect = new MagicAST.AST.Effects.Combat.EnchantRestrictionEffect
+        {
+          LegalTargets = filter,
+        },
+      },
+    ];
+  }
+
+  /// <summary>
+  /// Builds an <see cref="ObjectFilter"/> from the descriptor noun-phrase that
+  /// follows the <c>Enchant</c> keyword. Returns null for descriptors the
+  /// parser doesn't yet recognise so the fallback path can report the gap.
+  /// </summary>
+  private static ObjectFilter? BuildEnchantFilter(string descriptor)
+  {
+    // Strip leading "a "/"an " articles that appear in some printings.
+    var d = Regex.Replace(descriptor, @"^(?:a|an)\s+", "", RegexOptions.IgnoreCase).Trim();
+
+    ControllerFilter? controller = null;
+    if (d.EndsWith(" you control"))
+    {
+      controller = ControllerFilter.You;
+      d = d[..^" you control".Length].Trim();
+    }
+    else if (d.EndsWith(" an opponent controls"))
+    {
+      controller = ControllerFilter.Opponent;
+      d = d[..^" an opponent controls".Length].Trim();
+    }
+
+    // Simple-noun shape: "creature", "land", "permanent", "artifact", "enchantment".
+    var simpleTypes = new[] { "creature", "land", "permanent", "artifact", "enchantment", "planeswalker", "player" };
+    if (simpleTypes.Contains(d))
+    {
+      return new ObjectFilter { CardTypes = [d], Controller = controller };
+    }
 
     return null;
   }

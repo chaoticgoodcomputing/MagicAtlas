@@ -376,6 +376,20 @@ public static class OracleParsers
         return new ProtectionQuality { Kind = ProtectionQualityKind.CardType, Value = singular };
       }
 
+      // Characteristics: multicolored, monocolored, etc. — lowercase
+      // single-word qualifiers that aren't a color name. Oracle text
+      // capitalizes creature-type names (Demons, Dragons), so a lowercase
+      // token here means a state predicate rather than a type.
+      var characteristics = new[] { "multicolored", "monocolored", "colored" };
+      if (characteristics.Contains(normalized))
+      {
+        return new ProtectionQuality
+        {
+          Kind = ProtectionQualityKind.Characteristic,
+          Value = normalized,
+        };
+      }
+
       // Otherwise, assume it's a subtype (capitalized in oracle text)
       // Examples: "Demons", "Dragons", "Elves"
       return new ProtectionQuality { Kind = ProtectionQualityKind.Subtype, Value = value };
@@ -427,6 +441,66 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Entwine {cost}" — Rule 702.41. The cost is parsed by the
+  /// shared mana-cost parser so multi-symbol entwine costs (e.g. {1}{B}) land
+  /// as full <see cref="MagicAST.AST.Costs.ManaCost"/> nodes rather than
+  /// free-text fragments.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Entwine = (
+    from keyword in Keyword("Entwine")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Entwine",
+      Effect = new EntwineEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      },
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Choose a Background" — a fixed-name partner variant from
+  /// Commander Legends: Battle for Baldur's Gate (Rule 702.124g, descriptive
+  /// reference). Emits a static ability whose effect carries
+  /// <see cref="PartnerType.ChooseABackground"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> ChooseABackground = (
+    from choose in Token.EqualTo(OracleToken.Choose)
+    from a in Keyword("a")
+    from background in Keyword("Background")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Choose a Background",
+      Effect = new PartnerEffect { PartnerType = PartnerType.ChooseABackground },
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -457,7 +531,12 @@ public static class OracleParsers
   /// Parses any parameterized keyword ability.
   /// </summary>
   public static readonly TokenListParser<OracleToken, StaticAbility> ParameterizedKeyword =
-    Protection.Try().Or(Crew.Try()).Or(PartnerWith.Try());
+    Protection
+      .Try()
+      .Or(Crew.Try())
+      .Or(PartnerWith.Try())
+      .Or(ChooseABackground.Try())
+      .Or(Entwine.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).

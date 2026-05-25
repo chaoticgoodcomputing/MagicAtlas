@@ -1,5 +1,6 @@
 namespace MagicAST.Parsing;
 
+using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
 using MagicAST.Parsing.Tokens;
 using Superpower.Model;
@@ -172,6 +173,20 @@ public sealed class AbilityClassifier
     // Check for modal ability: Choose
     if (StartsWithChoose(tokens))
     {
+      // Exception: "Choose a Background" is a named partner-variant keyword
+      // (Rule 702.124g, descriptive). Route it to the static keyword parser
+      // so it lands as a StaticAbility with KeywordSource="Choose a Background"
+      // rather than as an unparsable modal selection.
+      var trimmed = clause.RawText.TrimStart();
+      if (trimmed.StartsWith("Choose a Background", StringComparison.OrdinalIgnoreCase))
+      {
+        return new ClauseClassification
+        {
+          Kind = AbilityKind.Static,
+          Confidence = 0.95,
+          AbilityWord = abilityWord,
+        };
+      }
       return new ClauseClassification
       {
         Kind = AbilityKind.Modal,
@@ -205,6 +220,75 @@ public sealed class AbilityClassifier
       };
     }
 
+    // Lines beginning with "Until end of turn, ..." are resolution
+    // instructions on the spell, not declarative statics — the duration
+    // clause is parsed as part of the effect by SpellAbilityParser.
+    if (
+      clause.RawText.TrimStart()
+        .StartsWith("Until end of turn", StringComparison.OrdinalIgnoreCase)
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "Each player ..." instructional sentences on the spell (Rule 113.3a) —
+    // discard prompts, life-loss conditionals, etc. Static doesn't fit; the
+    // text is an imperative resolution step.
+    if (
+      clause.RawText.TrimStart()
+        .StartsWith("Each player", StringComparison.OrdinalIgnoreCase)
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.80,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "This spell can't be countered." is a property of the resolving spell;
+    // route it to the spell parser so the EffectType lands inside
+    // SpellAbility.Effects rather than as a top-level static. Other
+    // "This spell ..." phrasings (e.g., "This spell costs {X} less to cast")
+    // are static cost-modification effects and remain Static.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*This\s+spell\s+can'?t\s+be\s+countered",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.80,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // Garbage / non-oracle characters: when the clause carries glyphs that
+    // never appear in printed oracle text (e.g., '@', '#', '$', '%', '^',
+    // '&', '*'), there's no meaningful structural pattern to anchor a Static
+    // classification on. Route to Unparsed so the fallback parser surfaces
+    // a structured "Failed to parse Unparsed ability" diagnostic instead of
+    // a mis-tagged "Static ability parser not yet implemented".
+    if (ContainsOracleGarbage(clause.RawText))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Unparsed,
+        Confidence = 1.0,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Default to static ability for declarative statements
     return new ClauseClassification
     {
@@ -212,6 +296,32 @@ public sealed class AbilityClassifier
       Confidence = 0.50,
       AbilityWord = abilityWord,
     };
+  }
+
+  /// <summary>
+  /// Heuristic: returns true when the clause carries glyphs that don't appear
+  /// in printed oracle text. Used to short-circuit classification on garbage
+  /// inputs so the fallback parser sees an <see cref="AbilityKind.Unparsed"/>
+  /// kind rather than a defaulted Static.
+  /// </summary>
+  private static bool ContainsOracleGarbage(string text)
+  {
+    foreach (var ch in text)
+    {
+      switch (ch)
+      {
+        case '@':
+        case '#':
+        case '$':
+        case '%':
+        case '^':
+        case '&':
+        case '~':
+        case '\\':
+          return true;
+      }
+    }
+    return false;
   }
 
   /// <summary>
