@@ -320,7 +320,92 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseSelfDealsDamageToFilteredCreatureEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "[Self] deals N damage to target [type] with [characteristic]." and
+  /// "[Self] deals N damage to each [type] with [characteristic]." — Take Down's
+  /// two modal options. Self-source is detected by the same self-by-name
+  /// convention used in <see cref="ActivatedAbilityParser"/>'s Denethor rule:
+  /// a leading capital token in the subject slot maps to the card itself
+  /// (<see cref="ObjectReference.Self"/>). The "target" vs "each" determiner
+  /// routes the reference kind onto <see cref="ObjectReferenceKind.Target"/>
+  /// or <see cref="ObjectReferenceKind.Each"/>; both share the same
+  /// <see cref="ObjectFilter"/> shape, with the trailing "with [characteristic]"
+  /// phrase carried verbatim on <see cref="ObjectFilter.Characteristics"/> per
+  /// the documented escape hatch (the predicate doesn't yet warrant a dedicated
+  /// structural axis — see batch-11 briefing).
+  /// </summary>
+  /// <remarks>
+  /// Distinct from <see cref="ActivatedAbilityParser"/>'s
+  /// "[Self] deals N damage to any target" rule: that rule's target is an
+  /// untyped <see cref="ObjectReferenceKind.AnyTarget"/>, while this rule's
+  /// target is type-and-characteristic-qualified. They share the same
+  /// self-by-name subject detection.
+  /// </remarks>
+  private static MagicAST.AST.Effects.Damage.DealDamageEffect? TryParseSelfDealsDamageToFilteredCreatureEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^(?<subject>\S.*?)\s+deals?\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+damage\s+to\s+(?<det>target|each)\s+(?<type>creature|artifact|enchantment|land|planeswalker|permanent)\s+(?<chars>with\s+\S.*?)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    // Self-by-name: the subject must be a capitalised card name. Pronoun
+    // subjects ("it", "this creature") are intentionally excluded — they
+    // belong to other recognizers wired through different reference kinds.
+    var subject = m.Groups["subject"].Value;
+    if (subject.Length == 0 || !char.IsUpper(subject[0]))
+    {
+      return null;
+    }
+
+    var rawAmount = m.Groups["amount"].Value.ToLowerInvariant();
+    int amount = rawAmount switch
+    {
+      "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      "four" => 4,
+      "five" => 5,
+      "six" => 6,
+      "seven" => 7,
+      "eight" => 8,
+      "nine" => 9,
+      "ten" => 10,
+      _ => int.Parse(rawAmount),
+    };
+
+    var kind = m.Groups["det"].Value.Equals("each", StringComparison.OrdinalIgnoreCase)
+      ? ObjectReferenceKind.Each
+      : ObjectReferenceKind.Target;
+
+    return new MagicAST.AST.Effects.Damage.DealDamageEffect
+    {
+      Amount = LiteralQuantity.Of(amount),
+      Source = ObjectReference.Self(),
+      Target = new ObjectReference
+      {
+        Kind = kind,
+        Filter = new ObjectFilter
+        {
+          CardTypes = [m.Groups["type"].Value.ToLowerInvariant()],
+          Characteristics = [m.Groups["chars"].Value.Trim()],
+        },
+      },
+    };
   }
 
   /// <summary>
