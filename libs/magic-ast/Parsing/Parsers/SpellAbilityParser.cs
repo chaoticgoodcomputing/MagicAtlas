@@ -648,7 +648,7 @@ public sealed class SpellAbilityParser : IAbilityParser
   {
     var m = Regex.Match(
       text,
-      @"^Counter\s+target\s+(?<filter>(?<color>colorless|white|blue|black|red|green)?\s*(?<type>instant|sorcery|creature|noncreature)?\s*spell(\s+with\s+converted\s+mana\s+cost.*)?)$",
+      @"^Counter\s+target\s+(?<filter>(?<color>colorless|multicolored|white|blue|black|red|green)?\s*(?<type>instant|sorcery|creature|noncreature)?\s*spell(\s+with\s+converted\s+mana\s+cost.*)?)$",
       RegexOptions.IgnoreCase
     );
     if (!m.Success)
@@ -693,7 +693,7 @@ public sealed class SpellAbilityParser : IAbilityParser
       characteristics.Add("noncreature");
     }
 
-    var (colors, isColorless) = MapColorWord(colorWord);
+    var (colors, isColorless, isMulticolored) = MapColorWord(colorWord);
 
     return new ObjectFilter
     {
@@ -701,32 +701,37 @@ public sealed class SpellAbilityParser : IAbilityParser
       Characteristics = characteristics.Count > 0 ? characteristics : null,
       Colors = colors,
       IsColorless = isColorless,
+      IsMulticolored = isMulticolored,
     };
   }
 
   /// <summary>
-  /// Maps an oracle-text color word to either a colored-list or the
-  /// <see cref="ObjectFilter.IsColorless"/> flag. Colorlessness is the
-  /// absence of all colors (Rule 105.1: "Colorless is not a color"), so
-  /// it lands on its own axis rather than as a value in <c>Colors</c>.
-  /// Returns (null, null) when no color word is present.
+  /// Maps an oracle-text color word to one of three axes on
+  /// <see cref="ObjectFilter"/>: a colored-list (<see cref="ObjectFilter.Colors"/>),
+  /// the <see cref="ObjectFilter.IsColorless"/> flag, or the
+  /// <see cref="ObjectFilter.IsMulticolored"/> flag. Colorlessness (Rule 105.1)
+  /// and multicoloredness (Rule 105.5: "an object with two or more colors") are
+  /// each their own structural axis — they are predicates over the color set
+  /// rather than values within it — so they do not share the <c>Colors</c> list.
+  /// Returns (null, null, null) when no color word is present.
   /// </summary>
-  private static (IReadOnlyList<string>?, bool?) MapColorWord(string? colorWord)
+  private static (IReadOnlyList<string>?, bool?, bool?) MapColorWord(string? colorWord)
   {
     if (string.IsNullOrWhiteSpace(colorWord))
     {
-      return (null, null);
+      return (null, null, null);
     }
 
     return colorWord.ToLowerInvariant() switch
     {
-      "white" => (new[] { "W" }, null),
-      "blue" => (new[] { "U" }, null),
-      "black" => (new[] { "B" }, null),
-      "red" => (new[] { "R" }, null),
-      "green" => (new[] { "G" }, null),
-      "colorless" => (null, true),
-      _ => (null, null),
+      "white" => (new[] { "W" }, null, null),
+      "blue" => (new[] { "U" }, null, null),
+      "black" => (new[] { "B" }, null, null),
+      "red" => (new[] { "R" }, null, null),
+      "green" => (new[] { "G" }, null, null),
+      "colorless" => (null, true, null),
+      "multicolored" => (null, null, true),
+      _ => (null, null, null),
     };
   }
 
