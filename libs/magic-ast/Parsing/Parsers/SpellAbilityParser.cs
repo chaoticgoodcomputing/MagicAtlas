@@ -448,48 +448,62 @@ public sealed class SpellAbilityParser : IAbilityParser
 
   /// <summary>
   /// Plain "Draw [N] card(s)." used at the spell-resolution level (sorceries
-  /// like Read the Tides' modal options, or single-option spells).
+  /// like Read the Tides' modal options, or single-option spells). The count
+  /// slot also recognises the variable forms X / Y / Z (e.g. Mind Spring,
+  /// "Draw X cards."), in which case <see cref="DrawCardsEffect.Count"/> is
+  /// a <see cref="VariableQuantity"/> rather than a literal — the value is
+  /// resolved at cast time from the spell's variable cost (Rule 107.3).
   /// </summary>
   private static MagicAST.AST.Effects.CardFlow.DrawCardsEffect? TryParseDrawCardsSimpleEffect(string text)
   {
     var m = Regex.Match(
       text,
-      @"^Draw\s+(?<count>a|one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+cards?$",
+      @"^Draw\s+(?<count>a|one|two|three|four|five|six|seven|eight|nine|ten|\d+|X|Y|Z)\s+cards?$",
       RegexOptions.IgnoreCase
     );
     if (!m.Success)
     {
       return null;
     }
-    var raw = m.Groups["count"].Value.ToLowerInvariant();
-    int n;
-    if (raw == "a" || raw == "one")
+    var raw = m.Groups["count"].Value;
+    var rawLower = raw.ToLowerInvariant();
+    Quantity count;
+    if (rawLower is "x" or "y" or "z")
     {
-      n = 1;
-    }
-    else if (int.TryParse(raw, out var asDigit))
-    {
-      n = asDigit;
+      count = new VariableQuantity { Name = rawLower.ToUpperInvariant() };
     }
     else
     {
-      n = raw switch
+      int n;
+      if (rawLower == "a" || rawLower == "one")
       {
-        "two" => 2,
-        "three" => 3,
-        "four" => 4,
-        "five" => 5,
-        "six" => 6,
-        "seven" => 7,
-        "eight" => 8,
-        "nine" => 9,
-        "ten" => 10,
-        _ => 1,
-      };
+        n = 1;
+      }
+      else if (int.TryParse(rawLower, out var asDigit))
+      {
+        n = asDigit;
+      }
+      else
+      {
+        n = rawLower switch
+        {
+          "two" => 2,
+          "three" => 3,
+          "four" => 4,
+          "five" => 5,
+          "six" => 6,
+          "seven" => 7,
+          "eight" => 8,
+          "nine" => 9,
+          "ten" => 10,
+          _ => 1,
+        };
+      }
+      count = LiteralQuantity.Of(n);
     }
     return new MagicAST.AST.Effects.CardFlow.DrawCardsEffect
     {
-      Count = LiteralQuantity.Of(n),
+      Count = count,
       Player = ObjectReference.You(),
     };
   }
