@@ -220,7 +220,41 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseMustAttackTargetEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "Target creature attacks this turn if able." — spell-resolution single-target
+  /// attack requirement (Boiling Blood). Rule 508.1d. Dual of
+  /// <see cref="TryParseMustBlockTargetEffect"/>: same shape with "attacks" instead
+  /// of "blocks". Distinct from the static "[subject] attacks each combat if able"
+  /// recognizer in StaticAbilityParser — this is a one-shot spell effect with an
+  /// explicit "this turn" duration, not a continuous static on the named permanent.
+  /// </summary>
+  private static MustAttackEffect? TryParseMustAttackTargetEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Target\s+(?<type>creature)\s+attacks\s+this\s+turn\s+if\s+able$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    return new MustAttackEffect
+    {
+      Target = ObjectReference.Target(
+        new ObjectFilter { CardTypes = [m.Groups["type"].Value.ToLowerInvariant()] }
+      ),
+      Duration = new UntilEndOfTurnDuration(),
+    };
   }
 
   /// <summary>
