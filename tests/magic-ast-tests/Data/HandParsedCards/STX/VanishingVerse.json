@@ -7,7 +7,7 @@
     "Power": null,
     "Toughness": null,
     "Colors": ["B", "W"],
-    "ColorIdentity": ["B", "W"]
+    "ColorIdentity": ["W", "B"]
   },
   "Output": {
     "Name": "Vanishing Verse",
@@ -51,7 +51,7 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "W"]
+        "ColorIdentity": ["W", "B"]
       }
     ]
   }
