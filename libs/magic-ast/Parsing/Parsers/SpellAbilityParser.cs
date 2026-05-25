@@ -737,26 +737,61 @@ public sealed class SpellAbilityParser : IAbilityParser
   }
 
   /// <summary>
-  /// "Tap target [type]." / "Tap target [type1] or [type2]." — spell-resolution
-  /// tap with either a single-type or type-disjunction target filter. Mirrors the
+  /// "Tap target [type]." / "Tap target [type1] or [type2]." / "Tap [count] target
+  /// [type]s." — spell-resolution tap with either a single-type or type-disjunction
+  /// target filter, and an optional leading count phrase. Mirrors the
   /// Demolish/destroy disjunction convention: <see cref="ObjectFilter.CardTypes"/>
-  /// as a multi-element list is the disjunction. Rule 701.26a (Tap).
+  /// as a multi-element list is the disjunction. The count phrase lands on
+  /// <see cref="MagicAST.AST.Effects.Control.TapEffect.Count"/> as a
+  /// <see cref="LiteralQuantity"/> for "<word>" or an <see cref="UpToQuantity"/>
+  /// for a "<word> or <word>" range (e.g. Amazing Acrobatics' "one or two").
+  /// Rule 701.26a (Tap).
   /// </summary>
   private static MagicAST.AST.Effects.Control.TapEffect? TryParseSpellTapTargetEffect(string text)
   {
+    // Optional leading count: a small-word, or a "<word> or <word>" range.
+    // The trailing target-type group accepts plurals (creatures) by tolerating
+    // an optional 's' on each comma/'or'-joined token; the type tokens are
+    // singularised below.
     var match = Regex.Match(
       text,
-      @"^Tap\s+target\s+(?<types>\w+(?:\s*,\s*\w+)*(?:\s*,?\s+or\s+\w+)?)$",
+      @"^Tap(?:\s+(?<count>(?<cmin>\w+)\s+or\s+(?<cmax>\w+)|\w+))?\s+target\s+(?<types>\w+(?:\s*,\s*\w+)*(?:\s*,?\s+or\s+\w+)?)$",
       RegexOptions.IgnoreCase
     );
     if (!match.Success)
     {
       return null;
     }
+
+    Quantity? count = null;
+    if (match.Groups["count"].Success)
+    {
+      if (match.Groups["cmin"].Success && match.Groups["cmax"].Success)
+      {
+        // "<word> or <word>" — model as UpToQuantity {Min, Max}.
+        if (!TryParseSmallWord(match.Groups["cmin"].Value, out var min)
+          || !TryParseSmallWord(match.Groups["cmax"].Value, out var max))
+        {
+          return null;
+        }
+        count = new UpToQuantity { Minimum = min, Maximum = max };
+      }
+      else
+      {
+        // Single literal count word (e.g. "two").
+        if (!TryParseSmallWord(match.Groups["count"].Value, out var n))
+        {
+          return null;
+        }
+        count = LiteralQuantity.Of(n);
+      }
+    }
+
     var typesPhrase = match.Groups["types"].Value;
     var types = Regex
       .Split(typesPhrase, @"\s*,\s*|\s+or\s+")
       .Select(t => t.Trim().ToLowerInvariant())
+      .Select(t => t.EndsWith("s") && t.Length > 1 ? t[..^1] : t)
       .Where(t => t.Length > 0)
       .ToList();
     if (types.Count == 0)
@@ -770,7 +805,34 @@ public sealed class SpellAbilityParser : IAbilityParser
         Kind = ObjectReferenceKind.Target,
         Filter = new ObjectFilter { CardTypes = types },
       },
+      Count = count,
     };
+  }
+
+  /// <summary>
+  /// Strict variant of <see cref="ParseSmallWord"/> — returns false on an
+  /// unrecognised token instead of defaulting to 1. Used where the caller
+  /// needs to bail out (e.g. unknown count word in a tap-with-count phrase)
+  /// rather than silently producing the wrong AST.
+  /// </summary>
+  private static bool TryParseSmallWord(string raw, out int value)
+  {
+    var lower = raw.ToLowerInvariant();
+    if (lower == "a" || lower == "one") { value = 1; return true; }
+    if (int.TryParse(lower, out value)) { return true; }
+    switch (lower)
+    {
+      case "two": value = 2; return true;
+      case "three": value = 3; return true;
+      case "four": value = 4; return true;
+      case "five": value = 5; return true;
+      case "six": value = 6; return true;
+      case "seven": value = 7; return true;
+      case "eight": value = 8; return true;
+      case "nine": value = 9; return true;
+      case "ten": value = 10; return true;
+      default: value = 0; return false;
+    }
   }
 
   /// <summary>
