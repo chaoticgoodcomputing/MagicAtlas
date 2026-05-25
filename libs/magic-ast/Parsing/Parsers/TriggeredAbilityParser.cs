@@ -934,7 +934,45 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return new List<Effect> { dealDamage };
     }
 
+    var youLoseLife = TryParseYouLoseLifeEffect(trimmed);
+    if (youLoseLife != null)
+    {
+      return new List<Effect> { youLoseLife };
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "you lose N life" — straightforward life-loss effect (Deadpool's upkeep
+  /// tax). Player defaults to You.
+  /// </summary>
+  private static LoseLifeEffect? TryParseYouLoseLifeEffect(string effectText)
+  {
+    var m = Regex.Match(
+      effectText,
+      @"^you\s+lose\s+(?<amount>\d+|one|two|three|four|five)\s+life$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    var raw = m.Groups["amount"].Value.ToLowerInvariant();
+    int amount = raw switch
+    {
+      "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      "four" => 4,
+      "five" => 5,
+      _ => int.Parse(raw),
+    };
+    return new LoseLifeEffect
+    {
+      Amount = LiteralQuantity.Of(amount),
+      Player = ObjectReference.You(),
+    };
   }
 
   /// <summary>

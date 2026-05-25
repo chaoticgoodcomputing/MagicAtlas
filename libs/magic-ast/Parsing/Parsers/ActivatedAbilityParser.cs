@@ -838,9 +838,16 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return null;
     }
 
-    // Determine player
+    // Determine player. "Each other player" is broader than "each opponent" —
+    // it includes everyone except the controller, which matters in multiplayer
+    // formats (Rule 109.1 / 102.1). Map onto EachOtherPlayer rather than
+    // collapsing onto EachOpponent.
     ObjectReference player;
     if (lower.Contains("each other player"))
+    {
+      player = new ObjectReference { Kind = ObjectReferenceKind.EachOtherPlayer };
+    }
+    else if (lower.Contains("each opponent"))
     {
       player = new ObjectReference { Kind = ObjectReferenceKind.EachOpponent };
     }
