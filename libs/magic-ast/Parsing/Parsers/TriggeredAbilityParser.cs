@@ -795,10 +795,28 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       controller = ControllerFilter.Opponent;
     }
 
-    // Simple filters - can be extended with more sophisticated parsing
-    if (lower.Contains("this creature"))
+    // Self-reference by card type: "this [type]" — Oracle text uses the
+    // card's own type word to refer to itself ("this creature", "this land",
+    // "this artifact"...). MAST resolves the self-reference to a filter on
+    // the named type. Order before the "a [type]" path so "this creature"
+    // doesn't fall through to "a creature".
+    foreach (
+      var selfType in new[]
+      {
+        "creature",
+        "land",
+        "artifact",
+        "enchantment",
+        "planeswalker",
+        "permanent",
+        "battle",
+      }
+    )
     {
-      return new ObjectFilter { CardTypes = ["creature"], Controller = controller };
+      if (Regex.IsMatch(lower, $@"\bthis\s+{selfType}\b"))
+      {
+        return new ObjectFilter { CardTypes = [selfType], Controller = controller };
+      }
     }
 
     if (lower.Contains("a creature") || lower.Contains("another creature"))
