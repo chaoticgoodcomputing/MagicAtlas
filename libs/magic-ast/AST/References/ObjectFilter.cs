@@ -44,6 +44,16 @@ public sealed record ObjectFilter
   public bool? IsColorless { get; init; }
 
   /// <summary>
+  /// Filters to multicolored objects (those with two or more colors). Rule 105.5
+  /// ("An object is multicolored if it has two or more colors"). Parallel axis to
+  /// <see cref="IsColorless"/> — distinct from the "has any of these colors" semantics
+  /// of <see cref="Colors"/>, which is satisfied by a single matching color and so
+  /// cannot encode the "two or more" constraint.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsMulticolored { get; init; }
+
+  /// <summary>
   /// Who controls the objects: You, Opponent, Any.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
