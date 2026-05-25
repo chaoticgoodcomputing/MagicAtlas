@@ -29,10 +29,11 @@ If you are invoked directly by the user (no orchestrator above you), wear all fo
 Step 0    Rebase + refresh triage
 Step 1    Pick N non-overlapping candidates from topGaps
 Step 1.5  Enrich candidates inline (judge-pass-1) → docs/judgments/briefing-{date}.md
-Step 2    Dispatch [sub:helper] — writes N fixtures + any new AST types
-Step 3    Merge helper's branch → confirm all N RoundTrip tests pass (Red #1 closed)
-Step 4    Dispatch N [sub:mech] in parallel — each closes Red #2 for its fixture
-Step 5-6  [sub:mech] Close Red #2 → confirm Parser_Produces green → manifest
+Step 2    Dispatch [sub:helper]
+Step 3-4  [sub:helper] Hand-parse N fixtures + create any new AST types → RoundTrip green
+Step 5    Merge helper's branch → confirm Red #1 closed on main
+Step 6    Dispatch N [sub:mech] in parallel
+Step 7-8  [sub:mech] Close Red #2 for assigned card → confirm Parser_Produces green → manifest
 Step 9    Dispatch [sub:judge] — judge-pass-2 → docs/judgments/verdict-{date}.md
           - PROCEED (0 FAIL) → continue to Step 10
           - HALT (any FAIL)  → don't merge mech branches, remediate inline or via follow-up sub-agent
