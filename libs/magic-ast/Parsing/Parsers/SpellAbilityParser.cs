@@ -136,7 +136,13 @@ public sealed class SpellAbilityParser : IAbilityParser
   {
     var trimmed = text.Trim().TrimEnd('.').Trim();
 
-    Effect? effect = TryParseCounterSpellEffect(trimmed);
+    Effect? effect = TryParseCounterSpellSubtypeDisjunctionEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseCounterSpellEffect(trimmed);
     if (effect is not null)
     {
       return effect;
@@ -811,6 +817,53 @@ public sealed class SpellAbilityParser : IAbilityParser
         {
           Characteristics = ["your commander"],
           Zone = Zone.CommandZone,
+        },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Counter target [Subtype1] or [Subtype2] spell." — Hisoka's Defiance shape.
+  /// The disjuncts here are subtypes (Rule 205.3 — creature/spell subtypes like
+  /// Spirit and Arcane) rather than the card-type / color qualifiers handled by
+  /// <see cref="TryParseCounterSpellEffect"/>. Surfaces the disjuncts on
+  /// <see cref="ObjectFilter.Subtypes"/> as a multi-element list — the same
+  /// disjunction convention used for <see cref="ObjectFilter.CardTypes"/> and
+  /// <see cref="ObjectFilter.Colors"/>.
+  /// </summary>
+  /// <remarks>
+  /// Subtype tokens are detected structurally by their leading-capital shape:
+  /// MTG subtypes are proper nouns in oracle text (Rule 205.3a), so a regex
+  /// requiring two leading-capital words separated by " or " before "spell"
+  /// disambiguates from the card-type / color disjunction handled by
+  /// <see cref="TryParseCounterSpellEffect"/>, whose tokens are all lowercase
+  /// in canonical oracle text. Capitalization is preserved on the filter — the
+  /// gold AST stores subtypes with their oracle-text casing (e.g. "Spirit",
+  /// "Arcane") rather than the lowercased convention used for card types.
+  /// Ordered before <see cref="TryParseCounterSpellEffect"/> so the broader
+  /// recognizer doesn't swallow a subtype-disjunction line into a fallback.
+  /// </remarks>
+  private static CounterSpellEffect? TryParseCounterSpellSubtypeDisjunctionEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Counter\s+target\s+(?<s1>[A-Z][a-zA-Z]*)\s+or\s+(?<s2>[A-Z][a-zA-Z]*)\s+spell$",
+      RegexOptions.CultureInvariant
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    var subtypes = new List<string> { m.Groups["s1"].Value, m.Groups["s2"].Value };
+    return new CounterSpellEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["spell"],
+          Subtypes = subtypes,
         },
       },
     };
