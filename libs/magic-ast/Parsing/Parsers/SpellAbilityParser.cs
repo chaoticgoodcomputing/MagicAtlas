@@ -2,6 +2,7 @@ namespace MagicAST.Parsing.Parsers;
 
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.Costs;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.Effects.Combat;
@@ -643,12 +644,16 @@ public sealed class SpellAbilityParser : IAbilityParser
   /// "Counter target [color] spell." (Rule 701.6, with the targeted spell's
   /// color restriction modeled as a structural <see cref="ObjectFilter.Colors"/>
   /// filter on the target reference.)
+  /// Optionally followed by an "unless its controller pays {X}" tail (e.g.
+  /// Clash of Wills), surfaced as a structured <see cref="UnlessClause"/> with
+  /// the targeted spell's controller as the payer and the spell's variable
+  /// mana cost as the avoidance cost.
   /// </summary>
   private static CounterSpellEffect? TryParseCounterSpellEffect(string text)
   {
     var m = Regex.Match(
       text,
-      @"^Counter\s+target\s+(?<filter>(?<color>colorless|white|blue|black|red|green)?\s*(?<type>instant|sorcery|creature|noncreature)?\s*spell(\s+with\s+converted\s+mana\s+cost.*)?)$",
+      @"^Counter\s+target\s+(?<filter>(?<color>colorless|white|blue|black|red|green)?\s*(?<type>instant|sorcery|creature|noncreature)?\s*spell(\s+with\s+converted\s+mana\s+cost.*)?)(?:\s+unless\s+its\s+controller\s+pays\s+\{(?<unlessx>[A-Za-z])\})?$",
       RegexOptions.IgnoreCase
     );
     if (!m.Success)
@@ -660,9 +665,19 @@ public sealed class SpellAbilityParser : IAbilityParser
       m.Groups["filter"].Value,
       m.Groups["color"].Success ? m.Groups["color"].Value : null
     );
+    UnlessClause? unless = null;
+    if (m.Groups["unlessx"].Success)
+    {
+      unless = new UnlessClause
+      {
+        Player = new ObjectReference { Kind = ObjectReferenceKind.Controller },
+        Cost = new ManaCost { Symbols = [new ManaSymbol { Kind = ManaSymbolKind.Variable }] },
+      };
+    }
     return new CounterSpellEffect
     {
       Target = new ObjectReference { Kind = ObjectReferenceKind.Target, Filter = filter },
+      UnlessClause = unless,
     };
   }
 
