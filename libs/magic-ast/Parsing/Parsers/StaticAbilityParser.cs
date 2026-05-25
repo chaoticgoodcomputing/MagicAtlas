@@ -176,8 +176,94 @@ public sealed class StaticAbilityParser : IAbilityParser
       return anthemPT;
     }
 
+    // "Noncreature spells with mana value N or greater can't be cast." /
+    // "Noncreature spells with {X} in their mana costs can't be cast." —
+    // Rule 601.5 cast-restriction (Gaddock Teeg). The spell-filter lives on
+    // StaticAbility.AffectedObjects; the effect itself is the parameterless
+    // CantBeCastEffect, since the restriction's payload is "no cast at all".
+    var cantBeCast = TryParseCantBeCastRestriction(clause);
+    if (cantBeCast != null)
+    {
+      return cantBeCast;
+    }
+
     return null;
   }
+
+  /// <summary>
+  /// "[filter] can't be cast." — Rule 601.5 cast-restriction. Two filter
+  /// shapes are recognized today, both rooted at <c>Noncreature spells</c>:
+  /// <list type="bullet">
+  ///   <item><c>Noncreature spells with mana value N or greater</c> — emits a
+  ///         <see cref="ObjectFilter"/> with <c>CardTypes:["spell"]</c>,
+  ///         <c>Characteristics:["noncreature"]</c>, and a
+  ///         <see cref="Comparison"/> on <see cref="ObjectFilter.ManaValueComparison"/>.</item>
+  ///   <item><c>Noncreature spells with {X} in their mana costs</c> — emits the
+  ///         same root filter plus a second <c>Characteristics</c> entry
+  ///         <c>"with {X} in their mana costs"</c>. The {X}-in-cost predicate
+  ///         is descriptive, not a numeric comparison, so it lives on the
+  ///         free-form characteristics axis rather than on
+  ///         <see cref="ObjectFilter.ManaValueComparison"/>.</item>
+  /// </list>
+  /// The filter sits on <see cref="MagicAST.AST.Abilities.StaticAbility.AffectedObjects"/>;
+  /// the wrapped effect is the parameterless
+  /// <see cref="MagicAST.AST.Effects.Timing.CantBeCastEffect"/> (per its
+  /// xml-doc, the restriction's targets are described by the containing
+  /// ability's filter, not by a payload on the effect itself).
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseCantBeCastRestriction(OracleClause clause)
+  {
+    var mvMatch = _cantBeCastManaValuePattern.Match(clause.RawText);
+    if (mvMatch.Success)
+    {
+      var value = int.Parse(mvMatch.Groups["value"].Value);
+      return
+      [
+        new StaticAbility
+        {
+          Effect = new MagicAST.AST.Effects.Timing.CantBeCastEffect(),
+          AffectedObjects = new ObjectFilter
+          {
+            CardTypes = ["spell"],
+            Characteristics = ["noncreature"],
+            ManaValueComparison = new Comparison
+            {
+              Operator = ComparisonOperator.GreaterThanOrEqual,
+              Value = value,
+            },
+          },
+        },
+      ];
+    }
+
+    if (_cantBeCastXInCostPattern.IsMatch(clause.RawText))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effect = new MagicAST.AST.Effects.Timing.CantBeCastEffect(),
+          AffectedObjects = new ObjectFilter
+          {
+            CardTypes = ["spell"],
+            Characteristics = ["noncreature", "with {X} in their mana costs"],
+          },
+        },
+      ];
+    }
+
+    return null;
+  }
+
+  private static readonly Regex _cantBeCastManaValuePattern = new(
+    @"^\s*Noncreature\s+spells\s+with\s+mana\s+value\s+(?<value>\d+)\s+or\s+greater\s+can'?t\s+be\s+cast\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  private static readonly Regex _cantBeCastXInCostPattern = new(
+    @"^\s*Noncreature\s+spells\s+with\s+\{X\}\s+in\s+their\s+mana\s+costs\s+can'?t\s+be\s+cast\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   /// <summary>
   /// "Enchanted creature gets +N/+N." — Aura P/T grant on the attached
