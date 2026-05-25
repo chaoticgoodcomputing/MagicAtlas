@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.CardFlow;
+using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Core;
 using MagicAST.AST.Effects.Modification;
@@ -206,7 +207,40 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseMustBlockTargetEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "Target creature blocks this turn if able." — spell-resolution single-target
+  /// block requirement (Culling Mark). Rule 509.1c. Distinct from the static
+  /// "[subject] blocks each combat if able" recognizer in StaticAbilityParser:
+  /// this is a one-shot spell effect with an explicit "this turn" duration,
+  /// not a continuous static on the named permanent.
+  /// </summary>
+  private static MustBlockEffect? TryParseMustBlockTargetEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Target\s+(?<type>creature)\s+blocks\s+this\s+turn\s+if\s+able$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    return new MustBlockEffect
+    {
+      Target = ObjectReference.Target(
+        new ObjectFilter { CardTypes = [m.Groups["type"].Value.ToLowerInvariant()] }
+      ),
+      Duration = new UntilEndOfTurnDuration(),
+    };
   }
 
   /// <summary>
