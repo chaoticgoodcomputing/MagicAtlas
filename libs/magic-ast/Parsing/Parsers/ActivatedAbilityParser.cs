@@ -197,6 +197,13 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return new List<Effect> { gainAbilityEffect };
     }
 
+    // Tap [count] target [type]   (e.g. "Tap X target lands", "Tap two target creatures", "Tap target creature")
+    var tapEffect = TryParseTapEffect(effectPart);
+    if (tapEffect != null)
+    {
+      return new List<Effect> { tapEffect };
+    }
+
     // Untap target [subtype]
     var untapEffect = TryParseUntapEffect(effectPart);
     if (untapEffect != null)
@@ -255,6 +262,75 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     }
 
     return new GainLifeEffect { Amount = amount, Player = ObjectReference.You() };
+  }
+
+  /// <summary>
+  /// Tries to parse "Tap [count] target [type]" effects.
+  /// Patterns:
+  /// - "Tap target creature."           → Count = null (single target)
+  /// - "Tap X target lands."            → Count = VariableQuantity X
+  /// - "Tap two target creatures."      → Count = LiteralQuantity 2
+  /// Rule 701.21 (Tap). For variable-X activated abilities, the X in the cost and
+  /// the X in the effect refer to the same chosen value (Rule 107.3b/c).
+  /// </summary>
+  private TapEffect? TryParseTapEffect(string effectText)
+  {
+    var text = effectText.Trim().TrimEnd('.');
+    var lower = text.ToLowerInvariant();
+
+    if (!lower.StartsWith("tap "))
+    {
+      return null;
+    }
+
+    // Strip leading "tap " before parsing count + target noun.
+    var rest = text[4..].Trim();
+    var restLower = rest.ToLowerInvariant();
+
+    Quantity? count = null;
+    var quantityMatch = System.Text.RegularExpressions.Regex.Match(
+      rest,
+      @"^(X|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+target\b",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase
+    );
+    if (quantityMatch.Success)
+    {
+      var qStr = quantityMatch.Groups[1].Value;
+      if (string.Equals(qStr, "X", StringComparison.OrdinalIgnoreCase))
+      {
+        count = VariableQuantity.X;
+      }
+      else
+      {
+        var n = ParseNumberWord(qStr) ?? int.Parse(qStr);
+        count = LiteralQuantity.Of(n);
+      }
+    }
+    else if (!restLower.StartsWith("target"))
+    {
+      // We can't recognize what's between "tap" and "target" — bail.
+      return null;
+    }
+
+    var targetMatch = System.Text.RegularExpressions.Regex.Match(
+      rest,
+      @"\btarget\s+(\w+)",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase
+    );
+    if (!targetMatch.Success)
+    {
+      return null;
+    }
+    var noun = targetMatch.Groups[1].Value.ToLowerInvariant();
+    if (noun.EndsWith("s") && noun.Length > 1)
+    {
+      noun = noun[..^1];
+    }
+
+    var filter = new ObjectFilter { CardTypes = [noun] };
+    var target = ObjectReference.Target(filter);
+
+    return new TapEffect { Target = target, Count = count };
   }
 
   /// <summary>
