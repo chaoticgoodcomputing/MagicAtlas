@@ -294,6 +294,30 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target [filter] must be blocked this turn if able." — spell-resolution
+    // single-target block requirement *on the attacker* (e.g., Irresistible Prey).
+    // Rule 509.1c. Distinct from the "Target [filter] blocks this turn if able"
+    // rule above: that one compels the named creature to do the blocking; this
+    // one compels the defending player's other creatures to block the named
+    // creature. Without this rule the line is mis-routed to the static parser
+    // (the static "[Self] must be blocked if able" recognizer there is the
+    // continuous-permanent variant with no duration).
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+\S.*?\s+must\s+be\s+blocked\s+this\s+turn\s+if\s+able\.?\s*$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "This spell can't be countered." is a property of the resolving spell;
     // route it to the spell parser so the EffectType lands inside
     // SpellAbility.Effects rather than as a top-level static. Other
