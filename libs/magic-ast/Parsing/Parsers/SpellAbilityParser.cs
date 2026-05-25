@@ -67,13 +67,16 @@ public sealed class SpellAbilityParser : IAbilityParser
 
   /// <summary>
   /// "Counter target spell." / "Counter target sorcery spell." /
-  /// "Counter target instant spell."
+  /// "Counter target instant spell." / "Counter target colorless spell." /
+  /// "Counter target [color] spell." (Rule 701.6, with the targeted spell's
+  /// color restriction modeled as a structural <see cref="ObjectFilter.Colors"/>
+  /// filter on the target reference.)
   /// </summary>
   private static CounterSpellEffect? TryParseCounterSpellEffect(string text)
   {
     var m = Regex.Match(
       text,
-      @"^Counter\s+target\s+(?<filter>(instant|sorcery|creature|noncreature)?\s*spell(\s+with\s+converted\s+mana\s+cost.*)?)$",
+      @"^Counter\s+target\s+(?<filter>(?<color>colorless|white|blue|black|red|green)?\s*(?<type>instant|sorcery|creature|noncreature)?\s*spell(\s+with\s+converted\s+mana\s+cost.*)?)$",
       RegexOptions.IgnoreCase
     );
     if (!m.Success)
@@ -81,7 +84,10 @@ public sealed class SpellAbilityParser : IAbilityParser
       return null;
     }
 
-    var filter = BuildSpellFilter(m.Groups["filter"].Value);
+    var filter = BuildSpellFilter(
+      m.Groups["filter"].Value,
+      m.Groups["color"].Success ? m.Groups["color"].Value : null
+    );
     return new CounterSpellEffect
     {
       Target = new ObjectReference { Kind = ObjectReferenceKind.Target, Filter = filter },
@@ -89,10 +95,14 @@ public sealed class SpellAbilityParser : IAbilityParser
   }
 
   /// <summary>
-  /// Builds an <see cref="ObjectFilter"/> for "target X spell" where X is an
-  /// optional card type qualifier (instant / sorcery / creature / noncreature).
+  /// Builds an <see cref="ObjectFilter"/> for "target [color] [card-type] spell"
+  /// where each qualifier is optional. The card-type qualifier (instant /
+  /// sorcery / creature / noncreature) lands on <see cref="ObjectFilter.Characteristics"/>;
+  /// the color qualifier lands on <see cref="ObjectFilter.Colors"/> as the
+  /// canonical letter code (W/U/B/R/G/C) so color filtering remains a
+  /// structured axis rather than free-text.
   /// </summary>
-  private static ObjectFilter BuildSpellFilter(string filterText)
+  private static ObjectFilter BuildSpellFilter(string filterText, string? colorWord)
   {
     var characteristics = new List<string>();
     var cardTypes = new List<string> { "spell" };
@@ -111,10 +121,38 @@ public sealed class SpellAbilityParser : IAbilityParser
       characteristics.Add("noncreature");
     }
 
+    var colors = MapColorWord(colorWord);
+
     return new ObjectFilter
     {
       CardTypes = cardTypes,
       Characteristics = characteristics.Count > 0 ? characteristics : null,
+      Colors = colors,
+    };
+  }
+
+  /// <summary>
+  /// Maps an oracle-text color word (e.g. "colorless", "blue") to the
+  /// canonical single-letter color list used on <see cref="ObjectFilter.Colors"/>.
+  /// Returns null when no color word is present so the filter doesn't
+  /// over-specify.
+  /// </summary>
+  private static IReadOnlyList<string>? MapColorWord(string? colorWord)
+  {
+    if (string.IsNullOrWhiteSpace(colorWord))
+    {
+      return null;
+    }
+
+    return colorWord.ToLowerInvariant() switch
+    {
+      "white" => ["W"],
+      "blue" => ["U"],
+      "black" => ["B"],
+      "red" => ["R"],
+      "green" => ["G"],
+      "colorless" => ["C"],
+      _ => null,
     };
   }
 

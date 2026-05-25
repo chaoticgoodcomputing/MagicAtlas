@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-05-25T06:48:33.6997735Z",
+  "timestamp": "2026-05-25T07:00:07.7322413Z",
   "testResults": {
     "MalformedParsedCards/MixedValidAndInvalidAbilities": {
       "passed": false
     },
-    "HandParsedCards/LTC/DenethorStoneSeer/RoundTrip": {
+    "HandParsedCards/NEO/MindlinkMech/RoundTrip": {
       "passed": true
     },
-    "HandParsedCards/NEO/MindlinkMech/RoundTrip": {
+    "HandParsedCards/LTC/DenethorStoneSeer/RoundTrip": {
       "passed": true
     },
     "OracleLines/RoadOfReturn/Line1": {
@@ -307,11 +307,11 @@
     "OracleLines/KTK/ZurgoHelmsmasher/Line2": {
       "passed": true
     },
-    "HandParsedCards/M21/RookieMistake/RoundTrip": {
-      "passed": true
-    },
     "OracleLines/DMR/MysticRemora/Line1": {
       "passed": false
+    },
+    "HandParsedCards/M21/RookieMistake/RoundTrip": {
+      "passed": true
     },
     "OracleLines/2X2/ManaVault/Line1": {
       "passed": false
@@ -383,6 +383,9 @@
       "passed": true
     },
     "OracleLines/LTC/DenethorStoneSeer/Line1": {
+      "passed": true
+    },
+    "HandParsedCards/OGW/CeremoniousRejection/RoundTrip": {
       "passed": true
     },
     "HandParsedCards/WHO/RoryWilliams/RoundTrip": {
@@ -466,6 +469,9 @@
     "OracleLines/DMR/MysticRemora/Line2": {
       "passed": false
     },
+    "OracleLines/OGW/CeremoniousRejection/Line1": {
+      "passed": true
+    },
     "HandParsedCards/SLD/DeadpoolTradingCard/RoundTrip": {
       "passed": true
     },
@@ -477,6 +483,9 @@
     },
     "OracleLines/CMM/DarettiScrapSavant/Line4": {
       "passed": false
+    },
+    "HandParsedCards/OGW/CeremoniousRejection": {
+      "passed": true
     },
     "OracleLines/M21/BasrisLieutenant/Line2": {
       "passed": false
