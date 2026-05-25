@@ -120,12 +120,83 @@ public sealed class SpellAbilityParser : IAbilityParser
       return pair;
     }
 
+    // Multi-sentence single-line bundling (per feedback_mast_multi_effect_per_clause).
+    // A modal option body like "Exile up to one target card from a graveyard.
+    // Draw a card." is one ability with two effects in the gold AST. Try the
+    // per-sentence dispatch only when EVERY sentence resolves to a single
+    // effect — partial success would silently drop content, so fall back to
+    // the single-effect path on any mismatch (which lets bi-sentence rules
+    // like TryParseDiscardThenDrawSpellEffect still own their shapes).
+    var bundled = TryParseSentenceBundleEffects(text);
+    if (bundled is not null)
+    {
+      return bundled;
+    }
+
     var single = TryParseEffect(text);
     if (single is null)
     {
       return null;
     }
     return [single];
+  }
+
+  /// <summary>
+  /// Splits a spell-ability clause on internal sentence boundaries
+  /// (<c>". "</c> followed by a capital letter) and parses each fragment
+  /// through <see cref="TryParseEffect"/>. Returns the concatenated effect
+  /// list only when every fragment resolves; on any failure returns null so
+  /// the caller's single-effect dispatch can still try the line as a whole.
+  /// </summary>
+  /// <remarks>
+  /// Implements the multi-sentence-single-line convention documented in
+  /// feedback_mast_multi_effect_per_clause: within a single oracle clause
+  /// (no <c>\n</c> between sentences), multiple sentences describe a sequence
+  /// of effects in one resolution event, surfaced as multiple entries in a
+  /// single <see cref="SpellAbility.Effects"/> list — not as separate
+  /// abilities. The split is deliberately conservative: anchored only on
+  /// <c>"."</c>-then-uppercase boundaries so abbreviations and inline
+  /// reminder fragments don't false-fire.
+  /// </remarks>
+  private static IReadOnlyList<Effect>? TryParseSentenceBundleEffects(string text)
+  {
+    var working = text.Trim();
+    // Strip a single trailing period so the regex's lookahead on "[A-Z]" is
+    // the only sentence-boundary signal we depend on.
+    if (working.EndsWith('.'))
+    {
+      working = working[..^1];
+    }
+
+    // Require at least one internal sentence boundary to engage this path.
+    var boundaries = Regex.Matches(working, @"\.\s+(?=[A-Z])");
+    if (boundaries.Count == 0)
+    {
+      return null;
+    }
+
+    var sentences = Regex.Split(working, @"\.\s+(?=[A-Z])");
+    if (sentences.Length < 2)
+    {
+      return null;
+    }
+
+    var collected = new List<Effect>(sentences.Length);
+    foreach (var sentence in sentences)
+    {
+      var fragment = sentence.Trim();
+      if (fragment.Length == 0)
+      {
+        return null;
+      }
+      var effect = TryParseEffect(fragment);
+      if (effect is null)
+      {
+        return null;
+      }
+      collected.Add(effect);
+    }
+    return collected;
   }
 
   /// <summary>
@@ -267,6 +338,12 @@ public sealed class SpellAbilityParser : IAbilityParser
     }
 
     effect = TryParseReturnTargetToHandEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseExileTargetCardFromGraveyardEffect(trimmed);
     if (effect is not null)
     {
       return effect;
@@ -598,6 +675,54 @@ public sealed class SpellAbilityParser : IAbilityParser
       {
         Kind = ObjectReferenceKind.Target,
         Filter = new ObjectFilter { CardTypes = types },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Exile up to one target card from a graveyard." — Heritage Reclamation's
+  /// third modal option. The cardinality qualifier ("up to one") lands on
+  /// <see cref="ObjectReference.Quantity"/> as an <see cref="UpToQuantity"/>
+  /// (Maximum=1, Minimum=0), distinct from the <see cref="ObjectFilter"/>
+  /// which describes *which* objects qualify rather than *how many* are
+  /// chosen. The graveyard zone is structural and routes onto
+  /// <see cref="ObjectFilter.Zone"/>; the target descriptor is "card", not a
+  /// permanent type, because graveyard residents are cards (Rule 109.1).
+  /// </summary>
+  /// <remarks>
+  /// Ordered before <see cref="TryParseExileGraveyardsEffect"/> because that
+  /// rule's "target players' graveyards" shape is distinct (it targets the
+  /// graveyards themselves, surfacing the player-modifier on the filter's
+  /// Characteristics), whereas this rule targets a single card residing in a
+  /// graveyard. Today only the "up to one" cardinality is supported; future
+  /// "up to N" / "any number of" phrasings can extend the regex's quantity
+  /// slot without changing the filter shape.
+  /// </remarks>
+  private static MagicAST.AST.Effects.ZoneChange.ExileEffect? TryParseExileTargetCardFromGraveyardEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^Exile\s+up\s+to\s+(?<n>one)\s+target\s+card\s+from\s+a\s+graveyard$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    var maximum = ParseSmallWord(m.Groups["n"].Value);
+    return new MagicAST.AST.Effects.ZoneChange.ExileEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["card"],
+          Zone = Zone.Graveyard,
+        },
+        Quantity = new UpToQuantity { Maximum = maximum, Minimum = 0 },
       },
     };
   }
