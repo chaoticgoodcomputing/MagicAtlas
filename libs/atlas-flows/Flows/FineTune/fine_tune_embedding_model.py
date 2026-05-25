@@ -50,7 +50,7 @@ def _models_dir() -> Path:
 
 
 @step(
-    inputs=["TrainingPairs", "FineTuneConfig"],
+    inputs=["TrainingPairsMined", "FineTuneConfig"],
     outputs="FineTunedEmbeddingModel",
     cacheable=True,
 )

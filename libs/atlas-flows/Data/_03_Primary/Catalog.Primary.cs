@@ -107,6 +107,21 @@ public partial class Catalog
         .Build()
     );
 
+  /// <summary>
+  /// Same as <see cref="TrainingPairs"/>, but with hard negatives mined via base-model
+  /// k-NN attached to every previously negative-less pair. The fine-tune step consumes this
+  /// instead of <see cref="TrainingPairs"/> so MNR loss sees real contrastive triplets
+  /// rather than relying on random in-batch sampling. See <c>mine_hard_negatives.py</c>
+  /// for the mining procedure and citations.
+  /// </summary>
+  public IItem<IEnumerable<TrainingPair>> TrainingPairsMined =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<TrainingPair>>("TrainingPairsMined")
+        .Json()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/training-pairs-mined.json")
+        .Build()
+    );
+
   /// <summary>Persisted encoder cache — one row per unique oracle-text string. EmbedOracleText
   /// dedups OracleLines.Text, runs the model once per unique text, writes the result here. The
   /// 2D UMAP step broadcasts cached vectors back to per-line rows via OracleLines join.</summary>
