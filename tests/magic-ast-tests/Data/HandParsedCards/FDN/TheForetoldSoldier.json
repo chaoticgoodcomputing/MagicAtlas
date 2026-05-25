@@ -1,0 +1,59 @@
+{
+  "Input": {
+    "Name": "The Foretold Soldier",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Human Soldier",
+    "OracleText": "This creature must be blocked if able.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "The Foretold Soldier",
+    "TypeLine": {
+      "Raw": "Creature — Human Soldier",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "This creature must be blocked if able.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "mustBeBlocked",
+            "Target": {
+              "Kind": "Self"
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1, "IsPhyrexian": false, "IsSnow": false },
+          { "Kind": "colored", "Colors": ["W"], "IsPhyrexian": false, "IsSnow": false }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-25T07:00:07.7322413Z",
+  "timestamp": "2026-05-25T06:59:19.1575901Z",
   "testResults": {
     "MalformedParsedCards/MixedValidAndInvalidAbilities": {
       "passed": false
@@ -63,6 +63,9 @@
     },
     "OracleLines/CLB/WilsonRefinedGrizzly/Line4": {
       "passed": false
+    },
+    "HandParsedCards/FDN/TheForetoldSoldier": {
+      "passed": true
     },
     "HandParsedCards/WHO/RoryWilliams": {
       "passed": false
@@ -385,9 +388,6 @@
     "OracleLines/LTC/DenethorStoneSeer/Line1": {
       "passed": true
     },
-    "HandParsedCards/OGW/CeremoniousRejection/RoundTrip": {
-      "passed": true
-    },
     "HandParsedCards/WHO/RoryWilliams/RoundTrip": {
       "passed": true
     },
@@ -445,6 +445,9 @@
     "HandParsedCards/JMP/RhysticStudy": {
       "passed": false
     },
+    "HandParsedCards/FDN/TheForetoldSoldier/RoundTrip": {
+      "passed": true
+    },
     "HandParsedCards/NEO/MindlinkMech": {
       "passed": false
     },
@@ -469,7 +472,7 @@
     "OracleLines/DMR/MysticRemora/Line2": {
       "passed": false
     },
-    "OracleLines/OGW/CeremoniousRejection/Line1": {
+    "OracleLines/FDN/TheForetoldSoldier/Line1": {
       "passed": true
     },
     "HandParsedCards/SLD/DeadpoolTradingCard/RoundTrip": {
@@ -483,9 +486,6 @@
     },
     "OracleLines/CMM/DarettiScrapSavant/Line4": {
       "passed": false
-    },
-    "HandParsedCards/OGW/CeremoniousRejection": {
-      "passed": true
     },
     "OracleLines/M21/BasrisLieutenant/Line2": {
       "passed": false
