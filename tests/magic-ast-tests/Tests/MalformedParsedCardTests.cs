@@ -53,6 +53,22 @@ public class MalformedParsedCardTests
     var actualNode = JsonNode.Parse(actualJson);
     var passed = JsonComparer.AreEqual(actualNode, expectedNode);
 
+    if (!passed)
+    {
+      var diffDir = "/tmp/mast-diffs";
+      Directory.CreateDirectory(diffDir);
+      var safeName = testCase.Name.Replace('/', '_');
+      var indented = new JsonSerializerOptions(MagicASTJsonOptions.Strict) { WriteIndented = true };
+      File.WriteAllText(
+        Path.Combine(diffDir, $"{safeName}.expected.json"),
+        JsonSerializer.Serialize(expectedNode, indented)
+      );
+      File.WriteAllText(
+        Path.Combine(diffDir, $"{safeName}.actual.json"),
+        JsonSerializer.Serialize(actualNode, indented)
+      );
+    }
+
     Assert.That(passed, Is.True, $"Malformed card mismatch: {testCase.Name}");
   }
 }

@@ -62,6 +62,21 @@ public class HandParsedCardTests
     var actualNode = JsonNode.Parse(actualJson);
     var passed = JsonComparer.AreEqual(actualNode, expectedNode);
 
+    if (!passed)
+    {
+      try
+      {
+        var diffDir = "/tmp/mast-diffs";
+        Directory.CreateDirectory(diffDir);
+        var safeName = testCase.Name.Replace('/', '_');
+        var expJson = expectedNode?.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) ?? "(null)";
+        var actJson = actualNode?.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) ?? "(null)";
+        File.WriteAllText(Path.Combine(diffDir, $"{safeName}.expected.json"), expJson);
+        File.WriteAllText(Path.Combine(diffDir, $"{safeName}.actual.json"), actJson);
+      }
+      catch { /* best-effort dump */ }
+    }
+
     Assert.That(
       passed,
       Is.True,

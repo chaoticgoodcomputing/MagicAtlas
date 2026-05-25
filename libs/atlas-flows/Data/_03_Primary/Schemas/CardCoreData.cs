@@ -21,8 +21,7 @@ public partial record CardCoreData
   public required Guid Id { get; init; }
 
   /// <summary>
-  /// Scryfall <c>oracle_id</c> — the stable identity of this card across printings. Joins to
-  /// any Scryfall-side taxonomy (e.g. <c>ScryfallTagAssignments.OracleId</c>). Nullable to
+  /// Scryfall <c>oracle_id</c> — the stable identity of this card across printings. Nullable to
   /// match the upstream API: reversible-layout cards omit the card-level oracle_id and carry
   /// it per face instead.
   /// </summary>

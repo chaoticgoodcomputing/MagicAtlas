@@ -8,10 +8,10 @@ using MagicAtlas.Flows.Reporting.Nodes;
 namespace MagicAtlas.Flows.Reporting;
 
 /// <summary>
-/// Renders the interactive Plotly HTML atlas (index.html). Joins AtlasPoints, OracleLines,
-/// hover metadata, and all canonical attributions on line_id/card_id; colors by canonical
-/// family and places annotations at canonical medoids. See build_atlas_plot.py for the
-/// rendering choices.
+/// Renders the explorer-mode atlas (index.html) — a standalone Plotly HTML scatter colored by
+/// MTG color identity (WUBRG + colorless + multicolor-hollow). Joins AtlasPoints with OracleLines
+/// (per-line text) and CardCoreData-derived hover metadata. No canonical/cluster overlay; that
+/// would be exploiter-mode and belongs in MagicAST tooling, not on this map.
 /// </summary>
 public static class ReportingFlow
 {
@@ -41,9 +41,6 @@ public static class ReportingFlow
           catalog.AtlasReportingPoints,
           catalog.OracleLines,
           catalog.AtlasCardHoverInfo,
-          catalog.LinePrimaryCanonicals,
-          catalog.OracleLineCanonicalAssignments,
-          catalog.ScryfallTagCuration,
           catalog.ReportingConfig
         ),
         output: catalog.AtlasPlotHtml,

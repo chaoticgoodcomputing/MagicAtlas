@@ -105,14 +105,6 @@
           }
         ],
         "ManaValue": 1
-      },
-      {
-        "Kind": "colors",
-        "Colors": []
-      },
-      {
-        "Kind": "colorIdentity",
-        "ColorIdentity": []
       }
     ]
   }

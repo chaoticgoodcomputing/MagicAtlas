@@ -8,15 +8,15 @@ namespace MagicAtlas.Flows.OracleEmbedding;
 
 /// <summary>
 /// Produces 2D UMAP coordinates for every filtered card, using the fine-tuned sentence-transformer
-/// model over oracle-text lines. Pipeline:
+/// model over oracle-text lines. Explorer-mode pipeline:
 /// </summary>
 /// <list type="number">
 /// <item><b>ProjectOracleLines</b> (C#) — <see cref="CardCoreData"/> → <see cref="OracleLine"/>
 /// (Arrow-safe per-line rows, stable hash-derived <c>LineId</c>).</item>
 /// <item><b>EmbedOracleText</b> (Python) — deduplicates <c>OracleLines.Text</c>, encodes each
 /// unique string once via FineTunedEmbeddingModel, writes <see cref="Catalog.EncodedTexts"/>.</item>
-/// <item><b>ReduceToTwoD</b> (Python) — unsupervised projection of ClusteringEmbeddings (5D,
-/// supervised upstream by Clustering.ReduceToFiveD) → <see cref="AtlasPoint"/>.</item>
+/// <item><b>ReduceToTwoD</b> (Python) — unsupervised UMAP HD → 2D over <c>EncodedTexts</c>
+/// (broadcast back to per-line rows), producing <see cref="AtlasPoint"/>.</item>
 /// </list>
 public static class OracleEmbeddingFlow
 {
@@ -45,14 +45,24 @@ public static class OracleEmbeddingFlow
         executor: executor
       );
 
-      // Unsupervised 5D→2D projection. Supervision lives upstream in Clustering.ReduceToFiveD;
-      // here we just preserve the topology of the already-structured 5D embedding.
       pipeline.AddPythonStep(
         label: "ReduceToTwoD",
         module: "Flows.OracleEmbedding.reduce_to_2d",
         function: "reduce_to_2d",
-        input: (catalog.ClusteringEmbeddings, catalog.OracleEmbeddingConfig),
+        input: (catalog.OracleLines, catalog.EncodedTexts, catalog.OracleEmbeddingConfig),
         output: catalog.AtlasPoints,
+        executor: executor
+      );
+
+      // Label-free fidelity scorecard — regression detector for the HD→2D projection. Cheap
+      // (~few seconds on ~30k lines, sub-samples for the O(N²) bits) so wire it inline rather
+      // than gating behind a separate "eval" flow.
+      pipeline.AddPythonStep(
+        label: "EvaluateAtlasFidelity",
+        module: "Flows.OracleEmbedding.evaluate_atlas_fidelity",
+        function: "evaluate_atlas_fidelity",
+        input: (catalog.OracleLines, catalog.EncodedTexts, catalog.AtlasPoints),
+        output: catalog.AtlasFidelityMetrics,
         executor: executor
       );
     });

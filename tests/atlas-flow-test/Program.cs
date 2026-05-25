@@ -4,18 +4,14 @@ using Flowthru.Data.Catalog;
 using Flowthru.Diagnostics;
 using Flowthru.Hosting;
 using Flowthru.Step.Python;
-using Flowthru.Validation.Runtime;
 using MagicAtlas.Data;
 using MagicAtlas.Flows.CardProcessing;
-using MagicAtlas.Flows.Clustering;
 using MagicAtlas.Flows.FineTune;
+using MagicAtlas.Flows.FineTuneEval;
 using MagicAtlas.Flows.Ingest;
 using MagicAtlas.Flows.OracleEmbedding;
 using MagicAtlas.Flows.Reporting;
 using MagicAtlas.Flows.RulesProcessing;
-using MagicAtlas.Flows.TagLabeling;
-using MagicAtlas.Flows.Tuning;
-using MagicAtlas.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,18 +19,25 @@ using Microsoft.Extensions.Logging;
 namespace MagicAtlas.Harness;
 
 /// <summary>
-/// FlowthruCli entry point for the atlas pipeline harness. Wires the local-filesystem
+/// FlowthruCli entry point for the explorer-mode atlas pipeline. Wires the local-filesystem
 /// <see cref="Catalog"/> (rooted at this project's <c>Data/</c> folder), the Python runtime
 /// (venv + module search path resolved against the <c>libs/atlas-flows</c> source tree), and the
-/// four pipeline flows:
+/// six pipeline flows:
 /// </summary>
 /// <list type="number">
-/// <item><b>Ingest</b> — owns the HTTP boundary; fetches MTG rules + Scryfall card/symbology data
-/// and persists into the <c>_01_Raw</c> layer.</item>
-/// <item><b>CardProcessing</b> — typed Scryfall card parsing + commander-format filter.</item>
+/// <item><b>Ingest</b> — HTTP boundary; fetches MTG rules + Scryfall card/symbology bytes.</item>
 /// <item><b>RulesProcessing</b> — section/rule/glossary extraction from the rules text.</item>
-/// <item><b>OracleEmbedding</b> — Python BERT + UMAP for the atlas-api's scatter plot.</item>
+/// <item><b>CardProcessing</b> — typed Scryfall card parsing + commander-format filter.</item>
+/// <item><b>FineTune</b> — MTG-corpus fine-tune of the base sentence-transformer.</item>
+/// <item><b>OracleEmbedding</b> — encode oracle lines → unsupervised UMAP → 2D atlas coordinates.</item>
+/// <item><b>Reporting</b> — render the atlas as a standalone Plotly HTML.</item>
 /// </list>
+/// <remarks>
+/// Categorical/cluster machinery (HDBSCAN, supervised UMAP, archetype taxonomy, attribution
+/// scorecards) is intentionally absent — exploiter-mode queries are handled by MagicAST
+/// (libs/magic-ast/), not by statistical attribution. The atlas here is explorer-mode only:
+/// "show me cards near this one" via semantic similarity.
+/// </remarks>
 public class Program
 {
   public static Task<int> Main(string[] args) =>
@@ -93,15 +96,6 @@ public class Program
       .Build();
     services.AddSingleton<IConfiguration>(configuration);
 
-    // ── External services ──────────────────────────────────────────────────
-    // Ollama for cluster-labeling LLM calls. Endpoint and default model resolved from
-    // `Flowthru:Services:Ollama` in appsettings.json. Preflight inspector (below) probes
-    // /api/tags before any step runs and fails fast if the model isn't pulled.
-    services.Configure<OllamaServiceOptions>(
-      configuration.GetSection("Flowthru:Services:Ollama")
-    );
-    services.AddSingleton<IOllamaService, OllamaService>();
-
     services.AddLogging(logging =>
     {
       logging.AddConsole();
@@ -152,28 +146,16 @@ public class Program
         sp.GetRequiredService<IConfiguration>()
       ));
 
-      // Enable smart caching (0.18.x). The cache manifest tracks per-step composite identities
+      // Enable smart caching. The cache manifest tracks per-step composite identities
       // (source-hash + input fingerprints) and short-circuits steps whose inputs and code
       // haven't changed since the last successful run. Python steps participate iff they're
-      // marked `cacheable=True` on the `@step` decorator (see Flows/**/<step>.py).
+      // marked `cacheable=True` on the `@step` decorator.
       flowthru.UseCacheStorage(_ =>
         Item.Of<CacheManifest>("flowthru.cache")
           .Json()
           .AtPath(Path.Combine(basePath, ".flowthru", "cache.json"))
           .Build()
       );
-
-      // Preflight: reach Ollama before any step runs. Surfaces a friendly diagnostic if the
-      // endpoint is down or the configured model isn't pulled on the server.
-      flowthru.AddFlowServiceInspector<IOllamaService>(async (svc, ct) =>
-      {
-        var health = await svc.HealthCheckAsync(ct);
-        if (!health.EndpointReachable)
-          return Inspect.Fail(health.Diagnostic, source: "Ollama");
-        if (!health.ModelAvailable)
-          return Inspect.Fail(health.Diagnostic, source: "Ollama");
-        return Inspect.Pass();
-      });
 
       flowthru.ConfigureMetadata(meta =>
       {
@@ -216,7 +198,7 @@ public class Program
           FineTuneFlow.Create
         )
         .WithDescription(
-          "Owns the embedding-model lifecycle (download base + future fine-tune)"
+          "Owns the embedding-model lifecycle (base model download + MTG-corpus fine-tune)"
         );
 
       flowthru
@@ -225,38 +207,8 @@ public class Program
           OracleEmbeddingFlow.Create
         )
         .WithDescription(
-          "BERT encode + UMAP→2D (Python): produces bert-embeddings.parquet + atlas-points.json"
+          "Encode oracle lines via the fine-tuned model + unsupervised UMAP → 2D atlas coordinates"
         );
-
-      flowthru
-        .RegisterFlow<Catalog, IPythonExecutor>(
-          "Clustering",
-          ClusteringFlow.Create
-        )
-        .WithDescription(
-          "UMAP→5D + HDBSCAN + c-TF-IDF (Python): produces cluster assignments and labels"
-        );
-
-      flowthru
-        .RegisterFlow<Catalog, IPythonExecutor>(
-          "TagLabeling",
-          TagLabelingFlow.Create
-        )
-        .WithDescription(
-          "Deterministic cluster labeling: exemplar centroids + Scryfall centroids + per-cluster "
-            + "candidate ranking. Produces ClusterTagAffinity for downstream consumers. The LLM "
-            + "arbitration pass (QwenLabeling) is unregistered by default — re-enable when wanted."
-        );
-
-      // QwenLabeling flow is intentionally unregistered. To turn the LLM arbitration step back
-      // on, uncomment the block below — IOllamaService is still wired in DI above and the
-      // preflight inspector still attaches.
-      // flowthru
-      //   .RegisterFlow<Catalog, IOllamaService>(
-      //     "QwenLabeling",
-      //     QwenLabelingFlow.Create
-      //   )
-      //   .WithDescription("Qwen arbitration of ClusterTagAffinity → TagAnchoredClusterLabels.");
 
       flowthru
         .RegisterFlow<Catalog, IPythonExecutor>(
@@ -269,12 +221,13 @@ public class Program
 
       flowthru
         .RegisterFlow<Catalog, IPythonExecutor>(
-          "Tuning",
-          TuningFlow.Create
+          "FineTuneEval",
+          FineTuneEvalFlow.Create
         )
         .WithDescription(
-          "UMAP hyperparameter sweep — SweepUmap2D (5D→2D unsupervised) + SweepUmap5D "
-            + "(HD→5D supervised + default 2D). Tuning-only; outputs sweep scorecards."
+          "Diagnostic: encodes the corpus + training-pair set under base AND fine-tuned "
+            + "models and emits a base-vs-fine-tuned health scorecard "
+            + "(geometry + per-source triplet margins). Run on demand."
         );
     });
   }

@@ -1,6 +1,7 @@
 """Build the training corpus for fine-tuning the embedding model.
 
-Three tiers of positive pairs / hard-negative triplets, all merged into one output table:
+All signal comes from MTG-derived sources — no manual curated overrides. Three tiers of
+positive pairs / hard-negative triplets, all merged into one output table:
 
   Tier 1 (glossary + CR grounding):
       (keyword, glossary_definition)
@@ -10,24 +11,15 @@ Three tiers of positive pairs / hard-negative triplets, all merged into one outp
       (reminder_text, keyword)              -- model learns reminder phrasing ↔ keyword
       (reminder_text, glossary_definition)  -- model learns reminder phrasing ↔ formal rule
 
-  Tier 3 (hard-negative triplets):
-      A handful of seed templates baked in here as `_SEED_TRIPLETS` to surface word-level
+  Tier 3 (seed hard-negative triplets):
+      A handful of templates baked in here as `_SEED_TRIPLETS` to surface word-level
       mechanical distinctions (`target` / `another target`, `a` / `another`, `target` / `all`).
-      Production triplet mining over oracle-text patterns is left as a future step — for now
-      the curated triplets (CuratedTriplets) carry the project-specific signal.
-
-  Curated overrides:
-      CuratedDefinitions: adds/overrides glossary entries.
-      CuratedTriplets:    emitted as `source="curated_triplet"` rows.
-      GlossaryExclusions: filters those names out of tier 1+2 before any pair generation.
+      Production triplet mining over oracle-text or AST patterns is future work.
 
 Inputs:
     glossary_text: str   — full glossary.txt content (blank-line-delimited blocks).
     rules_text:    str   — full rules.txt content (numbered CR sections).
     card_oracle:   DataFrame[card_id, name, oracle_text]  — oracle text WITH parentheticals.
-    curated_defs:  DataFrame[name, definition].
-    curated_trips: DataFrame[anchor, positive, negative, rationale?].
-    exclusions:    DataFrame[name, reason?].
 
 Output: DataFrame[anchor, positive, negative, weight, source].
 """
@@ -178,9 +170,6 @@ _SEED_TRIPLETS: list[dict] = [
         "GlossaryText",
         "RulesText",
         "CardOracleTexts",
-        "CuratedDefinitions",
-        "CuratedTriplets",
-        "GlossaryExclusions",
         "FineTuneConfig",
     ],
     outputs="TrainingPairs",
@@ -190,18 +179,12 @@ def build_training_pairs(
     glossary_text: str,
     rules_text: str,
     card_oracle: pd.DataFrame,
-    curated_defs: pd.DataFrame,
-    curated_triplets: pd.DataFrame,
-    exclusions: pd.DataFrame,
     config: dict,
 ) -> pd.DataFrame:
     triplet_weight = float(config["TripletWeight"])
     logger.info(
-        "Inputs: glossary=%d bytes, rules=%d bytes, %d cards, "
-        "%d curated defs, %d curated triplets, %d exclusions",
-        len(glossary_text), len(rules_text),
-        len(card_oracle), len(curated_defs),
-        len(curated_triplets), len(exclusions),
+        "Inputs: glossary=%d bytes, rules=%d bytes, %d cards",
+        len(glossary_text), len(rules_text), len(card_oracle),
     )
 
     glossary_entries = _parse_glossary(glossary_text)
@@ -211,13 +194,10 @@ def build_training_pairs(
         len(glossary_entries), len(rules_by_id),
     )
 
-    excl_names = {row.lower() for row in exclusions["name"].fillna("")}
-    glossary_entries = [e for e in glossary_entries if e["name"].lower() not in excl_names]
-
-    # Merge curated defs into the glossary view (curated wins on name collision).
-    glossary_by_name: dict[str, str] = {e["name"].lower(): e["definition"] for e in glossary_entries}
-    for _, row in curated_defs.iterrows():
-        glossary_by_name[str(row["name"]).lower()] = str(row["definition"])
+    # Glossary-name → definition lookup, used by reminder-text mining in tier 2.
+    glossary_by_name: dict[str, str] = {
+        e["name"].lower(): e["definition"] for e in glossary_entries
+    }
 
     rows: list[dict] = []
 
@@ -249,18 +229,8 @@ def build_training_pairs(
                     "source": "glossary_cr",
                 })
 
-    # Curated definitions also seed tier-1 rows (in addition to overriding the merge above).
-    for _, row in curated_defs.iterrows():
-        rows.append({
-            "anchor": str(row["name"]),
-            "positive": str(row["definition"]),
-            "negative": None,
-            "weight": 1.0,
-            "source": "curated_definition",
-        })
-
     n_tier1 = len(rows)
-    logger.info("Tier 1 (glossary + CR + curated_def): %d pairs", n_tier1)
+    logger.info("Tier 1 (glossary + CR): %d pairs", n_tier1)
 
     # ── Tier 2: reminder text ↔ keyword/glossary ──
     oracle_texts = card_oracle["oracle_text"].fillna("").astype(str).tolist()
@@ -275,25 +245,17 @@ def build_training_pairs(
         })
     logger.info("Tier 2 (reminder_text): %d pairs", len(rows) - n_tier1)
 
-    # ── Tier 3: seed triplets + curated triplets ──
+    # ── Tier 3: seed hard-negative triplets (templates baked into this file) ──
     n_before_tier3 = len(rows)
     for trip in _SEED_TRIPLETS:
         rows.append({
             "anchor": trip["anchor"],
             "positive": trip["positive"],
             "negative": trip["negative"],
-            "weight": triplet_weight,  # boost over plain positives
+            "weight": triplet_weight,
             "source": "template:seed",
         })
-    for _, row in curated_triplets.iterrows():
-        rows.append({
-            "anchor": str(row["anchor"]),
-            "positive": str(row["positive"]),
-            "negative": str(row["negative"]),
-            "weight": triplet_weight,
-            "source": "curated_triplet",
-        })
-    logger.info("Tier 3 (triplets): %d rows", len(rows) - n_before_tier3)
+    logger.info("Tier 3 (seed triplets): %d rows", len(rows) - n_before_tier3)
 
     df = pd.DataFrame(rows)
     logger.info(

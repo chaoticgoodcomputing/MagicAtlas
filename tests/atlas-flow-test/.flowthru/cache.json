@@ -3,55 +3,55 @@
   "Steps": {
     "FetchOracleCardsBulk": {
       "Value": "8324C12655D42691",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "FetchRulesText": {
       "Value": "98C6641777B04FCC",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "DownloadBaseModel": {
-      "Value": "E11CCE13E5386F13",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "73DA1F7D56D733F4",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "ParseCards": {
-      "Value": "3BAF17F7BD188BB2",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "49A74F4A2BE8A69B",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "SplitRulesIntoMajorSections": {
-      "Value": "55C33B1629936B29",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "D6BF5D4011BB820C",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "FilterAndSplitCards": {
-      "Value": "6EB710B551202F68",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "7F1FF3DD15EBC5B6",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "ProjectCardOracleText": {
-      "Value": "099A1352874B8D02",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "B9847539D70EF73E",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "ProjectOracleLines": {
-      "Value": "E8C6B0A28FDB73E1",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "16096E370B68C830",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "ProjectCardHoverInfo": {
-      "Value": "C92073E33D4A96F7",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "0522260F2C076FE7",
+      "RecordedAt": "2026-05-25T08:53:20.7660349+00:00"
     },
     "BuildTrainingPairs": {
-      "Value": "2EC84D4DFDEFCE4C",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "445DF2039B8291A1",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "EmbedOracleText": {
-      "Value": "097E23715ECC9EDF",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "787BE3A1D10940C1",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "FineTuneEmbeddingModel": {
-      "Value": "C0BCB3619ED7FD54",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "88FABB1041B77A7C",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "ReduceToTwoD": {
-      "Value": "DAE845EEEAFCA582",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "9DEC08AA50768F35",
+      "RecordedAt": "2026-05-25T09:12:09.2349279+00:00"
     },
     "ReduceToFiveD": {
       "Value": "C56272EE43B0929D",
@@ -118,90 +118,118 @@
       "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "ProjectReportingPoints": {
-      "Value": "194818744DEEB95F",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "572ECF752C34325E",
+      "RecordedAt": "2026-05-25T09:12:09.2349279+00:00"
     },
     "ProjectReportingPointsFineTuned": {
       "Value": "6C7FCC0EC1CE07D3",
       "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "BuildAtlasPlot": {
-      "Value": "EC73B4D15DD5CBD4",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "E198CCDC01A9ECC1",
+      "RecordedAt": "2026-05-25T09:12:09.2349279+00:00"
     },
     "BuildAtlasPlotFineTuned": {
       "Value": "7A2E782A566D3F9E",
       "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "EvaluateAtlasFidelity": {
+      "Value": "9179568DB59FECBF",
+      "RecordedAt": "2026-05-25T09:12:09.2349279+00:00"
+    },
+    "EmbedOracleTextBase": {
+      "Value": "95A022E1F55EBAB7",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
+    },
+    "EmbedTrainingTextsBase": {
+      "Value": "DFF27ABADE5EAD4E",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
+    },
+    "EmbedTrainingTextsFineTuned": {
+      "Value": "11F28A1781934E5C",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
+    },
+    "SampleEncodedTextsBase": {
+      "Value": "D07FD784008937CE",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
+    },
+    "SampleEncodedTexts": {
+      "Value": "6286D3C414E6292B",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
+    },
+    "EvaluateFineTuneHealth": {
+      "Value": "BE621026AC0D054E",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     }
   },
   "Items": {
     "RawCards": {
-      "Value": "f3efdfef0d097e7f76f66ca322ecacb440cfeeb586e8783c2513d766422e004b",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "b593f59ba3f0b404adc74e94ae0453c795340d92ec37153c8d6cb8519c8cf8a4",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "RawRules": {
-      "Value": "bc30ad6c916e8d489d64834b9d897d717eef43a268e4a4b0494cfd37c3ad8f72",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "1ed318ebc37a921913734906d0aba1071b79191841f4a94c91b3f8bfba9a1dae",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "FineTuneConfig": {
-      "Value": "22DFE6B967F3DF67",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "BC900A420FF55F4C",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "DefaultEmbeddingModel": {
-      "Value": "acce9d7cde39415f1e209c2b6c5ab9b97b333749777b34e31ce7c56b6dac3f45",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "940170883c5930c9ba26e59e0ff39c55ac1f6db2e7ee9b293ba643fd51674ca5",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "ProcessedCards": {
-      "Value": "53785338843f1c914ef87fb2ef301eee9a1d0044146d96dae6e61069d9fe1f36",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "0d62c939c7eb8b34fb53a5b539abfc56e34d1a11f10c1ae165d67c69dbf9f2c9",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "Intro": {
-      "Value": "bf7bf17db8d46fcf202e48c1a57ad9399f2c32694f8c396226f41f5588c08fe1",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "7f8079224e462a29afc43e9e52a583054b35ab0ec1f4b9b89db3930d33a71b69",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "TableOfContents": {
-      "Value": "09deaa7228b0794d9f4695b42525bce8f2a93063d78231a1010a1262515d700a",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "221d1e43ff9afebd3c7e64cfeb639f40322b641261d536b4bcf8f53c99ed970f",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "RulesText": {
-      "Value": "46b7d5c4368ae2169091e6e67f405e6d4ab76dd6a29d52656513a7872973c57a",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "8c12e29d50ba44a8738d4bf7330e699a5c0e5acff185aa61e4b4cb3e1a073421",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "GlossaryText": {
-      "Value": "93b9ba9627b9d76a7ba78008149a5a838f54cd943f10e777fd16eb3ace0ed594",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "5c709ae5df383b339e5b82e2e31927f737135fe59b1ba812839bccc48bdfca71",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "Credits": {
-      "Value": "04c269c107c8e477c9d4368e08b69ec9ba0e2a4f490e4d9c4aeef6bd749dbfb3",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "2bd7f462f7945787e35dff1c52f11c64485a1f213a13b6af6cb7d980242c20cd",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "FilteredCardCoreData": {
-      "Value": "1e45e6f262b1ff480a29bfb98f426f359b9d9793fd62d33cb0bd2b2d95b1c44c",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "b8d290d0b3612821efcfa1c7f9b9f76378b34fb9561079d5e6727937541d7622",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "FilteredCardMetadata": {
-      "Value": "fccc229e7727b484d7f06a979635fab97734f8ab3494292284669d88d828c452",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "e7211baf926f57244ecbbc90d332287a8f4e3e4519d94cdb4d122379007afaad",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "CardOracleTexts": {
-      "Value": "5423fe2464acf32eb092fc17625947f05b8696079e9374b2aacb9c54d1f865cc",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "7bb26c4af2d366f2e39ea674037be1cadf21ae7920312d430c4a3ccaf6ae4aa5",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "KeywordVocabulary": {
-      "Value": "691dab3e5ceccdd9354a75f355e623d725199c9e5b87db1aa029f6adc73f670f",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "6c199571ed666cc2770be278d92f8a01aeb42da867e7bf4caf497d1375bff608",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "OracleLines": {
-      "Value": "029d42fe57534ec282b73428a0f7c73661ca10b131ee154cb56e68a214cac30b",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "b3cb89249421da94bcb4d0d3b966bd770fed5c1be7e1d56cf12444a859cf5e87",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "BarrelDetectionReport": {
-      "Value": "5ce7b7a3e673db7c3aa0e8ee9be2183a6c0c54715f6ab0fbd52cfdb4a41faf23",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "f35214b4736b6ab690a5888cba0dd1e20373ac072b5471217f3fc7a43cbc6b8b",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "AtlasCardHoverInfo": {
-      "Value": "b301ad095a560e5d31e195b9e686e8ebf5360f3fbf88d82eb2783c71e6a79bad",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "3819c9fde7a01ac860bdc558591e994dd6073eae0a8353b1b19942de382217f6",
+      "RecordedAt": "2026-05-25T09:12:09.2349279+00:00"
     },
     "CuratedDefinitions": {
       "Value": "302410768265a7132547ab35ef4ee30657347a298c11af0353fc765de2c3bb69",
@@ -216,24 +244,24 @@
       "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "TrainingPairs": {
-      "Value": "b22783e4be8f7d78500b3137e4fad2a02bf5eedb527203cc99e033b89f720e6d",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "5f25daf1d55014fa5af133db828cd98b3fa76eeaab856290fb7eaaca3b08849e",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "OracleEmbeddingConfig": {
-      "Value": "7F69CD605EFE0848",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "8A6CE77892FA336F",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "EncodedTexts": {
-      "Value": "d53b00da13f36d36407843107421f3c192d930f3690fd6ab9de0111d71253727",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "a104f937f1955ea6a1f721cbc6bb955168b2283fc8cb4a47224d46c5544f1d2a",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "FineTunedEmbeddingModel": {
-      "Value": "aaae6b82e59ce79747cd5d3e2a9833e5b47bfe9343eb45eca806b2fbea7fae33",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "e5fc1ed640de9a1759dd5a078bb6d653d330aeb381fb321fd2bb9cda894de283",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     },
     "AtlasPoints": {
-      "Value": "49e92c5195be13a417d83d8b2f139fdda90f6e57e47fa56736e6067f59df53a4",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "b4be41dde30ddcefbcdf54e6f6c9b9d43d4aa38515d154746d75635c46e9d573",
+      "RecordedAt": "2026-05-25T09:12:09.2349279+00:00"
     },
     "ClusteringConfig": {
       "Value": "11EC27DAC5D79EBA",
@@ -312,8 +340,8 @@
       "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
     },
     "AtlasReportingPoints": {
-      "Value": "8302e248755c9e1a8a7c421ee344bb9e2a403e7535d0d74a46263415d09d3eea",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "d9198df97eeba5c3a06a17388e5aa585feec3c682cbe64fbf59ef0b0062cf5e9",
+      "RecordedAt": "2026-05-25T09:12:09.2349279+00:00"
     },
     "FineTunedAtlasReportingPoints": {
       "Value": "385d486b0fd91c0d87b3156bbd1d0f4380e2ec5e8f17fbe9d39483c56d39dbdc",
@@ -321,15 +349,43 @@
     },
     "ReportingConfig": {
       "Value": "4B31717BA5F45211",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "RecordedAt": "2026-05-25T09:12:09.2349279+00:00"
     },
     "AtlasPlotHtml": {
-      "Value": "9268350bd260ff8120528a833ec12693ac56ea790208c65498d01dd56fa4da63",
-      "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+      "Value": "de35f5cd18b316953069920ef6aa9489841d035c732821d112418537ceefa673",
+      "RecordedAt": "2026-05-25T09:12:09.2349279+00:00"
     },
     "FineTunedAtlasPlotHtml": {
       "Value": "67a9e83132ca657f6707f420085b7c7649ca16a1144071936f58df808646606c",
       "RecordedAt": "2026-05-22T07:56:22.9740207+00:00"
+    },
+    "AtlasFidelityMetrics": {
+      "Value": "88523d9cb0fc3bc91d9cd27f8f60a2da1a373fb34b3f51ae01bdc02ab4658a7c",
+      "RecordedAt": "2026-05-25T09:12:09.2349279+00:00"
+    },
+    "EncodedTextsBase": {
+      "Value": "1472a3db215ac3f8403cad80d270e695909babecd2a0dfd6883ce93a17b02ec7",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
+    },
+    "EncodedTrainingTextsBase": {
+      "Value": "cdc9413044a73b231056d4e326a2be03820751a0d5a499e333f746b96c99aab9",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
+    },
+    "EncodedTrainingTextsFineTuned": {
+      "Value": "fdb15aa5a56040345ca9832fa476e4b0f37345c6f5c6d357944d308f74a0d3ce",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
+    },
+    "EncodedTextsBaseSampled": {
+      "Value": "b29b7ffed4e18beefdf74047d8eaae0fe97877eae58142599931f20e433f7bd6",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
+    },
+    "EncodedTextsSampled": {
+      "Value": "81d2d98929b953bd2b0d921b005ff0b5633bfcf4e257fb8030ab4869ee0dd6cd",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
+    },
+    "FineTuneHealthMetrics": {
+      "Value": "73993404ebbd17e406ce3980445960f911e8840077910783cf61f614e0b234af",
+      "RecordedAt": "2026-05-25T09:44:57.3824656+00:00"
     }
   }
 }

@@ -1,28 +1,27 @@
-"""UNSUPERVISED UMAP from 5D ClusteringEmbeddings → 2D AtlasPoints.
+"""Unsupervised UMAP from HD encoded oracle text → 2D AtlasPoints.
 
-Post-restructure architecture:
+Explorer-mode pipeline:
 
-    HD (768d nomic)
-        │  reduce_to_five_d  (SUPERVISED, target_weight)   ← supervision lives here
-        ▼
-    5D  (ClusteringEmbeddings)
-        │  reduce_to_2d      (UNSUPERVISED, this file)     ← pure topology
+    HD (768d nomic, fine-tuned)
+        │  reduce_to_2d  (UNSUPERVISED, pure topology)
         ▼
     2D  (AtlasPoints)
 
-Why unsupervised: by the time data reaches 5D, the canonical structure is already shaped by the
-upstream supervised step. This step's only job is to make that 5D shape visible in 2D without
-re-fighting the topology/supervision trade-off. Supervision at 2D was geometrically infeasible
-anyway — 280+ canonicals can't be cleanly separated in 2 dimensions.
+No intermediate 5D layer, no supervision — the atlas exists for browsing semantic neighborhoods,
+not for separating archetype regions. Same metric as the encoder produces (cosine on
+unit-normalized HD vectors).
 
 Inputs:
-    five_d:  ClusteringEmbeddings [line_id, vector] — 5D float32 byte blobs.
-    config:  OracleEmbeddingConfig — uses Umap2DNNeighbors, Umap2DMinDist.
+    lines:    OracleLines [line_id, card_id, text].
+    encoded:  EncodedTexts [text, embedding] — encoder cache, one row per unique text.
+    config:   OracleEmbeddingConfig — uses Umap2DNNeighbors, Umap2DMinDist, UmapJitterSigma.
 
 Output: AtlasPoints [line_id, x, y].
 
-Jitter is NOT applied here — the upstream 5D step already jittered the HD vectors, so identical-
-text lines arrive at 5D with slightly-different vectors.
+Jitter is applied per-row before UMAP because identical-text lines (the encoder dedup
+optimization) share the same HD vector; without noise UMAP maps them to the same 2D point and
+the scatter collapses many cards to one dot. Tiny noise (sigma ≪ vector norm) spreads them into
+a tight ball while preserving topology.
 """
 from __future__ import annotations
 
@@ -36,7 +35,7 @@ from flowthru import step
 logger = logging.getLogger(__name__)
 
 _N_COMPONENTS = 2
-_METRIC = "euclidean"  # 5D outputs are in euclidean space, not cosine
+_METRIC = "cosine"
 _RANDOM_STATE = 42
 
 
@@ -54,18 +53,11 @@ def _normalize_guid(v) -> str | None:
     return s if s else None
 
 
-# Kept exported for backward compatibility — reduce_to_five_d.py imports this from us.
 def _broadcast_and_jitter(
     lines: pd.DataFrame, encoded: pd.DataFrame, jitter_sigma: float
 ) -> tuple[pd.Series, np.ndarray]:
     """Join lines × encoded on text, decode the byte-blob to float32, apply Gaussian jitter
-    scaled per-row by the embedding norm. Returns (line_ids in input order, jittered vectors).
-
-    Why jitter: with the encoder-dedup optimization, lines sharing identical text receive the
-    SAME embedding vector. Without noise, UMAP maps duplicates to identical coordinates and the
-    scatter plot collapses many cards to a single dot. Tiny noise (sigma ≪ vector norm) preserves
-    the topology while spreading duplicates into a tight ball after UMAP.
-    """
+    scaled per-row by the embedding norm. Returns (line_ids in input order, jittered vectors)."""
     merged = lines.merge(encoded, on="text", how="left", validate="many_to_one")
     missing = merged["embedding"].isna().sum()
     if missing:
@@ -88,8 +80,7 @@ def _broadcast_and_jitter(
 
 
 def _make_umap_reducer(n_neighbors: int, min_dist: float):
-    """Returns (reducer, backend_name). Prefers cuML; falls back to umap-learn. Unsupervised
-    only — supervision lives at the 5D step, not here."""
+    """Returns (reducer, backend_name). Prefers cuML; falls back to umap-learn."""
     try:
         from cuml.manifold import UMAP as CumlUMAP
 
@@ -118,18 +109,19 @@ def _make_umap_reducer(n_neighbors: int, min_dist: float):
         )
 
 
-def _reduce_to_2d_impl(five_d: pd.DataFrame, config: dict) -> pd.DataFrame:
+def _reduce_to_2d_impl(
+    lines: pd.DataFrame, encoded: pd.DataFrame, config: dict,
+) -> pd.DataFrame:
     n_neighbors = int(config["Umap2DNNeighbors"])
     min_dist = float(config["Umap2DMinDist"])
+    jitter_sigma = float(config["UmapJitterSigma"])
 
-    line_ids = five_d["line_id"].copy()
-    vectors = np.stack(
-        [np.frombuffer(b, dtype="<f4") for b in five_d["vector"]]
-    ).astype(np.float32)
-
+    line_ids, vectors = _broadcast_and_jitter(lines, encoded, jitter_sigma)
     logger.info(
-        "Input: %d × %dD vectors (n_neighbors=%d, min_dist=%g, metric=%s)",
-        vectors.shape[0], vectors.shape[1], n_neighbors, min_dist, _METRIC,
+        "Input: %d lines × %d unique texts → %d vectors of dim %d "
+        "(jitter_sigma=%g, n_neighbors=%d, min_dist=%g, metric=%s)",
+        len(lines), len(encoded), *vectors.shape, jitter_sigma,
+        n_neighbors, min_dist, _METRIC,
     )
 
     reducer, backend = _make_umap_reducer(n_neighbors=n_neighbors, min_dist=min_dist)
@@ -148,9 +140,11 @@ def _reduce_to_2d_impl(five_d: pd.DataFrame, config: dict) -> pd.DataFrame:
 
 
 @step(
-    inputs=["ClusteringEmbeddings", "OracleEmbeddingConfig"],
+    inputs=["OracleLines", "EncodedTexts", "OracleEmbeddingConfig"],
     outputs="AtlasPoints",
     cacheable=True,
 )
-def reduce_to_2d(five_d: pd.DataFrame, config: dict) -> pd.DataFrame:
-    return _reduce_to_2d_impl(five_d, config)
+def reduce_to_2d(
+    lines: pd.DataFrame, encoded: pd.DataFrame, config: dict,
+) -> pd.DataFrame:
+    return _reduce_to_2d_impl(lines, encoded, config)

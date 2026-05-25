@@ -41,7 +41,8 @@ public sealed partial class AttributeExtractor
       attributes.Add(new ColorsAttribute { Colors = input.Colors });
     }
 
-    // Color identity (computed from mana cost + mana symbols in rules text)
+    // Color identity (computed from mana cost + mana symbols in rules text).
+    // Always WUBRG-ordered per CR convention; fixtures must match.
     var colorIdentity = ComputeColorIdentity(input);
     if (colorIdentity.Count > 0)
     {

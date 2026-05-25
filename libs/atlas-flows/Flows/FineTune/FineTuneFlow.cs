@@ -48,9 +48,6 @@ public static class FineTuneFlow
           catalog.GlossaryText,
           catalog.RulesText,
           catalog.CardOracleTexts,
-          catalog.CuratedDefinitions,
-          catalog.CuratedTriplets,
-          catalog.GlossaryExclusions,
           catalog.FineTuneConfig
         ),
         output: catalog.TrainingPairs,

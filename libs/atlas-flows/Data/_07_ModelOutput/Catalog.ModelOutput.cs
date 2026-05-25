@@ -4,15 +4,15 @@ using MagicAtlas.Data._07_ModelOutput.Schemas;
 namespace MagicAtlas.Data;
 
 /// <summary>
-/// Model evaluation outputs (Layer 7). One row per evaluated assertion per model variant —
-/// post-gut, only the fine-tuned variant remains and base-model comparison plumbing was removed.
+/// Model evaluation outputs (Layer 7). Diagnostics about the encoded/projected artifacts that
+/// inform whether the explorer atlas is healthy.
 /// </summary>
 public partial class Catalog
 {
   /// <summary>
   /// Diagnostic snapshot of <c>ProjectOracleLinesNode</c>'s barrel-detection pass — barrel/
-  /// borderline counts plus sample lines. One report per pipeline run; not per-variant
-  /// because barrel detection is model-agnostic (operates on raw oracle text, not embeddings).
+  /// borderline counts plus sample lines. One report per pipeline run; model-agnostic (operates
+  /// on raw oracle text, not embeddings).
   /// </summary>
   public IItem<BarrelDetectionReport> BarrelDetectionReport =>
     CreateItem(() =>
@@ -22,54 +22,33 @@ public partial class Catalog
         .Build()
     );
 
-  /// <summary>Quality scorecard for HDBSCAN clustering measured against the canonical
-  /// line-attribution ground truth. Per-cluster rows + corpus-wide row.</summary>
-  public IItem<IEnumerable<ClusterCanonicalBenchmark>> ClusterCanonicalBenchmark =>
+  /// <summary>
+  /// Label-free fidelity scorecard for the explorer atlas — measures HD↔2D neighborhood
+  /// preservation (trustworthiness, continuity, per-card k-NN jaccard). Acts as the
+  /// regression detector for the explorer-mode pipeline: when these numbers drift, the
+  /// projection has lost faithfulness to its source HD topology. See
+  /// <see cref="AtlasFidelityMetric"/>.
+  /// </summary>
+  public IItem<IEnumerable<AtlasFidelityMetric>> AtlasFidelityMetrics =>
     CreateItem(() =>
-      Item.Of<IEnumerable<ClusterCanonicalBenchmark>>("ClusterCanonicalBenchmark")
+      Item.Of<IEnumerable<AtlasFidelityMetric>>("AtlasFidelityMetrics")
         .Json()
-        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/cluster-canonical-benchmark.json")
+        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/atlas-fidelity-metrics.json")
         .Build()
     );
 
-  /// <summary>Per-canonical 2D-placement scorecard — radii, dispersion, centroid-based
-  /// silhouette, overlap rate. One row per canonical + an overall row (slug = "*").</summary>
-  public IItem<IEnumerable<CanonicalPlacementMetric>> CanonicalPlacementMetrics =>
+  /// <summary>
+  /// Base-vs-fine-tuned comparison scorecard for the embedding model. Geometry-tier metrics
+  /// (pairwise-cosine spread, hubness) and objective-tier metrics (per-source triplet margins,
+  /// positive/negative cosine means) measured under each model variant. Lets you decide
+  /// "is the fine-tune helping or hurting?" empirically rather than by intuition.
+  /// See <see cref="FineTuneHealthMetric"/>.
+  /// </summary>
+  public IItem<IEnumerable<FineTuneHealthMetric>> FineTuneHealthMetrics =>
     CreateItem(() =>
-      Item.Of<IEnumerable<CanonicalPlacementMetric>>("CanonicalPlacementMetrics")
+      Item.Of<IEnumerable<FineTuneHealthMetric>>("FineTuneHealthMetrics")
         .Json()
-        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/canonical-placement-metrics.json")
-        .Build()
-    );
-
-  /// <summary>Cross-level projection-quality scorecard — HD/5D/2D × Exploration/Exploitation
-  /// × 8 metrics in tidy long form. See <see cref="ProjectionQualityMetric"/>.</summary>
-  public IItem<IEnumerable<ProjectionQualityMetric>> ProjectionQualityMetrics =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<ProjectionQualityMetric>>("ProjectionQualityMetrics")
-        .Json()
-        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/projection-quality-metrics.json")
-        .Build()
-    );
-
-  /// <summary>Results of the 5D→2D UMAP sweep — tidy long form, one row per
-  /// (sweep_point, level, metric). Tuning-only artifact; not consumed by the production atlas.</summary>
-  public IItem<IEnumerable<UmapSweepResult>> UmapSweep2DResults =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<UmapSweepResult>>("UmapSweep2DResults")
-        .Json()
-        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/umap-sweep-2d-results.json")
-        .Build()
-    );
-
-  /// <summary>Results of the HD→5D supervised UMAP sweep — tidy long form. Per-combo metrics
-  /// at the 5D layer (where supervision lives) plus the downstream 2D layer (with default 2D
-  /// hyperparams) for end-to-end visibility.</summary>
-  public IItem<IEnumerable<UmapSweepResult>> UmapSweep5DResults =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<UmapSweepResult>>("UmapSweep5DResults")
-        .Json()
-        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/umap-sweep-5d-results.json")
+        .AtPath($"{_basePath}/_07_ModelOutput/Datasets/fine-tune-health-metrics.json")
         .Build()
     );
 }
