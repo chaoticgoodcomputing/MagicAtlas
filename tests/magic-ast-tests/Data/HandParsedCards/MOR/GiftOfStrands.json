@@ -1,0 +1,99 @@
+{
+  "Input": {
+    "Name": "Gift of Strands",
+    "ManaCost": "{3}{G}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Flash\nEnchant creature\nWhen this Aura enters, scry 2.\nEnchanted creature gets +3/+3.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Gift of Strands",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Flash\nEnchant creature\nWhen this Aura enters, scry 2.\nEnchanted creature gets +3/+3.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flash",
+          "Effect": {
+            "EffectType": "timingModification",
+            "Modification": "Grant",
+            "Timing": "Instant"
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effect": {
+            "EffectType": "enchantRestriction",
+            "LegalTargets": {
+              "CardTypes": ["creature"]
+            }
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["aura"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "scry",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "modifyPT",
+            "Target": {
+              "Kind": "EnchantedOrEquipped"
+            },
+            "PowerModifier": {
+              "QuantityType": "literal",
+              "Value": 3
+            },
+            "ToughnessModifier": {
+              "QuantityType": "literal",
+              "Value": 3
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
