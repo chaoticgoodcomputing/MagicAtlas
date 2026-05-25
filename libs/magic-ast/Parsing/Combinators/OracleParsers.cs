@@ -376,6 +376,20 @@ public static class OracleParsers
         return new ProtectionQuality { Kind = ProtectionQualityKind.CardType, Value = singular };
       }
 
+      // Characteristics: multicolored, monocolored, etc. — lowercase
+      // single-word qualifiers that aren't a color name. Oracle text
+      // capitalizes creature-type names (Demons, Dragons), so a lowercase
+      // token here means a state predicate rather than a type.
+      var characteristics = new[] { "multicolored", "monocolored", "colored" };
+      if (characteristics.Contains(normalized))
+      {
+        return new ProtectionQuality
+        {
+          Kind = ProtectionQualityKind.Characteristic,
+          Value = normalized,
+        };
+      }
+
       // Otherwise, assume it's a subtype (capitalized in oracle text)
       // Examples: "Demons", "Dragons", "Elves"
       return new ProtectionQuality { Kind = ProtectionQualityKind.Subtype, Value = value };

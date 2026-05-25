@@ -3,10 +3,15 @@ namespace MagicAST.Parsing.Parsers;
 using System.Text.RegularExpressions;
 using MagicAST.AST;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.Costs;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.CardFlow;
+using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Core;
+using MagicAST.AST.Effects.Counter;
+using MagicAST.AST.Effects.Resource;
 using MagicAST.AST.Effects.TokenCopy;
+using MagicAST.AST.Effects.ZoneChange;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 using MagicAST.AST.Triggers;
@@ -235,17 +240,103 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     };
 
   /// <summary>
-  /// Splits the clause into trigger and effect parts at the first comma.
+  /// Splits the clause into trigger and effect parts at the comma that opens
+  /// the resolution sentence. Trigger conditions may contain internal commas
+  /// (e.g. "you cast a spell that's white, blue, black, or red, put..."), so
+  /// a naive first-comma split misclassifies the colour list. We instead pick
+  /// the latest comma whose right-hand side begins with a verb consistent with
+  /// an effect description (or "if" / "you may", which introduce conditional
+  /// effects). This still bottoms out on the first comma if no later candidate
+  /// looks like an effect — matching the previous behaviour for simple shapes.
   /// </summary>
   private static (string Trigger, string Effect)? SplitTriggerAndEffect(string text)
   {
-    var parts = text.Split(',', 2);
-    if (parts.Length != 2)
+    var firstComma = text.IndexOf(',');
+    if (firstComma < 0)
     {
       return null;
     }
 
-    return (parts[0].Trim(), parts[1].Trim());
+    var commaIndices = new List<int>();
+    for (var i = 0; i < text.Length; i++)
+    {
+      if (text[i] == ',')
+      {
+        commaIndices.Add(i);
+      }
+    }
+
+    // Scan commas right-to-left for one whose tail begins with an effect verb.
+    foreach (var i in ((IEnumerable<int>)commaIndices).Reverse())
+    {
+      var tail = text[(i + 1)..].TrimStart();
+      if (LooksLikeEffectStart(tail))
+      {
+        return (text[..i].Trim(), tail);
+      }
+    }
+
+    // Fallback: first comma split.
+    return (text[..firstComma].Trim(), text[(firstComma + 1)..].Trim());
+  }
+
+  /// <summary>
+  /// True if <paramref name="tail"/> starts with one of the imperative verbs
+  /// (or conditional prefixes) the effect-parser recognises. Used by
+  /// <see cref="SplitTriggerAndEffect"/> to anchor the trigger/effect boundary
+  /// past commas internal to the trigger condition.
+  /// </summary>
+  private static bool LooksLikeEffectStart(string tail)
+  {
+    string[] starters =
+    [
+      "put",
+      "draw",
+      "create",
+      "scry",
+      "look",
+      "you may",
+      "you gain",
+      "you lose",
+      "target",
+      "each opponent",
+      "each player",
+      "destroy",
+      "exile",
+      "return",
+      "untap",
+      "tap",
+      "deal",
+      "mill",
+      "discard",
+      "if you",
+      "if you do",
+      "if",
+      "this creature",
+      "this permanent",
+      "search",
+      "shuffle",
+      "reveal",
+      "counter",
+      "until end of turn",
+      "for each",
+    ];
+    foreach (var s in starters)
+    {
+      if (tail.StartsWith(s, StringComparison.OrdinalIgnoreCase))
+      {
+        // Require a following space or punctuation so "putrid" doesn't match "put".
+        if (
+          tail.Length == s.Length
+          || char.IsWhiteSpace(tail[s.Length])
+          || char.IsPunctuation(tail[s.Length])
+        )
+        {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /// <summary>
@@ -255,6 +346,57 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   private static TriggerCondition? ParseTriggerCondition(string triggerText, TriggerTiming timing)
   {
     var lower = triggerText.ToLowerInvariant();
+
+    // Phase/step triggers (At-style): "At the beginning of your upkeep",
+    // "At the beginning of your first main phase", etc.
+    if (timing == TriggerTiming.At)
+    {
+      var phaseTrigger = TryParsePhaseTrigger(lower, timing);
+      if (phaseTrigger is not null)
+      {
+        return phaseTrigger;
+      }
+    }
+
+    // Spell-cast trigger: "Whenever [filter] cast(s) a spell..."
+    if (lower.Contains("cast") && lower.Contains("spell"))
+    {
+      var spellCast = TryParseSpellCastTrigger(triggerText, timing);
+      if (spellCast is not null)
+      {
+        return spellCast;
+      }
+    }
+
+    // Life-change triggers
+    if (lower.Contains("gain") && lower.Contains("life"))
+    {
+      var gainsLife = TryParseGainsLifeTrigger(triggerText, timing);
+      if (gainsLife is not null)
+      {
+        return gainsLife;
+      }
+    }
+
+    // Scry-or-surveil trigger: "Whenever you scry or surveil"
+    if (lower.Contains("scry") || lower.Contains("surveil"))
+    {
+      var scryOrSurveil = TryParseScryOrSurveilTrigger(triggerText, timing);
+      if (scryOrSurveil is not null)
+      {
+        return scryOrSurveil;
+      }
+    }
+
+    // Crewing trigger: "Whenever this Vehicle becomes crewed..."
+    if (lower.Contains("becomes crewed"))
+    {
+      var crew = TryParseBecomesCrewedTrigger(triggerText, timing);
+      if (crew is not null)
+      {
+        return crew;
+      }
+    }
 
     // Try different trigger event types
     if (lower.Contains("dies"))
@@ -270,6 +412,236 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     // Add more trigger types here as needed (attacks, etc.)
 
     return null;
+  }
+
+  /// <summary>
+  /// "At the beginning of your upkeep" / "At the beginning of your first main phase" /
+  /// "At the beginning of your draw step" / "At the beginning of your end step" /
+  /// "At the beginning of combat on your turn".
+  /// Maps the phase/step word to a <see cref="TriggerEvent"/>. The "your" /
+  /// "each player's" possessive lands on the filter as a <c>Controller</c>.
+  /// </summary>
+  private static TriggerCondition? TryParsePhaseTrigger(string lower, TriggerTiming timing)
+  {
+    if (!lower.Contains("beginning of"))
+    {
+      return null;
+    }
+
+    TriggerEvent? evt = null;
+    if (lower.Contains("upkeep"))
+    {
+      evt = TriggerEvent.BeginningOfUpkeep;
+    }
+    else if (lower.Contains("first main phase") || lower.Contains("precombat main phase"))
+    {
+      evt = TriggerEvent.BeginningOfPreCombatMainPhase;
+    }
+    else if (lower.Contains("postcombat main phase") || lower.Contains("second main phase"))
+    {
+      evt = TriggerEvent.BeginningOfPostCombatMainPhase;
+    }
+    else if (lower.Contains("draw step"))
+    {
+      evt = TriggerEvent.BeginningOfDrawStep;
+    }
+    else if (lower.Contains("end step"))
+    {
+      evt = TriggerEvent.BeginningOfEndStep;
+    }
+    else if (lower.Contains("combat"))
+    {
+      evt = TriggerEvent.BeginningOfCombat;
+    }
+
+    if (evt is null)
+    {
+      return null;
+    }
+
+    // Possessive cue determines the filter's controller axis. "your" → You,
+    // "each opponent's" → Opponent, "each player's" → no filter (universal).
+    ObjectFilter? filter = null;
+    if (lower.Contains("your"))
+    {
+      filter = new ObjectFilter { Controller = ControllerFilter.You };
+    }
+    else if (lower.Contains("each opponent"))
+    {
+      filter = new ObjectFilter { Controller = ControllerFilter.Opponent };
+    }
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = evt.Value,
+      Filter = filter,
+    };
+  }
+
+  /// <summary>
+  /// "Whenever you cast a spell" / "Whenever an opponent casts a spell" /
+  /// "Whenever you cast a spell that's white, blue, black, or red" / etc.
+  /// Encodes the caster and any inline spell-color/type qualifiers on the filter.
+  /// </summary>
+  private static TriggerCondition? TryParseSpellCastTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    // Recognize "[subject] cast(s) [some] spell ..."
+    if (!Regex.IsMatch(triggerText, @"\bcasts?\b", RegexOptions.IgnoreCase))
+    {
+      return null;
+    }
+    if (!Regex.IsMatch(triggerText, @"\bspell\b", RegexOptions.IgnoreCase))
+    {
+      return null;
+    }
+
+    var lower = triggerText.ToLowerInvariant();
+
+    // Caster (controller filter)
+    ControllerFilter? controller = null;
+    if (Regex.IsMatch(lower, @"\b(you|an?\s+opponent|an?\s+player)\b"))
+    {
+      controller = lower.Contains("opponent")
+        ? ControllerFilter.Opponent
+        : (lower.Contains("you") ? ControllerFilter.You : null);
+    }
+
+    // Card-type qualifiers on the cast spell ("creature spell", "noncreature spell", etc.)
+    var characteristics = new List<string>();
+    foreach (var word in new[] { "creature", "noncreature", "instant", "sorcery", "artifact", "enchantment" })
+    {
+      if (Regex.IsMatch(lower, $@"\b{Regex.Escape(word)}\s+spell\b"))
+      {
+        characteristics.Add(word);
+      }
+    }
+
+    // Color qualifiers: "that's white" / "that's white, blue, black, or red" /
+    // "white spell" etc. Look for any colour word in the trigger fragment.
+    var colors = new List<string>();
+    var colorMap = new Dictionary<string, string>
+    {
+      ["white"] = "W",
+      ["blue"] = "U",
+      ["black"] = "B",
+      ["red"] = "R",
+      ["green"] = "G",
+    };
+    foreach (var (name, code) in colorMap)
+    {
+      if (Regex.IsMatch(lower, $@"\b{name}\b"))
+      {
+        colors.Add(code);
+      }
+    }
+
+    // "this spell from anywhere other than exile" — Rory Williams shape.
+    // Encode the qualifier on Characteristics so the trigger remains a
+    // structured filter rather than a free-text condition.
+    if (lower.Contains("this spell from anywhere other than exile"))
+    {
+      characteristics.Add("this spell from anywhere other than exile");
+    }
+
+    // Build filter. Suppress CardTypes=["spell"] when no qualifiers were
+    // detected and the controller is non-You (matches RhysticStudy's gold).
+    var hasAnyQualifier = characteristics.Count > 0 || colors.Count > 0;
+    IReadOnlyList<string>? cardTypes = hasAnyQualifier ? new List<string> { "spell" } : null;
+
+    var filter = new ObjectFilter
+    {
+      CardTypes = cardTypes,
+      Characteristics = characteristics.Count > 0 ? characteristics : null,
+      Colors = colors.Count > 0 ? colors : null,
+      Controller = controller,
+    };
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.SpellCast,
+      Filter = filter,
+    };
+  }
+
+  /// <summary>
+  /// "Whenever you gain life" — life-gain trigger. Controller defaults to You.
+  /// </summary>
+  private static TriggerCondition? TryParseGainsLifeTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    var lower = triggerText.ToLowerInvariant();
+    if (!Regex.IsMatch(lower, @"\b(you|opponent|a player)\s+gain(s)?\s+life\b"))
+    {
+      return null;
+    }
+
+    ControllerFilter controller = lower.Contains("opponent")
+      ? ControllerFilter.Opponent
+      : ControllerFilter.You;
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.GainsLife,
+      Filter = new ObjectFilter { Controller = controller },
+    };
+  }
+
+  /// <summary>
+  /// "Whenever you scry or surveil" — fires on either keyword action (Rule 701.18 / 701.43).
+  /// </summary>
+  private static TriggerCondition? TryParseScryOrSurveilTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    var lower = triggerText.ToLowerInvariant();
+    if (!Regex.IsMatch(lower, @"\byou\s+scry\s+or\s+surveil\b"))
+    {
+      return null;
+    }
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.ScryOrSurveil,
+      Filter = new ObjectFilter { Controller = ControllerFilter.You },
+    };
+  }
+
+  /// <summary>
+  /// "Whenever this Vehicle becomes crewed [for the first time each turn]" — Rule 702.122 trigger.
+  /// </summary>
+  private static TriggerCondition? TryParseBecomesCrewedTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    var lower = triggerText.ToLowerInvariant();
+    if (!lower.Contains("becomes crewed"))
+    {
+      return null;
+    }
+
+    // Filter expresses the subject. "this Vehicle" is the common shape.
+    ObjectFilter? filter = null;
+    if (lower.Contains("this vehicle"))
+    {
+      filter = new ObjectFilter { Characteristics = ["this Vehicle"] };
+    }
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.BecomesCrewed,
+      Filter = filter,
+    };
   }
 
   /// <summary>
@@ -379,24 +751,358 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   /// </summary>
   private static IReadOnlyList<Effect>? ParseEffects(string effectText)
   {
+    // Strip a trailing period for downstream pattern matchers.
+    var trimmed = effectText.Trim().TrimEnd('.').Trim();
+
+    // Composite phase-step effects: "each opponent loses X life and you gain X life,
+    // where X is the number of <count>" — Sanctum-of-Stone-Fangs shape. Match these
+    // before the single-effect parsers so the conjunction binds tightly.
+    var loseGainLifeWhereX = TryParseLoseAndGainLifeWhereX(trimmed);
+    if (loseGainLifeWhereX is not null)
+    {
+      return loseGainLifeWhereX;
+    }
+
     // Try different effect types
-    var effect = TryParseCreateTokenEffect(effectText);
+    var effect = TryParseCreateTokenEffect(trimmed);
     if (effect != null)
     {
       return new List<Effect> { effect };
     }
 
-    var scry = TryParseScryEffect(effectText);
+    var scry = TryParseScryEffect(trimmed);
     if (scry != null)
     {
       return new List<Effect> { scry };
     }
 
-    // Can add more effect types here:
-    // - ParseDrawEffect(effectText)
-    // - ParseGainLifeEffect(effectText)
-    // - ParsePutCounterEffect(effectText)
+    var draw = TryParseDrawCardsEffect(trimmed);
+    if (draw != null)
+    {
+      return new List<Effect> { draw };
+    }
 
+    var putCounters = TryParsePutCountersEffect(trimmed);
+    if (putCounters != null)
+    {
+      return new List<Effect> { putCounters };
+    }
+
+    var untap = TryParseUntapSelfEffect(trimmed);
+    if (untap != null)
+    {
+      return new List<Effect> { untap };
+    }
+
+    var returnHand = TryParseReturnToHandEffect(trimmed);
+    if (returnHand != null)
+    {
+      return new List<Effect> { returnHand };
+    }
+
+    var loseLife = TryParseLoseLifeDerivedEffect(trimmed);
+    if (loseLife != null)
+    {
+      return new List<Effect> { loseLife };
+    }
+
+    return null;
+  }
+
+  /// <summary>
+  /// "draw a card" / "you may draw a card unless that player pays {N}" — produces
+  /// a <see cref="DrawCardsEffect"/> with the optional <see cref="UnlessClause"/>.
+  /// </summary>
+  private static DrawCardsEffect? TryParseDrawCardsEffect(string effectText)
+  {
+    var lower = effectText.ToLowerInvariant();
+    if (!Regex.IsMatch(lower, @"\bdraw\s+(a|one|two|three|four|five|\d+)\s+cards?\b"))
+    {
+      return null;
+    }
+
+    var isOptional = lower.Contains("you may draw") || lower.StartsWith("you may ");
+    var count = ParseWordOrDigitCount(effectText) ?? 1;
+
+    // Unless clause: "...unless that player pays {N}." or "...unless [player] pays [cost]."
+    var unlessMatch = Regex.Match(
+      effectText,
+      @"unless\s+(?<who>that\s+player|you|an\s+opponent)\s+pays?\s+(?<cost>\{[^}]+\}(?:\{[^}]+\})*)",
+      RegexOptions.IgnoreCase
+    );
+
+    UnlessClause? unless = null;
+    if (unlessMatch.Success)
+    {
+      var who = unlessMatch.Groups["who"].Value.ToLowerInvariant().Trim();
+      var costStr = unlessMatch.Groups["cost"].Value;
+      ObjectReference player = who switch
+      {
+        "that player" => new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
+        "you" => ObjectReference.You(),
+        _ => new ObjectReference { Kind = ObjectReferenceKind.Opponent },
+      };
+      var manaCost = TryBuildManaCost(costStr);
+      if (manaCost is not null)
+      {
+        unless = new UnlessClause { Player = player, Cost = manaCost };
+      }
+    }
+
+    return new DrawCardsEffect
+    {
+      Count = LiteralQuantity.Of(count),
+      Player = ObjectReference.You(),
+      IsOptional = isOptional,
+      UnlessClause = unless,
+    };
+  }
+
+  /// <summary>
+  /// "put a +1/+1 counter on this creature" / "put a +1/+1 counter on target creature you control".
+  /// Recognises +1/+1 and -1/-1 counter shapes with self / target / target-you-control targets.
+  /// </summary>
+  private static PutCountersEffect? TryParsePutCountersEffect(string effectText)
+  {
+    var lower = effectText.ToLowerInvariant();
+    if (!lower.Contains("put") || !lower.Contains("counter"))
+    {
+      return null;
+    }
+
+    string counterType;
+    if (effectText.Contains("+1/+1"))
+    {
+      counterType = "+1/+1";
+    }
+    else if (effectText.Contains("-1/-1"))
+    {
+      counterType = "-1/-1";
+    }
+    else
+    {
+      return null;
+    }
+
+    var count = ParseWordOrDigitCount(effectText) ?? 1;
+    ObjectReference target;
+    if (lower.Contains("target creature you control"))
+    {
+      target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You },
+      };
+    }
+    else if (lower.Contains("target creature"))
+    {
+      target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = ["creature"] },
+      };
+    }
+    else if (lower.Contains("this creature") || lower.Contains("this permanent"))
+    {
+      target = ObjectReference.Self();
+    }
+    else
+    {
+      target = ObjectReference.Self();
+    }
+
+    return new PutCountersEffect
+    {
+      Target = target,
+      CounterType = counterType,
+      Count = LiteralQuantity.Of(count),
+    };
+  }
+
+  /// <summary>
+  /// "untap this artifact" / "untap it" / "untap this permanent" — Self-targeting untap.
+  /// Pattern often appears inside "If you do, untap this artifact." which is parsed
+  /// as the IfYouDo branch of an optional pay effect on cards like Mana Vault.
+  /// </summary>
+  private static UntapEffect? TryParseUntapSelfEffect(string effectText)
+  {
+    var lower = effectText.ToLowerInvariant();
+    // Optional "if you do" prefix is treated as part of the effect's optionality
+    // on the parent — here we just need to recognise the untap-self shape.
+    if (!Regex.IsMatch(lower, @"untap\s+(this|it)\b"))
+    {
+      return null;
+    }
+    return new UntapEffect { Target = ObjectReference.Self() };
+  }
+
+  /// <summary>
+  /// "return up to one other target creature or planeswalker to its owner's hand" —
+  /// Barrin shape. Encodes the "other" qualifier on Characteristics and the
+  /// type disjunction on CardTypes. Also handles the simpler "return [target] to
+  /// its owner's hand" and "return another target creature you control to its
+  /// owner's hand".
+  /// </summary>
+  private static ReturnToHandEffect? TryParseReturnToHandEffect(string effectText)
+  {
+    var lower = effectText.ToLowerInvariant();
+    if (!lower.Contains("return") || !lower.Contains("hand"))
+    {
+      return null;
+    }
+
+    // Hand qualifier
+    if (!Regex.IsMatch(lower, @"to\s+(its\s+owner'?s|your)\s+hand"))
+    {
+      return null;
+    }
+
+    var isOptional = lower.Contains("you may return") || lower.StartsWith("you may ");
+    var characteristics = new List<string>();
+    if (lower.Contains("another target"))
+    {
+      characteristics.Add("other");
+    }
+    else if (Regex.IsMatch(lower, @"\bother\s+target\b"))
+    {
+      characteristics.Add("other");
+    }
+
+    var cardTypes = new List<string>();
+    foreach (var t in new[] { "creature", "planeswalker", "artifact", "enchantment", "permanent" })
+    {
+      if (Regex.IsMatch(lower, $@"\b{t}\b"))
+      {
+        cardTypes.Add(t);
+      }
+    }
+    if (cardTypes.Count == 0)
+    {
+      return null;
+    }
+
+    ControllerFilter? controller = null;
+    if (lower.Contains("you control"))
+    {
+      controller = ControllerFilter.You;
+    }
+
+    var filter = new ObjectFilter
+    {
+      CardTypes = cardTypes,
+      Characteristics = characteristics.Count > 0 ? characteristics : null,
+      Controller = controller,
+    };
+
+    return new ReturnToHandEffect
+    {
+      Target = new ObjectReference { Kind = ObjectReferenceKind.Target, Filter = filter },
+      IsOptional = isOptional,
+    };
+  }
+
+  /// <summary>
+  /// "target opponent loses that much life" — Vito's drain-on-life-gain effect.
+  /// Encodes the "that much" antecedent as a derived <see cref="DerivedKind.LifeGained"/>
+  /// quantity, matching the gold AST.
+  /// </summary>
+  private static LoseLifeEffect? TryParseLoseLifeDerivedEffect(string effectText)
+  {
+    var lower = effectText.ToLowerInvariant();
+    var match = Regex.Match(
+      lower,
+      @"target\s+opponent\s+loses?\s+that\s+much\s+life",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    return new LoseLifeEffect
+    {
+      Amount = new DerivedQuantity { DerivedFrom = DerivedKind.LifeGained },
+      Player = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = ["player"] },
+      },
+    };
+  }
+
+  /// <summary>
+  /// Sanctum-style composite: "each opponent loses X life and you gain X life,
+  /// where X is the number of [filter]". Encodes both halves as
+  /// <see cref="CountQuantity"/> sharing the same <c>CountOf</c> description.
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseLoseAndGainLifeWhereX(string effectText)
+  {
+    var match = Regex.Match(
+      effectText,
+      @"^each\s+opponent\s+loses\s+X\s+life\s+and\s+you\s+gain\s+X\s+life,\s*where\s+X\s+is\s+the\s+number\s+of\s+(?<count>.+)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var countOf = match.Groups["count"].Value.Trim();
+    return new List<Effect>
+    {
+      new LoseLifeEffect
+      {
+        Amount = new CountQuantity { CountOf = countOf },
+        Player = new ObjectReference { Kind = ObjectReferenceKind.EachOpponent },
+      },
+      new GainLifeEffect
+      {
+        Amount = new CountQuantity { CountOf = countOf },
+        Player = ObjectReference.You(),
+      },
+    };
+  }
+
+  /// <summary>
+  /// Builds a <see cref="ManaCost"/> from a sequence of "{X}" mana symbols.
+  /// Returns null when the string isn't a well-formed mana sequence.
+  /// </summary>
+  private static ManaCost? TryBuildManaCost(string manaText)
+  {
+    try
+    {
+      var parsed = new ManaCostParser().Parse(manaText);
+      if (parsed.Symbols.Count == 0)
+      {
+        return null;
+      }
+      return new ManaCost { Symbols = parsed.Symbols };
+    }
+    catch
+    {
+      return null;
+    }
+  }
+
+  /// <summary>
+  /// Parses number words ("one", "two", ..., "ten") and digit forms into integers.
+  /// Returns null when the text doesn't carry a count word.
+  /// </summary>
+  private static int? ParseWordOrDigitCount(string text)
+  {
+    var lower = text.ToLowerInvariant();
+    if (lower.Contains("two")) return 2;
+    if (lower.Contains("three")) return 3;
+    if (lower.Contains("four")) return 4;
+    if (lower.Contains("five")) return 5;
+    if (lower.Contains("six")) return 6;
+    if (lower.Contains("seven")) return 7;
+    if (lower.Contains("eight")) return 8;
+    if (lower.Contains("nine")) return 9;
+    if (lower.Contains("ten")) return 10;
+    var m = Regex.Match(lower, @"\b(\d+)\b");
+    if (m.Success) return int.Parse(m.Groups[1].Value);
+    if (Regex.IsMatch(lower, @"\b(a|an|one)\b")) return 1;
     return null;
   }
 
