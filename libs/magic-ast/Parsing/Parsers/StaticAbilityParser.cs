@@ -1082,6 +1082,55 @@ public sealed class StaticAbilityParser : IAbilityParser
       return new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped };
     }
 
+    // "White creatures you control" / "Red artifacts an opponent controls" —
+    // colour-scoped card-type grant (Resplendent Mentor). Same shape as the
+    // controller-scoped card-type branch below, plus a colour adjective that
+    // lands on ObjectFilter.Colors. The colour word is capitalised at the
+    // start of a clause (oracle convention); the regex matches the colour
+    // case-insensitively but the resulting code is normalised to the
+    // single-letter colour code on ObjectFilter.Colors. Listed before the
+    // bare card-type branch because that pattern is anchored at the
+    // card-type noun — a leading colour word would simply fail it, not be
+    // misclassified, but ordering keeps the colour-specific branch self-evident.
+    var colorTypeMatch = Regex.Match(
+      trimmed,
+      @"^(?<color>White|Blue|Black|Red|Green)\s+(?<type>creatures|artifacts|enchantments|lands|planeswalkers|permanents)\s+(?<ctrl>you\s+control|an\s+opponent\s+controls)\.?$",
+      RegexOptions.IgnoreCase
+    );
+    if (colorTypeMatch.Success)
+    {
+      var colorName = colorTypeMatch.Groups["color"].Value.ToLowerInvariant();
+      var colorCode = colorName switch
+      {
+        "white" => "W",
+        "blue" => "U",
+        "black" => "B",
+        "red" => "R",
+        "green" => "G",
+        _ => null,
+      };
+      if (colorCode is null)
+      {
+        return null;
+      }
+      var pluralType = colorTypeMatch.Groups["type"].Value.ToLowerInvariant();
+      var singularType = pluralType.EndsWith('s') ? pluralType[..^1] : pluralType;
+      var ctrlText = colorTypeMatch.Groups["ctrl"].Value.ToLowerInvariant();
+      var colorController = ctrlText.StartsWith("you")
+        ? ControllerFilter.You
+        : ControllerFilter.Opponent;
+      return new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter
+        {
+          CardTypes = [singularType],
+          Colors = [colorCode],
+          Controller = colorController,
+        },
+      };
+    }
+
     // "Creatures you control" / "Artifacts an opponent controls" — controller-scoped
     // card-type grant. The lower-case plural card-type noun is what distinguishes
     // this from the capitalised-subtype "All [Subtype]s" branch below; the trailing
