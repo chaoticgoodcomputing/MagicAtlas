@@ -208,6 +208,12 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseExileMonocoloredPermanentEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     effect = TryParseSpellTapTargetEffect(trimmed);
     if (effect is not null)
     {
@@ -871,6 +877,50 @@ public sealed class SpellAbilityParser : IAbilityParser
       {
         Kind = ObjectReferenceKind.Target,
         Filter = new ObjectFilter { CardTypes = cardTypes },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Exile target monocolored permanent." — Vanishing Verse. The
+  /// "monocolored" qualifier is a structural color-set predicate (Rule 105.3:
+  /// "an object with exactly one color"), not a value within
+  /// <see cref="ObjectFilter.Colors"/>, so it surfaces on the dedicated
+  /// <see cref="ObjectFilter.IsMonocolored"/> axis — same pattern as
+  /// <see cref="ObjectFilter.IsColorless"/> and <see cref="ObjectFilter.IsMulticolored"/>
+  /// in <see cref="BuildSpellFilter"/>.
+  /// </summary>
+  /// <remarks>
+  /// Kept distinct from <see cref="TryParseExileTypeDisjunctionEffect"/>: that one
+  /// matches a multi-type "X or Y" disjunction, this one matches a single-type
+  /// target qualified by the monocolored predicate. The single-type plain shape
+  /// "Exile target [type]" remains intentionally unhandled (other exile fixtures
+  /// rely on it falling through).
+  /// </remarks>
+  private static MagicAST.AST.Effects.ZoneChange.ExileEffect? TryParseExileMonocoloredPermanentEffect(
+    string text
+  )
+  {
+    if (
+      !Regex.IsMatch(
+        text,
+        @"^Exile\s+target\s+monocolored\s+permanent$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return null;
+    }
+    return new MagicAST.AST.Effects.ZoneChange.ExileEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["permanent"],
+          IsMonocolored = true,
+        },
       },
     };
   }
