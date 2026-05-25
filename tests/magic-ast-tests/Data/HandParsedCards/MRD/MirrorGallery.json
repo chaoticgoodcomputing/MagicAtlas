@@ -1,0 +1,48 @@
+{
+  "Input": {
+    "Name": "Mirror Gallery",
+    "ManaCost": "{5}",
+    "TypeLine": "Artifact",
+    "OracleText": "The \"legend rule\" doesn't apply.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Mirror Gallery",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "The \"legend rule\" doesn't apply.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "legendRuleSuppression"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 5 }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
