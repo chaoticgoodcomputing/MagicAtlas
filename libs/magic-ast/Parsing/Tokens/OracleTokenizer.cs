@@ -174,8 +174,12 @@ public sealed class OracleTokenizer : Tokenizer<OracleToken>
         continue;
       }
 
-      // Unknown character - skip and continue
-      yield return Result.Empty<OracleToken>(next.Location, [$"unexpected character '{ch}'"]);
+      // Unknown character - skip silently to keep the token stream productive.
+      // Yielding Result.Empty here would mark the whole TryTokenize as failed,
+      // wiping every preceding token and leaving downstream classification with
+      // no signal. The raw-text-driven parsers do not depend on these punctuation
+      // characters (e.g., the '+' / '/' inside "+1/+1"); the tokens we care about
+      // (mana symbols, words, numbers, punctuation) survive.
       next = next.Remainder.ConsumeChar();
       next = SkipWhiteSpace(next.Location);
     } while (next.HasValue);
