@@ -202,6 +202,12 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseExileColorDisjunctionPermanentEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     effect = TryParseExileTypeDisjunctionEffect(trimmed);
     if (effect is not null)
     {
@@ -945,6 +951,74 @@ public sealed class SpellAbilityParser : IAbilityParser
       {
         Kind = ObjectReferenceKind.Target,
         Filter = new ObjectFilter { CardTypes = cardTypes },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Exile target [color1] or [color2] permanent." — Celestial Purge.
+  /// Mirrors the color-disjunction convention from
+  /// <see cref="TryParseCounterSpellEffect"/>: each color word maps through
+  /// <see cref="MapColorWord"/> to its canonical letter code, with multiple
+  /// colors merged into a single <see cref="ObjectFilter.Colors"/> list. The
+  /// card-type token (creature / artifact / enchantment / land / planeswalker /
+  /// permanent) lands on <see cref="ObjectFilter.CardTypes"/> as the single
+  /// type qualifier — the disjunction is over colors, not types.
+  /// </summary>
+  /// <remarks>
+  /// Distinct from <see cref="TryParseExileTypeDisjunctionEffect"/> (multi-type
+  /// disjunction with a fixed target noun like "creature or Spacecraft") and
+  /// from <see cref="TryParseExileMonocoloredPermanentEffect"/> (single
+  /// color-set predicate on permanent). Ordered before the type-disjunction
+  /// recognizer in <see cref="TryParseEffect"/> because that recognizer's
+  /// regex would otherwise greedily capture "black or red permanent" as three
+  /// card-type tokens.
+  /// </remarks>
+  private static MagicAST.AST.Effects.ZoneChange.ExileEffect? TryParseExileColorDisjunctionPermanentEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^Exile\s+target\s+(?<c1>white|blue|black|red|green)\s+or\s+(?<c2>white|blue|black|red|green)\s+(?<type>creature|artifact|enchantment|land|planeswalker|permanent)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var colors = new List<string>();
+    foreach (var word in new[] { m.Groups["c1"].Value, m.Groups["c2"].Value })
+    {
+      var (mappedColors, _, _) = MapColorWord(word);
+      if (mappedColors is null)
+      {
+        continue;
+      }
+      foreach (var c in mappedColors)
+      {
+        if (!colors.Contains(c))
+        {
+          colors.Add(c);
+        }
+      }
+    }
+    if (colors.Count < 2)
+    {
+      return null;
+    }
+
+    return new MagicAST.AST.Effects.ZoneChange.ExileEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = [m.Groups["type"].Value.ToLowerInvariant()],
+          Colors = colors,
+        },
       },
     };
   }
