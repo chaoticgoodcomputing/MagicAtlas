@@ -8,6 +8,7 @@ using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Core;
+using MagicAST.AST.Effects.Counter;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.Effects.Resource;
 using MagicAST.AST.Effects.ZoneChange;
@@ -110,6 +111,11 @@ public sealed class SpellAbilityParser : IAbilityParser
   /// </summary>
   private static IReadOnlyList<Effect>? TryParseEffects(string text)
   {
+    // Parenthetical reminder text (Rule 207.2) carries no rules meaning — it
+    // restates the keyword/effect for new players. Strip it before any rule
+    // fires so the gold AST (which omits reminder content) gets a clean line.
+    text = StripReminderText(text);
+
     // Effects that intrinsically split into multiple gold entries are matched
     // before the single-effect dispatch so the parser doesn't collapse them
     // into one composite by accident.
@@ -120,12 +126,83 @@ public sealed class SpellAbilityParser : IAbilityParser
       return pair;
     }
 
+    // Multi-sentence single-line bundling (per feedback_mast_multi_effect_per_clause).
+    // A modal option body like "Exile up to one target card from a graveyard.
+    // Draw a card." is one ability with two effects in the gold AST. Try the
+    // per-sentence dispatch only when EVERY sentence resolves to a single
+    // effect — partial success would silently drop content, so fall back to
+    // the single-effect path on any mismatch (which lets bi-sentence rules
+    // like TryParseDiscardThenDrawSpellEffect still own their shapes).
+    var bundled = TryParseSentenceBundleEffects(text);
+    if (bundled is not null)
+    {
+      return bundled;
+    }
+
     var single = TryParseEffect(text);
     if (single is null)
     {
       return null;
     }
     return [single];
+  }
+
+  /// <summary>
+  /// Splits a spell-ability clause on internal sentence boundaries
+  /// (<c>". "</c> followed by a capital letter) and parses each fragment
+  /// through <see cref="TryParseEffect"/>. Returns the concatenated effect
+  /// list only when every fragment resolves; on any failure returns null so
+  /// the caller's single-effect dispatch can still try the line as a whole.
+  /// </summary>
+  /// <remarks>
+  /// Implements the multi-sentence-single-line convention documented in
+  /// feedback_mast_multi_effect_per_clause: within a single oracle clause
+  /// (no <c>\n</c> between sentences), multiple sentences describe a sequence
+  /// of effects in one resolution event, surfaced as multiple entries in a
+  /// single <see cref="SpellAbility.Effects"/> list — not as separate
+  /// abilities. The split is deliberately conservative: anchored only on
+  /// <c>"."</c>-then-uppercase boundaries so abbreviations and inline
+  /// reminder fragments don't false-fire.
+  /// </remarks>
+  private static IReadOnlyList<Effect>? TryParseSentenceBundleEffects(string text)
+  {
+    var working = text.Trim();
+    // Strip a single trailing period so the regex's lookahead on "[A-Z]" is
+    // the only sentence-boundary signal we depend on.
+    if (working.EndsWith('.'))
+    {
+      working = working[..^1];
+    }
+
+    // Require at least one internal sentence boundary to engage this path.
+    var boundaries = Regex.Matches(working, @"\.\s+(?=[A-Z])");
+    if (boundaries.Count == 0)
+    {
+      return null;
+    }
+
+    var sentences = Regex.Split(working, @"\.\s+(?=[A-Z])");
+    if (sentences.Length < 2)
+    {
+      return null;
+    }
+
+    var collected = new List<Effect>(sentences.Length);
+    foreach (var sentence in sentences)
+    {
+      var fragment = sentence.Trim();
+      if (fragment.Length == 0)
+      {
+        return null;
+      }
+      var effect = TryParseEffect(fragment);
+      if (effect is null)
+      {
+        return null;
+      }
+      collected.Add(effect);
+    }
+    return collected;
   }
 
   /// <summary>
@@ -188,7 +265,13 @@ public sealed class SpellAbilityParser : IAbilityParser
   {
     var trimmed = text.Trim().TrimEnd('.').Trim();
 
-    Effect? effect = TryParseCounterTargetTypeOrSubtypeSpellEffect(trimmed);
+    Effect? effect = TryParsePutCountersTargetSubtypeDisjunctionEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseCounterTargetTypeOrSubtypeSpellEffect(trimmed);
     if (effect is not null)
     {
       return effect;
@@ -272,6 +355,12 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseExileTargetCardFromGraveyardEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     effect = TryParseExileGraveyardsEffect(trimmed);
     if (effect is not null)
     {
@@ -344,7 +433,89 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParsePutCounterOnTargetEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseScrySpellEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// Removes parenthesized reminder text (Rule 207.2) from a spell line. Reminder
+  /// text reiterates a keyword or counter's effect in italics and carries no
+  /// rules-text content of its own — the gold AST omits it entirely. Stripping
+  /// it here lets the per-effect recognizers see a clean line without each
+  /// regex having to tolerate a trailing parenthetical.
+  /// </summary>
+  private static string StripReminderText(string text)
+  {
+    // Non-greedy across balanced parentheses; reminder text never nests in
+    // practice, so a single pass suffices.
+    var stripped = Regex.Replace(text, @"\s*\([^)]*\)", string.Empty);
+    return stripped.Trim();
+  }
+
+  /// <summary>
+  /// "Put a [counter-type] counter on target [type]." — single-counter spell-side
+  /// put-counter (Boon of Safety: "Put a shield counter on target creature").
+  /// The counter type is captured verbatim and lowercased onto
+  /// <see cref="PutCountersEffect.CounterType"/>; the target filter is the
+  /// single card-type token. Count is fixed at 1 (literal) per the "a" article.
+  /// </summary>
+  /// <remarks>
+  /// Intentionally narrow: only the single-counter "a" article shape and a
+  /// single-token type filter. Multi-counter shapes ("Put two +1/+1 counters
+  /// on…") and +N/+N counters use distinct phrasing and are left for a
+  /// dedicated rule when a fixture demands them.
+  /// </remarks>
+  private static PutCountersEffect? TryParsePutCounterOnTargetEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Put\s+a\s+(?<counter>\w+)\s+counter\s+on\s+target\s+(?<type>creature|artifact|enchantment|land|planeswalker|permanent)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    return new PutCountersEffect
+    {
+      CounterType = m.Groups["counter"].Value.ToLowerInvariant(),
+      Count = LiteralQuantity.Of(1),
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = [m.Groups["type"].Value.ToLowerInvariant()] },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Scry N." — spell-side scry instruction (Boon of Safety's second clause).
+  /// Mirrors <see cref="ActivatedAbilityParser.TryParseScryEffect"/> but emits
+  /// no <c>Player</c> field — the scrying player is implicit (the spell's
+  /// controller, per Rule 701.18), and the gold fixture omits it.
+  /// </summary>
+  private static ScryEffect? TryParseScrySpellEffect(string text)
+  {
+    var m = Regex.Match(text, @"^Scry\s+(?<count>\d+)$", RegexOptions.IgnoreCase);
+    if (!m.Success)
+    {
+      return null;
+    }
+    return new ScryEffect
+    {
+      Count = LiteralQuantity.Of(int.Parse(m.Groups["count"].Value)),
+    };
   }
 
   /// <summary>
@@ -598,6 +769,54 @@ public sealed class SpellAbilityParser : IAbilityParser
       {
         Kind = ObjectReferenceKind.Target,
         Filter = new ObjectFilter { CardTypes = types },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Exile up to one target card from a graveyard." — Heritage Reclamation's
+  /// third modal option. The cardinality qualifier ("up to one") lands on
+  /// <see cref="ObjectReference.Quantity"/> as an <see cref="UpToQuantity"/>
+  /// (Maximum=1, Minimum=0), distinct from the <see cref="ObjectFilter"/>
+  /// which describes *which* objects qualify rather than *how many* are
+  /// chosen. The graveyard zone is structural and routes onto
+  /// <see cref="ObjectFilter.Zone"/>; the target descriptor is "card", not a
+  /// permanent type, because graveyard residents are cards (Rule 109.1).
+  /// </summary>
+  /// <remarks>
+  /// Ordered before <see cref="TryParseExileGraveyardsEffect"/> because that
+  /// rule's "target players' graveyards" shape is distinct (it targets the
+  /// graveyards themselves, surfacing the player-modifier on the filter's
+  /// Characteristics), whereas this rule targets a single card residing in a
+  /// graveyard. Today only the "up to one" cardinality is supported; future
+  /// "up to N" / "any number of" phrasings can extend the regex's quantity
+  /// slot without changing the filter shape.
+  /// </remarks>
+  private static MagicAST.AST.Effects.ZoneChange.ExileEffect? TryParseExileTargetCardFromGraveyardEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^Exile\s+up\s+to\s+(?<n>one)\s+target\s+card\s+from\s+a\s+graveyard$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    var maximum = ParseSmallWord(m.Groups["n"].Value);
+    return new MagicAST.AST.Effects.ZoneChange.ExileEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["card"],
+          Zone = Zone.Graveyard,
+        },
+        Quantity = new UpToQuantity { Maximum = maximum, Minimum = 0 },
       },
     };
   }
@@ -1611,6 +1830,69 @@ public sealed class SpellAbilityParser : IAbilityParser
       }
     }
     return result;
+  }
+
+  /// <summary>
+  /// "Put N [counter type] counters on target [Subtype1] or [Subtype2] you control."
+  /// — Drill Too Deep's first modal option. Subtype-disjunction target (Rule 205.3:
+  /// subtype labels are case-sensitive proper nouns, preserved as written) with an
+  /// explicit <c>Controller=You</c> restriction. Count slot accepts the small-number
+  /// oracle vocabulary via <see cref="ParseSmallWord"/>; the counter-type token is
+  /// lowercased to match the gold convention (counter-type labels are common nouns).
+  /// </summary>
+  /// <remarks>
+  /// Distinct from the activated/triggered putCounters recognizers (which target
+  /// "self" or "target creature"): this rule's target carries a multi-element
+  /// <see cref="ObjectFilter.Subtypes"/> list — the existing disjunction convention
+  /// applied to the subtype axis rather than to <see cref="ObjectFilter.CardTypes"/>
+  /// (see <see cref="TryParseDestroyTargetTypeDisjunctionEffect"/>, which uses the
+  /// same convention on card-types). The "you control" tail lands on
+  /// <see cref="ObjectFilter.Controller"/> as a structural axis, matching the
+  /// convention in <see cref="TryParseReturnTargetToHandEffect"/>.
+  /// </remarks>
+  private static MagicAST.AST.Effects.Counter.PutCountersEffect? TryParsePutCountersTargetSubtypeDisjunctionEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^Put\s+(?<count>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counter>[a-z]+(?:[+\-]\d+/[+\-]\d+)?)\s+counters?\s+on\s+target\s+(?<s1>[A-Z][A-Za-z]+)\s+or\s+(?<s2>[A-Z][A-Za-z]+)(?:\s+you\s+control)?$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    // Require oracle-text capitalisation on the subtype tokens so this rule
+    // doesn't false-fire on card-type disjunctions ("artifact or land") which
+    // belong on CardTypes rather than Subtypes (Rule 205.3 vs 205.2).
+    var s1 = m.Groups["s1"].Value;
+    var s2 = m.Groups["s2"].Value;
+    if (!char.IsUpper(s1[0]) || !char.IsUpper(s2[0]))
+    {
+      return null;
+    }
+
+    var count = LiteralQuantity.Of(ParseSmallWord(m.Groups["count"].Value));
+    var controller = text.Contains("you control", StringComparison.OrdinalIgnoreCase)
+      ? ControllerFilter.You
+      : (ControllerFilter?)null;
+
+    return new MagicAST.AST.Effects.Counter.PutCountersEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          Subtypes = new List<string> { s1, s2 },
+          Controller = controller,
+        },
+      },
+      CounterType = m.Groups["counter"].Value.ToLowerInvariant(),
+      Count = count,
+    };
   }
 
   /// <summary>
