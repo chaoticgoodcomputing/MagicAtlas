@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-25T06:48:33.6997735Z",
+  "timestamp": "2026-05-25T07:04:25.3572728Z",
   "testResults": {
     "MalformedParsedCards/MixedValidAndInvalidAbilities": {
       "passed": false
@@ -62,6 +62,9 @@
       "passed": true
     },
     "OracleLines/CLB/WilsonRefinedGrizzly/Line4": {
+      "passed": false
+    },
+    "HandParsedCards/NEO/AoTheDawnSky": {
       "passed": false
     },
     "HandParsedCards/WHO/RoryWilliams": {
@@ -319,6 +322,9 @@
     "HandParsedCards/ChatterfangSquirrelGeneral": {
       "passed": false
     },
+    "OracleLines/NEO/AoTheDawnSky/Line2": {
+      "passed": false
+    },
     "OracleLines/2X2/ManaVault/Line4": {
       "passed": true
     },
@@ -466,7 +472,13 @@
     "OracleLines/DMR/MysticRemora/Line2": {
       "passed": false
     },
+    "OracleLines/NEO/AoTheDawnSky/Line1": {
+      "passed": true
+    },
     "HandParsedCards/SLD/DeadpoolTradingCard/RoundTrip": {
+      "passed": true
+    },
+    "HandParsedCards/NEO/AoTheDawnSky/RoundTrip": {
       "passed": true
     },
     "OracleLines/TheDeathOfGwenStacy/Line1": {

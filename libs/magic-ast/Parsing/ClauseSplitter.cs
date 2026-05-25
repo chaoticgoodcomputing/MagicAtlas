@@ -186,7 +186,17 @@ public sealed class ClauseSplitter
       // Modal headers may be followed by bullet-prefixed option paragraphs.
       // Consume those greedily into a single modal-header clause carrying
       // the options on its ModalOptions field.
-      if (IsModalHeader(paragraphText) && !ContainsBullet(paragraphText))
+      //
+      // Two preamble shapes open a modal-bullet group:
+      //   • A spell-level "Choose one —" header — IsModalHeader.
+      //   • A trigger-level "When [X] dies, choose one —" preamble —
+      //     EndsWithModalSelector. The triggered-ability parser unpacks the
+      //     attached ModalOptions into a ModalEffect inside the trigger's
+      //     Effects list (descriptive parallel to the spell-level shape).
+      if (
+        (IsModalHeader(paragraphText) || EndsWithModalSelector(paragraphText))
+        && !ContainsBullet(paragraphText)
+      )
       {
         var lookaheadOptions = new List<OracleClause>();
         var lookahead = i + 1;
@@ -479,6 +489,33 @@ public sealed class ClauseSplitter
       || lower.StartsWith("choose three")
       || lower.StartsWith("choose any number")
       || lower.StartsWith("choose up to");
+  }
+
+  /// <summary>
+  /// Checks if a paragraph ENDS with a modal selector phrase that opens an
+  /// inline modal-bullet group, e.g.
+  /// <c>"When Ao dies, choose one —"</c>. These preambles are not modal headers
+  /// in their own right (the leading text classifies as Triggered/Activated);
+  /// the modal choice is one step inside the ability's resolution. Detecting
+  /// the trailing selector lets <see cref="ClauseSplitter"/> still consume the
+  /// following bullet lines into the same clause's <c>ModalOptions</c>, which
+  /// the triggered/activated parser unpacks into a <c>ModalEffect</c>.
+  /// </summary>
+  private static bool EndsWithModalSelector(string text)
+  {
+    // Strip a trailing em-dash (and optional whitespace/period) so we can match
+    // the selector phrase by its tail.
+    var trimmed = text.TrimEnd();
+    if (trimmed.EndsWith('—'))
+    {
+      trimmed = trimmed[..^1].TrimEnd();
+    }
+    var lower = trimmed.ToLowerInvariant();
+    return lower.EndsWith("choose one")
+      || lower.EndsWith("choose two")
+      || lower.EndsWith("choose three")
+      || lower.EndsWith("choose any number")
+      || System.Text.RegularExpressions.Regex.IsMatch(lower, @"choose up to \w+$");
   }
 
   /// <summary>
