@@ -92,15 +92,15 @@ def fine_tune_embedding_model(pairs: pd.DataFrame, config: dict) -> dict:
     model = SentenceTransformer(base_repo, device=device, trust_remote_code=True)
 
     # Mixed-loss training: split rows into positive-pairs and triplets, train each with its own
-    # MultipleNegativesRankingLoss. MNR with a 3-column dataset (anchor, positive, negative) uses
-    # the explicit negative as an additional in-batch hard negative — exactly what swap-triplets
-    # need to teach "Vampire ≠ Werewolf", "you ≠ your opponent", etc.
+    # CachedMultipleNegativesRankingLoss. MNR with a 3-column dataset (anchor, positive, negative)
+    # uses the explicit negative as an additional in-batch hard negative — exactly what swap-
+    # triplets need to teach "Vampire ≠ Werewolf", "you ≠ your opponent", etc.
     #
     # Apply the `clustering:` task prefix to every training-pair string so the fine-tune
     # refines the same prefix-conditioned representation that downstream OracleEmbedding
-    # and ExemplarCentroid steps use at inference. Training and inference must agree on the
-    # prefix — fine-tuning unprefixed strings would refine a *different* representation than
-    # the one we later infer against.
+    # steps use at inference. Training and inference must agree on the prefix — fine-tuning
+    # unprefixed strings would refine a *different* representation than the one we later
+    # infer against.
     pair_rows: list[dict] = []
     triplet_rows: list[dict] = []
     for _, row in pairs.iterrows():
@@ -125,14 +125,38 @@ def fine_tune_embedding_model(pairs: pd.DataFrame, config: dict) -> dict:
 
     # Build a dict of datasets + dict of losses; SentenceTransformerTrainer iterates them
     # together, applying the corresponding loss to each batch from each named dataset.
+    #
+    # CachedMultipleNegativesRankingLoss vs plain MultipleNegativesRankingLoss:
+    # MNR's effectiveness scales with the number of in-batch negatives per anchor — sbert.net's
+    # losses ref [1] and the Nomic Embed paper [2] both treat batch sizes < 16 as fundamentally
+    # under-powered for MNR-style contrastive training (their training used a 16,384 global
+    # batch). The Cached variant lets us run at the recommended effective batch size without
+    # exceeding GPU memory: it splits the batch into smaller forward/backward chunks
+    # (mini_batch_size below), caches the embeddings, and computes the contrastive loss
+    # against the full cached batch as if it had all fit in one forward pass.
+    #
+    # mini_batch_size=4 keeps each forward+backward inside the cached loss under our GPU
+    # memory ceiling (Nomic v1.5 at ~140M params + SwiGLU + RoPE activations on a 12 GB GPU
+    # is tight — see PYTORCH_CUDA_ALLOC_CONF + gradient_checkpointing above). The effective
+    # contrastive batch is still per_device_train_batch_size (set to 32 in appsettings).
+    #
+    # [1] https://sbert.net/docs/package_reference/sentence_transformer/losses.html
+    # [2] Nomic Embed: Training a Reproducible Long Context Text Embedder,
+    #     Nussbaum et al., arxiv:2402.01613 §3.1.
+    _CACHED_MNR_MINI_BATCH = 4
+
     train_datasets: dict = {}
     losses_dict: dict = {}
     if pair_rows:
         train_datasets["pairs"] = Dataset.from_list(pair_rows)
-        losses_dict["pairs"] = losses.MultipleNegativesRankingLoss(model)
+        losses_dict["pairs"] = losses.CachedMultipleNegativesRankingLoss(
+            model, mini_batch_size=_CACHED_MNR_MINI_BATCH,
+        )
     if triplet_rows:
         train_datasets["triplets"] = Dataset.from_list(triplet_rows)
-        losses_dict["triplets"] = losses.MultipleNegativesRankingLoss(model)
+        losses_dict["triplets"] = losses.CachedMultipleNegativesRankingLoss(
+            model, mini_batch_size=_CACHED_MNR_MINI_BATCH,
+        )
     # When only one of the two is populated, unwrap so the trainer takes the simpler form.
     if len(train_datasets) == 1:
         only_key = next(iter(train_datasets))

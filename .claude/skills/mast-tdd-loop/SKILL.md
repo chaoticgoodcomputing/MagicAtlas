@@ -12,40 +12,58 @@ This skill drives one round of extending MagicAST. Each round:
 
 ## Roles
 
-The skill is read from two perspectives. Annotations on each step say which agent owns it.
+The skill is read from four perspectives. Annotations on each step say which agent owns it.
 
-- **`[main]` — main agent (orchestrator).** Reads the triage report, batch-picks gaps, dispatches one sub-agent per gap via the `Agent` tool (each in its own worktree), then merges, validates, regenerates the glossary, and re-runs the triage flow after sub-agents complete. The main agent owns every cross-cutting artifact: the merged tree, the glossary, the judge briefings + verdicts, the triage report.
-- **`[sub]` — sub-agent (worker).** Receives one assigned `(pattern, candidate-line)` as input. Hand-parses, drives the red→red→green cycle on its own worktree, reports a minimal manifest back. Touches only the card's fixture file, the AST nodes it added, and the parser code it changed. Never regenerates the glossary, never re-runs triage, never sees other sub-agents' work.
+- **`[main]` — main agent (orchestrator).** Coordinates the batch. Picks candidates from triage, writes the judge briefing (rule facts), dispatches the hand-parsing helper, merges its output, dispatches mechanical sub-agents in parallel, dispatches the judge-verify sub-agent, merges everything, validates NUnit at 100%, regenerates the glossary, re-runs the triage flow. Owns every cross-cutting artifact.
+- **`[sub:helper]` — hand-parsing helper sub-agent (one per batch).** Receives the judge briefing + the N candidate picks. Writes all N gold-AST fixtures and creates any new AST types needed (Red #1 — schema gap). Each fixture must RoundTrip cleanly before they finish. Independent MTG-context check on the orchestrator's candidate picks.
+- **`[sub:mech]` — mechanical parser sub-agents (N per batch, parallel).** Each receives ONE fixture path. Job is exclusively: teach the parser to produce the gold AST in that fixture. No fixture work, no AST-type creation. NUnit's `Parser_ProducesExpectedOutput` for the assigned card must pass before they commit.
+- **`[sub:judge]` — judge-verify sub-agent (one per batch).** Reads the batch's changed files post-merge, renders strict PASS/FAIL verdicts per the `mast-judge` skill. Any FAIL halts the merge into main.
 
-If you are invoked directly by the user (no orchestrator above you), wear both hats: do every step yourself in sequence, single-threaded.
+If you are invoked directly by the user (no orchestrator above you), wear all four hats: do every step yourself in sequence, single-threaded. In that mode, the value of the separate hand-parsing pass shrinks — but the discipline (rule lookup before gold writing, gold before parser work, judge gate before declaring done) still stands.
 
 ## Quick start
 
-`[main]` orchestration (two judge gates, one batch):
+`[main]` orchestration (two judge gates flanking a parallel mechanical phase):
 
 ```
-Step 0  Rebase + refresh triage
-Step 1  Pick N non-overlapping candidates from topGaps
+Step 0    Rebase + refresh triage
+Step 1    Pick N non-overlapping candidates from topGaps
 Step 1.5  Enrich candidates inline (judge-pass-1) → docs/judgments/briefing-{date}.md
-Step 2  Dispatch N sub-agents (worktrees), each pointed at its briefing section
-Step 3-6 [sub] Hand-parse → Red #1 → Red #2 → green → manifest
-Step 7  Judge-pass-2 (mast-judge sub-agent) → docs/judgments/verdict-{date}.md
-        - PROCEED → continue to Step 8
-        - HALT (BLOCKING verdict) → do not merge, surface to human
-Step 8  Merge → NUnit (100% green required) → glossary → re-run triage → loop
+Step 2    Dispatch [sub:helper] — writes N fixtures + any new AST types
+Step 3    Merge helper's branch → confirm all N RoundTrip tests pass (Red #1 closed)
+Step 4    Dispatch N [sub:mech] in parallel — each closes Red #2 for its fixture
+Step 5-6  [sub:mech] Close Red #2 → confirm Parser_Produces green → manifest
+Step 9    Dispatch [sub:judge] — judge-pass-2 → docs/judgments/verdict-{date}.md
+          - PROCEED (0 FAIL) → continue to Step 10
+          - HALT (any FAIL)  → don't merge mech branches, remediate inline or via follow-up sub-agent
+Step 10   Merge mechanical branches → NUnit (100% green required) → glossary → re-run triage → loop
 ```
 
-`[sub]` per-session:
+`[sub:helper]` per-session (handles all N candidates sequentially):
 
 ```bash
-# 1) Read conventions + your judge briefing
+# 1) Read conventions + the judge briefing
 cat libs/magic-ast/CONTRIBUTING.md
 cat libs/magic-ast/GLOSSARY.md
-cat docs/judgments/briefing-{date}.md   # your section establishes the rule facts
-# 2) Hand-parse the assigned fixture, then iterate:
-nx run mast:test
-# 3) Close Red #1 (schema), then Red #2 (parser). Re-run between iterations.
-# 4) When green, emit the manifest and stop.
+cat docs/judgments/briefing-{date}.md   # the rule facts you must respect
+# 2) For each candidate: hand-parse, write fixture, run RoundTrip:
+nx run mast:test  # all Output_RoundTrip tests must be green for your fixtures
+# 3) If RoundTrip fails: Red #1 — create the missing AST type. Re-run.
+# 4) When all N RoundTrips are green, commit and report.
+```
+
+`[sub:mech]` per-session (handles exactly ONE assigned fixture):
+
+```bash
+# 1) Read conventions
+cat libs/magic-ast/CONTRIBUTING.md
+cat libs/magic-ast/GLOSSARY.md
+cat {your assigned fixture path}        # the gold AST you must teach the parser to produce
+# 2) Run your card's test to see the current diff:
+dotnet test --filter "FullyQualifiedName~{ShortCardName}"
+cat /tmp/mast-diffs/{Set}_{Card}.actual.json   # diff diff diff
+# 3) Extend the parser until your test passes. NO fixture edits, NO AST changes.
+# 4) When green, commit and report.
 ```
 
 ## Before you touch anything
@@ -93,7 +111,7 @@ Choose batch size based on the number of **non-overlapping** patterns. Two gaps 
 
 ### Step 1.5 — `[main]` Enrich candidates with rules context (judge mode = inline)
 
-Before dispatching sub-agents, the orchestrator briefs each candidate with authoritative MTG rules context. This is **judge-pass-1 (enrichment)** — but the orchestrator acts as judge here rather than dispatching a sub-agent, because the local state already has the candidate picks and direct file access to the rules data. (Judge-pass-2 in Step 7 IS a separate sub-agent — different cost-benefit.)
+Before dispatching the helper, the orchestrator briefs each candidate with authoritative MTG rules context. This is **judge-pass-1 (enrichment)** — orchestrator-internal, because the local state already has the candidate picks and direct file access to the rules data. (Judge-pass-2 in Step 9 IS a separate sub-agent — independent verification value justifies the dispatch.)
 
 Write a single batch briefing to `docs/judgments/briefing-{YYYY-MM-DD}.md` (suffix `-N` if it already exists for today). One section per candidate. **Keep it light** — establish facts, don't prescribe AST shapes. ~200 words per candidate.
 
@@ -128,19 +146,20 @@ If a candidate's mechanic isn't in `glossary.json` at all (and the term is genui
 
 The briefing is **informative, not prescriptive**. The judge reports rule facts; the sub-agent owns the AST shape.
 
-### Step 2 — `[main]` Dispatch sub-agents
+### Step 2 — `[main]` Dispatch the hand-parsing helper
 
-Now dispatch. Spawn a sub-agent per candidate via the `Agent` tool with `isolation: "worktree"`. The sub-agent prompt **must** include:
+Spawn ONE sub-agent via the `Agent` tool with `isolation: "worktree"`. Its prompt **must** include:
 
-- The assigned pattern name and `projectedCoverageGain`.
-- The full chosen candidate-line record (oracle text, source card metadata, cleanliness score, `Input` DTO).
-- A pointer to this skill (`use the mast-tdd-loop skill`) and the memory item names listed above.
-- The branch name to commit on (e.g., `mast-tdd/{pattern-slug}`).
-- A **pointer to the briefing**: `read your section in docs/judgments/briefing-{date}.md — section "## Candidate {n}: {card}"`. By reference, not embedded; the briefing is canonical and the sub-agent can re-read mid-session.
+- The judge briefing path (`docs/judgments/briefing-{date}.md`).
+- All N candidate picks (oracle text, source card metadata, `Input` DTO).
+- A pointer to this skill (the `[sub:helper]` sections specifically — Steps 3 and 4).
+- The memory items listed in "Before you touch anything."
+- The branch name to commit on (e.g., `mast-tdd/helper-{date}`).
+- Explicit instructions: "Write all N gold-AST fixtures at the canonical paths. Create any new AST types needed to make RoundTrip green. Don't touch any parser code. When all N RoundTrip tests pass, commit and report."
 
-After dispatching, wait for every sub-agent to report back before continuing to Step 7.
+Wait for the helper to finish before continuing.
 
-### Step 3 — `[sub]` Hand-parse the candidate (gold AST, eventual-truth)
+### Step 3 — `[sub:helper]` Hand-parse all candidates (gold AST, eventual-truth)
 
 **The hand-parsed JSON is the gold AST — what a fully-implemented parser SHOULD eventually emit for this card.** It is not a snapshot of the current parser's output, and it is not partially populated with `UnparsedAbility` nodes where the parser currently falls short.
 
@@ -152,14 +171,10 @@ This is the single most important rule of the loop. Get it wrong and the TDD dir
 - `Pattern` strings copied from `FallbackParser.InferFailurePattern`.
 
 **Allowed and expected:**
-- AST node shapes that don't yet exist — create them in `libs/magic-ast/AST/` as Red #1 (see Step 4).
-- Abilities you can't fully spec — model them as descriptively as you can with existing nodes; use the `OtherHistoryPredicate`-style escape hatches sparingly; surface the design decision in your manifest.
+- AST node shapes that don't yet exist — create them in `libs/magic-ast/AST/` as Red #1 (see Step 4 below).
+- Abilities the gold needs to model fully, even if no current parser produces them. Mechanical sub-agents will close that parser gap in Step 7. Your job is the gold; theirs is the parser.
 
-**Card-scope choice.** If the assigned candidate-line lives on a card with multiple complex abilities you can't reasonably gold-model in this session, you have two options:
-1. **Pick a simpler card** containing the same pattern in cleaner isolation. The triage report's `candidateLines[]` is sorted by `cleanlinessScore`; scan deeper for a card where the target line dominates.
-2. **Gold-AST every ability on the card AND teach every parser surface needed to make all of them green.** The per-card `Parser_ProducesExpectedOutput` test must pass green for the batch to land — no ratchet tolerance. If the card has 5 abilities, the batch teaches the parser to produce all 5 correctly, or the fixture doesn't land.
-
-Prefer (1) when a simpler exemplar exists. Use (2) when the candidate is genuinely the cleanest one — and accept the larger parser scope it implies.
+**Card-scope:** every ability on the chosen card must be gold-modeled. The mechanical sub-agents need to drive the per-card `Parser_ProducesExpectedOutput` test green — a fixture with one untaught sibling ability is unmergable. If a candidate is too complex to fully gold-model in this batch, swap it: the triage report's `candidateLines[]` is sorted by `cleanlinessScore`; scan deeper for a card where the target pattern dominates with simpler siblings.
 
 **File location and casing:**
 
@@ -196,17 +211,19 @@ Create `tests/magic-ast-tests/Data/HandParsedCards/{Set}/{CardName}.json` contai
 - Model what the oracle text **says**, not what the rules **do**. No turn-state, priority, stack ordering, or layering fields.
 - For optional effect dimensions (duration, "you may" / "if you do", "unless [player] pays [cost]"): use the existing trait interfaces (`IDurativeEffect`, `IOptionalEffect`, `IPreventableEffect`). JSON property names: `Duration`, `IsOptional` / `IfYouDo`, `UnlessClause`.
 
-### Step 4 — `[sub]` Surface Red #1 (schema gap)
+### Step 4 — `[sub:helper]` Surface and close Red #1 (schema gap)
 
 ```bash
 nx run mast:test
 ```
 
-**Red #1 doesn't always fire.** If your hand-parsed shape uses only AST primitives that already exist (`UntapEffect`, `ObjectFilter`, common discriminator strings, etc.), the deserialization succeeds on first attempt and you jump straight to Red #2. That's a sign the gap is purely a parser-rule gap, not a schema gap — keep going.
+The helper's job ends when every fixture's `Output_RoundTrip_ProducesIdenticalJson` is green. `Parser_ProducesExpectedOutput` can be red — that's the mechanical sub-agents' job to close in Step 7.
+
+**Red #1 doesn't always fire.** If your gold uses only AST primitives that already exist, RoundTrip succeeds on first attempt. That's a sign the schema is sufficient.
 
 When Red #1 does fire, it's a `JsonException` thrown during `CardTestCase.GetOutput()` — i.e., **deserialization** of the hand-parsed JSON to `CardOutputAST`. Two flavors:
 
-**3a. Unknown discriminator value**
+**4a. Unknown discriminator value**
 ```
 System.Text.Json.JsonException : Unknown {Base} discriminator '{value}'. Known: {list}.
 ```
@@ -227,7 +244,7 @@ Action: create a new sealed record under the appropriate `AST/` subdirectory. De
 
 The record must `: <Base>` and (for Effect subtypes) typically `, IOptionalEffect, IDurativeEffect, IPreventableEffect` — copy the pattern from any existing sibling under `AST/Effects/`.
 
-**3b. Unmapped JSON property**
+**4b. Unmapped JSON property**
 ```
 System.Text.Json.JsonException : The JSON property '{name}' could not be mapped to any
 .NET member contained in type '{FullType}'.
@@ -235,63 +252,105 @@ System.Text.Json.JsonException : The JSON property '{name}' could not be mapped 
 You added a field that the target concrete record doesn't declare.
 
 Action: either
-- add the field to the record (with `[JsonPropertyName("{name}")]` and `[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]` for optional fields), or
+- add the field to the record (with `[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]` for optional fields), or
 - remove the field from the JSON (and reconsider whether it belonged there at all).
 
-Iterate until Red #1 clears. When the test moves from **errored** to **failed with a diff**, you've reached Red #2.
+Iterate until every fixture's RoundTrip is green. Commit on your branch.
 
-### Step 5 — `[sub]` Surface Red #2 (parser gap)
+Closing helper manifest:
 
-Red #2 appears as `Parser_ProducesExpectedOutput` failing with a JSON diff between expected and actual ASTs. The parser is producing the wrong thing — typically an `UnparsedAbility` (with a diagnostic) instead of the structured node you authored.
+```markdown
+## MAST helper — manifest
+
+**Branch:** {branch-name}
+**Fixtures written:** {list of N paths}
+**New AST types:** {list with discriminators}, or "none"
+**RoundTrip status:** all N green / X red (with reasons)
+```
+
+Do not write any parser code. Do not regenerate `GLOSSARY.md`. Do not re-run triage. Orchestrator owns those.
+
+### Step 5 — `[main]` Merge helper's branch + confirm Red #1 closed
+
+```bash
+git merge --no-ff {helper-branch}
+nx run mast:test
+```
+
+After merge, the helper's N new `Parser_ProducesExpectedOutput` tests are red (no parser yet); their `Output_RoundTrip_ProducesIdenticalJson` tests must be green (schema represents the gold). That's the expected state going into Step 6.
+
+If any RoundTrip is red on main post-merge, the helper didn't finish. Dispatch a focused follow-up sub-agent on the failing fixture(s), or roll back and re-dispatch the helper with more explicit context.
+
+### Step 6 — `[main]` Dispatch mechanical sub-agents in parallel
+
+Spawn N sub-agents, ONE per fixture, in parallel via the `Agent` tool with `isolation: "worktree"`. Each prompt **must** include:
+
+- The exact fixture path the sub-agent is responsible for.
+- A pointer to this skill (the `[sub:mech]` sections — Steps 7 and 8).
+- The branch name (e.g., `mast-tdd/{pattern-slug}-mech`).
+- Explicit narrow scope: "Teach the parser to make `Parser_ProducesExpectedOutput` for `{ShortCardName}` pass. Do NOT modify the fixture. Do NOT add or modify AST types. The helper did that work; if you find yourself wanting to, that's a signal to stop and report — the helper's gold may be wrong."
+
+After dispatching, wait for all N to report back before continuing to Step 9.
+
+### Step 7 — `[sub:mech]` Close Red #2 (parser gap)
+
+Red #2: `Parser_ProducesExpectedOutput` failing with a JSON diff. The parser is producing the wrong thing — typically an `UnparsedAbility` (with a diagnostic) instead of the structured node the gold contains.
+
+Use `/tmp/mast-diffs/{Set}_{Card}.expected.json` + `.actual.json` to see the precise diff (auto-dumped on test failure). Read both, find the field-level differences, work backward to which parser rule emits or misses the gold shape.
 
 Action: extend the appropriate `IAbilityParser` implementation in `libs/magic-ast/Parsing/Parsers/`. The dispatch table is reflection-discovered via `[OracleAbilityParser(AbilityKind.X)]` — **do not edit `OracleParser.cs` or `AbilityParserRegistry.cs`**.
 
 - New ability-kind parser (e.g., `ModalAbilityParser`, `SpellAbilityParser`): create a new file with the attribute. The registry picks it up automatically.
 - Existing parser missing a case (e.g., `TriggeredAbilityParser` for a new trigger event): extend the relevant private method.
 
-Iterate until both `Output_RoundTrip_ProducesIdenticalJson` and `Parser_ProducesExpectedOutput` pass for your fixture.
+Iterate until `Parser_ProducesExpectedOutput` for your card passes.
 
-### Step 6 — `[sub]` Report back
+**Mechanical scope. Don't:**
+- Modify the fixture. If you think the gold is wrong, STOP and report — the helper's gold-writing is upstream; if it's wrong, judge-pass-2 should catch it.
+- Add or modify AST types. Same — that's the helper's territory.
+- Modify other fixtures, even to "improve consistency." Stay in your card's lane.
 
-Confirm the local NUnit suite is 100% green:
+### Step 8 — `[sub:mech]` Report back
+
+Confirm the test passes:
 
 ```bash
-nx run mast:test
+dotnet test --filter "Parser_ProducesExpectedOutput&FullyQualifiedName~{ShortCardName}"
 ```
-
-Vanilla NUnit doctrine: **every test must pass** for the batch to be eligible to merge. If your fixture's `Parser_ProducesExpectedOutput` test isn't green, the parser work isn't done. There is no baseline file, no stable-failure tolerance — see if you missed an ability, a discriminator, or a field shape.
-
-If the test passes, the diff dump at `/tmp/mast-diffs/{set}_{card}.expected.json` + `.actual.json` shouldn't exist (only failed tests dump diffs). If it does exist for your fixture, that's the diff you need to close.
 
 Commit on the assigned branch. Then emit this manifest as your closing message and stop:
 
 ```markdown
-## MAST sub-agent — manifest
+## MAST mechanical sub-agent — manifest
 
 **Branch:** {branch-name}
-**Assigned pattern:** {pattern-name}
 **Card:** {set}/{card-name}
 
-### Added
-- AST types: {list, with discriminators}, or "none"
-- Parsers: {list, with AbilityKind}, or "none"
-- Fixture: {path-to-HandParsedCards-json}
+### Parser-files touched
+- {file:lines}, ...
+
+### New parser surfaces
+- {one-line description per added regex / dispatch case}
 
 ### Stop / handoff
 - {anything I bailed on, per Stop conditions; otherwise "none"}
 ```
 
-Do not regenerate `GLOSSARY.md`. Do not re-run triage. Do not touch any file outside your fixture + the AST/parser code you added or modified. The orchestrator owns those.
+Do not regenerate `GLOSSARY.md`. Do not re-run triage. Do not touch fixtures or AST types. Orchestrator owns those.
 
-### Step 7 — `[main]` Judge-pass-2 (rules-accuracy verify)
+### Step 9 — `[main]` Judge-pass-2 (rules-accuracy verify)
 
-Before merging, dispatch a sub-agent that uses the `mast-judge` skill to verify the rules-accuracy of the batch's output. This is the second judge pass — Step 1.5 established what the rules SAY; this one checks whether the sub-agents' work descriptively MATCHES what they said.
+Before merging mechanical branches, dispatch a sub-agent that uses the `mast-judge` skill to verify the rules-accuracy of the batch's output. This is the second judge pass — Step 1.5 established what the rules SAY; this one checks whether the work descriptively MATCHES.
 
-Gather the scope: every fixture file and every AST node file touched across all reporting sub-agent branches:
+Gather the scope: helper's merged fixtures + AST changes (already on main) plus every parser file touched across the mechanical branches:
 
 ```bash
-# List files touched by any sub-agent branch in this batch
-git diff --name-only main..{branch} | grep -E '(tests/magic-ast-tests/Data/HandParsedCards/.*\.json|libs/magic-ast/AST/.*\.cs)$'
+# Helper's work (already on main)
+git diff --name-only {pre-helper-main}..main | grep -E '(tests/magic-ast-tests/Data/HandParsedCards/.*\.json|libs/magic-ast/AST/.*\.cs)$'
+# Mechanical branches' parser changes
+for branch in {mechanical-branches}; do
+  git diff --name-only main..$branch | grep -E 'libs/magic-ast/Parsing/.*\.cs$'
+done
 ```
 
 Dispatch the judge:
@@ -309,14 +368,14 @@ Agent({
 
 Read the judge's closing message:
 
-- **PROCEED**: judge rendered 0 FAILs. Continue to Step 8.
-- **HALT**: one or more FAIL verdicts. Do not merge. Address every FAIL — either inline (orchestrator fixes the items) or via a follow-up sub-agent dispatched specifically to remediate. Then re-run Step 7. The loop does not continue until the verdict is PASS.
+- **PROCEED**: judge rendered 0 FAILs. Continue to Step 10.
+- **HALT**: one or more FAIL verdicts. Do not merge mechanical branches. Address every FAIL — either inline (orchestrator fixes the items) or via a follow-up sub-agent dispatched specifically to remediate. Then re-run Step 9. The loop does not continue until the verdict is PASS.
 
 The judge is strict binary PASS/FAIL; there is no "concern" tier. See `.claude/skills/mast-judge/SKILL.md` for the anti-pattern enumeration (free text, escape hatches, unparsed nodes, imprecise citations all FAIL).
 
-### Step 8 — `[main]` Merge, validate, regenerate, re-triage
+### Step 10 — `[main]` Merge mechanical branches, validate, regenerate, re-triage
 
-After Step 7 returns PROCEED:
+After Step 9 returns PROCEED:
 
 ```bash
 # 1) Merge all reporting sub-agent branches in order.
@@ -392,7 +451,7 @@ Conditions:
 
 `[main]`-only conditions:
 
-- Post-merge NUnit (Step 8 substep 2) isn't 100% green. Two sub-agents' edits conflict semantically even though each was green in isolation. Roll back the merges and either re-dispatch them serially or route to human.
+- Post-merge NUnit (Step 10 substep 2) isn't 100% green. Two mechanical sub-agents' parser edits conflict semantically even though each was green in isolation. Roll back the merges and either re-dispatch them serially or route to human.
 - Judge-pass-2 returns HALT (one or more BLOCKING verdicts). Do not merge. Surface the verdict report at `docs/judgments/verdict-{date}.md` to the human along with the offending sub-agent branches.
 - Two sub-agents in the same batch claim the same `AbilityKind` for a new parser, or the same discriminator string for a new AST node. Serialize: pick one to land first, then re-dispatch the other against the post-merge tree.
 - Post-batch triage rerun shows fewer total parsing successes than the pre-batch state. Roll back the merges and investigate.
