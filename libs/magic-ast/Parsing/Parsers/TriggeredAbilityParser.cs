@@ -910,6 +910,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return new List<Effect> { scry };
     }
 
+    var addMana = TryParseAddManaEffect(trimmed);
+    if (addMana != null)
+    {
+      return new List<Effect> { addMana };
+    }
+
     var draw = TryParseDrawCardsEffect(trimmed);
     if (draw != null)
     {
@@ -1436,6 +1442,37 @@ public sealed class TriggeredAbilityParser : IAbilityParser
 
     var count = int.Parse(match.Groups[1].Value);
     return new ScryEffect { Count = LiteralQuantity.Of(count) };
+  }
+
+  /// <summary>
+  /// "add {C}" / "add {G}{G}" / "add one mana of any color" — Rule 106 mana-add
+  /// effect on the resolution side of a triggered ability. Mirrors the matcher
+  /// on <see cref="ActivatedAbilityParser"/>; the parsers will be consolidated
+  /// into a shared effect combinator once enough cases accumulate. Note that
+  /// triggered mana production is *not* a Rule 605 mana ability (those require
+  /// activation), so no IsManaAbility flag is set here.
+  /// </summary>
+  private static AddManaEffect? TryParseAddManaEffect(string effectText)
+  {
+    var text = effectText.Trim().TrimEnd('.').Trim();
+    if (!text.StartsWith("add ", StringComparison.OrdinalIgnoreCase))
+    {
+      return null;
+    }
+
+    var manaText = text[4..].Trim();
+
+    if (Regex.IsMatch(manaText, @"^one\s+mana\s+of\s+any\s+color$", RegexOptions.IgnoreCase))
+    {
+      return new AddManaEffect { Mana = string.Empty, AnyColor = true };
+    }
+
+    if (string.IsNullOrWhiteSpace(manaText) || !manaText.Contains('{'))
+    {
+      return null;
+    }
+
+    return new AddManaEffect { Mana = manaText, AnyColor = false };
   }
 
   /// <summary>
