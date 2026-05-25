@@ -252,6 +252,23 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "You may [spell-verb] ..." optional resolution-step phrasing on a spell
+    // (Rule 117.7) — e.g., "You may discard a card. If you do, draw two cards."
+    // (Abandon Attachments). The opening "You may" is a player-instruction frame
+    // around a spell-instruction verb, so the line resolves as a spell effect
+    // with IsOptional=true rather than as a declarative static. Mirrors the
+    // <c>StartsWithSpellInstructionVerb</c> dispatch but lets the "You may"
+    // frame precede the verb.
+    if (StartsWithYouMaySpellInstruction(clause.RawText))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.80,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Target [filter] blocks this turn if able." — spell-resolution single-target
     // block requirement (e.g., Culling Mark). The static "[subject] blocks each
     // combat if able" recognizer in StaticAbilityParser is the wrong route: this
@@ -405,6 +422,31 @@ public sealed class AbilityClassifier
         trimmed.StartsWith(verb + " ", StringComparison.OrdinalIgnoreCase)
         || trimmed.Equals(verb, StringComparison.OrdinalIgnoreCase)
       )
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// <summary>
+  /// Recognises clauses opened by the "You may [verb] ..." frame, where the
+  /// verb is one of the spell-resolution instruction verbs. Distinguished from
+  /// the bare <see cref="StartsWithSpellInstructionVerb"/> check because the
+  /// imperative is wrapped in a "You may" player-choice (Rule 117.7); the line
+  /// is still a spell-resolution step, not a continuous static.
+  /// </summary>
+  private static bool StartsWithYouMaySpellInstruction(string rawText)
+  {
+    var trimmed = rawText.TrimStart('•', '•', ' ', '\t');
+    if (!trimmed.StartsWith("You may ", StringComparison.OrdinalIgnoreCase))
+    {
+      return false;
+    }
+    var rest = trimmed.Substring("You may ".Length);
+    foreach (var verb in _spellInstructionVerbs)
+    {
+      if (rest.StartsWith(verb + " ", StringComparison.OrdinalIgnoreCase))
       {
         return true;
       }
