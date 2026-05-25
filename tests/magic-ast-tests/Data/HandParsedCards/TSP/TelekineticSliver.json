@@ -1,0 +1,88 @@
+{
+  "Input": {
+    "Name": "Telekinetic Sliver",
+    "ManaCost": "{2}{U}{U}",
+    "TypeLine": "Creature — Sliver",
+    "OracleText": "All Slivers have \"{T}: Tap target permanent.\"",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Telekinetic Sliver",
+    "TypeLine": {
+      "Raw": "Creature — Sliver",
+      "Types": ["Creature"],
+      "Subtypes": ["Sliver"]
+    },
+    "Oracle": {
+      "RawText": "All Slivers have \"{T}: Tap target permanent.\"",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "gainAbility",
+            "Target": {
+              "Kind": "Each",
+              "Filter": {
+                "Subtypes": ["Sliver"]
+              }
+            },
+            "GainedAbility": {
+              "Kind": "activated",
+              "Costs": [
+                { "CostType": "tap" }
+              ],
+              "Effects": [
+                {
+                  "EffectType": "tap",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": ["permanent"]
+                    }
+                  }
+                }
+              ],
+              "IsManaAbility": false
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
