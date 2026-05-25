@@ -3,6 +3,7 @@ namespace MagicAST.Parsing.Parsers;
 using System.Text.RegularExpressions;
 using MagicAST.AST;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.References;
@@ -121,7 +122,59 @@ public sealed class StaticAbilityParser : IAbilityParser
       return costReduction;
     }
 
+    // "During [period], [self] has [keyword]." — conditional static keyword
+    // (Zurgo's during-your-turn indestructibility).
+    var conditionalKeyword = TryParseConditionalSelfKeyword(clause);
+    if (conditionalKeyword != null)
+    {
+      return conditionalKeyword;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "During your turn, [self] has [keyword]." — produces a static ability
+  /// guarded by a <see cref="MagicAST.AST.Abilities.Condition"/> whose text
+  /// preserves the duration clause. The keyword tail is wrapped in the
+  /// canonical effect node so the resulting ability mirrors the same shape
+  /// a non-conditional version of that keyword would carry.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseConditionalSelfKeyword(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*(?<cond>During\s+(?:your\s+turn|each\s+(?:opponent|player)'?s\s+turn|combat)),\s+(?<subject>\S.*?)\s+has\s+(?<kw>\w+(?:\s+\w+)?)\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    var kw = match.Groups["kw"].Value.ToLowerInvariant().Trim();
+    Effect? effect = kw switch
+    {
+      "indestructible" => new MagicAST.AST.Effects.Keyword.IndestructibleEffect(),
+      "haste" => new MagicAST.AST.Effects.Keyword.HasteEffect(),
+      "trample" => new MagicAST.AST.Effects.Keyword.TrampleEffect(),
+      "lifelink" => new MagicAST.AST.Effects.Damage.LifelinkEffect(),
+      "vigilance" => new MagicAST.AST.Effects.Keyword.VigilanceEffect(),
+      "reach" => new MagicAST.AST.Effects.Keyword.ReachEffect(),
+      _ => null,
+    };
+    if (effect is null)
+    {
+      return null;
+    }
+    var conditionText = match.Groups["cond"].Value.Trim();
+    return
+    [
+      new StaticAbility
+      {
+        Effect = effect,
+        Condition = new MagicAST.AST.Abilities.Condition { Text = conditionText },
+      },
+    ];
   }
 
   /// <summary>
