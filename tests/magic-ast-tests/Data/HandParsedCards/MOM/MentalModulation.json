@@ -42,7 +42,12 @@
                   "CardTypes": ["artifact", "creature"]
                 }
               }
-            },
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
             {
               "EffectType": "drawCards",
               "Count": {

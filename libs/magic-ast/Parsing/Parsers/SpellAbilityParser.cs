@@ -200,7 +200,50 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseSpellTapTargetEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "Tap target [type]." / "Tap target [type1] or [type2]." — spell-resolution
+  /// tap with either a single-type or type-disjunction target filter. Mirrors the
+  /// Demolish/destroy disjunction convention: <see cref="ObjectFilter.CardTypes"/>
+  /// as a multi-element list is the disjunction. Rule 701.26a (Tap).
+  /// </summary>
+  private static MagicAST.AST.Effects.Control.TapEffect? TryParseSpellTapTargetEffect(string text)
+  {
+    var match = Regex.Match(
+      text,
+      @"^Tap\s+target\s+(?<types>\w+(?:\s*,\s*\w+)*(?:\s*,?\s+or\s+\w+)?)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    var typesPhrase = match.Groups["types"].Value;
+    var types = Regex
+      .Split(typesPhrase, @"\s*,\s*|\s+or\s+")
+      .Select(t => t.Trim().ToLowerInvariant())
+      .Where(t => t.Length > 0)
+      .ToList();
+    if (types.Count == 0)
+    {
+      return null;
+    }
+    return new MagicAST.AST.Effects.Control.TapEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = types },
+      },
+    };
   }
 
   /// <summary>

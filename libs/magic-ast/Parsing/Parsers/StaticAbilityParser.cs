@@ -130,7 +130,49 @@ public sealed class StaticAbilityParser : IAbilityParser
       return conditionalKeyword;
     }
 
+    // "This spell costs {N} less to cast during [period]." — flat-amount
+    // cost reduction guarded by a duration condition (Mental Modulation).
+    var conditionalCostReduction = TryParseConditionalSpellCostReduction(clause);
+    if (conditionalCostReduction != null)
+    {
+      return conditionalCostReduction;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "This spell costs {N} less to cast during [your turn / each opponent's turn / ...]." —
+  /// emits a <see cref="StaticAbility"/> with a <see cref="MagicAST.AST.Abilities.Condition"/>
+  /// preserving the duration clause, wrapping a <see cref="MagicAST.AST.Effects.Resource.CostReductionEffect"/>
+  /// whose <c>Amount</c> is the literal generic-mana reduction. Rule 117.6 (cost reductions).
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseConditionalSpellCostReduction(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*This\s+spell\s+costs\s+\{(?<amount>\d+)\}\s+less\s+to\s+cast\s+(?<cond>during\s+(?:your\s+turn|each\s+(?:opponent|player)'?s\s+turn|combat))\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    var amount = int.Parse(match.Groups["amount"].Value);
+    // Preserve oracle-text casing for the condition (the lower-case "during"
+    // that follows "to cast " is correct as-is; don't recapitalize).
+    var conditionText = match.Groups["cond"].Value;
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Resource.CostReductionEffect
+        {
+          Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount),
+        },
+        Condition = new MagicAST.AST.Abilities.Condition { Text = conditionText },
+      },
+    ];
   }
 
   /// <summary>
