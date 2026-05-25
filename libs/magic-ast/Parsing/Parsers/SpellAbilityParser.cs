@@ -136,7 +136,13 @@ public sealed class SpellAbilityParser : IAbilityParser
   {
     var trimmed = text.Trim().TrimEnd('.').Trim();
 
-    Effect? effect = TryParseCounterSpellEffect(trimmed);
+    Effect? effect = TryParseCounterTargetTypeOrSubtypeSpellEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseCounterSpellEffect(trimmed);
     if (effect is not null)
     {
       return effect;
@@ -811,6 +817,87 @@ public sealed class SpellAbilityParser : IAbilityParser
         {
           Characteristics = ["your commander"],
           Zone = Zone.CommandZone,
+        },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Counter target [Q1] or [Q2] spell." — Nullify ("creature or Aura"),
+  /// Hisoka's Defiance ("Spirit or Arcane"). The two qualifiers can mix freely
+  /// across the card-type and subtype axes on <see cref="ObjectFilter"/>: each
+  /// token is classified by vocabulary, not position. Card-type tokens append
+  /// to <see cref="ObjectFilter.CardTypes"/> alongside the implicit "spell";
+  /// subtype tokens accumulate on <see cref="ObjectFilter.Subtypes"/> with
+  /// their oracle-text capitalization preserved (subtype labels are
+  /// case-sensitive per Rule 205.3).
+  /// </summary>
+  /// <remarks>
+  /// Ordered before <see cref="TryParseCounterSpellEffect"/> so this dedicated
+  /// type-or-subtype shape captures the disjunction without colliding with the
+  /// color-disjunction branch of the older recognizer (which only accepts color
+  /// words on either side of "or"). The two recognizers are kept separate
+  /// because color disjunction routes onto <see cref="ObjectFilter.Colors"/>
+  /// while type/subtype disjunction routes onto two different axes — merging
+  /// them would force the regex to know which axis each token belongs to up
+  /// front, which is exactly the work this rule does after the match.
+  /// </remarks>
+  private static CounterSpellEffect? TryParseCounterTargetTypeOrSubtypeSpellEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Counter\s+target\s+(?<q1>[A-Za-z]+)\s+or\s+(?<q2>[A-Za-z]+)\s+spell$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    // Reject color-disjunction phrases — TryParseCounterSpellEffect already
+    // owns that shape and routes colors onto ObjectFilter.Colors.
+    var colorWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+      "white", "blue", "black", "red", "green", "colorless", "multicolored",
+    };
+    if (colorWords.Contains(m.Groups["q1"].Value) || colorWords.Contains(m.Groups["q2"].Value))
+    {
+      return null;
+    }
+
+    var cardTypeVocab = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+      "creature", "artifact", "enchantment", "land", "planeswalker",
+      "instant", "sorcery", "tribal", "battle",
+    };
+
+    var cardTypes = new List<string> { "spell" };
+    var subtypes = new List<string>();
+    foreach (var q in new[] { m.Groups["q1"].Value, m.Groups["q2"].Value })
+    {
+      if (cardTypeVocab.Contains(q))
+      {
+        // Card-type tokens are stored lowercased per the existing CardTypes
+        // convention (see SplitTypeDisjunction / BuildSpellFilter).
+        cardTypes.Add(q.ToLowerInvariant());
+      }
+      else
+      {
+        // Subtypes preserve oracle-text capitalization (Rule 205.3 treats
+        // subtype labels as proper nouns; the gold fixtures match exactly).
+        subtypes.Add(q);
+      }
+    }
+
+    return new CounterSpellEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = cardTypes,
+          Subtypes = subtypes.Count > 0 ? subtypes : null,
         },
       },
     };
