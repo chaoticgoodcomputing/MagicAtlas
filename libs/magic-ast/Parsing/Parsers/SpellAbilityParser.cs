@@ -202,6 +202,12 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseExileAttackingCreatureUnlessEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     effect = TryParseExileTypeDisjunctionEffect(trimmed);
     if (effect is not null)
     {
@@ -989,6 +995,48 @@ public sealed class SpellAbilityParser : IAbilityParser
           CardTypes = ["permanent"],
           IsMonocolored = true,
         },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Exile target attacking creature unless its controller pays {X}." — Excise.
+  /// Mirrors the <see cref="UnlessClause"/> tail that
+  /// <see cref="TryParseCounterSpellEffect"/> attaches to Clash of Wills, applied
+  /// to <see cref="ExileEffect"/> instead of <see cref="CounterSpellEffect"/>.
+  /// "attacking" is a runtime status predicate on the target filter, encoded
+  /// on <see cref="ObjectFilter.Characteristics"/> rather than a structural
+  /// characteristic axis (per the batch-8 briefing: combat-status words live on
+  /// Characteristics until a dedicated predicate axis is justified).
+  /// </summary>
+  private static MagicAST.AST.Effects.ZoneChange.ExileEffect? TryParseExileAttackingCreatureUnlessEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^Exile\s+target\s+attacking\s+creature\s+unless\s+its\s+controller\s+pays\s+\{(?<unlessx>[A-Za-z])\}$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    return new MagicAST.AST.Effects.ZoneChange.ExileEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Characteristics = ["attacking"],
+        },
+      },
+      UnlessClause = new UnlessClause
+      {
+        Player = new ObjectReference { Kind = ObjectReferenceKind.Controller },
+        Cost = new ManaCost { Symbols = [new ManaSymbol { Kind = ManaSymbolKind.Variable }] },
       },
     };
   }
