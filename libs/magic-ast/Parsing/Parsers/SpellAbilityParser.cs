@@ -433,6 +433,12 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseSelfDealsDamageToTypeDisjunctionEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     effect = TryParsePutCounterOnTargetEffect(trimmed);
     if (effect is not null)
     {
@@ -566,6 +572,62 @@ public sealed class SpellAbilityParser : IAbilityParser
           CardTypes = [m.Groups["type"].Value.ToLowerInvariant()],
           Characteristics = [m.Groups["chars"].Value.Trim()],
         },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "[Self] deals N damage to target [type] (or [type])?." — Ready to Rumble's
+  /// first modal option ("Ready to Rumble deals 5 damage to target creature or
+  /// planeswalker"). Self-source detected by leading-capital subject. Supports
+  /// the type-disjunction shape on the target filter — two card-type tokens
+  /// joined by "or" land on a two-element <see cref="ObjectFilter.CardTypes"/>
+  /// list. Distinct from
+  /// <see cref="TryParseSelfDealsDamageToFilteredCreatureEffect"/> because that
+  /// rule requires a trailing "with [characteristic]" qualifier; this one is
+  /// the bare-target shape with no characteristic suffix.
+  /// </summary>
+  private static MagicAST.AST.Effects.Damage.DealDamageEffect? TryParseSelfDealsDamageToTypeDisjunctionEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^(?<subject>\S.*?)\s+deals?\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+damage\s+to\s+target\s+(?<type1>creature|artifact|enchantment|land|planeswalker|permanent)(?:\s+or\s+(?<type2>creature|artifact|enchantment|land|planeswalker|permanent))?\.?$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    var subject = m.Groups["subject"].Value;
+    if (subject.Length == 0 || !char.IsUpper(subject[0]))
+    {
+      return null;
+    }
+
+    var rawAmount = m.Groups["amount"].Value.ToLowerInvariant();
+    int amount = rawAmount switch
+    {
+      "one" => 1, "two" => 2, "three" => 3, "four" => 4, "five" => 5,
+      "six" => 6, "seven" => 7, "eight" => 8, "nine" => 9, "ten" => 10,
+      _ => int.Parse(rawAmount),
+    };
+
+    var cardTypes = new List<string> { m.Groups["type1"].Value.ToLowerInvariant() };
+    if (m.Groups["type2"].Success)
+    {
+      cardTypes.Add(m.Groups["type2"].Value.ToLowerInvariant());
+    }
+
+    return new MagicAST.AST.Effects.Damage.DealDamageEffect
+    {
+      Amount = LiteralQuantity.Of(amount),
+      Source = ObjectReference.Self(),
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = cardTypes },
       },
     };
   }
