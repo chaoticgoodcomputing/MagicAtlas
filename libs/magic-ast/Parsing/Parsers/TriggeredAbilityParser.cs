@@ -810,6 +810,11 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         "planeswalker",
         "permanent",
         "battle",
+        // Subtype self-reference: "this Aura" — oracle text uses the
+        // subtype word when the card has no relevant supertype/cardtype
+        // distinction (e.g., Aura enchantments). Treated descriptively
+        // as a CardTypes singleton; MAST records the word the text used.
+        "aura",
       }
     )
     {
