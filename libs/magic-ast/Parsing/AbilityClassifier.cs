@@ -94,6 +94,7 @@ public sealed class AbilityClassifier
       "Coven",
       "Pack tactics",
       "Magecraft",
+      "Fateful hour",
       // Adventure
       "Adventure",
     };
@@ -356,6 +357,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // Ability-word conditional spell-effect: "[AbilityWord] — If <condition>,
+    // <spell-verb> …". The ability word itself (e.g. "Fateful hour", Rule 702.95)
+    // has no rules meaning — it gates an otherwise normal spell-resolution
+    // instruction on a state predicate. We surface the gate as free-text on
+    // SpellAbility.Instructions (the documented escape hatch until SpellAbility
+    // grows a structured InterveningIf), and route to the spell parser so the
+    // trailing effect lands in SpellAbility.Effects instead of stalling on the
+    // unimplemented static-conditional path.
+    if (
+      abilityWord is not null
+      && StartsWithIfConditionThenSpellVerb(clause.RawText, abilityWord)
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Garbage / non-oracle characters: when the clause carries glyphs that
     // never appear in printed oracle text (e.g., '@', '#', '$', '%', '^',
     // '&', '*'), there's no meaningful structural pattern to anchor a Static
@@ -444,6 +466,42 @@ public sealed class AbilityClassifier
       return false;
     }
     var rest = trimmed.Substring("You may ".Length);
+    foreach (var verb in _spellInstructionVerbs)
+    {
+      if (rest.StartsWith(verb + " ", StringComparison.OrdinalIgnoreCase))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// <summary>
+  /// Recognises clauses of the shape "[AbilityWord] — If <condition>,
+  /// <spell-verb> …" — the ability-word conditional spell-effect pattern
+  /// (e.g. Spell Snuff's Fateful hour line). The em-dash separates the
+  /// ability-word prefix from the body; the leading "If <condition>," in the
+  /// body is the gating predicate and the verb that follows must be one of
+  /// the spell-resolution instruction verbs for the line to qualify.
+  /// </summary>
+  private static bool StartsWithIfConditionThenSpellVerb(string rawText, string abilityWord)
+  {
+    var emDashIndex = rawText.IndexOf('—');
+    if (emDashIndex <= 0)
+    {
+      return false;
+    }
+    var body = rawText[(emDashIndex + 1)..].TrimStart();
+    var ifMatch = Regex.Match(
+      body,
+      @"^If\s+[^,]+,\s*(?<rest>.+)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!ifMatch.Success)
+    {
+      return false;
+    }
+    var rest = ifMatch.Groups["rest"].Value;
     foreach (var verb in _spellInstructionVerbs)
     {
       if (rest.StartsWith(verb + " ", StringComparison.OrdinalIgnoreCase))
