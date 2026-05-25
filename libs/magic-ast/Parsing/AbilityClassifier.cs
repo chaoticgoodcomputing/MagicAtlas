@@ -268,6 +268,22 @@ public sealed class AbilityClassifier
       };
     }
 
+    // Garbage / non-oracle characters: when the clause carries glyphs that
+    // never appear in printed oracle text (e.g., '@', '#', '$', '%', '^',
+    // '&', '*'), there's no meaningful structural pattern to anchor a Static
+    // classification on. Route to Unparsed so the fallback parser surfaces
+    // a structured "Failed to parse Unparsed ability" diagnostic instead of
+    // a mis-tagged "Static ability parser not yet implemented".
+    if (ContainsOracleGarbage(clause.RawText))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Unparsed,
+        Confidence = 1.0,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Default to static ability for declarative statements
     return new ClauseClassification
     {
@@ -275,6 +291,32 @@ public sealed class AbilityClassifier
       Confidence = 0.50,
       AbilityWord = abilityWord,
     };
+  }
+
+  /// <summary>
+  /// Heuristic: returns true when the clause carries glyphs that don't appear
+  /// in printed oracle text. Used to short-circuit classification on garbage
+  /// inputs so the fallback parser sees an <see cref="AbilityKind.Unparsed"/>
+  /// kind rather than a defaulted Static.
+  /// </summary>
+  private static bool ContainsOracleGarbage(string text)
+  {
+    foreach (var ch in text)
+    {
+      switch (ch)
+      {
+        case '@':
+        case '#':
+        case '$':
+        case '%':
+        case '^':
+        case '&':
+        case '~':
+        case '\\':
+          return true;
+      }
+    }
+    return false;
   }
 
   /// <summary>
