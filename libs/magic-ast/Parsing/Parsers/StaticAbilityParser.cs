@@ -719,17 +719,44 @@ public sealed class StaticAbilityParser : IAbilityParser
 
   /// <summary>
   /// Maps the noun-phrase left of "has" onto an ObjectReference target.
-  /// Today only the Aura-vocabulary phrases ("enchanted [type]", "equipped
-  /// [type]") are recognized; the target's <c>EnchantedOrEquipped</c> kind
-  /// already conveys the relationship — <c>AffectedObjects</c> would be
-  /// redundant free-text, so we don't emit one.
+  /// Two shapes are recognized today:
+  /// <list type="bullet">
+  ///   <item>Aura-vocabulary ("enchanted [type]" / "equipped [type]") collapses to
+  ///         <see cref="ObjectReferenceKind.EnchantedOrEquipped"/>; the kind itself
+  ///         conveys the relationship, so no filter is emitted.</item>
+  ///   <item>"All [Subtype]s" (e.g. <c>All Slivers</c>, <c>All Zombies</c>) — the
+  ///         global tribal grant shape (Sliver-lords, anthem-style enchantments).
+  ///         Maps to an <see cref="ObjectReferenceKind.Each"/> reference with a
+  ///         <see cref="ObjectFilter.Subtypes"/> singleton holding the depluralised
+  ///         subtype. The leading capital is the disambiguator: lower-case "all
+  ///         creatures" would be a card-type grant (left as a follow-up).</item>
+  /// </list>
   /// </summary>
   private static ObjectReference? ClassifyGrantTarget(string filterText)
   {
-    var lower = filterText.ToLowerInvariant();
+    var trimmed = filterText.Trim();
+    var lower = trimmed.ToLowerInvariant();
     if (lower.StartsWith("enchanted ") || lower.StartsWith("equipped "))
     {
       return new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped };
+    }
+
+    // "All Slivers" / "All Zombies" — capitalised plural noun after a literal "All ".
+    // We match the singular by stripping a trailing "s"; oracle text capitalises
+    // creature subtypes, which is what lets us distinguish a subtype grant from a
+    // generic "all creatures" grant (different shape, not handled here yet).
+    var allMatch = Regex.Match(
+      trimmed,
+      @"^All\s+(?<sub>[A-Z][a-z]+)s\b\.?$"
+    );
+    if (allMatch.Success)
+    {
+      var subtype = allMatch.Groups["sub"].Value;
+      return new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter { Subtypes = [subtype] },
+      };
     }
     return null;
   }
@@ -738,8 +765,14 @@ public sealed class StaticAbilityParser : IAbilityParser
   // are split before us). Captures the noun-phrase subject and the quoted body
   // verbatim; nested quotes inside the body are unlikely in oracle text and
   // are out of scope for this first cut.
+  //
+  // Verb is "has" or "have" — oracle text agrees the verb with the subject:
+  // singular ("Enchanted creature has", Find the Path's Aura grant) vs. plural
+  // ("All Slivers have", Telekinetic Sliver's global tribal grant). Both shapes
+  // land on the same GainAbilityEffect node; ClassifyGrantTarget distinguishes
+  // the subject.
   private static readonly Regex _grantedAbilityPattern = new(
-    @"^\s*(?<filter>[^""""]+?)\s+has\s+[""""](?<body>[^""""]+)[""""]\.?\s*$",
+    @"^\s*(?<filter>[^""""]+?)\s+(?:has|have)\s+[""""](?<body>[^""""]+)[""""]\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
