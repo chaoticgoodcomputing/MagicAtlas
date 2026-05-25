@@ -1,0 +1,144 @@
+{
+  "Input": {
+    "Name": "Coliseum Behemoth",
+    "ManaCost": "{4}{R}",
+    "TypeLine": "Creature — Beast",
+    "OracleText": "Trample\nWhen this creature enters, choose one —\n• Destroy target artifact or enchantment.\n• Draw a card.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Coliseum Behemoth",
+    "TypeLine": {
+      "Raw": "Creature — Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Trample\nWhen this creature enters, choose one —\n• Destroy target artifact or enchantment.\n• Draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effect": {
+            "EffectType": "trample"
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "modal",
+              "ModeSelection": {
+                "Minimum": 1,
+                "Maximum": 1
+              },
+              "Modes": [
+                {
+                  "Ability": {
+                    "Kind": "spell",
+                    "Effects": [
+                      {
+                        "EffectType": "destroy",
+                        "Target": {
+                          "Kind": "Target",
+                          "Filter": {
+                            "CardTypes": [
+                              "artifact",
+                              "enchantment"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Ability": {
+                    "Kind": "spell",
+                    "Effects": [
+                      {
+                        "EffectType": "drawCards",
+                        "Count": {
+                          "QuantityType": "literal",
+                          "Value": 1
+                        },
+                        "Player": {
+                          "Kind": "You"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "AllowDuplicates": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
