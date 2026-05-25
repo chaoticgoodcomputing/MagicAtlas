@@ -9,6 +9,8 @@ using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Core;
 using MagicAST.AST.Effects.Counter;
+using MagicAST.AST.Effects.Damage;
+using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Resource;
 using MagicAST.AST.Effects.TokenCopy;
 using MagicAST.AST.Effects.ZoneChange;
@@ -84,11 +86,44 @@ public sealed class TriggeredAbilityParser : IAbilityParser
 
     var (triggerPart, effectPart) = parts.Value;
 
+    // Rule 603.4 intervening-if: "At/When/Whenever X, if Y, Z." The
+    // trigger/effect split may swallow the "if Y" into the trigger half when
+    // there's an effect verb after the "if" clause. Extract trailing
+    // ", if <cond>" from triggerPart before parsing the trigger condition.
+    Condition? interveningIf = null;
+    var trailingIfMatch = Regex.Match(
+      triggerPart,
+      @"^(?<head>.+),\s*if\s+(?<cond>[^,]+)$",
+      RegexOptions.IgnoreCase
+    );
+    if (trailingIfMatch.Success)
+    {
+      interveningIf = new Condition { Text = trailingIfMatch.Groups["cond"].Value.Trim() };
+      triggerPart = trailingIfMatch.Groups["head"].Value.Trim();
+    }
+
     // Parse trigger event and filter
     var trigger = ParseTriggerCondition(triggerPart, triggerTiming.Value);
     if (trigger == null)
     {
       return null;
+    }
+
+    // Same intervening-if shape, but with the condition still sitting at the
+    // head of the effect half (e.g., when the split landed on a different
+    // comma). Strip it off and assign to interveningIf if not already set.
+    if (interveningIf is null)
+    {
+      var leadingIfMatch = Regex.Match(
+        effectPart,
+        @"^if\s+(?<cond>.+?),\s+(?<rest>.+)$",
+        RegexOptions.IgnoreCase
+      );
+      if (leadingIfMatch.Success)
+      {
+        interveningIf = new Condition { Text = leadingIfMatch.Groups["cond"].Value.Trim() };
+        effectPart = leadingIfMatch.Groups["rest"].Value.Trim();
+      }
     }
 
     // Modal trigger: "When X, choose one —" with bulleted options absorbed by
@@ -97,7 +132,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     // single ModalEffect to occupy the trigger's Effects list.
     if (clause.ModalOptions is { Count: > 0 } && TryBuildModalEffect(effectPart, clause.ModalOptions) is { } modalEffect)
     {
-      return new TriggeredAbility { Trigger = trigger, Effects = [modalEffect] };
+      return new TriggeredAbility
+      {
+        Trigger = trigger,
+        InterveningIf = interveningIf,
+        Effects = [modalEffect],
+      };
     }
 
     // Parse effects
@@ -107,7 +147,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return null;
     }
 
-    return new TriggeredAbility { Trigger = trigger, Effects = effects };
+    return new TriggeredAbility
+    {
+      Trigger = trigger,
+      InterveningIf = interveningIf,
+      Effects = effects,
+    };
   }
 
   /// <summary>
@@ -692,15 +737,28 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   {
     var lower = text.ToLowerInvariant();
 
+    // Possessive cue: any "you control" / "an opponent controls" qualifier
+    // lands on the filter's Controller axis. Applies on top of card-type
+    // matching below.
+    ControllerFilter? controller = null;
+    if (Regex.IsMatch(lower, @"\byou\s+control\b"))
+    {
+      controller = ControllerFilter.You;
+    }
+    else if (Regex.IsMatch(lower, @"\ban\s+opponent\s+controls\b"))
+    {
+      controller = ControllerFilter.Opponent;
+    }
+
     // Simple filters - can be extended with more sophisticated parsing
     if (lower.Contains("this creature"))
     {
-      return new ObjectFilter { CardTypes = ["creature"] };
+      return new ObjectFilter { CardTypes = ["creature"], Controller = controller };
     }
 
     if (lower.Contains("a creature") || lower.Contains("another creature"))
     {
-      return new ObjectFilter { CardTypes = ["creature"] };
+      return new ObjectFilter { CardTypes = ["creature"], Controller = controller };
     }
 
     // Self-by-name pattern, e.g. "When Denethor enters" / "Whenever Barrin dies".
@@ -709,7 +767,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     // already used for "this creature" — MAST describes what the text says).
     if (IsSelfByNameTrigger(text))
     {
-      return new ObjectFilter { CardTypes = ["creature"] };
+      return new ObjectFilter { CardTypes = ["creature"], Controller = controller };
     }
 
     return null;
@@ -957,7 +1015,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return null;
     }
 
-    var isOptional = lower.Contains("you may return") || lower.StartsWith("you may ");
+    // "you may return ..." and "return up to N ..." both make this effect
+    // optional in oracle convention — the controller can choose 0 targets.
+    var isOptional =
+      lower.Contains("you may return")
+      || lower.StartsWith("you may ")
+      || Regex.IsMatch(lower, @"return\s+up\s+to\s+");
     var characteristics = new List<string>();
     if (lower.Contains("another target"))
     {
@@ -1158,8 +1221,28 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return null;
     }
 
-    // Parse abilities (optional)
-    var abilities = ParseTokenAbilities(text);
+    // Parse abilities (optional). Convert the "with X" suffixes into the
+    // same StaticAbility shape MAST uses for direct keyword abilities so the
+    // token's ability list mirrors how the keyword would appear if printed
+    // straight onto a permanent.
+    var abilityNames = ParseTokenAbilities(text);
+    IReadOnlyList<Ability>? tokenAbilities = null;
+    if (abilityNames.Count > 0)
+    {
+      var abilities = new List<Ability>();
+      foreach (var name in abilityNames)
+      {
+        var sa = BuildKeywordStaticAbility(name);
+        if (sa is not null)
+        {
+          abilities.Add(sa);
+        }
+      }
+      if (abilities.Count > 0)
+      {
+        tokenAbilities = abilities;
+      }
+    }
 
     return new CreateTokenEffect
     {
@@ -1171,9 +1254,45 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         Colors = colors,
         Types = ["creature"],
         Subtypes = subtypes,
-        // Abilities would be stored here if TokenDefinition supported them
+        Abilities = tokenAbilities,
       },
     };
+  }
+
+  /// <summary>
+  /// Wraps a keyword name into a <see cref="StaticAbility"/> with the canonical
+  /// <c>KeywordSource</c> + effect node, mirroring the shape used when the
+  /// same keyword appears directly on a card. Returns null for keywords MAST
+  /// does not yet model.
+  /// </summary>
+  private static StaticAbility? BuildKeywordStaticAbility(string keywordRaw)
+  {
+    var lower = keywordRaw.ToLowerInvariant().Trim();
+    Effect? effect = lower switch
+    {
+      "flying" => new MagicAST.AST.Effects.Keyword.EvasionEffect
+      {
+        CanBeBlockedBy = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Characteristics = ["flying", "reach"],
+        },
+      },
+      "vigilance" => new MagicAST.AST.Effects.Keyword.VigilanceEffect(),
+      "trample" => new MagicAST.AST.Effects.Keyword.TrampleEffect(),
+      "haste" => new MagicAST.AST.Effects.Keyword.HasteEffect(),
+      "reach" => new MagicAST.AST.Effects.Keyword.ReachEffect(),
+      "lifelink" => new MagicAST.AST.Effects.Damage.LifelinkEffect(),
+      "indestructible" => new MagicAST.AST.Effects.Keyword.IndestructibleEffect(),
+      "deathtouch" => null, // not yet modeled
+      _ => null,
+    };
+    if (effect is null)
+    {
+      return null;
+    }
+    var keywordSource = char.ToUpperInvariant(lower[0]) + lower[1..];
+    return new StaticAbility { Effect = effect, KeywordSource = keywordSource };
   }
 
   #endregion

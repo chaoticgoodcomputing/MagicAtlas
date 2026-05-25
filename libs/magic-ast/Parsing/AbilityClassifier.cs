@@ -172,6 +172,20 @@ public sealed class AbilityClassifier
     // Check for modal ability: Choose
     if (StartsWithChoose(tokens))
     {
+      // Exception: "Choose a Background" is a named partner-variant keyword
+      // (Rule 702.124g, descriptive). Route it to the static keyword parser
+      // so it lands as a StaticAbility with KeywordSource="Choose a Background"
+      // rather than as an unparsable modal selection.
+      var trimmed = clause.RawText.TrimStart();
+      if (trimmed.StartsWith("Choose a Background", StringComparison.OrdinalIgnoreCase))
+      {
+        return new ClauseClassification
+        {
+          Kind = AbilityKind.Static,
+          Confidence = 0.95,
+          AbilityWord = abilityWord,
+        };
+      }
       return new ClauseClassification
       {
         Kind = AbilityKind.Modal,

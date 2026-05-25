@@ -441,6 +441,25 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Choose a Background" — a fixed-name partner variant from
+  /// Commander Legends: Battle for Baldur's Gate (Rule 702.124g, descriptive
+  /// reference). Emits a static ability whose effect carries
+  /// <see cref="PartnerType.ChooseABackground"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> ChooseABackground = (
+    from choose in Keyword("Choose")
+    from a in Keyword("a")
+    from background in Keyword("Background")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Choose a Background",
+      Effect = new PartnerEffect { PartnerType = PartnerType.ChooseABackground },
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -471,7 +490,7 @@ public static class OracleParsers
   /// Parses any parameterized keyword ability.
   /// </summary>
   public static readonly TokenListParser<OracleToken, StaticAbility> ParameterizedKeyword =
-    Protection.Try().Or(Crew.Try()).Or(PartnerWith.Try());
+    Protection.Try().Or(Crew.Try()).Or(PartnerWith.Try()).Or(ChooseABackground.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
