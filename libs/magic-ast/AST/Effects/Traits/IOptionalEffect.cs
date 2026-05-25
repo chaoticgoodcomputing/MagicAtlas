@@ -27,4 +27,12 @@ public interface IOptionalEffect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   Effect? IfYouDo { get; init; }
+
+  /// <summary>
+  /// Optional secondary effect that runs "if you don't" perform the main
+  /// effect. Mirrors <see cref="IfYouDo"/>. Captures the per-player fork
+  /// pattern (Rule 117.7): "Each player may [X]. Each player who doesn't [Y]."
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  Effect? IfYouDoNot { get; init; }
 }

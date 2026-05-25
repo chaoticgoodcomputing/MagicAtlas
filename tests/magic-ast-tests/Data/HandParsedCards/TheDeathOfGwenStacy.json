@@ -47,14 +47,11 @@
                     "EffectType": "discardCards",
                     "Count": { "QuantityType": "literal", "Value": 1 },
                     "Player": { "Kind": "EachPlayer" },
-                    "IsOptional": true
-                  },
-                  {
-                    "EffectType": "loseLife",
-                    "Amount": { "QuantityType": "literal", "Value": 3 },
-                    "Player": {
-                      "Kind": "EachPlayer",
-                      "Filter": { "Characteristics": ["who didn't discard a card"] }
+                    "IsOptional": true,
+                    "IfYouDoNot": {
+                      "EffectType": "loseLife",
+                      "Amount": { "QuantityType": "literal", "Value": 3 },
+                      "Player": { "Kind": "ThatPlayer" }
                     }
                   }
                 ]

@@ -22,6 +22,10 @@ public sealed record GainControlEffect : Effect, IOptionalEffect, IDurativeEffec
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Effect? IfYouDo { get; init; }
 
+  /// <summary>Optional follow-up effect contingent on the controller choosing NOT to perform this one. Rule 117.7. (IOptionalEffect)</summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Effect? IfYouDoNot { get; init; }
+
   /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Duration? Duration { get; init; }

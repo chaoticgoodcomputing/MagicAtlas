@@ -24,12 +24,12 @@ public sealed class RatchetTestTracker
   {
     // Determine baseline path - in test project source directory
     // This ensures the baseline is committed to source control, not in dist/
-    var testAssemblyPath = typeof(RatchetTestTracker).Assembly.Location;
-    var assemblyDir = Path.GetDirectoryName(testAssemblyPath)!;
-
-    // Find the test project directory by looking for the .csproj file
-    // Navigate up from assembly location until we find tests/MagicAST.Tests/
-    var projectRoot = FindProjectRoot(assemblyDir);
+    //
+    // Anchor the search on Environment.CurrentDirectory rather than
+    // Assembly.Location: dist/ is shared across worktrees but CWD reflects
+    // which tree the runner was invoked from. This keeps each worktree's
+    // baseline writes isolated to its own tree.
+    var projectRoot = FindProjectRoot(Environment.CurrentDirectory);
 
     // Store baseline in the test project directory (source tree)
     _baselinePath = Path.Combine(projectRoot, BaselineFileName);
@@ -67,10 +67,11 @@ public sealed class RatchetTestTracker
       dir = dir.Parent;
     }
 
-    // Fallback: if we can't find the project file, use the repo root
-    // This happens when running from dist/
+    // Fallback: if we can't find the project file, use the repo root.
+    // A worktree's .git is a FILE (gitdir pointer), not a directory —
+    // check for both so worktrees aren't skipped past.
     var repoRoot = startPath;
-    while (Directory.Exists(repoRoot) && !Directory.Exists(Path.Combine(repoRoot, ".git")))
+    while (Directory.Exists(repoRoot) && !IsRepoRoot(repoRoot))
     {
       var parent = Path.GetDirectoryName(repoRoot);
       if (parent == null || parent == repoRoot)
@@ -82,6 +83,12 @@ public sealed class RatchetTestTracker
     }
 
     return Path.Combine(repoRoot, "tests", "magic-ast-tests");
+  }
+
+  private static bool IsRepoRoot(string path)
+  {
+    var dotGit = Path.Combine(path, ".git");
+    return Directory.Exists(dotGit) || File.Exists(dotGit);
   }
 
   /// <summary>
