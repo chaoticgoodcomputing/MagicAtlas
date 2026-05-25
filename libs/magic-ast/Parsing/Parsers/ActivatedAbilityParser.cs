@@ -536,6 +536,8 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   /// <summary>
   /// Tries to parse "Add {mana}" effects.
   /// Pattern: "Add {G}", "Add {C}{C}{C}", "Add {W}{U}{B}{R}{G}", etc.
+  /// Also handles "Add one mana of any color" (Crystal Grotto / Chromatic Lantern
+  /// shape) where the produced mana is a single choice across all five colors.
   /// </summary>
   private AddManaEffect? TryParseAddManaEffect(string effectText)
   {
@@ -553,6 +555,20 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     if (manaText.EndsWith('.'))
     {
       manaText = manaText[..^1].Trim();
+    }
+
+    // "one mana of any color" — single-pip wildcard production. The choice
+    // axis lives on AnyColor; Mana is left empty because no concrete symbol
+    // is committed at print time.
+    if (
+      Regex.IsMatch(
+        manaText,
+        @"^one\s+mana\s+of\s+any\s+color$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new AddManaEffect { Mana = string.Empty, AnyColor = true };
     }
 
     // The mana text should be a sequence of mana symbols like "{G}" or "{C}{C}{C}"
