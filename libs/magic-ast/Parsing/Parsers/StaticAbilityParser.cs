@@ -62,6 +62,14 @@ public sealed class StaticAbilityParser : IAbilityParser
       return mustAttack;
     }
 
+    // "[Self] must be blocked if able." — Rule 509.1c block requirement.
+    // Dual of the must-attack pattern above; same parser shape applies.
+    var mustBeBlocked = TryParseMustBeBlocked(clause);
+    if (mustBeBlocked != null)
+    {
+      return mustBeBlocked;
+    }
+
     // Try other static ability patterns
     // TODO: Add more patterns as needed:
     // - "Enchant [descriptor]"
@@ -102,6 +110,38 @@ public sealed class StaticAbilityParser : IAbilityParser
 
   private static readonly Regex _mustAttackPattern = new(
     @"^\s*\S.*?\s+attacks\s+each\s+combat\s+if\s+able\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// Recognizes "[Self] must be blocked if able." where [Self] is either
+  /// the literal phrase "This creature"/"This permanent" or the card's own name
+  /// (any leading word(s) before "must be blocked"). Produces a <see cref="StaticAbility"/>
+  /// wrapping a <see cref="MustBeBlockedEffect"/> targeting <c>Self</c>.
+  /// </summary>
+  /// <remarks>
+  /// Mirrors the must-attack pattern above. The leading subject is captured liberally
+  /// (any non-empty prefix) on the same rationale: card-name-as-subject is the standard
+  /// oracle-text convention for self-reference on a named permanent.
+  /// </remarks>
+  private static IReadOnlyList<Ability>? TryParseMustBeBlocked(OracleClause clause)
+  {
+    if (!_mustBeBlockedPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MustBeBlockedEffect { Target = ObjectReference.Self() },
+      },
+    ];
+  }
+
+  private static readonly Regex _mustBeBlockedPattern = new(
+    @"^\s*\S.*?\s+must\s+be\s+blocked\s+if\s+able\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

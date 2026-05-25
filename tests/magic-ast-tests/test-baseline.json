@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-05-25T06:48:33.6997735Z",
+  "timestamp": "2026-05-25T06:59:19.1575901Z",
   "testResults": {
     "MalformedParsedCards/MixedValidAndInvalidAbilities": {
       "passed": false
     },
-    "HandParsedCards/LTC/DenethorStoneSeer/RoundTrip": {
+    "HandParsedCards/NEO/MindlinkMech/RoundTrip": {
       "passed": true
     },
-    "HandParsedCards/NEO/MindlinkMech/RoundTrip": {
+    "HandParsedCards/LTC/DenethorStoneSeer/RoundTrip": {
       "passed": true
     },
     "OracleLines/RoadOfReturn/Line1": {
@@ -63,6 +63,9 @@
     },
     "OracleLines/CLB/WilsonRefinedGrizzly/Line4": {
       "passed": false
+    },
+    "HandParsedCards/FDN/TheForetoldSoldier": {
+      "passed": true
     },
     "HandParsedCards/WHO/RoryWilliams": {
       "passed": false
@@ -307,11 +310,11 @@
     "OracleLines/KTK/ZurgoHelmsmasher/Line2": {
       "passed": true
     },
-    "HandParsedCards/M21/RookieMistake/RoundTrip": {
-      "passed": true
-    },
     "OracleLines/DMR/MysticRemora/Line1": {
       "passed": false
+    },
+    "HandParsedCards/M21/RookieMistake/RoundTrip": {
+      "passed": true
     },
     "OracleLines/2X2/ManaVault/Line1": {
       "passed": false
@@ -442,6 +445,9 @@
     "HandParsedCards/JMP/RhysticStudy": {
       "passed": false
     },
+    "HandParsedCards/FDN/TheForetoldSoldier/RoundTrip": {
+      "passed": true
+    },
     "HandParsedCards/NEO/MindlinkMech": {
       "passed": false
     },
@@ -465,6 +471,9 @@
     },
     "OracleLines/DMR/MysticRemora/Line2": {
       "passed": false
+    },
+    "OracleLines/FDN/TheForetoldSoldier/Line1": {
+      "passed": true
     },
     "HandParsedCards/SLD/DeadpoolTradingCard/RoundTrip": {
       "passed": true
