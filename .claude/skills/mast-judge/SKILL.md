@@ -1,6 +1,6 @@
 ---
 name: mast-judge
-description: Acts as an MTG rules judge over MagicAST work. Reads the merged output of a TDD batch (changed fixtures + new/modified AST nodes), cross-checks each item against the Comprehensive Rules (glossary.json + rules-structure.json), and renders per-item verdicts (CORRECT / CONCERN / BLOCKING). Invoked by the mast-tdd-loop orchestrator after sub-agents land their branches and before merging into main. Use when verifying a batch's rules-accuracy, spot-checking a fixture, or when the user references "judge", "rules accuracy", or "verify a batch".
+description: Acts as an MTG rules judge over MagicAST work. Reads the merged output of a TDD batch (changed fixtures + new/modified AST nodes), cross-checks each item against the Comprehensive Rules (glossary.json + rules-structure.json), and renders strict per-item PASS/FAIL verdicts. Any FAIL halts the loop. Invoked by the mast-tdd-loop orchestrator after sub-agents land their branches and before merging into main. Use when verifying a batch's rules-accuracy, spot-checking a fixture, or when the user references "judge", "rules accuracy", or "verify a batch".
 ---
 
 # MAST judge
@@ -19,7 +19,7 @@ Out of scope:
 
 - Structural critique of the AST family (that's the engine-lens audit's job — `docs/ast-engine-lens-audit.md`).
 - Engine semantics (layering, priority, stack ordering, target re-legality). MAST is descriptive — see memory item `feedback_mast_describes_not_executes`.
-- Parser correctness (that's the ratchet's job).
+- Parser correctness (that's vanilla NUnit's job — every test must be green to land the batch).
 - Code quality (that's code review's job).
 
 ## Data sources

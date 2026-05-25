@@ -1,6 +1,6 @@
 ---
 name: mast-tdd-loop
-description: Drives a TDD cycle for extending MagicAST (the Magic-the-Gathering oracle-text parser at libs/magic-ast/). Pick an unparseable card from triage, hand-parse the gold AST, run the ratchet to surface schema and parser gaps, then close each gap with a new AST node or parser rule. Use when extending MagicAST coverage, working on the MAST TDD loop, hand-parsing a card, adding a new AST node or ability/effect/cost type, adding an ability-kind parser, or when the user references issue #7, "mast-tdd-loop", "MAST round-trip", or "the MAST cycle".
+description: Drives a TDD cycle for extending MagicAST (the Magic-the-Gathering oracle-text parser at libs/magic-ast/). Pick an unparseable card from triage, hand-parse the gold AST, run the NUnit suite to surface schema and parser gaps, then close each gap with a new AST node or parser rule. Every test must be green to land a batch — no ratchet tolerance. Use when extending MagicAST coverage, working on the MAST TDD loop, hand-parsing a card, adding a new AST node or ability/effect/cost type, adding an ability-kind parser, or when the user references issue #7, "mast-tdd-loop", "MAST round-trip", or "the MAST cycle".
 ---
 
 # MAST TDD loop
@@ -8,13 +8,13 @@ description: Drives a TDD cycle for extending MagicAST (the Magic-the-Gathering 
 This skill drives one round of extending MagicAST. Each round:
 - starts at parser gaps surfaced by the triage report,
 - ends with new AST nodes and/or parser rules that close them,
-- preserves the ratchet (no regressions) and rolls the corpus-wide triage forward.
+- lands `nx run mast:test` at 100% green (vanilla NUnit; no ratchet tolerance) and rolls the corpus-wide triage forward.
 
 ## Roles
 
 The skill is read from two perspectives. Annotations on each step say which agent owns it.
 
-- **`[main]` — main agent (orchestrator).** Reads the triage report, batch-picks gaps, dispatches one sub-agent per gap via the `Agent` tool (each in its own worktree), then merges, validates, regenerates the glossary, and re-runs the triage flow after sub-agents complete. The main agent owns every cross-cutting artifact: the merged tree, the glossary, the baseline, the triage report.
+- **`[main]` — main agent (orchestrator).** Reads the triage report, batch-picks gaps, dispatches one sub-agent per gap via the `Agent` tool (each in its own worktree), then merges, validates, regenerates the glossary, and re-runs the triage flow after sub-agents complete. The main agent owns every cross-cutting artifact: the merged tree, the glossary, the judge briefings + verdicts, the triage report.
 - **`[sub]` — sub-agent (worker).** Receives one assigned `(pattern, candidate-line)` as input. Hand-parses, drives the red→red→green cycle on its own worktree, reports a minimal manifest back. Touches only the card's fixture file, the AST nodes it added, and the parser code it changed. Never regenerates the glossary, never re-runs triage, never sees other sub-agents' work.
 
 If you are invoked directly by the user (no orchestrator above you), wear both hats: do every step yourself in sequence, single-threaded.
@@ -32,7 +32,7 @@ Step 3-6 [sub] Hand-parse → Red #1 → Red #2 → green → manifest
 Step 7  Judge-pass-2 (mast-judge sub-agent) → docs/judgments/verdict-{date}.md
         - PROCEED → continue to Step 8
         - HALT (BLOCKING verdict) → do not merge, surface to human
-Step 8  Merge → ratchet → glossary → re-run triage → loop
+Step 8  Merge → NUnit (100% green required) → glossary → re-run triage → loop
 ```
 
 `[sub]` per-session:
@@ -157,9 +157,9 @@ This is the single most important rule of the loop. Get it wrong and the TDD dir
 
 **Card-scope choice.** If the assigned candidate-line lives on a card with multiple complex abilities you can't reasonably gold-model in this session, you have two options:
 1. **Pick a simpler card** containing the same pattern in cleaner isolation. The triage report's `candidateLines[]` is sorted by `cleanlinessScore`; scan deeper for a card where the target line dominates.
-2. **Gold-AST every ability on the card.** Yes, even ones unrelated to your assigned pattern. The per-line test (`OracleLines/{set}/{card}/Line{n}`) gives you a clean win signal for *your* line going green; the per-card `Parser_ProducesExpectedOutput` stays stable-red on the ratchet until siblings also get taught. That's the ratchet's job.
+2. **Gold-AST every ability on the card AND teach every parser surface needed to make all of them green.** The per-card `Parser_ProducesExpectedOutput` test must pass green for the batch to land — no ratchet tolerance. If the card has 5 abilities, the batch teaches the parser to produce all 5 correctly, or the fixture doesn't land.
 
-Prefer (1) when a simpler exemplar exists. Use (2) when the candidate is genuinely the cleanest one.
+Prefer (1) when a simpler exemplar exists. Use (2) when the candidate is genuinely the cleanest one — and accept the larger parser scope it implies.
 
 **File location and casing:**
 
@@ -253,13 +253,15 @@ Iterate until both `Output_RoundTrip_ProducesIdenticalJson` and `Parser_Produces
 
 ### Step 6 — `[sub]` Report back
 
-Confirm the local ratchet is green:
+Confirm the local NUnit suite is 100% green:
 
 ```bash
 nx run mast:test
 ```
 
-The ratchet listener will rewrite `tests/magic-ast-tests/test-baseline.json` with your worktree's results — **that's fine and expected**. The orchestrator regenerates the baseline once after merging the whole batch, so don't `git restore` your local baseline update or worry about its timestamp drift. Just commit alongside the rest of your work; if there's a merge conflict on the baseline, the orchestrator handles it.
+Vanilla NUnit doctrine: **every test must pass** for the batch to be eligible to merge. If your fixture's `Parser_ProducesExpectedOutput` test isn't green, the parser work isn't done. There is no baseline file, no stable-failure tolerance — see if you missed an ability, a discriminator, or a field shape.
+
+If the test passes, the diff dump at `/tmp/mast-diffs/{set}_{card}.expected.json` + `.actual.json` shouldn't exist (only failed tests dump diffs). If it does exist for your fixture, that's the diff you need to close.
 
 Commit on the assigned branch. Then emit this manifest as your closing message and stop:
 
@@ -322,8 +324,9 @@ for branch in {sub-agent branches}; do
   git merge --no-ff "$branch"
 done
 
-# 2) Confirm post-merge ratchet is green. Two sub-agents' edits can be
-# individually-green but jointly-red — this catches that.
+# 2) Confirm post-merge NUnit is 100% green. Two sub-agents' edits can be
+# individually-green but jointly-red — this catches that. No ratchet
+# tolerance: any test red after merge halts the batch.
 nx run mast:test
 
 # 3) Regenerate the glossary once for the merged tree.
@@ -385,11 +388,11 @@ Conditions:
 
   The whole point of the restructure was that one-card sessions shouldn't touch these. If you genuinely need to, that's a separate architectural ticket.
 - An MTG term in oracle text isn't in `glossary.json` (the parsed Comprehensive Rules glossary). Surface the gap. Don't guess at the meaning.
-- The ratchet baseline shows a **regression** (a previously-passing test now fails). Fix it before continuing the session.
+- The NUnit suite isn't 100% green at the end of your session. Either you didn't teach the parser to produce the gold (the normal case — keep working), or one of your changes regressed another fixture (read the diff dumps in `/tmp/mast-diffs/` for both).
 
 `[main]`-only conditions:
 
-- Post-merge ratchet (Step 8 substep 2) fails. Two sub-agents' edits conflict semantically even though each was green in isolation. Roll back the merges and either re-dispatch them serially or route to human.
+- Post-merge NUnit (Step 8 substep 2) isn't 100% green. Two sub-agents' edits conflict semantically even though each was green in isolation. Roll back the merges and either re-dispatch them serially or route to human.
 - Judge-pass-2 returns HALT (one or more BLOCKING verdicts). Do not merge. Surface the verdict report at `docs/judgments/verdict-{date}.md` to the human along with the offending sub-agent branches.
 - Two sub-agents in the same batch claim the same `AbilityKind` for a new parser, or the same discriminator string for a new AST node. Serialize: pick one to land first, then re-dispatch the other against the post-merge tree.
 - Post-batch triage rerun shows fewer total parsing successes than the pre-batch state. Roll back the merges and investigate.
@@ -408,7 +411,7 @@ Conditions:
 | Ability parsers | `libs/magic-ast/Parsing/Parsers/*.cs` |
 | Failure-pattern inference | `libs/magic-ast/Parsing/Parsers/FallbackParser.cs` |
 | Hand-parsed fixtures | `tests/magic-ast-tests/Data/HandParsedCards/{set}/*.json` |
-| Ratchet baseline | `tests/magic-ast-tests/test-baseline.json` |
+| Test diff dumps (on failure) | `/tmp/mast-diffs/{set}_{card}.expected.json` + `.actual.json` |
 | Test runner | `nx run mast:test` |
 | Triage runner | `nx run mast:run` |
 | Glossary regenerator | `nx run magic-ast:glossary` |
