@@ -51,7 +51,9 @@
           { "Kind": "generic", "GenericAmount": 4 }
         ],
         "ManaValue": 4
-      }
+      },
+      { "Kind": "colors", "Colors": [] },
+      { "Kind": "colorIdentity", "ColorIdentity": [] }
     ]
   }
 }
