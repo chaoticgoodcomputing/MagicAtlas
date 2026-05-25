@@ -1,0 +1,67 @@
+{
+  "Input": {
+    "Name": "Grand Melee",
+    "ManaCost": "{3}{R}",
+    "TypeLine": "Enchantment",
+    "OracleText": "All creatures attack each combat if able.\nAll creatures block each combat if able.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Grand Melee",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "All creatures attack each combat if able.\nAll creatures block each combat if able.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "mustAttack",
+            "Target": {
+              "Kind": "Each",
+              "Filter": {
+                "CardTypes": ["creature"]
+              }
+            }
+          }
+        },
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "mustBlock",
+            "Target": {
+              "Kind": "Each",
+              "Filter": {
+                "CardTypes": ["creature"]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}
