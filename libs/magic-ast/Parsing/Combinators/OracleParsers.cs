@@ -448,7 +448,7 @@ public static class OracleParsers
   /// <see cref="PartnerType.ChooseABackground"/>.
   /// </summary>
   public static readonly TokenListParser<OracleToken, StaticAbility> ChooseABackground = (
-    from choose in Keyword("Choose")
+    from choose in Token.EqualTo(OracleToken.Choose)
     from a in Keyword("a")
     from background in Keyword("Background")
     from reminder in _optionalReminder

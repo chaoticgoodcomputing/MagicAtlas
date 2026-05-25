@@ -105,7 +105,87 @@ public sealed class StaticAbilityParser : IAbilityParser
       return enchant;
     }
 
+    // "Ward {N}" / "Ward — [effect]" — emits a TriggeredAbility with
+    // KeywordSource="Ward", structured as the trigger Rule 702.21 expands to.
+    var ward = TryParseWardKeyword(clause);
+    if (ward != null)
+    {
+      return ward;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "Ward {N}" / "Ward {X}{Y}" — Rule 702.21 keyword. The reminder-text
+  /// expansion is canonically "Whenever this permanent becomes the target of
+  /// a spell or ability an opponent controls, counter it unless that player
+  /// pays [cost]." The parser emits that triggered shape directly with
+  /// KeywordSource="Ward" so the resulting node mirrors how the same trigger
+  /// would land if printed verbatim on a card.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseWardKeyword(OracleClause clause)
+  {
+    var match = Regex.Match(
+      clause.RawText,
+      @"^\s*Ward\s+(?<cost>(?:\{[^}]+\})+)\s*(?<rest>.*)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var costStr = match.Groups["cost"].Value;
+    MagicAST.AST.Costs.ManaCost? wardCost;
+    try
+    {
+      var parsed = new ManaCostParser().Parse(costStr);
+      if (parsed.Symbols.Count == 0)
+      {
+        return null;
+      }
+      wardCost = new MagicAST.AST.Costs.ManaCost { Symbols = parsed.Symbols };
+    }
+    catch
+    {
+      return null;
+    }
+
+    Parenthetical? reminder = null;
+    var rest = match.Groups["rest"].Value.Trim();
+    if (rest.StartsWith('(') && rest.EndsWith(')'))
+    {
+      reminder = new Parenthetical { Text = rest };
+    }
+
+    var trigger = new MagicAST.AST.Triggers.TriggerCondition
+    {
+      Timing = MagicAST.AST.Triggers.TriggerTiming.Whenever,
+      Event = MagicAST.AST.Triggers.TriggerEvent.BecomesTarget,
+      Filter = new ObjectFilter { Controller = ControllerFilter.Opponent },
+    };
+
+    var counterSpell = new MagicAST.AST.Effects.Control.CounterSpellEffect
+    {
+      Target = new ObjectReference { Kind = ObjectReferenceKind.It },
+      UnlessClause = new MagicAST.AST.Effects.UnlessClause
+      {
+        Player = new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
+        Cost = wardCost,
+      },
+    };
+
+    return
+    [
+      new MagicAST.AST.Abilities.TriggeredAbility
+      {
+        KeywordSource = "Ward",
+        Trigger = trigger,
+        Effects = [counterSpell],
+        Reminder = reminder,
+      },
+    ];
   }
 
   /// <summary>
