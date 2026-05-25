@@ -273,6 +273,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target [filter] attacks this turn if able." — spell-resolution single-target
+    // attack requirement (e.g., Boiling Blood). Dual of the block-requirement rule
+    // above: a one-shot imperative spell instruction with explicit duration, not the
+    // continuous static "[subject] attacks each combat if able" that lives on a
+    // permanent (Rule 508.1d).
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+\S.*?\s+attacks?\s+this\s+turn\s+if\s+able\.?\s*$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "This spell can't be countered." is a property of the resolving spell;
     // route it to the spell parser so the EffectType lands inside
     // SpellAbility.Effects rather than as a top-level static. Other
