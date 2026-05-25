@@ -1,0 +1,86 @@
+{
+  "Input": {
+    "Name": "Null Elemental Blast",
+    "ManaCost": "{C}",
+    "TypeLine": "Instant",
+    "OracleText": "Choose one —\n• Counter target multicolored spell.\n• Destroy target multicolored permanent.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Null Elemental Blast",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Choose one —\n• Counter target multicolored spell.\n• Destroy target multicolored permanent.",
+      "Abilities": [
+        {
+          "Kind": "modal",
+          "ModeSelection": {
+            "Minimum": 1,
+            "Maximum": 1
+          },
+          "Modes": [
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "counterSpell",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": ["spell"],
+                        "IsMulticolored": true
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "destroy",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": ["permanent"],
+                        "IsMulticolored": true
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "AllowDuplicates": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{C}",
+        "Symbols": [
+          { "Kind": "colorless" }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
