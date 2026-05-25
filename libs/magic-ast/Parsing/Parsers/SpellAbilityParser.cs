@@ -226,6 +226,12 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseMustBeBlockedTargetEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     return null;
   }
 
@@ -276,6 +282,38 @@ public sealed class SpellAbilityParser : IAbilityParser
       return null;
     }
     return new MustBlockEffect
+    {
+      Target = ObjectReference.Target(
+        new ObjectFilter { CardTypes = [m.Groups["type"].Value.ToLowerInvariant()] }
+      ),
+      Duration = new UntilEndOfTurnDuration(),
+    };
+  }
+
+  /// <summary>
+  /// "Target creature must be blocked this turn if able." — spell-resolution
+  /// single-target *block requirement on the attacker* (Irresistible Prey).
+  /// Rule 509.1c. Dual of <see cref="TryParseMustBlockTargetEffect"/>: that rule
+  /// compels the named creature to *do* the blocking; this rule compels the
+  /// defending player's other creatures to block the named creature. The
+  /// distinction matters because the AST node differs
+  /// (<see cref="MustBeBlockedEffect"/> vs <see cref="MustBlockEffect"/>).
+  /// Distinct from the static "[Self] must be blocked if able" recognizer in
+  /// StaticAbilityParser — that is a continuous ability on a permanent with no
+  /// duration; this is a one-shot spell instruction with explicit "this turn".
+  /// </summary>
+  private static MustBeBlockedEffect? TryParseMustBeBlockedTargetEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^Target\s+(?<type>creature)\s+must\s+be\s+blocked\s+this\s+turn\s+if\s+able$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    return new MustBeBlockedEffect
     {
       Target = ObjectReference.Target(
         new ObjectFilter { CardTypes = [m.Groups["type"].Value.ToLowerInvariant()] }
