@@ -1,27 +1,31 @@
-namespace MagicAST.AST.Effects.Modification;
+namespace MagicAST.AST.Effects.Keyword;
 
 using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
-using MagicAST.AST.Quantities;
-using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
 using MagicAST.AST.Effects.Traits;
 
 /// <summary>
-/// "[target] gains [ability]"
+/// Descriptive placeholder for "this is just the named keyword X" when the
+/// keyword's internal mechanics don't yet have their own structured Effect
+/// node. Carries only the keyword name — the keyword's semantics live in
+/// the comprehensive rules and are not described further here.
 /// </summary>
-[OracleEffect("gainAbility")]
-public sealed record GainAbilityEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+/// <remarks>
+/// This is a deliberate escape hatch, used most often inside
+/// <c>GainAbilityEffect.GainedAbility</c> when a granted keyword (e.g.
+/// "suspend", "morph") hasn't been promoted to a first-class effect type.
+/// Prefer a structured concrete Effect (Lifelink, Trample, …) when one
+/// exists; reach for this only when the modeled alternative is genuinely
+/// missing.
+/// </remarks>
+[OracleEffect("keywordReference")]
+public sealed record KeywordReferenceEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 {
-  public required ObjectReference Target { get; init; }
-
   /// <summary>
-  /// The ability that is gained, as a structured AST node.
-  /// Recursive: a granted ability is itself an <see cref="Ability"/> with its
-  /// own costs, effects, restrictions, etc. (Rule 113.6 / 113.10 — abilities
-  /// granted by an effect are still full-fledged abilities of the gainer.)
+  /// The keyword name as it appears in oracle text (lowercased).
   /// </summary>
-  public required Ability GainedAbility { get; init; }
+  public required string Keyword { get; init; }
 
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
   public bool IsOptional { get; init; }

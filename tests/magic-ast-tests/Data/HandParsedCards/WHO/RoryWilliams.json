@@ -70,7 +70,14 @@
             {
               "EffectType": "gainAbility",
               "Target": { "Kind": "It" },
-              "AbilityText": "suspend"
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Suspend",
+                "Effect": {
+                  "EffectType": "keywordReference",
+                  "Keyword": "suspend"
+                }
+              }
             },
             {
               "EffectType": "investigate"

@@ -7,6 +7,8 @@ using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Counter;
+using MagicAST.AST.Effects.Damage;
+using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.Effects.Resource;
 using MagicAST.AST.Quantities;
@@ -753,17 +755,58 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return null;
     }
 
-    var ability = match.Groups[1].Value;
+    var keyword = match.Groups[1].Value;
+    var gainedAbility = BuildGrantedKeywordAbility(keyword);
+    if (gainedAbility is null)
+    {
+      return null;
+    }
 
     return new GainAbilityEffect
     {
       Target = new ObjectReference
       {
-        Kind = ObjectReferenceKind.Target,
+        Kind = ObjectReferenceKind.Each,
         Filter = new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You },
       },
-      AbilityText = ability,
+      GainedAbility = gainedAbility,
     };
+  }
+
+  /// <summary>
+  /// Wraps a granted-keyword name into a structured <see cref="StaticAbility"/>
+  /// carrying the keyword's effect node. Returns null when the keyword has no
+  /// modeled effect yet — caller treats that as a parser miss.
+  /// </summary>
+  /// <remarks>
+  /// Granted keywords are descriptively "the gainer now has [keyword]", which
+  /// is a static keyword ability — same shape MAST already uses when the
+  /// keyword appears directly on a card (see Vito's lifelink, Rory's
+  /// first-strike, etc.). The discriminator stays consistent across direct vs.
+  /// granted appearances.
+  /// </remarks>
+  private static Ability? BuildGrantedKeywordAbility(string keywordRaw)
+  {
+    var keyword = keywordRaw.Trim().ToLowerInvariant();
+    Effect? effect = keyword switch
+    {
+      "lifelink" => new LifelinkEffect(),
+      "haste" => new HasteEffect(),
+      "trample" => new TrampleEffect(),
+      "vigilance" => new VigilanceEffect(),
+      "reach" => new ReachEffect(),
+      "indestructible" => new IndestructibleEffect(),
+      _ => null,
+    };
+
+    if (effect is null)
+    {
+      return null;
+    }
+
+    // Title-case the keyword for KeywordSource (matches direct-keyword ability convention).
+    var keywordSource = char.ToUpperInvariant(keyword[0]) + keyword[1..];
+    return new StaticAbility { Effect = effect, KeywordSource = keywordSource };
   }
 
   /// <summary>

@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-05-25T06:48:33.6997735Z",
+  "timestamp": "2026-05-25T07:06:01.0367206Z",
   "testResults": {
     "MalformedParsedCards/MixedValidAndInvalidAbilities": {
       "passed": false
     },
-    "HandParsedCards/LTC/DenethorStoneSeer/RoundTrip": {
+    "HandParsedCards/NEO/MindlinkMech/RoundTrip": {
       "passed": true
     },
-    "HandParsedCards/NEO/MindlinkMech/RoundTrip": {
+    "HandParsedCards/LTC/DenethorStoneSeer/RoundTrip": {
       "passed": true
     },
     "OracleLines/RoadOfReturn/Line1": {
@@ -30,6 +30,9 @@
     },
     "HandParsedCards/M21/Hobblefiend": {
       "passed": false
+    },
+    "HandParsedCards/FDN/FindThePath/RoundTrip": {
+      "passed": true
     },
     "HandParsedCards/M21/RookieMistake": {
       "passed": false
@@ -107,6 +110,9 @@
       "passed": false
     },
     "HandParsedCards/M21/VitoThornOfTheDuskRose/RoundTrip": {
+      "passed": true
+    },
+    "OracleLines/FDN/FindThePath/Line2": {
       "passed": true
     },
     "HandParsedCards/SLD/DeadpoolTradingCard": {
@@ -307,11 +313,14 @@
     "OracleLines/KTK/ZurgoHelmsmasher/Line2": {
       "passed": true
     },
-    "HandParsedCards/M21/RookieMistake/RoundTrip": {
-      "passed": true
+    "HandParsedCards/FDN/FindThePath": {
+      "passed": false
     },
     "OracleLines/DMR/MysticRemora/Line1": {
       "passed": false
+    },
+    "HandParsedCards/M21/RookieMistake/RoundTrip": {
+      "passed": true
     },
     "OracleLines/2X2/ManaVault/Line1": {
       "passed": false
@@ -381,6 +390,9 @@
     },
     "KeywordExpander/DoubleStrike_ExpandsToCombatDamageTimingBoth": {
       "passed": true
+    },
+    "OracleLines/FDN/FindThePath/Line1": {
+      "passed": false
     },
     "OracleLines/LTC/DenethorStoneSeer/Line1": {
       "passed": true

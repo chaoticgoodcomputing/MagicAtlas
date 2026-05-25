@@ -95,7 +95,13 @@
                   "Controller": "You"
                 }
               },
-              "AbilityText": "lifelink",
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Lifelink",
+                "Effect": {
+                  "EffectType": "lifelink"
+                }
+              },
               "Duration": {
                 "DurationType": "untilEndOfTurn"
               }
