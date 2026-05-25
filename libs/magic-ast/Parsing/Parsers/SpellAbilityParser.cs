@@ -148,6 +148,12 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseDestroyMonocoloredCreatureEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     effect = TryParseReturnFromGraveyardToHandEffect(trimmed);
     if (effect is not null)
     {
@@ -945,6 +951,51 @@ public sealed class SpellAbilityParser : IAbilityParser
       {
         Kind = ObjectReferenceKind.Target,
         Filter = new ObjectFilter { CardTypes = cardTypes },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Destroy target monocolored creature." — Ultimate Price. Sibling of
+  /// <see cref="TryParseExileMonocoloredPermanentEffect"/>: the "monocolored"
+  /// qualifier is a structural color-set predicate (Rule 105.3: "an object
+  /// with exactly one color"), surfaced on the dedicated
+  /// <see cref="ObjectFilter.IsMonocolored"/> axis rather than encoded as a
+  /// value inside <see cref="ObjectFilter.Colors"/> or as a free-text
+  /// characteristic.
+  /// </summary>
+  /// <remarks>
+  /// Kept distinct from <see cref="TryParseDestroyTargetSimpleEffect"/>: that
+  /// rule's type-token regex doesn't admit a "monocolored" qualifier, and
+  /// adding the predicate to a shared rule would muddy the filter contract.
+  /// Distinct from <see cref="TryParseDestroyTargetTypeDisjunctionEffect"/>:
+  /// disjunction surfaces a multi-element <c>CardTypes</c> list; this rule
+  /// keeps <c>CardTypes</c> single-element and adds the predicate axis.
+  /// </remarks>
+  private static MagicAST.AST.Effects.ZoneChange.DestroyEffect? TryParseDestroyMonocoloredCreatureEffect(
+    string text
+  )
+  {
+    if (
+      !Regex.IsMatch(
+        text,
+        @"^Destroy\s+target\s+monocolored\s+creature$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return null;
+    }
+    return new MagicAST.AST.Effects.ZoneChange.DestroyEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          IsMonocolored = true,
+        },
       },
     };
   }
