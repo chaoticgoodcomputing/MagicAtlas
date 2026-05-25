@@ -1,29 +1,16 @@
 using NUnit.Framework;
 
 /// <summary>
-/// Assembly-level SetUpFixture for running code after all tests complete.
-/// Must be public and outside of any namespace to apply to entire assembly.
+/// Assembly-level SetUpFixture. Kept as a stub for future assembly-wide
+/// setup; the ratchet-driven progress reporting that previously lived here
+/// has been removed in favour of vanilla NUnit pass/fail.
 /// </summary>
 [SetUpFixture]
 public class AssemblySetupFixture
 {
   [OneTimeSetUp]
-  public void RunBeforeAllTests()
-  {
-    TestContext.Progress.WriteLine("=== BEFORE ALL TESTS ===");
-  }
+  public void RunBeforeAllTests() { }
 
   [OneTimeTearDown]
-  public void RunAfterAllTests()
-  {
-    TestContext.Progress.WriteLine("=== AFTER ALL TESTS - STARTING SUMMARY ===");
-
-    // Print failure hotspots for parser migration work
-    var failureSummary = MagicAST.Tests.Infrastructure.FailureTracker.GetSummaryReport();
-    TestContext.Progress.WriteLine(failureSummary);
-
-    // Print ratchet test summary
-    MagicAST.Tests.Infrastructure.RatchetTestTracker.Instance.PrintSummaryAndSetExitCode();
-    TestContext.Progress.WriteLine("=== AFTER ALL TESTS - SUMMARY COMPLETE ===");
-  }
+  public void RunAfterAllTests() { }
 }

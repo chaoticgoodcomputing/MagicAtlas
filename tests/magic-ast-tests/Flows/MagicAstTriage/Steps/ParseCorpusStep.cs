@@ -10,8 +10,7 @@ namespace MagicAtlas.Ast.Tests.Flows.MagicAstTriage.Steps;
 /// <summary>
 /// Runs the MagicAST <see cref="OracleParser"/> over each card's oracle text,
 /// one newline-bounded line at a time. The unit of analysis is the oracle
-/// line — matching what <c>OracleLineTests</c> uses — so each line's
-/// diagnostic patterns can be aggregated independently.
+/// line so each line's diagnostic patterns can be aggregated independently.
 /// </summary>
 /// <remarks>
 /// Serial single-pass (Q4 = (a)) — measure first, parallelise if too slow.

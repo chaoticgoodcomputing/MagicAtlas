@@ -6,7 +6,7 @@
   "tags": ["type:test", "scope:magic-ast"],
   "targets": {
     "build": {
-      "//": "Build the consolidated MagicAST test harness (NUnit ratchet + Flowthru triage flow).",
+      "//": "Build the consolidated MagicAST test harness (NUnit tests + Flowthru triage flow).",
       "executor": "nx:run-commands",
       "options": {
         "commands": ["dotnet build"],
@@ -16,22 +16,12 @@
       "dependsOn": ["^build"]
     },
     "test": {
-      "//": "Run the MagicAST ratchet (NUnit). Stable failures are tolerated; regressions block.",
+      "//": "Run the MagicAST NUnit suite. Every test must pass green; no ratchet tolerance.",
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["bash scripts/run-ratchet-tests.sh"],
+        "commands": ["dotnet test"],
         "cwd": "tests/magic-ast-tests",
         "parallel": false
-      },
-      "configurations": {
-        "baseline": {
-          "//": "Accept the current state as the new baseline.",
-          "commands": ["UPDATE_BASELINE=true bash scripts/run-ratchet-tests.sh"]
-        },
-        "raw": {
-          "//": "Skip the ratchet listener; run dotnet test directly.",
-          "commands": ["dotnet test"]
-        }
       }
     },
     "run": {
