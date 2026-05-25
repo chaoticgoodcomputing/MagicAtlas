@@ -259,7 +259,13 @@ public sealed class SpellAbilityParser : IAbilityParser
   {
     var trimmed = text.Trim().TrimEnd('.').Trim();
 
-    Effect? effect = TryParseCounterTargetTypeOrSubtypeSpellEffect(trimmed);
+    Effect? effect = TryParsePutCountersTargetSubtypeDisjunctionEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParseCounterTargetTypeOrSubtypeSpellEffect(trimmed);
     if (effect is not null)
     {
       return effect;
@@ -1736,6 +1742,69 @@ public sealed class SpellAbilityParser : IAbilityParser
       }
     }
     return result;
+  }
+
+  /// <summary>
+  /// "Put N [counter type] counters on target [Subtype1] or [Subtype2] you control."
+  /// — Drill Too Deep's first modal option. Subtype-disjunction target (Rule 205.3:
+  /// subtype labels are case-sensitive proper nouns, preserved as written) with an
+  /// explicit <c>Controller=You</c> restriction. Count slot accepts the small-number
+  /// oracle vocabulary via <see cref="ParseSmallWord"/>; the counter-type token is
+  /// lowercased to match the gold convention (counter-type labels are common nouns).
+  /// </summary>
+  /// <remarks>
+  /// Distinct from the activated/triggered putCounters recognizers (which target
+  /// "self" or "target creature"): this rule's target carries a multi-element
+  /// <see cref="ObjectFilter.Subtypes"/> list — the existing disjunction convention
+  /// applied to the subtype axis rather than to <see cref="ObjectFilter.CardTypes"/>
+  /// (see <see cref="TryParseDestroyTargetTypeDisjunctionEffect"/>, which uses the
+  /// same convention on card-types). The "you control" tail lands on
+  /// <see cref="ObjectFilter.Controller"/> as a structural axis, matching the
+  /// convention in <see cref="TryParseReturnTargetToHandEffect"/>.
+  /// </remarks>
+  private static MagicAST.AST.Effects.Counter.PutCountersEffect? TryParsePutCountersTargetSubtypeDisjunctionEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^Put\s+(?<count>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counter>[a-z]+(?:[+\-]\d+/[+\-]\d+)?)\s+counters?\s+on\s+target\s+(?<s1>[A-Z][A-Za-z]+)\s+or\s+(?<s2>[A-Z][A-Za-z]+)(?:\s+you\s+control)?$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    // Require oracle-text capitalisation on the subtype tokens so this rule
+    // doesn't false-fire on card-type disjunctions ("artifact or land") which
+    // belong on CardTypes rather than Subtypes (Rule 205.3 vs 205.2).
+    var s1 = m.Groups["s1"].Value;
+    var s2 = m.Groups["s2"].Value;
+    if (!char.IsUpper(s1[0]) || !char.IsUpper(s2[0]))
+    {
+      return null;
+    }
+
+    var count = LiteralQuantity.Of(ParseSmallWord(m.Groups["count"].Value));
+    var controller = text.Contains("you control", StringComparison.OrdinalIgnoreCase)
+      ? ControllerFilter.You
+      : (ControllerFilter?)null;
+
+    return new MagicAST.AST.Effects.Counter.PutCountersEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          Subtypes = new List<string> { s1, s2 },
+          Controller = controller,
+        },
+      },
+      CounterType = m.Groups["counter"].Value.ToLowerInvariant(),
+      Count = count,
+    };
   }
 
   /// <summary>
