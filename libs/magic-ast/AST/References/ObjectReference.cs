@@ -1,6 +1,7 @@
 namespace MagicAST.AST.References;
 
 using System.Text.Json.Serialization;
+using MagicAST.AST.Quantities;
 
 /// <summary>
 /// A reference to an object in the game.
@@ -18,6 +19,15 @@ public sealed record ObjectReference
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectFilter? Filter { get; init; }
+
+  /// <summary>
+  /// Optional cardinality on the reference itself — used for "up to N target",
+  /// "N target", "any number of target" phrasings. When null, the reference is
+  /// singular (the default for Target/Self/It). Distinct from <see cref="Filter"/>,
+  /// which describes *which* objects qualify; this describes *how many* are chosen.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Quantity? Quantity { get; init; }
 
   // Factory methods
   public static ObjectReference Self() => new() { Kind = ObjectReferenceKind.Self };
