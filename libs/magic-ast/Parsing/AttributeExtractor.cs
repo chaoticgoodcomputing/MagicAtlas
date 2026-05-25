@@ -29,7 +29,14 @@ public sealed partial class AttributeExtractor
         {
           Raw = input.ManaCost,
           Symbols = parsedCost.Symbols,
-          ManaValue = parsedCost.ManaValue > 0 ? parsedCost.ManaValue : null,
+          // Variable mana costs (containing {X}/{Y}/{Z}) have no determinate
+          // mana value outside the stack — the X portion is undefined until
+          // the spell is cast (Rule 107.3). Surface IsVariable as the
+          // canonical signal and suppress the partial-literal ManaValue so
+          // downstream consumers don't treat it as the spell's total cost.
+          ManaValue = parsedCost.IsVariable
+            ? null
+            : (parsedCost.ManaValue > 0 ? parsedCost.ManaValue : null),
           IsVariable = parsedCost.IsVariable,
         }
       );
@@ -94,7 +101,14 @@ public sealed partial class AttributeExtractor
         {
           Raw = face.ManaCost,
           Symbols = parsedCost.Symbols,
-          ManaValue = parsedCost.ManaValue > 0 ? parsedCost.ManaValue : null,
+          // Variable mana costs (containing {X}/{Y}/{Z}) have no determinate
+          // mana value outside the stack — the X portion is undefined until
+          // the spell is cast (Rule 107.3). Surface IsVariable as the
+          // canonical signal and suppress the partial-literal ManaValue so
+          // downstream consumers don't treat it as the spell's total cost.
+          ManaValue = parsedCost.IsVariable
+            ? null
+            : (parsedCost.ManaValue > 0 ? parsedCost.ManaValue : null),
           IsVariable = parsedCost.IsVariable,
         }
       );
