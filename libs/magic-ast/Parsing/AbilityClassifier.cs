@@ -270,6 +270,25 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "You gain/lose N life." / "You draw N cards." — spell-resolution
+    // player-resource instructions whose subject ("You") is the player rather
+    // than an imperative verb. The bare-verb <see cref="_spellInstructionVerbs"/>
+    // dispatch doesn't catch these because the clause opens with "You";
+    // recognise the narrow "You <resource-verb> …" prefix here so modal option
+    // bodies like Recuperate's "You gain 6 life." resolve as spell effects
+    // rather than defaulting to a mis-tagged static. Tight allowlist of
+    // resource verbs (gain/lose life, draw/discard cards) keeps the route
+    // from swallowing declarative "You can't …" statics.
+    if (StartsWithYouResourceInstruction(clause.RawText))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.80,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Target [filter] blocks this turn if able." — spell-resolution single-target
     // block requirement (e.g., Culling Mark). The static "[subject] blocks each
     // combat if able" recognizer in StaticAbilityParser is the wrong route: this
@@ -477,6 +496,22 @@ public sealed class AbilityClassifier
   }
 
   /// <summary>
+  /// Recognises "You <resource-verb> …" clauses — spell-resolution player-action
+  /// instructions whose subject is the player rather than an imperative verb.
+  /// Allowlist: gain/lose life, draw/discard cards. Kept narrow on purpose so
+  /// declarative "You can't …" / "You may not …" lines stay on the static path.
+  /// </summary>
+  private static bool StartsWithYouResourceInstruction(string rawText)
+  {
+    var trimmed = rawText.TrimStart('•', '•', ' ', '\t');
+    return Regex.IsMatch(
+      trimmed,
+      @"^You\s+(gain|lose|draw|discard)\s+",
+      RegexOptions.IgnoreCase
+    );
+  }
+
+  /// <summary>
   /// Recognises clauses of the shape "[AbilityWord] — If <condition>,
   /// <spell-verb> …" — the ability-word conditional spell-effect pattern
   /// (e.g. Spell Snuff's Fateful hour line). The em-dash separates the
@@ -534,6 +569,7 @@ public sealed class AbilityClassifier
     "Put",
     "Tap",
     "Untap",
+    "Prevent",
   ];
 
   /// <summary>

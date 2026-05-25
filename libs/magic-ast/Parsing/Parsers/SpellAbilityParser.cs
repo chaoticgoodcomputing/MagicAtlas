@@ -326,7 +326,98 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseGainLifeSpellEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
+    effect = TryParsePreventDamageThisTurnEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "You gain N life." — spell-resolution life-gain (Recuperate's first modal
+  /// option). The "N" slot accepts literals (digit or number word) and the
+  /// X/Y/Z variable cost references — mirrors the count vocabulary used by
+  /// <see cref="TryParseDrawCardsSimpleEffect"/> and the activated-ability
+  /// counterpart in <see cref="ActivatedAbilityParser"/>. Anchored at the
+  /// clause start so it doesn't false-fire on triggered "When … you gain N
+  /// life" lines (those route through the triggered parser).
+  /// </summary>
+  private static MagicAST.AST.Effects.Resource.GainLifeEffect? TryParseGainLifeSpellEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^You\s+gain\s+(?<amount>X|Y|Z|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var amountText = m.Groups["amount"].Value;
+    Quantity amount;
+    var amountLower = amountText.ToLowerInvariant();
+    if (amountLower is "x" or "y" or "z")
+    {
+      amount = new VariableQuantity { Name = amountLower.ToUpperInvariant() };
+    }
+    else
+    {
+      amount = LiteralQuantity.Of(ParseSmallWord(amountText));
+    }
+
+    return new MagicAST.AST.Effects.Resource.GainLifeEffect
+    {
+      Amount = amount,
+      Player = ObjectReference.You(),
+    };
+  }
+
+  /// <summary>
+  /// "Prevent the next N damage that would be dealt to target [type] this turn."
+  /// — Recuperate's second modal option. A one-shot damage-prevention
+  /// instruction (Rule 615.1) with three structural slots on
+  /// <see cref="MagicAST.AST.Effects.Damage.PreventDamageEffect"/>:
+  /// the <see cref="MagicAST.AST.Effects.Damage.PreventDamageEffect.Amount"/>
+  /// shield (literal N), the <see cref="MagicAST.AST.Effects.Damage.PreventDamageEffect.Target"/>
+  /// recipient (single-type creature filter), and the
+  /// <see cref="MagicAST.AST.Effects.Damage.PreventDamageEffect.Duration"/>
+  /// scope (until end of turn, from "this turn"). The "next" qualifier is
+  /// implicit in the shield semantics and carries no separate axis.
+  /// </summary>
+  private static MagicAST.AST.Effects.Damage.PreventDamageEffect? TryParsePreventDamageThisTurnEffect(
+    string text
+  )
+  {
+    var m = Regex.Match(
+      text,
+      @"^Prevent\s+the\s+next\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+damage\s+that\s+would\s+be\s+dealt\s+to\s+target\s+(?<type>creature|planeswalker|player)\s+this\s+turn$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var amount = LiteralQuantity.Of(ParseSmallWord(m.Groups["amount"].Value));
+    return new MagicAST.AST.Effects.Damage.PreventDamageEffect
+    {
+      Amount = amount,
+      Target = ObjectReference.Target(
+        new ObjectFilter { CardTypes = [m.Groups["type"].Value.ToLowerInvariant()] }
+      ),
+      Duration = new UntilEndOfTurnDuration(),
+    };
   }
 
   /// <summary>
