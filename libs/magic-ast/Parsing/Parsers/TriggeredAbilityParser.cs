@@ -152,7 +152,33 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       Trigger = trigger,
       InterveningIf = interveningIf,
       Effects = effects,
+      Instructions = ExtractInstructions(effectPart, effects),
     };
+  }
+
+  /// <summary>
+  /// Returns the "you may pay {X}" instruction list when the effect-half
+  /// starts with that phrasing and the parsed effects include the
+  /// "If you do, ..." follow-up flagged as optional. The Instruction text
+  /// is the bare "you may pay {X}" fragment (without the period or follow-up
+  /// clause), matching the gold convention for Mana-Vault-style upkeep
+  /// triggers.
+  /// </summary>
+  private static IReadOnlyList<string>? ExtractInstructions(
+    string effectPart,
+    IReadOnlyList<Effect> effects
+  )
+  {
+    var match = Regex.Match(
+      effectPart,
+      @"^(?<instr>you\s+may\s+pay\s+(?:\{[^}]+\})+)\.\s*If\s+you\s+do,",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    return new List<string> { match.Groups["instr"].Value.Trim() };
   }
 
   /// <summary>
@@ -902,7 +928,46 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return new List<Effect> { loseLife };
     }
 
+    var dealDamage = TryParseSelfDealsDamageToYouEffect(trimmed);
+    if (dealDamage != null)
+    {
+      return new List<Effect> { dealDamage };
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "it deals N damage to you" / "this creature deals N damage to you" —
+  /// reflexive damage from the source permanent back to its controller.
+  /// </summary>
+  private static MagicAST.AST.Effects.Damage.DealDamageEffect? TryParseSelfDealsDamageToYouEffect(
+    string effectText
+  )
+  {
+    var m = Regex.Match(
+      effectText,
+      @"^(it|this\s+(?:creature|permanent|artifact|enchantment))\s+deals?\s+(?<amount>\d+|one|two|three)\s+damage\s+to\s+you$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    var raw = m.Groups["amount"].Value.ToLowerInvariant();
+    int amount = raw switch
+    {
+      "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      _ => int.Parse(raw),
+    };
+    return new MagicAST.AST.Effects.Damage.DealDamageEffect
+    {
+      Amount = LiteralQuantity.Of(amount),
+      Source = ObjectReference.Self(),
+      Target = ObjectReference.You(),
+    };
   }
 
   /// <summary>
@@ -1017,19 +1082,23 @@ public sealed class TriggeredAbilityParser : IAbilityParser
 
   /// <summary>
   /// "untap this artifact" / "untap it" / "untap this permanent" — Self-targeting untap.
-  /// Pattern often appears inside "If you do, untap this artifact." which is parsed
-  /// as the IfYouDo branch of an optional pay effect on cards like Mana Vault.
+  /// Recognises the "you may pay {X}. If you do, untap ..." gating shape too,
+  /// flagging the produced effect as <c>IsOptional=true</c> since the controller
+  /// chooses whether to pay (matches Mana Vault's gold).
   /// </summary>
   private static UntapEffect? TryParseUntapSelfEffect(string effectText)
   {
     var lower = effectText.ToLowerInvariant();
-    // Optional "if you do" prefix is treated as part of the effect's optionality
-    // on the parent — here we just need to recognise the untap-self shape.
     if (!Regex.IsMatch(lower, @"untap\s+(this|it)\b"))
     {
       return null;
     }
-    return new UntapEffect { Target = ObjectReference.Self() };
+    var isOptional = Regex.IsMatch(
+      lower,
+      @"you\s+may\s+pay\s+\{[^}]+\}",
+      RegexOptions.IgnoreCase
+    );
+    return new UntapEffect { Target = ObjectReference.Self(), IsOptional = isOptional };
   }
 
   /// <summary>
