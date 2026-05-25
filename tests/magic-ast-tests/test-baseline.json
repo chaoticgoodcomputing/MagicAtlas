@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-05-25T07:04:25.3572728Z",
+  "timestamp": "2026-05-25T07:07:29.1545604Z",
   "testResults": {
     "MalformedParsedCards/MixedValidAndInvalidAbilities": {
       "passed": false
     },
-    "HandParsedCards/LTC/DenethorStoneSeer/RoundTrip": {
+    "HandParsedCards/NEO/MindlinkMech/RoundTrip": {
       "passed": true
     },
-    "HandParsedCards/NEO/MindlinkMech/RoundTrip": {
+    "HandParsedCards/LTC/DenethorStoneSeer/RoundTrip": {
       "passed": true
     },
     "OracleLines/RoadOfReturn/Line1": {
@@ -310,11 +310,11 @@
     "OracleLines/KTK/ZurgoHelmsmasher/Line2": {
       "passed": true
     },
-    "HandParsedCards/M21/RookieMistake/RoundTrip": {
-      "passed": true
-    },
     "OracleLines/DMR/MysticRemora/Line1": {
       "passed": false
+    },
+    "HandParsedCards/M21/RookieMistake/RoundTrip": {
+      "passed": true
     },
     "OracleLines/2X2/ManaVault/Line1": {
       "passed": false
