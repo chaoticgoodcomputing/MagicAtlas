@@ -838,6 +838,16 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return null;
     }
 
+    Duration? duration = null;
+    if (lower.Contains("until end of turn"))
+    {
+      duration = new UntilEndOfTurnDuration();
+    }
+    else if (lower.Contains("until your next turn"))
+    {
+      duration = new UntilYourNextTurnDuration();
+    }
+
     return new GainAbilityEffect
     {
       Target = new ObjectReference
@@ -846,6 +856,7 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
         Filter = new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You },
       },
       GainedAbility = gainedAbility,
+      Duration = duration,
     };
   }
 

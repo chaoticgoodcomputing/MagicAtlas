@@ -821,6 +821,14 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return loseGainLifeWhereX;
     }
 
+    // "each player draws a card and loses 1 life" / "each player draws N cards
+    // and loses N life" — Stormfist Crusader's symmetric upkeep effect.
+    var drawAndLose = TryParseEachPlayerDrawAndLoseLife(trimmed);
+    if (drawAndLose is not null)
+    {
+      return drawAndLose;
+    }
+
     // Try different effect types
     var effect = TryParseCreateTokenEffect(trimmed);
     if (effect != null)
@@ -1090,6 +1098,47 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         Kind = ObjectReferenceKind.Target,
         Filter = new ObjectFilter { CardTypes = ["player"] },
       },
+    };
+  }
+
+  /// <summary>
+  /// Stormfist-style composite: "each player draws a card and loses N life."
+  /// Returns the gold's flat two-element list (drawCards, loseLife) so the
+  /// trigger's Effects field carries both side-effects, with EachPlayer as
+  /// the subject for both.
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseEachPlayerDrawAndLoseLife(string effectText)
+  {
+    var match = Regex.Match(
+      effectText,
+      @"^each\s+player\s+draws\s+(?<draw>a|one|two|three|\d+)\s+cards?\s+and\s+loses\s+(?<life>\d+|one|two|three)\s+life$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    var drawRaw = match.Groups["draw"].Value.ToLowerInvariant();
+    var lifeRaw = match.Groups["life"].Value.ToLowerInvariant();
+    int drawCount = drawRaw switch
+    {
+      "a" or "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      _ => int.Parse(drawRaw),
+    };
+    int lifeCount = lifeRaw switch
+    {
+      "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      _ => int.Parse(lifeRaw),
+    };
+    var eachPlayer = new ObjectReference { Kind = ObjectReferenceKind.EachPlayer };
+    return new List<Effect>
+    {
+      new DrawCardsEffect { Count = LiteralQuantity.Of(drawCount), Player = eachPlayer },
+      new LoseLifeEffect { Amount = LiteralQuantity.Of(lifeCount), Player = eachPlayer },
     };
   }
 
