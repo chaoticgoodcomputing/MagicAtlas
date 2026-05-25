@@ -175,6 +175,15 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   /// </summary>
   private List<Effect>? ParseEffects(string effectPart)
   {
+    // First, try multi-sentence dispatch: "X. Y." where each sentence is a
+    // distinct effect. Recombine the parsed list when both sentences parse
+    // successfully; fall through to the single-effect path otherwise.
+    var multi = TryParseMultiEffectSentences(effectPart);
+    if (multi is not null)
+    {
+      return multi;
+    }
+
     // Try different effect types in sequence
 
     // Add mana
@@ -240,9 +249,132 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return new List<Effect> { gainLifeEffect };
     }
 
+    // Denethor's two-effect tail: "Target player becomes the monarch."
+    // / "Denethor deals 3 damage to any target." — recognised when the
+    // surrounding multi-sentence dispatch reaches a single sentence.
+    var becomeMonarch = TryParseBecomeMonarchEffect(effectPart);
+    if (becomeMonarch != null)
+    {
+      return new List<Effect> { becomeMonarch };
+    }
+
+    var selfDealsDamage = TryParseSelfDealsDamageToAnyTargetEffect(effectPart);
+    if (selfDealsDamage != null)
+    {
+      return new List<Effect> { selfDealsDamage };
+    }
+
     // For now, we can't parse other effect types
     // Return null to signal that we need to fall back to unparsed
     return null;
+  }
+
+  /// <summary>
+  /// Splits an effect half on sentence boundaries (". ") and parses each
+  /// sentence via <see cref="ParseEffects(string)"/> recursively. Returns
+  /// the concatenated effects when every sentence parses, otherwise null
+  /// so the caller falls back to the single-effect path.
+  /// </summary>
+  private List<Effect>? TryParseMultiEffectSentences(string effectPart)
+  {
+    // Quick reject for single-sentence inputs to avoid infinite recursion on
+    // the head-sentence path that the recursive ParseEffects call retreads.
+    var trimmed = effectPart.Trim().TrimEnd('.').Trim();
+    var pieces = Regex.Split(trimmed, @"\.\s+");
+    if (pieces.Length < 2)
+    {
+      return null;
+    }
+
+    var combined = new List<Effect>();
+    foreach (var piece in pieces)
+    {
+      var sentence = piece.Trim();
+      if (sentence.Length == 0)
+      {
+        continue;
+      }
+      var parsed = ParseEffects(sentence + ".");
+      if (parsed is null || parsed.Count == 0)
+      {
+        return null;
+      }
+      combined.AddRange(parsed);
+    }
+    return combined.Count > 0 ? combined : null;
+  }
+
+  /// <summary>
+  /// "Target player becomes the monarch." — Rule 716 monarch designation
+  /// granted to a chosen player.
+  /// </summary>
+  private static MagicAST.AST.Effects.Timing.BecomeMonarchEffect? TryParseBecomeMonarchEffect(
+    string effectText
+  )
+  {
+    var trimmed = effectText.Trim().TrimEnd('.').Trim();
+    if (
+      !Regex.IsMatch(
+        trimmed,
+        @"^Target\s+player\s+becomes\s+the\s+monarch$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return null;
+    }
+    return new MagicAST.AST.Effects.Timing.BecomeMonarchEffect
+    {
+      Player = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = ["player"] },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "[Self] deals N damage to any target." — self-as-source dealDamage with
+  /// AnyTarget. Captures Denethor's burn tail; works for any card whose
+  /// oracle line references itself by name in the source position.
+  /// </summary>
+  private static MagicAST.AST.Effects.Damage.DealDamageEffect? TryParseSelfDealsDamageToAnyTargetEffect(
+    string effectText
+  )
+  {
+    var trimmed = effectText.Trim().TrimEnd('.').Trim();
+    var m = Regex.Match(
+      trimmed,
+      @"^(?<subject>\S.*?)\s+deals?\s+(?<amount>\d+|one|two|three|four|five)\s+damage\s+to\s+any\s+target$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    // The subject is the card's own name (capitalised); detect via leading
+    // capital + ASCII-letter-only word chars to avoid matching pronouns.
+    var subject = m.Groups["subject"].Value;
+    if (subject.Length == 0 || !char.IsUpper(subject[0]))
+    {
+      return null;
+    }
+    var raw = m.Groups["amount"].Value.ToLowerInvariant();
+    int amount = raw switch
+    {
+      "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      "four" => 4,
+      "five" => 5,
+      _ => int.Parse(raw),
+    };
+    return new MagicAST.AST.Effects.Damage.DealDamageEffect
+    {
+      Amount = LiteralQuantity.Of(amount),
+      Source = ObjectReference.Self(),
+      Target = new ObjectReference { Kind = ObjectReferenceKind.AnyTarget },
+    };
   }
 
   /// <summary>
@@ -618,13 +750,25 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       );
       if (match.Success)
       {
-        var type = match.Groups[1].Value.ToLowerInvariant();
+        var typeRaw = match.Groups[1].Value;
+        var type = typeRaw.ToLowerInvariant();
         // Handle plurals (e.g., "Squirrels" -> "Squirrel")
         if (type.EndsWith("s") && type != "this")
         {
           type = type[..^1];
         }
-        filter = new ObjectFilter { Subtypes = [type] };
+        // Capitalized self-reference (e.g., "Sacrifice Denethor") — the card
+        // refers to itself by name. Encode as a "this permanent" self-reference
+        // on Characteristics rather than a literal Subtypes entry, matching
+        // the gold convention for self-by-name cost references.
+        if (char.IsUpper(typeRaw[0]))
+        {
+          filter = new ObjectFilter { Characteristics = ["this permanent"] };
+        }
+        else
+        {
+          filter = new ObjectFilter { Subtypes = [type] };
+        }
       }
     }
 
