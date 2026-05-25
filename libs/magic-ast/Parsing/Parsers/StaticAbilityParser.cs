@@ -156,7 +156,99 @@ public sealed class StaticAbilityParser : IAbilityParser
       return legendRuleSuppression;
     }
 
+    // "If you would draw a card, draw [N] cards instead." — Rule 121 (drawing)
+    // + Rule 614 (replacement effects). Pure substitution: the original draw
+    // does not occur; the replacement draw of N cards happens in its place
+    // (Thought Reflection shape).
+    var drawReplacement = TryParseDrawReplacement(clause);
+    if (drawReplacement != null)
+    {
+      return drawReplacement;
+    }
+
     return null;
+  }
+
+  /// <summary>
+  /// "If you would draw a card, draw [N] cards instead." — Rule 614 pure
+  /// replacement of a card-draw event. The leading "a card" is the elided
+  /// singular: <see cref="MagicAST.AST.Effects.Replacement.DrawCardEvent.Count"/>
+  /// is left unset (its xml-doc declares one as the default), so we do not
+  /// emit a literal 1 on the event. The replacement side does carry an
+  /// explicit count, matched either as a digit or a small number-word
+  /// ("two", "three", ...).
+  /// </summary>
+  /// <remarks>
+  /// <see cref="MagicAST.AST.Effects.Replacement.ReplacementEffect.OriginalEventOccurs"/>
+  /// stays <c>false</c>: the gold for Thought Reflection treats this as a
+  /// substitution, not an augmentation (cf. Chatterfang-style "in addition").
+  /// </remarks>
+  private static IReadOnlyList<Ability>? TryParseDrawReplacement(OracleClause clause)
+  {
+    var match = _drawReplacementPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var countText = match.Groups["count"].Value.ToLowerInvariant();
+    if (!TryParseSmallCount(countText, out var count))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Replacement.ReplacementEffect
+        {
+          Event = new MagicAST.AST.Effects.Replacement.DrawCardEvent
+          {
+            Player = ObjectReference.You(),
+          },
+          OriginalEventOccurs = false,
+          Replacement = new MagicAST.AST.Effects.CardFlow.DrawCardsEffect
+          {
+            Count = MagicAST.AST.Quantities.LiteralQuantity.Of(count),
+            Player = ObjectReference.You(),
+          },
+        },
+      },
+    ];
+  }
+
+  private static readonly Regex _drawReplacementPattern = new(
+    @"^\s*If\s+you\s+would\s+draw\s+a\s+card,\s+draw\s+(?<count>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+cards?\s+instead\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// Maps a small-count token (digit or number-word "one".."ten") onto an
+  /// integer. Returns false for anything outside that vocabulary so callers
+  /// can fall through to the fallback path.
+  /// </summary>
+  private static bool TryParseSmallCount(string token, out int value)
+  {
+    if (int.TryParse(token, out value))
+    {
+      return true;
+    }
+    value = token switch
+    {
+      "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      "four" => 4,
+      "five" => 5,
+      "six" => 6,
+      "seven" => 7,
+      "eight" => 8,
+      "nine" => 9,
+      "ten" => 10,
+      _ => 0,
+    };
+    return value > 0;
   }
 
   /// <summary>
