@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Garbled Goblin",
     "ManaCost": "{1}{R}",
-    "TypeLine": "Creature \u2014 Goblin",
+    "TypeLine": "Creature — Goblin",
     "OracleText": "Xyzzy plugh and also qwertyuiop forever.",
     "Power": "2",
     "Toughness": "1",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Garbled Goblin",
     "TypeLine": {
-      "Raw": "Creature \u2014 Goblin",
+      "Raw": "Creature — Goblin",
       "Types": [
         "Creature"
       ],
@@ -31,20 +31,21 @@
           "Kind": "unparsed",
           "SourceSpan": {
             "Start": 0,
-            "Length": 41,
-            "End": 41
+            "Length": 40,
+            "End": 40
           },
           "RawText": "Xyzzy plugh and also qwertyuiop forever.",
           "Diagnostics": [
             {
               "Severity": "error",
-              "Message": "Unrecognized ability text",
+              "Message": "Static ability parser not yet implemented",
               "Location": {
                 "Start": 0,
-                "Length": 41,
-                "End": 41
+                "Length": 40,
+                "End": 40
               },
-              "Pattern": "UnknownAbility"
+              "RawText": "Xyzzy plugh and also qwertyuiop forever.",
+              "Pattern": "AmbiguousStructure"
             }
           ]
         }

@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Partially Parsed Paladin",
     "ManaCost": "{2}{W}{W}",
-    "TypeLine": "Creature \u2014 Human Knight",
+    "TypeLine": "Creature — Human Knight",
     "OracleText": "Flying\n@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
     "Power": "3",
     "Toughness": "3",
@@ -11,12 +11,15 @@
     ],
     "ColorIdentity": [
       "W"
+    ],
+    "Keywords": [
+      "Flying"
     ]
   },
   "Output": {
     "Name": "Partially Parsed Paladin",
     "TypeLine": {
-      "Raw": "Creature \u2014 Human Knight",
+      "Raw": "Creature — Human Knight",
       "Types": [
         "Creature"
       ],
@@ -41,8 +44,7 @@
                 "flying",
                 "reach"
               ]
-            },
-            "IsOptional": false
+            }
           }
         },
         {
@@ -56,13 +58,14 @@
           "Diagnostics": [
             {
               "Severity": "error",
-              "Message": "Unrecognized ability text",
+              "Message": "Failed to parse Unparsed ability",
               "Location": {
                 "Start": 7,
                 "Length": 47,
                 "End": 54
               },
-              "Pattern": "UnknownAbility"
+              "RawText": "@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
+              "Pattern": "UnparsedUnparsed"
             }
           ]
         }
@@ -90,8 +93,7 @@
             ]
           }
         ],
-        "ManaValue": 4,
-        "IsVariable": false
+        "ManaValue": 4
       },
       {
         "Kind": "colors",
