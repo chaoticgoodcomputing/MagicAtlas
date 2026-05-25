@@ -187,6 +187,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return cantBeCast;
     }
 
+    // "Other [Subtype] creatures you control get +N/+N." — tribal-lord
+    // anthem (Sachi, Daughter of Seshiro). Same shape as the Aura anthem
+    // above (no Duration; persists while the source is on the battlefield,
+    // Rule 604.3), but targets an Each-reference filtered by subtype +
+    // controller + an "other" characteristic instead of EnchantedOrEquipped.
+    var tribalAnthemPT = TryParseTribalAnthemModifyPT(clause);
+    if (tribalAnthemPT != null)
+    {
+      return tribalAnthemPT;
+    }
+
     return null;
   }
 
@@ -302,6 +313,67 @@ public sealed class StaticAbilityParser : IAbilityParser
   private static readonly Regex _anthemModifyPTPattern = new(
     @"^\s*Enchanted\s+creature\s+gets\s+\+(?<p>\d+)/\+(?<t>\d+)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "Other [Subtype] creatures you control get +N/+N." — tribal-lord
+  /// anthem (Sachi). Emits the same <see cref="ModifyPTEffect"/> shape as
+  /// the Aura anthem, but with an <see cref="ObjectReferenceKind.Each"/>
+  /// target filtered by subtype + controller + an explicit "other"
+  /// characteristic. The "Other" qualifier rides on
+  /// <see cref="ObjectFilter.Characteristics"/> (matching how
+  /// <c>ActivatedAbilityParser</c> encodes "another", and how
+  /// <c>TriggeredAbilityParser</c>'s Barrin shape encodes "other"): an
+  /// extrinsic exclusion of the source rather than a synthetic subtype.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseTribalAnthemModifyPT(OracleClause clause)
+  {
+    var match = _tribalAnthemModifyPTPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var subtype = match.Groups["sub"].Value;
+    var ctrl = match.Groups["ctrl"].Value.ToLowerInvariant();
+    var controller = ctrl.StartsWith("you")
+      ? ControllerFilter.You
+      : ControllerFilter.Opponent;
+    var power = int.Parse(match.Groups["p"].Value);
+    var toughness = int.Parse(match.Groups["t"].Value);
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new ModifyPTEffect
+        {
+          Target = new ObjectReference
+          {
+            Kind = ObjectReferenceKind.Each,
+            Filter = new ObjectFilter
+            {
+              CardTypes = ["creature"],
+              Subtypes = [subtype],
+              Controller = controller,
+              Characteristics = ["other"],
+            },
+          },
+          PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
+          ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
+        },
+      },
+    ];
+  }
+
+  // Capitalised subtype (oracle text capitalises creature subtypes), followed by
+  // "creatures" (lowercase plural card-type noun) and a controller clause. The
+  // leading "Other " is what distinguishes this from the would-be inclusive
+  // tribal anthem; without it the source itself would be in the filter and the
+  // shape would need a different gold (no card hits that yet).
+  private static readonly Regex _tribalAnthemModifyPTPattern = new(
+    @"^\s*Other\s+(?<sub>[A-Z][a-z]+)\s+creatures\s+(?<ctrl>you\s+control|an\s+opponent\s+controls)\s+get\s+\+(?<p>\d+)/\+(?<t>\d+)\.?\s*$",
+    RegexOptions.Compiled
   );
 
   /// <summary>
@@ -1034,6 +1106,36 @@ public sealed class StaticAbilityParser : IAbilityParser
         Filter = new ObjectFilter
         {
           CardTypes = [singular],
+          Controller = controller,
+        },
+      };
+    }
+
+    // "Shamans you control" / "Goblins an opponent controls" — controller-scoped
+    // tribal grant (Sachi, Daughter of Seshiro). Distinguished from the
+    // card-type branch above by a capitalised subtype-plural noun, and from the
+    // global "All [Subtype]s" branch below by the trailing controller clause —
+    // the controller scope is what's load-bearing for this shape, and we
+    // surface it onto ObjectFilter.Controller. No CardTypes is emitted: the
+    // subtype carries the type-line constraint implicitly (Rule 205.3), and
+    // the gold for Sachi confirms it.
+    var tribalControlMatch = Regex.Match(
+      trimmed,
+      @"^(?<sub>[A-Z][a-z]+)s\s+(?<ctrl>you\s+control|an\s+opponent\s+controls)\.?$"
+    );
+    if (tribalControlMatch.Success)
+    {
+      var subtype = tribalControlMatch.Groups["sub"].Value;
+      var ctrl = tribalControlMatch.Groups["ctrl"].Value.ToLowerInvariant();
+      var controller = ctrl.StartsWith("you")
+        ? ControllerFilter.You
+        : ControllerFilter.Opponent;
+      return new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter
+        {
+          Subtypes = [subtype],
           Controller = controller,
         },
       };
