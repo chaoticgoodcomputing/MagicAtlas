@@ -35,7 +35,19 @@ public sealed class SpellAbilityParser : IAbilityParser
   /// <inheritdoc/>
   public IReadOnlyList<Ability> Parse(OracleClause clause, ClauseClassification classification)
   {
-    var effects = TryParseEffects(clause.RawText);
+    // Ability-word conditional preamble: "[AbilityWord] — If <condition>, …".
+    // The em-dash + ability word carries no rules meaning (already pulled onto
+    // classification.AbilityWord); the "If <condition>," is the state predicate
+    // gating the trailing spell-resolution instruction. We strip both before
+    // dispatch so the existing effect rules see a clean spell line, and stash
+    // the condition on SpellAbility.Instructions as the documented free-text
+    // fallback (until SpellAbility grows a structured InterveningIf axis).
+    var (effectsText, instructions) = StripAbilityWordConditionalPreamble(
+      clause.RawText,
+      classification.AbilityWord
+    );
+
+    var effects = TryParseEffects(effectsText);
     if (effects is null || effects.Count == 0)
     {
       return
@@ -46,8 +58,48 @@ public sealed class SpellAbilityParser : IAbilityParser
 
     return
     [
-      new SpellAbility { Effects = effects, AbilityWord = classification.AbilityWord },
+      new SpellAbility
+      {
+        Effects = effects,
+        AbilityWord = classification.AbilityWord,
+        Instructions = instructions,
+      },
     ];
+  }
+
+  /// <summary>
+  /// Peels the "[AbilityWord] — If <condition>," preamble off a spell line,
+  /// returning the body to feed into <see cref="TryParseEffects"/> and the
+  /// condition phrase to stash on <see cref="SpellAbility.Instructions"/>.
+  /// Pass-through when no preamble is present.
+  /// </summary>
+  private static (string EffectsText, IReadOnlyList<string>? Instructions) StripAbilityWordConditionalPreamble(
+    string rawText,
+    string? abilityWord
+  )
+  {
+    if (abilityWord is null)
+    {
+      return (rawText, null);
+    }
+    var emDashIndex = rawText.IndexOf('—');
+    if (emDashIndex <= 0)
+    {
+      return (rawText, null);
+    }
+    var body = rawText[(emDashIndex + 1)..].TrimStart();
+    var ifMatch = Regex.Match(
+      body,
+      @"^(?<cond>If\s+[^,]+),\s*(?<rest>.+)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!ifMatch.Success)
+    {
+      return (rawText, null);
+    }
+    var condition = ifMatch.Groups["cond"].Value.Trim();
+    var rest = ifMatch.Groups["rest"].Value;
+    return (rest, new[] { condition });
   }
 
   /// <summary>
