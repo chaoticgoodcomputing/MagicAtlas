@@ -74,7 +74,27 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     var effects = ParseEffects(effectPart);
     if (effects == null || effects.Count == 0)
     {
-      return null;
+      // Cost parsed but the effect didn't. Surface as an Activated ability
+      // carrying a structured UnparsedEffect so the cost-half still lands in
+      // the AST (matches the malformed-fixture contract: the Tap cost is
+      // still real even when the right-hand side is garbage).
+      var effectSpan = new MagicAST.AST.TextSpan(
+        clause.SourceSpan.Start + colonIndex + 1,
+        Math.Max(0, clause.RawText.Length - (colonIndex + 1))
+      );
+      var unparsedEffect = new MagicAST.AST.Effects.Core.UnparsedEffect
+      {
+        SourceSpan = effectSpan,
+        RawText = effectPart,
+      };
+      return new ActivatedAbility
+      {
+        Costs = costs,
+        Effects = [unparsedEffect],
+        IsManaAbility = false,
+        LoyaltyCost = classification.LoyaltyCost,
+        AbilityWord = classification.AbilityWord,
+      };
     }
 
     // Determine if this is a mana ability
