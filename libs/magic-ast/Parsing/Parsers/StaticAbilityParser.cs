@@ -755,7 +755,7 @@ public sealed class StaticAbilityParser : IAbilityParser
 
   /// <summary>
   /// Maps the noun-phrase left of "has" onto an ObjectReference target.
-  /// Two shapes are recognized today:
+  /// Three shapes are recognized today:
   /// <list type="bullet">
   ///   <item>Aura-vocabulary ("enchanted [type]" / "equipped [type]") collapses to
   ///         <see cref="ObjectReferenceKind.EnchantedOrEquipped"/>; the kind itself
@@ -765,7 +765,13 @@ public sealed class StaticAbilityParser : IAbilityParser
   ///         Maps to an <see cref="ObjectReferenceKind.Each"/> reference with a
   ///         <see cref="ObjectFilter.Subtypes"/> singleton holding the depluralised
   ///         subtype. The leading capital is the disambiguator: lower-case "all
-  ///         creatures" would be a card-type grant (left as a follow-up).</item>
+  ///         creatures" would be a card-type grant (next bullet).</item>
+  ///   <item>"[CardType]s you control" / "[CardType]s an opponent controls" — the
+  ///         controller-scoped card-type grant (Citanul Hierophants, anthem-style
+  ///         lords). Lowercase plural card-type noun followed by a controller
+  ///         clause. Maps to an <see cref="ObjectReferenceKind.Each"/> reference
+  ///         with the singularised card-type on <see cref="ObjectFilter.CardTypes"/>
+  ///         and the matching <see cref="ControllerFilter"/>.</item>
   /// </list>
   /// </summary>
   private static ObjectReference? ClassifyGrantTarget(string filterText)
@@ -775,6 +781,35 @@ public sealed class StaticAbilityParser : IAbilityParser
     if (lower.StartsWith("enchanted ") || lower.StartsWith("equipped "))
     {
       return new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped };
+    }
+
+    // "Creatures you control" / "Artifacts an opponent controls" — controller-scoped
+    // card-type grant. The lower-case plural card-type noun is what distinguishes
+    // this from the capitalised-subtype "All [Subtype]s" branch below; the trailing
+    // controller clause carries the scope onto ObjectFilter.Controller.
+    var controlMatch = Regex.Match(
+      trimmed,
+      @"^(?<type>Creatures|Artifacts|Enchantments|Lands|Planeswalkers|Permanents)\s+(?<ctrl>you\s+control|an\s+opponent\s+controls)\.?$",
+      RegexOptions.IgnoreCase
+    );
+    if (controlMatch.Success)
+    {
+      var plural = controlMatch.Groups["type"].Value.ToLowerInvariant();
+      // Depluralise — oracle plurals here are always simple "-s".
+      var singular = plural.EndsWith('s') ? plural[..^1] : plural;
+      var ctrl = controlMatch.Groups["ctrl"].Value.ToLowerInvariant();
+      var controller = ctrl.StartsWith("you")
+        ? ControllerFilter.You
+        : ControllerFilter.Opponent;
+      return new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter
+        {
+          CardTypes = [singular],
+          Controller = controller,
+        },
+      };
     }
 
     // "All Slivers" / "All Zombies" — capitalised plural noun after a literal "All ".
