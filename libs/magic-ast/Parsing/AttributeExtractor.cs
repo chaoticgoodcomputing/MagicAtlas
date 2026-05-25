@@ -42,19 +42,17 @@ public sealed partial class AttributeExtractor
       );
     }
 
-    // Colors
-    if (input.Colors is { Count: > 0 })
-    {
-      attributes.Add(new ColorsAttribute { Colors = input.Colors });
-    }
+    // Colors — always emit, even when empty. An empty Colors[] array is the
+    // canonical representation of a colorless card (CR 105.1: colorlessness is
+    // the absence of color, not a color value). Doctrine: present-with-empty
+    // is the descriptive shape, not absent-attribute.
+    attributes.Add(new ColorsAttribute { Colors = input.Colors ?? [] });
 
     // Color identity (computed from mana cost + mana symbols in rules text).
-    // Always WUBRG-ordered per CR convention; fixtures must match.
+    // Always WUBRG-ordered per CR convention; fixtures must match. Empty list
+    // for colorless cards, same doctrine as Colors above.
     var colorIdentity = ComputeColorIdentity(input);
-    if (colorIdentity.Count > 0)
-    {
-      attributes.Add(new ColorIdentityAttribute { ColorIdentity = colorIdentity });
-    }
+    attributes.Add(new ColorIdentityAttribute { ColorIdentity = colorIdentity });
 
     // Creature stats (power/toughness)
     if (!string.IsNullOrWhiteSpace(input.Power) && !string.IsNullOrWhiteSpace(input.Toughness))
