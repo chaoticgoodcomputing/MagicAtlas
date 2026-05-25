@@ -160,6 +160,12 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseDiscardThenDrawSpellEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     effect = TryParseDiscardEachPlayerEffect(trimmed);
     if (effect is not null)
     {
@@ -508,6 +514,76 @@ public sealed class SpellAbilityParser : IAbilityParser
         Kind = ObjectReferenceKind.Target,
         Filter = new ObjectFilter { CardTypes = [m.Groups["type"].Value.ToLowerInvariant()] },
       },
+    };
+  }
+
+  /// <summary>
+  /// Abandon-Attachments shape: "You may discard [N] card(s). If you do, draw
+  /// [M] card(s)." Two-sentence single-line conjoined effect — the head
+  /// <see cref="DiscardCardsEffect"/> carries <c>IsOptional=true</c> and an
+  /// <see cref="DiscardCardsEffect.IfYouDo"/> continuation pointing at the
+  /// draw. Rule 117.7 (optional effect + "if you do" tail). Mirrors the
+  /// <c>TryParseReturnToHandWithIfYouDoGainLife</c> rule in
+  /// <see cref="TriggeredAbilityParser"/> for the spell context.
+  /// </summary>
+  private static MagicAST.AST.Effects.CardFlow.DiscardCardsEffect? TryParseDiscardThenDrawSpellEffect(string text)
+  {
+    var m = Regex.Match(
+      text,
+      @"^You\s+may\s+discard\s+(?<dn>a|one|two|three|four|five|\d+)\s+cards?\.\s*If\s+you\s+do,\s*draw\s+(?<rn>a|one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+cards?$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var discardCount = ParseSmallWord(m.Groups["dn"].Value);
+    var drawCount = ParseSmallWord(m.Groups["rn"].Value);
+
+    var draw = new MagicAST.AST.Effects.CardFlow.DrawCardsEffect
+    {
+      Count = LiteralQuantity.Of(drawCount),
+      Player = ObjectReference.You(),
+    };
+    return new MagicAST.AST.Effects.CardFlow.DiscardCardsEffect
+    {
+      Count = LiteralQuantity.Of(discardCount),
+      Player = ObjectReference.You(),
+      Random = false,
+      IsOptional = true,
+      IfYouDo = draw,
+    };
+  }
+
+  /// <summary>
+  /// Maps the small-number oracle vocabulary ("a", "one"…"ten", or a digit
+  /// run) to its integer value. Defaults to 1 on an unrecognised token —
+  /// callers guard via regex so unrecognised tokens shouldn't reach here.
+  /// </summary>
+  private static int ParseSmallWord(string raw)
+  {
+    var lower = raw.ToLowerInvariant();
+    if (lower == "a" || lower == "one")
+    {
+      return 1;
+    }
+    if (int.TryParse(lower, out var n))
+    {
+      return n;
+    }
+    return lower switch
+    {
+      "two" => 2,
+      "three" => 3,
+      "four" => 4,
+      "five" => 5,
+      "six" => 6,
+      "seven" => 7,
+      "eight" => 8,
+      "nine" => 9,
+      "ten" => 10,
+      _ => 1,
     };
   }
 
