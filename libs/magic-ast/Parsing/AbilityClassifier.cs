@@ -252,6 +252,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target [filter] blocks this turn if able." — spell-resolution single-target
+    // block requirement (e.g., Culling Mark). The static "[subject] blocks each
+    // combat if able" recognizer in StaticAbilityParser is the wrong route: this
+    // line is an imperative spell instruction (one-shot, with explicit duration),
+    // not a continuous static on the named permanent.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+\S.*?\s+blocks?\s+this\s+turn\s+if\s+able\.?\s*$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "This spell can't be countered." is a property of the resolving spell;
     // route it to the spell parser so the EffectType lands inside
     // SpellAbility.Effects rather than as a top-level static. Other
