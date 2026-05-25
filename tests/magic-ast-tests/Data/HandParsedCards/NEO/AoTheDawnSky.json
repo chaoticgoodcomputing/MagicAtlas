@@ -1,0 +1,166 @@
+{
+  "Input": {
+    "Name": "Ao, the Dawn Sky",
+    "ManaCost": "{3}{W}{W}",
+    "TypeLine": "Legendary Creature — Dragon Spirit",
+    "OracleText": "Flying, vigilance\nWhen Ao dies, choose one —\n• Look at the top seven cards of your library. Put any number of nonland permanent cards with total mana value 4 or less from among them onto the battlefield. Put the rest on the bottom of your library in a random order.\n• Put two +1/+1 counters on each permanent you control that's a creature or Vehicle.",
+    "Power": "5",
+    "Toughness": "4",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Ao, the Dawn Sky",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Dragon Spirit",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dragon",
+        "Spirit"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying, vigilance\nWhen Ao dies, choose one —\n• Look at the top seven cards of your library. Put any number of nonland permanent cards with total mana value 4 or less from among them onto the battlefield. Put the rest on the bottom of your library in a random order.\n• Put two +1/+1 counters on each permanent you control that's a creature or Vehicle.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effect": {
+            "EffectType": "evasion",
+            "CanBeBlockedBy": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Characteristics": [
+                "flying",
+                "reach"
+              ]
+            }
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Vigilance",
+          "Effect": {
+            "EffectType": "vigilance"
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "modal",
+              "ModeSelection": {
+                "Minimum": 1,
+                "Maximum": 1
+              },
+              "Modes": [
+                {
+                  "Ability": {
+                    "Kind": "spell",
+                    "Effects": [
+                      {
+                        "EffectType": "lookAtCards",
+                        "Player": { "Kind": "You" },
+                        "Count": {
+                          "QuantityType": "literal",
+                          "Value": 7
+                        },
+                        "Zone": "Library",
+                        "Location": "Top"
+                      },
+                      {
+                        "EffectType": "unparsed",
+                        "SourceSpan": { "Start": 0, "Length": 0 },
+                        "RawText": "Put any number of nonland permanent cards with total mana value 4 or less from among them onto the battlefield. Put the rest on the bottom of your library in a random order."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Ability": {
+                    "Kind": "spell",
+                    "Effects": [
+                      {
+                        "EffectType": "putCounters",
+                        "Target": {
+                          "Kind": "Each",
+                          "Filter": {
+                            "CardTypes": ["permanent"],
+                            "Controller": "You",
+                            "Characteristics": ["creature or Vehicle"]
+                          }
+                        },
+                        "CounterType": "+1/+1",
+                        "Count": {
+                          "QuantityType": "literal",
+                          "Value": 2
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "AllowDuplicates": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}

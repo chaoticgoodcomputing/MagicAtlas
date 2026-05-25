@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-25T07:06:01.0367206Z",
+  "timestamp": "2026-05-25T07:07:29.1545604Z",
   "testResults": {
     "MalformedParsedCards/MixedValidAndInvalidAbilities": {
       "passed": false
@@ -30,9 +30,6 @@
     },
     "HandParsedCards/M21/Hobblefiend": {
       "passed": false
-    },
-    "HandParsedCards/FDN/FindThePath/RoundTrip": {
-      "passed": true
     },
     "HandParsedCards/M21/RookieMistake": {
       "passed": false
@@ -65,6 +62,9 @@
       "passed": true
     },
     "OracleLines/CLB/WilsonRefinedGrizzly/Line4": {
+      "passed": false
+    },
+    "HandParsedCards/NEO/AoTheDawnSky": {
       "passed": false
     },
     "HandParsedCards/WHO/RoryWilliams": {
@@ -110,9 +110,6 @@
       "passed": false
     },
     "HandParsedCards/M21/VitoThornOfTheDuskRose/RoundTrip": {
-      "passed": true
-    },
-    "OracleLines/FDN/FindThePath/Line2": {
       "passed": true
     },
     "HandParsedCards/SLD/DeadpoolTradingCard": {
@@ -313,9 +310,6 @@
     "OracleLines/KTK/ZurgoHelmsmasher/Line2": {
       "passed": true
     },
-    "HandParsedCards/FDN/FindThePath": {
-      "passed": false
-    },
     "OracleLines/DMR/MysticRemora/Line1": {
       "passed": false
     },
@@ -326,6 +320,9 @@
       "passed": false
     },
     "HandParsedCards/ChatterfangSquirrelGeneral": {
+      "passed": false
+    },
+    "OracleLines/NEO/AoTheDawnSky/Line2": {
       "passed": false
     },
     "OracleLines/2X2/ManaVault/Line4": {
@@ -390,9 +387,6 @@
     },
     "KeywordExpander/DoubleStrike_ExpandsToCombatDamageTimingBoth": {
       "passed": true
-    },
-    "OracleLines/FDN/FindThePath/Line1": {
-      "passed": false
     },
     "OracleLines/LTC/DenethorStoneSeer/Line1": {
       "passed": true
@@ -478,7 +472,13 @@
     "OracleLines/DMR/MysticRemora/Line2": {
       "passed": false
     },
+    "OracleLines/NEO/AoTheDawnSky/Line1": {
+      "passed": true
+    },
     "HandParsedCards/SLD/DeadpoolTradingCard/RoundTrip": {
+      "passed": true
+    },
+    "HandParsedCards/NEO/AoTheDawnSky/RoundTrip": {
       "passed": true
     },
     "OracleLines/TheDeathOfGwenStacy/Line1": {

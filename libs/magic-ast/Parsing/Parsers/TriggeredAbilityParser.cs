@@ -5,6 +5,7 @@ using MagicAST.AST;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.CardFlow;
+using MagicAST.AST.Effects.Core;
 using MagicAST.AST.Effects.TokenCopy;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
@@ -24,6 +25,13 @@ using MagicAST.Parsing.Tokens;
 public sealed class TriggeredAbilityParser : IAbilityParser
 {
   private readonly FallbackParser _fallback = new();
+  private readonly AbilityClassifier _classifier = new();
+
+  // Lazy so we don't recurse through registry construction at type-load time.
+  // The triggered-modal path dispatches each modal option clause back through
+  // the registry, exactly like ModalAbilityParser does for spell-level modals.
+  private static readonly Lazy<AbilityParserRegistry> _registry =
+    new(() => new AbilityParserRegistry());
 
   /// <inheritdoc/>
   public IReadOnlyList<Ability> Parse(OracleClause clause, ClauseClassification classification)
@@ -78,6 +86,15 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return null;
     }
 
+    // Modal trigger: "When X, choose one —" with bulleted options absorbed by
+    // ClauseSplitter into clause.ModalOptions. The effect-part is the modal
+    // selector phrase; the actual effects are the bullet bodies. Build a
+    // single ModalEffect to occupy the trigger's Effects list.
+    if (clause.ModalOptions is { Count: > 0 } && TryBuildModalEffect(effectPart, clause.ModalOptions) is { } modalEffect)
+    {
+      return new TriggeredAbility { Trigger = trigger, Effects = [modalEffect] };
+    }
+
     // Parse effects
     var effects = ParseEffects(effectPart);
     if (effects == null || effects.Count == 0)
@@ -86,6 +103,121 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     }
 
     return new TriggeredAbility { Trigger = trigger, Effects = effects };
+  }
+
+  /// <summary>
+  /// Build a <see cref="ModalEffect"/> for a triggered ability whose effect
+  /// stream is the modal preamble "choose one —" (or similar) followed by
+  /// bulleted option bodies.
+  ///
+  /// Each option clause is dispatched back through the classifier+registry —
+  /// the same mechanism <see cref="ModalAbilityParser"/> uses — so the option
+  /// bodies parse to whatever ability shape their text classifies as (typically
+  /// <see cref="SpellAbility"/> with an effect list). Returns null if the
+  /// effect-part text isn't a recognised modal selector.
+  /// </summary>
+  private ModalEffect? TryBuildModalEffect(
+    string effectPart,
+    IReadOnlyList<OracleClause> optionClauses
+  )
+  {
+    var selection = TryParseModeSelection(effectPart);
+    if (selection is null)
+    {
+      return null;
+    }
+
+    var modes = new List<ModalOption>(optionClauses.Count);
+    foreach (var optionClause in optionClauses)
+    {
+      var optionClassification = _classifier.Classify(optionClause);
+      var optionAbilities = _registry
+        .Value.GetParser(optionClassification.Kind)
+        .Parse(optionClause, optionClassification);
+      foreach (var ability in optionAbilities)
+      {
+        modes.Add(new ModalOption { Ability = ability });
+      }
+    }
+
+    return new ModalEffect
+    {
+      ModeSelection = selection,
+      Modes = modes,
+    };
+  }
+
+  /// <summary>
+  /// Recognises the modal-selector tail of a trigger preamble — the substring
+  /// after the trigger-condition comma, e.g. "choose one —". Mirrors the
+  /// header-match logic on <see cref="ModalAbilityParser"/> but allows the
+  /// trailing em-dash to be present (selectors in trigger-modal preambles
+  /// always carry the em-dash because the clause body lives on bullet lines).
+  /// </summary>
+  private static ModeSelection? TryParseModeSelection(string effectPart)
+  {
+    var trimmed = effectPart.TrimEnd();
+    if (trimmed.EndsWith('—'))
+    {
+      trimmed = trimmed[..^1].TrimEnd();
+    }
+
+    var lower = trimmed.ToLowerInvariant();
+    if (lower == "choose one or both")
+    {
+      return ModeSelection.ChooseOneOrBoth();
+    }
+    if (lower == "choose one")
+    {
+      return ModeSelection.ChooseOne();
+    }
+    if (lower == "choose two")
+    {
+      return ModeSelection.ChooseTwo();
+    }
+    if (lower == "choose three")
+    {
+      return ModeSelection.ChooseExactly(3);
+    }
+    if (lower == "choose any number")
+    {
+      return ModeSelection.ChooseUpTo(int.MaxValue);
+    }
+    var upTo = Regex.Match(lower, @"^choose up to (\w+)$");
+    if (upTo.Success && TryParseWordNumber(upTo.Groups[1].Value, out var n))
+    {
+      return ModeSelection.ChooseUpTo(n);
+    }
+    return null;
+  }
+
+  private static bool TryParseWordNumber(string token, out int value)
+  {
+    if (int.TryParse(token, out value))
+    {
+      return true;
+    }
+    switch (token)
+    {
+      case "one":
+        value = 1;
+        return true;
+      case "two":
+        value = 2;
+        return true;
+      case "three":
+        value = 3;
+        return true;
+      case "four":
+        value = 4;
+        return true;
+      case "five":
+        value = 5;
+        return true;
+      default:
+        value = 0;
+        return false;
+    }
   }
 
   #region Trigger Parsing
