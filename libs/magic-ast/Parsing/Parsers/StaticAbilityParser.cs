@@ -166,8 +166,57 @@ public sealed class StaticAbilityParser : IAbilityParser
       return drawReplacement;
     }
 
+    // "Enchanted creature gets +N/+N." — anthem-style Aura P/T grant.
+    // No Duration: the modifier persists while the Aura is attached (Rule
+    // 303/702.5). Descriptive shape on EnchantedOrEquipped with literal
+    // power/toughness modifiers; mirrors the gold for Gift of Strands.
+    var anthemPT = TryParseAnthemModifyPT(clause);
+    if (anthemPT != null)
+    {
+      return anthemPT;
+    }
+
     return null;
   }
+
+  /// <summary>
+  /// "Enchanted creature gets +N/+N." — Aura P/T grant on the attached
+  /// object. Emits a <see cref="StaticAbility"/> wrapping a
+  /// <see cref="ModifyPTEffect"/> with
+  /// <see cref="ObjectReferenceKind.EnchantedOrEquipped"/> as the target.
+  /// No <see cref="ModifyPTEffect.Duration"/> is set: anthem-style
+  /// modifiers from Auras last while the Aura remains attached, not for a
+  /// bounded duration clause (cf. "until end of turn" pumps).
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseAnthemModifyPT(OracleClause clause)
+  {
+    var match = _anthemModifyPTPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var power = int.Parse(match.Groups["p"].Value);
+    var toughness = int.Parse(match.Groups["t"].Value);
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new ModifyPTEffect
+        {
+          Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+          PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
+          ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
+        },
+      },
+    ];
+  }
+
+  private static readonly Regex _anthemModifyPTPattern = new(
+    @"^\s*Enchanted\s+creature\s+gets\s+\+(?<p>\d+)/\+(?<t>\d+)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   /// <summary>
   /// "If you would draw a card, draw [N] cards instead." — Rule 614 pure
