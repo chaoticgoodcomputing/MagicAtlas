@@ -311,9 +311,28 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
-    // Scan commas right-to-left for one whose tail begins with an effect verb.
-    foreach (var i in ((IEnumerable<int>)commaIndices).Reverse())
+    // Trigger condition is, by oracle convention, an unbroken
+    // prepositional/imperative phrase up to the resolution clause. Sentence
+    // boundaries inside the effect half (e.g. Niambi's "...to its owner's
+    // hand. If you do, ...") shouldn't lift commas past them into the
+    // trigger. Cap the search at the first period if one exists.
+    int searchLimit = text.Length;
+    var firstPeriod = text.IndexOf('.');
+    if (firstPeriod >= 0)
     {
+      searchLimit = firstPeriod;
+    }
+
+    // Scan commas left-to-right for the first one whose tail begins with an
+    // effect verb. Left-to-right keeps the trigger phrase tight — picking the
+    // last effect-flavoured comma would let trigger conditions absorb the
+    // entire first resolution sentence.
+    foreach (var i in commaIndices)
+    {
+      if (i >= searchLimit)
+      {
+        break;
+      }
       var tail = text[(i + 1)..].TrimStart();
       if (LooksLikeEffectStart(tail))
       {
@@ -860,6 +879,17 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return new List<Effect> { untap };
     }
 
+    // "you may return ... to its owner's hand. If you do, you gain life
+    // equal to that creature's mana value." — Niambi shape. Splits on the
+    // first sentence boundary and parses the tail as an IfYouDo gain-life.
+    // Tried before the plain return-to-hand so the IfYouDo doesn't get
+    // discarded by the simpler matcher.
+    var returnWithIfYouDo = TryParseReturnToHandWithIfYouDoGainLife(trimmed);
+    if (returnWithIfYouDo != null)
+    {
+      return new List<Effect> { returnWithIfYouDo };
+    }
+
     var returnHand = TryParseReturnToHandEffect(trimmed);
     if (returnHand != null)
     {
@@ -1032,7 +1062,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     var characteristics = new List<string>();
     if (lower.Contains("another target"))
     {
-      characteristics.Add("other");
+      characteristics.Add("another");
     }
     else if (Regex.IsMatch(lower, @"\bother\s+target\b"))
     {
@@ -1070,6 +1100,48 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       Target = new ObjectReference { Kind = ObjectReferenceKind.Target, Filter = filter },
       IsOptional = isOptional,
     };
+  }
+
+  /// <summary>
+  /// Niambi shape: "you may return ... to its owner's hand. If you do, you
+  /// gain life equal to that creature's mana value." Builds a
+  /// <see cref="ReturnToHandEffect"/> with <c>IsOptional=true</c> and an
+  /// <c>IfYouDo</c> gain-life clause whose amount is derived from the
+  /// returned creature's mana value.
+  /// </summary>
+  private static ReturnToHandEffect? TryParseReturnToHandWithIfYouDoGainLife(string effectText)
+  {
+    var split = Regex.Match(
+      effectText,
+      @"^(?<ret>you\s+may\s+return\s+.+?to\s+(?:its?\s+owner'?s|your)\s+hand)\.\s*If\s+you\s+do,\s*(?<rest>you\s+gain\s+life\s+equal\s+to\s+(?<src>that\s+creature'?s\s+mana\s+value))$",
+      RegexOptions.IgnoreCase
+    );
+    if (!split.Success)
+    {
+      return null;
+    }
+
+    var returnEffect = TryParseReturnToHandEffect(split.Groups["ret"].Value.Trim());
+    if (returnEffect is null)
+    {
+      return null;
+    }
+
+    var source = split.Groups["src"].Value.Trim();
+    // Singularize possessive: "that creature's mana value" → source "that creature".
+    var sourceObject = Regex.Replace(source, @"'?s\s+mana\s+value$", "", RegexOptions.IgnoreCase).Trim();
+
+    var gainLife = new GainLifeEffect
+    {
+      Amount = new DerivedQuantity
+      {
+        DerivedFrom = DerivedKind.ManaValue,
+        Source = sourceObject,
+      },
+      Player = ObjectReference.You(),
+    };
+
+    return returnEffect with { IfYouDo = gainLife, IsOptional = true };
   }
 
   /// <summary>
