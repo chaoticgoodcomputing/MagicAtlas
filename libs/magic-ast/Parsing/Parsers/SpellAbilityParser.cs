@@ -212,6 +212,12 @@ public sealed class SpellAbilityParser : IAbilityParser
       return effect;
     }
 
+    effect = TryParseDestroyMulticoloredPermanentEffect(trimmed);
+    if (effect is not null)
+    {
+      return effect;
+    }
+
     effect = TryParseReturnFromGraveyardToHandEffect(trimmed);
     if (effect is not null)
     {
@@ -1289,6 +1295,53 @@ public sealed class SpellAbilityParser : IAbilityParser
         {
           CardTypes = ["creature"],
           IsMonocolored = true,
+        },
+      },
+    };
+  }
+
+  /// <summary>
+  /// "Destroy target multicolored permanent." — Null Elemental Blast (modal
+  /// option). Structural sibling of
+  /// <see cref="TryParseDestroyMonocoloredCreatureEffect"/>: the "multicolored"
+  /// qualifier is a color-set predicate (Rule 105.5: "an object with two or
+  /// more colors") on the dedicated <see cref="ObjectFilter.IsMulticolored"/>
+  /// axis — same convention used by the multicolored counter shape in
+  /// <see cref="BuildSpellFilter"/> (Neutralizing Blast) and by
+  /// <see cref="TryParseExileMonocoloredPermanentEffect"/>.
+  /// </summary>
+  /// <remarks>
+  /// Kept distinct from <see cref="TryParseDestroyTargetSimpleEffect"/>: the
+  /// simple destroy regex doesn't admit a color-set qualifier between
+  /// "target" and the type word. Distinct from
+  /// <see cref="TryParseDestroyTargetTypeDisjunctionEffect"/>: disjunction
+  /// surfaces a multi-element <c>CardTypes</c> list; this rule keeps
+  /// <c>CardTypes</c> single-element ("permanent") and adds the predicate
+  /// axis.
+  /// </remarks>
+  private static MagicAST.AST.Effects.ZoneChange.DestroyEffect? TryParseDestroyMulticoloredPermanentEffect(
+    string text
+  )
+  {
+    if (
+      !Regex.IsMatch(
+        text,
+        @"^Destroy\s+target\s+multicolored\s+permanent$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return null;
+    }
+    return new MagicAST.AST.Effects.ZoneChange.DestroyEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["permanent"],
+          IsMulticolored = true,
         },
       },
     };
