@@ -196,8 +196,12 @@ public sealed class AbilityClassifier
       };
     }
 
-    // Check for single keyword (may need expansion)
-    if (IsSingleKeyword(tokens))
+    // Check for single keyword (may need expansion). Skipped when the clause
+    // leads with a spell-instruction verb (e.g. "Scry 1.", "Mill 2."): those
+    // shapes are imperative resolution steps, not statics, even though they
+    // happen to tokenize as <verb> <number> and would otherwise be mistaken
+    // for a parameterized keyword.
+    if (!StartsWithSpellInstructionVerb(clause.RawText) && IsSingleKeyword(tokens))
     {
       return new ClauseClassification
       {
