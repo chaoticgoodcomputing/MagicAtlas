@@ -147,13 +147,19 @@ If you see those AFTER the gate passed, STOP and report — the gate threshold m
 
 ### Step 1 — `[main]` Pick families
 
-Read `tests/magic-ast-tests/Data/_08_Reporting/triage-report.json`. Each `topGaps[]` entry now carries `pattern` AND `lastAttemptedRule` (post-telemetry). A **family** is a `(pattern, lastAttemptedRule)` cluster — failures that share both the high-level pattern AND the specific parser rule that bailed. This is the unit of work for a family-contract mech.
+Read `tests/magic-ast-tests/Data/_08_Reporting/triage-report.json`. **Two surfaces in this file inform family-picking — weigh both, don't default to one.**
 
-For each family you want to address this batch:
+**Surface A — `topYieldClusters[]` (data-derived, near the top of the file).** Lexical-template clustering over unparsed oracle lines, with greedy set-cover yield projection. Each entry carries a placeholder-substituted `template`, `marginalYield` (cards this cluster flips green given prior picks), `cumulativeYield`, and `exemplars[]` (cleanest fixture candidates pre-ranked by fewest-other-unparsed-templates). This surface finds the **biggest pre-named pattern is missing entirely** kind of gap — basic tapped lands, single-keyword reminder text, ETB lifegain — shapes that don't get hand-coded into `FallbackParser.InferFailurePattern` because they're "too common to need a name."
 
-- Select **5-10 candidate fixtures** from `candidateLines[]`, sorted by `cleanlinessScore` ascending. The mech will be expected to make all of them green via one parser surface — so they need to genuinely share a structural shape. Skip lines with `alreadyHandParsed: true`.
-- **Diversity check:** the 5-10 should not all be near-duplicates. If three lines are "[CardName] deals 3 damage to target creature" with only the name changing, that's effectively one fixture's worth of pressure. Pick lines that vary the dimensions you suspect the parser surface needs to handle (target shapes, count phrasings, modifier suffixes).
-- **Bail-out signal:** if the family's `lastAttemptedRule` is `null` or `"FallbackParser.*"`, the failure isn't sharp enough yet — this family is in the `AmbiguousStructure` zone. Either pick a different family or surface it for pattern-bucket refinement.
+**Surface B — `topGaps[]` (pattern-named, post-telemetry).** Each entry carries `pattern` AND `lastAttemptedRule`. A **family** is a `(pattern, lastAttemptedRule)` cluster — failures that share both the high-level pattern AND the specific parser rule that bailed. This surface gives you sharp shape names you can write a one-paragraph briefing about. Bail-out signal: if `lastAttemptedRule` is `null` or `"FallbackParser.*"`, the cluster is too coarse — surface for pattern-bucket refinement or pick a different family.
+
+**Default heuristic:** Start with `topYieldClusters[]`. The `marginalYield` numbers are upper bounds (real parser rules cover 60-90% of a cluster perfectly) but they're directly comparable across clusters. If the top yield-cluster has a template you can't easily translate into a parser-rule shape, fall back to `topGaps[]` for the same slot. The numbers are advisory; orchestrator judgment is the deciding factor.
+
+For each family you commit to (from either surface):
+
+- Select **5-10 fixture candidates**. If from `topYieldClusters[]`, use `exemplars[]` directly (already ranked by cleanest-first). If from `topGaps[]`, use `candidateLines[]` sorted by `cleanlinessScore` ascending. Skip lines with `alreadyHandParsed: true`.
+- **Diversity check:** the 5-10 should vary the dimensions you suspect the parser surface needs to handle (target shapes, count phrasings, modifier suffixes), not be near-duplicates. Three lines that only differ in card name are effectively one fixture's worth of pressure.
+- **Pre-curate from raw corpus when triage candidates are stacked.** Triage exemplars favor whatever cards happen to fail — often legendary creatures with multi-keyword bodies. For cleaner fixtures, query `tests/magic-ast-tests/Data/_01_Raw/Datasets/External/oracle-cards.json` with a `jq` regex matching the cluster template; single-line non-legendary cards (enchantments, simple instants) make sharper exemplars.
 
 Choose batch size based on the number of **non-overlapping** families. Two families that target the same parser file (e.g., both want `SpellAbilityParser`) should be serialized across batches, not paralleled — unless the parser-rule split has landed and each rule lives in its own file.
 
