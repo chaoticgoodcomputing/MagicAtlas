@@ -1,0 +1,106 @@
+{
+  "Input": {
+    "Name": "Daring Leap",
+    "ManaCost": "{1}{W}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Target creature gets +1/+1 and gains flying and first strike until end of turn.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U", "W"],
+    "ColorIdentity": ["U", "W"]
+  },
+  "Output": {
+    "Name": "Daring Leap",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Target creature gets +1/+1 and gains flying and first strike until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "It"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Flying",
+                "Effect": {
+                  "EffectType": "evasion",
+                  "CanBeBlockedBy": {
+                    "CardTypes": ["creature"],
+                    "Characteristics": ["flying", "reach"]
+                  }
+                }
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "It"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "First strike",
+                "Effect": {
+                  "EffectType": "combatDamageTiming",
+                  "Timing": "First"
+                }
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U", "W"]
+      }
+    ]
+  }
+}

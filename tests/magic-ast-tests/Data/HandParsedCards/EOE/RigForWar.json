@@ -1,0 +1,101 @@
+{
+  "Input": {
+    "Name": "Rig for War",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Instant",
+    "OracleText": "Target creature gets +3/+0 and gains first strike and reach until end of turn.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Rig for War",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Target creature gets +3/+0 and gains first strike and reach until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "It"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "First strike",
+                "Effect": {
+                  "EffectType": "combatDamageTiming",
+                  "Timing": "First"
+                }
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "It"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Reach",
+                "Effect": {
+                  "EffectType": "reach"
+                }
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}
