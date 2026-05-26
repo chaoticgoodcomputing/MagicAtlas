@@ -138,6 +138,19 @@ public sealed class AbilityClassifier
       return loyaltyClassification with { AbilityWord = abilityWord };
     }
 
+    // Parenthetical-wrapped activated ability: "({T}: Add {B} or {R}.)" on dual
+    // lands and basic land subtypes. The whole clause tokenizes as a single
+    // ReminderText token; the inner content is a normal {cost}: effect pattern.
+    if (IsParentheticalActivatedAbility(tokens, clause.RawText))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Activated,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Check for triggered ability: When/Whenever/At
     if (StartsWithTriggerTiming(tokens))
     {
@@ -492,6 +505,29 @@ public sealed class AbilityClassifier
       Confidence = 0.50,
       AbilityWord = abilityWord,
     };
+  }
+
+  /// <summary>
+  /// True when the entire clause is a parenthetical-wrapped activated ability,
+  /// e.g. "({T}: Add {B} or {R}.)" on dual lands and basic land subtypes.
+  /// The clause tokenises as a single <see cref="OracleToken.ReminderText"/>
+  /// token; the inner content opens with a mana/tap symbol followed by a colon.
+  /// </summary>
+  private static bool IsParentheticalActivatedAbility(
+    List<Token<OracleToken>> tokens,
+    string rawText
+  )
+  {
+    if (tokens.Count != 1 || tokens[0].Kind != OracleToken.ReminderText)
+    {
+      return false;
+    }
+    var inner = rawText.Trim();
+    if (inner.StartsWith('(') && inner.EndsWith(')'))
+    {
+      inner = inner[1..^1].Trim();
+    }
+    return Regex.IsMatch(inner, @"^\{[^}]+\}:", RegexOptions.None);
   }
 
   /// <summary>
