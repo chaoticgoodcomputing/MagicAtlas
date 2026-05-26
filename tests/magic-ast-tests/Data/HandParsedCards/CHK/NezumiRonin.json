@@ -1,0 +1,53 @@
+{
+  "Input": {
+    "Name": "Nezumi Ronin",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Rat Samurai",
+    "OracleText": "Bushido 1 (Whenever this creature blocks or becomes blocked, it gets +1/+1 until end of turn.)",
+    "Power": "3",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Nezumi Ronin",
+    "TypeLine": {
+      "Raw": "Creature — Rat Samurai",
+      "Supertypes": [],
+      "Types": ["Creature"],
+      "Subtypes": ["Rat", "Samurai"]
+    },
+    "Oracle": {
+      "RawText": "Bushido 1 (Whenever this creature blocks or becomes blocked, it gets +1/+1 until end of turn.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Bushido",
+          "Effect": {
+            "EffectType": "bushido",
+            "Value": 1,
+            "IsOptional": false
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3
+      },
+      { "Kind": "colors", "Colors": ["B"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}
