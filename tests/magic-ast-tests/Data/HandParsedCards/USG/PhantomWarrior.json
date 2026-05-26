@@ -1,0 +1,65 @@
+{
+  "Input": {
+    "Name": "Phantom Warrior",
+    "ManaCost": "{1}{U}{U}",
+    "TypeLine": "Creature — Illusion Warrior",
+    "OracleText": "This creature can't be blocked.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Phantom Warrior",
+    "TypeLine": {
+      "Raw": "Creature — Illusion Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Illusion", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "This creature can't be blocked.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "cantBeBlocked",
+            "IsOptional": false
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

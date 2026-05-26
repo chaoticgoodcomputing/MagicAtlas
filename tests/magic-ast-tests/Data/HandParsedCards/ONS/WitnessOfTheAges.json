@@ -1,0 +1,69 @@
+{
+  "Input": {
+    "Name": "Witness of the Ages",
+    "ManaCost": "{6}",
+    "TypeLine": "Artifact Creature — Golem",
+    "OracleText": "Morph {5} (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Witness of the Ages",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Golem",
+      "Types": ["Artifact", "Creature"],
+      "Subtypes": ["Golem"]
+    },
+    "Oracle": {
+      "RawText": "Morph {5} (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Morph",
+          "Effect": {
+            "EffectType": "morph",
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 5 }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{6}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 6 }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
