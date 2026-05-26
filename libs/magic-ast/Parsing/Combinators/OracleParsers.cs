@@ -206,6 +206,42 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Defender" keyword.
+  /// Pattern: "Defender" [reminder]
+  /// Rule 702.3. A creature with defender can't attack. MAST records keyword
+  /// presence; the can't-attack semantics are derived by the rules engine.
+  /// Handles both bare "Defender" and "Defender (This creature can't attack.)"
+  /// — reminder text is consumed but not stored in the AST.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Defender = (
+    from keyword in Keyword("Defender")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Defender",
+      Effect = new DefenderEffect(),
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Cascade" keyword.
+  /// Pattern: "Cascade" [reminder]
+  /// Rule 702.85. Records keyword presence; the exile-and-cast machinery is
+  /// handled by the rules engine. Reminder text is consumed but not stored.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Cascade = (
+    from keyword in Keyword("Cascade")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Cascade",
+      Effect = new CascadeEffect(),
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -483,6 +519,51 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Cycling {cost}" keyword.
+  /// Pattern: "Cycling" mana-symbol+ [reminder]
+  /// Rule 702.32. An activated ability playable only from hand:
+  /// "[Cost], Discard this card: Draw a card." MAST records the keyword and
+  /// its associated mana cost; the inner discard/draw structure is inferred
+  /// from the rules. Reminder text is consumed but not stored.
+  /// The cost is the polymorphic <see cref="MagicAST.AST.Costs.Cost"/> base
+  /// to accommodate typecycling and similar variants.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Cycling = (
+    from keyword in Keyword("Cycling")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Cycling",
+      Effect = new CyclingEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      },
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Choose a Background" — a fixed-name partner variant from
   /// Commander Legends: Battle for Baldur's Gate (Rule 702.124g, descriptive
   /// reference). Emits a static ability whose effect carries
@@ -519,6 +600,8 @@ public static class OracleParsers
     .Or(Reach)
     .Or(Flash)
     .Or(Storm)
+    .Or(Defender)
+    .Or(Cascade)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)
@@ -536,7 +619,8 @@ public static class OracleParsers
       .Or(Crew.Try())
       .Or(PartnerWith.Try())
       .Or(ChooseABackground.Try())
-      .Or(Entwine.Try());
+      .Or(Entwine.Try())
+      .Or(Cycling.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
