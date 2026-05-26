@@ -227,6 +227,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return asLongAs;
     }
 
+    // "(Enchanted|Equipped) creature gets +N/+M and has <keyword>." — Aura/Equipment
+    // composite static: a P/T buff bundled with a keyword grant on the attached
+    // object (Rule 702.5 / 613.1c). Emits a CompositeEffect wrapping a
+    // ModifyPTEffect and a GainAbilityEffect, both targeting EnchantedOrEquipped.
+    // No Duration: the modifier persists while the Aura/Equipment is attached.
+    var enchantedPTAndKeyword = TryParseEnchantedPTAndKeyword(clause);
+    if (enchantedPTAndKeyword != null)
+    {
+      return enchantedPTAndKeyword;
+    }
+
     // "This [permanent/land/...] enters tapped." — Rule 614 replacement-effect
     // property recorded as a static-ability-attached <see cref="EntersTappedEffect"/>.
     // No KeywordSource: the oracle text is a full sentence, not a keyword token.
@@ -352,6 +363,77 @@ public sealed class StaticAbilityParser : IAbilityParser
 
   private static readonly Regex _anthemModifyPTPattern = new(
     @"^\s*Enchanted\s+creature\s+gets\s+\+(?<p>\d+)/\+(?<t>\d+)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "(Enchanted|Equipped) creature gets +N/+M and has &lt;keyword&gt;." — Aura/Equipment
+  /// composite static: a P/T buff bundled with a keyword grant on the attached
+  /// object (Rule 702.5 / 613.1c). Emits a <see cref="StaticAbility"/> wrapping
+  /// a <see cref="CompositeEffect"/> whose <c>Effects</c> list contains:
+  /// <list type="bullet">
+  ///   <item><see cref="ModifyPTEffect"/> targeting <c>EnchantedOrEquipped</c>.</item>
+  ///   <item><see cref="GainAbilityEffect"/> targeting <c>EnchantedOrEquipped</c>,
+  ///         whose <c>GainedAbility</c> is the canonical <see cref="StaticAbility"/>
+  ///         for the keyword (via <see cref="MapKeywordToStaticAbility"/>).</item>
+  /// </list>
+  /// No <c>Duration</c>: the modifier persists while the Aura/Equipment is attached.
+  /// Generalises to both "Enchanted" and "Equipped" subjects so Equipment cards
+  /// with the same composite shape share the parser surface.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEnchantedPTAndKeyword(OracleClause clause)
+  {
+    var match = _enchantedPTAndKeywordPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var psign = match.Groups["psign"].Value;
+    var power = int.Parse(match.Groups["p"].Value);
+    if (psign == "-") power = -power;
+
+    var tsign = match.Groups["tsign"].Value;
+    var toughness = int.Parse(match.Groups["t"].Value);
+    if (tsign == "-") toughness = -toughness;
+
+    var kw = match.Groups["kw"].Value.Trim();
+    var grantedAbility = MapKeywordToStaticAbility(kw);
+    if (grantedAbility is null)
+    {
+      // Unrecognised keyword — fall through so the fallback surfaces the gap.
+      return null;
+    }
+
+    var target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped };
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Core.CompositeEffect
+        {
+          Effects =
+          [
+            new ModifyPTEffect
+            {
+              Target = target,
+              PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
+              ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
+            },
+            new GainAbilityEffect
+            {
+              Target = target,
+              GainedAbility = grantedAbility,
+            },
+          ],
+        },
+      },
+    ];
+  }
+
+  private static readonly Regex _enchantedPTAndKeywordPattern = new(
+    @"^\s*(?:Enchanted|Equipped)\s+creature\s+gets\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\s+and\s+has\s+(?<kw>[a-z][a-z ]+?)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
