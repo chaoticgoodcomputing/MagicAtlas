@@ -1,0 +1,59 @@
+{
+  "Input": {
+    "Name": "Ruination",
+    "ManaCost": "{3}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Destroy all nonbasic lands.",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": [],
+    "Id": "6330d925-96a8-47e1-855d-035ddc2af709",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Ruination",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Destroy all nonbasic lands.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["land"],
+                  "Characteristics": ["nonbasic"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}
