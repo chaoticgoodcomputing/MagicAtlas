@@ -17,4 +17,16 @@ public partial class Catalog
       .Json()
       .AtPath($"{_basePath}/_08_Reporting/triage-report.json")
       .Build());
+
+  /// <summary>
+  /// Discovery-side companion to <see cref="TriageReport"/>. Lexical-template
+  /// clustering over unparsed oracle lines + greedy set-cover yield projection.
+  /// Surfaces unnamed structural patterns and recommends the highest-yield
+  /// K-cluster batch for the next session.
+  /// </summary>
+  public IItem<YieldClustersReport> YieldClusters =>
+    CreateItem(() => Item.Of<YieldClustersReport>("YieldClusters")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/yield-clusters.json")
+      .Build());
 }
