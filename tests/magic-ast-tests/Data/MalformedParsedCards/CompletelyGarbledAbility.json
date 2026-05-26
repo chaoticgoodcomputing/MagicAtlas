@@ -45,7 +45,9 @@
                 "End": 40
               },
               "RawText": "Xyzzy plugh and also qwertyuiop forever.",
-              "Pattern": "AmbiguousStructure"
+              "Pattern": "AmbiguousStructure",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 0
             }
           ]
         }
@@ -86,13 +88,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]
