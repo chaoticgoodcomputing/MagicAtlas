@@ -1,0 +1,50 @@
+{
+  "Input": {
+    "Name": "Typhoid Rats",
+    "ManaCost": "{B}",
+    "TypeLine": "Creature — Rat",
+    "OracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Typhoid Rats",
+    "TypeLine": {
+      "Raw": "Creature — Rat",
+      "Supertypes": [],
+      "Types": ["Creature"],
+      "Subtypes": ["Rat"]
+    },
+    "Oracle": {
+      "RawText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Deathtouch",
+          "Effect": {
+            "EffectType": "deathtouch"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 1
+      },
+      { "Kind": "colors", "Colors": ["B"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

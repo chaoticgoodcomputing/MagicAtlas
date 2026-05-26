@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "Vestige of Emrakul",
+    "ManaCost": "{3}{R}",
+    "TypeLine": "Creature — Eldrazi Drone",
+    "OracleText": "Devoid (This card has no color.)\nTrample",
+    "Power": "3",
+    "Toughness": "4",
+    "Colors": [],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Vestige of Emrakul",
+    "TypeLine": {
+      "Raw": "Creature — Eldrazi Drone",
+      "Supertypes": [],
+      "Types": ["Creature"],
+      "Subtypes": ["Eldrazi", "Drone"]
+    },
+    "Oracle": {
+      "RawText": "Devoid (This card has no color.)\nTrample",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Devoid",
+          "Effect": {
+            "EffectType": "devoid"
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effect": {
+            "EffectType": "trample"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 4
+      },
+      { "Kind": "colors", "Colors": [] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+      }
+    ]
+  }
+}

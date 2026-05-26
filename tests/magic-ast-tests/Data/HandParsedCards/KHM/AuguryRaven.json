@@ -1,0 +1,69 @@
+{
+  "Input": {
+    "Name": "Augury Raven",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Creature — Bird",
+    "OracleText": "Flying\nForetell {1}{U} (During your turn, you may pay {2} and exile this card from your hand face down. Cast it on a later turn for its foretell cost.)",
+    "Power": "3",
+    "Toughness": "2",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Augury Raven",
+    "TypeLine": {
+      "Raw": "Creature — Bird",
+      "Supertypes": [],
+      "Types": ["Creature"],
+      "Subtypes": ["Bird"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nForetell {1}{U} (During your turn, you may pay {2} and exile this card from your hand face down. Cast it on a later turn for its foretell cost.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effect": {
+            "EffectType": "evasion",
+            "CanBeBlockedBy": {
+              "CardTypes": ["creature"],
+              "Characteristics": ["flying", "reach"]
+            }
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Foretell",
+          "Effect": {
+            "EffectType": "foretell",
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 1 },
+                { "Kind": "colored", "Colors": ["U"] }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 4
+      },
+      { "Kind": "colors", "Colors": ["U"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
