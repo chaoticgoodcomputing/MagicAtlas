@@ -27,11 +27,15 @@ public sealed class ModifyPTTriggeredRule : ITriggeredRule
       return false;
     }
 
-    // Parse "it gets +P/+T" or "target [creature] gets +P/+T"
+    // Parse "it gets +P/+T", "this creature gets +P/+T", or "target [creature] gets +P/+T"
     ObjectReference target;
     if (Regex.IsMatch(lower, @"\bit\s+gets\b"))
     {
       target = ObjectReference.It();
+    }
+    else if (Regex.IsMatch(lower, @"\bthis\s+creature\s+gets\b"))
+    {
+      target = ObjectReference.Self();
     }
     else if (Regex.IsMatch(lower, @"\btarget\s+creature\b"))
     {

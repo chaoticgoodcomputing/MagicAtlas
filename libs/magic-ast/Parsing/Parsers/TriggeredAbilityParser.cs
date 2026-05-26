@@ -77,6 +77,27 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return null;
     }
 
+    // Peel ability-word prefix ("Landfall — ", "Threshold — ", etc.) if present.
+    // Ability words (Rule 207.2c) have no rules meaning; the classifier already
+    // extracted the word into classification.AbilityWord. Strip the prefix from
+    // the raw text and token list so trigger-timing detection works generically
+    // across all ability words without per-word parser branches.
+    string? abilityWord = classification.AbilityWord;
+    if (abilityWord is not null)
+    {
+      var emDashIndex = text.IndexOf('—');
+      if (emDashIndex >= 0)
+      {
+        text = text[(emDashIndex + 1)..].TrimStart();
+        // Rebuild token list from the stripped text by dropping tokens before and including the em-dash.
+        var emDashTokenIndex = tokens.FindIndex(t => t.Kind == OracleToken.EmDash);
+        if (emDashTokenIndex >= 0 && emDashTokenIndex + 1 < tokens.Count)
+        {
+          tokens = tokens[(emDashTokenIndex + 1)..];
+        }
+      }
+    }
+
     // Parse trigger timing (When/Whenever/At)
     var triggerTiming = ParseTriggerTiming(tokens[0].Kind);
     if (triggerTiming == null)
@@ -144,6 +165,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         Trigger = trigger,
         InterveningIf = interveningIf,
         Effects = [modalEffect],
+        AbilityWord = abilityWord,
       };
     }
 
@@ -160,6 +182,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       InterveningIf = interveningIf,
       Effects = effects,
       Instructions = ExtractInstructions(effectPart, effects),
+      AbilityWord = abilityWord,
     };
   }
 
@@ -972,6 +995,11 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     if (lower.Contains("a creature") || lower.Contains("another creature"))
     {
       return new ObjectFilter { CardTypes = ["creature"], Controller = controller };
+    }
+
+    if (lower.Contains("a land") || lower.Contains("another land"))
+    {
+      return new ObjectFilter { CardTypes = ["land"], Controller = controller };
     }
 
     // Self-by-name pattern, e.g. "When Denethor enters" / "Whenever Barrin dies".
