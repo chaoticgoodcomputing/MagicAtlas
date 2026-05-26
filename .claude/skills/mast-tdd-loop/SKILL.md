@@ -14,9 +14,9 @@ This skill drives one round of extending MagicAST. Each round:
 
 The skill is read from five perspectives. Annotations on each step say which agent owns it.
 
-- **`[main]` — main agent (orchestrator).** Coordinates the batch. Picks **families** from triage (clusters of failures sharing `(pattern, lastAttemptedRule)`), writes the judge briefing (rule facts), dispatches helpers, merges output, dispatches mechanical sub-agents, dispatches judge-verify, merges everything, validates NUnit at 100%, regenerates the glossary, re-runs triage. Owns every cross-cutting artifact.
-- **`[sub:helper-novel]` — Opus novel-shape helper (one per batch).** Receives the briefing + only those candidates that need new AST types, new discriminators, or sit on a doctrinal edge (multi-effect-per-clause, colorless, color-ordering, trait-boundary calls). Creates any new AST types (Red #1) and writes the gold fixtures for them. RoundTrip must be green for all its fixtures before it finishes.
-- **`[sub:helper-mech]` — Sonnet mechanical-fixture helpers (M per batch, parallel).** Each receives a group of fixtures whose AST shapes already exist in `GLOSSARY.md`. Their contract is strictly mechanical: look up existing AST types, write the gold AST, RoundTrip green. **If they'd need a new AST type, they bail** — that's `[sub:helper-novel]`'s territory, not theirs.
+- **`[main]` — main agent (orchestrator).** Coordinates the batch. Picks **families** from triage (clusters of failures sharing `(pattern, lastAttemptedRule)`), writes the judge briefing (rule facts), **inlines excerpts from the MTG rules glossary** (`tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` — gitignored Flowthru intermediate, NOT in worktrees), dispatches helpers, merges output, dispatches mechanical sub-agents, dispatches judge-verify, merges everything, validates NUnit at 100%, **regenerates the AST GLOSSARY.md on main only** (sub-agents must not run `nx run magic-ast:glossary` because the regenerator's output leaks into main's working tree via shared `libs/`), commits the regenerated glossary BEFORE dispatching subsequent waves, re-runs triage. Owns every cross-cutting artifact.
+- **`[sub:helper-novel]` — Opus novel-shape helper (one per batch).** Receives the briefing + only those candidates that need new AST types, new discriminators, or sit on a doctrinal edge (multi-effect-per-clause, colorless, color-ordering, trait-boundary calls). Creates any new AST types (Red #1) and writes the gold fixtures for them. RoundTrip must be green for all its fixtures before it finishes. **Reads `libs/magic-ast/GLOSSARY.md` freely** — it's tracked in git and visible in the worktree. **Does NOT run `nx run magic-ast:glossary`** — orchestrator regenerates on main after merge.
+- **`[sub:helper-mech]` — Sonnet mechanical-fixture helpers (M per batch, parallel).** Each receives a group of fixtures whose AST shapes already exist in `GLOSSARY.md`. Contract is strictly mechanical: look up existing AST types, write the gold AST, RoundTrip green. **If they'd need a new AST type, they bail** — that's `[sub:helper-novel]`'s territory. **Reads `GLOSSARY.md` freely; does NOT regenerate it.**
 - **`[sub:mech]` — mechanical parser sub-agents (N per batch, parallel) — FAMILY CONTRACT.** Each receives a **family**: a `(pattern, lastAttemptedRule)` cluster plus N fixtures (5-10) spanning that family's surface. The contract is: **make ALL N fixtures green via ONE consolidated parser surface** (one new method, or one extended existing method). If the mech finds itself writing N separate `TryParseX` methods, it's misread the family — bail and report the sub-patterns. NUnit's `Parser_ProducesExpectedOutput` for every assigned card must pass before commit.
 - **`[sub:judge]` — judge-verify sub-agent (one per batch).** Reads the batch's changed files post-merge, renders strict PASS/FAIL verdicts per the `mast-judge` skill. Any FAIL halts the merge into main.
 
@@ -88,11 +88,11 @@ Read these in order. They take five minutes and they save hours.
    - `reference_mtg_glossary_location` — where the parsed MTG Comprehensive Rules glossary lives, and when to consult it.
    - `feedback_contributing_replaces_context` — in this workspace, library glossaries/conventions live in `CONTRIBUTING.md`, not `CONTEXT.md`.
 
-2. **`libs/magic-ast/GLOSSARY.md`** — auto-generated index of every current AST node, with discriminator strings and source links. **Look here before inventing a new node.** Many things you might want already exist (`Quantity`, `ObjectFilter`, `TriggerCondition`, `UnlessClause`, the three trait interfaces under `AST/Effects/Traits/`).
+2. **`libs/magic-ast/GLOSSARY.md`** — auto-generated index of every current AST node, with discriminator strings and source links. **Tracked in git; readable from both main and worktrees.** Look here before inventing a new node — many things you might want already exist (`Quantity`, `ObjectFilter`, `TriggerCondition`, `UnlessClause`, the three trait interfaces under `AST/Effects/Traits/`). **DO NOT run `nx run magic-ast:glossary` from a worktree** — the regenerator writes back into the shared `libs/` directory and leaks the result into main's working tree, blocking merges. Orchestrator regenerates on main only.
 
 3. **`libs/magic-ast/CONTRIBUTING.md`** — terminology, AST styling, attribute conventions for the magic-ast library.
 
-4. **`tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json`** — parsed MTG Comprehensive Rules glossary. **Consult this whenever oracle text uses an MTG-domain term** (e.g., "ward", "embalm", "scry", "step", "ability"). Use the rules-accurate definition, not vernacular. **Note for sub-agents in worktrees:** this file lives in the main repo's source tree and may not be present inside an agent worktree. If you can't read it locally, surface the gap rather than guessing — or `git show main:tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` from your worktree to read it.
+4. **`tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json`** — parsed MTG Comprehensive Rules glossary. **GITIGNORED Flowthru intermediate — present on main, NOT in worktrees.** The orchestrator quotes the relevant rule numbers + glossary definitions into each candidate's briefing section (Step 1.5). Sub-agents work from the briefing's citations, not the raw file. If you find yourself in a worktree wanting an MTG-rules definition not in your briefing, BAIL and report — the orchestrator should have included it (or `git show main:tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` to read main's copy directly if you must).
 
 ## The cycle
 
@@ -194,6 +194,12 @@ For each candidate:
 - **{Rule number} {Rule title}** — {subrule text or glossary def, ~1-2 sentences quoted from the rules data}
 - {additional rules as needed}
 
+### AST types in scope (optional convenience — sub-agents can also read GLOSSARY.md directly)
+- **`{TypeName}`** — `[OracleEffect("{discriminator}")]`. Inherits `Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect`. Key fields: `{Field1: Type, Field2: Type, ...}`. Source: `libs/magic-ast/AST/.../{TypeName}.cs`.
+- {repeat for the 3-5 most relevant AST types the sub-agent will use}
+
+This section is a **convenience pointer**, not a strict whitelist — `libs/magic-ast/GLOSSARY.md` is tracked in git and readable from the worktree. Inline the types most directly relevant to the family; the sub-agent can browse the full glossary if it needs more. For helper-novel work that ADDS new types, this section instead lists "AST types you'll write" with proposed signatures.
+
 ### Expected generalization
 - {a sentence or two on what ONE parser surface should look like to cover all N — informative, not prescriptive. The mech may discover the family is too coarse, in which case they bail.}
 
@@ -204,9 +210,11 @@ For each candidate:
 - {term} — referenced in oracle but missing from glossary.json
 ```
 
+**The "Relevant rules" section IS mandatory** — sub-agents in worktrees don't have `glossary.json` (it's a gitignored Flowthru intermediate), so the rules-canonical definitions must be quoted into the briefing. The "AST types in scope" section is a convenience overview; sub-agents can also read `GLOSSARY.md` directly from the worktree (it's tracked in git).
+
 If a candidate's mechanic isn't in `glossary.json` at all (and the term is genuinely MTG-domain, not vernacular), do not dispatch the sub-agent — swap the candidate for a different one or escalate to the human.
 
-The briefing is **informative, not prescriptive**. The judge reports rule facts; the sub-agent owns the AST shape.
+The briefing is **informative, not prescriptive about parser shape**. Sub-agents own the AST shape and parser design.
 
 ### Step 2 — `[main]` Triage candidates and dispatch helpers
 
@@ -515,14 +523,21 @@ done
 # tolerance: any test red after merge halts the batch.
 nx run mast:test
 
-# 3) Regenerate the glossary once for the merged tree.
+# 3) Regenerate the glossary on main (orchestrator-only; sub-agents must
+# never run this — see Roles section and the helper dispatch prompts).
+# This must be committed BEFORE any subsequent sub-agent wave is dispatched
+# so subsequent briefings can reference the new types accurately.
 nx run magic-ast:glossary
+git add libs/magic-ast/GLOSSARY.md
+git commit -m "chore(mast): regenerate GLOSSARY after batch {date}"
 
 # 4) Refresh the corpus-wide triage report.
 nx run mast:run
 ```
 
 If substep 2 fails, do not continue. Roll the merges back and investigate per the `[main]`-only stop conditions below.
+
+**Intra-batch regeneration:** if this batch has a helper-novel wave followed by mech waves, regenerate + commit GLOSSARY.md immediately after the helper-novel merge — BEFORE the mech wave is dispatched. That way the orchestrator can include the new types' signatures in the mech-wave briefing (or sub-prompt amendment). Substep 3 above is the end-of-batch regeneration; intra-batch regeneration follows the same shape but applies after each helper-novel merge.
 
 Produce a batch-level report and decide whether to loop:
 
