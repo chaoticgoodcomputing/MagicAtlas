@@ -35,22 +35,35 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
       return false;
     }
 
+    var isOptional = lower.Contains("you may");
     var count = TriggeredRuleHelpers.ParseWordOrDigitCount(text) ?? 1;
+    var hasAnother = lower.Contains("another target");
     ObjectReference target;
     if (lower.Contains("target creature you control"))
     {
+      var characteristics = hasAnother ? new[] { "another" } : null;
       target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You },
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Controller = ControllerFilter.You,
+          Characteristics = characteristics,
+        },
       };
     }
     else if (lower.Contains("target creature"))
     {
+      var characteristics = hasAnother ? new[] { "another" } : null;
       target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter { CardTypes = ["creature"] },
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Characteristics = characteristics,
+        },
       };
     }
     else if (lower.Contains("this creature") || lower.Contains("this permanent"))
@@ -73,6 +86,7 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
       Target = target,
       CounterType = counterType,
       Count = LiteralQuantity.Of(count),
+      IsOptional = isOptional,
     };
     return true;
   }
