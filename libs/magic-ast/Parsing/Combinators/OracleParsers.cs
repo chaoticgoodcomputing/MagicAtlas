@@ -416,6 +416,24 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Wither" keyword.
+  /// Pattern: "Wither" [reminder]
+  /// Rule 702.80. This creature deals damage to creatures in the form of
+  /// -1/-1 counters. MAST records keyword presence; the damage-redirection
+  /// semantics are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Wither = (
+    from kw in Keyword("Wither")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Wither",
+      Effect = new WitherEffect(),
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -1009,6 +1027,27 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Soulshift N" keyword.
+  /// Pattern: "Soulshift" number [reminder]
+  /// Rule 702.46. A triggered keyword ability: when this creature dies, you may
+  /// return target Spirit card with mana value N or less from your graveyard to
+  /// your hand. MAST records the keyword and its integer value; the trigger-and-
+  /// return expansion is engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Soulshift = (
+    from keyword in Keyword("Soulshift")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Soulshift",
+      Effect = new SoulshiftEffect { Value = int.Parse(value.ToStringValue()) },
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Equip {cost}" keyword.
   /// Pattern: "Equip" mana-symbol+ [reminder]
   /// Rule 702.6. An activated ability that attaches this Equipment to a creature
@@ -1083,6 +1122,7 @@ public static class OracleParsers
     .Or(Convoke)
     .Or(Exalted)
     .Or(Infect)
+    .Or(Wither)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)
@@ -1099,6 +1139,7 @@ public static class OracleParsers
       .Try()
       .Or(Crew.Try())
       .Or(Bushido.Try())
+      .Or(Soulshift.Try())
       .Or(PartnerWith.Try())
       .Or(ChooseABackground.Try())
       .Or(Entwine.Try())
