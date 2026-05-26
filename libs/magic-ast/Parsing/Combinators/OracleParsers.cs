@@ -434,6 +434,25 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Persist" keyword.
+  /// Pattern: "Persist" [reminder]
+  /// Rule 702.78. When this creature dies, if it had no -1/-1 counters on it,
+  /// return it to the battlefield under its owner's control with a -1/-1 counter
+  /// on it. MAST records keyword presence; the dies-trigger and counter-placement
+  /// semantics are engine territory. Mirrors the Infect/Wither pattern exactly.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Persist = (
+    from kw in Keyword("Persist")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Persist",
+      Effect = new PersistEffect { IsOptional = false },
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -1092,6 +1111,50 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Bestow {cost}" keyword.
+  /// Pattern: "Bestow" mana-symbol+ [reminder]
+  /// Rule 702.103. If you cast this card for its bestow cost, it's an Aura spell
+  /// with enchant creature. It becomes a creature again if it's not attached.
+  /// MAST records the keyword and the bestow cost; the alternative-cast /
+  /// Aura-mode / unattach semantics are engine territory. Mirrors the
+  /// Cycling/Equip pattern exactly.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Bestow = (
+    from keyword in Keyword("Bestow")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Bestow",
+      Effect = new BestowEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      },
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -1123,6 +1186,7 @@ public static class OracleParsers
     .Or(Exalted)
     .Or(Infect)
     .Or(Wither)
+    .Or(Persist)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)
@@ -1149,7 +1213,8 @@ public static class OracleParsers
       .Or(Foretell.Try())
       .Or(Flashback.Try())
       .Or(Equip.Try())
-      .Or(Morph.Try());
+      .Or(Morph.Try())
+      .Or(Bestow.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
