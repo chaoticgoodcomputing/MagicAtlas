@@ -380,6 +380,29 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Creatures you control get +N/+M until end of turn." — spell-resolution mass
+    // anthem shape (e.g., Charge, Bar the Door). A one-shot imperative spell effect
+    // (Rule 113.3a) with an explicit "until end of turn" duration clause. The duration
+    // is the distinguishing marker: static anthems like Glorious Anthem ("Creatures you
+    // control get +1/+1.") carry no duration and remain on the Static path. Without
+    // this rule the classifier defaults to Static, routing all "Creatures you control
+    // get ..." lines to StaticAbilityParser where the spell-form stalls.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Creatures\s+you\s+control\s+get\s+[+\-]\d+/[+\-]\d+\s+until\s+end\s+of\s+turn",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "[Self] deals N damage to ..." — self-by-name spell-resolution dealDamage.
     // Take Down's modal options ("Take Down deals 4 damage to target creature
     // with flying.") open with the card's own name rather than a recognised
