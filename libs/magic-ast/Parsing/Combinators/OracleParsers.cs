@@ -242,6 +242,124 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Deathtouch" keyword.
+  /// Pattern: "Deathtouch" [reminder]
+  /// Rule 702.2. Any nonzero damage dealt by a source with deathtouch destroys the
+  /// damaged creature. MAST records keyword presence; semantics are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Deathtouch = (
+    from keyword in Keyword("Deathtouch")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Deathtouch",
+      Effect = new DeathtouchEffect(),
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Hexproof" keyword.
+  /// Pattern: "Hexproof" [reminder]
+  /// Rule 702.11. This permanent can't be the target of spells or abilities
+  /// your opponents control. MAST records keyword presence.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Hexproof = (
+    from keyword in Keyword("Hexproof")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Hexproof",
+      Effect = new HexproofEffect(),
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Shroud" keyword.
+  /// Pattern: "Shroud" [reminder]
+  /// Rule 702.18. This permanent can't be the target of spells or abilities
+  /// (including by its controller). MAST records keyword presence.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Shroud = (
+    from keyword in Keyword("Shroud")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Shroud",
+      Effect = new ShroudEffect(),
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Prowess" keyword.
+  /// Pattern: "Prowess" [reminder]
+  /// Rule 702.108. Modeled as a keyword marker per MAST convention;
+  /// the trigger-and-buff expansion is engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Prowess = (
+    from keyword in Keyword("Prowess")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Prowess",
+      Effect = new ProwessEffect(),
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Devoid" keyword.
+  /// Pattern: "Devoid" [reminder]
+  /// Rule 702.114. Characteristic-defining ability — this card has no color.
+  /// MAST records keyword presence; the colorless-derived semantics are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Devoid = (
+    from keyword in Keyword("Devoid")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Devoid",
+      Effect = new DevoidEffect(),
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Changeling" keyword.
+  /// Pattern: "Changeling" [reminder]
+  /// Rule 702.73. This card is every creature type. MAST records keyword presence.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Changeling = (
+    from keyword in Keyword("Changeling")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Changeling",
+      Effect = new ChangelingEffect(),
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Banding" keyword.
+  /// Pattern: "Banding" [reminder]
+  /// Rule 702.22. Legacy ability. MAST records keyword presence; combat-band
+  /// semantics are engine territory. Reminder text varies but keyword token is uniform.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Banding = (
+    from keyword in Keyword("Banding")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Banding",
+      Effect = new BandingEffect(),
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -564,6 +682,132 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Madness {cost}" keyword.
+  /// Pattern: "Madness" mana-symbol+ [reminder]
+  /// Rule 702.35. Lets a player cast a discarded card for its madness cost.
+  /// MAST records the keyword and the alternative cost; discard-into-exile-and-cast
+  /// machinery is engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Madness = (
+    from keyword in Keyword("Madness")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Madness",
+      Effect = new MadnessEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      },
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Foretell {cost}" keyword.
+  /// Pattern: "Foretell" mana-symbol+ [reminder]
+  /// Rule 702.143. Lets a player exile a card face down for {2}, then cast it
+  /// for its foretell cost on a later turn. MAST records the keyword and the
+  /// foretell cost; deferred-cast machinery is engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Foretell = (
+    from keyword in Keyword("Foretell")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Foretell",
+      Effect = new ForetellEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      },
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Flashback {cost}" keyword.
+  /// Pattern: "Flashback" mana-symbol+ [reminder]
+  /// Rule 702.34. Lets a player cast a card from their graveyard for its
+  /// flashback cost; the card is then exiled. MAST records the keyword and the
+  /// flashback cost; cast-from-graveyard-then-exile machinery is engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Flashback = (
+    from keyword in Keyword("Flashback")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Flashback",
+      Effect = new FlashbackEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      },
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Choose a Background" — a fixed-name partner variant from
   /// Commander Legends: Battle for Baldur's Gate (Rule 702.124g, descriptive
   /// reference). Emits a static ability whose effect carries
@@ -602,6 +846,13 @@ public static class OracleParsers
     .Or(Storm)
     .Or(Defender)
     .Or(Cascade)
+    .Or(Deathtouch)
+    .Or(Hexproof)
+    .Or(Shroud)
+    .Or(Prowess)
+    .Or(Devoid)
+    .Or(Changeling)
+    .Or(Banding)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)
@@ -620,7 +871,10 @@ public static class OracleParsers
       .Or(PartnerWith.Try())
       .Or(ChooseABackground.Try())
       .Or(Entwine.Try())
-      .Or(Cycling.Try());
+      .Or(Cycling.Try())
+      .Or(Madness.Try())
+      .Or(Foretell.Try())
+      .Or(Flashback.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
