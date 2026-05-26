@@ -1,0 +1,73 @@
+{
+  "Input": {
+    "Name": "Flight",
+    "ManaCost": "{U}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nEnchanted creature has flying.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Flight",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nEnchanted creature has flying.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effect": {
+            "EffectType": "enchantRestriction",
+            "LegalTargets": {
+              "CardTypes": ["creature"]
+            }
+          }
+        },
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "gainAbility",
+            "Target": { "Kind": "EnchantedOrEquipped" },
+            "GainedAbility": {
+              "Kind": "static",
+              "KeywordSource": "Flying",
+              "Effect": {
+                "EffectType": "evasion",
+                "CanBeBlockedBy": {
+                  "CardTypes": ["creature"],
+                  "Characteristics": ["flying", "reach"]
+                },
+                "IsOptional": false
+              }
+            },
+            "IsOptional": false
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
