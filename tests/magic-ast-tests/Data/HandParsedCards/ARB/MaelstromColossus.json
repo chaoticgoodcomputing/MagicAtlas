@@ -1,0 +1,66 @@
+{
+  "Input": {
+    "Name": "Maelstrom Colossus",
+    "ManaCost": "{8}",
+    "TypeLine": "Artifact Creature — Golem",
+    "OracleText": "Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)",
+    "Power": "8",
+    "Toughness": "8",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Maelstrom Colossus",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Golem",
+      "Types": ["Artifact", "Creature"],
+      "Subtypes": ["Golem"]
+    },
+    "Oracle": {
+      "RawText": "Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Cascade",
+          "Effect": {
+            "EffectType": "cascade"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{8}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 8
+          }
+        ],
+        "ManaValue": 8
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "8",
+          "Value": 8
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "8",
+          "Value": 8
+        }
+      }
+    ]
+  }
+}

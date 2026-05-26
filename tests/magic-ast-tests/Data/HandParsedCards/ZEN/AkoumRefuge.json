@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Akoum Refuge",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {B} or {R}.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": ["B", "R"]
+  },
+  "Output": {
+    "Name": "Akoum Refuge",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": ["Land"]
+    },
+    "Oracle": {
+      "RawText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {B} or {R}.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "entersTapped"
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["land"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{B} or {R}"
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "R"]
+      }
+    ]
+  }
+}
