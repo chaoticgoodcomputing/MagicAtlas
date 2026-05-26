@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "Wirewood Guardian",
+    "ManaCost": "{5}{G}{G}",
+    "TypeLine": "Creature — Elf Mutant",
+    "OracleText": "Forestcycling {2} ({2}, Discard this card: Search your library for a Forest card, reveal it, put it into your hand, then shuffle.)",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Wirewood Guardian",
+    "TypeLine": {
+      "Raw": "Creature — Elf Mutant",
+      "Types": ["Creature"],
+      "Subtypes": ["Elf", "Mutant"]
+    },
+    "Oracle": {
+      "RawText": "Forestcycling {2} ({2}, Discard this card: Search your library for a Forest card, reveal it, put it into your hand, then shuffle.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Forestcycling",
+          "Effect": {
+            "EffectType": "typecycling",
+            "Type": "Forest",
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 2 }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{G}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 5 },
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 7
+      },
+      { "Kind": "colors", "Colors": ["G"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "6", "Value": 6 },
+        "Toughness": { "ValueType": "fixed", "Raw": "6", "Value": 6 }
+      }
+    ]
+  }
+}
