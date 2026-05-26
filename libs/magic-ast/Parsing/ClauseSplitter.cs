@@ -124,6 +124,16 @@ public sealed class ClauseSplitter
     {
       var (paragraphText, paragraphStart) = paragraphs[i];
 
+      // Additional-cost prefix lines ("As an additional cost to cast this
+      // spell, [cost].") are spell-casting annotations, not oracle abilities.
+      // They belong on Card.Attributes as AdditionalCostsAttribute (populated
+      // by AttributeExtractor). Skipping here prevents a spurious UnparsedAbility
+      // from appearing in Oracle.Abilities for the cost line.
+      if (IsAdditionalCostPrefix(paragraphText))
+      {
+        continue;
+      }
+
       // Level-up cost paragraphs ("Level up {cost} (reminder)") start a
       // multi-stanza superstructure. Consume the cost paragraph plus all
       // following LEVEL stanza paragraphs (with their P/T and inner-ability
@@ -227,6 +237,15 @@ public sealed class ClauseSplitter
   private static bool ContainsBullet(string text) => text.Contains('•');
 
   private static bool IsBulletOption(string text) => text.StartsWith("•");
+
+  /// <summary>
+  /// Recognises "As an additional cost to cast this spell, [cost]." lines.
+  /// These lines are spell-casting annotations (CR 117.12), not oracle abilities.
+  /// AttributeExtractor parses the cost and emits AdditionalCostsAttribute instead.
+  /// Stripping them here prevents a spurious UnparsedAbility in Oracle.Abilities.
+  /// </summary>
+  private static bool IsAdditionalCostPrefix(string text) =>
+    text.StartsWith("As an additional cost to cast this spell,", StringComparison.OrdinalIgnoreCase);
 
   /// <summary>
   /// Recognises the head paragraph of a Level Up cluster: a line that opens
