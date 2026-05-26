@@ -359,6 +359,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target [filter] gets +N/+M ..." — spell-resolution single-target P/T modifier,
+    // optionally combined with keyword grants and/or a duration clause
+    // ("until end of turn"). The "Target" subject marks this as a one-shot imperative
+    // spell effect (Rule 113.3a), not a declarative static. Uses "Target\s+\S+" so
+    // it fires on "Target creature" but not on static shapes like "Equipped creature".
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+\S+.*?\s+gets\s+[+-]\d+/[+-]\d+",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "[Self] deals N damage to ..." — self-by-name spell-resolution dealDamage.
     // Take Down's modal options ("Take Down deals 4 damage to target creature
     // with flying.") open with the card's own name rather than a recognised

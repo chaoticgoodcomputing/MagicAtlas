@@ -29,8 +29,10 @@ public sealed class SpellAbilityParser : IAbilityParser
 
   /// <summary>
   /// Records the (rule, priority) pair for dispatch and diagnostic attribution.
+  /// The optional <see cref="MultiRule"/> is set when the rule also implements
+  /// <see cref="IMultiSpellRule"/> and should be tried before the single-effect path.
   /// </summary>
-  private readonly record struct RuleEntry(ISpellRule Rule, string Name, int Priority);
+  private readonly record struct RuleEntry(ISpellRule Rule, IMultiSpellRule? MultiRule, string Name, int Priority);
 
   public SpellAbilityParser()
   {
@@ -58,7 +60,8 @@ public sealed class SpellAbilityParser : IAbilityParser
         ?? throw new InvalidOperationException(
           $"Failed to instantiate {type.FullName} (parameterless constructor required)."
         );
-      found.Add(new RuleEntry(instance, $"SpellAbilityParser.{type.Name}", attr.Priority));
+      var multiRule = instance as IMultiSpellRule;
+      found.Add(new RuleEntry(instance, multiRule, $"SpellAbilityParser.{type.Name}", attr.Priority));
     }
     // Highest priority first; stable secondary by name for determinism within a band.
     return found
@@ -152,6 +155,12 @@ public sealed class SpellAbilityParser : IAbilityParser
     if (bundled is not null)
     {
       return (bundled, bundledLastRule);
+    }
+
+    var (multi, multiLastRule) = TryParseMultiSpellRuleEffects(text);
+    if (multi is not null)
+    {
+      return (multi, multiLastRule);
     }
 
     var (single, singleLastRule) = TryParseEffect(text);
@@ -253,6 +262,28 @@ public sealed class SpellAbilityParser : IAbilityParser
         Duration = duration,
       },
     };
+  }
+
+  /// <summary>
+  /// Tries each <see cref="IMultiSpellRule"/> in the priority-ordered rule chain.
+  /// Returns the flat effect list and the name of the matching rule on success;
+  /// returns (null, null) when no multi-rule fires.
+  /// </summary>
+  private (IReadOnlyList<Effect>? Effects, string? LastAttemptedRule) TryParseMultiSpellRuleEffects(string text)
+  {
+    var trimmed = text.Trim().TrimEnd('.').Trim();
+    foreach (var entry in _rules)
+    {
+      if (entry.MultiRule is null)
+      {
+        continue;
+      }
+      if (entry.MultiRule.TryMatchMulti(trimmed, out var effects) && effects is not null)
+      {
+        return (effects, entry.Name);
+      }
+    }
+    return (null, null);
   }
 
   /// <summary>
