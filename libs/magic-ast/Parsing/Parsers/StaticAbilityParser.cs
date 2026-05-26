@@ -333,8 +333,8 @@ public sealed class StaticAbilityParser : IAbilityParser
       return null;
     }
 
-    var power = int.Parse(match.Groups["p"].Value);
-    var toughness = int.Parse(match.Groups["t"].Value);
+    var power = int.Parse(match.Groups["psign"].Value + match.Groups["p"].Value);
+    var toughness = int.Parse(match.Groups["tsign"].Value + match.Groups["t"].Value);
 
     return
     [
@@ -351,7 +351,7 @@ public sealed class StaticAbilityParser : IAbilityParser
   }
 
   private static readonly Regex _anthemModifyPTPattern = new(
-    @"^\s*Enchanted\s+creature\s+gets\s+\+(?<p>\d+)/\+(?<t>\d+)\.?\s*$",
+    @"^\s*(?:Enchanted|Equipped)\s+creature\s+gets\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

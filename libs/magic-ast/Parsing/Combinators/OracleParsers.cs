@@ -360,6 +360,24 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Convoke" keyword.
+  /// Pattern: "Convoke" [reminder]
+  /// Rule 702.51. Lets you tap creatures to help pay for this spell.
+  /// MAST records keyword presence; the per-creature cost-reduction mechanic
+  /// is engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Convoke = (
+    from keyword in Keyword("Convoke")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Convoke",
+      Effect = new ConvokeEffect(),
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -826,6 +844,51 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Equip {cost}" keyword.
+  /// Pattern: "Equip" mana-symbol+ [reminder]
+  /// Rule 702.6. An activated ability that attaches this Equipment to a creature
+  /// you control. MAST records the keyword and its activation cost; the attach
+  /// mechanics and sorcery-speed restriction are derived from the rules
+  /// (per the descriptive-not-engine doctrine).
+  /// The cost uses the polymorphic <see cref="MagicAST.AST.Costs.Cost"/> base
+  /// to accommodate future non-mana equip costs (e.g. "Equip — Sacrifice a creature").
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Equip = (
+    from keyword in Keyword("Equip")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Equip",
+      Effect = new EquipEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      },
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -853,6 +916,7 @@ public static class OracleParsers
     .Or(Devoid)
     .Or(Changeling)
     .Or(Banding)
+    .Or(Convoke)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)
@@ -874,7 +938,8 @@ public static class OracleParsers
       .Or(Cycling.Try())
       .Or(Madness.Try())
       .Or(Foretell.Try())
-      .Or(Flashback.Try());
+      .Or(Flashback.Try())
+      .Or(Equip.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
