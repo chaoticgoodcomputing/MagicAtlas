@@ -121,6 +121,113 @@ internal static class SpellRuleHelpers
     };
   }
 
+  // ---------------------------------------------------------------------------
+  // Destroy-filter helpers
+  // ---------------------------------------------------------------------------
+
+  /// <summary>
+  /// Card-type oracle tokens accepted in a destroy filter phrase — both singular
+  /// and plural forms. Values are the canonical lowercase singular strings stored
+  /// in <see cref="ObjectFilter.CardTypes"/>.
+  /// </summary>
+  private static readonly Dictionary<string, string> DestroyCardTypeMap =
+    new(StringComparer.OrdinalIgnoreCase)
+    {
+      { "land", "land" },
+      { "lands", "land" },
+      { "creature", "creature" },
+      { "creatures", "creature" },
+      { "artifact", "artifact" },
+      { "artifacts", "artifact" },
+      { "enchantment", "enchantment" },
+      { "enchantments", "enchantment" },
+      { "planeswalker", "planeswalker" },
+      { "planeswalkers", "planeswalker" },
+      { "permanent", "permanent" },
+      { "permanents", "permanent" },
+      { "instant", "instant" },
+      { "instants", "instant" },
+      { "sorcery", "sorcery" },
+      { "sorceries", "sorcery" },
+    };
+
+  // Regex for a destroy filter phrase:
+  //   [non<X> ] [color ] <noun>
+  // Examples: "nonbasic lands", "white creatures", "black creature", "Spirit"
+  private static readonly Regex DestroyFilterPattern = new(
+    @"^(?:non(?<nonnoun>[A-Za-z]+)\s+)?(?:(?<color>white|blue|black|red|green)\s+)?(?<noun>[A-Za-z]+)$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  /// <summary>
+  /// Parses a destroy-rule filter phrase (the words after "Destroy all" or
+  /// "Destroy target") into an <see cref="ObjectFilter"/>.
+  /// Supports:
+  /// <list type="bullet">
+  ///   <item>Bare card type: "creature", "lands"</item>
+  ///   <item>Bare subtype: "Spirit", "Human" (any word not in the card-type table)</item>
+  ///   <item>Color + card type: "white creatures", "black creature"</item>
+  ///   <item>non- prefix + card type: "nonbasic lands", "nonland creatures"</item>
+  /// </list>
+  /// Returns <c>null</c> if the phrase does not match the expected shape.
+  /// </summary>
+  public static ObjectFilter? ParseDestroyFilter(string filterPhrase)
+  {
+    var m = DestroyFilterPattern.Match(filterPhrase.Trim());
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var nonNoun = m.Groups["nonnoun"].Success ? m.Groups["nonnoun"].Value : null;
+    var colorWord = m.Groups["color"].Success ? m.Groups["color"].Value : null;
+    var noun = m.Groups["noun"].Value;
+
+    // Resolve Colors from the color word.
+    IReadOnlyList<string>? colors = null;
+    bool? isColorless = null;
+    bool? isMulticolored = null;
+    if (colorWord is not null)
+    {
+      var (mappedColors, mappedColorless, mappedMulticolored) = MapColorWord(colorWord);
+      colors = mappedColors;
+      isColorless = mappedColorless;
+      isMulticolored = mappedMulticolored;
+    }
+
+    // Build the Characteristics list from the non- prefix (if present).
+    List<string>? characteristics = null;
+    if (nonNoun is not null)
+    {
+      characteristics = ["non" + nonNoun.ToLowerInvariant()];
+    }
+
+    // Determine whether the main noun is a card type or a subtype.
+    if (DestroyCardTypeMap.TryGetValue(noun, out var singularType))
+    {
+      return new ObjectFilter
+      {
+        CardTypes = [singularType],
+        Colors = colors,
+        IsColorless = isColorless,
+        IsMulticolored = isMulticolored,
+        Characteristics = characteristics,
+      };
+    }
+
+    // Not a card type → treat as a subtype (e.g., "Spirit", "Human").
+    // Color + subtype combinations are theoretically possible but rare; we support
+    // them here for completeness.
+    return new ObjectFilter
+    {
+      Subtypes = [noun],
+      Colors = colors,
+      IsColorless = isColorless,
+      IsMulticolored = isMulticolored,
+      Characteristics = characteristics,
+    };
+  }
+
   /// <summary>
   /// Builds an <see cref="ObjectFilter"/> for "target [non&lt;color&gt;] [color(s)] [card-type] spell
   /// [with mana value N]" — used by the counter-spell rule.

@@ -6,11 +6,16 @@ using MagicAST.AST.Effects.ZoneChange;
 using MagicAST.AST.References;
 
 /// <summary>
-/// "Destroy all [type|subtype]." — mass-destroy spell.
-/// Covers type filters (lands, creatures, artifacts, …) and subtype filters
-/// (Plains, Islands, Auras, …). Emits a <see cref="DestroyEffect"/> whose
-/// <see cref="DestroyEffect.Target"/> has <see cref="ObjectReferenceKind.Each"/>
-/// and the appropriate <see cref="ObjectFilter"/> slot populated.
+/// "Destroy all [filter]." — mass-destroy spell.
+/// Covers single-token type/subtype filters (lands, creatures, Plains, Auras, …)
+/// and richer multi-word filters via <see cref="SpellRuleHelpers.ParseDestroyFilter"/>:
+/// <list type="bullet">
+///   <item>non- prefix: "nonbasic lands", "nonland creatures"</item>
+///   <item>color + type: "white creatures", "black creatures"</item>
+/// </list>
+/// Emits a <see cref="DestroyEffect"/> whose <see cref="DestroyEffect.Target"/> has
+/// <see cref="ObjectReferenceKind.Each"/> and the appropriate <see cref="ObjectFilter"/>
+/// slot populated.
 /// </summary>
 [SpellRule(Priority = 60)]
 public sealed class DestroyAllRule : ISpellRule
@@ -49,8 +54,10 @@ public sealed class DestroyAllRule : ISpellRule
       { "Auras", "Aura" },
     };
 
+  // Matches "Destroy all <filter>" where <filter> is one or more words
+  // (captures multi-word phrases like "nonbasic lands", "white creatures").
   private static readonly Regex Pattern = new(
-    @"^Destroy\s+all\s+(?<token>[A-Za-z]+)$",
+    @"^Destroy\s+all\s+(?<filter>.+)$",
     RegexOptions.Compiled | RegexOptions.IgnoreCase
   );
 
@@ -63,37 +70,59 @@ public sealed class DestroyAllRule : ISpellRule
       return false;
     }
 
-    var token = m.Groups["token"].Value;
+    var filterPhrase = m.Groups["filter"].Value.Trim();
 
-    if (CardTypeTokens.Contains(token))
+    // Fast path: single-token cases (existing behaviour for Armageddon, Supreme Verdict, etc.)
+    if (!filterPhrase.Contains(' '))
     {
-      // Singularize by stripping trailing 's': "lands" → "land", "creatures" → "creature".
-      // All entries in CardTypeTokens are regular plurals — just strip the final 's'.
-      var singularType = token.TrimEnd('s').ToLowerInvariant();
-      effect = new DestroyEffect
+      var token = filterPhrase;
+
+      if (CardTypeTokens.Contains(token))
       {
-        Target = new ObjectReference
+        var singularType = token.TrimEnd('s').ToLowerInvariant();
+        effect = new DestroyEffect
         {
-          Kind = ObjectReferenceKind.Each,
-          Filter = new ObjectFilter { CardTypes = [singularType] },
-        },
-      };
-      return true;
+          Target = new ObjectReference
+          {
+            Kind = ObjectReferenceKind.Each,
+            Filter = new ObjectFilter { CardTypes = [singularType] },
+          },
+        };
+        return true;
+      }
+
+      if (SubtypeSingular.TryGetValue(token, out var singular))
+      {
+        effect = new DestroyEffect
+        {
+          Target = new ObjectReference
+          {
+            Kind = ObjectReferenceKind.Each,
+            Filter = new ObjectFilter { Subtypes = [singular] },
+          },
+        };
+        return true;
+      }
+
+      // Unknown single token — fall through to the shared helper
+      // (handles cases the fast-path tables don't cover).
     }
 
-    if (SubtypeSingular.TryGetValue(token, out var singular))
+    // Multi-word (or unlisted single-token) path: delegate to the shared helper.
+    var filter = SpellRuleHelpers.ParseDestroyFilter(filterPhrase);
+    if (filter is null)
     {
-      effect = new DestroyEffect
-      {
-        Target = new ObjectReference
-        {
-          Kind = ObjectReferenceKind.Each,
-          Filter = new ObjectFilter { Subtypes = [singular] },
-        },
-      };
-      return true;
+      return false;
     }
 
-    return false;
+    effect = new DestroyEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = filter,
+      },
+    };
+    return true;
   }
 }
