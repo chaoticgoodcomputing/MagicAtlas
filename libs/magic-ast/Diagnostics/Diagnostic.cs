@@ -66,4 +66,27 @@ public sealed record Diagnostic
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Pattern { get; init; }
+
+  /// <summary>
+  /// Name of the parser rule that came closest to matching this clause before
+  /// the dispatch gave up. Format <c>"{ParserClassName}.{MethodName}"</c>
+  /// (e.g. <c>"SpellAbilityParser.Parse"</c>). Combined with
+  /// <see cref="Pattern"/> in the triage aggregator to produce
+  /// finer-grained failure clusters (so e.g. a "ConditionalEffect" pattern
+  /// arriving via the spell dispatch chain is distinguished from the same
+  /// pattern arriving via the triggered dispatch chain).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public string? LastAttemptedRule { get; init; }
+
+  /// <summary>
+  /// Character offset within the source oracle text at which the parser bailed
+  /// out. For clause-level fall-throughs this is the clause's start offset
+  /// (i.e. <see cref="MagicAST.AST.TextSpan.Start"/> of the clause being
+  /// dispatched), which is the most precise position the current
+  /// regex-rule-chain architecture surfaces without per-sub-rule
+  /// instrumentation.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? FailurePosition { get; init; }
 }

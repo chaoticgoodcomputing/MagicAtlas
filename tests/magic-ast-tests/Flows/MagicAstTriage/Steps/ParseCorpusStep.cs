@@ -77,17 +77,23 @@ public static class ParseCorpusStep
   private static LineOutcome ParseLine(OracleParser parser, int index, string lineText)
   {
     var result = parser.Parse(lineText);
-    var patterns = result
+    var diagnostics = result
       .Output.Abilities.OfType<UnparsedAbility>()
       .SelectMany(unparsed => unparsed.Diagnostics)
-      .Select(d => d.Pattern ?? "Unknown")
+      .Select(d => new LineDiagnostic
+      {
+        Pattern = d.Pattern ?? "Unknown",
+        LastAttemptedRule = d.LastAttemptedRule,
+        FailurePosition = d.FailurePosition,
+      })
       .ToList();
 
     return new LineOutcome
     {
       LineIndex = index,
       OracleLine = lineText,
-      Patterns = patterns,
+      Patterns = diagnostics.Select(d => d.Pattern).ToList(),
+      Diagnostics = diagnostics,
     };
   }
 }

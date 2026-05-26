@@ -40,7 +40,13 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     }
     return
     [
-      _fallback.Parse(clause, classification, "Activated ability parser not yet implemented"),
+      _fallback.Parse(
+        clause,
+        classification,
+        "Activated ability parser not yet implemented",
+        lastAttemptedRule: "ActivatedAbilityParser.Parse",
+        failurePosition: clause.SourceSpan.Start
+      ),
     ];
   }
 
