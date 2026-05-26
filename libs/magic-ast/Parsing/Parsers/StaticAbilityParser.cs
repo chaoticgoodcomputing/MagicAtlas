@@ -291,6 +291,16 @@ public sealed class StaticAbilityParser : IAbilityParser
       return skipUntap;
     }
 
+    // "This creature can block only creatures with <characteristic>." —
+    // Rule 509.1c blocker-side narrowing restriction. The creature CAN block,
+    // but only attackers matching the filter (e.g. "creatures with flying").
+    // No KeywordSource: the restriction is a full declarative sentence.
+    var canBlockOnly = TryParseCanBlockOnly(clause);
+    if (canBlockOnly != null)
+    {
+      return canBlockOnly;
+    }
+
     return null;
   }
 
@@ -2055,6 +2065,69 @@ public sealed class StaticAbilityParser : IAbilityParser
   // The trailing period is optional for minor formatting variants.
   private static readonly Regex _cantBeBlockedPattern = new(
     @"^\s*This\s+(?:creature|land|permanent)\s+can'?t\s+be\s+blocked\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "This creature can block only creatures with &lt;characteristic&gt;." —
+  /// Rule 509.1c blocker-side narrowing restriction (Cloud Elemental shape).
+  /// The creature can block, but only attackers matching the filter. Distinct
+  /// from <see cref="TryParseCantBlock"/> (blanket can't-block) and from
+  /// <see cref="TryParseMustBlock"/> (blocker-side requirement). No
+  /// <c>KeywordSource</c>: the restriction is a full declarative sentence.
+  /// </summary>
+  /// <remarks>
+  /// The filter phrase is always of the form <c>creatures with &lt;X&gt;</c>
+  /// for this family (e.g. "creatures with flying", "creatures with reach").
+  /// The captured characteristic rides on
+  /// <see cref="ObjectFilter.Characteristics"/> as a verbatim string so the
+  /// gold shape matches the hand-parsed fixture exactly.
+  /// </remarks>
+  private static IReadOnlyList<Ability>? TryParseCanBlockOnly(OracleClause clause)
+  {
+    var match = _canBlockOnlyPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var filterPhrase = match.Groups["filter"].Value.Trim();
+
+    // "creatures with <X>" — the standard filter shape for this family.
+    var withMatch = _creaturesWithPattern.Match(filterPhrase);
+    if (!withMatch.Success)
+    {
+      return null;
+    }
+
+    var characteristic = withMatch.Groups["char"].Value.Trim().ToLowerInvariant();
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new CanBlockOnlyEffect
+        {
+          Filter = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Characteristics = [$"with {characteristic}"],
+          },
+        },
+      },
+    ];
+  }
+
+  // Matches "This creature can block only <filter>."
+  // The filter group captures everything between "only " and the terminal period.
+  private static readonly Regex _canBlockOnlyPattern = new(
+    @"^\s*This\s+creature\s+can\s+block\s+only\s+(?<filter>.+?)\.\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches "creatures with <characteristic>" — the standard filter shape.
+  private static readonly Regex _creaturesWithPattern = new(
+    @"^creatures\s+with\s+(?<char>.+)$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
