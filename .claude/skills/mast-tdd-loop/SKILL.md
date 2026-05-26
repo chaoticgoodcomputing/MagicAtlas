@@ -14,9 +14,9 @@ This skill drives one round of extending MagicAST. Each round:
 
 The skill is read from five perspectives. Annotations on each step say which agent owns it.
 
-- **`[main]` — main agent (orchestrator).** Coordinates the batch. Picks **families** from triage (clusters of failures sharing `(pattern, lastAttemptedRule)`), writes the judge briefing (rule facts), **inlines excerpts from the MTG rules glossary** (`tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` — gitignored Flowthru intermediate, NOT in worktrees), dispatches helpers, merges output, dispatches mechanical sub-agents, dispatches judge-verify, merges everything, validates NUnit at 100%, **regenerates the AST GLOSSARY.md on main only** (sub-agents must not run `nx run magic-ast:glossary` because the regenerator's output leaks into main's working tree via shared `libs/`), commits the regenerated glossary BEFORE dispatching subsequent waves, re-runs triage. Owns every cross-cutting artifact.
-- **`[sub:helper-novel]` — Opus novel-shape helper (one per batch).** Receives the briefing + only those candidates that need new AST types, new discriminators, or sit on a doctrinal edge (multi-effect-per-clause, colorless, color-ordering, trait-boundary calls). Creates any new AST types (Red #1) and writes the gold fixtures for them. RoundTrip must be green for all its fixtures before it finishes. **Reads `libs/magic-ast/GLOSSARY.md` freely** — it's tracked in git and visible in the worktree. **Does NOT run `nx run magic-ast:glossary`** — orchestrator regenerates on main after merge.
-- **`[sub:helper-mech]` — Sonnet mechanical-fixture helpers (M per batch, parallel).** Each receives a group of fixtures whose AST shapes already exist in `GLOSSARY.md`. Contract is strictly mechanical: look up existing AST types, write the gold AST, RoundTrip green. **If they'd need a new AST type, they bail** — that's `[sub:helper-novel]`'s territory. **Reads `GLOSSARY.md` freely; does NOT regenerate it.**
+- **`[main]` — main agent (orchestrator).** Coordinates the batch. Picks **families** from triage (clusters of failures sharing `(pattern, lastAttemptedRule)`), writes the judge briefing (rule facts), **inlines excerpts from the MTG rules glossary** (`tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` — gitignored Flowthru intermediate, NOT in worktrees), dispatches helpers, merges output, dispatches mechanical sub-agents, dispatches judge-verify, merges everything, validates NUnit at 100%, **regenerates AST GLOSSARY.md on main (single source of truth — keeps the committed copy in sync with merged AST changes; commit it immediately after regen so the working tree stays clean for the next merge)**, re-runs triage. Owns every cross-cutting artifact.
+- **`[sub:helper-novel]` — Opus novel-shape helper (one per batch).** Receives the briefing + only those candidates that need new AST types, new discriminators, or sit on a doctrinal edge (multi-effect-per-clause, colorless, color-ordering, trait-boundary calls). Creates any new AST types (Red #1) and writes the gold fixtures for them. RoundTrip must be green for all its fixtures before it finishes. **Reads `libs/magic-ast/GLOSSARY.md` freely** — it's tracked in git and visible in the worktree. **Sub-agent CAN run `nx run magic-ast:glossary` inside the worktree** — the worktree's `libs/` is fully isolated from main's (verified empirically; different inodes, no symlinks). The orchestrator regenerates on main separately as its own source-of-truth.
+- **`[sub:helper-mech]` — Sonnet mechanical-fixture helpers (M per batch, parallel).** Each receives a group of fixtures whose AST shapes already exist in `GLOSSARY.md`. Contract is strictly mechanical: look up existing AST types, write the gold AST, RoundTrip green. **If they'd need a new AST type, they bail** — that's `[sub:helper-novel]`'s territory. **Reads `GLOSSARY.md` freely.**
 - **`[sub:mech]` — mechanical parser sub-agents (N per batch, parallel) — FAMILY CONTRACT.** Each receives a **family**: a `(pattern, lastAttemptedRule)` cluster plus N fixtures (5-10) spanning that family's surface. The contract is: **make ALL N fixtures green via ONE consolidated parser surface** (one new method, or one extended existing method). If the mech finds itself writing N separate `TryParseX` methods, it's misread the family — bail and report the sub-patterns. NUnit's `Parser_ProducesExpectedOutput` for every assigned card must pass before commit.
 - **`[sub:judge]` — judge-verify sub-agent (one per batch).** Reads the batch's changed files post-merge, renders strict PASS/FAIL verdicts per the `mast-judge` skill. Any FAIL halts the merge into main.
 
@@ -88,7 +88,7 @@ Read these in order. They take five minutes and they save hours.
    - `reference_mtg_glossary_location` — where the parsed MTG Comprehensive Rules glossary lives, and when to consult it.
    - `feedback_contributing_replaces_context` — in this workspace, library glossaries/conventions live in `CONTRIBUTING.md`, not `CONTEXT.md`.
 
-2. **`libs/magic-ast/GLOSSARY.md`** — auto-generated index of every current AST node, with discriminator strings and source links. **Tracked in git; readable from both main and worktrees.** Look here before inventing a new node — many things you might want already exist (`Quantity`, `ObjectFilter`, `TriggerCondition`, `UnlessClause`, the three trait interfaces under `AST/Effects/Traits/`). **DO NOT run `nx run magic-ast:glossary` from a worktree** — the regenerator writes back into the shared `libs/` directory and leaks the result into main's working tree, blocking merges. Orchestrator regenerates on main only.
+2. **`libs/magic-ast/GLOSSARY.md`** — auto-generated index of every current AST node, with discriminator strings and source links. **Tracked in git; readable from both main and worktrees.** Look here before inventing a new node — many things you might want already exist (`Quantity`, `ObjectFilter`, `TriggerCondition`, `UnlessClause`, the three trait interfaces under `AST/Effects/Traits/`). The regenerator (`nx run magic-ast:glossary`) writes its output to a path computed from the script's own location (`__file__`), so worktree regen writes only to the worktree's `libs/`. Safe to regenerate in-worktree if needed; the orchestrator regenerates on main as the canonical source of truth.
 
 3. **`libs/magic-ast/CONTRIBUTING.md`** — terminology, AST styling, attribute conventions for the magic-ast library.
 
@@ -109,39 +109,47 @@ echo "$WORKTREE_ROOT"   # sanity-check: should be /home/.../MagicAtlas/.claude/w
 
 If `pwd` does NOT contain `.claude/worktrees/`, you are NOT in a worktree — STOP and report. Working from the main repo will land commits on `main`.
 
-**Step 0b — MANDATORY pre-flight rebase gate.** Run this script verbatim before any other action. It HALTS your session if the worktree was branched from a stale base — the recurring failure mode that has destroyed batches in past runs (worktree branched from a commit deep in history, never rebased, modifications to shared files would revert the rule-split / fixture work / parser refinements on merge).
+**Step 0b — MANDATORY pre-flight rebase.** Run this script verbatim before any other action.
+
+**Why this is always needed:** the Claude Code harness creates each `isolation: "worktree"` agent from a fixed `CLAUDE_BASE` ref — the commit at which the parent session started. It does NOT update for newly merged commits during the session. So **every** sub-agent spawn in a multi-batch session is behind main by however many commits the session has produced. Verified empirically: 89/89 active worktrees in this repo pin to the session-start commit, regardless of when they were spawned.
+
+The gate's job is to silently rebase onto current main before any work happens. Two cases:
 
 ```bash
-# Pre-flight: refuse to proceed if worktree is too far behind main.
+# Pre-flight: rebase worktree onto current main (always; never trust CLAUDE_BASE).
 git -C "$WORKTREE_ROOT" fetch origin main 2>/dev/null || git -C "$WORKTREE_ROOT" fetch origin
 MERGE_BASE=$(git -C "$WORKTREE_ROOT" merge-base HEAD main)
 BEHIND=$(git -C "$WORKTREE_ROOT" rev-list --count "${MERGE_BASE}..main")
+UNIQUE=$(git -C "$WORKTREE_ROOT" rev-list --count "main..HEAD")
 echo "Worktree merge-base: $(git -C "$WORKTREE_ROOT" log --oneline -1 $MERGE_BASE)"
-echo "Behind main by: $BEHIND commits"
+echo "Behind main: $BEHIND commits. Unique on branch: $UNIQUE commits."
 
-if [ "$BEHIND" -gt 20 ]; then
-  echo "STOP — worktree is $BEHIND commits behind main." >&2
-  echo "Either rebase: git -C \"$WORKTREE_ROOT\" rebase main" >&2
-  echo "Or report base-staleness to the orchestrator and exit without committing." >&2
-  exit 1
-fi
-
-# If behind by 1-20 commits, attempt automatic rebase. Abort the session on conflict.
-if [ "$BEHIND" -gt 0 ]; then
+if [ "$BEHIND" -eq 0 ]; then
+  echo "Already at main — no rebase needed."
+elif [ "$UNIQUE" -eq 0 ]; then
+  # Fresh worktree with no unique work — safe to hard-reset to current main.
+  # This is the common case: harness just spawned the worktree, nothing committed yet.
+  echo "Fresh worktree; hard-reset to main."
+  git -C "$WORKTREE_ROOT" reset --hard main
+else
+  # Worktree has unique commits — attempt rebase, halt on conflict.
+  echo "Worktree has $UNIQUE unique commits; rebasing onto main."
   git -C "$WORKTREE_ROOT" rebase main || {
-    echo "STOP — rebase conflict. Report to orchestrator." >&2
+    echo "STOP — rebase conflict. Report to orchestrator with unique commits preserved." >&2
     git -C "$WORKTREE_ROOT" rebase --abort
     exit 1
   }
 fi
 ```
 
+**No commit-count threshold.** Earlier versions HALTed if more than 20 commits behind, but that's incompatible with this harness behavior — staleness is *guaranteed*, often hundreds of commits in long sessions, and the worktree always has zero unique commits at first spawn. Silent hard-reset is the correct behavior in that case; rebase-or-halt only applies when there's actual unique work to preserve.
+
 Tell-tale smells that the gate missed something (rare but worth knowing):
 - Code references pre-consolidation paths (`tools/test/magic-ast/...` instead of `tests/magic-ast-tests/...`).
 - AST property accesses that don't compile (e.g., `Effect.Duration` instead of `(effect as IDurativeEffect)?.Duration`).
 - Test counts that disagree wildly with what the orchestrator briefed you on.
 
-If you see those AFTER the gate passed, STOP and report — the gate threshold may need tightening, or you're working against an unmerged in-flight branch.
+If you see those AFTER the gate passed, STOP and report — you may be working against an unmerged in-flight branch.
 
 **For the rest of this session: all `git` commands MUST use the `-C "$WORKTREE_ROOT"` flag.** This includes `add`, `commit`, `push`, `merge`, `status`, `log`, `diff`. CWD-based git is forbidden. If you find yourself `cd`-ing to inspect a main-repo file, use `git -C "$WORKTREE_ROOT" show main:path/to/file` instead of changing directory.
 
