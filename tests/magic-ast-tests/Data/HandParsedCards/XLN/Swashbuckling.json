@@ -1,0 +1,83 @@
+{
+  "Input": {
+    "Name": "Swashbuckling",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nEnchanted creature gets +2/+2 and has haste.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Swashbuckling",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nEnchanted creature gets +2/+2 and has haste.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effect": {
+            "EffectType": "enchantRestriction",
+            "LegalTargets": {
+              "CardTypes": ["creature"]
+            }
+          }
+        },
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "composite",
+            "IsOptional": false,
+            "Effects": [
+              {
+                "EffectType": "modifyPT",
+                "Target": { "Kind": "EnchantedOrEquipped" },
+                "PowerModifier": { "QuantityType": "literal", "Value": 2 },
+                "ToughnessModifier": { "QuantityType": "literal", "Value": 2 },
+                "IsOptional": false
+              },
+              {
+                "EffectType": "gainAbility",
+                "Target": { "Kind": "EnchantedOrEquipped" },
+                "GainedAbility": {
+                  "Kind": "static",
+                  "KeywordSource": "Haste",
+                  "Effect": {
+                    "EffectType": "haste",
+                    "IsOptional": false
+                  }
+                },
+                "IsOptional": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}
