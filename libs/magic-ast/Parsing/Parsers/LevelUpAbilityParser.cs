@@ -22,7 +22,16 @@ public sealed class LevelUpAbilityParser : IAbilityParser
   {
     if (clause.LevelUpStanzas is null || clause.LevelUpStanzas.Count == 0)
     {
-      return [_fallback.Parse(clause, classification, "LevelUp parser invoked without stanzas")];
+      return
+      [
+        _fallback.Parse(
+          clause,
+          classification,
+          "LevelUp parser invoked without stanzas",
+          lastAttemptedRule: "LevelUpAbilityParser.Parse",
+          failurePosition: clause.SourceSpan.Start
+        ),
+      ];
     }
 
     // The cost paragraph is "Level up {N} ({N}: Put a level counter on this. Level up only as a sorcery.)".

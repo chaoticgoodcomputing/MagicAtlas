@@ -30,6 +30,14 @@ public static class AggregateTriageReportStep
   /// </summary>
   /// <param name="ratchetBaselinePath">Path to <c>test-baseline.json</c>.</param>
   /// <param name="handParsedFixturesRoot">Directory holding <c>HandParsedCards/</c> fixtures.</param>
+  /// <summary>
+  /// Composite grouping key for gap aggregation. The triage flow groups
+  /// failures by <c>(Pattern, LastAttemptedRule)</c> so the same pattern
+  /// produced by two different parser dispatch chains lands as two distinct
+  /// gap entries — sharper than grouping by pattern alone.
+  /// </summary>
+  private readonly record struct GapKey(string Pattern, string? LastAttemptedRule);
+
   public static Func<IEnumerable<ParseRecord>, TriageReport> Create(
     string ratchetBaselinePath,
     string handParsedFixturesRoot
@@ -48,61 +56,104 @@ public static class AggregateTriageReportStep
       var totalCards = all.Count;
       var passingCards = all.Count(r => r.Lines.All(l => l.Patterns.Count == 0));
 
-      // pattern -> line ids (using identity of (cardId, lineIndex))
-      var patternToLineIds = new Dictionary<string, HashSet<(string, int)>>();
-      // pattern -> card ids
-      var patternToCardIds = new Dictionary<string, HashSet<string>>();
+      // (pattern, rule) -> line ids (using identity of (cardId, lineIndex))
+      var keyToLineIds = new Dictionary<GapKey, HashSet<(string, int)>>();
+      // (pattern, rule) -> card ids
+      var keyToCardIds = new Dictionary<GapKey, HashSet<string>>();
+      // (pattern, rule) -> list of FailurePosition values for mode computation
+      var keyToPositions = new Dictionary<GapKey, List<int>>();
 
       foreach (var (record, line) in allLines)
       {
-        foreach (var p in line.Patterns.Distinct())
+        // Per-line distinct keys: a single line can contribute at most once
+        // per (pattern, rule) to the line/card counts (matches the pre-change
+        // .Distinct() semantics on patterns), but every diagnostic instance
+        // contributes a FailurePosition sample for the mode.
+        var seenKeys = new HashSet<GapKey>();
+        foreach (var diag in line.Diagnostics)
         {
-          if (!patternToLineIds.TryGetValue(p, out var lineSet))
+          var key = new GapKey(diag.Pattern, diag.LastAttemptedRule);
+          if (seenKeys.Add(key))
           {
-            patternToLineIds[p] = lineSet = new HashSet<(string, int)>();
-          }
-          lineSet.Add((record.ScryfallId, line.LineIndex));
+            if (!keyToLineIds.TryGetValue(key, out var lineSet))
+            {
+              keyToLineIds[key] = lineSet = new HashSet<(string, int)>();
+            }
+            lineSet.Add((record.ScryfallId, line.LineIndex));
 
-          if (!patternToCardIds.TryGetValue(p, out var cardSet))
-          {
-            patternToCardIds[p] = cardSet = new HashSet<string>();
+            if (!keyToCardIds.TryGetValue(key, out var cardSet))
+            {
+              keyToCardIds[key] = cardSet = new HashSet<string>();
+            }
+            cardSet.Add(record.ScryfallId);
           }
-          cardSet.Add(record.ScryfallId);
+          if (diag.FailurePosition is int pos)
+          {
+            if (!keyToPositions.TryGetValue(key, out var positions))
+            {
+              keyToPositions[key] = positions = new List<int>();
+            }
+            positions.Add(pos);
+          }
         }
       }
 
-      var distinctPatterns = patternToLineIds.Count;
+      // Distinct-pattern count remains pattern-axis for legacy semantics — it
+      // counts unique failure categories, not unique (pattern, rule) pairs.
+      var distinctPatterns = keyToLineIds.Keys.Select(k => k.Pattern).Distinct().Count();
 
       // --- Q3 conservative-naive coverage gain ---
-      // For each pattern P: count cards whose ENTIRE pattern-set across all
-      // lines is exactly {P}; resolving P would flip all of these to green.
-      // Same idea at the line level for lineCoveragePct.
-      var cardPatternSets = all.ToDictionary(
+      // For each gap key K: count cards whose ENTIRE key-set across all lines
+      // is exactly {K}; resolving K would flip all of these to green. Same
+      // idea at the line level for lineCoveragePct.
+      var cardKeySets = all.ToDictionary(
         r => r.ScryfallId,
-        r => r.Lines.SelectMany(l => l.Patterns).Distinct().ToHashSet()
+        r => r.Lines
+          .SelectMany(l => l.Diagnostics)
+          .Select(d => new GapKey(d.Pattern, d.LastAttemptedRule))
+          .ToHashSet()
       );
 
-      var patternToExclusiveCards = patternToLineIds.Keys.ToDictionary(
-        p => p,
-        p =>
-          all.Count(r =>
-          {
-            var ps = cardPatternSets[r.ScryfallId];
-            return ps.Count == 1 && ps.Contains(p);
-          })
+      var keyToExclusiveCards = keyToLineIds.Keys.ToDictionary(
+        k => k,
+        k => all.Count(r =>
+        {
+          var ks = cardKeySets[r.ScryfallId];
+          return ks.Count == 1 && ks.Contains(k);
+        })
       );
 
-      var patternToExclusiveLines = patternToLineIds.Keys.ToDictionary(
-        p => p,
-        p =>
-          allLines.Count(x =>
-          {
-            var ps = x.line.Patterns.Distinct().ToList();
-            return ps.Count == 1 && ps[0] == p;
-          })
+      var keyToExclusiveLines = keyToLineIds.Keys.ToDictionary(
+        k => k,
+        k => allLines.Count(x =>
+        {
+          var ks = x.line.Diagnostics
+            .Select(d => new GapKey(d.Pattern, d.LastAttemptedRule))
+            .Distinct()
+            .ToList();
+          return ks.Count == 1 && ks[0].Equals(k);
+        })
       );
 
       // --- Q1 per-line Jaccard related-pattern detection ---
+      // Relatedness stays at the *pattern* axis (not the (pattern, rule)
+      // composite): the orchestrator's "avoid parallelising related patterns"
+      // contract is keyed on the human-facing pattern name, not the parser
+      // dispatch chain.
+      var patternToLineIds = keyToLineIds
+        .GroupBy(kvp => kvp.Key.Pattern)
+        .ToDictionary(
+          g => g.Key,
+          g =>
+          {
+            var union = new HashSet<(string, int)>();
+            foreach (var entry in g)
+            {
+              union.UnionWith(entry.Value);
+            }
+            return union;
+          }
+        );
       var patternList = patternToLineIds.Keys.ToList();
       var patternToRelated = new Dictionary<string, List<string>>(patternList.Count);
       foreach (var a in patternList)
@@ -128,25 +179,26 @@ public static class AggregateTriageReportStep
       }
 
       // --- Build top gaps ranked by projected card-coverage gain ---
-      var rankedPatterns = patternToLineIds
-        .Keys.OrderByDescending(p => patternToExclusiveCards[p])
-        .ThenByDescending(p => patternToCardIds[p].Count)
+      var rankedKeys = keyToLineIds
+        .Keys.OrderByDescending(k => keyToExclusiveCards[k])
+        .ThenByDescending(k => keyToCardIds[k].Count)
         .Take(MaxTopGaps)
         .ToList();
 
       var cardLookup = all.ToDictionary(r => r.ScryfallId);
 
-      var topGaps = rankedPatterns
+      var topGaps = rankedKeys
         .Select(
-          (pattern, idx) =>
+          (key, idx) =>
             BuildGapEntry(
-              pattern,
+              key,
               idx + 1,
-              patternToLineIds[pattern],
-              patternToCardIds[pattern],
-              patternToExclusiveCards[pattern],
-              patternToExclusiveLines[pattern],
-              patternToRelated[pattern],
+              keyToLineIds[key],
+              keyToCardIds[key],
+              keyToExclusiveCards[key],
+              keyToExclusiveLines[key],
+              patternToRelated.TryGetValue(key.Pattern, out var rel) ? rel : new List<string>(),
+              keyToPositions.TryGetValue(key, out var pos) ? pos : new List<int>(),
               allLines,
               cardLookup,
               handParsedNames,
@@ -171,13 +223,14 @@ public static class AggregateTriageReportStep
     };
 
   private static GapEntry BuildGapEntry(
-    string pattern,
+    GapKey key,
     int rank,
     HashSet<(string, int)> lineIds,
     HashSet<string> cardIds,
     int exclusiveCards,
     int exclusiveLines,
     IReadOnlyList<string> related,
+    IReadOnlyList<int> positions,
     IReadOnlyList<(ParseRecord record, LineOutcome line)> allLines,
     IReadOnlyDictionary<string, ParseRecord> cardLookup,
     IReadOnlySet<string> handParsedNames,
@@ -185,13 +238,19 @@ public static class AggregateTriageReportStep
     int totalLines
   )
   {
+    // Cleanliness is computed against this gap's (pattern, rule) key
+    // specifically, not just the pattern — a line carrying two diagnostics
+    // with the same pattern but different last-attempted-rules counts as
+    // partially-clean for each gap, which is the right blame attribution.
     var candidateLines = allLines
-      .Where(x => x.line.Patterns.Contains(pattern))
+      .Where(x => x.line.Diagnostics.Any(d =>
+        d.Pattern == key.Pattern && d.LastAttemptedRule == key.LastAttemptedRule))
       .Select(x =>
       {
-        var totalDiagnostics = x.line.Patterns.Count;
-        var pDiagnostics = x.line.Patterns.Count(p => p == pattern);
-        var cleanliness = totalDiagnostics == 0 ? 0.0 : 1.0 - ((double)pDiagnostics / totalDiagnostics);
+        var totalDiagnostics = x.line.Diagnostics.Count;
+        var keyDiagnostics = x.line.Diagnostics.Count(d =>
+          d.Pattern == key.Pattern && d.LastAttemptedRule == key.LastAttemptedRule);
+        var cleanliness = totalDiagnostics == 0 ? 0.0 : 1.0 - ((double)keyDiagnostics / totalDiagnostics);
         return new CandidateLine
         {
           OracleText = x.line.OracleLine,
@@ -214,7 +273,9 @@ public static class AggregateTriageReportStep
     return new GapEntry
     {
       Rank = rank,
-      Pattern = pattern,
+      Pattern = key.Pattern,
+      LastAttemptedRule = key.LastAttemptedRule,
+      ModeFailurePosition = ModeOrNull(positions),
       Frequency = new GapFrequency { Lines = lineIds.Count, Cards = cardIds.Count },
       ProjectedCoverageGain = new CoverageGain
       {
@@ -224,6 +285,26 @@ public static class AggregateTriageReportStep
       RelatedPatterns = related,
       CandidateLines = candidateLines,
     };
+  }
+
+  /// <summary>
+  /// Returns the most-common value in <paramref name="values"/>, or null when
+  /// the list is empty. Ties are broken by the smaller offset — deterministic
+  /// and matches the intuition that earlier-in-the-clause failure positions
+  /// are more informative for triage.
+  /// </summary>
+  private static int? ModeOrNull(IReadOnlyList<int> values)
+  {
+    if (values.Count == 0)
+    {
+      return null;
+    }
+    return values
+      .GroupBy(v => v)
+      .OrderByDescending(g => g.Count())
+      .ThenBy(g => g.Key)
+      .First()
+      .Key;
   }
 
   private static CoverageStat StatOf(int passing, int total) =>

@@ -22,7 +22,16 @@ public sealed class SagaAbilityParser : IAbilityParser
     if (clause.SagaChapters is null || clause.SagaChapters.Count == 0)
     {
       // Defensive: classifier should only route us pre-grouped clauses.
-      return [_fallback.Parse(clause, classification, "Saga parser invoked without chapters")];
+      return
+      [
+        _fallback.Parse(
+          clause,
+          classification,
+          "Saga parser invoked without chapters",
+          lastAttemptedRule: "SagaAbilityParser.Parse",
+          failurePosition: clause.SourceSpan.Start
+        ),
+      ];
     }
 
     var chapters = new List<SagaChapter>(clause.SagaChapters.Count);
@@ -38,7 +47,13 @@ public sealed class SagaAbilityParser : IAbilityParser
       var body =
         bodyAbilities.Count > 0
           ? bodyAbilities[0]
-          : _fallback.Parse(chapterClause, bodyClassification, "Saga chapter body produced no abilities");
+          : _fallback.Parse(
+              chapterClause,
+              bodyClassification,
+              "Saga chapter body produced no abilities",
+              lastAttemptedRule: "SagaAbilityParser.Parse",
+              failurePosition: chapterClause.SourceSpan.Start
+            );
 
       chapters.Add(
         new SagaChapter

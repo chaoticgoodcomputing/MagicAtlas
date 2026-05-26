@@ -50,7 +50,13 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     }
     return
     [
-      _fallback.Parse(clause, classification, "Triggered ability parser not yet implemented"),
+      _fallback.Parse(
+        clause,
+        classification,
+        "Triggered ability parser not yet implemented",
+        lastAttemptedRule: "TriggeredAbilityParser.Parse",
+        failurePosition: clause.SourceSpan.Start
+      ),
     ];
   }
 

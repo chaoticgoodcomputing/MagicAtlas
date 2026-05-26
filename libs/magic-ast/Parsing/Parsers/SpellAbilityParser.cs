@@ -53,7 +53,13 @@ public sealed class SpellAbilityParser : IAbilityParser
     {
       return
       [
-        _fallback.Parse(clause, classification, "Spell ability parser couldn't recognise effect"),
+        _fallback.Parse(
+          clause,
+          classification,
+          "Spell ability parser couldn't recognise effect",
+          lastAttemptedRule: "SpellAbilityParser.Parse",
+          failurePosition: clause.SourceSpan.Start
+        ),
       ];
     }
 

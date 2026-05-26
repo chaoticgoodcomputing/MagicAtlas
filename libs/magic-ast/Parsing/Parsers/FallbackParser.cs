@@ -26,15 +26,34 @@ public sealed class FallbackParser : IAbilityParser
   /// <param name="classification">The classification attempt.</param>
   /// <param name="error">Optional error message from the parsing attempt.</param>
   /// <param name="expected">Optional expected tokens/patterns.</param>
+  /// <param name="lastAttemptedRule">
+  /// Optional name of the parser rule that came closest to matching before
+  /// dispatching to fallback. Convention: <c>"{ParserClassName}.{MethodName}"</c>.
+  /// When omitted, defaults to <c>"FallbackParser.Parse"</c> — i.e. the
+  /// classification routed directly to the fallback with no upstream rule attempt.
+  /// </param>
+  /// <param name="failurePosition">
+  /// Optional character offset within the source oracle text at which the
+  /// parser bailed. When omitted, defaults to <c>clause.SourceSpan.Start</c>.
+  /// </param>
   /// <returns>An UnparsedAbility node with diagnostics.</returns>
   public UnparsedAbility Parse(
     OracleClause clause,
     ClauseClassification classification,
     string? error = null,
-    IReadOnlyList<string>? expected = null
+    IReadOnlyList<string>? expected = null,
+    string? lastAttemptedRule = null,
+    int? failurePosition = null
   )
   {
-    var diagnostic = CreateDiagnostic(clause, classification, error, expected);
+    var diagnostic = CreateDiagnostic(
+      clause,
+      classification,
+      error,
+      expected,
+      lastAttemptedRule ?? "FallbackParser.Parse",
+      failurePosition ?? clause.SourceSpan.Start
+    );
 
     return new UnparsedAbility
     {
@@ -58,7 +77,9 @@ public sealed class FallbackParser : IAbilityParser
     OracleClause clause,
     ClauseClassification classification,
     string? error,
-    IReadOnlyList<string>? expected
+    IReadOnlyList<string>? expected,
+    string lastAttemptedRule,
+    int failurePosition
   )
   {
     var pattern = InferFailurePattern(clause, classification);
@@ -72,6 +93,8 @@ public sealed class FallbackParser : IAbilityParser
       Expected = expected,
       RawText = clause.RawText,
       Pattern = pattern,
+      LastAttemptedRule = lastAttemptedRule,
+      FailurePosition = failurePosition,
     };
   }
 

@@ -47,4 +47,38 @@ public partial record LineOutcome
   /// into multiple unparsed clauses sharing the same pattern.
   /// </summary>
   public required IReadOnlyList<string> Patterns { get; init; }
+
+  /// <summary>
+  /// One entry per diagnostic emitted while parsing this line, in lockstep with
+  /// <see cref="Patterns"/>. Each entry bundles the pattern with the parser-rule
+  /// near-miss telemetry (<c>LastAttemptedRule</c> + <c>FailurePosition</c>)
+  /// from the originating <c>Diagnostic</c>. The aggregator uses the bundled
+  /// shape to cluster failures by <c>(pattern, lastAttemptedRule)</c> instead
+  /// of by <c>pattern</c> alone.
+  /// </summary>
+  public required IReadOnlyList<LineDiagnostic> Diagnostics { get; init; }
+}
+
+/// <summary>
+/// Per-diagnostic detail extracted from one <c>UnparsedAbility</c> emitted by
+/// the parser for a single oracle line. Mirrors the relevant fields of
+/// <c>MagicAST.Diagnostics.Diagnostic</c> needed by the triage aggregator.
+/// </summary>
+[FlowthruSchema]
+public partial record LineDiagnostic
+{
+  /// <summary>The <c>Diagnostic.Pattern</c> string (e.g. "ConditionalEffect").</summary>
+  public required string Pattern { get; init; }
+
+  /// <summary>
+  /// Name of the parser rule that came closest to matching before fallback —
+  /// e.g. <c>"SpellAbilityParser.Parse"</c>. May be null on legacy diagnostics
+  /// that pre-date the telemetry wiring.
+  /// </summary>
+  public string? LastAttemptedRule { get; init; }
+
+  /// <summary>
+  /// Character offset within the source oracle line at which the parser bailed.
+  /// </summary>
+  public int? FailurePosition { get; init; }
 }

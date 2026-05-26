@@ -36,7 +36,13 @@ public sealed class StaticAbilityParser : IAbilityParser
     }
     return
     [
-      _fallback.Parse(clause, classification, "Static ability parser not yet implemented"),
+      _fallback.Parse(
+        clause,
+        classification,
+        "Static ability parser not yet implemented",
+        lastAttemptedRule: "StaticAbilityParser.Parse",
+        failurePosition: clause.SourceSpan.Start
+      ),
     ];
   }
 

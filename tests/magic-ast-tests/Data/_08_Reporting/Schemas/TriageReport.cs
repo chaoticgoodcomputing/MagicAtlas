@@ -42,6 +42,27 @@ public partial record GapEntry
 {
   public required int Rank { get; init; }
   public required string Pattern { get; init; }
+
+  /// <summary>
+  /// Parser-rule near-miss identifier — the <c>Diagnostic.LastAttemptedRule</c>
+  /// value shared by this gap's failures. Combined with <see cref="Pattern"/>,
+  /// the pair is the unique key for a gap entry: grouping by
+  /// <c>(Pattern, LastAttemptedRule)</c> distinguishes e.g. a "ConditionalEffect"
+  /// pattern arriving via the spell dispatch chain from the same pattern
+  /// arriving via the triggered dispatch chain. Null only when the entry was
+  /// produced before the telemetry wiring landed (legacy diagnostics).
+  /// </summary>
+  public string? LastAttemptedRule { get; init; }
+
+  /// <summary>
+  /// The mode (most-common) <c>FailurePosition</c> across the failures in this
+  /// group. The mode is preferred over the median because failure positions
+  /// tend to cluster on specific offsets (e.g. clause-start of an offending
+  /// sub-rule), and the mode preserves the cluster rather than averaging it
+  /// away. Null when no failures in the group carry a position.
+  /// </summary>
+  public int? ModeFailurePosition { get; init; }
+
   public required GapFrequency Frequency { get; init; }
   public required CoverageGain ProjectedCoverageGain { get; init; }
 

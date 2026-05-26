@@ -24,14 +24,32 @@ public sealed class ModalAbilityParser : IAbilityParser
     var selection = TryParseModeSelection(clause.RawText);
     if (selection is null)
     {
-      return [_fallback.Parse(clause, classification, "Unrecognized modal selection phrase")];
+      return
+      [
+        _fallback.Parse(
+          clause,
+          classification,
+          "Unrecognized modal selection phrase",
+          lastAttemptedRule: "ModalAbilityParser.Parse",
+          failurePosition: clause.SourceSpan.Start
+        ),
+      ];
     }
 
     var optionClauses = clause.ModalOptions;
     if (optionClauses is null || optionClauses.Count == 0)
     {
       // Header without attached options — degrade to unparsed so the gap is visible.
-      return [_fallback.Parse(clause, classification, "Modal header has no attached options")];
+      return
+      [
+        _fallback.Parse(
+          clause,
+          classification,
+          "Modal header has no attached options",
+          lastAttemptedRule: "ModalAbilityParser.Parse",
+          failurePosition: clause.SourceSpan.Start
+        ),
+      ];
     }
 
     var modes = new List<ModalOption>(optionClauses.Count);
