@@ -122,26 +122,52 @@ internal static class SpellRuleHelpers
   }
 
   /// <summary>
-  /// Builds an <see cref="ObjectFilter"/> for
-  /// "target [color(s)] [card-type] spell" — used by the counter-spell rule.
+  /// Builds an <see cref="ObjectFilter"/> for "target [non&lt;color&gt;] [color(s)] [card-type] spell
+  /// [with mana value N]" — used by the counter-spell rule.
   /// </summary>
-  public static ObjectFilter BuildSpellFilter(string filterText, IReadOnlyList<string> colorWords)
+  /// <param name="colorWords">Named color words (white, blue, …, colorless, multicolored).</param>
+  /// <param name="nonColorWord">A "non&lt;color&gt;" predicate (e.g. "nonblue"), or null.</param>
+  /// <param name="cardTypeWord">A bare card-type qualifier before "spell" (e.g. "artifact"), or null.
+  ///   Card-types that are already implied by "spell" semantics (instant, sorcery, creature,
+  ///   noncreature) go into <c>Characteristics</c>; true orthogonal card types (artifact, land,
+  ///   enchantment, permanent) are appended to <c>CardTypes</c>.</param>
+  /// <param name="manaValueComparison">A mana-value comparison, or null.</param>
+  public static ObjectFilter BuildSpellFilter(
+    IReadOnlyList<string> colorWords,
+    string? nonColorWord = null,
+    string? cardTypeWord = null,
+    Comparison? manaValueComparison = null
+  )
   {
     var characteristics = new List<string>();
     var cardTypes = new List<string> { "spell" };
-    foreach (var word in new[] { "instant", "sorcery", "creature", "noncreature" })
+
+    // non<color> predicates (nonblue, nonred, …) → Characteristics (open-ended set)
+    if (!string.IsNullOrWhiteSpace(nonColorWord))
     {
-      if (
-        filterText.Contains(word, StringComparison.OrdinalIgnoreCase)
-        && !filterText.Contains("non" + word, StringComparison.OrdinalIgnoreCase)
-      )
-      {
-        characteristics.Add(word);
-      }
+      characteristics.Add(nonColorWord.ToLowerInvariant());
     }
-    if (filterText.Contains("noncreature", StringComparison.OrdinalIgnoreCase))
+
+    // Card-type qualifier:
+    //   - "instant", "sorcery", "creature" → Characteristics (spell-subset semantics)
+    //   - "noncreature" → Characteristics
+    //   - "artifact", "land", "enchantment", "permanent" → additional CardType
+    if (!string.IsNullOrWhiteSpace(cardTypeWord))
     {
-      characteristics.Add("noncreature");
+      var lower = cardTypeWord.ToLowerInvariant();
+      switch (lower)
+      {
+        case "instant":
+        case "sorcery":
+        case "creature":
+        case "noncreature":
+          characteristics.Add(lower);
+          break;
+        default:
+          // Orthogonal card type: artifact, land, enchantment, permanent, etc.
+          cardTypes.Add(lower);
+          break;
+      }
     }
 
     List<string>? colors = null;
@@ -172,6 +198,7 @@ internal static class SpellRuleHelpers
       Colors = colors,
       IsColorless = isColorless,
       IsMulticolored = isMulticolored,
+      ManaValueComparison = manaValueComparison,
     };
   }
 }
