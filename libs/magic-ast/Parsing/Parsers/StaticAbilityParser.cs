@@ -204,6 +204,18 @@ public sealed class StaticAbilityParser : IAbilityParser
       return tribalAnthemPT;
     }
 
+    // "... as long as <condition>." — Rule 611 trailing-duration suffix on a
+    // static-grant effect. Peels the suffix, parses the remaining text as
+    // either a P/T buff or a keyword grant, then wraps the result's effect
+    // with AsLongAsDuration. The condition text is stored verbatim — not
+    // parsed further. Placed last so more-specific rules above get first look
+    // at the full text; only reaches here when every other rule returns null.
+    var asLongAs = TryParseAsLongAsStaticGrant(clause);
+    if (asLongAs != null)
+    {
+      return asLongAs;
+    }
+
     return null;
   }
 
@@ -1230,6 +1242,176 @@ public sealed class StaticAbilityParser : IAbilityParser
     @"^\s*(?<filter>[^""""]+?)\s+(?:has|have)\s+[""""](?<body>[^""""]+)[""""]\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
+
+  /// <summary>
+  /// "... as long as [condition]." — Rule 611 continuous-effect trailing
+  /// duration. Detects the suffix, strips it, then tries to parse the
+  /// remainder as either:
+  /// <list type="bullet">
+  ///   <item><c>This creature/This permanent gets +N/+M</c> —
+  ///         <see cref="ModifyPTEffect"/> targeting <c>Self</c>.</item>
+  ///   <item><c>[subject] has [keyword]</c> (unquoted) —
+  ///         <see cref="GainAbilityEffect"/> targeting <c>Self</c>, wrapping
+  ///         the keyword as a nested <see cref="StaticAbility"/>. The subject
+  ///         before "has" collapses to <c>Self</c> per the card-name-as-subject
+  ///         oracle convention.</item>
+  /// </list>
+  /// The peeled condition text (e.g. <c>"it's untapped"</c>) is stored verbatim
+  /// on <see cref="AsLongAsDuration.Condition"/> — not parsed further.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseAsLongAsStaticGrant(OracleClause clause)
+  {
+    // Peel " as long as <condition>." from the end of the clause.
+    var suffixMatch = _asLongAsSuffixPattern.Match(clause.RawText);
+    if (!suffixMatch.Success)
+    {
+      return null;
+    }
+
+    var remainingText = suffixMatch.Groups["main"].Value.Trim();
+    var conditionText = suffixMatch.Groups["cond"].Value.Trim();
+    var duration = new AsLongAsDuration { Condition = conditionText };
+
+    // Sub-parser A: "This creature/This permanent gets +N/+M"
+    var ptMatch = _selfGetsPTPattern.Match(remainingText);
+    if (ptMatch.Success)
+    {
+      var power = int.Parse(ptMatch.Groups["p"].Value);
+      var toughness = int.Parse(ptMatch.Groups["t"].Value);
+      return
+      [
+        new StaticAbility
+        {
+          Effect = new MagicAST.AST.Effects.Modification.ModifyPTEffect
+          {
+            Target = ObjectReference.Self(),
+            PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
+            ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
+            Duration = duration,
+          },
+        },
+      ];
+    }
+
+    // Sub-parser B: "[subject] has [keyword]" — unquoted keyword grant.
+    // Subject collapses to Self (card-name-as-subject oracle convention).
+    var kwMatch = _subjectHasKeywordPattern.Match(remainingText);
+    if (kwMatch.Success)
+    {
+      var kw = kwMatch.Groups["kw"].Value.Trim();
+      var grantedAbility = MapKeywordToStaticAbility(kw);
+      if (grantedAbility != null)
+      {
+        return
+        [
+          new StaticAbility
+          {
+            Effect = new MagicAST.AST.Effects.Modification.GainAbilityEffect
+            {
+              Target = ObjectReference.Self(),
+              GainedAbility = grantedAbility,
+              Duration = duration,
+            },
+          },
+        ];
+      }
+    }
+
+    return null;
+  }
+
+  // Strips " as long as <cond>." from the end. The "main" group is everything
+  // before the suffix; "cond" is the condition body without the trailing period.
+  private static readonly Regex _asLongAsSuffixPattern = new(
+    @"^\s*(?<main>.+?)\s+as\s+long\s+as\s+(?<cond>.+?)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches the sub-clause after suffix stripping for P/T modifiers.
+  // Handles "+0/+3", "+1/+0", etc. (non-negative only — oracle uses explicit
+  // +/- signs; negative modifiers use the dash form which we don't see here).
+  private static readonly Regex _selfGetsPTPattern = new(
+    @"^\s*This\s+(?:creature|permanent)\s+gets\s+\+(?<p>\d+)/\+(?<t>\d+)\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches the sub-clause for an unquoted keyword grant on any subject.
+  // Subject (anything before "has") collapses to Self.
+  private static readonly Regex _subjectHasKeywordPattern = new(
+    @"^\s*\S.*?\s+has\s+(?<kw>[A-Za-z][A-Za-z\s]*?)\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// Maps a keyword phrase to its canonical <see cref="StaticAbility"/> node.
+  /// Returns null for keywords not yet supported, causing the caller to fall
+  /// through to the fallback path.
+  /// </summary>
+  private static StaticAbility? MapKeywordToStaticAbility(string keyword)
+  {
+    return keyword.ToLowerInvariant() switch
+    {
+      "first strike" => new StaticAbility
+      {
+        KeywordSource = "First strike",
+        Effect = new MagicAST.AST.Effects.Combat.CombatDamageTimingEffect
+        {
+          Timing = MagicAST.AST.Effects.Combat.CombatDamageTiming.First,
+        },
+      },
+      "double strike" => new StaticAbility
+      {
+        KeywordSource = "Double strike",
+        Effect = new MagicAST.AST.Effects.Combat.CombatDamageTimingEffect
+        {
+          Timing = MagicAST.AST.Effects.Combat.CombatDamageTiming.Both,
+        },
+      },
+      "flying" => new StaticAbility
+      {
+        KeywordSource = "Flying",
+        Effect = new MagicAST.AST.Effects.Keyword.EvasionEffect
+        {
+          CanBeBlockedBy = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Characteristics = ["flying", "reach"],
+          },
+        },
+      },
+      "indestructible" => new StaticAbility
+      {
+        KeywordSource = "Indestructible",
+        Effect = new MagicAST.AST.Effects.Keyword.IndestructibleEffect(),
+      },
+      "vigilance" => new StaticAbility
+      {
+        KeywordSource = "Vigilance",
+        Effect = new MagicAST.AST.Effects.Keyword.VigilanceEffect(),
+      },
+      "haste" => new StaticAbility
+      {
+        KeywordSource = "Haste",
+        Effect = new MagicAST.AST.Effects.Keyword.HasteEffect(),
+      },
+      "lifelink" => new StaticAbility
+      {
+        KeywordSource = "Lifelink",
+        Effect = new MagicAST.AST.Effects.Damage.LifelinkEffect(),
+      },
+      "reach" => new StaticAbility
+      {
+        KeywordSource = "Reach",
+        Effect = new MagicAST.AST.Effects.Keyword.ReachEffect(),
+      },
+      "trample" => new StaticAbility
+      {
+        KeywordSource = "Trample",
+        Effect = new MagicAST.AST.Effects.Keyword.TrampleEffect(),
+      },
+      _ => null,
+    };
+  }
 
   #region Keyword Parsing
 

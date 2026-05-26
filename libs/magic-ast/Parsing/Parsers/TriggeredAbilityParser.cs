@@ -506,9 +506,86 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return ParseEntersTrigger(triggerText, timing);
     }
 
-    // Add more trigger types here as needed (attacks, etc.)
+    // Attack-with trigger: "Whenever you attack with [Name] and another [qualifier] creature"
+    // (Merry shape). Emits TriggerEvent.Attacks with the companion-creature filter.
+    if (lower.Contains("attack") && lower.Contains("another"))
+    {
+      var attackWith = TryParseAttackWithAndAnotherTrigger(triggerText, timing);
+      if (attackWith is not null)
+      {
+        return attackWith;
+      }
+    }
 
     return null;
+  }
+
+  /// <summary>
+  /// "Whenever you attack with [CardName] and another [qualifier*] creature" —
+  /// models the companion-attack trigger (Rule 508). The card name collapses to
+  /// <c>Self</c> per the card-name-as-subject convention. The companion
+  /// creature filter carries the "another" characteristic plus any supertype
+  /// or card-type qualifiers from the oracle text.
+  /// </summary>
+  private static TriggerCondition? TryParseAttackWithAndAnotherTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    // Pattern: "Whenever you attack with [Name] and another [adj] creature"
+    // The [adj] group captures optional qualifiers like "legendary" before "creature".
+    var match = Regex.Match(
+      triggerText,
+      @"^\s*(?:Whenever\s+)?you\s+attack\s+with\s+\S.*?\s+and\s+another\s+(?<adj>[\w\s]+?)\s+creature\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var adjText = match.Groups["adj"].Value.Trim().ToLowerInvariant();
+
+    // Build companion-creature filter. "legendary" maps to Supertypes;
+    // unrecognised qualifiers fall through to null (bail).
+    List<string>? supertypes = null;
+    List<string>? characteristics = null;
+
+    if (!string.IsNullOrWhiteSpace(adjText))
+    {
+      // Check for supertypes recognised in oracle text.
+      var knownSupertypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+      {
+        "legendary",
+        "basic",
+        "snow",
+        "world",
+      };
+      if (knownSupertypes.Contains(adjText))
+      {
+        supertypes = [adjText.Substring(0, 1).ToUpperInvariant() + adjText.Substring(1).ToLowerInvariant()];
+      }
+      else
+      {
+        // Unrecognised qualifier — bail so the fallback path records the gap.
+        return null;
+      }
+    }
+
+    // "another" is a characteristic exclusion (excludes the source creature).
+    characteristics = ["another"];
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.Attacks,
+      Filter = new ObjectFilter
+      {
+        Supertypes = supertypes,
+        Controller = ControllerFilter.You,
+        Characteristics = characteristics,
+      },
+    };
   }
 
   /// <summary>
