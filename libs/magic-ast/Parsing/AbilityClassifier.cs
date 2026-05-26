@@ -490,6 +490,10 @@ public sealed class AbilityClassifier
       if (
         trimmed.StartsWith(verb + " ", StringComparison.OrdinalIgnoreCase)
         || trimmed.Equals(verb, StringComparison.OrdinalIgnoreCase)
+        // Handles keyword-action verbs that appear as standalone lines:
+        // "Investigate." — the period follows immediately with no space.
+        // The reminder text "(…)" may follow the period; that's also valid.
+        || trimmed.StartsWith(verb + ".", StringComparison.OrdinalIgnoreCase)
       )
       {
         return true;
@@ -598,6 +602,26 @@ public sealed class AbilityClassifier
     "Tap",
     "Untap",
     "Prevent",
+    // Keyword actions (Rule 701) — these are imperative resolution steps, not
+    // statics. Without an explicit entry here, a bare "Investigate." line would
+    // be classified as IsSingleKeyword → Static, which sends it to the static
+    // parser where it stalls. All keyword actions with standalone oracle lines
+    // belong here so they route to SpellAbilityParser.
+    "Investigate",
+    "Populate",
+    "Proliferate",
+    "Regenerate",
+    "Bolster",
+    "Manifest",
+    "Detain",
+    "Explore",
+    "Adapt",
+    "Amass",
+    "Foretell",
+    "Connive",
+    "Train",
+    "Exert",
+    "Venture",
   ];
 
   /// <summary>
