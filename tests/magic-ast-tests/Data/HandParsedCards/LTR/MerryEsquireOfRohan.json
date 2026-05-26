@@ -1,0 +1,143 @@
+{
+  "Input": {
+    "Name": "Merry, Esquire of Rohan",
+    "ManaCost": "{R}{W}",
+    "TypeLine": "Legendary Creature — Halfling Knight",
+    "OracleText": "Haste\nMerry has first strike as long as it's equipped.\nWhenever you attack with Merry and another legendary creature, draw a card.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Merry, Esquire of Rohan",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Halfling Knight",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Halfling",
+        "Knight"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Haste\nMerry has first strike as long as it's equipped.\nWhenever you attack with Merry and another legendary creature, draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Haste",
+          "Effect": {
+            "EffectType": "haste"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "gainAbility",
+            "Target": {
+              "Kind": "Self"
+            },
+            "GainedAbility": {
+              "Kind": "static",
+              "KeywordSource": "First strike",
+              "Effect": {
+                "EffectType": "combatDamageTiming",
+                "Timing": "First"
+              }
+            },
+            "Duration": {
+              "DurationType": "asLongAs",
+              "Condition": "it's equipped"
+            }
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "Supertypes": [
+                "Legendary"
+              ],
+              "Controller": "You",
+              "Characteristics": [
+                "another"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{R}{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
