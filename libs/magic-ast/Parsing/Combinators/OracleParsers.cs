@@ -883,6 +883,52 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Morph {cost}" keyword.
+  /// Pattern: "Morph" mana-symbol+ [reminder]
+  /// Rule 702.37. A static ability: the player may cast this card face down as
+  /// a 2/2 colorless creature for {3}, and may turn it face up later by paying
+  /// its morph cost. MAST records the keyword and the morph cost; the
+  /// cast-face-down rules and turn-face-up mechanics are conventionally
+  /// inferred from the rules (per the descriptive-not-engine doctrine).
+  /// The cost uses the polymorphic <see cref="MagicAST.AST.Costs.Cost"/> base,
+  /// mirroring <see cref="CyclingEffect"/> and <see cref="EquipEffect"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Morph = (
+    from keyword in Keyword("Morph")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Morph",
+      Effect = new MorphEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      },
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Equip {cost}" keyword.
   /// Pattern: "Equip" mana-symbol+ [reminder]
   /// Rule 702.6. An activated ability that attaches this Equipment to a creature
@@ -979,7 +1025,8 @@ public static class OracleParsers
       .Or(Madness.Try())
       .Or(Foretell.Try())
       .Or(Flashback.Try())
-      .Or(Equip.Try());
+      .Or(Equip.Try())
+      .Or(Morph.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
