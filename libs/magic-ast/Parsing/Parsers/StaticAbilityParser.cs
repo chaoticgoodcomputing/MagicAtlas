@@ -1537,11 +1537,12 @@ public sealed class StaticAbilityParser : IAbilityParser
   ///   <item><c>White creatures get …</c> — color + card-type filter.</item>
   ///   <item><c>Dragon creatures you control get …</c> — subtype + card-type + controller.</item>
   ///   <item><c>Elves you control get …</c> — bare subtype (depluralised) + controller.</item>
+  ///   <item><c>Other Cats you control get …</c> — "Other" prefix adds
+  ///         <c>Characteristics: ["other"]</c> to the filter.</item>
   /// </list>
   /// Negative modifiers (e.g. <c>-1/-1</c>) are emitted as
   /// <see cref="MagicAST.AST.Quantities.LiteralQuantity.Of(int)"/> with a
-  /// negative value. Does NOT match the "Other [Subtype] creatures …" shape
-  /// (handled by <see cref="TryParseTribalAnthemModifyPT"/>) or the
+  /// negative value. Does NOT match the
   /// "Enchanted creature gets …" shape (handled by
   /// <see cref="TryParseAnthemModifyPT"/>). Also does NOT match lines ending
   /// in "as long as …" — those are handled by
@@ -1565,6 +1566,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     }
 
     var filterText = match.Groups["filter"].Value.Trim();
+    var isOther = match.Groups["other"].Success;
     var psign = match.Groups["psign"].Value;
     var p = int.Parse(match.Groups["p"].Value);
     var tsign = match.Groups["tsign"].Value;
@@ -1573,7 +1575,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     var power = psign == "-" ? -p : p;
     var toughness = tsign == "-" ? -t : t;
 
-    var filter = ParseLordPTFilter(filterText);
+    var filter = ParseLordPTFilter(filterText, isOther);
     if (filter is null)
     {
       return null;
@@ -1597,10 +1599,12 @@ public sealed class StaticAbilityParser : IAbilityParser
     ];
   }
 
-  // Pattern: optional "All " prefix, then a filter noun-phrase, then
-  // "get"/"gets", then [+-]N/[+-]N. Anchored; does not match mid-sentence.
+  // Pattern: optional "Other " or "All " prefix, then a filter noun-phrase,
+  // then "get"/"gets", then [+-]N/[+-]N. Anchored; does not match mid-sentence.
+  // The named group "other" fires when "Other " is present; used to populate
+  // ObjectFilter.Characteristics: ["other"] on the resulting filter.
   private static readonly Regex _lordPTBuffPattern = new(
-    @"^\s*(?:All\s+)?(?<filter>\S.+?)\s+gets?\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\.?\s*$",
+    @"^\s*(?:(?<other>Other)\s+|All\s+)?(?<filter>\S.+?)\s+gets?\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -1618,10 +1622,17 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// <summary>
   /// Parses the filter noun-phrase in a lord-effect P/T line into an
   /// <see cref="ObjectFilter"/>. Returns null for unrecognised shapes.
+  /// When <paramref name="isOther"/> is <see langword="true"/>, the filter
+  /// includes <c>Characteristics: ["other"]</c> to represent the "Other"
+  /// qualifier on the oracle line (e.g. "Other Cats you control get +2/+1.").
   /// </summary>
-  private static ObjectFilter? ParseLordPTFilter(string filterText)
+  private static ObjectFilter? ParseLordPTFilter(string filterText, bool isOther = false)
   {
     var text = filterText.Trim();
+
+    // "Other " qualifier on the oracle line → record as a Characteristics
+    // entry so the AST preserves the exclusion-of-self semantics.
+    IReadOnlyList<string>? characteristics = isOther ? ["other"] : null;
 
     // Peel optional "you control" controller suffix.
     ControllerFilter? controller = null;
@@ -1652,6 +1663,7 @@ public sealed class StaticAbilityParser : IAbilityParser
         CardTypes = ["creature"],
         Colors = [colorCode],
         Controller = controller,
+        Characteristics = characteristics,
       };
     }
 
@@ -1675,6 +1687,7 @@ public sealed class StaticAbilityParser : IAbilityParser
         CardTypes = ["creature"],
         Subtypes = [subtype],
         Controller = controller,
+        Characteristics = characteristics,
       };
     }
 
@@ -1685,6 +1698,7 @@ public sealed class StaticAbilityParser : IAbilityParser
       {
         CardTypes = ["creature"],
         Controller = controller,
+        Characteristics = characteristics,
       };
     }
 
@@ -1693,6 +1707,13 @@ public sealed class StaticAbilityParser : IAbilityParser
     // singular canonical oracle-capitalised form. Irregular plurals (e.g.
     // "Elves" → "Elf") are handled via a lookup before the fallback simple
     // strip-s path.
+    // When the "Other " prefix is present the filter describes a tribal-lord
+    // shape ("Other Cats you control get …") where the subtype is a
+    // creature-only subtype. Include CardTypes: ["creature"] so the filter
+    // aligns with the "[Subtype] creatures" branch — both describe creatures
+    // of that subtype. Without the "Other" qualifier the subtype noun may span
+    // non-creature permanents (e.g. "Elves" in some enchantment anthems) so
+    // CardTypes is omitted for backward compatibility.
     var bareSubtypeMatch = Regex.Match(text, @"^(?<sub>[A-Z][a-z]+)s$");
     if (bareSubtypeMatch.Success)
     {
@@ -1700,8 +1721,10 @@ public sealed class StaticAbilityParser : IAbilityParser
       var subtype = DepluralizeSubtype(pluralWord);
       return new ObjectFilter
       {
+        CardTypes = isOther ? (IReadOnlyList<string>?)["creature"] : null,
         Subtypes = [subtype],
         Controller = controller,
+        Characteristics = characteristics,
       };
     }
 
