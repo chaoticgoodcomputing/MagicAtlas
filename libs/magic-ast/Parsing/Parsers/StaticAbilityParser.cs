@@ -204,6 +204,16 @@ public sealed class StaticAbilityParser : IAbilityParser
       return tribalAnthemPT;
     }
 
+    // "[FilterDescription] (get|gets) [+-]N/[+-]N." — lord-effect P/T buff on a
+    // filtered set of creatures (Rule 613.1c, layer 7C). Handles global
+    // (no controller), controller-scoped, color-scoped, subtype+type, and
+    // bare-subtype filter shapes in a single consolidated surface.
+    var lordPT = TryParseLordPTBuff(clause);
+    if (lordPT != null)
+    {
+      return lordPT;
+    }
+
     // "... as long as <condition>." — Rule 611 trailing-duration suffix on a
     // static-grant effect. Peels the suffix, parses the remaining text as
     // either a P/T buff or a keyword grant, then wraps the result's effect
@@ -1411,6 +1421,217 @@ public sealed class StaticAbilityParser : IAbilityParser
       },
       _ => null,
     };
+  }
+
+  /// <summary>
+  /// "[FilterDescription] (get|gets) [+-]N/[+-]N." — lord-effect P/T buff
+  /// (Rule 613.1c, layer 7C). ONE consolidated parser surface covering the
+  /// family of filter dimensions:
+  /// <list type="bullet">
+  ///   <item><c>All creatures get …</c> — global creature buff; no controller.</item>
+  ///   <item><c>Creatures get …</c> / <c>Creatures you control get …</c> — card-type
+  ///         filter; optional controller scope.</item>
+  ///   <item><c>White creatures get …</c> — color + card-type filter.</item>
+  ///   <item><c>Dragon creatures you control get …</c> — subtype + card-type + controller.</item>
+  ///   <item><c>Elves you control get …</c> — bare subtype (depluralised) + controller.</item>
+  /// </list>
+  /// Negative modifiers (e.g. <c>-1/-1</c>) are emitted as
+  /// <see cref="MagicAST.AST.Quantities.LiteralQuantity.Of(int)"/> with a
+  /// negative value. Does NOT match the "Other [Subtype] creatures …" shape
+  /// (handled by <see cref="TryParseTribalAnthemModifyPT"/>) or the
+  /// "Enchanted creature gets …" shape (handled by
+  /// <see cref="TryParseAnthemModifyPT"/>). Also does NOT match lines ending
+  /// in "as long as …" — those are handled by
+  /// <see cref="TryParseAsLongAsStaticGrant"/>, which is tried after this
+  /// method in the dispatch chain, ensuring the more-specific rules take
+  /// priority.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseLordPTBuff(OracleClause clause)
+  {
+    var match = _lordPTBuffPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    // Don't steal from AsLongAs — that parser peels the suffix itself.
+    // If the raw text has " as long as" anywhere, skip here.
+    if (clause.RawText.Contains(" as long as", StringComparison.OrdinalIgnoreCase))
+    {
+      return null;
+    }
+
+    var filterText = match.Groups["filter"].Value.Trim();
+    var psign = match.Groups["psign"].Value;
+    var p = int.Parse(match.Groups["p"].Value);
+    var tsign = match.Groups["tsign"].Value;
+    var t = int.Parse(match.Groups["t"].Value);
+
+    var power = psign == "-" ? -p : p;
+    var toughness = tsign == "-" ? -t : t;
+
+    var filter = ParseLordPTFilter(filterText);
+    if (filter is null)
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new ModifyPTEffect
+        {
+          Target = new ObjectReference
+          {
+            Kind = ObjectReferenceKind.Each,
+            Filter = filter,
+          },
+          PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
+          ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
+        },
+      },
+    ];
+  }
+
+  // Pattern: optional "All " prefix, then a filter noun-phrase, then
+  // "get"/"gets", then [+-]N/[+-]N. Anchored; does not match mid-sentence.
+  private static readonly Regex _lordPTBuffPattern = new(
+    @"^\s*(?:All\s+)?(?<filter>\S.+?)\s+gets?\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Color-name → single-letter code map (WUBRG order, all five colours).
+  private static readonly IReadOnlyDictionary<string, string> _colorNameToCode =
+    new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+      ["White"] = "W",
+      ["Blue"] = "U",
+      ["Black"] = "B",
+      ["Red"] = "R",
+      ["Green"] = "G",
+    };
+
+  /// <summary>
+  /// Parses the filter noun-phrase in a lord-effect P/T line into an
+  /// <see cref="ObjectFilter"/>. Returns null for unrecognised shapes.
+  /// </summary>
+  private static ObjectFilter? ParseLordPTFilter(string filterText)
+  {
+    var text = filterText.Trim();
+
+    // Peel optional "you control" controller suffix.
+    ControllerFilter? controller = null;
+    if (text.EndsWith(" you control", StringComparison.OrdinalIgnoreCase))
+    {
+      controller = ControllerFilter.You;
+      text = text[..^" you control".Length].Trim();
+    }
+
+    // --- Shape: "[Color] creatures" (e.g. "White creatures", "Black creatures") ---
+    // Must be checked BEFORE the generic "[Subtype] creatures" branch because
+    // colour adjectives like "White" also match the capitalised-subtype pattern.
+    // Oracle colour adjectives are capitalised at the start of a clause.
+    var colorCreatureMatch = Regex.Match(
+      text,
+      @"^(?<color>White|Blue|Black|Red|Green)\s+creatures?$",
+      RegexOptions.IgnoreCase
+    );
+    if (colorCreatureMatch.Success)
+    {
+      var colorName = colorCreatureMatch.Groups["color"].Value;
+      if (!_colorNameToCode.TryGetValue(colorName, out var colorCode))
+      {
+        return null;
+      }
+      return new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Colors = [colorCode],
+        Controller = controller,
+      };
+    }
+
+    // --- Shape: "[Subtype] creatures" (e.g. "Dragon creatures", "Bird creatures") ---
+    // Capitalised subtype immediately before the lower-case "creatures" noun.
+    // Checked after the colour branch so that colour adjectives ("White") are
+    // not misclassified as subtypes.
+    var subtypeCreatureMatch = Regex.Match(
+      text,
+      @"^(?<sub>[A-Z][a-z]+)\s+creatures?$",
+      RegexOptions.IgnoreCase
+    );
+    if (subtypeCreatureMatch.Success)
+    {
+      var subtype = subtypeCreatureMatch.Groups["sub"].Value;
+      // Normalise to singular oracle-canonical capitalised form.
+      // Oracle capitalises creature subtypes; the matched group already has
+      // its original capitalisation (e.g. "Dragon", "Bird").
+      return new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Subtypes = [subtype],
+        Controller = controller,
+      };
+    }
+
+    // --- Shape: "creatures" / "Creatures" (bare card-type) ---
+    if (text.Equals("creatures", StringComparison.OrdinalIgnoreCase))
+    {
+      return new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Controller = controller,
+      };
+    }
+
+    // --- Shape: bare plural subtype (e.g. "Elves", "Goblins", "Saprolings") ---
+    // Capitalised plural noun, no "creatures" word. Depluralise to the
+    // singular canonical oracle-capitalised form. Irregular plurals (e.g.
+    // "Elves" → "Elf") are handled via a lookup before the fallback simple
+    // strip-s path.
+    var bareSubtypeMatch = Regex.Match(text, @"^(?<sub>[A-Z][a-z]+)s$");
+    if (bareSubtypeMatch.Success)
+    {
+      var pluralWord = bareSubtypeMatch.Groups["sub"].Value + "s";
+      var subtype = DepluralizeSubtype(pluralWord);
+      return new ObjectFilter
+      {
+        Subtypes = [subtype],
+        Controller = controller,
+      };
+    }
+
+    // Unrecognised filter shape — fall through to the fallback parser.
+    return null;
+  }
+
+  // Known irregular plural → singular mappings for MTG creature subtypes.
+  // Checked before the fallback simple strip-s in DepluralizeSubtype.
+  private static readonly IReadOnlyDictionary<string, string> _subtypeIrregularPlurals =
+    new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+      ["Elves"] = "Elf",
+      ["Mice"] = "Mouse",
+      ["Loci"] = "Locus",
+      ["Dwarves"] = "Dwarf",
+      ["Wolves"] = "Wolf",
+      ["Djinn"] = "Djinn",
+    };
+
+  /// <summary>
+  /// Returns the oracle-canonical singular form of a plural subtype word.
+  /// Handles known irregular plurals first; falls back to stripping a
+  /// trailing "s" for regular "-s" plurals.
+  /// </summary>
+  private static string DepluralizeSubtype(string plural)
+  {
+    if (_subtypeIrregularPlurals.TryGetValue(plural, out var singular))
+    {
+      return singular;
+    }
+    // Simple regular plural: strip trailing "s".
+    return plural.EndsWith('s') ? plural[..^1] : plural;
   }
 
   #region Keyword Parsing
