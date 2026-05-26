@@ -14,7 +14,7 @@ This skill drives one round of extending MagicAST. Each round:
 
 The skill is read from five perspectives. Annotations on each step say which agent owns it.
 
-- **`[main]` — main agent (orchestrator).** Coordinates the batch. Picks **families** from triage (clusters of failures sharing `(pattern, lastAttemptedRule)`), writes the judge briefing (rule facts), **inlines excerpts from the MTG rules glossary** (`tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` — gitignored Flowthru intermediate, NOT in worktrees), dispatches helpers, merges output, dispatches mechanical sub-agents, dispatches judge-verify, merges everything, validates NUnit at 100%, **regenerates AST GLOSSARY.md on main (single source of truth — keeps the committed copy in sync with merged AST changes; commit it immediately after regen so the working tree stays clean for the next merge)**, re-runs triage. Owns every cross-cutting artifact.
+- **`[main]` — main agent (orchestrator).** Coordinates the batch. Picks **families** from triage (clusters of failures sharing `(pattern, lastAttemptedRule)`), writes the judge briefing with rules-canonical citations from `tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` (sub-agents have a copy of this gitignored file in their worktree via `.worktreeinclude`, but the briefing's rule-number citations are still the canonical reference), dispatches helpers, merges output, dispatches mechanical sub-agents, dispatches judge-verify, merges everything, validates NUnit at 100%, **regenerates AST GLOSSARY.md on main (single source of truth — keeps the committed copy in sync with merged AST changes; commit it immediately after regen so the working tree stays clean for the next merge)**, re-runs triage. Owns every cross-cutting artifact.
 - **`[sub:helper-novel]` — Opus novel-shape helper (one per batch).** Receives the briefing + only those candidates that need new AST types, new discriminators, or sit on a doctrinal edge (multi-effect-per-clause, colorless, color-ordering, trait-boundary calls). Creates any new AST types (Red #1) and writes the gold fixtures for them. RoundTrip must be green for all its fixtures before it finishes. **Reads `libs/magic-ast/GLOSSARY.md` freely** — it's tracked in git and visible in the worktree. **Sub-agent CAN run `nx run magic-ast:glossary` inside the worktree** — the worktree's `libs/` is fully isolated from main's (verified empirically; different inodes, no symlinks). The orchestrator regenerates on main separately as its own source-of-truth.
 - **`[sub:helper-mech]` — Sonnet mechanical-fixture helpers (M per batch, parallel).** Each receives a group of fixtures whose AST shapes already exist in `GLOSSARY.md`. Contract is strictly mechanical: look up existing AST types, write the gold AST, RoundTrip green. **If they'd need a new AST type, they bail** — that's `[sub:helper-novel]`'s territory. **Reads `GLOSSARY.md` freely.**
 - **`[sub:mech]` — mechanical parser sub-agents (N per batch, parallel) — FAMILY CONTRACT.** Each receives a **family**: a `(pattern, lastAttemptedRule)` cluster plus N fixtures (5-10) spanning that family's surface. The contract is: **make ALL N fixtures green via ONE consolidated parser surface** (one new method, or one extended existing method). If the mech finds itself writing N separate `TryParseX` methods, it's misread the family — bail and report the sub-patterns. NUnit's `Parser_ProducesExpectedOutput` for every assigned card must pass before commit.
@@ -92,7 +92,11 @@ Read these in order. They take five minutes and they save hours.
 
 3. **`libs/magic-ast/CONTRIBUTING.md`** — terminology, AST styling, attribute conventions for the magic-ast library.
 
-4. **`tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json`** — parsed MTG Comprehensive Rules glossary. **GITIGNORED Flowthru intermediate — present on main, NOT in worktrees.** The orchestrator quotes the relevant rule numbers + glossary definitions into each candidate's briefing section (Step 1.5). Sub-agents work from the briefing's citations, not the raw file. If you find yourself in a worktree wanting an MTG-rules definition not in your briefing, BAIL and report — the orchestrator should have included it (or `git show main:tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` to read main's copy directly if you must).
+4. **`tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json`** + **`tests/atlas-flow-test/Data/_03_Primary/Datasets/rules-structure.json`** — parsed MTG Comprehensive Rules glossary and rules-section structure. **GITIGNORED Flowthru intermediates — but copied into every new subagent worktree via `.worktreeinclude`.** Sub-agents can `jq` them directly without going through the orchestrator. The briefing still cites the relevant rule numbers as the canonical reference for the family, but if you need a glossary entry not in the briefing, read it from the worktree's copy:
+
+   ```bash
+   jq '.terms["Deathtouch"]' tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json
+   ```
 
 ## The cycle
 
@@ -109,47 +113,22 @@ echo "$WORKTREE_ROOT"   # sanity-check: should be /home/.../MagicAtlas/.claude/w
 
 If `pwd` does NOT contain `.claude/worktrees/`, you are NOT in a worktree — STOP and report. Working from the main repo will land commits on `main`.
 
-**Step 0b — MANDATORY pre-flight rebase.** Run this script verbatim before any other action.
+**Step 0b — Verify your worktree base.** The repo sets `worktree.baseRef: "head"` in `.claude/settings.json`, so the Claude Code harness branches your worktree from current local `main` HEAD at spawn time (not from `origin/HEAD`, which would be stale in long sessions where main has many unpushed commits).
 
-**Why this is always needed:** the Claude Code harness creates each `isolation: "worktree"` agent from a fixed `CLAUDE_BASE` ref — the commit at which the parent session started. It does NOT update for newly merged commits during the session. So **every** sub-agent spawn in a multi-batch session is behind main by however many commits the session has produced. Verified empirically: 89/89 active worktrees in this repo pin to the session-start commit, regardless of when they were spawned.
-
-The gate's job is to silently rebase onto current main before any work happens. Two cases:
+Two quick sanity checks before any other action:
 
 ```bash
-# Pre-flight: rebase worktree onto current main (always; never trust CLAUDE_BASE).
-git -C "$WORKTREE_ROOT" fetch origin main 2>/dev/null || git -C "$WORKTREE_ROOT" fetch origin
-MERGE_BASE=$(git -C "$WORKTREE_ROOT" merge-base HEAD main)
-BEHIND=$(git -C "$WORKTREE_ROOT" rev-list --count "${MERGE_BASE}..main")
-UNIQUE=$(git -C "$WORKTREE_ROOT" rev-list --count "main..HEAD")
-echo "Worktree merge-base: $(git -C "$WORKTREE_ROOT" log --oneline -1 $MERGE_BASE)"
-echo "Behind main: $BEHIND commits. Unique on branch: $UNIQUE commits."
-
-if [ "$BEHIND" -eq 0 ]; then
-  echo "Already at main — no rebase needed."
-elif [ "$UNIQUE" -eq 0 ]; then
-  # Fresh worktree with no unique work — safe to hard-reset to current main.
-  # This is the common case: harness just spawned the worktree, nothing committed yet.
-  echo "Fresh worktree; hard-reset to main."
-  git -C "$WORKTREE_ROOT" reset --hard main
-else
-  # Worktree has unique commits — attempt rebase, halt on conflict.
-  echo "Worktree has $UNIQUE unique commits; rebasing onto main."
-  git -C "$WORKTREE_ROOT" rebase main || {
-    echo "STOP — rebase conflict. Report to orchestrator with unique commits preserved." >&2
-    git -C "$WORKTREE_ROOT" rebase --abort
-    exit 1
-  }
-fi
+# Confirm you're at current main HEAD (with worktree.baseRef:head, you should be).
+git -C "$WORKTREE_ROOT" log --oneline -1 HEAD
+git -C "$WORKTREE_ROOT" log --oneline -1 main
+# Both should match. If not, the setting may have been overridden or your session
+# is older than the setting's commit (dddb251) — rebase manually:
+#   git -C "$WORKTREE_ROOT" rebase main
 ```
 
-**No commit-count threshold.** Earlier versions HALTed if more than 20 commits behind, but that's incompatible with this harness behavior — staleness is *guaranteed*, often hundreds of commits in long sessions, and the worktree always has zero unique commits at first spawn. Silent hard-reset is the correct behavior in that case; rebase-or-halt only applies when there's actual unique work to preserve.
+If the two HEADs match, you're good. The recurring "worktree 263 commits behind main" symptom from prior sessions is fixed at the setting level; no rebase gate needed in the common path.
 
-Tell-tale smells that the gate missed something (rare but worth knowing):
-- Code references pre-consolidation paths (`tools/test/magic-ast/...` instead of `tests/magic-ast-tests/...`).
-- AST property accesses that don't compile (e.g., `Effect.Duration` instead of `(effect as IDurativeEffect)?.Duration`).
-- Test counts that disagree wildly with what the orchestrator briefed you on.
-
-If you see those AFTER the gate passed, STOP and report — you may be working against an unmerged in-flight branch.
+If something looks off — code references pre-consolidation paths (`tools/test/magic-ast/...` instead of `tests/magic-ast-tests/...`), or AST property accesses don't compile, or test counts disagree wildly with the briefing — STOP and report. You may be on a sub-agent worktree whose branch was created before the `worktree.baseRef:head` setting landed.
 
 **For the rest of this session: all `git` commands MUST use the `-C "$WORKTREE_ROOT"` flag.** This includes `add`, `commit`, `push`, `merge`, `status`, `log`, `diff`. CWD-based git is forbidden. If you find yourself `cd`-ing to inspect a main-repo file, use `git -C "$WORKTREE_ROOT" show main:path/to/file` instead of changing directory.
 
@@ -218,7 +197,7 @@ This section is a **convenience pointer**, not a strict whitelist — `libs/magi
 - {term} — referenced in oracle but missing from glossary.json
 ```
 
-**The "Relevant rules" section IS mandatory** — sub-agents in worktrees don't have `glossary.json` (it's a gitignored Flowthru intermediate), so the rules-canonical definitions must be quoted into the briefing. The "AST types in scope" section is a convenience overview; sub-agents can also read `GLOSSARY.md` directly from the worktree (it's tracked in git).
+**The "Relevant rules" section is strongly recommended but no longer strictly mandatory** — sub-agents have a copy of `glossary.json` in their worktree (via `.worktreeinclude`) and can look up rule definitions themselves. Inline citations remain the canonical reference for the family and save the sub-agent a `jq` query, but they're a convenience now rather than the only path to the rules. The "AST types in scope" section remains a convenience overview; sub-agents can also read `GLOSSARY.md` directly from the worktree.
 
 If a candidate's mechanic isn't in `glossary.json` at all (and the term is genuinely MTG-domain, not vernacular), do not dispatch the sub-agent — swap the candidate for a different one or escalate to the human.
 
