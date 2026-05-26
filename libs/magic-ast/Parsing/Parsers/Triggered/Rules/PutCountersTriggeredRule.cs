@@ -1,5 +1,6 @@
 namespace MagicAST.Parsing.Parsers.Triggered.Rules;
 
+using System.Text.RegularExpressions;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Counter;
 using MagicAST.AST.Quantities;
@@ -55,6 +56,12 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
     else if (lower.Contains("this creature") || lower.Contains("this permanent"))
     {
       target = ObjectReference.Self();
+    }
+    else if (Regex.IsMatch(lower, @"\bon\s+it\b"))
+    {
+      // "put a +1/+1 counter on it" — "it" is the pronoun referring to the
+      // creature that triggered this ability (the attacker, blocker, etc.).
+      target = ObjectReference.It();
     }
     else
     {

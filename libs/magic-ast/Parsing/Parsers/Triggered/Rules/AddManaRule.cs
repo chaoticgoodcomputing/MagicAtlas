@@ -15,6 +15,15 @@ public sealed class AddManaRule : ITriggeredRule
   {
     effect = null;
     var t = text.Trim().TrimEnd('.').Trim();
+
+    // Strip optional "you may" prefix before the add verb.
+    var isOptional = false;
+    if (t.StartsWith("you may ", System.StringComparison.OrdinalIgnoreCase))
+    {
+      isOptional = true;
+      t = t[8..].Trim();
+    }
+
     if (!t.StartsWith("add ", System.StringComparison.OrdinalIgnoreCase))
     {
       return false;
@@ -22,14 +31,14 @@ public sealed class AddManaRule : ITriggeredRule
     var manaText = t[4..].Trim();
     if (Regex.IsMatch(manaText, @"^one\s+mana\s+of\s+any\s+color$", RegexOptions.IgnoreCase))
     {
-      effect = new AddManaEffect { Mana = string.Empty, AnyColor = true };
+      effect = new AddManaEffect { Mana = string.Empty, AnyColor = true, IsOptional = isOptional };
       return true;
     }
     if (string.IsNullOrWhiteSpace(manaText) || !manaText.Contains('{'))
     {
       return false;
     }
-    effect = new AddManaEffect { Mana = manaText, AnyColor = false };
+    effect = new AddManaEffect { Mana = manaText, AnyColor = false, IsOptional = isOptional };
     return true;
   }
 }
