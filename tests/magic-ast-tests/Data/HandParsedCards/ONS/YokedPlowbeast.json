@@ -1,0 +1,83 @@
+{
+  "Input": {
+    "Name": "Yoked Plowbeast",
+    "ManaCost": "{5}{W}{W}",
+    "TypeLine": "Creature — Beast",
+    "OracleText": "Cycling {2} ({2}, Discard this card: Draw a card.)",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Yoked Plowbeast",
+    "TypeLine": {
+      "Raw": "Creature — Beast",
+      "Types": ["Creature"],
+      "Subtypes": ["Beast"]
+    },
+    "Oracle": {
+      "RawText": "Cycling {2} ({2}, Discard this card: Draw a card.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Cycling",
+          "Effect": {
+            "EffectType": "cycling",
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
