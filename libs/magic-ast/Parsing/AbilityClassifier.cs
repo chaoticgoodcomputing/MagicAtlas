@@ -151,8 +151,13 @@ public sealed class AbilityClassifier
       };
     }
 
-    // Check for triggered ability: When/Whenever/At
-    if (StartsWithTriggerTiming(tokens))
+    // Check for triggered ability: When/Whenever/At — either at clause start,
+    // or after an ability-word prefix ("Landfall — Whenever ..."). Ability words
+    // (Rule 207.2c) have no rules meaning; peeling the prefix before the
+    // trigger-timing check makes this classification generic across all ability
+    // words (Landfall, Threshold, Delirium, Revolt, Enrage, Fateful hour, etc.)
+    // without any per-word special-casing.
+    if (StartsWithTriggerTiming(tokens) || (abilityWord is not null && BodyAfterAbilityWordStartsWithTriggerTiming(clause.RawText)))
     {
       return new ClauseClassification
       {
@@ -809,6 +814,26 @@ public sealed class AbilityClassifier
 
     var first = tokens[0].Kind;
     return first == OracleToken.When || first == OracleToken.Whenever || first == OracleToken.At;
+  }
+
+  /// <summary>
+  /// After stripping the ability-word prefix (e.g. "Landfall — "), checks whether
+  /// the remaining body text starts with a trigger-timing word (When/Whenever/At).
+  /// Used to classify ability-word-prefixed triggered abilities correctly without
+  /// per-word special-casing — covers Landfall, Threshold, Delirium, Revolt,
+  /// Enrage, Fateful hour, and any future ability words generically.
+  /// </summary>
+  private static bool BodyAfterAbilityWordStartsWithTriggerTiming(string rawText)
+  {
+    var emDashIndex = rawText.IndexOf('—');
+    if (emDashIndex < 0)
+    {
+      return false;
+    }
+    var body = rawText[(emDashIndex + 1)..].TrimStart();
+    return body.StartsWith("When ", StringComparison.OrdinalIgnoreCase)
+      || body.StartsWith("Whenever ", StringComparison.OrdinalIgnoreCase)
+      || body.StartsWith("At ", StringComparison.OrdinalIgnoreCase);
   }
 
   /// <summary>
