@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "Predator's Howl",
+    "ManaCost": "{3}{G}",
+    "TypeLine": "Instant",
+    "OracleText": "Create a 2/2 green Wolf creature token.\nMorbid — Create three 2/2 green Wolf creature tokens instead if a creature died this turn.",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Morbid"
+    ],
+    "Id": "cae61a9d-39fc-4c25-adec-d578d57c2903",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Predator's Howl",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Create a 2/2 green Wolf creature token.\nMorbid — Create three 2/2 green Wolf creature tokens instead if a creature died this turn.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "2",
+                "Toughness": "2",
+                "Colors": [
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Wolf"
+                ],
+                "IsCopy": false
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 40,
+            "Length": 90,
+            "End": 130
+          },
+          "RawText": "Morbid — Create three 2/2 green Wolf creature tokens instead if a creature died this turn.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "No structured morbid-conditional spell effect; ability word conditional not yet modelled",
+              "Location": {
+                "Start": 40,
+                "Length": 90,
+                "End": 130
+              },
+              "RawText": "Morbid — Create three 2/2 green Wolf creature tokens instead if a creature died this turn.",
+              "Pattern": "ConditionalEffect",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 40
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
