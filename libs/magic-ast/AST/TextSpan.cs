@@ -8,6 +8,12 @@ using System.Text.Json.Serialization;
 /// </summary>
 public readonly record struct TextSpan(int Start, int Length)
 {
+    /// <summary>
+    /// Computed end offset (exclusive). Derived from <see cref="Start"/> and <see cref="Length"/> —
+    /// must not round-trip through JSON, otherwise it would appear as a redundant property
+    /// in every fixture using a TextSpan.
+    /// </summary>
+    [JsonIgnore]
     public int End => Start + Length;
 
     public static TextSpan Empty => new(0, 0);

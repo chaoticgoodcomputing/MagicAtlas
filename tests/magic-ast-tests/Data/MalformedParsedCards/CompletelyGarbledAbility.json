@@ -31,8 +31,7 @@
           "Kind": "unparsed",
           "SourceSpan": {
             "Start": 0,
-            "Length": 40,
-            "End": 40
+            "Length": 40
           },
           "RawText": "Xyzzy plugh and also qwertyuiop forever.",
           "Diagnostics": [
@@ -41,8 +40,7 @@
               "Message": "Static ability parser not yet implemented",
               "Location": {
                 "Start": 0,
-                "Length": 40,
-                "End": 40
+                "Length": 40
               },
               "RawText": "Xyzzy plugh and also qwertyuiop forever.",
               "Pattern": "AmbiguousStructure",
