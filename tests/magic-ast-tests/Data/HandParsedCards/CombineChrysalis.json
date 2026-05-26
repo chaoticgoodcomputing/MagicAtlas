@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "Combine Chrysalis",
+    "ManaCost": "{G}{U}",
+    "TypeLine": "Artifact",
+    "OracleText": "Creature tokens you control have flying.\n{2}{G}{U}, {T}, Sacrifice a token: Create a 4/4 green Beast creature token. Activate only as a sorcery.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["G", "U"],
+    "ColorIdentity": ["G", "U"]
+  },
+  "Output": {
+    "Name": "Combine Chrysalis",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "Creature tokens you control have flying.\n{2}{G}{U}, {T}, Sacrifice a token: Create a 4/4 green Beast creature token. Activate only as a sorcery.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "gainAbility",
+            "Target": {
+              "Kind": "Each",
+              "Filter": {
+                "CardTypes": ["creature"],
+                "Characteristics": ["token"],
+                "Controller": "You"
+              }
+            },
+            "GainedAbility": {
+              "Kind": "static",
+              "KeywordSource": "Flying",
+              "Effect": {
+                "EffectType": "evasion",
+                "CanBeBlockedBy": {
+                  "CardTypes": ["creature"],
+                  "Characteristics": ["flying", "reach"]
+                },
+                "IsOptional": false
+              }
+            },
+            "IsOptional": false
+          }
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 2 },
+                { "Kind": "colored", "Colors": ["G"] },
+                { "Kind": "colored", "Colors": ["U"] }
+              ]
+            },
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "Characteristics": ["token"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "4",
+                "Toughness": "4",
+                "Colors": ["G"],
+                "Types": ["creature"],
+                "Subtypes": ["Beast"],
+                "IsCopy": false
+              },
+              "IsOptional": false
+            }
+          ],
+          "Restrictions": ["OnlyAsSorcery"],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G", "U"]
+      }
+    ]
+  }
+}

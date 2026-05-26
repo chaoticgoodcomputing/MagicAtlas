@@ -1,0 +1,72 @@
+{
+  "Input": {
+    "Name": "Gorgon's Head",
+    "ManaCost": "{1}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "Equipped creature has deathtouch.\nEquip {2}",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Gorgon's Head",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": ["Artifact"],
+      "Subtypes": ["Equipment"]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature has deathtouch.\nEquip {2}",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "gainAbility",
+            "Target": { "Kind": "EnchantedOrEquipped" },
+            "GainedAbility": {
+              "Kind": "static",
+              "KeywordSource": "Deathtouch",
+              "Effect": {
+                "EffectType": "deathtouch",
+                "IsOptional": false
+              }
+            },
+            "IsOptional": false
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Equip",
+          "Effect": {
+            "EffectType": "equip",
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 2 }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
