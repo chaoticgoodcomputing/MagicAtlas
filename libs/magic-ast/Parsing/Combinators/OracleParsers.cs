@@ -929,6 +929,30 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Bushido N" keyword.
+  /// Pattern: "Bushido" number [reminder]
+  /// Rule 702.45. A triggered keyword ability: whenever this creature blocks or becomes
+  /// blocked, it gets +N/+N until end of turn. MAST records the keyword and its integer
+  /// value; the trigger-and-buff expansion is engine territory.
+  ///
+  /// This is the first integer-parameterized keyword in the AST. It uses
+  /// <see cref="OracleToken.Number"/> directly (same token kind used by <see cref="Crew"/>),
+  /// not a mana-symbol sequence. Future integer-parameterized keywords (Annihilator,
+  /// Modular, Soulshift, etc.) should follow this same combinator shape.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Bushido = (
+    from keyword in Keyword("Bushido")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Bushido",
+      Effect = new BushidoEffect { Value = int.Parse(value.ToStringValue()) },
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Equip {cost}" keyword.
   /// Pattern: "Equip" mana-symbol+ [reminder]
   /// Rule 702.6. An activated ability that attaches this Equipment to a creature
@@ -1018,6 +1042,7 @@ public static class OracleParsers
     Protection
       .Try()
       .Or(Crew.Try())
+      .Or(Bushido.Try())
       .Or(PartnerWith.Try())
       .Or(ChooseABackground.Try())
       .Or(Entwine.Try())
