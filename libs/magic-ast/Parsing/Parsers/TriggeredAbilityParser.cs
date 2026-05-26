@@ -518,6 +518,17 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
+    // Attack trigger: "Whenever [CardName] attacks" / "Whenever a creature you control attacks".
+    // Covers self-by-name and controller-filter shapes (Rule 508 — Declare Attackers).
+    if (lower.Contains("attacks"))
+    {
+      var attacks = TryParseAttacksTrigger(triggerText, timing);
+      if (attacks is not null)
+      {
+        return attacks;
+      }
+    }
+
     return null;
   }
 
@@ -587,6 +598,55 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         Characteristics = characteristics,
       },
     };
+  }
+
+  /// <summary>
+  /// "Whenever [CardName] attacks" — self-by-name attack trigger (Rule 508).
+  /// "Whenever a creature you control attacks" — controller-filter attack trigger.
+  /// Both emit <see cref="TriggerEvent.Attacks"/>. The filter distinguishes:
+  /// - Self-by-name: <c>CardTypes: ["creature"]</c> (no Controller — the name collapses to a
+  ///   creature type reference per the card-name-as-subject convention).
+  /// - Controller-filter: <c>CardTypes: ["creature"], Controller: You</c>.
+  /// </summary>
+  private static TriggerCondition? TryParseAttacksTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    var lower = triggerText.ToLowerInvariant();
+
+    // Self-by-name: "Whenever [CardName] attacks" — one or more capitalized words
+    // followed by "attacks" (IsSelfByNameTrigger already handles this pattern for
+    // dies/enters; reuse that check, then delegate to ParseObjectFilter for the filter).
+    if (IsSelfByNameTrigger(triggerText))
+    {
+      return new TriggerCondition
+      {
+        Timing = timing,
+        Event = TriggerEvent.Attacks,
+        Filter = new ObjectFilter { CardTypes = ["creature"] },
+      };
+    }
+
+    // Controller-filter: "Whenever a creature you control attacks"
+    if (
+      Regex.IsMatch(lower, @"\ba\s+creature\s+you\s+control\s+attacks\b")
+      || Regex.IsMatch(lower, @"\bcreatures?\s+you\s+control\s+attack\b")
+    )
+    {
+      return new TriggerCondition
+      {
+        Timing = timing,
+        Event = TriggerEvent.Attacks,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Controller = ControllerFilter.You,
+        },
+      };
+    }
+
+    return null;
   }
 
   /// <summary>
