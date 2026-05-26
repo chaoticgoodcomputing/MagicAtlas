@@ -135,7 +135,7 @@ public static class OracleParsers
     from reminder in _optionalReminder
     select new StaticAbility
     {
-      KeywordSource = "Haste",
+      KeywordSource = keyword.ToStringValue(),
       Effect = new HasteEffect(),
       Reminder = reminder,
     }
@@ -738,6 +738,62 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "[Type]cycling {cost}" keyword variants (Swampcycling, Mountaincycling,
+  /// Plainscycling, Islandcycling, Forestcycling).
+  /// Pattern: "&lt;word-ending-in-cycling&gt;" mana-symbol+ [reminder]
+  /// Rule 702.32f. Each typecycling ability is an activated ability:
+  /// "[Cost], Discard this card: Search your library for a [Type] card, reveal it, put it
+  /// into your hand, then shuffle." The land type is extracted from the keyword prefix
+  /// (e.g., "Forest" from "Forestcycling"). MAST records the keyword, the land type,
+  /// and the cost; the inner search/reveal/shuffle structure is inferred from the rules.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Typecycling = (
+    from kwToken in Token
+      .EqualTo(OracleToken.Word)
+      .Try()
+      .Where(t =>
+      {
+        var s = t.ToStringValue();
+        return s.EndsWith("cycling", StringComparison.OrdinalIgnoreCase)
+          && !s.Equals("cycling", StringComparison.OrdinalIgnoreCase);
+      })
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    let kwText = kwToken.ToStringValue()
+    let landType = kwText[..^"cycling".Length]
+    select new StaticAbility
+    {
+      KeywordSource = kwText,
+      Effect = new TypecyclingEffect
+      {
+        Type = char.ToUpperInvariant(landType[0]) + landType[1..],
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      },
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Madness {cost}" keyword.
   /// Pattern: "Madness" mana-symbol+ [reminder]
   /// Rule 702.35. Lets a player cast a discarded card for its madness cost.
@@ -1046,6 +1102,7 @@ public static class OracleParsers
       .Or(PartnerWith.Try())
       .Or(ChooseABackground.Try())
       .Or(Entwine.Try())
+      .Or(Typecycling.Try())
       .Or(Cycling.Try())
       .Or(Madness.Try())
       .Or(Foretell.Try())
