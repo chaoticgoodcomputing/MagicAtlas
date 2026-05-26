@@ -1,0 +1,68 @@
+{
+  "Input": {
+    "Name": "Supreme Verdict",
+    "ManaCost": "{1}{W}{W}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "This spell can't be countered.\nDestroy all creatures.",
+    "Colors": ["U", "W"],
+    "ColorIdentity": ["U", "W"],
+    "Keywords": [],
+    "Id": "3892f1c5-937e-4ef4-b6f9-e0c0ded070d0",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Supreme Verdict",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "This spell can't be countered.\nDestroy all creatures.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "cantBeCountered"
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}{W}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U", "W"]
+      }
+    ]
+  }
+}
