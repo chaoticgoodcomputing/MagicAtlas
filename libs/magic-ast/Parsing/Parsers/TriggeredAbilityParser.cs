@@ -147,6 +147,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       };
     }
 
+    // Strip trailing parenthetical reminder text from the effect part before
+    // dispatching to effect rules. Reminder text follows the effect sentence
+    // as "(explanation...)" — e.g. "surveil 1. (Look at the top card...)".
+    // Capture it for the Reminder field on the returned TriggeredAbility.
+    var reminder = ExtractTrailingReminder(ref effectPart);
+
     // Parse effects
     var effects = ParseEffects(effectPart);
     if (effects == null || effects.Count == 0)
@@ -160,7 +166,29 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       InterveningIf = interveningIf,
       Effects = effects,
       Instructions = ExtractInstructions(effectPart, effects),
+      Reminder = reminder,
     };
+  }
+
+  /// <summary>
+  /// Strips a trailing parenthetical "(reminder text)" from <paramref name="effectPart"/>,
+  /// mutating it in place (via ref), and returns the parenthetical as a
+  /// <see cref="Parenthetical"/> if found, or null otherwise.
+  /// Only strips the LAST parenthetical so that mid-text parens (e.g. mana symbols) are left intact.
+  /// </summary>
+  private static Parenthetical? ExtractTrailingReminder(ref string effectPart)
+  {
+    // Match a trailing (possibly multi-sentence) parenthetical at the end of the text.
+    // Pattern: optional whitespace, open-paren, content (no nesting), close-paren, end.
+    var m = Regex.Match(effectPart, @"\s*\(([^)]+)\)\s*$");
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var reminderText = m.Groups[1].Value.Trim();
+    effectPart = effectPart[..m.Index].Trim();
+    return new Parenthetical { Text = reminderText };
   }
 
   /// <summary>

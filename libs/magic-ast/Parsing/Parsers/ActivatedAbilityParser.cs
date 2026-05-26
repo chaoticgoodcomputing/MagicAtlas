@@ -59,6 +59,13 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   {
     var text = clause.RawText;
 
+    // Strip surrounding parens from parenthetical-wrapped abilities like
+    // "({T}: Add {B} or {R}.)" so cost/effect parsing proceeds on the inner text.
+    if (text.StartsWith('(') && text.EndsWith(')'))
+    {
+      text = text[1..^1].Trim();
+    }
+
     // Find the colon that separates cost from effect
     var colonIndex = text.IndexOf(':');
     if (colonIndex < 0)
