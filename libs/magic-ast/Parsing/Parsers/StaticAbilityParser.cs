@@ -280,6 +280,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return cantBeBlocked;
     }
 
+    // "This creature enters with N +1/+1 counters on it." — Rule 614.1c
+    // self-replacement effect property recorded as a static-ability-attached
+    // EntersWithCountersEffect. No KeywordSource: the oracle text is a full
+    // declarative sentence, not a keyword token. Count supports both
+    // literal-N and variable-X printings. Mirrors TryParseEntersTapped.
+    var entersWithCounters = TryParseEntersWithCounters(clause);
+    if (entersWithCounters != null)
+    {
+      return entersWithCounters;
+    }
+
     // "You may choose not to untap this [permanent] during your untap step." —
     // Rule 302.6 / 116 opt-out. Full sentence, not a keyword. Emits a
     // parameterless SkipUntapEffect marker with IsOptional=false (the "may
@@ -2162,6 +2173,51 @@ public sealed class StaticAbilityParser : IAbilityParser
   // optional for minor formatting variants.
   private static readonly Regex _skipUntapPattern = new(
     @"^\s*You\s+may\s+choose\s+not\s+to\s+untap\s+this\s+(?:creature|permanent|artifact|enchantment|land)\s+during\s+your\s+untap\s+step\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "This creature enters with N +1/+1 counters on it." — Rule 614.1c
+  /// self-replacement effect. Emits a <see cref="StaticAbility"/> wrapping an
+  /// <see cref="MagicAST.AST.Effects.Replacement.EntersWithCountersEffect"/>
+  /// whose <c>Count</c> is either a <see cref="MagicAST.AST.Quantities.LiteralQuantity"/>
+  /// (for digit-N printings) or a <see cref="MagicAST.AST.Quantities.VariableQuantity"/>
+  /// (for "X" printings). No <c>KeywordSource</c>: the oracle text is a full
+  /// declarative sentence, not a keyword token. Mirrors
+  /// <see cref="TryParseEntersTapped"/> in structure.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEntersWithCounters(OracleClause clause)
+  {
+    var match = _entersWithCountersPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var countText = match.Groups["count"].Value;
+    MagicAST.AST.Quantities.Quantity count = countText.Equals("X", StringComparison.OrdinalIgnoreCase)
+      ? MagicAST.AST.Quantities.VariableQuantity.X
+      : MagicAST.AST.Quantities.LiteralQuantity.Of(int.Parse(countText));
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Replacement.EntersWithCountersEffect
+        {
+          Count = count,
+          CounterType = "+1/+1",
+          IsOptional = false,
+        },
+      },
+    ];
+  }
+
+  // Matches "This creature enters with N +1/+1 counters on it." where N is
+  // a decimal digit or the variable "X". Handles "counter" and "counters"
+  // (singular for N=1) and an optional trailing period.
+  private static readonly Regex _entersWithCountersPattern = new(
+    @"^\s*This\s+creature\s+enters\s+with\s+(?<count>\d+|X)\s+\+1/\+1\s+counters?\s+on\s+it\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
