@@ -11,6 +11,7 @@ using MagicAST.AST.Effects.Damage;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.Effects.Resource;
+using MagicAST.AST.Effects.ZoneChange;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 using MagicAST.Parsing.Tokens;
@@ -76,6 +77,12 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return null;
     }
 
+    // Extract trailing "Activate only as ..." restriction sentences from
+    // effectPart before effect parsing. These are not effects — they constrain
+    // when the ability can be activated (Rule 602.5). Stripping them prevents
+    // TryParseMultiEffectSentences from failing when it encounters them.
+    var restrictions = ExtractActivationRestrictions(ref effectPart);
+
     // Parse effects
     var effects = ParseEffects(effectPart);
     if (effects == null || effects.Count == 0)
@@ -97,6 +104,7 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       {
         Costs = costs,
         Effects = [unparsedEffect],
+        Restrictions = restrictions,
         IsManaAbility = false,
         LoyaltyCost = classification.LoyaltyCost,
         AbilityWord = classification.AbilityWord,
@@ -111,10 +119,81 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     {
       Costs = costs,
       Effects = effects,
+      Restrictions = restrictions,
       IsManaAbility = isManaAbility,
       LoyaltyCost = classification.LoyaltyCost,
       AbilityWord = classification.AbilityWord,
     };
+  }
+
+  /// <summary>
+  /// Strips trailing "Activate only as a sorcery." / "Activate only once each turn." /
+  /// etc. sentences from <paramref name="effectPart"/> and returns the parsed
+  /// <see cref="ActivationRestriction"/> list (null if none found). Modifies
+  /// <paramref name="effectPart"/> in-place to remove the extracted sentences.
+  /// </summary>
+  private static IReadOnlyList<ActivationRestriction>? ExtractActivationRestrictions(
+    ref string effectPart
+  )
+  {
+    var restrictions = new List<ActivationRestriction>();
+
+    // Greedily strip "Activate only as ..." sentences from the end of effectPart.
+    // These always appear after the real effect sentence(s).
+    string? remaining = effectPart;
+    while (remaining is not null)
+    {
+      // Match the last sentence (after the final ". ")
+      var lastDotSpace = remaining.LastIndexOf(". ", StringComparison.Ordinal);
+      string candidate;
+      string? prefix;
+      if (lastDotSpace >= 0)
+      {
+        candidate = remaining[(lastDotSpace + 2)..].Trim();
+        prefix = remaining[..lastDotSpace].Trim();
+      }
+      else
+      {
+        candidate = remaining.Trim();
+        prefix = null;
+      }
+
+      var restriction = TryParseActivationRestriction(candidate);
+      if (restriction is null)
+      {
+        break;
+      }
+      restrictions.Add(restriction.Value);
+      remaining = prefix;
+    }
+
+    if (restrictions.Count == 0)
+    {
+      return null;
+    }
+
+    restrictions.Reverse(); // restore original order (we iterated from the end)
+    effectPart = remaining ?? string.Empty;
+    return restrictions;
+  }
+
+  private static ActivationRestriction? TryParseActivationRestriction(string sentence)
+  {
+    var trimmed = sentence.Trim().TrimEnd('.');
+    var lower = trimmed.ToLowerInvariant();
+    if (lower == "activate only as a sorcery" || lower == "activate this ability only as a sorcery")
+    {
+      return ActivationRestriction.OnlyAsSorcery;
+    }
+    if (lower.Contains("activate only during your turn") || lower.Contains("activate this ability only during your turn"))
+    {
+      return ActivationRestriction.OnlyDuringYourTurn;
+    }
+    if (lower.Contains("activate only once each turn") || lower.Contains("activate this ability only once each turn"))
+    {
+      return ActivationRestriction.OnlyOnceEachTurn;
+    }
+    return null;
   }
 
   /// <summary>
@@ -268,6 +347,13 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     if (selfDealsDamage != null)
     {
       return new List<Effect> { selfDealsDamage };
+    }
+
+    // Return target [X] from [zone] to the battlefield
+    var returnToBf = TryParseReturnToBattlefieldEffect(effectPart);
+    if (returnToBf != null)
+    {
+      return new List<Effect> { returnToBf };
     }
 
     // For now, we can't parse other effect types
@@ -751,7 +837,19 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     }
     else if (lower.Contains("this creature") || lower.Contains("this permanent"))
     {
-      filter = new ObjectFilter { CardTypes = ["creature"] };
+      filter = new ObjectFilter { CardTypes = ["creature"], Characteristics = ["this permanent"] };
+    }
+    else if (lower.Contains("this artifact"))
+    {
+      filter = new ObjectFilter { CardTypes = ["artifact"], Characteristics = ["this permanent"] };
+    }
+    else if (lower.Contains("this enchantment"))
+    {
+      filter = new ObjectFilter { CardTypes = ["enchantment"], Characteristics = ["this permanent"] };
+    }
+    else if (lower.Contains("this land"))
+    {
+      filter = new ObjectFilter { CardTypes = ["land"], Characteristics = ["this permanent"] };
     }
     else if (lower.Contains("creature"))
     {
@@ -1087,6 +1185,52 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     // Title-case the keyword for KeywordSource (matches direct-keyword ability convention).
     var keywordSource = char.ToUpperInvariant(keyword[0]) + keyword[1..];
     return new StaticAbility { Effect = effect, KeywordSource = keywordSource };
+  }
+
+  /// <summary>
+  /// Tries to parse "Return target [X] from [zone] to the battlefield." effects.
+  /// Pattern: "Return target creature or Vehicle card from your graveyard to the battlefield."
+  /// Produces a <see cref="ReturnToBattlefieldEffect"/> with a Target ObjectReference whose
+  /// Filter captures the Zone and the full type-phrase as a Characteristics entry.
+  /// </summary>
+  private static ReturnToBattlefieldEffect? TryParseReturnToBattlefieldEffect(string effectText)
+  {
+    var trimmed = effectText.Trim().TrimEnd('.');
+    // Pattern: "Return target <what> from [your|the|a] <zone> to the battlefield"
+    var m = Regex.Match(
+      trimmed,
+      @"^return\s+target\s+(?<what>.+?)\s+from\s+(?:your|the|a|an)\s+(?<zone>graveyard|hand|library|exile)\s+to\s+the\s+battlefield$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var what = m.Groups["what"].Value.Trim();
+    var zoneRaw = m.Groups["zone"].Value.ToLowerInvariant();
+
+    var zone = zoneRaw switch
+    {
+      "graveyard" => Zone.Graveyard,
+      "hand" => Zone.Hand,
+      "library" => Zone.Library,
+      "exile" => Zone.Exile,
+      _ => Zone.Graveyard,
+    };
+
+    return new ReturnToBattlefieldEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          Zone = zone,
+          Characteristics = [what],
+        },
+      },
+    };
   }
 
   /// <summary>
