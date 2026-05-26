@@ -8,6 +8,17 @@ using System.Text.Json.Nodes;
 /// </summary>
 public static class JsonComparer
 {
+  // Property names whose array values are SET-semantic — order doesn't matter.
+  // ColorIdentity is canonically a set per Rule 903.4 ("the colors of mana that
+  // appear in its mana cost and ... rules text"). Colors arrays similarly describe
+  // a card's color identity, not a sequence. The parser emits WUBRG ordering for
+  // human readability, but fixtures shouldn't need to match exactly.
+  private static readonly HashSet<string> UnorderedArrayKeys = new(StringComparer.Ordinal)
+  {
+    "Colors",
+    "ColorIdentity",
+  };
+
   /// <summary>
   /// Compares two JSON nodes for structural equality (ignoring property order in objects).
   /// Missing properties with default values (false, 0, null, empty arrays) are treated as equal.
@@ -51,7 +62,12 @@ public static class JsonComparer
 
       if (hasA && hasB)
       {
-        if (!AreEqual(valueA, valueB))
+        var equal = UnorderedArrayKeys.Contains(key)
+          && valueA is JsonArray arrA
+          && valueB is JsonArray arrB
+            ? UnorderedArraysAreEqual(arrA, arrB)
+            : AreEqual(valueA, valueB);
+        if (!equal)
         {
           return false;
         }
@@ -137,5 +153,23 @@ public static class JsonComparer
   {
     // Compare as raw JSON strings for value equality
     return a.ToJsonString() == b.ToJsonString();
+  }
+
+  /// <summary>
+  /// Set-semantic array comparison: same elements in any order. Used for
+  /// `Colors` and `ColorIdentity` arrays where the underlying domain object
+  /// is a set, not a sequence.
+  /// </summary>
+  private static bool UnorderedArraysAreEqual(JsonArray a, JsonArray b)
+  {
+    if (a.Count != b.Count)
+    {
+      return false;
+    }
+    // Compare as multisets of JSON strings — sufficient for color codes
+    // ("W", "U", "B", "R", "G") since they're scalar strings.
+    var aBag = a.Select(n => n?.ToJsonString() ?? "null").OrderBy(s => s, StringComparer.Ordinal);
+    var bBag = b.Select(n => n?.ToJsonString() ?? "null").OrderBy(s => s, StringComparer.Ordinal);
+    return aBag.SequenceEqual(bBag);
   }
 }

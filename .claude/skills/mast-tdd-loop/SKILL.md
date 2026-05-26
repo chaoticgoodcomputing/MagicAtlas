@@ -109,23 +109,41 @@ echo "$WORKTREE_ROOT"   # sanity-check: should be /home/.../MagicAtlas/.claude/w
 
 If `pwd` does NOT contain `.claude/worktrees/`, you are NOT in a worktree — STOP and report. Working from the main repo will land commits on `main`.
 
-**Step 0b — Rebase your worktree.**
+**Step 0b — MANDATORY pre-flight rebase gate.** Run this script verbatim before any other action. It HALTS your session if the worktree was branched from a stale base — the recurring failure mode that has destroyed batches in past runs (worktree branched from a commit deep in history, never rebased, modifications to shared files would revert the rule-split / fixture work / parser refinements on merge).
 
 ```bash
-git -C "$WORKTREE_ROOT" log --oneline main..HEAD            # what's only on my branch
-git -C "$WORKTREE_ROOT" log --oneline HEAD..main            # what's on main but not in my worktree
+# Pre-flight: refuse to proceed if worktree is too far behind main.
+git -C "$WORKTREE_ROOT" fetch origin main 2>/dev/null || git -C "$WORKTREE_ROOT" fetch origin
+MERGE_BASE=$(git -C "$WORKTREE_ROOT" merge-base HEAD main)
+BEHIND=$(git -C "$WORKTREE_ROOT" rev-list --count "${MERGE_BASE}..main")
+echo "Worktree merge-base: $(git -C "$WORKTREE_ROOT" log --oneline -1 $MERGE_BASE)"
+echo "Behind main by: $BEHIND commits"
+
+if [ "$BEHIND" -gt 20 ]; then
+  echo "STOP — worktree is $BEHIND commits behind main." >&2
+  echo "Either rebase: git -C \"$WORKTREE_ROOT\" rebase main" >&2
+  echo "Or report base-staleness to the orchestrator and exit without committing." >&2
+  exit 1
+fi
+
+# If behind by 1-20 commits, attempt automatic rebase. Abort the session on conflict.
+if [ "$BEHIND" -gt 0 ]; then
+  git -C "$WORKTREE_ROOT" rebase main || {
+    echo "STOP — rebase conflict. Report to orchestrator." >&2
+    git -C "$WORKTREE_ROOT" rebase --abort
+    exit 1
+  }
+fi
 ```
 
-If `main` is ahead of your worktree:
+Tell-tale smells that the gate missed something (rare but worth knowing):
+- Code references pre-consolidation paths (`tools/test/magic-ast/...` instead of `tests/magic-ast-tests/...`).
+- AST property accesses that don't compile (e.g., `Effect.Duration` instead of `(effect as IDurativeEffect)?.Duration`).
+- Test counts that disagree wildly with what the orchestrator briefed you on.
 
-```bash
-git -C "$WORKTREE_ROOT" fetch origin
-git -C "$WORKTREE_ROOT" rebase main
-```
+If you see those AFTER the gate passed, STOP and report — the gate threshold may need tightening, or you're working against an unmerged in-flight branch.
 
 **For the rest of this session: all `git` commands MUST use the `-C "$WORKTREE_ROOT"` flag.** This includes `add`, `commit`, `push`, `merge`, `status`, `log`, `diff`. CWD-based git is forbidden. If you find yourself `cd`-ing to inspect a main-repo file, use `git -C "$WORKTREE_ROOT" show main:path/to/file` instead of changing directory.
-
-The dispatch mechanism may branch your worktree from a stale ref. If you start writing code against pre-consolidation file paths (`tools/test/magic-ast/...`), or you can't find files the skill or your assignment references, that's the smell — stop and rebase.
 
 ### Step 1 — `[main]` Pick families
 
@@ -212,7 +230,7 @@ Spawn M `[sub:helper-mech]` sub-agents via `Agent` (model: Sonnet, `isolation: "
 - The assigned mechanical fixtures (1-3 per helper-mech).
 - A pointer to this skill — the `[sub:helper-mech]` sections.
 - The branch name (e.g., `mast-tdd/helper-mech-{family-slug}-{date}`).
-- Explicit instructions: "Look up existing AST types in GLOSSARY.md, write the gold AST, RoundTrip green. **If you would need a new AST type, BAIL** — report and let the orchestrator move the fixture to the novel-shape helper. **Use git -C \"$WORKTREE_ROOT\" for every git command.**"
+- Explicit instructions: "Look up existing AST types in GLOSSARY.md, write the gold AST, RoundTrip green. **Two bail criteria — fire on EITHER:** (a) you would need a new AST type, or (b) the card's sibling abilities (non-family ones on the same card) would require parser work beyond the scope of any in-flight family. Criterion (b) is the Bloodcurdler lesson — fixture's RoundTrip can be green while `Parser_ProducesExpectedOutput` will still red because a sibling needs parser work no mech in the batch is scoped to provide. Run `dotnet test --filter Parser_ProducesExpectedOutput&FullyQualifiedName~{Card}` after writing each fixture; if it fails for reasons OTHER than your assigned family's parser gap, BAIL. **ColorIdentity arrays are set-semantic — order is no longer enforced by the comparator, but emit WUBRG for readability.** **Use git -C \"$WORKTREE_ROOT\" for every git command.**"
 
 Wait for ALL helpers to finish before continuing. If a helper-mech bails on a fixture, the orchestrator reassigns it to the novel-shape helper (which may need to be re-dispatched).
 
@@ -384,10 +402,30 @@ Action: extend the appropriate `IAbilityParser` implementation in `libs/magic-as
 Iterate until `Parser_ProducesExpectedOutput` for **every card in your family** passes.
 
 **Mechanical scope. Don't:**
-- Modify any fixture. If you think a gold is wrong, STOP and report — judge-pass-2 catches that.
+- Modify any fixture. If you think a gold is wrong (including colorIdentity ordering — see "Sibling-shape allowance" below), STOP and report — orchestrator-side fix.
 - Add or modify AST types. That's the helper's territory.
 - Modify fixtures outside your family, even to "improve consistency." Stay in your family's lane.
 - Add N separate methods when the family contract calls for one. If you can't find the generalization, bail with sub-patterns — that's the explicit escape valve.
+
+**Sibling-shape allowance.** Real fixture cards are multi-ability. Your family addresses one ability shape; the SAME fixture may carry a sibling ability that needs a separate parser surface for `Parser_ProducesExpectedOutput` to pass on that card. You MAY add a tight, narrowly-scoped sibling parser surface when ALL of these hold:
+
+1. The sibling shape is **single-shape** (one new method or one new `[SpellRule]` / `[TriggeredRule]` file — NOT a whole family's worth of work).
+2. The sibling shape does NOT belong to another family being addressed in the current batch (check the briefing for what other families are in-flight). If a conflict exists, BAIL on the multi-ability card instead.
+3. The sibling shape is fully covered by **existing AST types** (consult `GLOSSARY.md`). If it would need a new AST type, BAIL — the helper-mech should have caught this.
+4. The sibling work is genuinely smaller than the family work — a paragraph, not a section. A new parser file or one small method is acceptable; a new ability-kind parser is not.
+5. You record the sibling work explicitly in the closing manifest under a `### Sibling additions` section, so judge and orchestrator can review.
+
+If the sibling shape doesn't meet ALL five criteria, BAIL on the multi-ability card. The orchestrator will swap it for a single-family card or schedule the sibling work as a follow-up family. Don't stretch the family contract beyond recognition — the discipline is what makes parallel mech dispatch tractable.
+
+**Examples of acceptable sibling-shape work** (from prior batches):
+- AsLongAs mech adding an "attack with X and another" trigger to make Merry's full test pass.
+- CreateToken mech adding `InvestigateSpellRule` for HardEvidence's `Investigate.` sibling line.
+- BeginningOfTurn mech adding activated-parser extensions for Broodheart's `Activate only as a sorcery` restriction.
+
+**Examples that would NOT qualify (would require BAIL):**
+- Adding a Modal ability parser when only one family fixture happens to be modal.
+- Implementing a new TriggerEvent enum value plus its parser surface.
+- Solving the Threshold ability-word + composite-AsLongAs shape because Bloodcurdler has it — that's a separate family's worth of work.
 
 ### Step 8 — `[sub:mech]` Report back
 
