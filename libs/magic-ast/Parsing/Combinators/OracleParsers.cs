@@ -378,6 +378,44 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Exalted" keyword.
+  /// Pattern: "Exalted" [reminder]
+  /// Rule 702.83. Whenever a creature you control attacks alone, that creature
+  /// gets +1/+1 until end of turn. Although mechanically a triggered ability,
+  /// MAST models it as a keyword marker (same approach as Prowess); the
+  /// trigger-and-buff expansion is engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Exalted = (
+    from kw in Keyword("Exalted")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Exalted",
+      Effect = new ExaltedEffect(),
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Infect" keyword.
+  /// Pattern: "Infect" [reminder]
+  /// Rule 702.91. This creature deals damage to creatures in the form of
+  /// -1/-1 counters and to players in the form of poison counters.
+  /// MAST records keyword presence; the damage-redirection semantics are
+  /// engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Infect = (
+    from kw in Keyword("Infect")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Infect",
+      Effect = new InfectEffect(),
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -917,6 +955,8 @@ public static class OracleParsers
     .Or(Changeling)
     .Or(Banding)
     .Or(Convoke)
+    .Or(Exalted)
+    .Or(Infect)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)
