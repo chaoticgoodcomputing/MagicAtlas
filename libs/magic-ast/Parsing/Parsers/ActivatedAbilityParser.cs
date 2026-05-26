@@ -356,8 +356,73 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return new List<Effect> { returnToBf };
     }
 
+    // "Target creature gets +N/+M for as long as [condition]." —
+    // or "Target creature gets +N/+M until end of turn." —
+    // P/T modifier on an activated ability effect.
+    var modifyPT = TryParseModifyPTEffect(effectPart);
+    if (modifyPT != null)
+    {
+      return new List<Effect> { modifyPT };
+    }
+
     // For now, we can't parse other effect types
     // Return null to signal that we need to fall back to unparsed
+    return null;
+  }
+
+  /// <summary>
+  /// "Target creature gets [+-]N/[+-]M (until end of turn | for as long as [condition])." —
+  /// P/T modification on an activated ability's effect. Handles both the
+  /// <c>UntilEndOfTurn</c> and <c>AsLongAs</c> duration shapes so activated
+  /// abilities such as Tawnos's Weaponry ("{2}, {T}: Target creature gets +1/+1
+  /// for as long as this artifact remains tapped.") parse correctly.
+  /// </summary>
+  private static ModifyPTEffect? TryParseModifyPTEffect(string effectText)
+  {
+    var trimmed = effectText.Trim().TrimEnd('.').Trim();
+
+    // Shape A: "Target creature gets +N/+M until end of turn"
+    var eotMatch = System.Text.RegularExpressions.Regex.Match(
+      trimmed,
+      @"^Target\s+creature\s+gets\s+(?<p>[+\-]\d+)/(?<t>[+\-]\d+)\s+until\s+end\s+of\s+turn$",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase
+    );
+    if (eotMatch.Success)
+    {
+      return new ModifyPTEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter { CardTypes = ["creature"] },
+        },
+        PowerModifier = LiteralQuantity.Of(int.Parse(eotMatch.Groups["p"].Value)),
+        ToughnessModifier = LiteralQuantity.Of(int.Parse(eotMatch.Groups["t"].Value)),
+        Duration = new UntilEndOfTurnDuration(),
+      };
+    }
+
+    // Shape B: "Target creature gets +N/+M for as long as [condition]"
+    var asLongAsMatch = System.Text.RegularExpressions.Regex.Match(
+      trimmed,
+      @"^Target\s+creature\s+gets\s+(?<p>[+\-]\d+)/(?<t>[+\-]\d+)\s+for\s+as\s+long\s+as\s+(?<cond>.+)$",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase
+    );
+    if (asLongAsMatch.Success)
+    {
+      return new ModifyPTEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter { CardTypes = ["creature"] },
+        },
+        PowerModifier = LiteralQuantity.Of(int.Parse(asLongAsMatch.Groups["p"].Value)),
+        ToughnessModifier = LiteralQuantity.Of(int.Parse(asLongAsMatch.Groups["t"].Value)),
+        Duration = new AsLongAsDuration { Condition = asLongAsMatch.Groups["cond"].Value.Trim() },
+      };
+    }
+
     return null;
   }
 

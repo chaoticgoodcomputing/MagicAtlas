@@ -267,6 +267,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return cantBeBlocked;
     }
 
+    // "You may choose not to untap this [permanent] during your untap step." —
+    // Rule 302.6 / 116 opt-out. Full sentence, not a keyword. Emits a
+    // parameterless SkipUntapEffect marker with IsOptional=false (the "may
+    // choose" language belongs to the untap-step turn-based action, not to the
+    // IOptionalEffect "You may" prefix convention). Mirrors TryParseCantBlock.
+    var skipUntap = TryParseSkipUntap(clause);
+    if (skipUntap != null)
+    {
+      return skipUntap;
+    }
+
     return null;
   }
 
@@ -1857,6 +1868,40 @@ public sealed class StaticAbilityParser : IAbilityParser
   // The trailing period is optional for minor formatting variants.
   private static readonly Regex _cantBeBlockedPattern = new(
     @"^\s*This\s+(?:creature|land|permanent)\s+can'?t\s+be\s+blocked\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "You may choose not to untap this [permanent] during your untap step." —
+  /// Rule 302.6 opt-out. Full declarative sentence, not a keyword token, so no
+  /// <c>KeywordSource</c> is set. Emits a parameterless
+  /// <see cref="MagicAST.AST.Effects.Timing.SkipUntapEffect"/> marker with
+  /// <c>IsOptional = false</c>: the "may choose" language is attached to the
+  /// untap-step turn-based action (Rule 116), not to the
+  /// <see cref="IOptionalEffect.IsOptional"/> "You may" prefix convention. Mirrors
+  /// <see cref="TryParseCantBlock"/> in structure.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseSkipUntap(OracleClause clause)
+  {
+    if (!_skipUntapPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new MagicAST.AST.Effects.Timing.SkipUntapEffect { IsOptional = false },
+      },
+    ];
+  }
+
+  // Matches "You may choose not to untap this [permanent-type] during your untap step."
+  // The permanent-type noun is flexible — oracle uses the card's own type ("this
+  // artifact", "this creature", "this permanent", etc.). The trailing period is
+  // optional for minor formatting variants.
+  private static readonly Regex _skipUntapPattern = new(
+    @"^\s*You\s+may\s+choose\s+not\s+to\s+untap\s+this\s+(?:creature|permanent|artifact|enchantment|land)\s+during\s+your\s+untap\s+step\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
