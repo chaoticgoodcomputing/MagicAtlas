@@ -1,0 +1,63 @@
+{
+  "Input": {
+    "Name": "Aven Squire",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Bird Soldier",
+    "OracleText": "Flying\nExalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Aven Squire",
+    "TypeLine": {
+      "Raw": "Creature — Bird Soldier",
+      "Supertypes": [],
+      "Types": ["Creature"],
+      "Subtypes": ["Bird", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nExalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effect": {
+            "EffectType": "evasion",
+            "CanBeBlockedBy": {
+              "CardTypes": ["creature"],
+              "Characteristics": ["flying", "reach"]
+            }
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Exalted",
+          "Effect": {
+            "EffectType": "exalted",
+            "IsOptional": false
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["W"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

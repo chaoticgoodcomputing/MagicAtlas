@@ -1,0 +1,62 @@
+{
+  "Input": {
+    "Name": "Knight of Glory",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Human Knight",
+    "OracleText": "Protection from black (This creature can't be blocked, targeted, dealt damage, or enchanted by anything black.)\nExalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Knight of Glory",
+    "TypeLine": {
+      "Raw": "Creature — Human Knight",
+      "Supertypes": [],
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Knight"]
+    },
+    "Oracle": {
+      "RawText": "Protection from black (This creature can't be blocked, targeted, dealt damage, or enchanted by anything black.)\nExalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Protection",
+          "Effect": {
+            "EffectType": "protection",
+            "From": [
+              { "Kind": "Color", "Value": "black" }
+            ]
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Exalted",
+          "Effect": {
+            "EffectType": "exalted",
+            "IsOptional": false
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["W"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

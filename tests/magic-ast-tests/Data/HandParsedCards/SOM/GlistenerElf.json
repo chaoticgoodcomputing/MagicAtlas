@@ -1,0 +1,51 @@
+{
+  "Input": {
+    "Name": "Glistener Elf",
+    "ManaCost": "{G}",
+    "TypeLine": "Creature — Phyrexian Elf Warrior",
+    "OracleText": "Infect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Glistener Elf",
+    "TypeLine": {
+      "Raw": "Creature — Phyrexian Elf Warrior",
+      "Supertypes": [],
+      "Types": ["Creature"],
+      "Subtypes": ["Phyrexian", "Elf", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "Infect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Infect",
+          "Effect": {
+            "EffectType": "infect",
+            "IsOptional": false
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 1
+      },
+      { "Kind": "colors", "Colors": ["G"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}
