@@ -1,0 +1,108 @@
+{
+  "Input": {
+    "Name": "Pact of the Titan",
+    "ManaCost": "{0}",
+    "TypeLine": "Instant",
+    "OracleText": "Create a 4/4 red Giant creature token.\nAt the beginning of your next upkeep, pay {4}{R}. If you don't, you lose the game.",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [],
+    "Id": "4612effe-8ca2-4c27-90d2-d9255acc80d9",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Pact of the Titan",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Create a 4/4 red Giant creature token.\nAt the beginning of your next upkeep, pay {4}{R}. If you don't, you lose the game.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "4",
+                "Toughness": "4",
+                "Colors": [
+                  "R"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Giant"
+                ],
+                "IsCopy": false
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 39,
+            "Length": 82,
+            "End": 121
+          },
+          "RawText": "At the beginning of your next upkeep, pay {4}{R}. If you don't, you lose the game.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Pact upkeep trigger with conditional lose-the-game effect; no LoseGameEffect type exists in the AST",
+              "Location": {
+                "Start": 39,
+                "Length": 82,
+                "End": 121
+              },
+              "RawText": "At the beginning of your next upkeep, pay {4}{R}. If you don't, you lose the game.",
+              "Pattern": "ConditionalEffect",
+              "LastAttemptedRule": "TriggeredAbilityParser.Parse",
+              "FailurePosition": 39
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{0}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 0
+          }
+        ],
+        "ManaValue": 0,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
+    ]
+  }
+}
