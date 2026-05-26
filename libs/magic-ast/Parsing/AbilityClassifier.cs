@@ -682,6 +682,11 @@ public sealed class AbilityClassifier
     "Tap",
     "Untap",
     "Prevent",
+    // Mana production on the spell body (e.g. "Add {R}{R}{R}." — Infernal Plunge).
+    // Without this entry the classifier defaults to Static and routes to the
+    // unimplemented static-ability parser. "Add" is an imperative resolution step
+    // (Rule 701.21 — it produces mana that goes into the mana pool).
+    "Add",
     // Keyword actions (Rule 701) — these are imperative resolution steps, not
     // statics. Without an explicit entry here, a bare "Investigate." line would
     // be classified as IsSingleKeyword → Static, which sends it to the static

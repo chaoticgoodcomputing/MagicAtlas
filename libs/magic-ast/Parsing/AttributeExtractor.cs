@@ -1,7 +1,10 @@
 namespace MagicAST.Parsing;
 
 using System.Text.RegularExpressions;
+using MagicAST.AST;
 using MagicAST.AST.Costs;
+using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
 
 /// <summary>
 /// Extracts card attributes from a CardInputDTO.
@@ -78,6 +81,16 @@ public sealed partial class AttributeExtractor
       attributes.Add(new LayoutAttribute { Layout = input.Layout });
     }
 
+    // Additional costs encoded in oracle text.
+    // "As an additional cost to cast this spell, sacrifice a [type]."
+    // These lines are skipped by ClauseSplitter (no oracle ability emitted);
+    // we surface them here as AdditionalCostsAttribute on the card.
+    var additionalCostsAttr = TryExtractAdditionalCosts(input.OracleText);
+    if (additionalCostsAttr is not null)
+    {
+      attributes.Add(additionalCostsAttr);
+    }
+
     return attributes;
   }
 
@@ -137,6 +150,53 @@ public sealed partial class AttributeExtractor
     }
 
     return attributes;
+  }
+
+  // "As an additional cost to cast this spell, sacrifice a <type>."
+  // or "sacrifice <N> <type>s" — currently only "sacrifice a" (quantity=1) is
+  // handled, which covers the entire family-B corpus.
+  [GeneratedRegex(
+    @"^As an additional cost to cast this spell,\s+sacrifice\s+a\s+(?<type>[a-z]+)\.",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex AdditionalSacrificePrefix();
+
+  /// <summary>
+  /// Scans oracle text for "As an additional cost to cast this spell, sacrifice a [type]."
+  /// prefix lines and returns an AdditionalCostsAttribute when found, or null when absent.
+  /// Handles the sacrifice-a-permanent family; other cost shapes (discard, pay life) are
+  /// not yet recognised here and are left unparsed until a future batch extends this method.
+  /// </summary>
+  private static AdditionalCostsAttribute? TryExtractAdditionalCosts(string? oracleText)
+  {
+    if (string.IsNullOrWhiteSpace(oracleText))
+    {
+      return null;
+    }
+
+    // Oracle text is newline-separated; additional-cost lines are always the first line.
+    var firstLine = oracleText.Split('\n')[0].Trim();
+    var match = AdditionalSacrificePrefix().Match(firstLine);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var cardType = match.Groups["type"].Value.ToLowerInvariant();
+    var sourceSpan = new TextSpan(0, firstLine.Length);
+
+    var cost = new AdditionalCost
+    {
+      Cost = new SacrificeCost
+      {
+        Filter = new ObjectFilter { CardTypes = [cardType] },
+        Quantity = LiteralQuantity.Of(1),
+      },
+      IsOptional = false,
+      SourceSpan = sourceSpan,
+    };
+
+    return new AdditionalCostsAttribute { Costs = [cost] };
   }
 
   /// <summary>
