@@ -617,7 +617,6 @@ public sealed class AbilityClassifier
     "Explore",
     "Adapt",
     "Amass",
-    "Foretell",
     "Connive",
     "Train",
     "Exert",
