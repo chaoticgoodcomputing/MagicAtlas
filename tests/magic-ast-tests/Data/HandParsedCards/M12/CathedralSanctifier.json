@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Cathedral Sanctifier",
+    "ManaCost": "{W}",
+    "TypeLine": "Creature — Human Cleric",
+    "OracleText": "When this creature enters, you gain 3 life.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Cathedral Sanctifier",
+    "TypeLine": {
+      "Raw": "Creature — Human Cleric",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, you gain 3 life.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
