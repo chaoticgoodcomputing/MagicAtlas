@@ -52,8 +52,7 @@
           "Kind": "unparsed",
           "SourceSpan": {
             "Start": 7,
-            "Length": 47,
-            "End": 54
+            "Length": 47
           },
           "RawText": "@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
           "Diagnostics": [
@@ -62,8 +61,7 @@
               "Message": "Failed to parse Unparsed ability",
               "Location": {
                 "Start": 7,
-                "Length": 47,
-                "End": 54
+                "Length": 47
               },
               "RawText": "@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
               "Pattern": "UnparsedUnparsed",

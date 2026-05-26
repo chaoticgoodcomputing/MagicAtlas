@@ -1,0 +1,67 @@
+{
+  "Input": {
+    "Name": "Raze",
+    "ManaCost": "{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "As an additional cost to cast this spell, sacrifice a land.\nDestroy target land.",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Raze",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "As an additional cost to cast this spell, sacrifice a land.\nDestroy target land.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["land"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{R}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 1
+      },
+      { "Kind": "colors", "Colors": ["R"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "additionalCosts",
+        "Costs": [
+          {
+            "Cost": {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["land"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            },
+            "IsOptional": false,
+            "SourceSpan": { "Start": 0, "Length": 59 }
+          }
+        ]
+      }
+    ]
+  }
+}
