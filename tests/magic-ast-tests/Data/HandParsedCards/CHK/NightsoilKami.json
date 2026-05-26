@@ -1,0 +1,54 @@
+{
+  "Input": {
+    "Name": "Nightsoil Kami",
+    "ManaCost": "{4}{G}{G}",
+    "TypeLine": "Creature — Spirit",
+    "OracleText": "Soulshift 5 (When this creature dies, you may return target Spirit card with mana value 5 or less from your graveyard to your hand.)",
+    "Power": "6",
+    "Toughness": "4",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Nightsoil Kami",
+    "TypeLine": {
+      "Raw": "Creature — Spirit",
+      "Supertypes": [],
+      "Types": ["Creature"],
+      "Subtypes": ["Spirit"]
+    },
+    "Oracle": {
+      "RawText": "Soulshift 5 (When this creature dies, you may return target Spirit card with mana value 5 or less from your graveyard to your hand.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Soulshift",
+          "Effect": {
+            "EffectType": "soulshift",
+            "Value": 5,
+            "IsOptional": false
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 6
+      },
+      { "Kind": "colors", "Colors": ["G"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "6", "Value": 6 },
+        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+      }
+    ]
+  }
+}
