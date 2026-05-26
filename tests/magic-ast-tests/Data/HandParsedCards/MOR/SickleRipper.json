@@ -1,0 +1,52 @@
+{
+  "Input": {
+    "Name": "Sickle Ripper",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Elemental Warrior",
+    "OracleText": "Wither (This deals damage to creatures in the form of -1/-1 counters.)",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Sickle Ripper",
+    "TypeLine": {
+      "Raw": "Creature — Elemental Warrior",
+      "Supertypes": [],
+      "Types": ["Creature"],
+      "Subtypes": ["Elemental", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "Wither (This deals damage to creatures in the form of -1/-1 counters.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Wither",
+          "Effect": {
+            "EffectType": "wither",
+            "IsOptional": false
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["B"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}
