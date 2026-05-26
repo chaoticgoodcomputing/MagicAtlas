@@ -1,0 +1,83 @@
+{
+  "Input": {
+    "Name": "Sunder",
+    "ManaCost": "{3}{U}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Return all lands to their owners' hands.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Sunder",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Return all lands to their owners' hands.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "land"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}

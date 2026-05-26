@@ -1,0 +1,76 @@
+{
+  "Input": {
+    "Name": "Void Snare",
+    "ManaCost": "{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Return target nonland permanent to its owner's hand.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Void Snare",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Return target nonland permanent to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Characteristics": [
+                    "nonland"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
