@@ -2,6 +2,7 @@ using System.Text.Json;
 using Flowthru.Step;
 using MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
+using MagicAtlas.Ast.Tests.Flows.MagicAstTriage.Clustering;
 
 namespace MagicAtlas.Ast.Tests.Flows.MagicAstTriage.Steps;
 
@@ -24,6 +25,13 @@ public static class AggregateTriageReportStep
   private const double JaccardThreshold = 0.2;
   private const int MaxCandidateLinesPerPattern = 10;
   private const int MaxTopGaps = 20;
+
+  /// <summary>
+  /// Batch size for the data-derived yield-cluster recommendation embedded
+  /// in <see cref="TriageReport.TopYieldClusters"/>. Matches the typical
+  /// family-contract dispatch batch size in <c>mast-tdd-loop</c>.
+  /// </summary>
+  private const int YieldBatchSize = 5;
 
   /// <summary>
   /// Build the triage report.
@@ -208,6 +216,11 @@ public static class AggregateTriageReportStep
         )
         .ToList();
 
+      // Data-derived clustering pass: lexical-template clustering + greedy
+      // set-cover yield projection. Independent of the hand-coded pattern
+      // taxonomy above. Orchestrator should weigh both surfaces.
+      var topYieldClusters = YieldClusterAnalyzer.ComputeTopYieldClusters(all, YieldBatchSize);
+
       return new TriageReport
       {
         GeneratedAt = DateTime.UtcNow,
@@ -218,6 +231,7 @@ public static class AggregateTriageReportStep
           DistinctUnresolvedPatterns = distinctPatterns,
           HandParsedCoverage = ratchet,
         },
+        TopYieldClusters = topYieldClusters,
         TopGaps = topGaps,
       };
     };

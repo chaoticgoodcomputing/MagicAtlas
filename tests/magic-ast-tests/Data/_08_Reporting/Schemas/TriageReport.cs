@@ -14,7 +14,71 @@ public partial record TriageReport
 {
   public required DateTime GeneratedAt { get; init; }
   public required GlobalMetrics GlobalMetrics { get; init; }
+
+  /// <summary>
+  /// Discovery-side recommendation: the K clusters greedy set-cover picks as
+  /// the highest-yield batch. Data-derived from oracle-text lexical templates,
+  /// independent of the hand-coded <c>FallbackParser.InferFailurePattern</c>
+  /// taxonomy. Orchestrator should weigh BOTH this list and <see cref="TopGaps"/>
+  /// when choosing the next batch's families.
+  /// </summary>
+  public required IReadOnlyList<YieldClusterSummary> TopYieldClusters { get; init; }
+
   public required IReadOnlyList<GapEntry> TopGaps { get; init; }
+}
+
+/// <summary>
+/// One cluster in the yield-projection top-K. Templates are placeholder-
+/// substituted oracle text (e.g., <c>"Counter target &lt;TYPE&gt; spell."</c>).
+/// </summary>
+[FlowthruSchema]
+public partial record YieldClusterSummary
+{
+  /// <summary>Position in the greedy set-cover ranking (1-indexed).</summary>
+  public required int Rank { get; init; }
+
+  /// <summary>Placeholder-substituted oracle template that defines this cluster.</summary>
+  public required string Template { get; init; }
+
+  /// <summary>Total unparsed lines matching this template across the corpus.</summary>
+  public required int LineCount { get; init; }
+
+  /// <summary>Number of distinct cards with at least one line matching this template.</summary>
+  public required int CardCount { get; init; }
+
+  /// <summary>
+  /// Cards whose ENTIRE unparsed-line set is this single template — closing
+  /// this cluster would flip them green directly. Upper bound on the cluster's
+  /// standalone yield.
+  /// </summary>
+  public required int DirectYield { get; init; }
+
+  /// <summary>
+  /// Cards this cluster flips when picked at <see cref="Rank"/>, given the
+  /// prior picks already committed. Greedy-set-cover marginal contribution.
+  /// </summary>
+  public required int MarginalYield { get; init; }
+
+  /// <summary>Running total of <see cref="MarginalYield"/> through this rank.</summary>
+  public required int CumulativeYield { get; init; }
+
+  /// <summary>
+  /// Best fixture candidates — cards with the FEWEST other unparsed templates
+  /// (cleanest exemplars). Capped at 5.
+  /// </summary>
+  public required IReadOnlyList<YieldExemplar> Exemplars { get; init; }
+}
+
+/// <summary>A specific oracle line that exemplifies a yield cluster's template.</summary>
+[FlowthruSchema]
+public partial record YieldExemplar
+{
+  public required string CardName { get; init; }
+  public required string ScryfallId { get; init; }
+  public required string OracleLine { get; init; }
+
+  /// <summary>How many OTHER unparsed templates this card has (lower = cleaner fixture).</summary>
+  public required int OtherUnparsedClusters { get; init; }
 }
 
 /// <summary>Coverage and pattern-frequency metrics aggregated across the corpus.</summary>

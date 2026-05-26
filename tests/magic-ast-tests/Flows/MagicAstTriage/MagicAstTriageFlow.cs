@@ -54,13 +54,6 @@ public static class MagicAstTriageFlow
         inputs: catalog.ParseRecords,
         outputs: catalog.TriageReport
       );
-
-      pipeline.AddStep<IEnumerable<ParseRecord>, YieldClustersReport>(
-        label: "EmitYieldClusters",
-        transform: EmitYieldClustersStep.Create(),
-        inputs: catalog.ParseRecords,
-        outputs: catalog.YieldClusters
-      );
     });
   }
 }
