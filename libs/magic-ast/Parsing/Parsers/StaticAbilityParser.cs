@@ -5,6 +5,7 @@ using MagicAST.AST;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Combat;
+using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.References;
 using MagicAST.Parsing.Combinators;
@@ -224,6 +225,17 @@ public sealed class StaticAbilityParser : IAbilityParser
     if (asLongAs != null)
     {
       return asLongAs;
+    }
+
+    // "This [permanent/land/...] enters tapped." — Rule 614 replacement-effect
+    // property recorded as a static-ability-attached <see cref="EntersTappedEffect"/>.
+    // No KeywordSource: the oracle text is a full sentence, not a keyword token.
+    // Placed last in the chain because the sentence shape is unambiguous and
+    // won't compete with any keyword-dispatch path above.
+    var entersTapped = TryParseEntersTapped(clause);
+    if (entersTapped != null)
+    {
+      return entersTapped;
     }
 
     return null;
@@ -1633,6 +1645,38 @@ public sealed class StaticAbilityParser : IAbilityParser
     // Simple regular plural: strip trailing "s".
     return plural.EndsWith('s') ? plural[..^1] : plural;
   }
+
+  /// <summary>
+  /// "This [permanent/land/creature/artifact/enchantment] enters tapped." —
+  /// Rule 614 property recorded as a <see cref="EntersTappedEffect"/> on a
+  /// <see cref="StaticAbility"/>. No <c>KeywordSource</c> is set: oracle text
+  /// uses a full declarative sentence, not a keyword token. MAST records what
+  /// the oracle text <em>says</em>; the replacement-effect machinery Rule 614
+  /// derives at run-time is out of scope.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEntersTapped(OracleClause clause)
+  {
+    if (!_entersTappedPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new EntersTappedEffect(),
+      },
+    ];
+  }
+
+  // Matches "This [permanent|land|creature|artifact|enchantment] enters tapped."
+  // The permanent-type noun is flexible to cover the full range of oracle
+  // printings. The trailing period is optional to accommodate minor formatting
+  // variants.
+  private static readonly Regex _entersTappedPattern = new(
+    @"^\s*This\s+(?:permanent|land|creature|artifact|enchantment|spell)\s+enters\s+tapped\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   #region Keyword Parsing
 
