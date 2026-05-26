@@ -258,6 +258,15 @@ public sealed class StaticAbilityParser : IAbilityParser
       return cantBlock;
     }
 
+    // "This (creature|land|permanent) can't be blocked." — Rule 509.1b evasion
+    // (full unblockability). Full declarative sentence, not a keyword token, so
+    // no KeywordSource is set. Mirrors TryParseCantBlock in structure.
+    var cantBeBlocked = TryParseCantBeBlocked(clause);
+    if (cantBeBlocked != null)
+    {
+      return cantBeBlocked;
+    }
+
     return null;
   }
 
@@ -1819,6 +1828,35 @@ public sealed class StaticAbilityParser : IAbilityParser
   // The trailing period is optional for minor formatting variants.
   private static readonly Regex _cantBlockPattern = new(
     @"^\s*This\s+(?:creature|land|permanent)\s+can'?t\s+block\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "This (creature|land|permanent) can't be blocked." — Rule 509.1b full
+  /// unblockability. Full declarative sentence, so no <c>KeywordSource</c>
+  /// is set. Parameterless: the subject is the card the ability is printed
+  /// on. Mirrors <see cref="TryParseCantBlock"/> in structure.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseCantBeBlocked(OracleClause clause)
+  {
+    if (!_cantBeBlockedPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new CantBeBlockedEffect(),
+      },
+    ];
+  }
+
+  // Matches "This (creature|land|permanent) can't be blocked."
+  // The permanent-type noun covers the oracle printings seen in the corpus.
+  // The trailing period is optional for minor formatting variants.
+  private static readonly Regex _cantBeBlockedPattern = new(
+    @"^\s*This\s+(?:creature|land|permanent)\s+can'?t\s+be\s+blocked\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
