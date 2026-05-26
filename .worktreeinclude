@@ -1,0 +1,10 @@
+# Gitignored files copied into every new Claude Code worktree.
+# Uses .gitignore syntax. Only files that match a pattern AND are gitignored
+# are copied; tracked files are never duplicated.
+
+# MTG Comprehensive Rules glossary — gitignored Flowthru intermediate output.
+# Sub-agents in worktrees need this to look up rules-canonical definitions
+# (Step 1.5 briefings reference it). Without this entry, only the
+# orchestrator on main had the file.
+tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json
+tests/atlas-flow-test/Data/_03_Primary/Datasets/rules-structure.json
