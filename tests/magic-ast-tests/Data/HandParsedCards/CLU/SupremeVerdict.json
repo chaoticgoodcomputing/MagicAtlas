@@ -61,7 +61,7 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "W"]
+        "ColorIdentity": ["W", "U"]
       }
     ]
   }
