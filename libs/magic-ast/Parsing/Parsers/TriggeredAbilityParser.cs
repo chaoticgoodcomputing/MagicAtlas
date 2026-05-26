@@ -1,5 +1,6 @@
 namespace MagicAST.Parsing.Parsers;
 
+using System.Reflection;
 using System.Text.RegularExpressions;
 using MagicAST.AST;
 using MagicAST.AST.Abilities;
@@ -875,451 +876,80 @@ public sealed class TriggeredAbilityParser : IAbilityParser
 
   #endregion
 
-  #region Effect Parsing
+  #region Effect Parsing — Dispatcher
 
   /// <summary>
-  /// Parses the effects portion of the triggered ability.
-  /// Tries different effect parsers in sequence.
+  /// Per-rule entry for dispatch and telemetry attribution.
+  /// </summary>
+  private readonly record struct RuleEntry(Triggered.ITriggeredRule Rule, string Name, int Priority);
+
+  private static readonly Lazy<IReadOnlyList<RuleEntry>> _rules =
+    new(DiscoverRules, LazyThreadSafetyMode.ExecutionAndPublication);
+
+  private static IReadOnlyList<RuleEntry> DiscoverRules()
+  {
+    var assembly = typeof(TriggeredAbilityParser).Assembly;
+    var found = new List<RuleEntry>();
+    foreach (var type in assembly.GetTypes())
+    {
+      var attr = type.GetCustomAttribute<Triggered.TriggeredRuleAttribute>(inherit: false);
+      if (attr is null)
+      {
+        continue;
+      }
+      if (!typeof(Triggered.ITriggeredRule).IsAssignableFrom(type))
+      {
+        throw new InvalidOperationException(
+          $"{type.FullName} has [TriggeredRule] but does not implement ITriggeredRule."
+        );
+      }
+      var instance = (Triggered.ITriggeredRule?)Activator.CreateInstance(type)
+        ?? throw new InvalidOperationException(
+          $"Failed to instantiate {type.FullName} (parameterless constructor required)."
+        );
+      found.Add(new RuleEntry(instance, $"TriggeredAbilityParser.{type.Name}", attr.Priority));
+    }
+    return found
+      .OrderByDescending(r => r.Priority)
+      .ThenBy(r => r.Name, StringComparer.Ordinal)
+      .ToList();
+  }
+
+  /// <summary>
+  /// Multi-effect dispatch. Tries the two composite-effect orchestration paths
+  /// first (Sanctum and Stormfist shapes), then dispatches to single-effect rules
+  /// via reflection-discovered <see cref="Triggered.ITriggeredRule"/> implementations.
   /// </summary>
   private static IReadOnlyList<Effect>? ParseEffects(string effectText)
   {
-    // Strip a trailing period for downstream pattern matchers.
     var trimmed = effectText.Trim().TrimEnd('.').Trim();
 
-    // Composite phase-step effects: "each opponent loses X life and you gain X life,
-    // where X is the number of <count>" — Sanctum-of-Stone-Fangs shape. Match these
-    // before the single-effect parsers so the conjunction binds tightly.
     var loseGainLifeWhereX = TryParseLoseAndGainLifeWhereX(trimmed);
     if (loseGainLifeWhereX is not null)
     {
       return loseGainLifeWhereX;
     }
 
-    // "each player draws a card and loses 1 life" / "each player draws N cards
-    // and loses N life" — Stormfist Crusader's symmetric upkeep effect.
     var drawAndLose = TryParseEachPlayerDrawAndLoseLife(trimmed);
     if (drawAndLose is not null)
     {
       return drawAndLose;
     }
 
-    // Try different effect types
-    var effect = TryParseCreateTokenEffect(trimmed);
-    if (effect != null)
+    foreach (var entry in _rules.Value)
     {
-      return new List<Effect> { effect };
-    }
-
-    var scry = TryParseScryEffect(trimmed);
-    if (scry != null)
-    {
-      return new List<Effect> { scry };
-    }
-
-    var addMana = TryParseAddManaEffect(trimmed);
-    if (addMana != null)
-    {
-      return new List<Effect> { addMana };
-    }
-
-    var draw = TryParseDrawCardsEffect(trimmed);
-    if (draw != null)
-    {
-      return new List<Effect> { draw };
-    }
-
-    var putCounters = TryParsePutCountersEffect(trimmed);
-    if (putCounters != null)
-    {
-      return new List<Effect> { putCounters };
-    }
-
-    var untap = TryParseUntapSelfEffect(trimmed);
-    if (untap != null)
-    {
-      return new List<Effect> { untap };
-    }
-
-    // "you may return ... to its owner's hand. If you do, you gain life
-    // equal to that creature's mana value." — Niambi shape. Splits on the
-    // first sentence boundary and parses the tail as an IfYouDo gain-life.
-    // Tried before the plain return-to-hand so the IfYouDo doesn't get
-    // discarded by the simpler matcher.
-    var returnWithIfYouDo = TryParseReturnToHandWithIfYouDoGainLife(trimmed);
-    if (returnWithIfYouDo != null)
-    {
-      return new List<Effect> { returnWithIfYouDo };
-    }
-
-    var returnHand = TryParseReturnToHandEffect(trimmed);
-    if (returnHand != null)
-    {
-      return new List<Effect> { returnHand };
-    }
-
-    var loseLife = TryParseLoseLifeDerivedEffect(trimmed);
-    if (loseLife != null)
-    {
-      return new List<Effect> { loseLife };
-    }
-
-    var dealDamage = TryParseSelfDealsDamageToYouEffect(trimmed);
-    if (dealDamage != null)
-    {
-      return new List<Effect> { dealDamage };
-    }
-
-    var youLoseLife = TryParseYouLoseLifeEffect(trimmed);
-    if (youLoseLife != null)
-    {
-      return new List<Effect> { youLoseLife };
+      if (entry.Rule.TryMatch(trimmed, out var effect) && effect is not null)
+      {
+        return new List<Effect> { effect };
+      }
     }
 
     return null;
   }
 
   /// <summary>
-  /// "you lose N life" — straightforward life-loss effect (Deadpool's upkeep
-  /// tax). Player defaults to You.
-  /// </summary>
-  private static LoseLifeEffect? TryParseYouLoseLifeEffect(string effectText)
-  {
-    var m = Regex.Match(
-      effectText,
-      @"^you\s+lose\s+(?<amount>\d+|one|two|three|four|five)\s+life$",
-      RegexOptions.IgnoreCase
-    );
-    if (!m.Success)
-    {
-      return null;
-    }
-    var raw = m.Groups["amount"].Value.ToLowerInvariant();
-    int amount = raw switch
-    {
-      "one" => 1,
-      "two" => 2,
-      "three" => 3,
-      "four" => 4,
-      "five" => 5,
-      _ => int.Parse(raw),
-    };
-    return new LoseLifeEffect
-    {
-      Amount = LiteralQuantity.Of(amount),
-      Player = ObjectReference.You(),
-    };
-  }
-
-  /// <summary>
-  /// "it deals N damage to you" / "this creature deals N damage to you" —
-  /// reflexive damage from the source permanent back to its controller.
-  /// </summary>
-  private static MagicAST.AST.Effects.Damage.DealDamageEffect? TryParseSelfDealsDamageToYouEffect(
-    string effectText
-  )
-  {
-    var m = Regex.Match(
-      effectText,
-      @"^(it|this\s+(?:creature|permanent|artifact|enchantment))\s+deals?\s+(?<amount>\d+|one|two|three)\s+damage\s+to\s+you$",
-      RegexOptions.IgnoreCase
-    );
-    if (!m.Success)
-    {
-      return null;
-    }
-    var raw = m.Groups["amount"].Value.ToLowerInvariant();
-    int amount = raw switch
-    {
-      "one" => 1,
-      "two" => 2,
-      "three" => 3,
-      _ => int.Parse(raw),
-    };
-    return new MagicAST.AST.Effects.Damage.DealDamageEffect
-    {
-      Amount = LiteralQuantity.Of(amount),
-      Source = ObjectReference.Self(),
-      Target = ObjectReference.You(),
-    };
-  }
-
-  /// <summary>
-  /// "draw a card" / "you may draw a card unless that player pays {N}" — produces
-  /// a <see cref="DrawCardsEffect"/> with the optional <see cref="UnlessClause"/>.
-  /// </summary>
-  private static DrawCardsEffect? TryParseDrawCardsEffect(string effectText)
-  {
-    var lower = effectText.ToLowerInvariant();
-    if (!Regex.IsMatch(lower, @"\bdraw\s+(a|one|two|three|four|five|\d+)\s+cards?\b"))
-    {
-      return null;
-    }
-
-    var isOptional = lower.Contains("you may draw") || lower.StartsWith("you may ");
-    var count = ParseWordOrDigitCount(effectText) ?? 1;
-
-    // Unless clause: "...unless that player pays {N}." or "...unless [player] pays [cost]."
-    var unlessMatch = Regex.Match(
-      effectText,
-      @"unless\s+(?<who>that\s+player|you|an\s+opponent)\s+pays?\s+(?<cost>\{[^}]+\}(?:\{[^}]+\})*)",
-      RegexOptions.IgnoreCase
-    );
-
-    UnlessClause? unless = null;
-    if (unlessMatch.Success)
-    {
-      var who = unlessMatch.Groups["who"].Value.ToLowerInvariant().Trim();
-      var costStr = unlessMatch.Groups["cost"].Value;
-      ObjectReference player = who switch
-      {
-        "that player" => new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
-        "you" => ObjectReference.You(),
-        _ => new ObjectReference { Kind = ObjectReferenceKind.Opponent },
-      };
-      var manaCost = TryBuildManaCost(costStr);
-      if (manaCost is not null)
-      {
-        unless = new UnlessClause { Player = player, Cost = manaCost };
-      }
-    }
-
-    return new DrawCardsEffect
-    {
-      Count = LiteralQuantity.Of(count),
-      Player = ObjectReference.You(),
-      IsOptional = isOptional,
-      UnlessClause = unless,
-    };
-  }
-
-  /// <summary>
-  /// "put a +1/+1 counter on this creature" / "put a +1/+1 counter on target creature you control".
-  /// Recognises +1/+1 and -1/-1 counter shapes with self / target / target-you-control targets.
-  /// </summary>
-  private static PutCountersEffect? TryParsePutCountersEffect(string effectText)
-  {
-    var lower = effectText.ToLowerInvariant();
-    if (!lower.Contains("put") || !lower.Contains("counter"))
-    {
-      return null;
-    }
-
-    string counterType;
-    if (effectText.Contains("+1/+1"))
-    {
-      counterType = "+1/+1";
-    }
-    else if (effectText.Contains("-1/-1"))
-    {
-      counterType = "-1/-1";
-    }
-    else
-    {
-      return null;
-    }
-
-    var count = ParseWordOrDigitCount(effectText) ?? 1;
-    ObjectReference target;
-    if (lower.Contains("target creature you control"))
-    {
-      target = new ObjectReference
-      {
-        Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You },
-      };
-    }
-    else if (lower.Contains("target creature"))
-    {
-      target = new ObjectReference
-      {
-        Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter { CardTypes = ["creature"] },
-      };
-    }
-    else if (lower.Contains("this creature") || lower.Contains("this permanent"))
-    {
-      target = ObjectReference.Self();
-    }
-    else
-    {
-      target = ObjectReference.Self();
-    }
-
-    return new PutCountersEffect
-    {
-      Target = target,
-      CounterType = counterType,
-      Count = LiteralQuantity.Of(count),
-    };
-  }
-
-  /// <summary>
-  /// "untap this artifact" / "untap it" / "untap this permanent" — Self-targeting untap.
-  /// Recognises the "you may pay {X}. If you do, untap ..." gating shape too,
-  /// flagging the produced effect as <c>IsOptional=true</c> since the controller
-  /// chooses whether to pay (matches Mana Vault's gold).
-  /// </summary>
-  private static UntapEffect? TryParseUntapSelfEffect(string effectText)
-  {
-    var lower = effectText.ToLowerInvariant();
-    if (!Regex.IsMatch(lower, @"untap\s+(this|it)\b"))
-    {
-      return null;
-    }
-    var isOptional = Regex.IsMatch(
-      lower,
-      @"you\s+may\s+pay\s+\{[^}]+\}",
-      RegexOptions.IgnoreCase
-    );
-    return new UntapEffect { Target = ObjectReference.Self(), IsOptional = isOptional };
-  }
-
-  /// <summary>
-  /// "return up to one other target creature or planeswalker to its owner's hand" —
-  /// Barrin shape. Encodes the "other" qualifier on Characteristics and the
-  /// type disjunction on CardTypes. Also handles the simpler "return [target] to
-  /// its owner's hand" and "return another target creature you control to its
-  /// owner's hand".
-  /// </summary>
-  private static ReturnToHandEffect? TryParseReturnToHandEffect(string effectText)
-  {
-    var lower = effectText.ToLowerInvariant();
-    if (!lower.Contains("return") || !lower.Contains("hand"))
-    {
-      return null;
-    }
-
-    // Hand qualifier
-    if (!Regex.IsMatch(lower, @"to\s+(its\s+owner'?s|your)\s+hand"))
-    {
-      return null;
-    }
-
-    // "you may return ..." and "return up to N ..." both make this effect
-    // optional in oracle convention — the controller can choose 0 targets.
-    var isOptional =
-      lower.Contains("you may return")
-      || lower.StartsWith("you may ")
-      || Regex.IsMatch(lower, @"return\s+up\s+to\s+");
-    var characteristics = new List<string>();
-    if (lower.Contains("another target"))
-    {
-      characteristics.Add("another");
-    }
-    else if (Regex.IsMatch(lower, @"\bother\s+target\b"))
-    {
-      characteristics.Add("other");
-    }
-
-    var cardTypes = new List<string>();
-    foreach (var t in new[] { "creature", "planeswalker", "artifact", "enchantment", "permanent" })
-    {
-      if (Regex.IsMatch(lower, $@"\b{t}\b"))
-      {
-        cardTypes.Add(t);
-      }
-    }
-    if (cardTypes.Count == 0)
-    {
-      return null;
-    }
-
-    ControllerFilter? controller = null;
-    if (lower.Contains("you control"))
-    {
-      controller = ControllerFilter.You;
-    }
-
-    var filter = new ObjectFilter
-    {
-      CardTypes = cardTypes,
-      Characteristics = characteristics.Count > 0 ? characteristics : null,
-      Controller = controller,
-    };
-
-    return new ReturnToHandEffect
-    {
-      Target = new ObjectReference { Kind = ObjectReferenceKind.Target, Filter = filter },
-      IsOptional = isOptional,
-    };
-  }
-
-  /// <summary>
-  /// Niambi shape: "you may return ... to its owner's hand. If you do, you
-  /// gain life equal to that creature's mana value." Builds a
-  /// <see cref="ReturnToHandEffect"/> with <c>IsOptional=true</c> and an
-  /// <c>IfYouDo</c> gain-life clause whose amount is derived from the
-  /// returned creature's mana value.
-  /// </summary>
-  private static ReturnToHandEffect? TryParseReturnToHandWithIfYouDoGainLife(string effectText)
-  {
-    var split = Regex.Match(
-      effectText,
-      @"^(?<ret>you\s+may\s+return\s+.+?to\s+(?:its?\s+owner'?s|your)\s+hand)\.\s*If\s+you\s+do,\s*(?<rest>you\s+gain\s+life\s+equal\s+to\s+(?<src>that\s+creature'?s\s+mana\s+value))$",
-      RegexOptions.IgnoreCase
-    );
-    if (!split.Success)
-    {
-      return null;
-    }
-
-    var returnEffect = TryParseReturnToHandEffect(split.Groups["ret"].Value.Trim());
-    if (returnEffect is null)
-    {
-      return null;
-    }
-
-    var source = split.Groups["src"].Value.Trim();
-    // Singularize possessive: "that creature's mana value" → source "that creature".
-    var sourceObject = Regex.Replace(source, @"'?s\s+mana\s+value$", "", RegexOptions.IgnoreCase).Trim();
-
-    var gainLife = new GainLifeEffect
-    {
-      Amount = new DerivedQuantity
-      {
-        DerivedFrom = DerivedKind.ManaValue,
-        Source = sourceObject,
-      },
-      Player = ObjectReference.You(),
-    };
-
-    return returnEffect with { IfYouDo = gainLife, IsOptional = true };
-  }
-
-  /// <summary>
-  /// "target opponent loses that much life" — Vito's drain-on-life-gain effect.
-  /// Encodes the "that much" antecedent as a derived <see cref="DerivedKind.LifeGained"/>
-  /// quantity, matching the gold AST.
-  /// </summary>
-  private static LoseLifeEffect? TryParseLoseLifeDerivedEffect(string effectText)
-  {
-    var lower = effectText.ToLowerInvariant();
-    var match = Regex.Match(
-      lower,
-      @"target\s+opponent\s+loses?\s+that\s+much\s+life",
-      RegexOptions.IgnoreCase
-    );
-    if (!match.Success)
-    {
-      return null;
-    }
-
-    return new LoseLifeEffect
-    {
-      Amount = new DerivedQuantity { DerivedFrom = DerivedKind.LifeGained },
-      Player = new ObjectReference
-      {
-        Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter { CardTypes = ["player"] },
-      },
-    };
-  }
-
-  /// <summary>
   /// Stormfist-style composite: "each player draws a card and loses N life."
-  /// Returns the gold's flat two-element list (drawCards, loseLife) so the
-  /// trigger's Effects field carries both side-effects, with EachPlayer as
-  /// the subject for both.
+  /// Returns the gold's flat two-element list (drawCards, loseLife).
   /// </summary>
   private static IReadOnlyList<Effect>? TryParseEachPlayerDrawAndLoseLife(string effectText)
   {
@@ -1387,402 +1017,6 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         Player = ObjectReference.You(),
       },
     };
-  }
-
-  /// <summary>
-  /// Builds a <see cref="ManaCost"/> from a sequence of "{X}" mana symbols.
-  /// Returns null when the string isn't a well-formed mana sequence.
-  /// </summary>
-  private static ManaCost? TryBuildManaCost(string manaText)
-  {
-    try
-    {
-      var parsed = new ManaCostParser().Parse(manaText);
-      if (parsed.Symbols.Count == 0)
-      {
-        return null;
-      }
-      return new ManaCost { Symbols = parsed.Symbols };
-    }
-    catch
-    {
-      return null;
-    }
-  }
-
-  /// <summary>
-  /// Parses number words ("one", "two", ..., "ten") and digit forms into integers.
-  /// Returns null when the text doesn't carry a count word.
-  /// </summary>
-  private static int? ParseWordOrDigitCount(string text)
-  {
-    var lower = text.ToLowerInvariant();
-    if (lower.Contains("two")) return 2;
-    if (lower.Contains("three")) return 3;
-    if (lower.Contains("four")) return 4;
-    if (lower.Contains("five")) return 5;
-    if (lower.Contains("six")) return 6;
-    if (lower.Contains("seven")) return 7;
-    if (lower.Contains("eight")) return 8;
-    if (lower.Contains("nine")) return 9;
-    if (lower.Contains("ten")) return 10;
-    var m = Regex.Match(lower, @"\b(\d+)\b");
-    if (m.Success) return int.Parse(m.Groups[1].Value);
-    if (Regex.IsMatch(lower, @"\b(a|an|one)\b")) return 1;
-    return null;
-  }
-
-  /// <summary>
-  /// Tries to parse "scry N" effects (Rule 701.18 — keyword action). Mirrors
-  /// the equivalent parser on <see cref="ActivatedAbilityParser"/>; eventually
-  /// these should be hoisted into a shared effect-parser combinator.
-  /// </summary>
-  private static ScryEffect? TryParseScryEffect(string effectText)
-  {
-    var trimmed = effectText.Trim().TrimEnd('.');
-    var match = Regex.Match(trimmed, @"^scry\s+(\d+)$", RegexOptions.IgnoreCase);
-    if (!match.Success)
-    {
-      return null;
-    }
-
-    var count = int.Parse(match.Groups[1].Value);
-    return new ScryEffect { Count = LiteralQuantity.Of(count) };
-  }
-
-  /// <summary>
-  /// "add {C}" / "add {G}{G}" / "add one mana of any color" — Rule 106 mana-add
-  /// effect on the resolution side of a triggered ability. Mirrors the matcher
-  /// on <see cref="ActivatedAbilityParser"/>; the parsers will be consolidated
-  /// into a shared effect combinator once enough cases accumulate. Note that
-  /// triggered mana production is *not* a Rule 605 mana ability (those require
-  /// activation), so no IsManaAbility flag is set here.
-  /// </summary>
-  private static AddManaEffect? TryParseAddManaEffect(string effectText)
-  {
-    var text = effectText.Trim().TrimEnd('.').Trim();
-    if (!text.StartsWith("add ", StringComparison.OrdinalIgnoreCase))
-    {
-      return null;
-    }
-
-    var manaText = text[4..].Trim();
-
-    if (Regex.IsMatch(manaText, @"^one\s+mana\s+of\s+any\s+color$", RegexOptions.IgnoreCase))
-    {
-      return new AddManaEffect { Mana = string.Empty, AnyColor = true };
-    }
-
-    if (string.IsNullOrWhiteSpace(manaText) || !manaText.Contains('{'))
-    {
-      return null;
-    }
-
-    return new AddManaEffect { Mana = manaText, AnyColor = false };
-  }
-
-  /// <summary>
-  /// Parses "create [article] [P/T] [colors] [subtypes] creature token [abilities]" patterns.
-  /// Supports variations like:
-  /// - "create a 1/1 green Saproling creature token"
-  /// - "create two 2/2 black Zombie creature tokens"
-  /// - "create a 1/1 white and black Spirit creature token with flying"
-  /// </summary>
-  private static CreateTokenEffect? TryParseCreateTokenEffect(string text)
-  {
-    if (!text.Contains("create", StringComparison.OrdinalIgnoreCase))
-    {
-      return null;
-    }
-
-    // Parse article/quantity
-    var (article, count) = ParseArticle(text);
-
-    // Parse power/toughness (P/T)
-    var powerToughness = ParsePowerToughness(text);
-    if (powerToughness == null)
-    {
-      return null;
-    }
-
-    // Parse colors
-    var colors = ParseColors(text);
-
-    // Parse creature subtypes
-    var subtypes = ParseCreatureSubtypes(text);
-    if (subtypes.Count == 0)
-    {
-      return null;
-    }
-
-    // Parse abilities (optional). Convert the "with X" suffixes into the
-    // same StaticAbility shape MAST uses for direct keyword abilities so the
-    // token's ability list mirrors how the keyword would appear if printed
-    // straight onto a permanent.
-    var abilityNames = ParseTokenAbilities(text);
-    IReadOnlyList<Ability>? tokenAbilities = null;
-    if (abilityNames.Count > 0)
-    {
-      var abilities = new List<Ability>();
-      foreach (var name in abilityNames)
-      {
-        var sa = BuildKeywordStaticAbility(name);
-        if (sa is not null)
-        {
-          abilities.Add(sa);
-        }
-      }
-      if (abilities.Count > 0)
-      {
-        tokenAbilities = abilities;
-      }
-    }
-
-    return new CreateTokenEffect
-    {
-      Count = LiteralQuantity.Of(count),
-      Token = new TokenDefinition
-      {
-        Power = powerToughness.Value.Power,
-        Toughness = powerToughness.Value.Toughness,
-        Colors = colors,
-        Types = ["creature"],
-        Subtypes = subtypes,
-        Abilities = tokenAbilities,
-      },
-    };
-  }
-
-  /// <summary>
-  /// Wraps a keyword name into a <see cref="StaticAbility"/> with the canonical
-  /// <c>KeywordSource</c> + effect node, mirroring the shape used when the
-  /// same keyword appears directly on a card. Returns null for keywords MAST
-  /// does not yet model.
-  /// </summary>
-  private static StaticAbility? BuildKeywordStaticAbility(string keywordRaw)
-  {
-    var lower = keywordRaw.ToLowerInvariant().Trim();
-    Effect? effect = lower switch
-    {
-      "flying" => new MagicAST.AST.Effects.Keyword.EvasionEffect
-      {
-        CanBeBlockedBy = new ObjectFilter
-        {
-          CardTypes = ["creature"],
-          Characteristics = ["flying", "reach"],
-        },
-      },
-      "vigilance" => new MagicAST.AST.Effects.Keyword.VigilanceEffect(),
-      "trample" => new MagicAST.AST.Effects.Keyword.TrampleEffect(),
-      "haste" => new MagicAST.AST.Effects.Keyword.HasteEffect(),
-      "reach" => new MagicAST.AST.Effects.Keyword.ReachEffect(),
-      "lifelink" => new MagicAST.AST.Effects.Damage.LifelinkEffect(),
-      "indestructible" => new MagicAST.AST.Effects.Keyword.IndestructibleEffect(),
-      "deathtouch" => null, // not yet modeled
-      _ => null,
-    };
-    if (effect is null)
-    {
-      return null;
-    }
-    var keywordSource = char.ToUpperInvariant(lower[0]) + lower[1..];
-    return new StaticAbility { Effect = effect, KeywordSource = keywordSource };
-  }
-
-  #endregion
-
-  #region Token Spec Parsing Components
-
-  /// <summary>
-  /// Parses article/quantity from token creation text.
-  /// Compositional component for token parsing.
-  /// </summary>
-  private static (string Article, int Count) ParseArticle(string text)
-  {
-    var lower = text.ToLowerInvariant();
-
-    if (lower.Contains("two "))
-    {
-      return ("two", 2);
-    }
-
-    if (lower.Contains("three "))
-    {
-      return ("three", 3);
-    }
-
-    if (lower.Contains("four "))
-    {
-      return ("four", 4);
-    }
-
-    if (lower.Contains("an "))
-    {
-      return ("an", 1);
-    }
-
-    if (lower.Contains("a "))
-    {
-      return ("a", 1);
-    }
-
-    return ("", 1); // Default to 1
-  }
-
-  /// <summary>
-  /// Parses power/toughness notation (e.g., "1/1", "2/2", "X/X").
-  /// Compositional component reusable across parsers.
-  /// </summary>
-  private static (string Power, string Toughness)? ParsePowerToughness(string text)
-  {
-    // Match N/N pattern where N is digit or X
-    var match = System.Text.RegularExpressions.Regex.Match(text, @"(\d+|X)/(\d+|X)");
-    if (!match.Success)
-    {
-      return null;
-    }
-
-    return (match.Groups[1].Value, match.Groups[2].Value);
-  }
-
-  /// <summary>
-  /// Parses color words from text.
-  /// Handles single colors and compound colors (e.g., "white and black").
-  /// Compositional component reusable across parsers.
-  /// </summary>
-  private static List<string> ParseColors(string text)
-  {
-    var colors = new List<string>();
-    var lower = text.ToLowerInvariant();
-
-    // Map color names to abbreviations
-    var colorMappings = new Dictionary<string, string>
-    {
-      ["white"] = "W",
-      ["blue"] = "U",
-      ["black"] = "B",
-      ["red"] = "R",
-      ["green"] = "G",
-    };
-
-    foreach (var (name, code) in colorMappings)
-    {
-      if (lower.Contains(name))
-      {
-        colors.Add(code);
-      }
-    }
-
-    // Handle colorless explicitly
-    if (lower.Contains("colorless"))
-    {
-      colors.Clear();
-      colors.Add("C");
-    }
-
-    return colors;
-  }
-
-  /// <summary>
-  /// Parses creature subtypes from token creation text.
-  /// Looks for common creature types between P/T and "creature token".
-  /// Compositional component for token parsing.
-  /// </summary>
-  private static List<string> ParseCreatureSubtypes(string text)
-  {
-    var subtypes = new List<string>();
-
-    // Common creature types from data analysis
-    var knownTypes = new[]
-    {
-      "Saproling",
-      "Zombie",
-      "Spirit",
-      "Goblin",
-      "Soldier",
-      "Human",
-      "Elf",
-      "Warrior",
-      "Wolf",
-      "Dragon",
-      "Thopter",
-      "Servo",
-      "Knight",
-      "Vampire",
-      "Cat",
-      "Bat",
-      "Bird",
-      "Insect",
-      "Squirrel",
-      "Citizen",
-      "Rat",
-      "Angel",
-      "Detective",
-      "Robot",
-      "Kraken",
-      "Eldrazi",
-      "Phyrexian",
-      "Germ",
-      "Golem",
-      "Rebel",
-      "Hero",
-      "Ally",
-      "Orc",
-      "Army",
-    };
-
-    foreach (var type in knownTypes)
-    {
-      if (text.Contains(type, StringComparison.OrdinalIgnoreCase))
-      {
-        subtypes.Add(type);
-      }
-    }
-
-    return subtypes;
-  }
-
-  /// <summary>
-  /// Parses token abilities (e.g., "with flying", "with lifelink").
-  /// Compositional component for token parsing.
-  /// </summary>
-  private static List<string> ParseTokenAbilities(string text)
-  {
-    var abilities = new List<string>();
-    var lower = text.ToLowerInvariant();
-
-    // Common token abilities
-    if (lower.Contains("with flying"))
-    {
-      abilities.Add("flying");
-    }
-
-    if (lower.Contains("with lifelink"))
-    {
-      abilities.Add("lifelink");
-    }
-
-    if (lower.Contains("with vigilance"))
-    {
-      abilities.Add("vigilance");
-    }
-
-    if (lower.Contains("with deathtouch"))
-    {
-      abilities.Add("deathtouch");
-    }
-
-    if (lower.Contains("with haste"))
-    {
-      abilities.Add("haste");
-    }
-
-    if (lower.Contains("with trample"))
-    {
-      abilities.Add("trample");
-    }
-
-    return abilities;
   }
 
   #endregion
