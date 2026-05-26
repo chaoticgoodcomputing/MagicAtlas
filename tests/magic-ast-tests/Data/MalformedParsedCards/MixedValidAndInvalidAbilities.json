@@ -33,7 +33,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Flying",
           "Effect": {
             "EffectType": "evasion",
             "CanBeBlockedBy": {
@@ -44,8 +43,10 @@
                 "flying",
                 "reach"
               ]
-            }
-          }
+            },
+            "IsOptional": false
+          },
+          "KeywordSource": "Flying"
         },
         {
           "Kind": "unparsed",
@@ -65,7 +66,9 @@
                 "End": 54
               },
               "RawText": "@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
-              "Pattern": "UnparsedUnparsed"
+              "Pattern": "UnparsedUnparsed",
+              "LastAttemptedRule": "FallbackParser.Parse",
+              "FailurePosition": 7
             }
           ]
         }
@@ -93,7 +96,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -111,13 +115,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         }
       }
     ]
