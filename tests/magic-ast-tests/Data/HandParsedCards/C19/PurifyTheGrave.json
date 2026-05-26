@@ -1,0 +1,66 @@
+{
+  "Input": {
+    "Name": "Purify the Grave",
+    "ManaCost": "{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Exile target card from a graveyard.\nFlashback {W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Purify the Grave",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Supertypes": [],
+      "Types": ["Instant"],
+      "Subtypes": []
+    },
+    "Oracle": {
+      "RawText": "Exile target card from a graveyard.\nFlashback {W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["card"],
+                  "Zone": "Graveyard"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Flashback",
+          "Effect": {
+            "EffectType": "flashback",
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["W"] }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 1
+      },
+      { "Kind": "colors", "Colors": ["W"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["W"] }
+    ]
+  }
+}
