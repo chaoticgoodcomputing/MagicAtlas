@@ -1,0 +1,73 @@
+{
+  "Input": {
+    "Name": "Trusty Machete",
+    "ManaCost": "{1}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "Equipped creature gets +2/+1.\nEquip {2}",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Trusty Machete",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": ["Artifact"],
+      "Subtypes": ["Equipment"]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature gets +2/+1.\nEquip {2}",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "modifyPT",
+            "Target": {
+              "Kind": "EnchantedOrEquipped"
+            },
+            "PowerModifier": {
+              "QuantityType": "literal",
+              "Value": 2
+            },
+            "ToughnessModifier": {
+              "QuantityType": "literal",
+              "Value": 1
+            }
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Equip",
+          "Effect": {
+            "EffectType": "equip",
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 2 }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
