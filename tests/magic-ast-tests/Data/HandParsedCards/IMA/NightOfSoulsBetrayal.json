@@ -1,0 +1,90 @@
+{
+  "Input": {
+    "Name": "Night of Souls' Betrayal",
+    "ManaCost": "{2}{B}{B}",
+    "TypeLine": "Legendary Enchantment",
+    "OracleText": "All creatures get -1/-1.",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Night of Souls' Betrayal",
+    "TypeLine": {
+      "Raw": "Legendary Enchantment",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "All creatures get -1/-1.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "modifyPT",
+            "Target": {
+              "Kind": "Each",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ]
+              }
+            },
+            "PowerModifier": {
+              "QuantityType": "literal",
+              "Value": -1
+            },
+            "ToughnessModifier": {
+              "QuantityType": "literal",
+              "Value": -1
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}
