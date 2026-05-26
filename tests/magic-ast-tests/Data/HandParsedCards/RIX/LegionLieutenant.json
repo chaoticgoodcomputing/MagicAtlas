@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Legion Lieutenant",
+    "ManaCost": "{W}{B}",
+    "TypeLine": "Creature — Vampire Knight",
+    "OracleText": "Other Vampires you control get +1/+1.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["W", "B"],
+    "ColorIdentity": ["W", "B"]
+  },
+  "Output": {
+    "Name": "Legion Lieutenant",
+    "TypeLine": {
+      "Raw": "Creature — Vampire Knight",
+      "Types": ["Creature"],
+      "Subtypes": ["Vampire", "Knight"]
+    },
+    "Oracle": {
+      "RawText": "Other Vampires you control get +1/+1.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effect": {
+            "EffectType": "modifyPT",
+            "Target": {
+              "Kind": "Each",
+              "Filter": {
+                "CardTypes": ["creature"],
+                "Subtypes": ["Vampire"],
+                "Controller": "You",
+                "Characteristics": ["other"]
+              }
+            },
+            "PowerModifier": { "QuantityType": "literal", "Value": 1 },
+            "ToughnessModifier": { "QuantityType": "literal", "Value": 1 },
+            "IsOptional": false
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}{B}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W", "B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
