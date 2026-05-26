@@ -365,9 +365,79 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return new List<Effect> { modifyPT };
     }
 
+    // "Create a [P]/[T] [color] [subtype] creature token." — token creation as an
+    // activated-ability effect (Rule 111). Reuses the same regex shape as the
+    // Spell and Triggered CreateTokenRule counterparts; keeps the activated form
+    // inline rather than in a separate rule file since the effect is narrowly scoped.
+    var createToken = TryParseCreateTokenEffect(effectPart);
+    if (createToken != null)
+    {
+      return new List<Effect> { createToken };
+    }
+
     // For now, we can't parse other effect types
     // Return null to signal that we need to fall back to unparsed
     return null;
+  }
+
+  private static readonly System.Text.RegularExpressions.Regex _createTokenPattern = new(
+    @"^Create\s+(?<count>a|X|Y|Z|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<power>\d+)/(?<toughness>\d+)\s+(?<color>white|blue|black|red|green)\s+(?<subtype>\w+)\s+creature\s+tokens?$",
+    System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Compiled
+  );
+
+  private static readonly System.Collections.Generic.Dictionary<string, string> _activatedColorMap = new(
+    System.StringComparer.OrdinalIgnoreCase
+  )
+  {
+    ["white"] = "W", ["blue"] = "U", ["black"] = "B", ["red"] = "R", ["green"] = "G",
+  };
+
+  /// <summary>
+  /// "Create a [P]/[T] [color] [subtype] creature token." — single-token creation
+  /// effect. Mirrors <see cref="Spell.Rules.CreateTokenRule"/> but lives in the
+  /// activated-ability parser so artifact abilities like Combine Chrysalis parse
+  /// without needing a sibling spell or triggered rule.
+  /// </summary>
+  private static MagicAST.AST.Effects.TokenCopy.CreateTokenEffect? TryParseCreateTokenEffect(string effectText)
+  {
+    var m = _createTokenPattern.Match(effectText.Trim().TrimEnd('.'));
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var rawCount = m.Groups["count"].Value.ToLowerInvariant();
+    MagicAST.AST.Quantities.Quantity count = rawCount switch
+    {
+      "x" or "y" or "z" => new MagicAST.AST.Quantities.VariableQuantity { Name = rawCount.ToUpperInvariant() },
+      "a" or "one" => MagicAST.AST.Quantities.LiteralQuantity.Of(1),
+      "two" => MagicAST.AST.Quantities.LiteralQuantity.Of(2),
+      "three" => MagicAST.AST.Quantities.LiteralQuantity.Of(3),
+      _ => MagicAST.AST.Quantities.LiteralQuantity.Of(int.TryParse(rawCount, out var n) ? n : 1),
+    };
+
+    if (!_activatedColorMap.TryGetValue(m.Groups["color"].Value, out var colorCode))
+    {
+      return null;
+    }
+
+    var subtype = m.Groups["subtype"].Value;
+    subtype = char.ToUpperInvariant(subtype[0]) + subtype[1..];
+
+    return new MagicAST.AST.Effects.TokenCopy.CreateTokenEffect
+    {
+      Count = count,
+      Token = new MagicAST.AST.Effects.TokenDefinition
+      {
+        Power = m.Groups["power"].Value,
+        Toughness = m.Groups["toughness"].Value,
+        Colors = [colorCode],
+        Types = ["creature"],
+        Subtypes = [subtype],
+        IsCopy = false,
+      },
+      IsOptional = false,
+    };
   }
 
   /// <summary>
@@ -915,6 +985,14 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     else if (lower.Contains("this land"))
     {
       filter = new ObjectFilter { CardTypes = ["land"], Characteristics = ["this permanent"] };
+    }
+    else if (Regex.IsMatch(lower, @"\btoken\b") && !lower.Contains("creature") && !lower.Contains("artifact"))
+    {
+      // "Sacrifice a token" — "token" is a characteristic predicate (Rule 111.7),
+      // not a card type or subtype. Encodes as Characteristics: ["token"] to
+      // match the gold convention and distinguish from typed-token costs like
+      // "Sacrifice a creature token".
+      filter = new ObjectFilter { Characteristics = ["token"] };
     }
     else if (lower.Contains("creature"))
     {

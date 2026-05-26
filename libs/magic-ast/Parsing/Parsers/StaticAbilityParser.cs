@@ -227,6 +227,19 @@ public sealed class StaticAbilityParser : IAbilityParser
       return asLongAs;
     }
 
+    // "(Enchanted|Equipped) creature has <keyword>." or
+    // "<filter> tokens you control have <keyword>." — bare keyword grant with no
+    // P/T modifier. Distinct from TryParseEnchantedPTAndKeyword (batch 5) which
+    // requires the "+N/+M and has" conjunction. Placed before the composite rule
+    // because both start with "Enchanted/Equipped creature" and the bare shape
+    // is more common — we want it to win without the composite rule trying to
+    // match and failing on the absent P/T modifier.
+    var bareKeywordGrant = TryParseBareKeywordGrant(clause);
+    if (bareKeywordGrant != null)
+    {
+      return bareKeywordGrant;
+    }
+
     // "(Enchanted|Equipped) creature gets +N/+M and has <keyword>." — Aura/Equipment
     // composite static: a P/T buff bundled with a keyword grant on the attached
     // object (Rule 702.5 / 613.1c). Emits a CompositeEffect wrapping a
@@ -465,6 +478,170 @@ public sealed class StaticAbilityParser : IAbilityParser
     @"^\s*(?:Enchanted|Equipped)\s+creature\s+gets\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\s+and\s+has\s+(?<kw>[a-z][a-z ]+?)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
+
+  /// <summary>
+  /// Bare keyword grant on an anchor or filter target — two arms in one surface:
+  /// <list type="bullet">
+  ///   <item><c>(Enchanted|Equipped) creature has &lt;keyword&gt;.</c> — the Aura/Equipment
+  ///         static grant (Rule 702.5). Emits a <see cref="StaticAbility"/> wrapping a
+  ///         <see cref="GainAbilityEffect"/> with <c>Target: EnchantedOrEquipped</c>. No P/T
+  ///         modifier (that composite shape is handled by
+  ///         <see cref="TryParseEnchantedPTAndKeyword"/>).</item>
+  ///   <item><c>&lt;filter&gt; [tokens] you control have &lt;keyword&gt;.</c> — controller-scoped
+  ///         continuous grant on a token (or creature) filter (Rule 613.1c). The filter arm
+  ///         parses the leading noun phrase to determine card type, subtype, and the
+  ///         <c>token</c> predicate (placed on <see cref="ObjectFilter.Characteristics"/>).</item>
+  /// </list>
+  /// Both arms share <see cref="MapKeywordToStaticAbility"/> so any keyword added there
+  /// is available to both target shapes without further edits.
+  /// </summary>
+  /// <summary>
+  /// Strips trailing reminder text — a parenthetical clause at the end of the
+  /// oracle line — before matching patterns that use end-of-string anchors.
+  /// Reminder text is purely explanatory (Rule 207.2); stripping it before pattern
+  /// matching is safe because the gold AST does not carry the parenthetical on these
+  /// bare-grant shapes.
+  /// </summary>
+  private static string StripReminderText(string text)
+  {
+    return Regex.Replace(text, @"\s*\([^)]*\)\s*$", string.Empty).Trim();
+  }
+
+  private static IReadOnlyList<Ability>? TryParseBareKeywordGrant(OracleClause clause)
+  {
+    // Strip trailing reminder text before pattern matching so lines like
+    // "Creature tokens you control have deathtouch. (Any amount ...)" still match.
+    var rawText = StripReminderText(clause.RawText);
+
+    // Arm 1: anchor target — "(Enchanted|Equipped) creature has <keyword>."
+    var anchorMatch = _bareAnchorKeywordPattern.Match(rawText);
+    if (anchorMatch.Success)
+    {
+      var kw = anchorMatch.Groups["kw"].Value.Trim().ToLowerInvariant();
+      var grantedAbility = MapKeywordToStaticAbility(kw);
+      if (grantedAbility is null)
+      {
+        return null;
+      }
+      return
+      [
+        new StaticAbility
+        {
+          Effect = new GainAbilityEffect
+          {
+            Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+            GainedAbility = grantedAbility,
+          },
+        },
+      ];
+    }
+
+    // Arm 2: filter target — "<filter> [tokens] you control have <keyword>."
+    // Handles: "Creature tokens you control have <kw>.",
+    //          "<Subtype> tokens you control have <kw>.",
+    //          "Creatures you control have <kw>."
+    var filterMatch = _bareFilterKeywordPattern.Match(rawText);
+    if (!filterMatch.Success)
+    {
+      return null;
+    }
+
+    var filterText = filterMatch.Groups["filter"].Value.Trim();
+    var filterKw = filterMatch.Groups["kw"].Value.Trim().ToLowerInvariant();
+    var isTokenFilter = filterMatch.Groups["token"].Success;
+
+    var grantedAbility2 = MapKeywordToStaticAbility(filterKw);
+    if (grantedAbility2 is null)
+    {
+      return null;
+    }
+
+    var target = BuildBareGrantFilterTarget(filterText, isTokenFilter);
+    if (target is null)
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effect = new GainAbilityEffect
+        {
+          Target = target,
+          GainedAbility = grantedAbility2,
+        },
+      },
+    ];
+  }
+
+  // Arm 1: "(Enchanted|Equipped) creature has <keyword>."
+  // No P/T modifier allowed — this is the bare-grant shape only.
+  private static readonly Regex _bareAnchorKeywordPattern = new(
+    @"^\s*(?:Enchanted|Equipped)\s+creature\s+has\s+(?<kw>[a-z][a-z ]+?)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Arm 2: "<filter> [tokens] you control have <keyword>."
+  // Captures the noun-phrase before the optional "tokens" word and the trailing keyword.
+  // The "token" group is present only when the literal word "tokens" appears in the phrase,
+  // indicating the grant is restricted to token permanents.
+  private static readonly Regex _bareFilterKeywordPattern = new(
+    @"^\s*(?<filter>[A-Za-z][A-Za-z ]+?)\s+(?<token>tokens?\s+)?you\s+control\s+have\s+(?<kw>[a-z][a-z ]+?)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// Builds an <see cref="ObjectReference"/> for the filter arm of
+  /// <see cref="TryParseBareKeywordGrant"/>. Two filter shapes are recognised:
+  /// <list type="bullet">
+  ///   <item>"Creature(s)" — plain card-type filter; no subtype.</item>
+  ///   <item>"[Subtype] creatures" or bare "[Subtype]" — subtype filter.</item>
+  /// </list>
+  /// When <paramref name="isToken"/> is <see langword="true"/> the filter
+  /// includes <c>Characteristics: ["token"]</c> (matching how
+  /// <c>ObjectFilter.Characteristics</c> encodes the token predicate).
+  /// Returns <see langword="null"/> for unrecognised filter shapes.
+  /// </summary>
+  private static ObjectReference? BuildBareGrantFilterTarget(string filterText, bool isToken)
+  {
+    var lower = filterText.Trim().ToLowerInvariant();
+
+    // "Creature" / "Creatures" — bare card-type filter.
+    if (lower is "creature" or "creatures")
+    {
+      return new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Characteristics = isToken ? (IReadOnlyList<string>?)["token"] : null,
+          Controller = ControllerFilter.You,
+        },
+      };
+    }
+
+    // "[Subtype] creature(s)" — subtype + card-type filter (e.g. "Wolf creatures").
+    var subtypeCreatureMatch = Regex.Match(filterText, @"^(?<sub>[A-Z][a-z]+)\s+creatures?$");
+    if (subtypeCreatureMatch.Success)
+    {
+      var subtype = subtypeCreatureMatch.Groups["sub"].Value;
+      return new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Subtypes = [subtype],
+          Characteristics = isToken ? (IReadOnlyList<string>?)["token"] : null,
+          Controller = ControllerFilter.You,
+        },
+      };
+    }
+
+    return null;
+  }
 
   /// <summary>
   /// "Other [Subtype] creatures you control get +N/+N." — tribal-lord
@@ -1541,6 +1718,16 @@ public sealed class StaticAbilityParser : IAbilityParser
       {
         KeywordSource = "Trample",
         Effect = new MagicAST.AST.Effects.Keyword.TrampleEffect(),
+      },
+      "defender" => new StaticAbility
+      {
+        KeywordSource = "Defender",
+        Effect = new MagicAST.AST.Effects.Keyword.DefenderEffect { IsOptional = false },
+      },
+      "deathtouch" => new StaticAbility
+      {
+        KeywordSource = "Deathtouch",
+        Effect = new MagicAST.AST.Effects.Keyword.DeathtouchEffect { IsOptional = false },
       },
       _ => null,
     };

@@ -1074,6 +1074,16 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return drawAndLose;
     }
 
+    // "create a P1/T1 color1 sub1 creature token, a P2/T2 color2 sub2 creature token,
+    // and a P3/T3 color3 sub3 creature token" — multi-token composite triggered
+    // effect (Rule 111). Tried before the single-rule loop so the comma-separated
+    // series isn't mismatched by the single-token CreateTokenRule.
+    var multiToken = TryParseCompositeCreateTokens(trimmed);
+    if (multiToken is not null)
+    {
+      return multiToken;
+    }
+
     foreach (var entry in _rules.Value)
     {
       if (entry.Rule.TryMatch(trimmed, out var effect) && effect is not null)
@@ -1083,6 +1093,77 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     }
 
     return null;
+  }
+
+  // One token spec: "a P/T color subtype creature token" (article + P/T + color + subtype).
+  private static readonly Regex _singleTokenSpec = new(
+    @"(?:a|an|\d+)\s+(?<power>\d+)/(?<toughness>\d+)\s+(?<color>white|blue|black|red|green)\s+(?<subtype>\w+)\s+creature\s+token",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  private static readonly IReadOnlyDictionary<string, string> _triggeredColorMap =
+    new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+      ["white"] = "W", ["blue"] = "U", ["black"] = "B", ["red"] = "R", ["green"] = "G",
+    };
+
+  /// <summary>
+  /// "create [spec1], [spec2], and [spec3]" — comma-separated multi-token
+  /// creation. Each spec is "a P/T color subtype creature token". Wraps the
+  /// individual <see cref="CreateTokenEffect"/> nodes in a single
+  /// <see cref="CompositeEffect"/> matching the gold for Somberwald Beastmaster.
+  /// Returns <see langword="null"/> for any other shape (single token or
+  /// non-create text) so the single-rule dispatch below handles it.
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseCompositeCreateTokens(string effectText)
+  {
+    var lower = effectText.ToLowerInvariant();
+    if (!lower.StartsWith("create"))
+    {
+      return null;
+    }
+
+    var specs = _singleTokenSpec.Matches(effectText);
+    if (specs.Count < 2)
+    {
+      // Single token — let the existing CreateTokenRule handle it.
+      return null;
+    }
+
+    var creates = new List<Effect>();
+    foreach (System.Text.RegularExpressions.Match spec in specs)
+    {
+      if (!_triggeredColorMap.TryGetValue(spec.Groups["color"].Value, out var colorCode))
+      {
+        return null;
+      }
+      var subtype = spec.Groups["subtype"].Value;
+      subtype = char.ToUpperInvariant(subtype[0]) + subtype[1..];
+
+      creates.Add(new CreateTokenEffect
+      {
+        Count = LiteralQuantity.Of(1),
+        Token = new TokenDefinition
+        {
+          Power = spec.Groups["power"].Value,
+          Toughness = spec.Groups["toughness"].Value,
+          Colors = [colorCode],
+          Types = ["creature"],
+          Subtypes = [subtype],
+          IsCopy = false,
+        },
+        IsOptional = false,
+      });
+    }
+
+    return new List<Effect>
+    {
+      new CompositeEffect
+      {
+        Effects = creates,
+        IsOptional = false,
+      },
+    };
   }
 
   /// <summary>
