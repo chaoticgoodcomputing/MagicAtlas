@@ -1,0 +1,51 @@
+{
+  "Input": {
+    "Name": "Putrid Goblin",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Zombie Goblin",
+    "OracleText": "Persist (When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Putrid Goblin",
+    "TypeLine": {
+      "Raw": "Creature — Zombie Goblin",
+      "Types": ["Creature"],
+      "Subtypes": ["Zombie", "Goblin"]
+    },
+    "Oracle": {
+      "RawText": "Persist (When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Persist",
+          "Effect": {
+            "EffectType": "persist",
+            "IsOptional": false
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["B"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
