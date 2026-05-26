@@ -1,5 +1,6 @@
 namespace MagicAST.Parsing.Parsers;
 
+using System.Text.RegularExpressions;
 using MagicAST.AST;
 using MagicAST.AST.Abilities;
 using MagicAST.Diagnostics;
@@ -98,73 +99,205 @@ public sealed class FallbackParser : IAbilityParser
     };
   }
 
+  // --- Line-split artifact patterns (multi-line abilities whose body lines
+  //     get individually re-presented to the parser by the triage flow's
+  //     per-line splitter). Tag and de-emphasize — NOT actionable as parser
+  //     work; they're already consumed at the ability level.
+  private static readonly Regex LevelUpStanzaBodyPt = new(@"^\d+/\d+$", RegexOptions.Compiled);
+  private static readonly Regex LevelUpStanzaHeader = new(
+    @"^level\s+\d+(\s*[-+–]\s*\d+|\+)?$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  // --- Spell sub-patterns (UnparsedSpell partitioning).
+  private static readonly Regex CounterSpellLead = new(
+    @"^counter\s+target",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+  private static readonly Regex DestroyTargetLead = new(
+    @"^destroy\s+(target|all)",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+  private static readonly Regex ExileTargetLead = new(
+    @"^exile\s+(target|all)",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+  private static readonly Regex ReturnTargetLead = new(
+    @"^return\s+(target|all)",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+  private static readonly Regex DealDamageLead = new(
+    @"^\S+\s+deals?\s+\w+\s+damage\s+to",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+  private static readonly Regex CreateTokenLead = new(
+    @"^create\s+\S+\s+(\d+/\d+|[a-z]+\s+\d+/\d+).*\btoken",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  // --- Triggered sub-patterns (UnparsedTriggered partitioning). Match the
+  //     trigger condition, not the effect — that's what differentiates the
+  //     parser surface that would handle this family.
+  private static readonly Regex EnterTrigger = new(
+    @"^(when|whenever)\s+\S+\s+enters\b",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+  private static readonly Regex DieTrigger = new(
+    @"^(when|whenever)\s+\S+\s+dies\b",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+  private static readonly Regex AttackTrigger = new(
+    @"^(when|whenever)\s+\S+\s+attacks?\b",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+  private static readonly Regex CombatDamageTrigger = new(
+    @"^(when|whenever)\s+\S+\s+deals?\s+combat\s+damage\b",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+  private static readonly Regex BeginningOfTurnTrigger = new(
+    @"^at\s+the\s+beginning\s+of\b",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  // --- Static sub-patterns (UnparsedStatic partitioning).
+  private static readonly Regex LordPtBuff = new(
+    @"\bget\s+[+-]\d+/[+-]\d+\b",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+  private static readonly Regex ProtectionFromStatic = new(
+    @"\bprotection\s+from\b",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+  private static readonly Regex AsLongAsStatic = new(
+    @"\bas\s+long\s+as\b",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
   /// <summary>
-  /// Infers a failure pattern category for aggregation.
+  /// Infers a failure pattern category for aggregation. Ordering matters:
+  /// more-specific structural patterns first, then real-failure sub-patterns
+  /// keyed off the inferred ability kind, then the confidence-based catchall.
   /// </summary>
+  /// <remarks>
+  /// Sub-patterns are grouped by which parser surface would close them so the
+  /// triage aggregator can present family-contract candidates directly. If a
+  /// new sub-pattern doesn't map to a single parser rule shape, don't add it
+  /// here — keep the catchall doing its job.
+  /// </remarks>
   private static string InferFailurePattern(
     OracleClause clause,
     ClauseClassification classification
   )
   {
     var tokens = clause.Tokens.ToList();
-    var text = clause.RawText.ToLowerInvariant();
+    var raw = clause.RawText;
+    var trimmed = raw.Trim();
+    var text = raw.ToLowerInvariant();
 
-    // Check for common patterns that need specific parser support
+    // ─── Line-split artifacts (de-emphasize, NOT parser work) ───
+    // Level Up stanza body fragments — bare "3/3", "5/5" or "LEVEL 1-2", "LEVEL 7+".
+    // The whole stanza is consumed by LevelUpAbilityParser at ability scope;
+    // the triage line-splitter treats each body line as an unparseable clause.
+    if (LevelUpStanzaBodyPt.IsMatch(trimmed))
+    {
+      return "LevelUpStanzaBody";
+    }
+    if (LevelUpStanzaHeader.IsMatch(trimmed))
+    {
+      return "LevelUpStanzaBody";
+    }
+    // Modal option fragments — "• Scry 1.", "• Draw a card." — body of a
+    // Modal/Choose-one ability that gets line-split by the triage flow.
+    if (trimmed.StartsWith('•'))
+    {
+      return "ModalOptionFragment";
+    }
 
-    // Level up cards
+    // ─── Existing structural patterns (preserved) ───
     if (text.StartsWith("level up"))
     {
       return "LevelUp";
     }
-
-    // Class cards
     if (text.Contains("class level"))
     {
       return "ClassLevel";
     }
-
-    // Saga cards
     if (text.StartsWith("(as this saga enters") || text.Contains("read ahead"))
     {
       return "Saga";
     }
-
-    // Partner with
     if (text.StartsWith("partner with"))
     {
       return "PartnerWith";
     }
-
-    // Nested/quoted abilities
     if (clause.Tokens.Any(t => t.Kind == OracleToken.QuotedText))
     {
       return "NestedAbility";
     }
-
-    // Complex targeting
     if (text.Contains("target") && text.Contains("or"))
     {
       return "ComplexTargeting";
     }
-
-    // Conditional effects
     if (text.Contains("if you") || text.Contains("if a") || text.Contains("if an"))
     {
       return "ConditionalEffect";
     }
-
-    // X spells/effects
     if (tokens.Any(t => t.Kind == OracleToken.VariableMana))
     {
       return "VariableEffect";
     }
 
-    // Based on classification confidence
+    // ─── Sub-pattern partitioning by inferred ability kind ───
+    // Each sub-pattern below corresponds to ONE plausible parser rule surface
+    // (one [SpellRule], [TriggeredRule], etc.) that would close the family.
+    var kind = classification.Kind;
+
+    if (kind == AbilityKind.Spell)
+    {
+      if (CounterSpellLead.IsMatch(text))
+        return "CounterSpell";
+      if (DestroyTargetLead.IsMatch(text))
+        return "DestroyTargetSpell";
+      if (ExileTargetLead.IsMatch(text))
+        return "ExileTargetSpell";
+      if (ReturnTargetLead.IsMatch(text))
+        return "ReturnTargetSpell";
+      if (DealDamageLead.IsMatch(text))
+        return "DealDamageSpell";
+      if (CreateTokenLead.IsMatch(text))
+        return "CreateTokenSpell";
+    }
+
+    if (kind == AbilityKind.Triggered)
+    {
+      if (EnterTrigger.IsMatch(text))
+        return "EnterTrigger";
+      if (DieTrigger.IsMatch(text))
+        return "DieTrigger";
+      if (AttackTrigger.IsMatch(text))
+        return "AttackTrigger";
+      if (CombatDamageTrigger.IsMatch(text))
+        return "CombatDamageTrigger";
+      if (BeginningOfTurnTrigger.IsMatch(text))
+        return "BeginningOfTurnTrigger";
+    }
+
+    if (kind == AbilityKind.Static)
+    {
+      if (LordPtBuff.IsMatch(text))
+        return "LordPowerToughnessBuff";
+      if (ProtectionFromStatic.IsMatch(text))
+        return "ProtectionFrom";
+      if (AsLongAsStatic.IsMatch(text))
+        return "AsLongAsCondition";
+    }
+
+    // ─── Confidence-based catchall ───
     return classification.Confidence switch
     {
       < 0.5 => "UnknownStructure",
       < 0.7 => "AmbiguousStructure",
-      _ => $"Unparsed{classification.Kind}",
+      _ => $"Unparsed{kind}",
     };
   }
 }
