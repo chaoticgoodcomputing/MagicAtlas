@@ -563,6 +563,22 @@ public sealed class StaticAbilityParser : IAbilityParser
       return phantomDamagePrevention;
     }
 
+    // "Spells your opponents cast that target this creature cost {N} more to
+    // cast." — pre-Ward targeting cost increase (Rule 117.6). A continuous
+    // static effect that raises the total cost of spells an opponent casts by
+    // a flat generic-mana amount when those spells target this permanent. The
+    // subject may be "this creature" (pronoun form) or the card's own name
+    // (name form); both are collapsed to Self. Emits a StaticAbility wrapping
+    // a CostIncreaseEffect with CasterFilter=Opponent and TargetedObject=Self.
+    // No KeywordSource: the oracle text is a full declarative sentence, not a
+    // keyword token. Placed last because it is unambiguous and won't compete
+    // with any rule above.
+    var spellsTargetingCostMore = TryParseSpellsTargetingCostMore(clause);
+    if (spellsTargetingCostMore != null)
+    {
+      return spellsTargetingCostMore;
+    }
+
     return null;
   }
 
@@ -4815,6 +4831,64 @@ public sealed class StaticAbilityParser : IAbilityParser
   private static readonly Regex _phantomDamagePreventionPattern = new(
     @"^\s*If\s+damage\s+would\s+be\s+dealt\s+to\s+(?<subj>.+?),\s*prevent\s+that\s+damage\.\s*Remove\s+a\s+\+1/\+1\s+counter\s+from\s+(?<subj2>.+?)\.\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "Spells your opponents cast that target this creature cost {N} more to
+  /// cast." — pre-Ward targeting cost increase (Rule 117.6). Two surface
+  /// forms are recognised:
+  /// <list type="bullet">
+  ///   <item><b>Pronoun form</b>: <c>… that target this creature …</c> —
+  ///         used on cards printed after the "this creature" wording
+  ///         standardisation.</item>
+  ///   <item><b>Name form</b>: <c>… that target [CardName] …</c> — used on
+  ///         older cards and reprints that retain the card's proper name in
+  ///         oracle text. The name is captured but collapsed to Self; only
+  ///         the cost amount is meaningful for the AST node.</item>
+  /// </list>
+  /// Both forms emit a <see cref="StaticAbility"/> wrapping a
+  /// <see cref="MagicAST.AST.Effects.Resource.CostIncreaseEffect"/> with:
+  /// <list type="bullet">
+  ///   <item><c>Amount</c> = <see cref="MagicAST.AST.Quantities.LiteralQuantity"/> of N.</item>
+  ///   <item><c>TargetedObject</c> = <see cref="ObjectReference.Self()"/> (the source permanent).</item>
+  ///   <item><c>CasterFilter</c> = <see cref="ControllerFilter.Opponent"/>.</item>
+  /// </list>
+  /// No <c>KeywordSource</c>: the oracle text is a full declarative sentence,
+  /// not a keyword token. No <c>Duration</c>: the increase persists while the
+  /// source permanent is on the battlefield.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseSpellsTargetingCostMore(OracleClause clause)
+  {
+    var match = _spellsTargetingCostMorePattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var amount = int.Parse(match.Groups["amount"].Value);
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Resource.CostIncreaseEffect
+        {
+          Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount),
+          TargetedObject = ObjectReference.Self(),
+          CasterFilter = ControllerFilter.Opponent,
+        }],
+      },
+    ];
+  }
+
+  // "Spells your opponents cast that target this creature cost {N} more to cast."
+  // Also matches the name form: "... that target [Name] cost {N} more to cast."
+  // The non-capturing middle group covers both "this creature/permanent/artifact/
+  // enchantment/land/planeswalker" and any other noun phrase (card name).
+  // Amount is a single generic-mana digit inside braces: {1}, {2}, {3}, {4}.
+  private static readonly Regex _spellsTargetingCostMorePattern = new(
+    @"^\s*Spells\s+your\s+opponents\s+cast\s+that\s+target\s+(?:this\s+\w+|[A-Z][A-Za-z\s,']+?)\s+cost\s+\{(?<amount>\d+)\}\s+more\s+to\s+cast\.?\s*$",
+    RegexOptions.Compiled
   );
 
   #region Keyword Parsing
