@@ -1,0 +1,99 @@
+{
+  "Input": {
+    "Name": "Barging Sergeant",
+    "ManaCost": "{4}{R}",
+    "TypeLine": "Creature — Minotaur Soldier",
+    "OracleText": "Haste\nMentor (Whenever this creature attacks, put a +1/+1 counter on target attacking creature with lesser power.)",
+    "Power": "4",
+    "Toughness": "2",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Barging Sergeant",
+    "TypeLine": {
+      "Raw": "Creature — Minotaur Soldier",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Minotaur",
+        "Soldier"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Haste\nMentor (Whenever this creature attacks, put a +1/+1 counter on target attacking creature with lesser power.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Haste",
+          "Effects": [
+            {
+              "EffectType": "haste"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Mentor",
+          "Reminder": {
+            "Text": "(Whenever this creature attacks, put a +1/+1 counter on target attacking creature with lesser power.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "mentor"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
