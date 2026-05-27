@@ -2532,7 +2532,134 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Fuse" keyword.
+  /// Pattern: "Fuse" [reminder]
+  /// Rule 702.102. Found on split cards from Dragon's Maze. "You may cast one
+  /// or both halves of this card from your hand." MAST records keyword presence;
+  /// the split-card casting modes and cost-combination mechanics are engine
+  /// territory. Parameterless keyword marker — mirrors Storm, Ascend.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Fuse = (
+    from kw in Keyword("Fuse")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Fuse",
+      Effects = [new FuseEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Bargain" keyword.
+  /// Pattern: "Bargain" [reminder]
+  /// Rule 702.166. "You may sacrifice an artifact, enchantment, or token as you
+  /// cast this spell." Found on cards from Wilds of Eldraine and later sets.
+  /// MAST records keyword presence; the optional-sacrifice additional-cost and
+  /// "bargained" designation are engine territory. Parameterless keyword marker
+  /// — mirrors Storm, Ascend.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Bargain = (
+    from kw in Keyword("Bargain")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Bargain",
+      Effects = [new BargainEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Spree" keyword.
+  /// Pattern: "Spree" [reminder]
+  /// Rule 702.172. "Choose one or more additional costs." Found on modal spells
+  /// that require the caster to select at least one mode and pay the
+  /// corresponding additional cost for each chosen mode. MAST records keyword
+  /// presence; the mode-selection, additional-cost payment, and multi-mode
+  /// resolution mechanics are engine territory. Parameterless keyword marker
+  /// — mirrors Storm, Convoke.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Spree = (
+    from kw in Keyword("Spree")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Spree",
+      Effects = [new SpreeEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Job select" keyword.
+  /// Pattern: "Job" "select" [reminder]
+  /// Rule 702.182. "When this Equipment enters, create a 1/1 colorless Hero
+  /// creature token, then attach this to it." Found on Equipment cards from
+  /// the Final Fantasy set. Although mechanically a triggered ability, MAST
+  /// records it as a keyword marker — same approach as Living weapon (702.77).
+  /// Multi-word keyword via sequential Keyword() combinators, mirroring
+  /// LivingWeapon and BattleCry.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> JobSelect = (
+    from job in Keyword("Job")
+    from selectKw in Keyword("select")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Job select",
+      Effects = [new JobSelectEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
+
+  /// <summary>
+  /// Parser for "Warp {cost}" keyword.
+  /// Pattern: "Warp" mana-symbol+ [reminder]
+  /// Rule 702.185. "You may cast this card from your hand for its warp cost. It
+  /// enters the battlefield tapped..." An alternative-cast keyword on permanent
+  /// cards that allows them to be cast for an alternative mana cost, entering
+  /// tapped. MAST records the keyword and the warp cost; the alternative-cast
+  /// and enters-tapped mechanics are engine territory. Mirrors the
+  /// Plot/Dash/Ninjutsu mana-cost pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Warp = (
+    from keyword in Keyword("Warp")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Warp",
+      Effects = [new WarpEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
 
   #region Composite Parsers
 
@@ -2647,7 +2774,11 @@ public static class OracleParsers
     .Or(StartYourEngines)
     .Or(Riot)
     .Or(Training)
-    .Or(Dethrone);
+    .Or(Dethrone)
+    .Or(Fuse)
+    .Or(Bargain)
+    .Or(Spree)
+    .Or(JobSelect);
 
   /// <summary>
   /// Parses any parameterized keyword ability.
@@ -2691,7 +2822,8 @@ public static class OracleParsers
       .Or(Hideaway.Try())
       .Or(Mobilize.Try())
       .Or(Afflict.Try())
-      .Or(Afterlife.Try());
+      .Or(Afterlife.Try())
+      .Or(Warp.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
