@@ -21,6 +21,10 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
       return false;
     }
 
+    // Extract counter type. Named counters come in two forms:
+    //   "+1/+1" / "-1/-1" — P/T counters (the common case)
+    //   "a verse counter", "a time counter", "an age counter", etc. — named counters (Rule 122.1)
+    // The "a <type> counter" pattern is parsed with a regex that captures <type>.
     string counterType;
     if (text.Contains("+1/+1"))
     {
@@ -32,7 +36,17 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
     }
     else
     {
-      return false;
+      // Named counter: "put a <type> counter on ..." (Rule 122.1)
+      var namedMatch = Regex.Match(
+        text,
+        @"\bput\s+a(?:n)?\s+(?<type>[\w\-]+)\s+counter\b",
+        RegexOptions.IgnoreCase
+      );
+      if (!namedMatch.Success)
+      {
+        return false;
+      }
+      counterType = namedMatch.Groups["type"].Value.ToLowerInvariant();
     }
 
     var isOptional = lower.Contains("you may");
@@ -66,7 +80,13 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
         },
       };
     }
-    else if (lower.Contains("this creature") || lower.Contains("this permanent"))
+    else if (
+      lower.Contains("this creature")
+      || lower.Contains("this permanent")
+      || lower.Contains("this enchantment")
+      || lower.Contains("this artifact")
+      || lower.Contains("this land")
+    )
     {
       target = ObjectReference.Self();
     }
