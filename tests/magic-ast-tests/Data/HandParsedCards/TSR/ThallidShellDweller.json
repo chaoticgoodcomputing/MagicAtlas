@@ -1,0 +1,150 @@
+{
+  "Input": {
+    "Name": "Thallid Shell-Dweller",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Fungus",
+    "OracleText": "Defender\nAt the beginning of your upkeep, put a spore counter on this creature.\nRemove three spore counters from this creature: Create a 1/1 green Saproling creature token.",
+    "Power": "0",
+    "Toughness": "5",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Thallid Shell-Dweller",
+    "TypeLine": {
+      "Raw": "Creature — Fungus",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Fungus"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Defender\nAt the beginning of your upkeep, put a spore counter on this creature.\nRemove three spore counters from this creature: Create a 1/1 green Saproling creature token.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Defender",
+          "Effects": [
+            {
+              "EffectType": "defender"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfUpkeep",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "spore",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "removeCounters",
+              "CounterType": "spore",
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": [
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Saproling"
+                ],
+                "IsCopy": false
+              },
+              "IsOptional": false
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}

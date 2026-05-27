@@ -253,6 +253,15 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
         continue;
       }
 
+      // Try remove-counters cost (e.g., "Remove three spore counters from this creature")
+      var removeCountersCost = TryParseRemoveCountersCost(component);
+      if (removeCountersCost != null)
+      {
+        costs.Add(removeCountersCost);
+        hasParsedAnyCost = true;
+        continue;
+      }
+
       // If we can't parse this component, the whole cost parse fails
       // (We should be able to understand all cost components)
     }
@@ -1020,6 +1029,59 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     return new DiscardCost { Filter = filter, Quantity = quantity };
   }
 
+  /// <summary>
+  /// Tries to parse remove-counters costs like
+  /// "Remove three spore counters from this creature"
+  /// or "Remove two charge counters from this permanent".
+  /// Rule 122 (counters). The counter type is a named counter (Rule 122.1);
+  /// the source is encoded as <see cref="ObjectReference.Self()"/> because
+  /// oracle text always reads "from this creature / from this permanent"
+  /// for activated-ability costs on a card referencing itself.
+  /// </summary>
+  private static RemoveCountersCost? TryParseRemoveCountersCost(string costText)
+  {
+    var trimmed = costText.Trim();
+    // Pattern: "Remove <count> <type> counter(s) from this <noun>"
+    var m = Regex.Match(
+      trimmed,
+      @"^Remove\s+(?<count>a|an|one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+(?<type>[\w\-/+]+)\s+counters?\s+from\s+this\s+\w+$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var rawCount = m.Groups["count"].Value.ToLowerInvariant();
+    var quantity = rawCount switch
+    {
+      "a" or "an" or "one" => LiteralQuantity.Of(1),
+      "two" => LiteralQuantity.Of(2),
+      "three" => LiteralQuantity.Of(3),
+      "four" => LiteralQuantity.Of(4),
+      "five" => LiteralQuantity.Of(5),
+      "six" => LiteralQuantity.Of(6),
+      "seven" => LiteralQuantity.Of(7),
+      "eight" => LiteralQuantity.Of(8),
+      "nine" => LiteralQuantity.Of(9),
+      "ten" => LiteralQuantity.Of(10),
+      _ => int.TryParse(rawCount, out var n) ? LiteralQuantity.Of(n) : null,
+    };
+    if (quantity is null)
+    {
+      return null;
+    }
+
+    var counterType = m.Groups["type"].Value.ToLowerInvariant();
+
+    return new RemoveCountersCost
+    {
+      CounterType = counterType,
+      Quantity = quantity,
+      Target = ObjectReference.Self(),
+    };
+  }
+
   #endregion
 
   #region Shared Pattern Parsers (used by both costs and effects)
@@ -1092,36 +1154,38 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     else
     {
       // Try to extract the type from the text
-      // Pattern: "Sacrifice [count] [type]"
+      // Pattern: "Sacrifice [article|count] [type]"
+      // Capture the optional article/count so we can distinguish self-reference
+      // from creature-subtype: "Sacrifice Denethor" (no article → self) vs.
+      // "Sacrifice a Saproling" (article "a" → creature subtype, Rule 205.3m).
       var match = Regex.Match(
         text,
-        @"(?:Sacrifice|sacrifice) (?:a |an |X )?(\w+)",
+        @"(?:Sacrifice|sacrifice) (?<article>a |an |X )?(?<type>\w+)",
         RegexOptions.IgnoreCase
       );
       if (match.Success)
       {
-        var typeRaw = match.Groups[1].Value;
+        var typeRaw = match.Groups["type"].Value;
         var type = typeRaw.ToLowerInvariant();
+        var hasArticle = match.Groups["article"].Success && match.Groups["article"].Value.Trim() is "a" or "an";
         var wasPlural = type.EndsWith("s") && type != "this";
         // Handle plurals (e.g., "Squirrels" -> "Squirrel")
         if (wasPlural)
         {
           type = type[..^1];
         }
-        // Capitalized SINGULAR self-reference (e.g., "Sacrifice Denethor") —
+        // Capitalized SINGULAR without an article (e.g., "Sacrifice Denethor") —
         // the card refers to itself by name. Encode as a "this permanent"
         // self-reference on Characteristics rather than a literal Subtypes
-        // entry, matching the gold convention for self-by-name cost
-        // references.
+        // entry, matching the gold convention for self-by-name cost references.
         //
-        // Capitalized PLURAL (e.g., "Sacrifice X Squirrels") is a creature
-        // subtype, not a self-reference — oracle text capitalizes creature
-        // subtypes (Rule 205.3m). Singularize and emit on Subtypes. Without
-        // this distinction the plural-subtype case collapses onto the
-        // "this permanent" self-ref shape, which mis-models the cost
-        // (sacrificing N Squirrels you control vs. sacrificing the card
-        // itself N times).
-        if (char.IsUpper(typeRaw[0]) && !wasPlural)
+        // Capitalized PLURAL (e.g., "Sacrifice X Squirrels") or capitalized with
+        // an article (e.g., "Sacrifice a Saproling") is a creature subtype, not
+        // a self-reference — oracle text capitalizes creature subtypes (Rule 205.3m).
+        // Singularize and emit on Subtypes. Without this distinction the plural-subtype
+        // case and the article-preceded case collapse onto the "this permanent"
+        // self-ref shape.
+        if (char.IsUpper(typeRaw[0]) && !wasPlural && !hasArticle)
         {
           filter = new ObjectFilter { Characteristics = ["this permanent"] };
         }

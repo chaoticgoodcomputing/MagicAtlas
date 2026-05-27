@@ -1,0 +1,171 @@
+{
+  "Input": {
+    "Name": "Elvish Farmer",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Elf",
+    "OracleText": "At the beginning of your upkeep, put a spore counter on this creature.\nRemove three spore counters from this creature: Create a 1/1 green Saproling creature token.\nSacrifice a Saproling: You gain 2 life.",
+    "Power": "0",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Elvish Farmer",
+    "TypeLine": {
+      "Raw": "Creature — Elf",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf"
+      ]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of your upkeep, put a spore counter on this creature.\nRemove three spore counters from this creature: Create a 1/1 green Saproling creature token.\nSacrifice a Saproling: You gain 2 life.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfUpkeep",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "spore",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "removeCounters",
+              "CounterType": "spore",
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": [
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Saproling"
+                ],
+                "IsCopy": false
+              },
+              "IsOptional": false
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "Subtypes": [
+                  "Saproling"
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
