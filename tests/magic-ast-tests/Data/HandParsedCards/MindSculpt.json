@@ -1,0 +1,59 @@
+{
+  "Input": {
+    "Name": "Mind Sculpt",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Target opponent mills seven cards.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": ["Mill"],
+    "Id": "037d6277-1fc3-41a4-ade6-7cca10535b0f",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Mind Sculpt",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Target opponent mills seven cards.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "mill",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 7
+              },
+              "Player": {
+                "Kind": "Opponent"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}

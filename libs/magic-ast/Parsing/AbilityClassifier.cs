@@ -377,6 +377,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target player mills N cards." / "Target opponent mills N cards." — Rule 701.17
+    // mill keyword action targeting a specific player or opponent. The "Target" subject
+    // and imperative "mills" verb mark this as a one-shot spell-resolution instruction
+    // (Rule 113.3a), not a declarative static. Without this rule the clause defaults to
+    // Static and stalls at StaticAbilityParser.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+(player|opponent)\s+mills?\s+\S+",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Target [filter] gets +N/+M ..." — spell-resolution single-target P/T modifier,
     // optionally combined with keyword grants and/or a duration clause
     // ("until end of turn"). The "Target" subject marks this as a one-shot imperative
