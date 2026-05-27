@@ -35,4 +35,12 @@ public sealed record DrawCardsEffect : Effect, IOptionalEffect, IDurativeEffect,
   /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public UnlessClause? UnlessClause { get; init; }
+
+  /// <summary>
+  /// Game-state condition that must hold for this draw to occur.
+  /// Used for "If [condition], draw a card" patterns such as "If this spell was kicked".
+  /// Mirrors the <see cref="Condition"/> used by <see cref="TriggeredAbility.InterveningIf"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Condition? Condition { get; init; }
 }

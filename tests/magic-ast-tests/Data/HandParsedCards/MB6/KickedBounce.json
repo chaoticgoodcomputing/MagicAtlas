@@ -1,0 +1,83 @@
+{
+  "Input": {
+    "Name": "Kicked Bounce",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Kicker {2} (You may pay an additional {2} as you cast this spell.)\nReturn target nonland permanent to its owner's hand. If this spell was kicked, draw a card.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Kicked Bounce",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Kicker {2} (You may pay an additional {2} as you cast this spell.)\nReturn target nonland permanent to its owner's hand. If this spell was kicked, draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Kicker",
+          "Effects": [
+            {
+              "EffectType": "kicker",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 2
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["permanent"],
+                  "Characteristics": ["nonland"]
+                }
+              }
+            },
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              },
+              "Condition": {
+                "Text": "this spell was kicked"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          {"Kind": "generic", "GenericAmount": 1},
+          {"Kind": "colored", "Colors": ["U"]}
+        ],
+        "ManaValue": 2
+      },
+      {"Kind": "colors", "Colors": ["U"]},
+      {"Kind": "colorIdentity", "ColorIdentity": ["U"]}
+    ]
+  }
+}
