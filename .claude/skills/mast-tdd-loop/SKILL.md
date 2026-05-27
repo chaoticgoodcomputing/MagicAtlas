@@ -17,7 +17,7 @@ The skill is read from five perspectives. Annotations on each step say which age
 - **`[main]` — main agent (orchestrator).** Coordinates the batch. Picks **families** from triage (clusters of failures sharing `(pattern, lastAttemptedRule)`), writes the judge briefing with rules-canonical citations from `tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` (sub-agents have a copy of this gitignored file in their worktree via `.worktreeinclude`, but the briefing's rule-number citations are still the canonical reference), dispatches helpers, merges output, dispatches mechanical sub-agents, dispatches judge-verify, merges everything, validates NUnit at 100%, **regenerates AST GLOSSARY.md on main (single source of truth — keeps the committed copy in sync with merged AST changes; commit it immediately after regen so the working tree stays clean for the next merge)**, re-runs triage. Owns every cross-cutting artifact.
 - **`[sub:helper-novel]` — Opus novel-shape helper (one per batch).** Receives the briefing + only those candidates that need new AST types, new discriminators, or sit on a doctrinal edge (multi-effect-per-clause, colorless, color-ordering, trait-boundary calls). Creates any new AST types (Red #1) and writes the gold fixtures for them. RoundTrip must be green for all its fixtures before it finishes. **Reads `libs/magic-ast/GLOSSARY.md` freely** — it's tracked in git and visible in the worktree. **Sub-agent CAN run `nx run magic-ast:glossary` inside the worktree** — the worktree's `libs/` is fully isolated from main's (verified empirically; different inodes, no symlinks). The orchestrator regenerates on main separately as its own source-of-truth.
 - **`[sub:helper-mech]` — Sonnet mechanical-fixture helpers (M per batch, parallel).** Each receives a group of fixtures whose AST shapes already exist in `GLOSSARY.md`. Contract is strictly mechanical: look up existing AST types, write the gold AST, RoundTrip green. **If they'd need a new AST type, they bail** — that's `[sub:helper-novel]`'s territory. **Reads `GLOSSARY.md` freely.**
-- **`[sub:mech]` — mechanical parser sub-agents (N per batch, parallel) — FAMILY CONTRACT.** Each receives a **family**: a `(pattern, lastAttemptedRule)` cluster plus N fixtures (5-10) spanning that family's surface. The contract is: **make ALL N fixtures green via ONE consolidated parser surface** (one new method, or one extended existing method). If the mech finds itself writing N separate `TryParseX` methods, it's misread the family — bail and report the sub-patterns. NUnit's `Parser_ProducesExpectedOutput` for every assigned card must pass before commit.
+- **`[sub:mech]` — mechanical parser sub-agents (N per batch, parallel) — FAMILY CONTRACT.** Each receives a **family**: a `(pattern, lastAttemptedRule)` cluster plus N fixtures (1-3) spanning that family's surface. The contract is: **make ALL N fixtures green via ONE consolidated parser surface** (one new method, or one extended existing method). If the mech finds itself writing N separate `TryParseX` methods, it's misread the family — bail and report the sub-patterns. NUnit's `Parser_ProducesExpectedOutput` for every assigned card must pass before commit.
 - **`[sub:judge]` — judge-verify sub-agent (one per batch).** Reads the batch's changed files post-merge, renders strict PASS/FAIL verdicts per the `mast-judge` skill. Any FAIL halts the merge into main.
 
 If you are invoked directly by the user (no orchestrator above you), wear all five hats: do every step yourself in sequence, single-threaded. In that mode, the value of the helper/mech split shrinks — but the discipline (rule lookup → gold → parser → judge gate) still stands.
@@ -29,7 +29,7 @@ If you are invoked directly by the user (no orchestrator above you), wear all fi
 ```
 Step 0    Rebase + refresh triage. Capture $WORKTREE_ROOT (sub-agents use git -C "$WORKTREE_ROOT").
 Step 1    Pick N families from topGaps[]. A family = (pattern, lastAttemptedRule) cluster
-          with 5-10 candidate fixtures sharing the same parser failure point.
+          with 1-3 candidate fixtures sharing the same parser failure point.
 Step 1.5  Enrich each family inline (judge-pass-1) → docs/judgments/briefing-{date}.md
 Step 2a   Triage each family's candidate cards into:
           - novel-shape (need new AST type / discriminator / doctrinal edge)
@@ -78,6 +78,38 @@ done
 # 5) If you find yourself writing N separate methods → STOP, bail with sub-pattern report.
 # 6) When all green, commit (git -C "$WORKTREE_ROOT" ...) and report.
 ```
+
+## Batch dispatch model
+
+The orchestrator dispatches up to N sub-agents per batch (default N=20). The binding constraint is **file affinity** — agents that touch the same file must merge sequentially; agents that create distinct files can run fully parallel.
+
+### File-affinity groupings
+
+| Group | Typical target files | Parallelism | Cap per batch |
+|---|---|---|---|
+| **Unique-file agents** (Triggered/Rules/, Spell/Rules/) | Each creates a new file | Fully parallel, no conflict | Unlimited |
+| **Keyword-batch agents** | `KeywordDefinitions.cs` + `OracleParsers.cs` | Dispatch parallel, merge **sequentially** | 2 (each handles 3-4 keywords) |
+| **StaticAbilityParser agents** | `StaticAbilityParser.cs` (each adds a new private method) | Dispatch parallel, merge sequentially | No hard cap |
+| **ActivatedAbilityParser agents** | `ActivatedAbilityParser.cs` | **ONE per batch** — too many cross-cutting changes to parallelize | 1 |
+| **Combo-depth agents** | Various — user-requested cards to 100% coverage | Opus, scope varies | Per orchestrator judgment |
+
+### Merge protocol
+
+1. Merge unique-file agents first (trivial auto-merge).
+2. Merge keyword-batch agents sequentially (resolve `GLOSSARY.md` conflicts by accepting ours — regenerate at end).
+3. Merge StaticAbilityParser agents sequentially.
+4. Run NUnit gate after each merge group.
+5. Regenerate `GLOSSARY.md` once at the end.
+6. Re-run triage.
+
+### Dispatch prompt mandates
+
+- **No self-merge:** Every agent prompt MUST include: "Commit on your worktree branch. Do NOT merge to main — the orchestrator merges." This was the #1 lesson from the first 20-agent session — several agents merged directly to main, creating a moving target for later merges.
+- **Duplicate-work guard:** When two agents might add the same keyword/rule, explicitly note in each prompt: "If [X] already exists when you read GLOSSARY.md, SKIP it and pick [alternate scope]."
+
+### Judge policy
+
+Skip judge for established-pattern work (keyword additions mirroring existing patterns). Judge only novel-shape agents (combo depth, replacement effects, new AST types, architectural changes).
 
 ## Before you touch anything
 
@@ -134,18 +166,20 @@ If something looks off — code references pre-consolidation paths (`tools/test/
 
 ### Step 1 — `[main]` Pick families
 
-Read `tests/magic-ast-tests/Data/_08_Reporting/triage-report.json`. **Two surfaces in this file inform family-picking — weigh both, don't default to one.**
+Read `tests/magic-ast-tests/Data/_08_Reporting/triage-report.json`. **Three surfaces in this file inform family-picking — weigh all three, don't default to one.**
 
-**Surface A — `topYieldClusters[]` (data-derived, near the top of the file).** Lexical-template clustering over unparsed oracle lines, with greedy set-cover yield projection. Each entry carries a placeholder-substituted `template`, `marginalYield` (cards this cluster flips green given prior picks), `cumulativeYield`, and `exemplars[]` (cleanest fixture candidates pre-ranked by fewest-other-unparsed-templates). This surface finds the **biggest pre-named pattern is missing entirely** kind of gap — basic tapped lands, single-keyword reminder text, ETB lifegain — shapes that don't get hand-coded into `FallbackParser.InferFailurePattern` because they're "too common to need a name."
+**Surface A — `topYieldClusters[]` (data-derived, near the top of the file).** Lexical-template clustering over unparsed oracle lines, with greedy set-cover yield projection. Each entry carries a placeholder-substituted `template`, `marginalYield` (cards this cluster flips green given prior picks), `cumulativeYield`, and `exemplars[]` (cleanest fixture candidates pre-ranked by fewest-other-unparsed-templates). This surface finds the **biggest pre-named pattern is missing entirely** kind of gap — basic tapped lands, single-keyword reminder text, ETB lifegain — shapes that don't get hand-coded into `FallbackParser.InferFailurePattern` because they're "too common to need a name." Expand to 20 entries when dispatching a full batch.
 
-**Surface B — `topGaps[]` (pattern-named, post-telemetry).** Each entry carries `pattern` AND `lastAttemptedRule`. A **family** is a `(pattern, lastAttemptedRule)` cluster — failures that share both the high-level pattern AND the specific parser rule that bailed. This surface gives you sharp shape names you can write a one-paragraph briefing about. Bail-out signal: if `lastAttemptedRule` is `null` or `"FallbackParser.*"`, the cluster is too coarse — surface for pattern-bucket refinement or pick a different family.
+**Surface B — `topGaps[]` (pattern-named, post-telemetry).** Each entry carries `pattern` AND `lastAttemptedRule`. A **family** is a `(pattern, lastAttemptedRule)` cluster — failures that share both the high-level pattern AND the specific parser rule that bailed. This surface gives you sharp shape names you can write a one-paragraph briefing about. Bail-out signal: if `lastAttemptedRule` is `null` or `"FallbackParser.*"`, the cluster is too coarse — surface for pattern-bucket refinement or pick a different family. This surface bridges Surfaces A and C with its `(pattern, lastAttemptedRule)` clustering.
 
-**Default heuristic:** Start with `topYieldClusters[]`. The `marginalYield` numbers are upper bounds (real parser rules cover 60-90% of a cluster perfectly) but they're directly comparable across clusters. If the top yield-cluster has a template you can't easily translate into a parser-rule shape, fall back to `topGaps[]` for the same slot. The numbers are advisory; orchestrator judgment is the deciding factor.
+**Surface C — `topGapsByLineFrequency[]` (line-frequency ranked).** Ranked by raw line frequency rather than exclusive card count. Use this to identify high-volume parser bail points that have broad corpus impact even when they don't flip whole cards. The batch 36 classifier routing fix (+289 cards from one change) and batch 38 ability-word prefix stripping fix were both surfaced by this ranking — neither would have appeared as a top yield cluster or top gap by card count, but both dominated by line frequency.
+
+**Default heuristic:** Start with Surface C to identify parser-surface-level opportunities (high line frequency = broad latent value), then cross-reference with Surface A for card-level yield projection. Surface B bridges the two with its `(pattern, lastAttemptedRule)` clustering. The `marginalYield` numbers in Surface A are upper bounds (real parser rules cover 60-90% of a cluster perfectly) but they're directly comparable across clusters. If the top yield-cluster has a template you can't easily translate into a parser-rule shape, fall back to `topGaps[]` for the same slot. The numbers are advisory; orchestrator judgment is the deciding factor.
 
 For each family you commit to (from either surface):
 
-- Select **5-10 fixture candidates**. If from `topYieldClusters[]`, use `exemplars[]` directly (already ranked by cleanest-first). If from `topGaps[]`, use `candidateLines[]` sorted by `cleanlinessScore` ascending. Skip lines with `alreadyHandParsed: true`.
-- **Diversity check:** the 5-10 should vary the dimensions you suspect the parser surface needs to handle (target shapes, count phrasings, modifier suffixes), not be near-duplicates. Three lines that only differ in card name are effectively one fixture's worth of pressure.
+- Select **1-3 fixture candidates**. If from `topYieldClusters[]`, use `exemplars[]` directly (already ranked by cleanest-first). If from `topGaps[]`, use `candidateLines[]` sorted by `cleanlinessScore` ascending. Skip lines with `alreadyHandParsed: true`. The lower count (vs. the original 5-10) is deliberate: N agents times 5 fixtures produces unsustainable merge overhead, and coverage-per-fixture yield is the optimization target. One well-chosen fixture that exercises the parser surface is better than five near-duplicates. The triage's `AbilityCoverage` metric now captures parser-surface-level progress that fixture count used to proxy for.
+- **Diversity check:** the 1-3 should vary the dimensions you suspect the parser surface needs to handle (target shapes, count phrasings, modifier suffixes), not be near-duplicates.
 - **Pre-curate from raw corpus when triage candidates are stacked.** Triage exemplars favor whatever cards happen to fail — often legendary creatures with multi-keyword bodies. For cleaner fixtures, query `tests/magic-ast-tests/Data/_01_Raw/Datasets/External/oracle-cards.json` with a `jq` regex matching the cluster template; single-line non-legendary cards (enchantments, simple instants) make sharper exemplars.
 
 Choose batch size based on the number of **non-overlapping** families. Two families that target the same parser file (e.g., both want `SpellAbilityParser`) should be serialized across batches, not paralleled — unless the parser-rule split has landed and each rule lives in its own file.
@@ -175,7 +209,7 @@ For each candidate:
 ### Cards in this family
 1. **{Card Name 1}** — `{oracle text of the candidate line}` (cleanliness={score})
 2. **{Card Name 2}** — `{oracle text}` (cleanliness={score})
-... (5-10 cards)
+... (1-3 cards)
 
 ### Relevant rules
 - **{Rule number} {Rule title}** — {subrule text or glossary def, ~1-2 sentences quoted from the rules data}
@@ -362,7 +396,7 @@ If any RoundTrip is red on main post-merge, the helper didn't finish. Dispatch a
 Spawn N sub-agents, ONE per **family** (not per fixture), in parallel via the `Agent` tool with `isolation: "worktree"`. Each prompt **must** include:
 
 - The family identity: `pattern`, `lastAttemptedRule` from triage.
-- **All 5-10 fixture paths in the family** (not just one).
+- **All 1-3 fixture paths in the family** (not just one).
 - A pointer to this skill (the `[sub:mech]` sections — Steps 7 and 8).
 - The branch name (e.g., `mast-tdd/{family-slug}-mech`).
 - Explicit family contract: "Teach the parser to make `Parser_ProducesExpectedOutput` pass for ALL of these cards via ONE consolidated parser surface (one new method, or one extension of `lastAttemptedRule`). If you find yourself writing N separate methods, you've misread the family — STOP and bail with a sub-pattern breakdown. Do NOT modify fixtures. Do NOT add or modify AST types. **Use git -C \"$WORKTREE_ROOT\" for every git command.**"
@@ -545,8 +579,22 @@ Produce a batch-level report and decide whether to loop:
 
 ### Corpus-wide delta (post-triage rerun)
 - Total cards flipped green: {count}
+- Total lines flipped green: {count}
+- Total abilities flipped green: {count} (ability-level, not card-gated)
 - Pattern frequencies (top 5 changes): {pattern: before → after}
 - New patterns surfaced: {list}
+
+### Projected vs observed yield
+| Agent | Cluster/Scope | Projected MarginalYield | Observed Card Δ | Observed Line Δ | Yield Ratio |
+|---|---|---|---|---|---|
+| {agent-id} | {cluster or scope description} | {from triage TopYieldClusters[].MarginalYield} | {post-triage card delta for this agent} | {post-triage line delta} | {observed/projected} |
+| ... | ... | ... | ... | ... | ... |
+| **Total** | | **Σ projected** | **Σ cards** | **Σ lines** | **Σ observed / Σ projected** |
+
+**Yield ratio analysis:** {one sentence — why observed differed from projected, e.g., "classifier routing fix had 3x multiplier; mill spell had 0.1x due to corpus shape"}
+**Coverage-per-fixture:** {total card delta / total fixtures written — the optimization target}
+
+For combo-depth or investigation agents not driven by a yield cluster, use "n/a (depth)" for Projected MarginalYield. The yield ratio column highlights which triage surfaces best predict real-world coverage gains — iterate the triage process to maximize coverage-per-fixture yield over successive batches.
 
 ### Next batch
 - Suggested gaps: {next topGaps[0..N], or "stop — diminishing returns"}
@@ -588,6 +636,7 @@ Conditions:
 - A `[sub:helper-mech]` bails on a fixture because it would need a new AST type. Reassign the fixture to the novel-shape helper (which may need to be re-dispatched if it has already completed).
 - Post-batch triage rerun shows fewer total parsing successes than the pre-batch state. Roll back the merges and investigate.
 - A pattern bucket consistently fails to shrink across multiple batches (suggests the bucket is too coarse and needs `FallbackParser.InferFailurePattern` to be refined). File a follow-up issue; that work is out of scope for this skill.
+- **Stalled sub-agent.** If a sub-agent completes with only Step 0 done (worktree verification) and no actual parser/fixture work, it stalled. Do not re-dispatch in the same mega-batch — the stalled agent's scope may overlap with work already landing from other agents. Queue for re-dispatch in the next batch after the current mega-batch merges.
 
 ## File quick reference
 
