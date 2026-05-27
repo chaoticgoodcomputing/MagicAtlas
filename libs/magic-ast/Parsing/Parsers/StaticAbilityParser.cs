@@ -621,6 +621,21 @@ public sealed class StaticAbilityParser : IAbilityParser
       return noMaxHandSize;
     }
 
+    // "You may cast this spell as though it had flash. If you cast it any time
+    // a sorcery couldn't have been cast, the controller of the permanent it
+    // becomes sacrifices it at the beginning of the next cleanup step." —
+    // Armor of Thorns / Leyline-of-Anticipation-style conditional flash grant
+    // with cleanup sacrifice consequence (Rule 702.8e). Two sentences on one
+    // oracle line; per the multi-effect-per-clause doctrine they land in a
+    // single StaticAbility with a TimingModificationEffect whose Consequence
+    // carries the sacrifice. No KeywordSource: the oracle text is a full
+    // declarative paragraph, not a single keyword token.
+    var castAsFlashWithConsequence = TryParseCastAsFlashWithConsequence(clause);
+    if (castAsFlashWithConsequence != null)
+    {
+      return castAsFlashWithConsequence;
+    }
+
     // "If damage would be dealt to [this creature], prevent that damage.
     // Remove a +1/+1 counter from [this creature]." — Phantom mechanic
     // (Judgment, Rule 614 replacement). The subject may be "this creature" or
@@ -5339,6 +5354,75 @@ public sealed class StaticAbilityParser : IAbilityParser
   // The trailing period is optional for minor formatting variants.
   private static readonly Regex _playAdditionalLandPattern = new(
     @"^\s*You\s+may\s+play\s+an\s+additional\s+land\s+on\s+each\s+of\s+your\s+turns\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "You may cast this spell as though it had flash. If you cast it any time a
+  /// sorcery couldn't have been cast, the controller of the permanent it becomes
+  /// sacrifices it at the beginning of the next cleanup step." — conditional flash
+  /// grant with cleanup-step sacrifice consequence (Rule 702.8e). The Armor of
+  /// Thorns family; the pattern also appears on Leyline-adjacent enchantments.
+  ///
+  /// <para>
+  /// Shape: <see cref="StaticAbility"/> wrapping a <see cref="TimingModificationEffect"/>:
+  /// <list type="bullet">
+  ///   <item><c>Modification = Grant</c>, <c>Timing = Instant</c> — flash grant.</item>
+  ///   <item><c>IsOptional = true</c> — "You may cast this spell...".</item>
+  ///   <item><c>Consequence</c> = <see cref="MagicAST.AST.Effects.ZoneChange.SacrificeEffect"/>
+  ///         targeting <c>Self</c> with
+  ///         <see cref="MagicAST.AST.Effects.AtBeginningOfNextCleanupStepDuration"/>
+  ///         — fires only when the optional flash was used outside a sorcery window.</item>
+  /// </list>
+  /// No <c>KeywordSource</c>: the oracle text is a full two-sentence paragraph,
+  /// not a single keyword token.
+  /// </para>
+  ///
+  /// <para>
+  /// "The controller of the permanent it becomes" is the actor of the sacrifice —
+  /// but sacrifice in MAST is always performed by the permanent's controller
+  /// (Rule 701.16), so no actor field is needed; <c>Target = Self</c> describes
+  /// what is sacrificed.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseCastAsFlashWithConsequence(OracleClause clause)
+  {
+    if (!_castAsFlashWithConsequencePattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new TimingModificationEffect
+        {
+          Modification = TimingModificationType.Grant,
+          Timing = TimingWindow.Instant,
+          IsOptional = true,
+          Consequence = new MagicAST.AST.Effects.ZoneChange.SacrificeEffect
+          {
+            Target = ObjectReference.Self(),
+            Duration = new AtBeginningOfNextCleanupStepDuration(),
+          },
+        }],
+      },
+    ];
+  }
+
+  // Matches the two-sentence Armor-of-Thorns oracle text:
+  //   "You may cast this spell as though it had flash. If you cast it any time
+  //    a sorcery couldn't have been cast, the controller of the permanent it
+  //    becomes sacrifices it at the beginning of the next cleanup step."
+  // The match is anchored at both ends. Minor formatting variants (optional
+  // trailing period, apostrophe vs. right-quote for "couldn't") are handled by
+  // the character class on the contraction.
+  private static readonly Regex _castAsFlashWithConsequencePattern = new(
+    @"^\s*You\s+may\s+cast\s+this\s+spell\s+as\s+though\s+it\s+had\s+flash\.\s+"
+    + @"If\s+you\s+cast\s+it\s+any\s+time\s+a\s+sorcery\s+couldn'?t\s+have\s+been\s+cast,\s+"
+    + @"the\s+controller\s+of\s+the\s+permanent\s+it\s+becomes\s+sacrifices\s+it\s+"
+    + @"at\s+the\s+beginning\s+of\s+the\s+next\s+cleanup\s+step\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

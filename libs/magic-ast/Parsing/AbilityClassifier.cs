@@ -315,6 +315,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "You may cast this spell as though it had flash. If you cast it any time
+    // a sorcery couldn't have been cast, the controller of the permanent it
+    // becomes sacrifices it at the beginning of the next cleanup step." —
+    // Armor of Thorns / conditional flash grant with cleanup sacrifice
+    // consequence (Rule 702.8e). Although the clause opens with "You may cast"
+    // which would normally route to the spell parser via StartsWithYouMaySpellInstruction,
+    // this two-sentence paragraph is a permanent static property of the card —
+    // NOT a one-shot resolution step — so it belongs on the static path.
+    // Intercept before the generic "You may <verb>" gate below.
+    if (clause.RawText.TrimStart().StartsWith(
+      "You may cast this spell as though it had flash",
+      StringComparison.OrdinalIgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.95,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "You may [spell-verb] ..." optional resolution-step phrasing on a spell
     // (Rule 117.7) — e.g., "You may discard a card. If you do, draw two cards."
     // (Abandon Attachments). The opening "You may" is a player-instruction frame
