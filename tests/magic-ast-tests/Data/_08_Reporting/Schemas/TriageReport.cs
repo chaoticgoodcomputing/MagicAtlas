@@ -25,6 +25,14 @@ public partial record TriageReport
   public required IReadOnlyList<YieldClusterSummary> TopYieldClusters { get; init; }
 
   public required IReadOnlyList<GapEntry> TopGaps { get; init; }
+
+  /// <summary>
+  /// Same gap entries as TopGaps but ranked by raw line frequency (Frequency.Lines)
+  /// descending. Surfaces the highest-frequency parser bail points regardless of
+  /// whether they exclusively flip whole cards. Complements TopGaps' card-yield
+  /// ranking with a parser-surface-improvement perspective.
+  /// </summary>
+  public required IReadOnlyList<GapEntry> TopGapsByLineFrequency { get; init; }
 }
 
 /// <summary>
@@ -87,6 +95,7 @@ public partial record GlobalMetrics
 {
   public required CoverageStat CardCoverage { get; init; }
   public required CoverageStat LineCoverage { get; init; }
+  public required CoverageStat AbilityCoverage { get; init; }
   public required int DistinctUnresolvedPatterns { get; init; }
   public required CoverageStat HandParsedCoverage { get; init; }
 }

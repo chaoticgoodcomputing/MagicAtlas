@@ -40,6 +40,12 @@ public partial record LineOutcome
   /// <summary>The raw oracle line text (the chunk between newlines).</summary>
   public required string OracleLine { get; init; }
 
+  /// <summary>Total number of abilities the parser produced for this line.</summary>
+  public required int TotalAbilities { get; init; }
+
+  /// <summary>Number of abilities that were NOT <c>UnparsedAbility</c>.</summary>
+  public required int ParsedAbilities { get; init; }
+
   /// <summary>
   /// One entry per diagnostic emitted while parsing this line. Each entry is the
   /// <c>Diagnostic.Pattern</c> string from the corresponding

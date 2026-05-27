@@ -77,6 +77,8 @@ public static class ParseCorpusStep
   private static LineOutcome ParseLine(OracleParser parser, int index, string lineText)
   {
     var result = parser.Parse(lineText);
+    var totalAbilities = result.Output.Abilities.Count;
+    var parsedAbilities = result.Output.Abilities.Count(a => a is not UnparsedAbility);
     var diagnostics = result
       .Output.Abilities.OfType<UnparsedAbility>()
       .SelectMany(unparsed => unparsed.Diagnostics)
@@ -92,6 +94,8 @@ public static class ParseCorpusStep
     {
       LineIndex = index,
       OracleLine = lineText,
+      TotalAbilities = totalAbilities,
+      ParsedAbilities = parsedAbilities,
       Patterns = diagnostics.Select(d => d.Pattern).ToList(),
       Diagnostics = diagnostics,
     };
