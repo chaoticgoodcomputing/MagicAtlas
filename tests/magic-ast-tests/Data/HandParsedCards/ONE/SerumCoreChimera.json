@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Serum-Core Chimera",
+    "ManaCost": "{3}{R}",
+    "TypeLine": "Artifact Creature — Phyrexian Chimera",
+    "OracleText": "This creature enters with three oil counters on it.\nThis creature gets +1/+1 for each oil counter on it.",
+    "Power": "0",
+    "Toughness": "0",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Serum-Core Chimera",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Phyrexian Chimera",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Chimera"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature enters with three oil counters on it.\nThis creature gets +1/+1 for each oil counter on it.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "entersWithCounters",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "CounterType": "oil",
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": { "Kind": "Self" },
+              "PowerModifier": {
+                "QuantityType": "count",
+                "CountOf": "oil counter on it"
+              },
+              "ToughnessModifier": {
+                "QuantityType": "count",
+                "CountOf": "oil counter on it"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        }
+      }
+    ]
+  }
+}
