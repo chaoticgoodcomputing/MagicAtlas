@@ -35,26 +35,16 @@
           ]
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 37,
-            "Length": 131
-          },
-          "RawText": "Conspire (As you cast this spell, you may tap two untapped creatures you control that share a color with it. When you do, copy it.)",
-          "Diagnostics": [
+          "Kind": "static",
+          "KeywordSource": "Conspire",
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Static ability parser not yet implemented",
-              "Location": {
-                "Start": 37,
-                "Length": 131
-              },
-              "RawText": "Conspire (As you cast this spell, you may tap two untapped creatures you control that share a color with it. When you do, copy it.)",
-              "Pattern": "UnparsedStatic",
-              "LastAttemptedRule": "StaticAbilityParser.Parse",
-              "FailurePosition": 37
+              "EffectType": "conspire"
             }
-          ]
+          ],
+          "Reminder": {
+            "Text": "(As you cast this spell, you may tap two untapped creatures you control that share a color with it. When you do, copy it.)"
+          }
         }
       ]
     },

@@ -1679,6 +1679,134 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // DEVOUR KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Devour N: As this creature enters, you may sacrifice any number of
+  /// creatures. This creature enters with N +1/+1 counters on it for each
+  /// creature sacrificed this way.
+  /// Rule 702.82. MAST records the keyword and its integer devour value;
+  /// the sacrifice-on-entry, counter-placement, and optional semantics are
+  /// engine territory.
+  /// </summary>
+  public static KeywordDefinition Devour { get; } =
+    new()
+    {
+      Name = "Devour",
+      RuleReference = "702.82",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Devour",
+        Effects = [new DevourEffect
+        {
+          Value = ParseIntValue("Devour", parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CONSPIRE KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Conspire: As you cast this spell, you may tap two untapped creatures you
+  /// control that share a color with it. When you do, copy it.
+  /// Rule 702.78. MAST records the keyword's presence; the tap-two-creatures
+  /// additional cost and spell-copy triggered ability are engine territory.
+  /// </summary>
+  public static KeywordDefinition Conspire { get; } =
+    new()
+    {
+      Name = "Conspire",
+      RuleReference = "702.78",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Conspire",
+        Effects = [new ConspireEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // JUMP-START KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Jump-start: You may cast this card from your graveyard by discarding a
+  /// card in addition to paying its other costs. If you do, this card is
+  /// exiled as it resolves.
+  /// Rule 702.133. MAST records the keyword's presence; the graveyard-cast,
+  /// discard additional cost, and exile-on-resolution machinery are engine
+  /// territory.
+  /// </summary>
+  public static KeywordDefinition JumpStart { get; } =
+    new()
+    {
+      Name = "Jump-start",
+      RuleReference = "702.133",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Jump-start",
+        Effects = [new JumpStartEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // AFTERMATH KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Aftermath: Cast this spell only from your graveyard. Then exile it.
+  /// Rule 702.128. Found on the bottom half of split cards. MAST records
+  /// the keyword's presence; the graveyard-only cast restriction and
+  /// exile-on-resolution mechanics are engine territory.
+  /// </summary>
+  public static KeywordDefinition Aftermath { get; } =
+    new()
+    {
+      Name = "Aftermath",
+      RuleReference = "702.128",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Aftermath",
+        Effects = [new AftermathEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // EXPLOIT KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Exploit: When this creature enters, you may sacrifice a creature.
+  /// Rule 702.110. MAST records the keyword's presence; the ETB trigger,
+  /// optional sacrifice, and downstream sacrifice-payoff abilities are
+  /// engine territory.
+  /// </summary>
+  public static KeywordDefinition Exploit { get; } =
+    new()
+    {
+      Name = "Exploit",
+      RuleReference = "702.110",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Exploit",
+        Effects = [new ExploitEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1753,6 +1881,11 @@ public static class KeywordDefinitions
       Spree,
       JobSelect,
       Warp,
+      Devour,
+      Conspire,
+      JumpStart,
+      Aftermath,
+      Exploit,
       // More keywords can be added here as needed
     ];
 

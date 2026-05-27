@@ -2614,6 +2614,107 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Devour N" keyword.
+  /// Pattern: "Devour" number [reminder]
+  /// Rule 702.82. A static ability: as this creature enters, you may sacrifice
+  /// any number of creatures; this creature enters with N +1/+1 counters on it
+  /// for each creature sacrificed this way. MAST records the keyword and its
+  /// integer devour value; the sacrifice-on-entry and counter-placement are
+  /// engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Devour = (
+    from keyword in Keyword("Devour")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Devour",
+      Effects = [new DevourEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Conspire" keyword.
+  /// Pattern: "Conspire" [reminder]
+  /// Rule 702.78. "As you cast this spell, you may tap two untapped creatures
+  /// you control that share a color with it. When you do, copy it." MAST
+  /// records keyword presence; the tap-two-creatures additional cost and
+  /// spell-copy triggered ability are engine territory. Parameterless keyword
+  /// marker — mirrors Storm, Fuse.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Conspire = (
+    from kw in Keyword("Conspire")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Conspire",
+      Effects = [new ConspireEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Jump-start" keyword.
+  /// Pattern: "Jump-start" [reminder]
+  /// Rule 702.133. "You may cast this card from your graveyard by discarding a
+  /// card in addition to paying its other costs. If you do, this card is exiled
+  /// as it resolves." The tokenizer preserves hyphens in word tokens, so
+  /// "Jump-start" is a single Word token. MAST records keyword presence; the
+  /// graveyard-cast and discard additional cost are engine territory.
+  /// Parameterless keyword marker — mirrors Retrace, Rebound.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> JumpStart = (
+    from kw in Keyword("Jump-start")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Jump-start",
+      Effects = [new JumpStartEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Aftermath" keyword.
+  /// Pattern: "Aftermath" [reminder]
+  /// Rule 702.128. "Cast this spell only from your graveyard. Then exile it."
+  /// Found on the bottom half of split cards. MAST records keyword presence;
+  /// the graveyard-only cast restriction and exile-on-resolution mechanics
+  /// are engine territory. Parameterless keyword marker — mirrors Fuse.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Aftermath = (
+    from kw in Keyword("Aftermath")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Aftermath",
+      Effects = [new AftermathEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Exploit" keyword.
+  /// Pattern: "Exploit" [reminder]
+  /// Rule 702.110. "When this creature enters, you may sacrifice a creature."
+  /// MAST records keyword presence; the ETB trigger, optional sacrifice, and
+  /// downstream sacrifice-payoff abilities are engine territory. Parameterless
+  /// keyword marker — mirrors Evolve, Flanking.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Exploit = (
+    from kw in Keyword("Exploit")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Exploit",
+      Effects = [new ExploitEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   /// <summary>
@@ -2778,7 +2879,11 @@ public static class OracleParsers
     .Or(Fuse)
     .Or(Bargain)
     .Or(Spree)
-    .Or(JobSelect);
+    .Or(JobSelect)
+    .Or(Conspire)
+    .Or(JumpStart)
+    .Or(Aftermath)
+    .Or(Exploit);
 
   /// <summary>
   /// Parses any parameterized keyword ability.
@@ -2823,7 +2928,8 @@ public static class OracleParsers
       .Or(Mobilize.Try())
       .Or(Afflict.Try())
       .Or(Afterlife.Try())
-      .Or(Warp.Try());
+      .Or(Warp.Try())
+      .Or(Devour.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
