@@ -1,0 +1,91 @@
+{
+  "Input": {
+    "Name": "Warren Soultrader",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Vampire Noble",
+    "OracleText": "Pay 1 life, Sacrifice another creature: Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this artifact: Add one mana of any color.\")",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Warren Soultrader",
+    "TypeLine": {
+      "Raw": "Creature — Vampire Noble",
+      "Types": ["Creature"],
+      "Subtypes": ["Vampire", "Noble"]
+    },
+    "Oracle": {
+      "RawText": "Pay 1 life, Sacrifice another creature: Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this artifact: Add one mana of any color.\")",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "payLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"],
+                "Characteristics": ["another"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Types": ["artifact"],
+                "Subtypes": ["Treasure"],
+                "IsCopy": false,
+                "AbilityText": [
+                  "{T}, Sacrifice this artifact: Add one mana of any color."
+                ]
+              },
+              "IsOptional": false
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}

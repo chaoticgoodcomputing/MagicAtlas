@@ -1,0 +1,78 @@
+{
+  "Input": {
+    "Name": "Pitiless Plunderer",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Creature — Human Pirate",
+    "OracleText": "Whenever a creature you control dies, create a Treasure token.",
+    "Power": "1",
+    "Toughness": "4",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Pitiless Plunderer",
+    "TypeLine": {
+      "Raw": "Creature — Human Pirate",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Pirate"]
+    },
+    "Oracle": {
+      "RawText": "Whenever a creature you control dies, create a Treasure token.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Types": ["artifact"],
+                "Subtypes": ["Treasure"],
+                "IsCopy": false,
+                "AbilityText": [
+                  "{T}, Sacrifice this artifact: Add one mana of any color."
+                ]
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+      }
+    ]
+  }
+}
