@@ -1,0 +1,114 @@
+{
+  "Input": {
+    "Name": "Kari Zev, Skyship Raider",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Legendary Creature — Human Pirate",
+    "OracleText": "First strike, menace\nWhenever Kari Zev, Skyship Raider attacks, create a legendary 2/1 red Monkey creature token named Ragavan that's tapped and attacking. Sacrifice it at the beginning of the next end step.",
+    "Power": "1",
+    "Toughness": "3",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Kari Zev, Skyship Raider",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Pirate",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Pirate"]
+    },
+    "Oracle": {
+      "RawText": "First strike, menace\nWhenever Kari Zev, Skyship Raider attacks, create a legendary 2/1 red Monkey creature token named Ragavan that's tapped and attacking. Sacrifice it at the beginning of the next end step.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "First",
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "First strike"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"]
+              },
+              "MinimumBlockers": 2,
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Menace"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "2",
+                "Toughness": "1",
+                "Colors": ["R"],
+                "Types": ["creature"],
+                "Subtypes": ["Monkey"],
+                "IsCopy": false
+              },
+              "IsOptional": false
+            },
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "It"
+              },
+              "IsOptional": false,
+              "Duration": {
+                "DurationType": "atBeginningOfNextEndStep"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 1, "Raw": "1" },
+        "Toughness": { "ValueType": "fixed", "Value": 3, "Raw": "3" }
+      }
+    ]
+  }
+}

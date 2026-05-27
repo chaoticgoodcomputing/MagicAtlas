@@ -1391,6 +1391,8 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   /// verb. Name-words are either capitalised content words (e.g. "Goblin",
   /// "Chieftain") or lowercase function words that legally appear in MTG card
   /// names ("of", "the", "a", "an", "from", "for", "to", "in", "at", "with").
+  /// An optional trailing comma on any word is allowed to accommodate legendary
+  /// card names with epithets (e.g. "Kari Zev, Skyship Raider attacks").
   /// The parser does not have access to the card name at this point, so this is
   /// a structural match, not a name-equality check.
   /// </summary>
@@ -1408,10 +1410,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     // legally appear in a card name (prepositions / articles / conjunctions).
     // First word MUST be capitalised (card names begin with a capital letter).
     // Subsequent words may be function words ("Hag of Noxious Nightmares").
+    // Each word token may optionally end with a comma to handle legendary card
+    // names with epithets, e.g. "Kari Zev, Skyship Raider attacks".
     const string FunctionWords = "of|the|a|an|from|for|to|in|at|with|by|and|or|as";
     return Regex.IsMatch(
       stripped,
-      @"^[A-Z][A-Za-z'\-]*(?:\s+(?:[A-Z][A-Za-z'\-]*|" + FunctionWords + @"))*\s+(enters|dies|attacks|blocks)\b",
+      @"^[A-Z][A-Za-z'\-]*,?(?:\s+(?:[A-Z][A-Za-z'\-]*|" + FunctionWords + @"),?)*\s+(enters|dies|attacks|blocks)\b",
       RegexOptions.CultureInvariant
     );
   }
@@ -1494,6 +1498,17 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return multiToken;
     }
 
+    // Multi-sentence effect bundle: "Sentence one. Sentence two." — split on
+    // ". " followed by an uppercase letter (the same heuristic the SpellAbilityParser
+    // uses). Each sentence is dispatched through the single-rule loop independently.
+    // If any sentence fails to parse, the whole bundle falls through to null so the
+    // caller can fall back to the FallbackParser rather than silently dropping effects.
+    var sentenceBundle = TryParseSentenceBundleEffects(effectText);
+    if (sentenceBundle is not null)
+    {
+      return sentenceBundle;
+    }
+
     foreach (var entry in _rules.Value)
     {
       if (entry.Rule.TryMatch(trimmed, out var effect) && effect is not null)
@@ -1503,6 +1518,65 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     }
 
     return null;
+  }
+
+  /// <summary>
+  /// Splits a multi-sentence effect body on ". " followed by an uppercase letter
+  /// and dispatches each sentence independently through the single-rule chain.
+  /// Returns <see langword="null"/> if the text contains fewer than two sentences
+  /// (no split needed) or if any sentence fails to parse (preserving fall-through
+  /// to the FallbackParser rather than silently producing partial output).
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseSentenceBundleEffects(string effectText)
+  {
+    var working = effectText.Trim();
+    if (working.EndsWith('.'))
+    {
+      working = working[..^1];
+    }
+
+    // Only attempt if there is at least one ". " + uppercase boundary.
+    if (!Regex.IsMatch(working, @"\.\s+[A-Z]"))
+    {
+      return null;
+    }
+
+    var sentences = Regex.Split(working, @"\.\s+(?=[A-Z])");
+    if (sentences.Length < 2)
+    {
+      return null;
+    }
+
+    var collected = new List<Effect>(sentences.Length);
+    foreach (var sentence in sentences)
+    {
+      var fragment = sentence.Trim();
+      if (fragment.Length == 0)
+      {
+        return null;
+      }
+
+      // Dispatch each sentence through the single-rule chain.
+      Effect? matched = null;
+      foreach (var entry in _rules.Value)
+      {
+        if (entry.Rule.TryMatch(fragment, out var e) && e is not null)
+        {
+          matched = e;
+          break;
+        }
+      }
+
+      if (matched is null)
+      {
+        // At least one sentence is unrecognised — bail so the caller falls back.
+        return null;
+      }
+
+      collected.Add(matched);
+    }
+
+    return collected;
   }
 
   // One token spec: "a P/T color subtype creature token" (article + P/T + color + subtype).
