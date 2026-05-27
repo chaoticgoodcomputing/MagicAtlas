@@ -332,6 +332,29 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // COST-MODIFIER KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Delve: Each card you exile from your graveyard while casting this spell pays for {1}.
+  /// Rule 702.66. A parameterless cost-modifier keyword — MAST records the keyword's
+  /// presence; the per-card graveyard-exile cost-reduction mechanic is engine territory.
+  /// </summary>
+  public static KeywordDefinition Delve { get; } =
+    new()
+    {
+      Name = "Delve",
+      RuleReference = "702.66",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Delve",
+        Effects = [new DelveEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // KICKER KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -380,6 +403,7 @@ public static class KeywordDefinitions
       Crew,
       PartnerWith,
       Partner,
+      Delve,
       Kicker,
       // More keywords can be added here as needed
     ];

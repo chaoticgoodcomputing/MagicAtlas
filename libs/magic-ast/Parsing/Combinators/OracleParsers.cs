@@ -397,6 +397,24 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Delve" keyword.
+  /// Pattern: "Delve" [reminder]
+  /// Rule 702.66. Each card you exile from your graveyard while casting this spell
+  /// pays for {1}. MAST records keyword presence; the per-card graveyard-exile
+  /// cost-reduction mechanic is engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Delve = (
+    from keyword in Keyword("Delve")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Delve",
+      Effects = [new DelveEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Exalted" keyword.
   /// Pattern: "Exalted" [reminder]
   /// Rule 702.83. Whenever a creature you control attacks alone, that creature
@@ -1332,6 +1350,7 @@ public static class OracleParsers
     .Or(Changeling)
     .Or(Banding)
     .Or(Convoke)
+    .Or(Delve)
     .Or(Exalted)
     .Or(Infect)
     .Or(Wither)
