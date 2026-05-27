@@ -1,0 +1,73 @@
+{
+  "Input": {
+    "Name": "Dirty Wererat",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Human Rat Wizard",
+    "OracleText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +2/+2 and can't block.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Dirty Wererat",
+    "TypeLine": {
+      "Raw": "Creature — Human Rat Wizard",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Rat", "Wizard"]
+    },
+    "Oracle": {
+      "RawText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +2/+2 and can't block.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "AbilityWord": "Threshold",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": { "Kind": "Self" },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "there are seven or more cards in your graveyard"
+              }
+            },
+            {
+              "EffectType": "cantBlock",
+              "IsOptional": false,
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "there are seven or more cards in your graveyard"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3
+      },
+      { "Kind": "colors", "Colors": ["B"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
