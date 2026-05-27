@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Darkmoss Bridge",
+    "ManaCost": "",
+    "TypeLine": "Artifact Land",
+    "OracleText": "This land enters tapped.\nIndestructible\n{T}: Add {B} or {G}.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Darkmoss Bridge",
+    "TypeLine": {
+      "Raw": "Artifact Land",
+      "Types": [
+        "Artifact",
+        "Land"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This land enters tapped.\nIndestructible\n{T}: Add {B} or {G}.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "entersTapped"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Indestructible",
+          "Effects": [
+            {
+              "EffectType": "indestructible"
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{B} or {G}"
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
+      }
+    ]
+  }
+}
