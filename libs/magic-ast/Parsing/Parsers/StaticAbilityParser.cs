@@ -2671,23 +2671,69 @@ public sealed class StaticAbilityParser : IAbilityParser
 
   /// <summary>
   /// "This (creature|land|permanent) can't be blocked." — Rule 509.1b full
-  /// unblockability. Full declarative sentence, so no <c>KeywordSource</c>
-  /// is set. Parameterless: the subject is the card the ability is printed
-  /// on. Mirrors <see cref="TryParseCantBlock"/> in structure.
+  /// unblockability, or "This creature can't be blocked by [color] creatures."
+  /// — color-restricted variant. Full declarative sentence, so no
+  /// <c>KeywordSource</c> is set. Mirrors <see cref="TryParseCantBlock"/>
+  /// in structure.
+  /// <para>
+  /// When a color qualifier is present (<c>BlockedByFilter</c> is set), the
+  /// creature can still be blocked — just not by creatures of the named
+  /// color(s). This is descriptively distinct from full unblockability
+  /// (null filter) and from <see cref="EvasionEffect.CanBeBlockedBy"/>
+  /// ("can't be blocked EXCEPT by"), which names what CAN block.
+  /// </para>
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseCantBeBlocked(OracleClause clause)
   {
-    if (!_cantBeBlockedPattern.IsMatch(clause.RawText))
+    // Full unblockability: "This (creature|land|permanent) can't be blocked."
+    if (_cantBeBlockedPattern.IsMatch(clause.RawText))
     {
-      return null;
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new CantBeBlockedEffect()],
+        },
+      ];
     }
-    return
-    [
-      new StaticAbility
+
+    // Color-restricted variant: "This creature can't be blocked by [color] creatures."
+    var colorMatch = _cantBeBlockedByColorPattern.Match(clause.RawText);
+    if (colorMatch.Success)
+    {
+      var colorName = colorMatch.Groups["color"].Value.ToLowerInvariant();
+      var colorCode = colorName switch
       {
-        Effects = [new CantBeBlockedEffect()],
-      },
-    ];
+        "white" => "W",
+        "blue"  => "U",
+        "black" => "B",
+        "red"   => "R",
+        "green" => "G",
+        _       => null,
+      };
+      if (colorCode != null)
+      {
+        return
+        [
+          new StaticAbility
+          {
+            Effects =
+            [
+              new CantBeBlockedEffect
+              {
+                BlockedByFilter = new ObjectFilter
+                {
+                  CardTypes = ["creature"],
+                  Colors = [colorCode],
+                },
+              },
+            ],
+          },
+        ];
+      }
+    }
+
+    return null;
   }
 
   // Matches "This (creature|land|permanent) can't be blocked."
@@ -2695,6 +2741,13 @@ public sealed class StaticAbilityParser : IAbilityParser
   // The trailing period is optional for minor formatting variants.
   private static readonly Regex _cantBeBlockedPattern = new(
     @"^\s*This\s+(?:creature|land|permanent)\s+can'?t\s+be\s+blocked\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches "This creature can't be blocked by [color] creatures."
+  // Captures the color name for mapping to WUBRG code.
+  private static readonly Regex _cantBeBlockedByColorPattern = new(
+    @"^\s*This\s+(?:creature|permanent)\s+can'?t\s+be\s+blocked\s+by\s+(?<color>white|blue|black|red|green)\s+creatures\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
