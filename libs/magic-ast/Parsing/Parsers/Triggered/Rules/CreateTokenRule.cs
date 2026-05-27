@@ -136,6 +136,8 @@ public sealed class CreateTokenRule : ITriggeredRule
       }
     }
 
+    var tokenTypes = TriggeredRuleHelpers.ParseTokenTypes(createText);
+
     effect = new CreateTokenEffect
     {
       Count = LiteralQuantity.Of(count),
@@ -144,7 +146,7 @@ public sealed class CreateTokenRule : ITriggeredRule
         Power = powerToughness.Value.Power,
         Toughness = powerToughness.Value.Toughness,
         Colors = colors,
-        Types = ["creature"],
+        Types = tokenTypes,
         Subtypes = subtypes,
         Abilities = tokenAbilities,
       },

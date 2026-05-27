@@ -94,21 +94,30 @@ internal static class TriggeredRuleHelpers
     return colors;
   }
 
-  // Captures the subtype word(s) between a color word and "creature token" in
-  // the canonical "P/T color [Subtype] creature token" oracle pattern.
-  // Handles optional "you may" prefix and trailing "with [ability]" suffixes.
-  // Captures one or two consecutive words so two-word subtypes (e.g. "Spike Drone")
-  // could appear, though single-word is the overwhelmingly common case (Rule 205.3m).
+  // Captures the subtype word(s) between a color/colorless word and "creature token" in
+  // the canonical "P/T color [Subtype] [artifact] creature token(s)" oracle pattern.
+  // Handles optional "you may" prefix, trailing "with [ability]" suffixes, and the
+  // optional "artifact" super-type that precedes "creature" for multi-type tokens
+  // such as Thopters and Golems (Rule 205.3m — subtypes follow the type line).
+  //
+  // Intentionally NOT using IgnoreCase so that proper-noun subtypes (capitalised)
+  // are distinguished from lowercase type words like "artifact" — this prevents
+  // "artifact" from being mis-captured as a two-word subtype's second word.
+  // The color/colorless alternatives and the "creature" / "token" anchors use
+  // explicit casing that matches oracle text conventions (lowercase).
   private static readonly Regex _creatureTokenSubtypePattern = new(
-    @"\d+/\d+\s+(?:white|blue|black|red|green)\s+(?<sub1>[A-Z][a-z]+)(?:\s+(?<sub2>[A-Z][a-z]+))?\s+creature\s+token",
-    RegexOptions.Compiled | RegexOptions.IgnoreCase
+    @"\d+/\d+\s+(?:white|blue|black|red|green|colorless)\s+(?<sub1>[A-Z][a-z]+)(?:\s+(?<sub2>[A-Z][a-z]+))?\s+(?:artifact\s+)?creature\s+tokens?",
+    RegexOptions.Compiled
   );
 
   /// <summary>
   /// Extracts creature subtypes from oracle token-creation text.
-  /// Uses the structural position (word(s) between color and "creature token") so
-  /// arbitrary MTG creature subtypes are handled without a closed enumeration.
+  /// Uses the structural position (word(s) between color/colorless and
+  /// "[artifact] creature token(s)") so arbitrary MTG creature subtypes are
+  /// handled without a closed enumeration.
   /// Rule 205.3m — creature subtypes are listed after the card's types.
+  /// Handles both coloured tokens ("1/1 red Goblin creature token") and
+  /// colorless tokens ("1/1 colorless Thopter artifact creature tokens").
   /// </summary>
   public static List<string> ParseCreatureSubtypes(string text)
   {
@@ -123,7 +132,7 @@ internal static class TriggeredRuleHelpers
     var raw1 = match.Groups["sub1"].Value;
     subtypes.Add(char.ToUpperInvariant(raw1[0]) + raw1[1..]);
 
-    // sub2 is present only for two-word subtypes (uncommon but possible).
+    // sub2 is present only for two-word subtypes (e.g. "Phyrexian Germ").
     if (match.Groups["sub2"].Success)
     {
       var raw2 = match.Groups["sub2"].Value;
@@ -131,6 +140,23 @@ internal static class TriggeredRuleHelpers
     }
 
     return subtypes;
+  }
+
+  /// <summary>
+  /// Returns the card types for the token described in oracle text.
+  /// Multi-type tokens such as "artifact creature token" produce
+  /// <c>["artifact", "creature"]</c>; plain "creature token" produces
+  /// <c>["creature"]</c>. Rule 205.2 — a token's type line lists all of
+  /// its types in the standard order.
+  /// </summary>
+  public static List<string> ParseTokenTypes(string text)
+  {
+    var lower = text.ToLowerInvariant();
+    if (lower.Contains("artifact creature token") || lower.Contains("artifact creature tokens"))
+    {
+      return ["artifact", "creature"];
+    }
+    return ["creature"];
   }
 
   public static List<string> ParseTokenAbilities(string text)
