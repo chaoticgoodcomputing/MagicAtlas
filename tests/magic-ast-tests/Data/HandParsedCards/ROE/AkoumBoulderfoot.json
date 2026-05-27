@@ -1,0 +1,80 @@
+{
+  "Input": {
+    "Name": "Akoum Boulderfoot",
+    "ManaCost": "{4}{R}{R}",
+    "TypeLine": "Creature — Giant Warrior",
+    "OracleText": "When this creature enters, it deals 1 damage to any target.",
+    "Power": "4",
+    "Toughness": "5",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Akoum Boulderfoot",
+    "TypeLine": {
+      "Raw": "Creature — Giant Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Giant", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, it deals 1 damage to any target.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Source": { "Kind": "It" },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": { "Kind": "AnyTarget" },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
