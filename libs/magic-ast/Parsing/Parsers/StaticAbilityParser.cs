@@ -563,6 +563,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return phantomDamagePrevention;
     }
 
+    // "If this card is in your opening hand, you may begin the game with it on
+    // the battlefield." — Leyline pre-game placement (Rule 103.6a). The
+    // opening-hand condition is structural to every printed Leyline; it is
+    // encoded implicitly by the <see cref="OpeningHandEffect"/> type rather
+    // than as a runtime predicate. IsOptional=true captures "you may".
+    var openingHand = TryParseOpeningHand(clause);
+    if (openingHand != null)
+    {
+      return openingHand;
+    }
+
     return null;
   }
 
@@ -4814,6 +4825,50 @@ public sealed class StaticAbilityParser : IAbilityParser
   // collapse it to Self unconditionally (card-name = self by convention).
   private static readonly Regex _phantomDamagePreventionPattern = new(
     @"^\s*If\s+damage\s+would\s+be\s+dealt\s+to\s+(?<subj>.+?),\s*prevent\s+that\s+damage\.\s*Remove\s+a\s+\+1/\+1\s+counter\s+from\s+(?<subj2>.+?)\.\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "If this card is in your opening hand, you may begin the game with it on
+  /// the battlefield." — Leyline pre-game placement (Rule 103.6a).
+  ///
+  /// <para>
+  /// Emits a <see cref="MagicAST.AST.Effects.Timing.OpeningHandEffect"/> with
+  /// <see cref="IOptionalEffect.IsOptional"/> = true. The opening-hand
+  /// condition is structural to the effect type; no separate Condition field
+  /// is needed.
+  /// </para>
+  ///
+  /// <para>
+  /// The fixed oracle text has been printed verbatim on every Leyline card
+  /// since Guildpact (2006); a single exact-match pattern covers the entire
+  /// 17-card corpus.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseOpeningHand(OracleClause clause)
+  {
+    if (!_openingHandPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Timing.OpeningHandEffect
+        {
+          IsOptional = true,
+        }],
+      },
+    ];
+  }
+
+  // Matches the exact Leyline oracle line: "If this card is in your opening
+  // hand, you may begin the game with it on the battlefield."
+  // The period is optional to tolerate minor formatting variants.
+  private static readonly Regex _openingHandPattern = new(
+    @"^\s*If\s+this\s+card\s+is\s+in\s+your\s+opening\s+hand,\s+you\s+may\s+begin\s+the\s+game\s+with\s+it\s+on\s+the\s+battlefield\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
