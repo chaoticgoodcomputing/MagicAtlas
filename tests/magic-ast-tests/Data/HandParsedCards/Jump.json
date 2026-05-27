@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Jump",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Target creature gains flying until end of turn.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Jump",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Target creature gains flying until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Flying",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Characteristics": [
+                        "flying",
+                        "reach"
+                      ]
+                    },
+                    "IsOptional": false
+                  }
+                ]
+              },
+              "IsOptional": false,
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
