@@ -106,24 +106,31 @@
           "RawText": "Put a +1/+1 counter on target creature. You gain 1 life.",
           "Abilities": [
             {
-              "Kind": "unparsed",
-              "SourceSpan": {
-                "Start": 0,
-                "Length": 56
-              },
-              "RawText": "Put a +1/+1 counter on target creature. You gain 1 life.",
-              "Diagnostics": [
+              "Kind": "spell",
+              "Effects": [
                 {
-                  "Severity": "error",
-                  "Message": "Spell ability parser couldn't recognise effect",
-                  "Location": {
-                    "Start": 0,
-                    "Length": 56
+                  "EffectType": "putCounters",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": ["creature"]
+                    }
                   },
-                  "RawText": "Put a +1/+1 counter on target creature. You gain 1 life.",
-                  "Pattern": "UnparsedSpell",
-                  "LastAttemptedRule": "SpellAbilityParser.YouLoseLifeSpellRule",
-                  "FailurePosition": 0
+                  "CounterType": "+1/+1",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                },
+                {
+                  "EffectType": "gainLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
                 }
               ]
             }
