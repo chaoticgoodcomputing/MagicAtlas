@@ -577,6 +577,18 @@ public sealed class StaticAbilityParser : IAbilityParser
       return phantomDamagePrevention;
     }
 
+    // "You may play an additional land on each of your turns." — Rule 305.2
+    // land-play limit increase. A continuous static permission grant that lets
+    // the controller play one extra land per turn. IsOptional=true: the "You
+    // may" prefix is explicit — the controller is not forced to play the extra
+    // land. Parameterless; no target or duration needed (the permission persists
+    // while the source is on the battlefield, Rule 604.3).
+    var playAdditionalLand = TryParsePlayAdditionalLand(clause);
+    if (playAdditionalLand != null)
+    {
+      return playAdditionalLand;
+    }
+
     return null;
   }
 
@@ -4813,6 +4825,44 @@ public sealed class StaticAbilityParser : IAbilityParser
   // The trailing period is optional for minor formatting variants.
   private static readonly Regex _blockAdditionalPattern = new(
     @"^\s*This\s+creature\s+can\s+block\s+an\s+additional\s+creature\s+each\s+combat\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "You may play an additional land on each of your turns." — Rule 305.2
+  /// land-play limit increase. A continuous static permission grant that lets
+  /// the controller play one more land per turn than the default limit of one
+  /// (Rule 305.2). The "You may" preamble is explicit in oracle text so
+  /// <see cref="IOptionalEffect.IsOptional"/> is <c>true</c>: the grant is
+  /// purely permissive — the controller is not required to use the extra
+  /// land-play slot. Parameterless; no target or duration is needed because
+  /// the permission persists for as long as the source is on the battlefield
+  /// (Rule 604.3). Full-sentence form, not a printed keyword — no
+  /// <c>KeywordSource</c> is set on the containing ability.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParsePlayAdditionalLand(OracleClause clause)
+  {
+    if (!_playAdditionalLandPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Keyword.PlayAdditionalLandEffect
+        {
+          IsOptional = true,
+        }],
+      },
+    ];
+  }
+
+  // Matches "You may play an additional land on each of your turns."
+  // The trailing period is optional for minor formatting variants.
+  private static readonly Regex _playAdditionalLandPattern = new(
+    @"^\s*You\s+may\s+play\s+an\s+additional\s+land\s+on\s+each\s+of\s+your\s+turns\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
