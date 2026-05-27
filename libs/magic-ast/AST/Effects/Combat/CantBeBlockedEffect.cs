@@ -2,11 +2,13 @@ namespace MagicAST.AST.Effects.Combat;
 
 using System.Text.Json.Serialization;
 using MagicAST.AST.Effects.Traits;
+using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Combat-block evasion (attacker-side): oracle text states that a creature
-/// "can't be blocked." Rule 509.1b (declare-blockers step; evasion abilities
+/// "can't be blocked" (unconditionally) or "can't be blocked by [filter]"
+/// (color-restricted). Rule 509.1b (declare-blockers step; evasion abilities
 /// constrain the set of legal blocker declarations the defending player can
 /// make against the named object).
 /// </summary>
@@ -24,7 +26,10 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 ///   <item><description>
 ///     <see cref="CantBeBlockedEffect"/> — attacker-side <i>evasion</i>:
 ///     the listed creature cannot be declared as blocked by any creature
-///     (Rule 509.1b).
+///     (Rule 509.1b). When <see cref="BlockedByFilter"/> is null, this is
+///     full unblockability (Tidal Kraken, Phantom Warrior). When
+///     <see cref="BlockedByFilter"/> is set, blocking is prohibited only by
+///     creatures matching the filter (Sootwalkers, Vine Mare).
 ///   </description></item>
 ///   <item><description>
 ///     <see cref="MustBeBlockedEffect"/> — attacker-side <i>requirement</i>:
@@ -40,21 +45,32 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 ///   </description></item>
 /// </list>
 /// <para>
-/// Distinct from richer "can't be blocked except by..." evasion shapes,
-/// which carry a qualifier and are modeled separately
-/// (see <see cref="EvasionEffect"/>). This effect is the bare unconditional
-/// form on cards like Tidal Kraken, Phantom Warrior, and Slither Blade.
+/// Contrast with <see cref="MagicAST.AST.Effects.Keyword.EvasionEffect"/>,
+/// which encodes "can't be blocked <i>except by</i> [filter]" — i.e., what
+/// CAN block this creature (Flying, Fear, Intimidate shapes). This effect
+/// encodes the complementary "can't be blocked <i>by</i> [filter]" —
+/// i.e., what CANNOT block it.
 /// </para>
 /// <para>
-/// No parameters — this is a descriptive marker. The subject of the
-/// evasion is the static ability's controlling object (the card the ability
-/// is printed on). Global lines like "Creatures you control can't be blocked"
-/// would emit a different shape (mass-affecting effect with a target/filter).
+/// The subject of the evasion is the static ability's controlling object
+/// (the card the ability is printed on). Global lines like
+/// "Creatures you control can't be blocked" emit a different shape
+/// (mass-affecting effect with a target/filter).
 /// </para>
 /// </remarks>
 [OracleEffect("cantBeBlocked")]
 public sealed record CantBeBlockedEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 {
+  /// <summary>
+  /// Filter describing what CANNOT block this creature. When null, blocking
+  /// is prohibited unconditionally (full unblockability). When set, only
+  /// creatures matching this filter are prohibited from blocking — all other
+  /// creatures may still block normally. Rule 509.1b.
+  /// e.g., for "can't be blocked by white creatures": Colors = ["W"]
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectFilter? BlockedByFilter { get; init; }
+
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
   public bool IsOptional { get; init; }
 
