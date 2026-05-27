@@ -1,0 +1,77 @@
+{
+  "Input": {
+    "Name": "Queen's Agent",
+    "ManaCost": "{5}{B}",
+    "TypeLine": "Creature — Vampire Scout",
+    "OracleText": "Lifelink\nWhen this creature enters, it explores. (Reveal the top card of your library. Put that card into your hand if it's a land. Otherwise, put a +1/+1 counter on this creature, then put the card back or put it into your graveyard.)",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Queen's Agent",
+    "TypeLine": {
+      "Raw": "Creature — Vampire Scout",
+      "Types": ["Creature"],
+      "Subtypes": ["Vampire", "Scout"]
+    },
+    "Oracle": {
+      "RawText": "Lifelink\nWhen this creature enters, it explores. (Reveal the top card of your library. Put that card into your hand if it's a land. Otherwise, put a +1/+1 counter on this creature, then put the card back or put it into your graveyard.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Lifelink",
+          "Effect": {
+            "EffectType": "lifelink"
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "explore",
+              "Target": { "Kind": "It" }
+            }
+          ],
+          "Reminder": {
+            "Text": "Reveal the top card of your library. Put that card into your hand if it's a land. Otherwise, put a +1/+1 counter on this creature, then put the card back or put it into your graveyard."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 5 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 6
+      },
+      { "Kind": "colors", "Colors": ["B"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
