@@ -1,0 +1,133 @@
+{
+  "Input": {
+    "Name": "Alpharael, Stonechosen",
+    "ManaCost": "{3}{B}{B}",
+    "TypeLine": "Legendary Creature — Human Cleric",
+    "OracleText": "Ward—Discard a card at random.\nVoid — Whenever Alpharael attacks, if a nonland permanent left the battlefield this turn or a spell was warped this turn, defending player loses half their life, rounded up.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Alpharael, Stonechosen",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Cleric",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Ward—Discard a card at random.\nVoid — Whenever Alpharael attacks, if a nonland permanent left the battlefield this turn or a spell was warped this turn, defending player loses half their life, rounded up.",
+      "Abilities": [
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 30
+          },
+          "RawText": "Ward—Discard a card at random.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Static ability parser not yet implemented",
+              "Location": {
+                "Start": 0,
+                "Length": 30
+              },
+              "RawText": "Ward—Discard a card at random.",
+              "Pattern": "AmbiguousStructure",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 0
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 31,
+            "Length": 173
+          },
+          "RawText": "Void — Whenever Alpharael attacks, if a nonland permanent left the battlefield this turn or a spell was warped this turn, defending player loses half their life, rounded up.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Triggered ability parser not yet implemented",
+              "Location": {
+                "Start": 31,
+                "Length": 173
+              },
+              "RawText": "Void — Whenever Alpharael attacks, if a nonland permanent left the battlefield this turn or a spell was warped this turn, defending player loses half their life, rounded up.",
+              "Pattern": "ConditionalEffect",
+              "LastAttemptedRule": "TriggeredAbilityParser.Parse",
+              "FailurePosition": 31
+            }
+          ],
+          "AbilityWord": "Void"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}

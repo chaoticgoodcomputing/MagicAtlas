@@ -1,0 +1,107 @@
+{
+  "Input": {
+    "Name": "Temporal Intervention",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Void — This spell costs {2} less to cast if a nonland permanent left the battlefield this turn or a spell was warped this turn.\nTarget opponent reveals their hand. You choose a nonland card from it. That player discards that card.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Temporal Intervention",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Void — This spell costs {2} less to cast if a nonland permanent left the battlefield this turn or a spell was warped this turn.\nTarget opponent reveals their hand. You choose a nonland card from it. That player discards that card.",
+      "Abilities": [
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 127
+          },
+          "RawText": "Void — This spell costs {2} less to cast if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Static ability parser not yet implemented",
+              "Location": {
+                "Start": 0,
+                "Length": 127
+              },
+              "RawText": "Void — This spell costs {2} less to cast if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+              "Pattern": "ConditionalEffect",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 0
+            }
+          ],
+          "AbilityWord": "Void"
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 128,
+            "Length": 102
+          },
+          "RawText": "Target opponent reveals their hand. You choose a nonland card from it. That player discards that card.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Static ability parser not yet implemented",
+              "Location": {
+                "Start": 128,
+                "Length": 102
+              },
+              "RawText": "Target opponent reveals their hand. You choose a nonland card from it. That player discards that card.",
+              "Pattern": "AmbiguousStructure",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 128
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

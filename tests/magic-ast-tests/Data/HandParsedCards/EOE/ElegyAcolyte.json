@@ -1,0 +1,156 @@
+{
+  "Input": {
+    "Name": "Elegy Acolyte",
+    "ManaCost": "{2}{B}{B}",
+    "TypeLine": "Creature — Human Cleric",
+    "OracleText": "Lifelink\nWhenever one or more creatures you control deal combat damage to a player, you draw a card and lose 1 life.\nVoid — At the beginning of your end step, if a nonland permanent left the battlefield this turn or a spell was warped this turn, create a 2/2 colorless Robot artifact creature token.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Elegy Acolyte",
+    "TypeLine": {
+      "Raw": "Creature — Human Cleric",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Lifelink\nWhenever one or more creatures you control deal combat damage to a player, you draw a card and lose 1 life.\nVoid — At the beginning of your end step, if a nonland permanent left the battlefield this turn or a spell was warped this turn, create a 2/2 colorless Robot artifact creature token.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "lifelink",
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Lifelink"
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 9,
+            "Length": 107
+          },
+          "RawText": "Whenever one or more creatures you control deal combat damage to a player, you draw a card and lose 1 life.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Triggered ability parser not yet implemented",
+              "Location": {
+                "Start": 9,
+                "Length": 107
+              },
+              "RawText": "Whenever one or more creatures you control deal combat damage to a player, you draw a card and lose 1 life.",
+              "Pattern": "UnparsedTriggered",
+              "LastAttemptedRule": "TriggeredAbilityParser.Parse",
+              "FailurePosition": 9
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfEndStep",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "InterveningIf": {
+            "Text": "a nonland permanent left the battlefield this turn or a spell was warped this turn"
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "2",
+                "Toughness": "2",
+                "Colors": [
+                  "C"
+                ],
+                "Types": [
+                  "artifact",
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Robot"
+                ],
+                "IsCopy": false
+              },
+              "IsOptional": false
+            }
+          ],
+          "AbilityWord": "Void"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}

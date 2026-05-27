@@ -97,6 +97,8 @@ public sealed class AbilityClassifier
       "Fateful hour",
       // Adventure
       "Adventure",
+      // EOE (Edge of Eternities) ability words
+      "Void",
     };
 
   /// <summary>

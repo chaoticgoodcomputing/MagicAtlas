@@ -1,0 +1,117 @@
+{
+  "Input": {
+    "Name": "Kavaron Skywarden",
+    "ManaCost": "{4}{R}",
+    "TypeLine": "Creature — Kavu Soldier",
+    "OracleText": "Reach\nVoid — At the beginning of your end step, if a nonland permanent left the battlefield this turn or a spell was warped this turn, put a +1/+1 counter on this creature.",
+    "Power": "4",
+    "Toughness": "5",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Kavaron Skywarden",
+    "TypeLine": {
+      "Raw": "Creature — Kavu Soldier",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kavu",
+        "Soldier"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Reach\nVoid — At the beginning of your end step, if a nonland permanent left the battlefield this turn or a spell was warped this turn, put a +1/+1 counter on this creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "reach",
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Reach"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfEndStep",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "InterveningIf": {
+            "Text": "a nonland permanent left the battlefield this turn or a spell was warped this turn"
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "IsOptional": false
+            }
+          ],
+          "AbilityWord": "Void"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        }
+      }
+    ]
+  }
+}
