@@ -398,6 +398,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target [filter] gains [keyword] until end of turn." — spell-resolution single-target
+    // keyword grant (e.g., Jump, Unnatural Speed, Lace with Moonglove). The "Target"
+    // subject marks this as a one-shot imperative spell effect (Rule 113.3a, Rule 613.1c),
+    // not a declarative static like "Enchanted creature has flying." The "until end of
+    // turn" duration further confirms this is a transient resolution instruction.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+\S+.*?\s+gains\s+\S+.*?\s+until\s+end\s+of\s+turn",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Creatures you control get +N/+M until end of turn." — spell-resolution mass
     // anthem shape (e.g., Charge, Bar the Door). A one-shot imperative spell effect
     // (Rule 113.3a) with an explicit "until end of turn" duration clause. The duration
