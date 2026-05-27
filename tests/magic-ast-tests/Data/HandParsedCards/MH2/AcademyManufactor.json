@@ -1,0 +1,151 @@
+{
+  "Input": {
+    "Name": "Academy Manufactor",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact Creature — Assembly-Worker",
+    "OracleText": "If you would create a Clue, Food, or Treasure token, instead create one of each.",
+    "Power": "1",
+    "Toughness": "3",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Academy Manufactor",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Assembly-Worker",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Assembly-Worker"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If you would create a Clue, Food, or Treasure token, instead create one of each.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "tokenCreation",
+                "TokenFilter": {
+                  "Subtypes": [
+                    "Clue",
+                    "Food",
+                    "Treasure"
+                  ]
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "createToken",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Token": {
+                      "Types": [
+                        "artifact"
+                      ],
+                      "Subtypes": [
+                        "Clue"
+                      ],
+                      "AbilityText": [
+                        "{2}, Sacrifice this artifact: Draw a card."
+                      ],
+                      "IsCopy": false
+                    },
+                    "IsOptional": false
+                  },
+                  {
+                    "EffectType": "createToken",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Token": {
+                      "Types": [
+                        "artifact"
+                      ],
+                      "Subtypes": [
+                        "Food"
+                      ],
+                      "AbilityText": [
+                        "{2}, {T}, Sacrifice this artifact: You gain 3 life."
+                      ],
+                      "IsCopy": false
+                    },
+                    "IsOptional": false
+                  },
+                  {
+                    "EffectType": "createToken",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Token": {
+                      "Types": [
+                        "artifact"
+                      ],
+                      "Subtypes": [
+                        "Treasure"
+                      ],
+                      "AbilityText": [
+                        "{T}, Sacrifice this artifact: Add one mana of any color."
+                      ],
+                      "IsCopy": false
+                    },
+                    "IsOptional": false
+                  }
+                ],
+                "IsOptional": false
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

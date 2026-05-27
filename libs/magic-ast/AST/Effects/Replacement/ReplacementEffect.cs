@@ -27,8 +27,12 @@ public sealed record ReplacementEffect : Effect, IOptionalEffect, IDurativeEffec
 
   /// <summary>
   /// The effect(s) that happen instead of or in addition to the original event.
+  /// Null when the replacement is expressed purely as a <see cref="Modifier"/>
+  /// on the original event (e.g., Doubling Season's "twice that many" — the
+  /// original event's shape is preserved, only the quantity changes).
   /// </summary>
-  public required Effect Replacement { get; init; }
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Effect? Replacement { get; init; }
 
   /// <summary>
   /// Optional modifier to the original event (e.g., "twice that many" for Doubling Season).

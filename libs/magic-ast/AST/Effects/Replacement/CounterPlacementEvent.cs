@@ -17,4 +17,11 @@ public sealed record CounterPlacementEvent : ReplacementEvent
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? CounterType { get; init; }
+
+  /// <summary>
+  /// Minimum quantity for the event to apply (e.g., "one or more" = 1).
+  /// Mirrors <see cref="TokenCreationEvent.MinimumQuantity"/> for parity.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? MinimumQuantity { get; init; }
 }
