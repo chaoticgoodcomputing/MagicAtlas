@@ -1,0 +1,150 @@
+{
+  "Input": {
+    "Name": "Adventurous Eater // Have a Bite",
+    "TypeLine": "Creature — Human Warlock // Sorcery",
+    "ColorIdentity": ["B"],
+    "Keywords": ["Prepared"],
+    "Layout": "prepare",
+    "CardFaces": [
+      {
+        "Name": "Adventurous Eater",
+        "ManaCost": "{2}{B}",
+        "TypeLine": "Creature — Human Warlock",
+        "OracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+        "Power": "3",
+        "Toughness": "2",
+        "Colors": ["B"]
+      },
+      {
+        "Name": "Have a Bite",
+        "ManaCost": "{B}",
+        "TypeLine": "Sorcery",
+        "OracleText": "Put a +1/+1 counter on target creature. You gain 1 life.",
+        "Power": null,
+        "Toughness": null,
+        "Colors": ["B"]
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Adventurous Eater // Have a Bite",
+    "TypeLine": {
+      "Raw": "Creature — Human Warlock // Sorcery",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Warlock", "//", "Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "layout",
+        "Layout": "prepare"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Adventurous Eater",
+        "TypeLine": {
+          "Raw": "Creature — Human Warlock",
+          "Types": ["Creature"],
+          "Subtypes": ["Human", "Warlock"]
+        },
+        "Oracle": {
+          "RawText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "prepared",
+                  "IsOptional": false
+                }
+              ],
+              "KeywordSource": "Prepared"
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{2}{B}",
+            "Symbols": [
+              { "Kind": "generic", "GenericAmount": 2 },
+              { "Kind": "colored", "Colors": ["B"] }
+            ],
+            "ManaValue": 3,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": ["B"]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+            "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+          }
+        ]
+      },
+      {
+        "Name": "Have a Bite",
+        "TypeLine": {
+          "Raw": "Sorcery",
+          "Types": ["Sorcery"]
+        },
+        "Oracle": {
+          "RawText": "Put a +1/+1 counter on target creature. You gain 1 life.",
+          "Abilities": [
+            {
+              "Kind": "unparsed",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 56
+              },
+              "RawText": "Put a +1/+1 counter on target creature. You gain 1 life.",
+              "Diagnostics": [
+                {
+                  "Severity": "error",
+                  "Message": "Spell ability parser couldn't recognise effect",
+                  "Location": {
+                    "Start": 0,
+                    "Length": 56
+                  },
+                  "RawText": "Put a +1/+1 counter on target creature. You gain 1 life.",
+                  "Pattern": "UnparsedSpell",
+                  "LastAttemptedRule": "SpellAbilityParser.UntapTargetRule",
+                  "FailurePosition": 0
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{B}",
+            "Symbols": [
+              { "Kind": "colored", "Colors": ["B"] }
+            ],
+            "ManaValue": 1,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": ["B"]
+          }
+        ]
+      }
+    ]
+  }
+}

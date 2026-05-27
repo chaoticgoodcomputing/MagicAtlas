@@ -154,7 +154,7 @@ public class KeywordExpanderTests
   public void CanExpand_ReturnsFalseForUnknownKeywords()
   {
       Assert.That(_expander.CanExpand("NotAKeyword"), Is.False);
-      Assert.That(_expander.CanExpand("Firebending"), Is.False);
+      Assert.That(_expander.CanExpand("DefinitelyNotAKeyword"), Is.False);
   }
 
   [Test]

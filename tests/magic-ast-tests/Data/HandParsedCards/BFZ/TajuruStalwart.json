@@ -1,0 +1,53 @@
+{
+  "Input": {
+    "Name": "Tajuru Stalwart",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Creature — Elf Scout Ally",
+    "OracleText": "Converge — This creature enters with a +1/+1 counter on it for each color of mana spent to cast it.",
+    "Power": "0",
+    "Toughness": "1",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Tajuru Stalwart",
+    "TypeLine": {
+      "Raw": "Creature — Elf Scout Ally",
+      "Types": ["Creature"],
+      "Subtypes": ["Elf", "Scout", "Ally"]
+    },
+    "Oracle": {
+      "RawText": "Converge — This creature enters with a +1/+1 counter on it for each color of mana spent to cast it.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Converge",
+          "Effects": [
+            {
+              "EffectType": "converge",
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 3
+      },
+      { "Kind": "colors", "Colors": ["G"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "0", "Value": 0 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

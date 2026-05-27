@@ -1757,6 +1757,29 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Firebending N" keyword.
+  /// Pattern: "Firebending" number [reminder]
+  /// (Avatar: The Last Airbender). A triggered keyword ability: whenever this
+  /// creature attacks, add N {R}. This mana lasts until end of combat. MAST
+  /// records the keyword and its integer value; the attack trigger,
+  /// mana-addition, and end-of-combat duration are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/> and
+  /// <see cref="Mobilize"/>. Variable-value printings ("Firebending X, where X
+  /// is ...") are not matched by this parser.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Firebending = (
+    from keyword in Keyword("Firebending")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Firebending",
+      Effects = [new FirebendingEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Equip {cost}" keyword.
   /// Pattern: "Equip" mana-symbol+ [reminder]
   /// Rule 702.6. An activated ability that attaches this Equipment to a creature
@@ -2552,6 +2575,26 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Converge" ability word.
+  /// Pattern: "Converge" [reminder]
+  /// Ability word (Rule 207.2c). Effects scale with the number of colors of mana
+  /// spent to cast the spell. MAST records the ability-word marker as a keyword
+  /// presence node; the color-counting and scaled-effect semantics are engine
+  /// territory. Mirrors Sunburst (Rule 702.44) which encodes the same concept as
+  /// a keyword ability.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Converge = (
+    from kw in Keyword("Converge")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Converge",
+      Effects = [new ConvergeEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Bargain" keyword.
   /// Pattern: "Bargain" [reminder]
   /// Rule 702.166. "You may sacrifice an artifact, enchantment, or token as you
@@ -2615,6 +2658,29 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "For Mirrodin!" keyword.
+  /// Pattern: "For" "Mirrodin" [reminder]
+  /// (Phyrexia: All Will Be One). When this Equipment enters, create a 2/2 red
+  /// Rebel creature token, then attach this to it. Although mechanically a
+  /// triggered ability, MAST records keyword presence — same approach as Living
+  /// Weapon (Rule 702.77). The '!' is silently dropped by the tokenizer
+  /// (unknown-character handling), so the combinator matches "For Mirrodin".
+  /// Multi-word keyword via sequential Keyword() combinators, mirroring
+  /// LivingWeapon and CumulativeUpkeep.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> ForMirrodin = (
+    from for_ in Keyword("For")
+    from mirrodin in Keyword("Mirrodin")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "For Mirrodin",
+      Effects = [new ForMirrodinEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Devour N" keyword.
   /// Pattern: "Devour" number [reminder]
   /// Rule 702.82. A static ability: as this creature enters, you may sacrifice
@@ -2632,6 +2698,33 @@ public static class OracleParsers
     {
       KeywordSource = "Devour",
       Effects = [new DevourEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Prepared" keyword state.
+  /// Pattern: "This" "creature" "enters" "prepared" [reminder]
+  /// (Foundations Remastered prepare-layout cards). Oracle text reads "This creature
+  /// enters prepared." (the keyword appears mid-sentence, not as a leading token).
+  /// While prepared, the controller may cast a copy of the attached spell; doing
+  /// so unprepares it. MAST records the keyword's presence; the prepared-state and
+  /// copy-cast mechanics are engine territory. The combinator matches the full
+  /// sentence shape ("This creature enters prepared") rather than a bare keyword
+  /// token, mirroring EntersTapped whose oracle text is also a full sentence.
+  /// The reminder "(While it's prepared, you may cast a copy of its spell. Doing
+  /// so unprepares it.)" is consumed by the optional-reminder combinator.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Prepared = (
+    from this_ in Token.EqualTo(OracleToken.This)
+    from creature in Keyword("creature")
+    from enters in Keyword("enters")
+    from prepared in Keyword("prepared")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Prepared",
+      Effects = [new PreparedEffect()],
       Reminder = reminder,
     }
   );
@@ -2711,6 +2804,30 @@ public static class OracleParsers
     {
       KeywordSource = "Exploit",
       Effects = [new ExploitEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Doctor's companion" keyword.
+  /// Pattern: "Doctor's" "companion" [reminder]
+  /// (Doctor Who Commander). You can have two commanders if the other is the Doctor.
+  /// A variant of the Partner keyword (Rule 702.124) restricted to Doctor-subtype
+  /// commanders. The apostrophe in "Doctor's" is consumed as part of the word token
+  /// by the tokenizer (which includes apostrophes in word characters), so
+  /// Keyword("Doctor's") matches the single word token "Doctor's". Multi-word
+  /// keyword via sequential Keyword() combinators, mirroring PartnerWith.
+  /// Must be placed BEFORE Partner.Try() in the Or-chain because "Doctor's" is
+  /// a distinct word token — there is no ambiguity with bare "Partner".
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> DoctorsCompanion = (
+    from doctors in Keyword("Doctor's")
+    from companion in Keyword("companion")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Doctor's companion",
+      Effects = [new DoctorsCompanionEffect()],
       Reminder = reminder,
     }
   );
@@ -2883,7 +3000,11 @@ public static class OracleParsers
     .Or(Conspire)
     .Or(JumpStart)
     .Or(Aftermath)
-    .Or(Exploit);
+    .Or(Exploit)
+    .Or(Converge)
+    .Or(ForMirrodin)
+    .Or(Prepared)
+    .Or(DoctorsCompanion);
 
   /// <summary>
   /// Parses any parameterized keyword ability.
@@ -2929,7 +3050,8 @@ public static class OracleParsers
       .Or(Afflict.Try())
       .Or(Afterlife.Try())
       .Or(Warp.Try())
-      .Or(Devour.Try());
+      .Or(Devour.Try())
+      .Or(Firebending.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).

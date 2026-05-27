@@ -1,0 +1,85 @@
+{
+  "Input": {
+    "Name": "Fire Sages",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature — Human Cleric",
+    "OracleText": "Firebending 1 (Whenever this creature attacks, add {R}. This mana lasts until end of combat.)\n{1}{R}{R}: Put a +1/+1 counter on this creature.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": ["Firebending"]
+  },
+  "Output": {
+    "Name": "Fire Sages",
+    "TypeLine": {
+      "Raw": "Creature — Human Cleric",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "Firebending 1 (Whenever this creature attacks, add {R}. This mana lasts until end of combat.)\n{1}{R}{R}: Put a +1/+1 counter on this creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Firebending",
+          "Reminder": {
+            "Text": "(Whenever this creature attacks, add {R}. This mana lasts until end of combat.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "firebending",
+              "Value": 1,
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 1 },
+                { "Kind": "colored", "Colors": ["R"] },
+                { "Kind": "colored", "Colors": ["R"] }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["R"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
