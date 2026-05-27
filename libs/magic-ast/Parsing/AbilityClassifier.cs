@@ -684,6 +684,28 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target creature can't be blocked this turn." — spell-resolution single-target
+    // evasion grant (Artful Dodge, Slip Through Space). The "this turn" duration marks
+    // this as an imperative spell-resolution instruction (Rule 509.1b), not the
+    // declarative static "[Self/Enchanted creature] can't be blocked" that lives on a
+    // permanent. Without this route the clause defaults to Static and stalls in
+    // StaticAbilityParser.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+creature\s+can'?t\s+be\s+blocked\s+this\s+turn\.?\s*$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Ability-word conditional spell-effect: "[AbilityWord] — If <condition>,
     // <spell-verb> …". The ability word itself (e.g. "Fateful hour", Rule 702.95)
     // has no rules meaning — it gates an otherwise normal spell-resolution
