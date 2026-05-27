@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "Immolating Glare",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Destroy target attacking creature.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Immolating Glare",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Destroy target attacking creature.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Characteristics": ["attacking"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}
