@@ -1,0 +1,111 @@
+{
+  "Input": {
+    "Name": "Bomat Bazaar Barge",
+    "ManaCost": "{4}",
+    "TypeLine": "Artifact — Vehicle",
+    "OracleText": "When this Vehicle enters, draw a card.\nCrew 3 (Tap any number of creatures you control with total power 3 or more: This Vehicle becomes an artifact creature until end of turn.)",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [
+      "Crew"
+    ],
+    "Id": "0f32be75-979d-43a9-9132-2cf013ddaf3b",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Bomat Bazaar Barge",
+    "TypeLine": {
+      "Raw": "Artifact — Vehicle",
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Vehicle"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this Vehicle enters, draw a card.\nCrew 3 (Tap any number of creatures you control with total power 3 or more: This Vehicle becomes an artifact creature until end of turn.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "vehicle"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "crew",
+              "Power": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Crew",
+          "Reminder": {
+            "Text": "(Tap any number of creatures you control with total power 3 or more: This Vehicle becomes an artifact creature until end of turn.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        }
+      }
+    ]
+  }
+}
