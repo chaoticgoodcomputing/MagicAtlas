@@ -1,0 +1,70 @@
+{
+  "Input": {
+    "Name": "Languish",
+    "ManaCost": "{2}{B}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "All creatures get -4/-4 until end of turn.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Languish",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "All creatures get -4/-4 until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": -4
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": -4
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["B"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}
