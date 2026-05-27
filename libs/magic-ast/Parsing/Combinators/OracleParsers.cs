@@ -1321,6 +1321,50 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Unearth {cost}" keyword.
+  /// Pattern: "Unearth" mana-symbol+ [reminder]
+  /// Rule 702.84. "[Cost]: Return this card from your graveyard to the battlefield.
+  /// It gains haste. Exile it at the beginning of the next end step or if it would
+  /// leave the battlefield. Unearth only as a sorcery." MAST records the keyword
+  /// and its activation cost; the return, haste-grant, and exile-at-end-step
+  /// semantics are engine territory. Mirrors the Kicker/Bestow/Echo/Equip pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Unearth = (
+    from keyword in Keyword("Unearth")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Unearth",
+      Effects = [new UnearthEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -1386,7 +1430,8 @@ public static class OracleParsers
       .Or(Morph.Try())
       .Or(Bestow.Try())
       .Or(Echo.Try())
-      .Or(Kicker.Try());
+      .Or(Kicker.Try())
+      .Or(Unearth.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).

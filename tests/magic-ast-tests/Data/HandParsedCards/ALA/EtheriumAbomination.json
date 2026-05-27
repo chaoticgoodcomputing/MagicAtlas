@@ -1,0 +1,121 @@
+{
+  "Input": {
+    "Name": "Etherium Abomination",
+    "ManaCost": "{3}{U}{B}",
+    "TypeLine": "Artifact Creature — Horror",
+    "OracleText": "Unearth {1}{U}{B} ({1}{U}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)",
+    "Power": "4",
+    "Toughness": "3",
+    "Colors": [
+      "B",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Etherium Abomination",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Horror",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Horror"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Unearth {1}{U}{B} ({1}{U}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Unearth",
+          "Reminder": {
+            "Text": "({1}{U}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "unearth",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 1
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ]
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "B"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U",
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
