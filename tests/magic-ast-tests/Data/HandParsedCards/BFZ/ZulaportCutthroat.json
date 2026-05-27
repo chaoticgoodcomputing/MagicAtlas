@@ -1,0 +1,114 @@
+{
+  "Input": {
+    "Name": "Zulaport Cutthroat",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Human Rogue Ally",
+    "OracleText": "Whenever Zulaport Cutthroat or another creature you control dies, each opponent loses 1 life and you gain 1 life.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Zulaport Cutthroat",
+    "TypeLine": {
+      "Raw": "Creature — Human Rogue Ally",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Rogue",
+        "Ally"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever Zulaport Cutthroat or another creature you control dies, each opponent loses 1 life and you gain 1 life.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "EachOpponent"
+              }
+            },
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

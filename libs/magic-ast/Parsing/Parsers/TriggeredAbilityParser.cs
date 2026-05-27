@@ -1246,6 +1246,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return loseGainLifeWhereX;
     }
 
+    var opponentLoseYouGain = TryParseEachOpponentLoseAndYouGainLife(trimmed);
+    if (opponentLoseYouGain is not null)
+    {
+      return opponentLoseYouGain;
+    }
+
     var drawAndLose = TryParseEachPlayerDrawAndLoseLife(trimmed);
     if (drawAndLose is not null)
     {
@@ -1340,6 +1346,59 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       {
         Effects = creates,
         IsOptional = false,
+      },
+    };
+  }
+
+  /// <summary>
+  /// Drain composite: "each opponent loses N life and you gain N life." —
+  /// the Zulaport Cutthroat / Drana's Emissary family. Returns a flat
+  /// two-element list [loseLife(EachOpponent, N), gainLife(You, N)].
+  ///
+  /// <para>
+  /// Rule 119.3: losing life reduces the life total. Rule 119.7: gaining life
+  /// increases it. The two effects share the same literal amount N. Simultaneous
+  /// resolution ordering in multiplayer is engine territory.
+  /// </para>
+  /// </summary>
+  internal static IReadOnlyList<Effect>? TryParseEachOpponentLoseAndYouGainLife(string effectText)
+  {
+    var match = Regex.Match(
+      effectText,
+      @"^each\s+opponent\s+loses\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life\s+and\s+you\s+gain\s+(?<gain>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    static int ParseAmount(string raw) => raw.ToLowerInvariant() switch
+    {
+      "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      "four" => 4,
+      "five" => 5,
+      "six" => 6,
+      "seven" => 7,
+      "eight" => 8,
+      "nine" => 9,
+      "ten" => 10,
+      _ => int.Parse(raw),
+    };
+    var loseAmount = ParseAmount(match.Groups["amount"].Value);
+    var gainAmount = ParseAmount(match.Groups["gain"].Value);
+    return new List<Effect>
+    {
+      new LoseLifeEffect
+      {
+        Amount = LiteralQuantity.Of(loseAmount),
+        Player = new ObjectReference { Kind = ObjectReferenceKind.EachOpponent },
+      },
+      new GainLifeEffect
+      {
+        Amount = LiteralQuantity.Of(gainAmount),
+        Player = ObjectReference.You(),
       },
     };
   }

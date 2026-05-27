@@ -1,0 +1,129 @@
+{
+  "Input": {
+    "Name": "Drana's Emissary",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Vampire Cleric",
+    "OracleText": "Flying\nAt the beginning of your upkeep, each opponent loses 1 life and you gain 1 life.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Drana's Emissary",
+    "TypeLine": {
+      "Raw": "Creature — Vampire Cleric",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire",
+        "Cleric"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying\nAt the beginning of your upkeep, each opponent loses 1 life and you gain 1 life.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "flying",
+                  "reach"
+                ]
+              },
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Flying"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfUpkeep",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "EachOpponent"
+              }
+            },
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
