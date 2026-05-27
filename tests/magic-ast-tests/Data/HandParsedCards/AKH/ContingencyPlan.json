@@ -1,0 +1,56 @@
+{
+  "Input": {
+    "Name": "Contingency Plan",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Surveil 5. (Look at the top five cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Contingency Plan",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Surveil 5. (Look at the top five cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "surveil",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 5
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
