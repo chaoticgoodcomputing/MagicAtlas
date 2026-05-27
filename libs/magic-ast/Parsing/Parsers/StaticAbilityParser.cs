@@ -196,6 +196,16 @@ public sealed class StaticAbilityParser : IAbilityParser
       return drawReplacement;
     }
 
+    // "If one or more tokens would be created under your control, those tokens
+    // plus that many [token-def] are created instead." — Rule 614 augmentation
+    // (Doubling Season / Chatterfang shape). OriginalEventOccurs=true: the
+    // original tokens still appear; the replacement ADDS more.
+    var tokenAugmentation = TryParseTokenAugmentationReplacement(clause);
+    if (tokenAugmentation != null)
+    {
+      return tokenAugmentation;
+    }
+
     // "This creature gets +N/+M for each <filter> you control." — self
     // P/T modifier scaled by a count of permanents the controller controls
     // (Rule 613.4c, layer 7c — effects and counters that modify power and/or
@@ -901,6 +911,99 @@ public sealed class StaticAbilityParser : IAbilityParser
     @"^\s*If\s+you\s+would\s+draw\s+a\s+card,\s+draw\s+(?<count>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+cards?\s+instead\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
+
+  /// <summary>
+  /// "If one or more tokens would be created under your control, those tokens
+  /// plus that many &lt;P&gt;/&lt;T&gt; &lt;color&gt; &lt;subtype&gt; creature
+  /// tokens are created instead." — Rule 614.2 augmentation: the original token
+  /// creation still occurs, AND an equal number of additional tokens (per the
+  /// supplied token definition) are also created. Chatterfang shape; Doubling
+  /// Season shares the structural pattern with a tweak ("twice that many").
+  /// </summary>
+  /// <remarks>
+  /// <see cref="MagicAST.AST.Effects.Replacement.ReplacementEffect.OriginalEventOccurs"/>
+  /// is <c>true</c>: the original tokens enter as printed; this rule layers on
+  /// extra Squirrel tokens. The count on the replacement
+  /// <see cref="MagicAST.AST.Effects.TokenCopy.CreateTokenEffect"/> is encoded
+  /// as a <see cref="MagicAST.AST.Quantities.CalculatedQuantity"/> whose
+  /// expression "that many" / operation "match" descriptively refers back to
+  /// the count of the original token-creation event — see the manifest entry
+  /// "Reminder-modifier convention" for the choice rationale.
+  /// </remarks>
+  private static IReadOnlyList<Ability>? TryParseTokenAugmentationReplacement(OracleClause clause)
+  {
+    var match = _tokenAugmentationPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    if (!_tokenAugmentationColorMap.TryGetValue(
+      match.Groups["color"].Value.ToLowerInvariant(),
+      out var colorCode))
+    {
+      return null;
+    }
+
+    var subtypeRaw = match.Groups["subtype"].Value;
+    var subtype = char.ToUpperInvariant(subtypeRaw[0]) + subtypeRaw[1..];
+
+    var replacement = new MagicAST.AST.Effects.TokenCopy.CreateTokenEffect
+    {
+      Count = new MagicAST.AST.Quantities.CalculatedQuantity
+      {
+        Expression = "that many",
+        Operation = "match",
+      },
+      Token = new MagicAST.AST.Effects.TokenDefinition
+      {
+        Power = match.Groups["p"].Value,
+        Toughness = match.Groups["t"].Value,
+        Colors = [colorCode],
+        Types = ["creature"],
+        Subtypes = [subtype],
+        IsCopy = false,
+      },
+    };
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Replacement.ReplacementEffect
+        {
+          Event = new MagicAST.AST.Effects.Replacement.TokenCreationEvent
+          {
+            MinimumQuantity = 1,
+          },
+          OriginalEventOccurs = true,
+          Replacement = replacement,
+        }],
+      },
+    ];
+  }
+
+  // Token-augmentation pattern (Chatterfang / Doubling-Season family). The
+  // capture groups describe the ADDITIONAL token's printed face: power,
+  // toughness, color, and creature subtype. The leading clause ("one or more
+  // tokens would be created under your control") is fixed; per-event variation
+  // (e.g. "twice that many" for Doubling Season) is intentionally NOT covered
+  // here — that's a separate replacement-modifier shape.
+  private static readonly Regex _tokenAugmentationPattern = new(
+    @"^\s*If\s+one\s+or\s+more\s+tokens\s+would\s+be\s+created\s+under\s+your\s+control,\s+those\s+tokens\s+plus\s+that\s+many\s+(?<p>\d+)/(?<t>\d+)\s+(?<color>white|blue|black|red|green)\s+(?<subtype>\w+)\s+creature\s+tokens\s+are\s+created\s+instead\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  private static readonly Dictionary<string, string> _tokenAugmentationColorMap = new(
+    StringComparer.OrdinalIgnoreCase
+  )
+  {
+    ["white"] = "W",
+    ["blue"] = "U",
+    ["black"] = "B",
+    ["red"] = "R",
+    ["green"] = "G",
+  };
 
   /// <summary>
   /// Maps a small-count token (digit or number-word "one".."ten") onto an

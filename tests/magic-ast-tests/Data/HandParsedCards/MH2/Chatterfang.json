@@ -1,0 +1,201 @@
+{
+  "Input": {
+    "Name": "Chatterfang, Squirrel General",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Legendary Creature — Squirrel Warrior",
+    "OracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)\nIf one or more tokens would be created under your control, those tokens plus that many 1/1 green Squirrel creature tokens are created instead.\n{B}, Sacrifice X Squirrels: Target creature gets +X/-X until end of turn.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Chatterfang, Squirrel General",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Squirrel Warrior",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Squirrel",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)\nIf one or more tokens would be created under your control, those tokens plus that many 1/1 green Squirrel creature tokens are created instead.\n{B}, Sacrifice X Squirrels: Target creature gets +X/-X until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "UnblockableCondition": {
+                "ConditionType": "DefendingPlayerControls",
+                "PermanentFilter": {
+                  "Subtypes": [
+                    "Forest"
+                  ]
+                }
+              },
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Forestwalk",
+          "Reminder": {
+            "Text": "(This creature can't be blocked as long as defending player controls a Forest.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "tokenCreation",
+                "MinimumQuantity": 1
+              },
+              "OriginalEventOccurs": true,
+              "Replacement": {
+                "EffectType": "createToken",
+                "Count": {
+                  "QuantityType": "calculated",
+                  "Expression": "that many",
+                  "Operation": "match"
+                },
+                "Token": {
+                  "Power": "1",
+                  "Toughness": "1",
+                  "Colors": [
+                    "G"
+                  ],
+                  "Types": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Squirrel"
+                  ],
+                  "IsCopy": false
+                },
+                "IsOptional": false
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                }
+              ]
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "Subtypes": [
+                  "Squirrel"
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "variable",
+                "Name": "X"
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "variable",
+                "Name": "X"
+              },
+              "ToughnessModifier": {
+                "QuantityType": "calculated",
+                "Expression": "-X",
+                "BaseQuantity": {
+                  "QuantityType": "variable",
+                  "Name": "X"
+                },
+                "Operation": "negate"
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              },
+              "IsOptional": false
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
