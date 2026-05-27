@@ -1,0 +1,69 @@
+{
+  "Input": {
+    "Name": "Decanter of Endless Water",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "You have no maximum hand size.\n{T}: Add one mana of any color.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Decanter of Endless Water",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "You have no maximum hand size.\n{T}: Add one mana of any color.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "noMaxHandSize",
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "",
+              "AnyColor": true
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
