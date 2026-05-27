@@ -7,7 +7,10 @@ using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 
 /// <summary>
-/// "Draw [N] card(s)." with literal and X/Y/Z variable count slots.
+/// "Draw [N] card(s)." and "You draw [N] card(s)." — imperative and
+/// player-subject forms of spell-resolution card draw (Rule 120.1).
+/// The "You draw" form appears as the second sentence in multi-effect spells
+/// like Crushing Disappointment ("Each player loses 2 life. You draw two cards.").
 /// </summary>
 [SpellRule]
 public sealed class DrawCardsSimpleRule : ISpellRule
@@ -17,7 +20,7 @@ public sealed class DrawCardsSimpleRule : ISpellRule
     effect = null;
     var m = Regex.Match(
       text,
-      @"^Draw\s+(?<count>a|one|two|three|four|five|six|seven|eight|nine|ten|\d+|X|Y|Z)\s+cards?$",
+      @"^(?:You\s+)?[Dd]raw\s+(?<count>a|one|two|three|four|five|six|seven|eight|nine|ten|\d+|X|Y|Z)\s+cards?$",
       RegexOptions.IgnoreCase
     );
     if (!m.Success)

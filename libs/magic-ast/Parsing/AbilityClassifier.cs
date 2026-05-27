@@ -259,12 +259,13 @@ public sealed class AbilityClassifier
       };
     }
 
-    // "Each player ..." instructional sentences on the spell (Rule 113.3a) —
-    // discard prompts, life-loss conditionals, etc. Static doesn't fit; the
-    // text is an imperative resolution step.
+    // "Each player ..." / "Each opponent ..." instructional sentences on the
+    // spell (Rule 113.3a) — life-loss, discard prompts, etc. Static doesn't
+    // fit; the text is an imperative resolution step.
+    var trimmedRaw = clause.RawText.TrimStart();
     if (
-      clause.RawText.TrimStart()
-        .StartsWith("Each player", StringComparison.OrdinalIgnoreCase)
+      trimmedRaw.StartsWith("Each player", StringComparison.OrdinalIgnoreCase) ||
+      trimmedRaw.StartsWith("Each opponent", StringComparison.OrdinalIgnoreCase)
     )
     {
       return new ClauseClassification
