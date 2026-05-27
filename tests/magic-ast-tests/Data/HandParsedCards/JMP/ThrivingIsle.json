@@ -1,0 +1,84 @@
+{
+  "Input": {
+    "Name": "Thriving Isle",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "This land enters tapped. As it enters, choose a color other than blue.\n{T}: Add {U}.\n{T}: Add one mana of the chosen color.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Thriving Isle",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": ["Land"]
+    },
+    "Oracle": {
+      "RawText": "This land enters tapped. As it enters, choose a color other than blue.\n{T}: Add {U}.\n{T}: Add one mana of the chosen color.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "entersTapped"
+            },
+            {
+              "EffectType": "chooseColorOnEntry",
+              "Restriction": "other than blue"
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{U}",
+              "AnyColor": false
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "unparsed",
+              "SourceSpan": {
+                "Start": 89,
+                "Length": 34
+              },
+              "RawText": "Add one mana of the chosen color."
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
