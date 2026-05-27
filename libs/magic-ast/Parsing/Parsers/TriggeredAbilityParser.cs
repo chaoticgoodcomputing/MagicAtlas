@@ -583,6 +583,22 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
+    // DealsCombatDamageToPlayer trigger: "Whenever this creature deals combat damage to a player".
+    // Combat damage step: Rule 510 (Combat Damage Step). A triggered ability with
+    // TriggerEvent.DealsCombatDamageToPlayer fires whenever the named source deals
+    // combat damage to a player (Rule 603.6). The recipient class ("a player",
+    // "an opponent", "any player") is implied by the enum value; the Filter captures
+    // the subject (what is dealing the damage). Rule 122 (counters) governs the
+    // typical effect — put a +1/+1 counter on it.
+    if (lower.Contains("deals combat damage"))
+    {
+      var combatDamage = TryParseDealsCombatDamageTrigger(triggerText, timing);
+      if (combatDamage is not null)
+      {
+        return combatDamage;
+      }
+    }
+
     // BecomesTarget trigger: "When this creature becomes the target of a spell or ability".
     // Triggered-ability machinery: Rule 603.1-603.2. The "becomes the target" relationship
     // is defined in Rule 115.1 (Targets — an object becomes a target when a spell or ability
@@ -691,6 +707,44 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     {
       Timing = timing,
       Event = TriggerEvent.Attacks,
+      Filter = filter,
+    };
+  }
+
+  /// <summary>
+  /// "Whenever [subject] deals combat damage to (a player|an opponent|any player)" —
+  /// emits <see cref="TriggerEvent.DealsCombatDamageToPlayer"/> (Rule 510 — Combat
+  /// Damage Step; Rule 603.6 — triggered abilities). The recipient class is implied
+  /// by the enum value; the Filter captures the subject (what is dealing the damage).
+  /// </summary>
+  private static TriggerCondition? TryParseDealsCombatDamageTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    var lower = triggerText.ToLowerInvariant();
+
+    // Require a player-class recipient: "to a player", "to an opponent", "to any player".
+    if (
+      !lower.Contains("to a player")
+      && !lower.Contains("to an opponent")
+      && !lower.Contains("to any player")
+    )
+    {
+      return null;
+    }
+
+    // Subject is the thing doing the dealing: "this creature", self-by-name, etc.
+    var filter = ParseObjectFilter(triggerText);
+    if (filter == null)
+    {
+      return null;
+    }
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.DealsCombatDamageToPlayer,
       Filter = filter,
     };
   }
