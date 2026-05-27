@@ -1035,9 +1035,19 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       characteristics.Add("targeting this creature");
     }
 
+    // Multicolored qualifier: "a multicolored spell" — Rule 105.5 ("An object is
+    // multicolored if it has two or more colors"). Encoded on IsMulticolored rather
+    // than Colors (which encodes "has any of these colors") to preserve the
+    // two-or-more constraint faithfully.
+    bool? isMulticolored = null;
+    if (Regex.IsMatch(lower, @"\bmulticolored\b"))
+    {
+      isMulticolored = true;
+    }
+
     // Build filter. Suppress CardTypes=["spell"] when no qualifiers were
     // detected and the controller is non-You (matches RhysticStudy's gold).
-    var hasAnyQualifier = characteristics.Count > 0 || colors.Count > 0;
+    var hasAnyQualifier = characteristics.Count > 0 || colors.Count > 0 || isMulticolored == true;
     IReadOnlyList<string>? cardTypes = hasAnyQualifier ? new List<string> { "spell" } : null;
 
     var filter = new ObjectFilter
@@ -1045,6 +1055,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       CardTypes = cardTypes,
       Characteristics = characteristics.Count > 0 ? characteristics : null,
       Colors = colors.Count > 0 ? colors : null,
+      IsMulticolored = isMulticolored,
       Controller = controller,
     };
 
