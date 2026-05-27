@@ -1839,6 +1839,153 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // EVOKE KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Evoke [cost]: You may cast this spell for its evoke cost. If you do, it's
+  /// sacrificed when it enters.
+  /// Rule 702.73. Scope: mana-cost parameter (all known printings).
+  /// The sacrifice-on-entry semantics are engine territory — MAST records the
+  /// keyword's presence and cost only, mirroring the Dash/Plot/Ninjutsu pattern.
+  /// </summary>
+  public static KeywordDefinition Evoke { get; } =
+    new()
+    {
+      Name = "Evoke",
+      RuleReference = "702.73",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Evoke",
+        Effects = [new EvokeEffect
+        {
+          Cost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SPECTACLE KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Spectacle [cost]: You may cast this spell for its spectacle cost if an
+  /// opponent lost life this turn.
+  /// Rule 702.136. Scope: mana-cost parameter (all known printings).
+  /// The opponent-lost-life precondition and alternative-cast semantics are
+  /// engine territory — MAST records the keyword's presence and cost only,
+  /// mirroring the Madness/Evoke alternative-cost pattern.
+  /// </summary>
+  public static KeywordDefinition Spectacle { get; } =
+    new()
+    {
+      Name = "Spectacle",
+      RuleReference = "702.136",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Spectacle",
+        Effects = [new SpectacleEffect
+        {
+          Cost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // REPLICATE KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Replicate [cost]: When you cast this spell, copy it for each time you
+  /// paid its replicate cost. You may choose new targets for the copies.
+  /// Rule 702.57. Scope: mana-cost parameter (all known printings).
+  /// The per-payment copy-creation and target-selection are engine territory
+  /// — MAST records the keyword's presence and cost only, mirroring the
+  /// Buyback/Conspire copy-spell pattern.
+  /// </summary>
+  public static KeywordDefinition Replicate { get; } =
+    new()
+    {
+      Name = "Replicate",
+      RuleReference = "702.57",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Replicate",
+        Effects = [new ReplicateEffect
+        {
+          Cost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TRIBUTE KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Tribute N: As this creature enters, an opponent of your choice may put
+  /// N +1/+1 counters on it. If they don't, a triggered ability fires.
+  /// Rule 702.102. MAST records the keyword and its integer value; the
+  /// opponent-choice, counter-placement, and conditional ETB semantics are
+  /// engine territory.
+  /// </summary>
+  public static KeywordDefinition Tribute { get; } =
+    new()
+    {
+      Name = "Tribute",
+      RuleReference = "702.102",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Tribute",
+        Effects = [new TributeEffect
+        {
+          Value = ParseIntValue("Tribute", parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // AMPLIFY KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Amplify N: As this creature enters, put a +1/+1 counter on it for each
+  /// [creature type] card you reveal in your hand.
+  /// Rule 702.37. MAST records the keyword and its integer value; the
+  /// creature-type-reveal and counter-placement semantics are engine territory.
+  /// Integer-parameterized keyword; mirrors the Bushido/Modular/Backup family.
+  /// </summary>
+  public static KeywordDefinition Amplify { get; } =
+    new()
+    {
+      Name = "Amplify",
+      RuleReference = "702.37",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Amplify",
+        Effects = [new AmplifyEffect
+        {
+          Value = ParseIntValue("Amplify", parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // CONSPIRE KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -2021,6 +2168,11 @@ public static class KeywordDefinitions
       Prepared,
       DoctorsCompanion,
       Firebending,
+      Evoke,
+      Spectacle,
+      Replicate,
+      Tribute,
+      Amplify,
       // More keywords can be added here as needed
     ];
 

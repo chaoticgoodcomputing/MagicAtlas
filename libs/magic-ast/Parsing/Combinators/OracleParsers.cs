@@ -2879,6 +2879,179 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Evoke {cost}" keyword.
+  /// Pattern: "Evoke" mana-symbol+ [reminder]
+  /// Rule 702.73. "You may cast this spell for its evoke cost. If you do,
+  /// it's sacrificed when it enters." MAST records the keyword and the evoke
+  /// cost; the sacrifice-on-entry semantics are engine territory. Mirrors the
+  /// Dash/Plot/Ninjutsu mana-cost pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Evoke = (
+    from keyword in Keyword("Evoke")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Evoke",
+      Effects = [new EvokeEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Spectacle {cost}" keyword.
+  /// Pattern: "Spectacle" mana-symbol+ [reminder]
+  /// Rule 702.136. "You may cast this spell for its spectacle cost if an
+  /// opponent lost life this turn." MAST records the keyword and the spectacle
+  /// cost; the opponent-lost-life precondition and alternative-cast semantics
+  /// are engine territory. Mirrors the Madness/Evoke alternative-cost pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Spectacle = (
+    from keyword in Keyword("Spectacle")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Spectacle",
+      Effects = [new SpectacleEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Replicate {cost}" keyword.
+  /// Pattern: "Replicate" mana-symbol+ [reminder]
+  /// Rule 702.57. "When you cast this spell, copy it for each time you paid
+  /// its replicate cost. You may choose new targets for the copies." MAST
+  /// records the keyword and the replicate cost; the per-payment copy-creation
+  /// and target-selection are engine territory. Mirrors the Buyback/Conspire
+  /// copy-spell pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Replicate = (
+    from keyword in Keyword("Replicate")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Replicate",
+      Effects = [new ReplicateEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Tribute N" keyword.
+  /// Pattern: "Tribute" number [reminder]
+  /// Rule 702.102. "As this creature enters, an opponent of your choice may
+  /// put N +1/+1 counters on it." MAST records the keyword and its integer
+  /// value; the opponent-choice, counter-placement, and conditional ETB
+  /// semantics are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Tribute = (
+    from keyword in Keyword("Tribute")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Tribute",
+      Effects = [new TributeEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Amplify N" keyword.
+  /// Pattern: "Amplify" number [reminder]
+  /// Rule 702.37. "As this creature enters, put a +1/+1 counter on it for
+  /// each [creature type] card you reveal in your hand." MAST records the
+  /// keyword and its integer value; the creature-type-reveal and
+  /// counter-placement semantics are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/> and
+  /// <see cref="Modular"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Amplify = (
+    from keyword in Keyword("Amplify")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Amplify",
+      Effects = [new AmplifyEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
   #region Composite Parsers
 
   /// <summary>
@@ -3051,7 +3224,12 @@ public static class OracleParsers
       .Or(Afterlife.Try())
       .Or(Warp.Try())
       .Or(Devour.Try())
-      .Or(Firebending.Try());
+      .Or(Firebending.Try())
+      .Or(Evoke.Try())
+      .Or(Spectacle.Try())
+      .Or(Replicate.Try())
+      .Or(Tribute.Try())
+      .Or(Amplify.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
