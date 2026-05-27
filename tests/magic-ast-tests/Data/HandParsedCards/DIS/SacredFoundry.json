@@ -1,0 +1,77 @@
+{
+  "Input": {
+    "Name": "Sacred Foundry",
+    "ManaCost": "",
+    "TypeLine": "Land — Mountain Plains",
+    "OracleText": "({T}: Add {R} or {W}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Sacred Foundry",
+    "TypeLine": {
+      "Raw": "Land — Mountain Plains",
+      "Types": [
+        "Land"
+      ],
+      "Subtypes": [
+        "Mountain",
+        "Plains"
+      ]
+    },
+    "Oracle": {
+      "RawText": "({T}: Add {R} or {W}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{R} or {W}"
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "payLifeOnEntry",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "IsOptional": true,
+              "IfYouDoNot": {
+                "EffectType": "entersTapped"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
+      }
+    ]
+  }
+}

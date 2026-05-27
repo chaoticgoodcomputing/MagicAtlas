@@ -307,6 +307,19 @@ public sealed class StaticAbilityParser : IAbilityParser
       return entersTapped;
     }
 
+    // "As this [permanent] enters, you may pay N life. If you don't, it
+    // enters tapped." — Shockland pattern (Rule 614.1c as-enters static
+    // replacement). Emits a <see cref="PayLifeOnEntryEffect"/> with
+    // IsOptional=true and IfYouDoNot=EntersTappedEffect. Placed after
+    // TryParseEntersTapped so the bare "This land enters tapped" shape gets
+    // first look — the painland shape is distinguished by its leading
+    // "As this ..." preamble and is unambiguous.
+    var painland = TryParsePainland(clause);
+    if (painland != null)
+    {
+      return painland;
+    }
+
     // "This (creature|land|permanent) can't block." — Rule 509.1c blocker-side
     // restriction. Full declarative sentence, not a keyword token, so no
     // KeywordSource is set. Mirrors TryParseEntersTapped in structure.
@@ -2519,6 +2532,60 @@ public sealed class StaticAbilityParser : IAbilityParser
   private static readonly Regex _entersTappedPattern = new(
     @"^\s*This\s+(?:permanent|land|creature|artifact|enchantment|spell)\s+enters\s+tapped"
     + @"(?:\s+unless\s+(?<condition>[^.]+?))?\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "As this [permanent] enters, you may pay N life. If you don't, it
+  /// enters tapped." — Shockland-pattern as-enters static (Rule 614.1c).
+  /// Emits a <see cref="PayLifeOnEntryEffect"/> with
+  /// <see cref="IOptionalEffect.IsOptional"/> = true and
+  /// <see cref="IOptionalEffect.IfYouDoNot"/> = <see cref="EntersTappedEffect"/>.
+  ///
+  /// <para>Why a dedicated effect rather than extending <c>EntersTappedEffect</c>:
+  /// the surface verb in the oracle text is "pay N life on entry" — that's
+  /// the optional action. The enters-tapped consequence is the negative
+  /// branch via the reusable <see cref="IOptionalEffect.IfYouDoNot"/>
+  /// machinery, keeping the AST descriptively faithful to what the oracle
+  /// line says.</para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParsePainland(OracleClause clause)
+  {
+    var match = _painlandPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var amountText = match.Groups["amount"].Value.ToLowerInvariant();
+    if (!TryParseSmallCount(amountText, out var amount))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new PayLifeOnEntryEffect
+        {
+          Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount),
+          IsOptional = true,
+          IfYouDoNot = new EntersTappedEffect(),
+        }],
+      },
+    ];
+  }
+
+  // Matches "As this [permanent-type] enters, you may pay N life. If you don't,
+  // it enters tapped." The permanent-type noun is open-ended (creature/artifact/
+  // enchantment/land/permanent) so the same parser surface covers any future
+  // non-land printings using the shape. The life amount is a small-count token
+  // (digit or number-word "one".."ten") to share the existing
+  // <see cref="TryParseSmallCount"/> vocabulary with sibling parsers.
+  // The closing period is optional for minor formatting variants.
+  private static readonly Regex _painlandPattern = new(
+    @"^\s*As\s+this\s+(?:permanent|land|creature|artifact|enchantment)\s+enters,\s+you\s+may\s+pay\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life\.\s+If\s+you\s+don'?t,\s+it\s+enters\s+tapped\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

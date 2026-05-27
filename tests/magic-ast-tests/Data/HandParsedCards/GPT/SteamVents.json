@@ -1,0 +1,77 @@
+{
+  "Input": {
+    "Name": "Steam Vents",
+    "ManaCost": "",
+    "TypeLine": "Land — Island Mountain",
+    "OracleText": "({T}: Add {U} or {R}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [
+      "R",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Steam Vents",
+    "TypeLine": {
+      "Raw": "Land — Island Mountain",
+      "Types": [
+        "Land"
+      ],
+      "Subtypes": [
+        "Island",
+        "Mountain"
+      ]
+    },
+    "Oracle": {
+      "RawText": "({T}: Add {U} or {R}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{U} or {R}"
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "payLifeOnEntry",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "IsOptional": true,
+              "IfYouDoNot": {
+                "EffectType": "entersTapped"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "R"
+        ]
+      }
+    ]
+  }
+}
