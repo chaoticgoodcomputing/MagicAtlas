@@ -496,6 +496,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       "until end of turn",
       "for each",
       "surveil",
+      "transform",
     ];
     foreach (var s in starters)
     {

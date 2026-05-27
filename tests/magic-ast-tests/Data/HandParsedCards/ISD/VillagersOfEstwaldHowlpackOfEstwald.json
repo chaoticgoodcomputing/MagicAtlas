@@ -1,0 +1,222 @@
+{
+  "Input": {
+    "Name": "Villagers of Estwald // Howlpack of Estwald",
+    "TypeLine": "Creature — Human Werewolf // Creature — Werewolf",
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [],
+    "Id": "6d9f2ef1-1a3c-4b8d-9e7f-3a2c1d4e5f6b",
+    "Layout": "transform",
+    "CardFaces": [
+      {
+        "Name": "Villagers of Estwald",
+        "ManaCost": "{1}{G}{G}",
+        "TypeLine": "Creature — Human Werewolf",
+        "OracleText": "At the beginning of each upkeep, if a player cast two or more spells last turn, transform this creature.",
+        "Power": "2",
+        "Toughness": "2",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Name": "Howlpack of Estwald",
+        "ManaCost": "",
+        "TypeLine": "Creature — Werewolf",
+        "OracleText": "Trample\nAt the beginning of each upkeep, if no spells were cast last turn, transform this creature.",
+        "Power": "5",
+        "Toughness": "5",
+        "Colors": [
+          "G"
+        ]
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Villagers of Estwald // Howlpack of Estwald",
+    "TypeLine": {
+      "Raw": "Creature — Human Werewolf // Creature — Werewolf",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Werewolf",
+        "//",
+        "Creature",
+        "—",
+        "Werewolf"
+      ]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "layout",
+        "Layout": "transform"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Villagers of Estwald",
+        "TypeLine": {
+          "Raw": "Creature — Human Werewolf",
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Human",
+            "Werewolf"
+          ]
+        },
+        "Oracle": {
+          "RawText": "At the beginning of each upkeep, if a player cast two or more spells last turn, transform this creature.",
+          "Abilities": [
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "At",
+                "Event": "BeginningOfUpkeep"
+              },
+              "InterveningIf": {
+                "Text": "a player cast two or more spells last turn"
+              },
+              "Effects": [
+                {
+                  "EffectType": "transform",
+                  "Target": {
+                    "Kind": "Self"
+                  },
+                  "IsOptional": false
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{1}{G}{G}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "G"
+                ]
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "G"
+                ]
+              }
+            ],
+            "ManaValue": 3,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 2,
+              "Raw": "2"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 2,
+              "Raw": "2"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Howlpack of Estwald",
+        "TypeLine": {
+          "Raw": "Creature — Werewolf",
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Werewolf"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Trample\nAt the beginning of each upkeep, if no spells were cast last turn, transform this creature.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "trample",
+                  "IsOptional": false
+                }
+              ],
+              "KeywordSource": "Trample"
+            },
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "At",
+                "Event": "BeginningOfUpkeep"
+              },
+              "InterveningIf": {
+                "Text": "no spells were cast last turn"
+              },
+              "Effects": [
+                {
+                  "EffectType": "transform",
+                  "Target": {
+                    "Kind": "Self"
+                  },
+                  "IsOptional": false
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "colors",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 5,
+              "Raw": "5"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 5,
+              "Raw": "5"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
