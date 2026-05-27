@@ -17,10 +17,8 @@
     "Name": "Bound in Silence",
     "TypeLine": {
       "Raw": "Kindred Enchantment — Rebel Aura",
-      "Supertypes": [
-        "Kindred"
-      ],
       "Types": [
+        "Kindred",
         "Enchantment"
       ],
       "Subtypes": [
