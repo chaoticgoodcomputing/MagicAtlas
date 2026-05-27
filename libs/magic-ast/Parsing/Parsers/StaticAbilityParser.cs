@@ -173,6 +173,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return drawReplacement;
     }
 
+    // "This creature gets +N/+M for each <filter> you control." — self
+    // P/T modifier scaled by a count of permanents the controller controls
+    // (Rule 613.1c, layer 7C). PowerModifier or ToughnessModifier is a
+    // CountQuantity whose CountOf captures the filter + "you control" as a
+    // free-text phrase; the zero side uses LiteralQuantity.Of(0).
+    var selfPTForEach = TryParseSelfPTForEach(clause);
+    if (selfPTForEach != null)
+    {
+      return selfPTForEach;
+    }
+
     // "Enchanted creature gets +N/+N." — anthem-style Aura P/T grant.
     // No Duration: the modifier persists while the Aura is attached (Rule
     // 303/702.5). Descriptive shape on EnchantedOrEquipped with literal
@@ -437,6 +448,82 @@ public sealed class StaticAbilityParser : IAbilityParser
 
   private static readonly Regex _anthemModifyPTPattern = new(
     @"^\s*(?:Enchanted|Equipped)\s+creature\s+gets\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "This creature gets +N/+M for each &lt;filter&gt; you control." —
+  /// self-referential P/T modifier scaled by a count of permanents the
+  /// controller controls (Rule 613.1c, layer 7C). The per-count increment
+  /// must be 1 for both power and toughness sides — cards with multipliers
+  /// other than 1 are not covered by this surface.
+  ///
+  /// <para>
+  /// The modifier uses a <see cref="MagicAST.AST.Quantities.CountQuantity"/>
+  /// whose <c>CountOf</c> is the filter noun-phrase followed by "you control"
+  /// (verbatim from the oracle line). The zero side uses a
+  /// <see cref="MagicAST.AST.Quantities.LiteralQuantity"/> of 0.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseSelfPTForEach(OracleClause clause)
+  {
+    var match = _selfPTForEachPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var psign = match.Groups["psign"].Value;
+    var p = int.Parse(match.Groups["p"].Value);
+    var tsign = match.Groups["tsign"].Value;
+    var t = int.Parse(match.Groups["t"].Value);
+
+    var power = psign == "-" ? -p : p;
+    var toughness = tsign == "-" ? -t : t;
+
+    // Only handle multiplier-1 increments. Multiplier > 1 is a different
+    // family shape and should fall through to the fallback parser.
+    if (Math.Abs(power) > 1 || Math.Abs(toughness) > 1)
+    {
+      return null;
+    }
+
+    // The oracle fragment after "for each" and before the period is the
+    // filter description; the "you control" suffix is already part of the
+    // oracle text and is included verbatim in CountOf.
+    var filterPhrase = match.Groups["filter"].Value.Trim();
+    // filterPhrase is the noun phrase between "for each" and the period;
+    // it already ends with "you control" (captured from the regex).
+    var countOf = filterPhrase;
+
+    MagicAST.AST.Quantities.Quantity powerModifier = power == 0
+      ? MagicAST.AST.Quantities.LiteralQuantity.Of(0)
+      : new MagicAST.AST.Quantities.CountQuantity { CountOf = countOf };
+
+    MagicAST.AST.Quantities.Quantity toughnessModifier = toughness == 0
+      ? MagicAST.AST.Quantities.LiteralQuantity.Of(0)
+      : new MagicAST.AST.Quantities.CountQuantity { CountOf = countOf };
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new ModifyPTEffect
+        {
+          Target = ObjectReference.Self(),
+          PowerModifier = powerModifier,
+          ToughnessModifier = toughnessModifier,
+        }],
+      },
+    ];
+  }
+
+  // "This creature gets +N/+M for each <filter> you control."
+  // Captures the sign and digit for each side, and the complete filter
+  // phrase (including the trailing "you control") between "for each" and
+  // the terminal period.
+  private static readonly Regex _selfPTForEachPattern = new(
+    @"^\s*This\s+creature\s+gets\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\s+for\s+each\s+(?<filter>.+?\s+you\s+control)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
