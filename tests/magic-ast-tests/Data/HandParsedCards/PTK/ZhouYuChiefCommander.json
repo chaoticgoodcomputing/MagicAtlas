@@ -1,0 +1,104 @@
+{
+  "Input": {
+    "Name": "Zhou Yu, Chief Commander",
+    "ManaCost": "{5}{U}{U}",
+    "TypeLine": "Legendary Creature — Human Soldier",
+    "OracleText": "Zhou Yu can't attack unless defending player controls an Island.",
+    "Power": "8",
+    "Toughness": "8",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Zhou Yu, Chief Commander",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Soldier",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Soldier"
+      ],
+      "Supertypes": [
+        "Legendary"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Zhou Yu can't attack unless defending player controls an Island.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantAttack",
+              "IsOptional": false,
+              "UnlessDefendingControls": {
+                "ConditionType": "DefendingPlayerControls",
+                "PermanentFilter": {
+                  "Subtypes": [
+                    "Island"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "8",
+          "Value": 8
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "8",
+          "Value": 8
+        }
+      }
+    ]
+  }
+}
