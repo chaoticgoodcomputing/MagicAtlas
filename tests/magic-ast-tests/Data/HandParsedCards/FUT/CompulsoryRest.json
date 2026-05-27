@@ -1,0 +1,152 @@
+{
+  "Input": {
+    "Name": "Compulsory Rest",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nEnchanted creature can't attack or block.\nEnchanted creature has \"{2}, Sacrifice this creature: You gain 2 life.\"",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Compulsory Rest",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nEnchanted creature can't attack or block.\nEnchanted creature has \"{2}, Sacrifice this creature: You gain 2 life.\"",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantAttack",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "IsOptional": false
+            },
+            {
+              "EffectType": "cantBlock",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "mana",
+                    "Symbols": [
+                      {
+                        "Kind": "generic",
+                        "GenericAmount": 2
+                      }
+                    ]
+                  },
+                  {
+                    "CostType": "sacrifice",
+                    "Filter": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Characteristics": [
+                        "this permanent"
+                      ]
+                    },
+                    "Quantity": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    }
+                  }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "gainLife",
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    },
+                    "IsOptional": false
+                  }
+                ],
+                "IsManaAbility": false
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}
