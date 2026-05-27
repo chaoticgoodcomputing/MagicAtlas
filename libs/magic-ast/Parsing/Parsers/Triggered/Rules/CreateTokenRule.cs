@@ -16,6 +16,15 @@ public sealed class CreateTokenRule : ITriggeredRule
   private static readonly System.Text.RegularExpressions.Regex _foodTokenPattern =
     new(@"^create a Food token\.?$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
+  private static readonly System.Text.RegularExpressions.Regex _treasureTokenPattern =
+    new(@"^create a Treasure token\.?$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+  private static readonly System.Text.RegularExpressions.Regex _clueTokenPattern =
+    new(@"^create a Clue token\.?$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+  private static readonly System.Text.RegularExpressions.Regex _bloodTokenPattern =
+    new(@"^create a Blood token\.?$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
   public bool TryMatch(string text, out Effect? effect)
   {
     effect = null;
@@ -25,7 +34,7 @@ public sealed class CreateTokenRule : ITriggeredRule
     }
 
     // --- Predefined artifact token: Food ---
-    // "create a Food token[.]" — Rule 111.10a, Food subtype.
+    // "create a Food token[.]" — Rule 107.10b, Food subtype.
     // No P/T; reminder text describes the activated ability (engine territory, not modelled here).
     if (_foodTokenPattern.IsMatch(text))
     {
@@ -33,6 +42,42 @@ public sealed class CreateTokenRule : ITriggeredRule
       {
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Food(),
+      };
+      return true;
+    }
+
+    // --- Predefined artifact token: Treasure ---
+    // "create a Treasure token[.]" — Rule 107.10b, Treasure subtype.
+    if (_treasureTokenPattern.IsMatch(text))
+    {
+      effect = new CreateTokenEffect
+      {
+        Count = LiteralQuantity.Of(1),
+        Token = TokenDefinition.Treasure(),
+      };
+      return true;
+    }
+
+    // --- Predefined artifact token: Clue ---
+    // "create a Clue token[.]" — Rule 107.10b, Clue subtype.
+    if (_clueTokenPattern.IsMatch(text))
+    {
+      effect = new CreateTokenEffect
+      {
+        Count = LiteralQuantity.Of(1),
+        Token = TokenDefinition.Clue(),
+      };
+      return true;
+    }
+
+    // --- Predefined artifact token: Blood ---
+    // "create a Blood token[.]" — Rule 107.10b, Blood subtype.
+    if (_bloodTokenPattern.IsMatch(text))
+    {
+      effect = new CreateTokenEffect
+      {
+        Count = LiteralQuantity.Of(1),
+        Token = TokenDefinition.Blood(),
       };
       return true;
     }
