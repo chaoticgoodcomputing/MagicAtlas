@@ -1,0 +1,71 @@
+{
+  "Input": {
+    "Name": "Igneous Inspiration",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Instant",
+    "OracleText": "Igneous Inspiration deals 3 damage to any target.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Igneous Inspiration",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Igneous Inspiration deals 3 damage to any target.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Source": { "Kind": "Self" },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Target": { "Kind": "AnyTarget" },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Learn",
+          "Effects": [
+            {
+              "EffectType": "learn",
+              "IsOptional": false
+            }
+          ],
+          "Reminder": {
+            "Text": "(You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}

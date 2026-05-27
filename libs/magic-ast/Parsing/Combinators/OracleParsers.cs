@@ -2044,9 +2044,131 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Rebound" keyword.
+  /// Pattern: "Rebound" [reminder]
+  /// Rule 702.88. If you cast this spell from your hand, exile it as it
+  /// resolves; at the beginning of your next upkeep, you may cast this card
+  /// from exile without paying its mana cost. MAST records keyword presence;
+  /// the exile-on-resolution and free-cast-from-exile machinery are engine
+  /// territory. Parameterless keyword marker — mirrors Extort, Ascend.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Rebound = (
+    from kw in Keyword("Rebound")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Rebound",
+      Effects = [new ReboundEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Unleash" keyword.
+  /// Pattern: "Unleash" [reminder]
+  /// Rule 702.97. You may have this creature enter with a +1/+1 counter on it;
+  /// it can't block as long as it has a +1/+1 counter on it. MAST records
+  /// keyword presence; the optional counter-on-entry and can't-block
+  /// restriction are engine territory. Parameterless keyword marker.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Unleash = (
+    from kw in Keyword("Unleash")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Unleash",
+      Effects = [new UnleashEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Learn" keyword.
+  /// Pattern: "Learn" ["." or end] [reminder]
+  /// Rule 702.148. A keyword action: you may reveal a Lesson card you own from
+  /// outside the game and put it into your hand, or discard a card to draw a
+  /// card. MAST records keyword presence; the choice semantics are engine
+  /// territory. Parameterless keyword marker — mirrors Extort, Ascend.
+  /// Note: oracle text uses "Learn." (with a trailing period absorbed by the
+  /// sentence tokenizer) followed by the reminder in parentheses.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Learn = (
+    from kw in Keyword("Learn")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Learn",
+      Effects = [new LearnEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Retrace" keyword.
+  /// Pattern: "Retrace" [reminder]
+  /// Rule 702.75. You may cast this card from your graveyard by discarding a
+  /// land card in addition to paying its other costs. MAST records keyword
+  /// presence; the graveyard-cast and discard-land additional-cost mechanics
+  /// are engine territory. Parameterless keyword marker — mirrors Extort, Ascend.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Retrace = (
+    from kw in Keyword("Retrace")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Retrace",
+      Effects = [new RetraceEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
+
+  /// <summary>
+  /// Parser for "Buyback {cost}" keyword.
+  /// Pattern: "Buyback" mana-symbol+ [reminder]
+  /// Rule 702.26. "You may pay an additional [cost] as you cast this spell.
+  /// If you do, put this card into your hand as it resolves." MAST records the
+  /// keyword and the buyback cost; the conditional-hand-return resolution is
+  /// engine territory. Mirrors the Kicker/Flashback/Unearth mana-cost pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Buyback = (
+    from keyword in Keyword("Buyback")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Buyback",
+      Effects = [new BuybackEffect
+      {
+        BuybackCost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
 
   /// <summary>
   /// Parses any simple keyword ability.
@@ -2099,7 +2221,11 @@ public static class OracleParsers
     .Or(Mountainwalk)
     .Or(Plainswalk)
     .Or(Swampwalk)
-    .Or(Extort);
+    .Or(Extort)
+    .Or(Rebound)
+    .Or(Unleash)
+    .Or(Learn)
+    .Or(Retrace);
 
   /// <summary>
   /// Parses any parameterized keyword ability.
@@ -2135,7 +2261,8 @@ public static class OracleParsers
       .Or(Plot.Try())
       .Or(CumulativeUpkeep.Try())
       .Or(Dash.Try())
-      .Or(Ninjutsu.Try());
+      .Or(Ninjutsu.Try())
+      .Or(Buyback.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
