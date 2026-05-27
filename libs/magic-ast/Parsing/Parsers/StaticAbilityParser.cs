@@ -372,6 +372,18 @@ public sealed class StaticAbilityParser : IAbilityParser
       return painland;
     }
 
+    // "As this [permanent] enters, choose a color." — as-enters color-choice
+    // declaration (Rule 614.1c). The controller selects a color at the moment
+    // the permanent enters; subsequent abilities referencing "the chosen color"
+    // are downstream consumers. MAST models only the choice declaration.
+    // Placed after TryParsePainland (same "As this ... enters" preamble) so
+    // the life-payment shape wins when the two patterns share a prefix.
+    var chooseColor = TryParseChooseColorOnEntry(clause);
+    if (chooseColor != null)
+    {
+      return chooseColor;
+    }
+
     // "This (creature|land|permanent) can't block." — Rule 509.1c blocker-side
     // restriction. Full declarative sentence, not a keyword token, so no
     // KeywordSource is set. Mirrors TryParseEntersTapped in structure.
@@ -3620,6 +3632,58 @@ public sealed class StaticAbilityParser : IAbilityParser
   // The closing period is optional for minor formatting variants.
   private static readonly Regex _painlandPattern = new(
     @"^\s*As\s+this\s+(?:permanent|land|creature|artifact|enchantment)\s+enters,\s+you\s+may\s+pay\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life\.\s+If\s+you\s+don'?t,\s+it\s+enters\s+tapped\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "As this [permanent] enters, choose a color." — as-enters color-choice
+  /// declaration (Rule 614.1c). The controller selects a color at the moment
+  /// this permanent enters the battlefield. The optional <c>Restriction</c>
+  /// field captures a qualifier such as "other than blue" when present;
+  /// unrestricted printings ("choose a color.") leave it null.
+  ///
+  /// <para>The optional restriction arm is included here because a pure
+  /// unrestricted pattern would misfire on lines like "choose a color other
+  /// than blue." if the method returned null for the restricted form and left
+  /// them to the fallback. Both shapes are uncommon enough that one method
+  /// covers both without blowing up the method surface.</para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseChooseColorOnEntry(OracleClause clause)
+  {
+    var match = _chooseColorOnEntryPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var restrictionGroup = match.Groups["restriction"];
+    string? restriction = restrictionGroup.Success
+      ? restrictionGroup.Value.Trim()
+      : null;
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new ChooseColorOnEntryEffect
+        {
+          Restriction = restriction,
+        }],
+      },
+    ];
+  }
+
+  // Matches "As this [permanent-type] enters, choose a color[.]" with an
+  // optional restriction clause "other than <color>". The permanent-type noun
+  // is open-ended (creature/artifact/enchantment/land/permanent/it) so the
+  // same parser surface covers all oracle printings. The restriction group
+  // is optional; unrestricted "choose a color" printings leave it null.
+  // The leading "As it" variant handles the Thriving Isle shape where the
+  // "This land enters tapped." sentence precedes "As it enters, choose a
+  // color other than blue." on the same oracle line — but that combined shape
+  // is handled separately; this pattern covers the standalone line only.
+  private static readonly Regex _chooseColorOnEntryPattern = new(
+    @"^\s*As\s+this\s+(?:permanent|land|creature|artifact|enchantment)\s+enters,\s+choose\s+a\s+color(?:\s+(?<restriction>other\s+than\s+[a-z]+?))?\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
