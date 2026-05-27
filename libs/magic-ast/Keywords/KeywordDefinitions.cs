@@ -662,6 +662,37 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // CUMULATIVE UPKEEP KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Cumulative upkeep [cost]: At the beginning of your upkeep, put an age counter
+  /// on this permanent, then sacrifice it unless you pay its upkeep cost for each
+  /// age counter on it.
+  /// Rule 702.24. Category is Triggered because the comp-rules expansion is a
+  /// triggered ability that fires at the beginning of the controller's upkeep.
+  /// The age-counter-scaling and sacrifice-unless-pay semantics are engine
+  /// territory — MAST records the keyword's presence and the cost parameter only.
+  /// </summary>
+  public static KeywordDefinition CumulativeUpkeep { get; } =
+    new()
+    {
+      Name = "Cumulative upkeep",
+      RuleReference = "702.24",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Cumulative upkeep",
+        Effects = [new CumulativeUpkeepEffect
+        {
+          Cost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -696,6 +727,7 @@ public static class KeywordDefinitions
       Mentor,
       Saddle,
       Megamorph,
+      CumulativeUpkeep,
       // More keywords can be added here as needed
     ];
 

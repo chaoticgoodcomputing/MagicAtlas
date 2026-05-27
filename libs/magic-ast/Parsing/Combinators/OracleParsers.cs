@@ -1623,6 +1623,52 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Cumulative upkeep {cost}" keyword.
+  /// Pattern: "Cumulative" "upkeep" mana-symbol+ [reminder]
+  /// Rule 702.24. "At the beginning of your upkeep, put an age counter on this
+  /// permanent, then sacrifice it unless you pay its upkeep cost for each age
+  /// counter on it." MAST records the keyword and the cumulative upkeep cost;
+  /// the upkeep-trigger, age-counter-scaling, and sacrifice-unless-pay semantics
+  /// are engine territory. Mirrors the Echo/Kicker/Bestow/Unearth/Plot pattern,
+  /// extended for a multi-word keyword via sequential Keyword() combinators.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> CumulativeUpkeep = (
+    from cumulative in Keyword("Cumulative")
+    from upkeep in Keyword("upkeep")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Cumulative upkeep",
+      Effects = [new CumulativeUpkeepEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -1699,7 +1745,8 @@ public static class OracleParsers
       .Or(Echo.Try())
       .Or(Kicker.Try())
       .Or(Unearth.Try())
-      .Or(Plot.Try());
+      .Or(Plot.Try())
+      .Or(CumulativeUpkeep.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
