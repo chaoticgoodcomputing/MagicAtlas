@@ -1,0 +1,62 @@
+{
+  "Input": {
+    "Name": "Peek",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Look at target player's hand.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Peek",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Look at target player's hand.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "lookAtCards",
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["player"]
+                }
+              },
+              "Count": {
+                "QuantityType": "derived",
+                "DerivedFrom": "CardsInHand"
+              },
+              "Zone": "Hand"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
