@@ -596,6 +596,44 @@ public static class KeywordDefinitions
       },
     };
 
+  /// <summary>
+  /// Daybound: found on the front faces of day/night double-faced cards.
+  /// Rule 702.145b. MAST records the keyword's presence and phase; the
+  /// day/night transformation rules (Rule 731) are engine territory.
+  /// </summary>
+  public static KeywordDefinition Daybound { get; } =
+    new()
+    {
+      Name = "Daybound",
+      RuleReference = "702.145",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Daybound",
+        Effects = [new DayNightEffect { Phase = DayNightPhase.Daybound }],
+      },
+    };
+
+  /// <summary>
+  /// Nightbound: found on the back faces of day/night double-faced cards.
+  /// Rule 702.145e. MAST records the keyword's presence and phase; the
+  /// day/night transformation rules (Rule 731) are engine territory.
+  /// </summary>
+  public static KeywordDefinition Nightbound { get; } =
+    new()
+    {
+      Name = "Nightbound",
+      RuleReference = "702.145",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Nightbound",
+        Effects = [new DayNightEffect { Phase = DayNightPhase.Nightbound }],
+      },
+    };
+
   // ═══════════════════════════════════════════════════════════════════════════
   // KICKER KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════

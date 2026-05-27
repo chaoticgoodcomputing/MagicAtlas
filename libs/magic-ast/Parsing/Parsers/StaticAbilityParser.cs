@@ -2891,6 +2891,28 @@ public sealed class StaticAbilityParser : IAbilityParser
         KeywordSource = "Hexproof",
         Effects = [new MagicAST.AST.Effects.Keyword.HexproofEffect()],
       },
+      // Daybound (Rule 702.145b). Found on front faces of day/night DFCs. MAST
+      // records the keyword's presence and phase; the day/night transformation
+      // rules (Rule 731) are engine territory.
+      "daybound" => new StaticAbility
+      {
+        KeywordSource = "Daybound",
+        Effects = [new MagicAST.AST.Effects.Keyword.DayNightEffect
+        {
+          Phase = MagicAST.AST.Effects.Keyword.DayNightPhase.Daybound,
+        }],
+      },
+      // Nightbound (Rule 702.145e). Found on back faces of day/night DFCs. MAST
+      // records the keyword's presence and phase; the day/night transformation
+      // rules (Rule 731) are engine territory.
+      "nightbound" => new StaticAbility
+      {
+        KeywordSource = "Nightbound",
+        Effects = [new MagicAST.AST.Effects.Keyword.DayNightEffect
+        {
+          Phase = MagicAST.AST.Effects.Keyword.DayNightPhase.Nightbound,
+        }],
+      },
       _ => null,
     };
   }

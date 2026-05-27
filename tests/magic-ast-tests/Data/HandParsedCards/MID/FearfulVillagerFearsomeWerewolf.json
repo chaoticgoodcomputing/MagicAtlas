@@ -1,0 +1,238 @@
+{
+  "Input": {
+    "Name": "Fearful Villager // Fearsome Werewolf",
+    "TypeLine": "Creature — Human Werewolf // Creature — Werewolf",
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Daybound",
+      "Nightbound",
+      "Menace"
+    ],
+    "Id": "5eb3a08e-1d31-4ab9-854f-a86b060696ec",
+    "Layout": "transform",
+    "CardFaces": [
+      {
+        "Name": "Fearful Villager",
+        "ManaCost": "{2}{R}",
+        "TypeLine": "Creature — Human Werewolf",
+        "OracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nDaybound (If a player casts no spells during their own turn, it becomes night next turn.)",
+        "Power": "2",
+        "Toughness": "3",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Name": "Fearsome Werewolf",
+        "ManaCost": "",
+        "TypeLine": "Creature — Werewolf",
+        "OracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nNightbound (If a player casts at least two spells during their own turn, it becomes day next turn.)",
+        "Power": "4",
+        "Toughness": "3",
+        "Colors": [
+          "R"
+        ]
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Fearful Villager // Fearsome Werewolf",
+    "TypeLine": {
+      "Raw": "Creature — Human Werewolf // Creature — Werewolf",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Werewolf",
+        "//",
+        "Creature",
+        "—",
+        "Werewolf"
+      ]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "layout",
+        "Layout": "transform"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Fearful Villager",
+        "TypeLine": {
+          "Raw": "Creature — Human Werewolf",
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Human",
+            "Werewolf"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Menace (This creature can't be blocked except by two or more creatures.)\nDaybound (If a player casts no spells during their own turn, it becomes night next turn.)",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "evasion",
+                  "CanBeBlockedBy": {
+                    "CardTypes": [
+                      "creature"
+                    ]
+                  },
+                  "MinimumBlockers": 2,
+                  "IsOptional": false
+                }
+              ],
+              "KeywordSource": "Menace",
+              "Reminder": {
+                "Text": "(This creature can't be blocked except by two or more creatures.)"
+              }
+            },
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "dayNight",
+                  "Phase": "Daybound",
+                  "IsOptional": false
+                }
+              ],
+              "KeywordSource": "Daybound",
+              "Reminder": {
+                "Text": "(If a player casts no spells during their own turn, it becomes night next turn.)"
+              }
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{2}{R}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "R"
+                ]
+              }
+            ],
+            "ManaValue": 3,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 2,
+              "Raw": "2"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 3,
+              "Raw": "3"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Fearsome Werewolf",
+        "TypeLine": {
+          "Raw": "Creature — Werewolf",
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Werewolf"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Menace (This creature can't be blocked except by two or more creatures.)\nNightbound (If a player casts at least two spells during their own turn, it becomes day next turn.)",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "evasion",
+                  "CanBeBlockedBy": {
+                    "CardTypes": [
+                      "creature"
+                    ]
+                  },
+                  "MinimumBlockers": 2,
+                  "IsOptional": false
+                }
+              ],
+              "KeywordSource": "Menace",
+              "Reminder": {
+                "Text": "(This creature can't be blocked except by two or more creatures.)"
+              }
+            },
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "dayNight",
+                  "Phase": "Nightbound",
+                  "IsOptional": false
+                }
+              ],
+              "KeywordSource": "Nightbound",
+              "Reminder": {
+                "Text": "(If a player casts at least two spells during their own turn, it becomes day next turn.)"
+              }
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "colors",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 4,
+              "Raw": "4"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 3,
+              "Raw": "3"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
