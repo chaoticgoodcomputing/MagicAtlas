@@ -9,10 +9,17 @@ using MagicAST.AST.Quantities;
 /// "create [article] [P/T] [colors] [subtypes] creature token [with ...]" — Rule 111.
 /// Also handles predefined artifact tokens (Food, Treasure, Clue, Blood) which
 /// have no P/T and whose activated ability is reminder text only (Rule 107.10b).
+/// Handles the optional "you may" prefix (Rule 116.1b) by setting IsOptional = true
+/// on the resulting CreateTokenEffect.
 /// </summary>
 [TriggeredRule]
 public sealed class CreateTokenRule : ITriggeredRule
 {
+  // Matches optional "you may" prefix before "create ...".
+  // Rule 116.1b: a player "may" perform an action as an optional choice.
+  private static readonly System.Text.RegularExpressions.Regex _youMayPrefix =
+    new(@"^you\s+may\s+", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
   private static readonly System.Text.RegularExpressions.Regex _foodTokenPattern =
     new(@"^create a Food token\.?$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
@@ -33,69 +40,84 @@ public sealed class CreateTokenRule : ITriggeredRule
       return false;
     }
 
+    // Strip optional "you may" prefix (Rule 116.1b). Track it so the produced
+    // effect carries IsOptional = true to signal the player has a choice.
+    var isOptional = false;
+    var createText = text;
+    var youMayMatch = _youMayPrefix.Match(text);
+    if (youMayMatch.Success)
+    {
+      isOptional = true;
+      createText = text[youMayMatch.Length..];
+    }
+
     // --- Predefined artifact token: Food ---
     // "create a Food token[.]" — Rule 107.10b, Food subtype.
     // No P/T; reminder text describes the activated ability (engine territory, not modelled here).
-    if (_foodTokenPattern.IsMatch(text))
+    if (_foodTokenPattern.IsMatch(createText))
     {
       effect = new CreateTokenEffect
       {
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Food(),
+        IsOptional = isOptional,
       };
       return true;
     }
 
     // --- Predefined artifact token: Treasure ---
     // "create a Treasure token[.]" — Rule 107.10b, Treasure subtype.
-    if (_treasureTokenPattern.IsMatch(text))
+    if (_treasureTokenPattern.IsMatch(createText))
     {
       effect = new CreateTokenEffect
       {
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Treasure(),
+        IsOptional = isOptional,
       };
       return true;
     }
 
     // --- Predefined artifact token: Clue ---
     // "create a Clue token[.]" — Rule 107.10b, Clue subtype.
-    if (_clueTokenPattern.IsMatch(text))
+    if (_clueTokenPattern.IsMatch(createText))
     {
       effect = new CreateTokenEffect
       {
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Clue(),
+        IsOptional = isOptional,
       };
       return true;
     }
 
     // --- Predefined artifact token: Blood ---
     // "create a Blood token[.]" — Rule 107.10b, Blood subtype.
-    if (_bloodTokenPattern.IsMatch(text))
+    if (_bloodTokenPattern.IsMatch(createText))
     {
       effect = new CreateTokenEffect
       {
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Blood(),
+        IsOptional = isOptional,
       };
       return true;
     }
 
-    var (_, count) = TriggeredRuleHelpers.ParseArticle(text);
-    var powerToughness = TriggeredRuleHelpers.ParsePowerToughness(text);
+    var (_, count) = TriggeredRuleHelpers.ParseArticle(createText);
+    var powerToughness = TriggeredRuleHelpers.ParsePowerToughness(createText);
     if (powerToughness == null)
     {
       return false;
     }
-    var colors = TriggeredRuleHelpers.ParseColors(text);
-    var subtypes = TriggeredRuleHelpers.ParseCreatureSubtypes(text);
+    var colors = TriggeredRuleHelpers.ParseColors(createText);
+    var subtypes = TriggeredRuleHelpers.ParseCreatureSubtypes(createText);
     if (subtypes.Count == 0)
     {
       return false;
     }
 
-    var abilityNames = TriggeredRuleHelpers.ParseTokenAbilities(text);
+    var abilityNames = TriggeredRuleHelpers.ParseTokenAbilities(createText);
     IReadOnlyList<Ability>? tokenAbilities = null;
     if (abilityNames.Count > 0)
     {
@@ -126,6 +148,7 @@ public sealed class CreateTokenRule : ITriggeredRule
         Subtypes = subtypes,
         Abilities = tokenAbilities,
       },
+      IsOptional = isOptional,
     };
     return true;
   }
