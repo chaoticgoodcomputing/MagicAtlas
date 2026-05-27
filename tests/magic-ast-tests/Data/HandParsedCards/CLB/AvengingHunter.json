@@ -1,0 +1,81 @@
+{
+  "Input": {
+    "Name": "Avenging Hunter",
+    "ManaCost": "{4}{G}",
+    "TypeLine": "Creature — Dragon Ranger",
+    "OracleText": "Trample\nWhen this creature enters, you take the initiative.",
+    "Power": "5",
+    "Toughness": "4",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Avenging Hunter",
+    "TypeLine": {
+      "Raw": "Creature — Dragon Ranger",
+      "Types": ["Creature"],
+      "Subtypes": ["Dragon", "Ranger"]
+    },
+    "Oracle": {
+      "RawText": "Trample\nWhen this creature enters, you take the initiative.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "trample"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "takeInitiative"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
