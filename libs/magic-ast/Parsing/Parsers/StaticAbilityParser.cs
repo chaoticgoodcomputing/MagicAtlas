@@ -420,14 +420,15 @@ public sealed class StaticAbilityParser : IAbilityParser
       return entersTappedAndChooseColor;
     }
 
-    // "This [permanent/land/...] enters tapped [unless condition]." and
-    // "If [condition], this [permanent] enters tapped." — Rule 614 replacement-effect
+    // "This [permanent/land/...] enters tapped [unless condition].",
+    // "If [condition], this [permanent] enters tapped.", and
+    // "Creatures your opponents control enter tapped." — Rule 614 replacement-effect
     // property recorded as a static-ability-attached <see cref="EntersTappedEffect"/>.
-    // The fastland/checkland "unless" shape and the slow-land "if" shape both route
-    // here; polarity is distinguished by <c>EntryConditionIsPositive</c>.
+    // The fastland/checkland "unless" shape, the slow-land "if" shape, and the
+    // opponent-scoped creature shape all route here. Self-shapes leave
+    // <see cref="EntersTappedEffect.Scope"/> null; the opponent-creatures shape
+    // sets Scope to <c>{ CardTypes: ["creature"], Controller: "Opponent" }</c>.
     // No KeywordSource: the oracle text is a full sentence, not a keyword token.
-    // Placed last in the chain because the sentence shape is unambiguous and
-    // won't compete with any keyword-dispatch path above.
     var entersTapped = TryParseEntersTapped(clause);
     if (entersTapped != null)
     {
@@ -4076,6 +4077,30 @@ public sealed class StaticAbilityParser : IAbilityParser
       ];
     }
 
+    // Arm 3: "Creatures your opponents control enter tapped." — Blind Obedience
+    // creature variant (Rule 614). The ability is scoped to creatures controlled
+    // by opponents rather than the source permanent itself. The scope is encoded
+    // as an ObjectFilter on EntersTappedEffect.Scope so downstream consumers can
+    // distinguish "this card enters tapped" (Scope=null) from "opponent creatures
+    // enter tapped" (Scope.Controller=Opponent).
+    if (_entersTappedOpponentsCreaturesPattern.IsMatch(clause.RawText))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new EntersTappedEffect
+          {
+            Scope = new ObjectFilter
+            {
+              CardTypes = ["creature"],
+              Controller = ControllerFilter.Opponent,
+            },
+          }],
+        },
+      ];
+    }
+
     return null;
   }
 
@@ -4097,6 +4122,15 @@ public sealed class StaticAbilityParser : IAbilityParser
   // the "unless" negation shape above.
   private static readonly Regex _entersTappedIfConditionPattern = new(
     @"^\s*If\s+(?<condition>[^,]+),\s+this\s+(?:permanent|land|creature|artifact|enchantment|spell)\s+enters\s+tapped\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Arm 3: "Creatures your opponents control enter tapped." — opponent-scoped
+  // creature enters-tapped static (Blind Obedience creature variant). The
+  // oracle text is a full declarative sentence. Anchored at both ends to
+  // prevent false matches on lines that are part of larger oracle paragraphs.
+  private static readonly Regex _entersTappedOpponentsCreaturesPattern = new(
+    @"^\s*Creatures\s+your\s+opponents\s+control\s+enter\s+tapped\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
