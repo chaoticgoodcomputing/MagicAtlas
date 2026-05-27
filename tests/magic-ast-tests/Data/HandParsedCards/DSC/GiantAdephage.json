@@ -1,0 +1,118 @@
+{
+  "Input": {
+    "Name": "Giant Adephage",
+    "ManaCost": "{5}{G}{G}",
+    "TypeLine": "Creature — Insect",
+    "OracleText": "Trample\nWhenever this creature deals combat damage to a player, create a token that's a copy of this creature.",
+    "Power": "7",
+    "Toughness": "7",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Trample"
+    ],
+    "Id": "893b22a7-b46c-4473-8d88-11ddf4406af1",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Giant Adephage",
+    "TypeLine": {
+      "Raw": "Creature — Insect",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Insect"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Trample\nWhenever this creature deals combat damage to a player, create a token that's a copy of this creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "trample"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "Self"
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        }
+      }
+    ]
+  }
+}
