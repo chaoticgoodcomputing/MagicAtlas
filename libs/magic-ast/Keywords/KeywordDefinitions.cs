@@ -984,6 +984,34 @@ public static class KeywordDefinitions
       },
     };
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // COMBAT DAMAGE TRIGGERED COUNTER KEYWORDS (Renown, Bloodthirst, Sunburst, Fabricate, Ingest)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Renown N: When this creature deals combat damage to a player, if it isn't
+  /// renowned, put N +1/+1 counters on it and it becomes renowned.
+  /// Rule 702.112. MAST records the keyword and its integer value; the trigger,
+  /// renowned designation, and counter-placement are engine territory.
+  /// </summary>
+  public static KeywordDefinition Renown { get; } =
+    new()
+    {
+      Name = "Renown",
+      RuleReference = "702.112",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Renown",
+        Effects = [new RenownEffect
+        {
+          Value = ParseIntValue("Renown", parameter),
+        }],
+      },
+    };
+
   /// <summary>
   /// Retrace: You may cast this card from your graveyard by discarding a land
   /// card in addition to paying its other costs.
@@ -1042,6 +1070,94 @@ public static class KeywordDefinitions
       {
         KeywordSource = "Learn",
         Effects = [new LearnEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Bloodthirst N: If an opponent was dealt damage this turn, this creature enters
+  /// with N +1/+1 counters on it.
+  /// Rule 702.54. MAST records the keyword and its integer value; the condition check
+  /// and counter-placement on entry are engine territory.
+  /// </summary>
+  public static KeywordDefinition Bloodthirst { get; } =
+    new()
+    {
+      Name = "Bloodthirst",
+      RuleReference = "702.54",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Bloodthirst",
+        Effects = [new BloodthirstEffect
+        {
+          Value = ParseIntValue("Bloodthirst", parameter),
+        }],
+      },
+    };
+
+  /// <summary>
+  /// Sunburst: This permanent enters with a +1/+1 counter on it for each color of
+  /// mana spent to cast it. (Non-creature artifacts use charge counters instead.)
+  /// Rule 702.44. Parameterless keyword marker — MAST records keyword presence;
+  /// the color-counting and counter-placement are engine territory.
+  /// </summary>
+  public static KeywordDefinition Sunburst { get; } =
+    new()
+    {
+      Name = "Sunburst",
+      RuleReference = "702.44",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Sunburst",
+        Effects = [new SunburstEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Fabricate N: When this creature enters, put N +1/+1 counters on it or create
+  /// N 1/1 colorless Servo artifact creature tokens.
+  /// Rule 702.118. MAST records the keyword and its integer value; the enters trigger,
+  /// choice between counters and tokens, and token creation are engine territory.
+  /// </summary>
+  public static KeywordDefinition Fabricate { get; } =
+    new()
+    {
+      Name = "Fabricate",
+      RuleReference = "702.118",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Fabricate",
+        Effects = [new FabricateEffect
+        {
+          Value = ParseIntValue("Fabricate", parameter),
+        }],
+      },
+    };
+
+  /// <summary>
+  /// Ingest: Whenever this creature deals combat damage to a player, that player
+  /// exiles the top card of their library.
+  /// Rule 702.115. Parameterless keyword marker — MAST records keyword presence;
+  /// the combat-damage trigger and exile-top-of-library action are engine territory.
+  /// </summary>
+  public static KeywordDefinition Ingest { get; } =
+    new()
+    {
+      Name = "Ingest",
+      RuleReference = "702.115",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Ingest",
+        Effects = [new IngestEffect()],
       },
     };
 
@@ -1126,6 +1242,11 @@ public static class KeywordDefinitions
       Retrace,
       Unleash,
       Learn,
+      Renown,
+      Bloodthirst,
+      Sunburst,
+      Fabricate,
+      Ingest,
       // More keywords can be added here as needed
     ];
 

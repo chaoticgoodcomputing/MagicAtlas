@@ -1,0 +1,148 @@
+{
+  "Input": {
+    "Name": "Fathom Feeder",
+    "ManaCost": "{U}{B}",
+    "TypeLine": "Creature — Eldrazi Drone",
+    "OracleText": "Devoid (This card has no color.)\nDeathtouch\nIngest (Whenever this creature deals combat damage to a player, that player exiles the top card of their library.)\n{3}{U}{B}: Draw a card. Each opponent exiles the top card of their library.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [],
+    "ColorIdentity": [
+      "B",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Fathom Feeder",
+    "TypeLine": {
+      "Raw": "Creature — Eldrazi Drone",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Eldrazi",
+        "Drone"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Devoid (This card has no color.)\nDeathtouch\nIngest (Whenever this creature deals combat damage to a player, that player exiles the top card of their library.)\n{3}{U}{B}: Draw a card. Each opponent exiles the top card of their library.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Devoid",
+          "Effects": [
+            {
+              "EffectType": "devoid",
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Deathtouch",
+          "Effects": [
+            {
+              "EffectType": "deathtouch",
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Ingest",
+          "Effects": [
+            {
+              "EffectType": "ingest",
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "EachOpponent"
+              },
+              "IsOptional": false
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

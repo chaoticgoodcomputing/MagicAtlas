@@ -1581,6 +1581,69 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Renown N" keyword.
+  /// Pattern: "Renown" number [reminder]
+  /// Rule 702.112. A triggered keyword ability: when this creature deals combat
+  /// damage to a player, if it isn't renowned, put N +1/+1 counters on it and
+  /// it becomes renowned. MAST records the keyword and its integer value; the
+  /// trigger, renowned designation, and counter-placement are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Renown = (
+    from keyword in Keyword("Renown")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Renown",
+      Effects = [new RenownEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Bloodthirst N" keyword.
+  /// Pattern: "Bloodthirst" number [reminder]
+  /// Rule 702.54. A static ability: if an opponent was dealt damage this turn,
+  /// this creature enters with N +1/+1 counters on it. MAST records the keyword
+  /// and its integer value; the condition check and counter-placement are engine
+  /// territory. Integer-parameterized keyword; mirrors <see cref="Bushido"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Bloodthirst = (
+    from keyword in Keyword("Bloodthirst")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Bloodthirst",
+      Effects = [new BloodthirstEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Fabricate N" keyword.
+  /// Pattern: "Fabricate" number [reminder]
+  /// Rule 702.118. A triggered keyword ability: when this creature enters, put N
+  /// +1/+1 counters on it or create N 1/1 colorless Servo artifact creature tokens.
+  /// MAST records the keyword and its integer value; the enters trigger, choice
+  /// between counters and tokens, and token creation are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/> and
+  /// <see cref="Backup"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Fabricate = (
+    from keyword in Keyword("Fabricate")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Fabricate",
+      Effects = [new FabricateEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Equip {cost}" keyword.
   /// Pattern: "Equip" mana-symbol+ [reminder]
   /// Rule 702.6. An activated ability that attaches this Equipment to a creature
@@ -2065,6 +2128,25 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Sunburst" keyword.
+  /// Pattern: "Sunburst" [reminder]
+  /// Rule 702.44. This permanent enters with a +1/+1 counter on it for each
+  /// color of mana spent to cast it. MAST records keyword presence; the
+  /// color-counting and counter-placement are engine territory.
+  /// Parameterless keyword marker; mirrors EvolveEffect and AscendEffect.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Sunburst = (
+    from kw in Keyword("Sunburst")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Sunburst",
+      Effects = [new SunburstEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Unleash" keyword.
   /// Pattern: "Unleash" [reminder]
   /// Rule 702.97. You may have this creature enter with a +1/+1 counter on it;
@@ -2119,6 +2201,25 @@ public static class OracleParsers
     {
       KeywordSource = "Retrace",
       Effects = [new RetraceEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Ingest" keyword.
+  /// Pattern: "Ingest" [reminder]
+  /// Rule 702.115. Whenever this creature deals combat damage to a player,
+  /// that player exiles the top card of their library. MAST records keyword
+  /// presence; the combat-damage trigger and exile-top-of-library action are
+  /// engine territory. Parameterless keyword marker.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Ingest = (
+    from kw in Keyword("Ingest")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Ingest",
+      Effects = [new IngestEffect()],
       Reminder = reminder,
     }
   );
@@ -2225,7 +2326,9 @@ public static class OracleParsers
     .Or(Rebound)
     .Or(Unleash)
     .Or(Learn)
-    .Or(Retrace);
+    .Or(Retrace)
+    .Or(Sunburst)
+    .Or(Ingest);
 
   /// <summary>
   /// Parses any parameterized keyword ability.
@@ -2240,6 +2343,9 @@ public static class OracleParsers
       .Or(Toxic.Try())
       .Or(Modular.Try())
       .Or(Backup.Try())
+      .Or(Renown.Try())
+      .Or(Bloodthirst.Try())
+      .Or(Fabricate.Try())
       .Or(PartnerWith.Try())
       .Or(Partner.Try())
       .Or(ChooseABackground.Try())

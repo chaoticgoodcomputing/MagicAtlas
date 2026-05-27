@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Carnage Wurm",
+    "ManaCost": "{6}{G}",
+    "TypeLine": "Creature — Wurm",
+    "OracleText": "Bloodthirst 3 (If an opponent was dealt damage this turn, this creature enters with three +1/+1 counters on it.)\nTrample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Carnage Wurm",
+    "TypeLine": {
+      "Raw": "Creature — Wurm",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Wurm"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Bloodthirst 3 (If an opponent was dealt damage this turn, this creature enters with three +1/+1 counters on it.)\nTrample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Bloodthirst",
+          "Effects": [
+            {
+              "EffectType": "bloodthirst",
+              "Value": 3,
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "trample",
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{6}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 6
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        }
+      }
+    ]
+  }
+}
