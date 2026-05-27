@@ -7,16 +7,32 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Combat-block permission (blocker-side): oracle text states that a creature
-/// "can block an additional creature each combat." Rule 509.1a (the defending
-/// player may declare more than one blocker for the same or additional attackers
-/// when an effect explicitly grants the extra-blocker permission).
+/// "can block an additional creature each combat" or "can block any number of
+/// creatures." Rule 509.1a (the defending player may declare more than one
+/// blocker for the same or additional attackers when an effect explicitly grants
+/// the extra-blocker permission).
 /// </summary>
 /// <remarks>
 /// MAST describes what the oracle text says, not what the rules engine
 /// enforces. The presence of this effect on a <c>StaticAbility</c> records that
-/// the card's oracle line grants the named object permission to block one more
-/// creature per combat phase than it otherwise could; it does not model the
+/// the card's oracle line grants the named object permission to block more
+/// creatures per combat phase than it otherwise could; it does not model the
 /// runtime application of that permission during the declare-blockers step.
+///
+/// <para>
+/// <see cref="IsUnlimited"/> distinguishes the two oracle-text shapes:
+/// <list type="bullet">
+///   <item><description>
+///     <b>true</b> — "can block any number of creatures" (Guard Gomazoa pattern);
+///     no numeric limit is stated in the oracle text.
+///   </description></item>
+///   <item><description>
+///     <b>false</b> (default) — "can block an additional creature each combat"
+///     (Foriysian Brigade, Two-Headed Giant of Foriys, etc.). Omitted from JSON
+///     when false so existing fixtures require no changes.
+///   </description></item>
+/// </list>
+/// </para>
 ///
 /// <para>
 /// "Each combat" vs. "this turn" timing distinction:
@@ -49,6 +65,16 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 [OracleEffect("blockAdditional")]
 public sealed record BlockAdditionalEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 {
+  /// <summary>
+  /// When <c>true</c>, the oracle text grants permission to block any number
+  /// of creatures ("This creature can block any number of creatures." —
+  /// Guard Gomazoa pattern). When <c>false</c> (default), the text grants
+  /// permission to block one additional creature each combat. Omitted from
+  /// JSON when false so existing fixtures require no changes.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool IsUnlimited { get; init; }
+
   /// <summary>
   /// The object the permission applies to. Null means the static ability's
   /// controlling object (the printed card itself); set for Aura/Equipment
