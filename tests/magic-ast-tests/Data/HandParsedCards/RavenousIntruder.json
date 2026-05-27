@@ -1,0 +1,86 @@
+{
+  "Input": {
+    "Name": "Ravenous Intruder",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature — Gremlin",
+    "OracleText": "Sacrifice an artifact: This creature gets +2/+2 until end of turn.",
+    "Power": "1",
+    "Toughness": "2",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Ravenous Intruder",
+    "TypeLine": {
+      "Raw": "Creature — Gremlin",
+      "Types": ["Creature"],
+      "Subtypes": ["Gremlin"]
+    },
+    "Oracle": {
+      "RawText": "Sacrifice an artifact: This creature gets +2/+2 until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["artifact"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "IsOptional": false,
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}

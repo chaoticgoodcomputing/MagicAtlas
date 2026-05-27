@@ -1,0 +1,86 @@
+{
+  "Input": {
+    "Name": "Nantuko Husk",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Zombie Insect",
+    "OracleText": "Sacrifice a creature: This creature gets +2/+2 until end of turn.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Nantuko Husk",
+    "TypeLine": {
+      "Raw": "Creature — Zombie Insect",
+      "Types": ["Creature"],
+      "Subtypes": ["Zombie", "Insect"]
+    },
+    "Oracle": {
+      "RawText": "Sacrifice a creature: This creature gets +2/+2 until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "IsOptional": false,
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}

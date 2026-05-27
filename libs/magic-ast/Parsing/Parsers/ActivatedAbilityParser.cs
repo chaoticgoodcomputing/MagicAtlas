@@ -517,6 +517,27 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       };
     }
 
+    // Shape C: "This creature gets <mod>/<mod> until end of turn" —
+    // self-referential P/T modifier as an activated-ability effect (Rule 613.4c).
+    // Subject is the ability's source permanent itself, encoded as ObjectReference.Self().
+    // Covers "Sacrifice a [filter]: This creature gets +N/+M until end of turn."
+    // and the discard-cost variant "Discard a card: This creature gets +N/+M until end of turn."
+    var selfEotMatch = System.Text.RegularExpressions.Regex.Match(
+      trimmed,
+      $@"^This\s+creature\s+gets\s+{pGroup}/{tGroup}\s+until\s+end\s+of\s+turn$",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase
+    );
+    if (selfEotMatch.Success)
+    {
+      return new ModifyPTEffect
+      {
+        Target = ObjectReference.Self(),
+        PowerModifier = ParseSignedModifier(selfEotMatch.Groups["p"].Value),
+        ToughnessModifier = ParseSignedModifier(selfEotMatch.Groups["t"].Value),
+        Duration = new UntilEndOfTurnDuration(),
+      };
+    }
+
     return null;
   }
 
@@ -1044,6 +1065,13 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     else if (lower.Contains("this land"))
     {
       filter = new ObjectFilter { CardTypes = ["land"], Characteristics = ["this permanent"] };
+    }
+    else if (lower.Contains(" land") || lower.EndsWith("land"))
+    {
+      // "Sacrifice a land" / "Sacrifice another land" — land is a card type (Rule 205.3a),
+      // not a subtype. Must precede the creature/artifact branches to avoid misrouting via
+      // the generic fallback regex which would emit Subtypes: ["land"] instead.
+      filter = new ObjectFilter { CardTypes = ["land"] };
     }
     else if (Regex.IsMatch(lower, @"\btoken\b") && !lower.Contains("creature") && !lower.Contains("artifact"))
     {

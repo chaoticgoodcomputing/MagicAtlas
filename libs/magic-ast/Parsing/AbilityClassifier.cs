@@ -849,8 +849,10 @@ public sealed class AbilityClassifier
       return false;
     }
 
-    // Check for mana/tap symbols before colon
+    // Check for mana/tap symbols before colon, or non-mana cost verbs
+    // ("Sacrifice …" / "Discard …") which are written as Word tokens.
     var hasCostToken = false;
+    var hasNonManaCostVerb = false;
     for (var i = 0; i < tokens.Count; i++)
     {
       var token = tokens[i];
@@ -861,7 +863,7 @@ public sealed class AbilityClassifier
         // or if this is an activation keyword pattern
         if (i > 0)
         {
-          return hasCostToken || IsActivationKeyword(tokens, i);
+          return hasCostToken || hasNonManaCostVerb || IsActivationKeyword(tokens, i);
         }
 
         return false;
@@ -871,6 +873,19 @@ public sealed class AbilityClassifier
       if (IsCostToken(token.Kind))
       {
         hasCostToken = true;
+      }
+
+      // Track non-mana cost verbs (Rule 701.9 Discard, Rule 701.21 Sacrifice).
+      // These appear as Word tokens before the colon and are unambiguously
+      // costs rather than effect verbs because they precede the colon separator.
+      if (token.Kind == OracleToken.Word)
+      {
+        var word = token.ToStringValue();
+        if (word.Equals("Sacrifice", StringComparison.OrdinalIgnoreCase)
+          || word.Equals("Discard", StringComparison.OrdinalIgnoreCase))
+        {
+          hasNonManaCostVerb = true;
+        }
       }
 
       // If we hit a trigger timing word, this isn't an activated ability
