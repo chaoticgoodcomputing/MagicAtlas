@@ -2510,14 +2510,21 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// follows the <c>Enchant</c> keyword. Returns null for descriptors the
   /// parser doesn't yet recognise so the fallback path can report the gap.
   /// <para>
-  /// Two shapes are recognised:
+  /// Three shapes are recognised:
   /// <list type="bullet">
   ///   <item>Simple-noun shape: "creature", "land", "permanent", "artifact",
   ///         "enchantment", "planeswalker", "player" — emits a single-element
   ///         <see cref="ObjectFilter.CardTypes"/> list.</item>
-  ///   <item>Disjunctive shape: "typeA or typeB" (e.g. "artifact or creature") —
+  ///   <item>Disjunctive type shape: "typeA or typeB" (e.g. "artifact or creature") —
   ///         emits a two-element <see cref="ObjectFilter.CardTypes"/> list. Both
   ///         named types must be members of the recognised simple-noun set.</item>
+  ///   <item>Color-disjunctive shape: "colorA or colorB creature"
+  ///         (e.g. "red or green creature") — emits an
+  ///         <see cref="ObjectFilter"/> with <c>CardTypes: ["creature"]</c> and a
+  ///         two-element <see cref="ObjectFilter.Colors"/> list encoding the color
+  ///         disjunction (Rule 105 — multiple entries in Colors[] means "has any of
+  ///         these colors"). Color names are mapped to their single-letter Scryfall
+  ///         symbols: white→W, blue→U, black→B, red→R, green→G.</item>
   /// </list>
   /// </para>
   /// </summary>
@@ -2545,7 +2552,7 @@ public sealed class StaticAbilityParser : IAbilityParser
       return new ObjectFilter { CardTypes = [d], Controller = controller };
     }
 
-    // Disjunctive shape: "typeA or typeB" (e.g. "artifact or creature").
+    // Disjunctive type shape: "typeA or typeB" (e.g. "artifact or creature").
     // Both halves must be recognised simple types.
     var orMatch = Regex.Match(d, @"^(?<a>[a-z]+)\s+or\s+(?<b>[a-z]+)$", RegexOptions.IgnoreCase);
     if (orMatch.Success)
@@ -2558,8 +2565,47 @@ public sealed class StaticAbilityParser : IAbilityParser
       }
     }
 
+    // Color-disjunctive shape: "colorA or colorB creature"
+    // (e.g. "red or green creature", "white or blue creature").
+    // Rule 105: multiple entries in Colors[] encode a disjunction — the filter
+    // matches any creature that has at least one of the listed colors.
+    var colorOrMatch = Regex.Match(
+      d,
+      @"^(?<colorA>white|blue|black|red|green)\s+or\s+(?<colorB>white|blue|black|red|green)\s+creature$",
+      RegexOptions.IgnoreCase
+    );
+    if (colorOrMatch.Success)
+    {
+      var colorA = MapColorNameToSymbol(colorOrMatch.Groups["colorA"].Value.ToLowerInvariant());
+      var colorB = MapColorNameToSymbol(colorOrMatch.Groups["colorB"].Value.ToLowerInvariant());
+      if (colorA is not null && colorB is not null)
+      {
+        return new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Colors = [colorA, colorB],
+          Controller = controller,
+        };
+      }
+    }
+
     return null;
   }
+
+  /// <summary>
+  /// Maps a lowercase MTG color name to its single-letter Scryfall symbol.
+  /// Returns null for unrecognised names so callers can fall through to the
+  /// fallback rather than emitting a malformed filter.
+  /// </summary>
+  private static string? MapColorNameToSymbol(string colorName) => colorName switch
+  {
+    "white" => "W",
+    "blue"  => "U",
+    "black" => "B",
+    "red"   => "R",
+    "green" => "G",
+    _       => null,
+  };
 
   /// <summary>
   /// "You control enchanted [type]." — Aura control-steal continuous effect
