@@ -4992,21 +4992,43 @@ public sealed class StaticAbilityParser : IAbilityParser
   );
 
   /// <summary>
-  /// "This creature can block an additional creature each combat." — Rule 509.1a
-  /// extra-blocker permission. Oracle text grants the controlling creature the
-  /// ability to block one more attacker per combat phase than the default of one.
+  /// "This creature can block an additional creature each combat." and
+  /// "This creature can block any number of creatures." — Rule 509.1a
+  /// extra-blocker permission. Covers two oracle-text shapes:
+  /// <list type="bullet">
+  ///   <item><description>
+  ///     <b>Additional (default):</b> grants permission to block one more
+  ///     attacker per combat phase than the default of one. Produces
+  ///     <see cref="BlockAdditionalEffect"/> with <c>IsUnlimited = false</c>.
+  ///   </description></item>
+  ///   <item><description>
+  ///     <b>Unlimited:</b> "This creature can block any number of creatures."
+  ///     (Guard Gomazoa pattern). Produces <see cref="BlockAdditionalEffect"/>
+  ///     with <c>IsUnlimited = true</c>. Rule 509.1a; no cap on blockers
+  ///     declared from this creature.
+  ///   </description></item>
+  /// </list>
   /// Full declarative sentence, so no <c>KeywordSource</c> is set. Mirrors
   /// <see cref="TryParseCantBlock"/> in structure.
   /// <para>
-  /// This handles the self-referential shape ("This creature can block an
-  /// additional creature each combat."). The Equipment/Aura shape ("Equipped/
-  /// Enchanted creature can block an additional creature each combat.") and
-  /// the global shape ("Each creature you control can block an additional
-  /// creature each combat.") are distinct families handled elsewhere.
+  /// Both shapes handle the self-referential form ("This creature …"). The
+  /// Equipment/Aura shape ("Equipped/Enchanted creature …") and the global
+  /// shape ("Each creature you control …") are distinct families handled
+  /// elsewhere.
   /// </para>
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseBlockAdditional(OracleClause clause)
   {
+    if (_blockAnyNumberPattern.IsMatch(clause.RawText))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new BlockAdditionalEffect { IsUnlimited = true }],
+        },
+      ];
+    }
     if (!_blockAdditionalPattern.IsMatch(clause.RawText))
     {
       return null;
@@ -5019,6 +5041,13 @@ public sealed class StaticAbilityParser : IAbilityParser
       },
     ];
   }
+
+  // Matches "This creature can block any number of creatures."
+  // The trailing period is optional for minor formatting variants.
+  private static readonly Regex _blockAnyNumberPattern = new(
+    @"^\s*This\s+creature\s+can\s+block\s+any\s+number\s+of\s+creatures\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   // Matches "This creature can block an additional creature each combat."
   // The trailing period is optional for minor formatting variants.

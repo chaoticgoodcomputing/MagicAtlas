@@ -1,0 +1,105 @@
+{
+  "Input": {
+    "Name": "Guard Gomazoa",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Creature — Jellyfish",
+    "OracleText": "Flying\nThis creature can block any number of creatures.",
+    "Power": "0",
+    "Toughness": "3",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Guard Gomazoa",
+    "TypeLine": {
+      "Raw": "Creature — Jellyfish",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Jellyfish"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying\nThis creature can block any number of creatures.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "flying",
+                  "reach"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "blockAdditional",
+              "IsUnlimited": true,
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
