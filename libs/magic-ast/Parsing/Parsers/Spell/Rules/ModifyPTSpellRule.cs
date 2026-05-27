@@ -10,6 +10,7 @@ using MagicAST.AST.References;
 /// Recognises the bare P/T-modification shape (no keyword conjunction):
 ///   "Target creature gets +N/+M until end of turn."
 ///   "Target creature gets -N/-M until end of turn."
+///   "Target creature gets +X/+0 until end of turn."  — variable X form
 ///   "It gets +N/+M until end of turn."   — pronoun back-reference form
 ///
 /// This is the simple single-effect version. The composite "gets +N/+M and gains
@@ -22,6 +23,7 @@ using MagicAST.AST.References;
 ///   <item>"Target creature gets +4/+4 until end of turn."  (Titanic Growth)</item>
 ///   <item>"Target creature gets -2/-2 until end of turn."  (Disfigure)</item>
 ///   <item>"Target creature gets -3/-3 until end of turn."  (Last Gasp)</item>
+///   <item>"Target creature gets +X/+0 until end of turn."  (Howl from Beyond)</item>
 ///   <item>"It gets +2/+4 until end of turn."              (Inspirit — second sentence)</item>
 /// </list>
 /// </summary>
@@ -30,6 +32,13 @@ public sealed class ModifyPTSpellRule : ISpellRule
 {
   private static readonly Regex _targetCreaturePattern = new(
     @"^Target\s+creature\s+gets\s+(?<p>[+\-]\d+)/(?<t>[+\-]\d+)\s+until\s+end\s+of\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // "Target creature gets +X/+0 until end of turn" — variable X for power, literal for toughness.
+  // Captures: <pvar> = variable name (X/Y/Z), <t> = literal toughness modifier.
+  private static readonly Regex _targetCreatureVariablePattern = new(
+    @"^Target\s+creature\s+gets\s+(?<psign>[+\-])(?<pvar>[XYZ])/(?<t>[+\-]\d+)\s+until\s+end\s+of\s+turn$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -57,6 +66,25 @@ public sealed class ModifyPTSpellRule : ISpellRule
           Filter = new ObjectFilter { CardTypes = ["creature"] },
         },
         PowerModifier = LiteralQuantity.Of(power),
+        ToughnessModifier = LiteralQuantity.Of(toughness),
+        Duration = new UntilEndOfTurnDuration(),
+      };
+      return true;
+    }
+
+    var mv = _targetCreatureVariablePattern.Match(trimmed);
+    if (mv.Success)
+    {
+      var varName = mv.Groups["pvar"].Value.ToUpperInvariant();
+      var toughness = int.Parse(mv.Groups["t"].Value);
+      effect = new ModifyPTEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter { CardTypes = ["creature"] },
+        },
+        PowerModifier = new VariableQuantity { Name = varName },
         ToughnessModifier = LiteralQuantity.Of(toughness),
         Duration = new UntilEndOfTurnDuration(),
       };

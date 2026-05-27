@@ -464,10 +464,12 @@ public sealed class AbilityClassifier
     // ("until end of turn"). The "Target" subject marks this as a one-shot imperative
     // spell effect (Rule 113.3a), not a declarative static. Uses "Target\s+\S+" so
     // it fires on "Target creature" but not on static shapes like "Equipped creature".
+    // Also matches variable-X forms like "+X/+0" where one or both values may be a
+    // spell variable (X/Y/Z) rather than a literal digit sequence.
     if (
       Regex.IsMatch(
         clause.RawText,
-        @"^\s*Target\s+\S+.*?\s+gets\s+[+-]\d+/[+-]\d+",
+        @"^\s*Target\s+\S+.*?\s+gets\s+[+-](?:\d+|[XYZ])/[+-](?:\d+|[XYZ])",
         RegexOptions.IgnoreCase
       )
     )
