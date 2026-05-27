@@ -1,0 +1,50 @@
+{
+  "Input": {
+    "Name": "Ruby Medallion",
+    "ManaCost": "{2}",
+    "TypeLine": "Artifact",
+    "OracleText": "Red spells you cast cost {1} less to cast.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Ruby Medallion",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "Red spells you cast cost {1} less to cast.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 1 }
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": ["spell"],
+            "Colors": ["R"],
+            "Controller": "You"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": [] },
+      { "Kind": "colorIdentity", "ColorIdentity": [] }
+    ]
+  }
+}
