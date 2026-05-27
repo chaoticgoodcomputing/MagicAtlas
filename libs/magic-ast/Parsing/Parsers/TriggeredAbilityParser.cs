@@ -497,6 +497,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       "for each",
       "surveil",
       "transform",
+      "remove",
     ];
     foreach (var s in starters)
     {
@@ -597,6 +598,19 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     if (lower.Contains("enters"))
     {
       return ParseEntersTrigger(triggerText, timing);
+    }
+
+    // AttacksOrBlocks trigger: "Whenever [subject] attacks or blocks" — combined combat trigger
+    // (Rule 508/509). The disjunction is a single oracle clause; emit AttacksOrBlocks so the
+    // two events aren't modelled as separate triggers. Must be tested before the individual
+    // Attacks/Blocks branches so "attacks or blocks" doesn't partially match "attacks".
+    if (lower.Contains("attacks or blocks"))
+    {
+      var attacksOrBlocks = TryParseAttacksOrBlocksTrigger(triggerText, timing);
+      if (attacksOrBlocks is not null)
+      {
+        return attacksOrBlocks;
+      }
     }
 
     // Attack-with trigger: "Whenever you attack with [Name] and another [qualifier] creature"
@@ -816,6 +830,63 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       Event = TriggerEvent.Blocks,
       Filter = filter,
     };
+  }
+
+  /// <summary>
+  /// "Whenever [subject] attacks or blocks" — combined attack/block trigger (Rule 508/509).
+  /// The disjunction is modelled as a single <see cref="TriggerEvent.AttacksOrBlocks"/> event
+  /// rather than two separate triggers; oracle text always prints the conjunction as a single line.
+  /// Subject shapes are the same as the individual Attacks/Blocks triggers.
+  /// </summary>
+  private static TriggerCondition? TryParseAttacksOrBlocksTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    // Strip "or blocks" so ParseObjectFilter sees a clean "attacks" subject phrase.
+    var stripped = Regex.Replace(
+      triggerText,
+      @"\s+or\s+blocks\b",
+      string.Empty,
+      RegexOptions.IgnoreCase
+    );
+    var filter = ParseObjectFilter(stripped);
+    if (filter == null)
+    {
+      // Also try self-by-name with the "attacks or blocks" verb form.
+      if (!IsSelfByNameAttacksOrBlocksTrigger(triggerText))
+      {
+        return null;
+      }
+      filter = new ObjectFilter { CardTypes = ["creature"] };
+    }
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.AttacksOrBlocks,
+      Filter = filter,
+    };
+  }
+
+  /// <summary>
+  /// Detects the "[CardName] attacks or blocks" self-by-name shape, extending
+  /// <see cref="IsSelfByNameTrigger"/> to cover the combined verb "attacks or blocks".
+  /// </summary>
+  private static bool IsSelfByNameAttacksOrBlocksTrigger(string triggerText)
+  {
+    var stripped = Regex.Replace(
+      triggerText.Trim(),
+      @"^(When|Whenever|At)\s+",
+      string.Empty,
+      RegexOptions.IgnoreCase
+    );
+    const string FunctionWords = "of|the|a|an|from|for|to|in|at|with|by|and|or|as";
+    return Regex.IsMatch(
+      stripped,
+      @"^[A-Z][A-Za-z'\-]*(?:\s+(?:[A-Z][A-Za-z'\-]*|" + FunctionWords + @"))*\s+attacks\s+or\s+blocks\b",
+      RegexOptions.CultureInvariant
+    );
   }
 
   /// <summary>
