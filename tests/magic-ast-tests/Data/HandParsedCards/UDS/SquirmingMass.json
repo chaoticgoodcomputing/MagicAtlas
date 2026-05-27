@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Squirming Mass",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Horror",
+    "OracleText": "Fear (This creature can't be blocked except by artifact creatures and/or black creatures.)",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Squirming Mass",
+    "TypeLine": {
+      "Raw": "Creature — Horror",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Horror"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Fear (This creature can't be blocked except by artifact creatures and/or black creatures.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Fear",
+          "Reminder": {
+            "Text": "(This creature can't be blocked except by artifact creatures and/or black creatures.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "artifact",
+                  "black"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

@@ -47,6 +47,31 @@ public static class KeywordDefinitions
     };
 
   /// <summary>
+  /// Fear: This creature can't be blocked except by artifact creatures and/or black creatures.
+  /// Rule 702.36
+  /// </summary>
+  public static KeywordDefinition Fear { get; } =
+    new()
+    {
+      Name = "Fear",
+      RuleReference = "702.36",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Fear",
+        Effects = [new EvasionEffect
+        {
+          CanBeBlockedBy = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Characteristics = ["artifact", "black"],
+          },
+        }],
+      },
+    };
+
+  /// <summary>
   /// Menace: This creature can't be blocked except by two or more creatures.
   /// Rule 702.110. Evasion keyword whose distinguishing feature is a minimum
   /// blocker count rather than a characteristic filter on the blockers.
@@ -540,6 +565,7 @@ public static class KeywordDefinitions
   public static IReadOnlyList<KeywordDefinition> All { get; } =
     [
       Flying,
+      Fear,
       Menace,
       FirstStrike,
       DoubleStrike,
