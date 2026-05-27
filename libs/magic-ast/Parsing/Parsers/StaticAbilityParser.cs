@@ -466,6 +466,20 @@ public sealed class StaticAbilityParser : IAbilityParser
       return noMaxHandSize;
     }
 
+    // "If damage would be dealt to [this creature], prevent that damage.
+    // Remove a +1/+1 counter from [this creature]." — Phantom mechanic
+    // (Judgment, Rule 614 replacement). The subject may be "this creature" or
+    // the card's own name — both are self-references. Emits a StaticAbility
+    // wrapping a ReplacementEffect whose replacement is a CompositeEffect of
+    // PreventDamageEffect (All=true, Target=Self) and RemoveCountersEffect
+    // (1 "+1/+1" counter from Self). OriginalEventOccurs=false: the damage is
+    // fully replaced by the prevention + counter-removal sequence.
+    var phantomDamagePrevention = TryParsePhantomDamagePrevention(clause);
+    if (phantomDamagePrevention != null)
+    {
+      return phantomDamagePrevention;
+    }
+
     return null;
   }
 
@@ -4042,17 +4056,19 @@ public sealed class StaticAbilityParser : IAbilityParser
     ];
   }
 
-  // Matches "This <type> enters with N <counterType> counters on it." where <type> is
-  // creature, artifact, enchantment, land, or permanent; N is a decimal digit,
-  // the variable "X", an English word-count ("one" through "ten"), or the
-  // article "a"/"an" (treated as 1); and <counterType> is either a P/T counter
-  // ("+1/+1", "-1/-1", etc.) or a named counter type (e.g., "charge", "oil",
-  // "loyalty", "javelin" — any single alphanumeric/hyphen/slash token that
-  // immediately precedes "counter(s)").
-  // Handles "counter" and "counters" (singular for N=1) and an optional
-  // trailing period. Rules: 122 (counters), 614.1d (enters-with replacement).
+  // Matches "This <type> enters with N <counterType> counters on it." OR
+  // "[CardName] enters with N <counterType> counters on it." — both "This [type]"
+  // and a named self-reference are valid oracle forms for the same replacement
+  // (Rule 614.1d). The subject prefix is captured liberally as "any non-empty
+  // leading words before 'enters with'", consistent with how MustAttack and
+  // MustBeBlocked treat named self-references (collapsed to Self in the AST).
+  // N is a decimal digit, the variable "X", an English word-count ("one"
+  // through "ten"), or the article "a"/"an" (treated as 1). The counter type
+  // may be a P/T counter ("+1/+1", "-1/-1") or any named counter.
+  // Handles "counter" and "counters" and an optional trailing period.
+  // Rules: 122 (counters), 614.1d (enters-with replacement).
   private static readonly Regex _entersWithCountersPattern = new(
-    @"^\s*This\s+(?<type>creature|artifact|enchantment|land|permanent|Equipment)\s+enters\s+with\s+(?<count>\d+|X|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[\w/+-]+)\s+counters?\s+on\s+it\.?\s*$",
+    @"^\s*\S.+?\s+enters\s+with\s+(?<count>\d+|X|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[\w/+-]+)\s+counters?\s+on\s+it\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -4118,6 +4134,88 @@ public sealed class StaticAbilityParser : IAbilityParser
   // The trailing period is optional for minor formatting variants.
   private static readonly Regex _blockAdditionalPattern = new(
     @"^\s*This\s+creature\s+can\s+block\s+an\s+additional\s+creature\s+each\s+combat\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "If damage would be dealt to [this creature], prevent that damage. Remove a
+  /// +1/+1 counter from [this creature]." — Phantom mechanic (Judgment, Rule 614
+  /// replacement effects). The two-sentence oracle text forms a single static
+  /// ability (both sentences are on one oracle line). The subject may be the literal
+  /// phrase "this creature" or the card's own name — both are self-references and
+  /// are collapsed to <c>Self</c> in the AST, consistent with the MustAttack /
+  /// MustBeBlocked convention.
+  ///
+  /// <para>
+  /// Shape: <see cref="StaticAbility"/> wrapping a <see cref="MagicAST.AST.Effects.Replacement.ReplacementEffect"/>:
+  /// <list type="bullet">
+  ///   <item><c>Event</c>: <see cref="MagicAST.AST.Effects.Replacement.DamageEvent"/> (no source or type filter — any damage to this creature).</item>
+  ///   <item><c>OriginalEventOccurs = false</c>: the damage is fully replaced; it does not occur.</item>
+  ///   <item><c>Replacement</c>: <see cref="MagicAST.AST.Effects.Core.CompositeEffect"/> containing:
+  ///     <list type="bullet">
+  ///       <item><see cref="MagicAST.AST.Effects.Damage.PreventDamageEffect"/> with <c>All = true</c>, <c>Target = Self</c>.</item>
+  ///       <item><see cref="MagicAST.AST.Effects.Counter.RemoveCountersEffect"/> removing 1 "+1/+1" counter from <c>Self</c>.</item>
+  ///     </list>
+  ///   </item>
+  /// </list>
+  /// </para>
+  ///
+  /// <para>
+  /// Rules accuracy note: Rule 614 says this is a "prevention + side effect"
+  /// replacement. The prevention happens "instead of" dealing damage; the counter
+  /// removal is a mandatory consequence of the replacement firing, not a separate
+  /// triggered ability. Modeling both as co-effects inside a single
+  /// <c>CompositeEffect</c> Replacement captures this bundled structure without
+  /// requiring a trigger.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParsePhantomDamagePrevention(OracleClause clause)
+  {
+    if (!_phantomDamagePreventionPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Replacement.ReplacementEffect
+        {
+          Event = new MagicAST.AST.Effects.Replacement.DamageEvent(),
+          OriginalEventOccurs = false,
+          Replacement = new MagicAST.AST.Effects.Core.CompositeEffect
+          {
+            Effects =
+            [
+              new MagicAST.AST.Effects.Damage.PreventDamageEffect
+              {
+                All = true,
+                Target = ObjectReference.Self(),
+              },
+              new MagicAST.AST.Effects.Counter.RemoveCountersEffect
+              {
+                Target = ObjectReference.Self(),
+                CounterType = "+1/+1",
+                Count = MagicAST.AST.Quantities.LiteralQuantity.Of(1),
+              },
+            ],
+          },
+        }],
+      },
+    ];
+  }
+
+  // Matches "If damage would be dealt to [subject], prevent that damage.
+  // Remove a +1/+1 counter from [subject]." — the Phantom mechanic.
+  // The subject before "," is a named self-reference or "this creature" — both
+  // are treated as Self. The two sentences are on a single oracle line.
+  // Subject: any non-comma run of characters (lazy) terminated by a comma.
+  // The same subject name must appear before "Remove a +1/+1 counter from".
+  // We capture the subject to validate it appears in both positions, but
+  // collapse it to Self unconditionally (card-name = self by convention).
+  private static readonly Regex _phantomDamagePreventionPattern = new(
+    @"^\s*If\s+damage\s+would\s+be\s+dealt\s+to\s+(?<subj>.+?),\s*prevent\s+that\s+damage\.\s*Remove\s+a\s+\+1/\+1\s+counter\s+from\s+(?<subj2>.+?)\.\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
