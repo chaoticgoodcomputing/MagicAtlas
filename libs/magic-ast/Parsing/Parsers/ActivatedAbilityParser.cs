@@ -394,6 +394,13 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return new List<Effect> { selfDealsDamage };
     }
 
+    // "[This creature|CardName] deals N damage to target attacking or blocking creature."
+    var selfDamageAttackOrBlock = TryParseSelfDealsDamageToAttackingOrBlockingCreatureEffect(effectPart);
+    if (selfDamageAttackOrBlock != null)
+    {
+      return new List<Effect> { selfDamageAttackOrBlock };
+    }
+
     // Return target [X] from [zone] to the battlefield
     var returnToBf = TryParseReturnToBattlefieldEffect(effectPart);
     if (returnToBf != null)
@@ -774,6 +781,68 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       Amount = LiteralQuantity.Of(amount),
       Source = ObjectReference.Self(),
       Target = new ObjectReference { Kind = ObjectReferenceKind.AnyTarget },
+    };
+  }
+
+  /// <summary>
+  /// "[This creature|CardName] deals N damage to target attacking or blocking creature." —
+  /// activated-ability pattern for archers, ballistas, and similar tap-to-deal-damage
+  /// permanents (Rule 700.4 — "attacking" and "blocking" are combat-status predicates).
+  /// Accepts either the pronoun form ("This creature deals …") or the self-by-name form
+  /// ("Lady Caleria deals …") in the subject slot; both encode the source as
+  /// <see cref="ObjectReference.Self()"/>. The target is a creature with
+  /// <see cref="ObjectFilter.Characteristics"/> = ["attacking or blocking"].
+  /// </summary>
+  private static MagicAST.AST.Effects.Damage.DealDamageEffect? TryParseSelfDealsDamageToAttackingOrBlockingCreatureEffect(
+    string effectText
+  )
+  {
+    var trimmed = effectText.Trim().TrimEnd('.').Trim();
+    var m = Regex.Match(
+      trimmed,
+      @"^(?<subject>This\s+creature|\S.*?)\s+deals?\s+(?<amount>\d+|one|two|three|four|five)\s+damage\s+to\s+target\s+attacking\s+or\s+blocking\s+creature$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    // Accept "This creature" (pronoun self-ref) or a capitalised proper-noun subject
+    // (self-by-name). Reject lowercase pronouns or uncapitalised words to avoid
+    // misrouting other effect phrasings.
+    var subject = m.Groups["subject"].Value;
+    var isThisCreature = subject.Equals("This creature", StringComparison.OrdinalIgnoreCase);
+    var isNamedSelf = subject.Length > 0 && char.IsUpper(subject[0]) && !isThisCreature;
+    if (!isThisCreature && !isNamedSelf)
+    {
+      return null;
+    }
+
+    var rawAmount = m.Groups["amount"].Value.ToLowerInvariant();
+    int amount = rawAmount switch
+    {
+      "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      "four" => 4,
+      "five" => 5,
+      _ => int.Parse(rawAmount),
+    };
+
+    return new MagicAST.AST.Effects.Damage.DealDamageEffect
+    {
+      Amount = LiteralQuantity.Of(amount),
+      Source = ObjectReference.Self(),
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Characteristics = ["attacking or blocking"],
+        },
+      },
     };
   }
 
