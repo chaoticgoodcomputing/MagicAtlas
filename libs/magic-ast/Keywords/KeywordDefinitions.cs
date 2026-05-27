@@ -1088,6 +1088,135 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // SPLIT-CARD KEYWORDS (Fuse)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Fuse: You may cast one or both halves of this card from your hand.
+  /// Rule 702.102. Found on split cards from Dragon's Maze. MAST records the
+  /// keyword's presence; the split-card casting modes and cost-combination
+  /// mechanics are engine territory.
+  /// </summary>
+  public static KeywordDefinition Fuse { get; } =
+    new()
+    {
+      Name = "Fuse",
+      RuleReference = "702.102",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Fuse",
+        Effects = [new FuseEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BARGAIN KEYWORDS (Wilds of Eldraine / WOE)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Bargain: You may sacrifice an artifact, enchantment, or token as you cast
+  /// this spell.
+  /// Rule 702.166. MAST records the keyword's presence; the optional-sacrifice
+  /// additional-cost and "bargained" designation gating conditional effects are
+  /// engine territory.
+  /// </summary>
+  public static KeywordDefinition Bargain { get; } =
+    new()
+    {
+      Name = "Bargain",
+      RuleReference = "702.166",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Bargain",
+        Effects = [new BargainEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SPREE KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Spree: Choose one or more additional costs.
+  /// Rule 702.172. Found on modal spells that require choosing at least one mode
+  /// and paying its additional cost. MAST records the keyword's presence;
+  /// the mode-selection, additional-cost payment, and multi-mode resolution
+  /// mechanics are engine territory.
+  /// </summary>
+  public static KeywordDefinition Spree { get; } =
+    new()
+    {
+      Name = "Spree",
+      RuleReference = "702.172",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Spree",
+        Effects = [new SpreeEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // JOB SELECT KEYWORDS (Final Fantasy)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Job select: When this Equipment enters, create a 1/1 colorless Hero
+  /// creature token, then attach this to it.
+  /// Rule 702.182. Found on Equipment cards from the Final Fantasy set.
+  /// Although mechanically a triggered ability, MAST records it as a keyword
+  /// marker — same approach as Living weapon (702.77); the ETB trigger,
+  /// Hero-token creation, and auto-attach semantics are engine territory.
+  /// </summary>
+  public static KeywordDefinition JobSelect { get; } =
+    new()
+    {
+      Name = "Job select",
+      RuleReference = "702.182",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Job select",
+        Effects = [new JobSelectEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // WARP KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Warp [cost]: You may cast this card from your hand for its warp cost. It
+  /// enters the battlefield tapped.
+  /// Rule 702.185. An alternative-cast keyword. MAST records the keyword and
+  /// the warp cost; the alternative-cast and enters-tapped mechanics are engine
+  /// territory — same approach as Plot (702.170) and Dash (702.109).
+  /// </summary>
+  public static KeywordDefinition Warp { get; } =
+    new()
+    {
+      Name = "Warp",
+      RuleReference = "702.185",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Warp",
+        Effects = [new WarpEffect
+        {
+          Cost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // LIVING WEAPON KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1497,6 +1626,11 @@ public static class KeywordDefinitions
       Hideaway,
       Mobilize,
       StartYourEngines,
+      Fuse,
+      Bargain,
+      Spree,
+      JobSelect,
+      Warp,
       // More keywords can be added here as needed
     ];
 
