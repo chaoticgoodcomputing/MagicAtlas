@@ -10,6 +10,7 @@ using MagicAST.AST.References;
 /// Recognises the mass P/T-modification shape for creature subsets:
 ///   "Creatures you control get +N/+M until end of turn."
 ///   "Creatures you control get -N/-M until end of turn."
+///   "Creatures your opponents control get -N/-M until end of turn."
 ///   "All creatures get +N/+M until end of turn."
 ///   "All creatures get -N/-M until end of turn."
 ///   "Attacking creatures get +N/+M until end of turn."
@@ -21,13 +22,15 @@ using MagicAST.AST.References;
 ///
 /// Examples:
 /// <list type="bullet">
-///   <item>"Creatures you control get +1/+1 until end of turn."  (Charge)</item>
-///   <item>"Creatures you control get +0/+4 until end of turn."  (Bar the Door)</item>
-///   <item>"All creatures get -1/-1 until end of turn."           (Shrivel)</item>
-///   <item>"All creatures get -2/-2 until end of turn."           (Infest)</item>
-///   <item>"All creatures get -4/-4 until end of turn."           (Languish)</item>
-///   <item>"Attacking creatures get +2/+0 until end of turn."     (Army of Allah)</item>
-///   <item>"Blocking creatures get +0/+3 until end of turn."      (Piety)</item>
+///   <item>"Creatures you control get +1/+1 until end of turn."             (Charge)</item>
+///   <item>"Creatures you control get +0/+4 until end of turn."             (Bar the Door)</item>
+///   <item>"All creatures get -1/-1 until end of turn."                     (Shrivel)</item>
+///   <item>"All creatures get -2/-2 until end of turn."                     (Infest)</item>
+///   <item>"All creatures get -4/-4 until end of turn."                     (Languish)</item>
+///   <item>"Attacking creatures get +2/+0 until end of turn."               (Army of Allah)</item>
+///   <item>"Blocking creatures get +0/+3 until end of turn."                (Piety)</item>
+///   <item>"Creatures your opponents control get -1/-1 until end of turn."  (Cower in Fear)</item>
+///   <item>"Creatures your opponents control get -1/-1 until end of turn."  (Make Obsolete)</item>
 /// </list>
 /// </summary>
 [SpellRule]
@@ -35,12 +38,13 @@ public sealed class MassAnthemSpellRule : ISpellRule
 {
   // Named capture group <subj> selects the subject phrase.
   // Subjects handled:
-  //   "All creatures"           → Each, all creatures, no controller filter
-  //   "Creatures you control"   → Each, creature, Controller=You
-  //   "Attacking creatures"     → Each, creature, Characteristics=["attacking"]
-  //   "Blocking creatures"      → Each, creature, Characteristics=["blocking"]
+  //   "All creatures"                        → Each, all creatures, no controller filter
+  //   "Creatures you control"                → Each, creature, Controller=You
+  //   "Creatures your opponents control"     → Each, creature, Controller=Opponent
+  //   "Attacking creatures"                  → Each, creature, Characteristics=["attacking"]
+  //   "Blocking creatures"                   → Each, creature, Characteristics=["blocking"]
   private static readonly Regex _pattern = new(
-    @"^(?<subj>All\s+creatures|Creatures\s+you\s+control|Attacking\s+creatures|Blocking\s+creatures)"
+    @"^(?<subj>All\s+creatures|Creatures\s+you\s+control|Creatures\s+your\s+opponents\s+control|Attacking\s+creatures|Blocking\s+creatures)"
     + @"\s+get\s+(?<p>[+\-]\d+)/(?<t>[+\-]\d+)\s+until\s+end\s+of\s+turn$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
@@ -85,6 +89,15 @@ public sealed class MassAnthemSpellRule : ISpellRule
       {
         CardTypes = ["creature"],
         Controller = ControllerFilter.You,
+      };
+    }
+
+    if (s.Equals("Creatures your opponents control", StringComparison.OrdinalIgnoreCase))
+    {
+      return new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Controller = ControllerFilter.Opponent,
       };
     }
 
