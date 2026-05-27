@@ -626,6 +626,22 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
+    // DealsDamage trigger: "Whenever this creature deals damage" — any damage, not just combat.
+    // Rule 120: Damage. A source deals damage to a permanent or player; this trigger fires
+    // on any instance of that source dealing damage regardless of source type (combat or
+    // noncombat). This is the oracle pattern for lifelink-analog abilities printed before
+    // the lifelink keyword existed (e.g. "Whenever this creature deals damage, you gain
+    // that much life."). The "combat damage" variant is handled above — check only after
+    // the combat-specific branch has failed to match.
+    if (lower.Contains("deals damage") && !lower.Contains("deals combat damage"))
+    {
+      var dealsDamage = TryParseDealsDamageTrigger(triggerText, timing);
+      if (dealsDamage is not null)
+      {
+        return dealsDamage;
+      }
+    }
+
     // BecomesTarget trigger: "When this creature becomes the target of a spell or ability".
     // Triggered-ability machinery: Rule 603.1-603.2. The "becomes the target" relationship
     // is defined in Rule 115.1 (Targets — an object becomes a target when a spell or ability
@@ -772,6 +788,42 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     {
       Timing = timing,
       Event = TriggerEvent.DealsCombatDamageToPlayer,
+      Filter = filter,
+    };
+  }
+
+  /// <summary>
+  /// "Whenever [subject] deals damage" — any damage (Rule 120), not only combat damage.
+  /// Emits <see cref="TriggerEvent.DealsDamage"/>. The subject (filter) captures the
+  /// source dealing damage — typically "this creature" (CardTypes = ["creature"]).
+  /// This pattern covers lifelink-analog oracle text printed before the lifelink keyword
+  /// was introduced ("Whenever this creature deals damage, you gain that much life.").
+  /// </summary>
+  private static TriggerCondition? TryParseDealsDamageTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    var lower = triggerText.ToLowerInvariant();
+
+    // Must contain "deals damage" but must NOT contain "deals combat damage"
+    // (the combat variant is handled by TryParseDealsCombatDamageTrigger above).
+    if (!lower.Contains("deals damage") || lower.Contains("deals combat damage"))
+    {
+      return null;
+    }
+
+    // Subject is the thing doing the dealing: "this creature", self-by-name, etc.
+    var filter = ParseObjectFilter(triggerText);
+    if (filter == null)
+    {
+      return null;
+    }
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.DealsDamage,
       Filter = filter,
     };
   }

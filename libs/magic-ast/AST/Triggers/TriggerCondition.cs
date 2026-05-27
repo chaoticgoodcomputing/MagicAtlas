@@ -80,6 +80,9 @@ public enum TriggerEvent
   /// <summary>A creature deals combat damage to a player</summary>
   DealsCombatDamageToPlayer,
 
+  /// <summary>A source deals damage (any damage, not only combat) — Rule 120</summary>
+  DealsDamage,
+
   // Damage triggers
   /// <summary>Damage is dealt</summary>
   DamageDealt,
