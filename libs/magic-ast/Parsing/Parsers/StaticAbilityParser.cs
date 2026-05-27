@@ -1675,36 +1675,62 @@ public sealed class StaticAbilityParser : IAbilityParser
 
   /// <summary>
   /// Matches "This [permanent] doesn't untap during [possessive] untap step." and
+  /// "Enchanted [type] doesn't untap during its controller's untap step." and
   /// produces a <see cref="StaticAbility"/> wrapping a <see cref="DoesntUntapEffect"/>.
+  /// The enchanted-creature form targets <see cref="ObjectReferenceKind.EnchantedOrEquipped"/>;
+  /// the self-reference form leaves Target null (caller infers Self from context).
+  /// Rule 701.20 (Untap); Rule 303.4 (Aura attachment / enchanted permanent).
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseDoesntUntap(OracleClause clause)
   {
-    var match = Regex.Match(
+    // Self-reference form: "This [type] doesn't untap during [your|its controller's] untap step."
+    var selfMatch = Regex.Match(
       clause.RawText,
       @"^\s*This\s+(?:permanent|creature|artifact|enchantment|land)\s+doesn'?t\s+untap\s+during\s+(?<possessive>your|its\s+controller'?s)\s+untap\s+step\.?\s*$",
       RegexOptions.IgnoreCase
     );
-    if (!match.Success)
+    if (selfMatch.Success)
     {
-      return null;
-    }
-    var possessive = match.Groups["possessive"].Value.Trim();
-    // Normalise "its controller's" → "its controller's" (preserve apostrophe);
-    // gold uses the literal possessive token so case-fold to lower-case "your".
-    if (possessive.Equals("your", StringComparison.OrdinalIgnoreCase))
-    {
-      possessive = "your";
-    }
-    return
-    [
-      new StaticAbility
+      var possessive = selfMatch.Groups["possessive"].Value.Trim();
+      if (possessive.Equals("your", StringComparison.OrdinalIgnoreCase))
       {
-        Effects = [new MagicAST.AST.Effects.Control.DoesntUntapEffect
+        possessive = "your";
+      }
+      return
+      [
+        new StaticAbility
         {
-          WhoseUntapStep = possessive,
-        }],
-      },
-    ];
+          Effects = [new MagicAST.AST.Effects.Control.DoesntUntapEffect
+          {
+            WhoseUntapStep = possessive,
+          }],
+        },
+      ];
+    }
+
+    // Aura form: "Enchanted [type] doesn't untap during its controller's untap step."
+    // Targets the attached permanent via EnchantedOrEquipped.
+    var enchantedMatch = Regex.Match(
+      clause.RawText,
+      @"^\s*(?:Enchanted|Equipped)\s+\w+\s+doesn'?t\s+untap\s+during\s+its\s+controller'?s\s+untap\s+step\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (enchantedMatch.Success)
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new MagicAST.AST.Effects.Control.DoesntUntapEffect
+          {
+            Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+            WhoseUntapStep = "its controller's",
+          }],
+        },
+      ];
+    }
+
+    return null;
   }
 
   /// <summary>
