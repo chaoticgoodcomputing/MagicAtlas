@@ -152,6 +152,30 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // COMBAT TRIGGERED KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Flanking: Whenever a creature without flanking blocks this creature, the blocking
+  /// creature gets -1/-1 until end of turn.
+  /// Rule 702.25. Although mechanically triggered, MAST models it as a keyword marker
+  /// (same approach as Exalted); the trigger-and-debuff expansion is engine territory.
+  /// </summary>
+  public static KeywordDefinition Flanking { get; } =
+    new()
+    {
+      Name = "Flanking",
+      RuleReference = "702.25",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Flanking",
+        Effects = [new FlankingEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // COMBAT BEHAVIOR KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -298,6 +322,7 @@ public static class KeywordDefinitions
       DoubleStrike,
       Lifelink,
       Indestructible,
+      Flanking,
       Vigilance,
       Storm,
       Protection,

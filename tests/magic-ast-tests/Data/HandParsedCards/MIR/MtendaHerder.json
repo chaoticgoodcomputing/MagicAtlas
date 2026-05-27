@@ -1,0 +1,88 @@
+{
+  "Input": {
+    "Name": "Mtenda Herder",
+    "ManaCost": "{W}",
+    "TypeLine": "Creature — Human",
+    "OracleText": "Flanking (Whenever a creature without flanking blocks this creature, the blocking creature gets -1/-1 until end of turn.)",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Mtenda Herder",
+    "TypeLine": {
+      "Raw": "Creature — Human",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flanking (Whenever a creature without flanking blocks this creature, the blocking creature gets -1/-1 until end of turn.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flanking",
+          "Reminder": {
+            "Text": "(Whenever a creature without flanking blocks this creature, the blocking creature gets -1/-1 until end of turn.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "flanking"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
