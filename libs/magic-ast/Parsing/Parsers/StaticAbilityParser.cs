@@ -792,20 +792,28 @@ public sealed class StaticAbilityParser : IAbilityParser
   );
 
   /// <summary>
-  /// Bare keyword grant on an anchor or filter target — two arms in one surface:
+  /// Bare keyword grant on an anchor or filter target — four arms in one surface:
   /// <list type="bullet">
   ///   <item><c>(Enchanted|Equipped) creature has &lt;keyword&gt;.</c> — the Aura/Equipment
   ///         static grant (Rule 702.5). Emits a <see cref="StaticAbility"/> wrapping a
   ///         <see cref="GainAbilityEffect"/> with <c>Target: EnchantedOrEquipped</c>. No P/T
   ///         modifier (that composite shape is handled by
   ///         <see cref="TryParseEnchantedPTAndKeyword"/>).</item>
+  ///   <item><c>All &lt;Subtype&gt; creatures have &lt;keyword&gt;.</c> — global tribal
+  ///         keyword grant (Rule 613.1c) that applies to ALL matching creatures regardless
+  ///         of controller. No controller is set on the filter; no "other" characteristic.
+  ///         Covers the Sliver family (Heart Sliver, Winged Sliver, etc.).</item>
+  ///   <item><c>Other &lt;filter&gt; [you control] have &lt;keyword&gt;.</c> — lord-grants-keyword
+  ///         with the "Other" exclusion-of-self prefix (Rule 613.1c). Filter parsing supports
+  ///         single-word subtypes, two-word subtypes (e.g. "Goblin Warrior creatures"), colour
+  ///         + card-type, and bare plural subtype shapes.</item>
   ///   <item><c>&lt;filter&gt; [tokens] you control have &lt;keyword&gt;.</c> — controller-scoped
   ///         continuous grant on a token (or creature) filter (Rule 613.1c). The filter arm
   ///         parses the leading noun phrase to determine card type, subtype, and the
   ///         <c>token</c> predicate (placed on <see cref="ObjectFilter.Characteristics"/>).</item>
   /// </list>
-  /// Both arms share <see cref="MapKeywordToStaticAbility"/> so any keyword added there
-  /// is available to both target shapes without further edits.
+  /// All arms share <see cref="MapKeywordToStaticAbility"/> so any keyword added there
+  /// is available to every target shape without further edits.
   /// </summary>
   /// <summary>
   /// Strips trailing reminder text — a parenthetical clause at the end of the
@@ -848,13 +856,52 @@ public sealed class StaticAbilityParser : IAbilityParser
       ];
     }
 
+    // Arm 4: "All <Subtype> creatures have <keyword>." — global tribal keyword grant
+    // (Rule 613.1c). "All" signals a universal quantifier with no controller restriction:
+    // the grant applies to EVERY creature with the named subtype regardless of who controls
+    // it. No Characteristics: ["other"] (this isn't an exclusion-of-self shape). No
+    // Controller (global, not "you control"). The filter carries only CardTypes + Subtypes.
+    // Covers Heart Sliver, Winged Sliver, Spinneret Sliver, etc. ("All Sliver creatures
+    // have haste/flying/reach…").
+    var allMatch = _bareAllKeywordPattern.Match(rawText);
+    if (allMatch.Success)
+    {
+      var allSubtype = allMatch.Groups["sub"].Value.Trim();
+      var allKw = allMatch.Groups["kw"].Value.Trim().ToLowerInvariant();
+      var allGranted = MapKeywordToStaticAbility(allKw);
+      if (allGranted is null)
+      {
+        return null;
+      }
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new GainAbilityEffect
+          {
+            Target = new ObjectReference
+            {
+              Kind = ObjectReferenceKind.Each,
+              Filter = new ObjectFilter
+              {
+                CardTypes = ["creature"],
+                Subtypes = [allSubtype],
+              },
+            },
+            GainedAbility = allGranted,
+          }],
+        },
+      ];
+    }
+
     // Arm 3: "Other <filter> [you control] have <keyword>." — lord-grants-keyword
     // with the "Other" exclusion-of-self prefix (Rule 613.1c). The "Other" qualifier
     // maps to Characteristics: ["other"] on the filter, matching the convention used
     // by TryParseTribalAnthemModifyPT and TryParseLordPTBuff. Filter parsing is
     // delegated to ParseLordPTFilter (isOther: true) which handles the full range
-    // of filter shapes: bare "creatures", "[Subtype] creatures", bare plural subtype,
-    // "[Color] creatures", and the optional "you control" controller suffix.
+    // of filter shapes: bare "creatures", "[Subtype] creatures", two-word subtype
+    // (e.g. "Goblin Warrior creatures"), bare plural subtype, "[Color] creatures",
+    // and the optional "you control" controller suffix.
     var otherMatch = _bareOtherKeywordPattern.Match(rawText);
     if (otherMatch.Success)
     {
@@ -937,6 +984,14 @@ public sealed class StaticAbilityParser : IAbilityParser
   private static readonly Regex _bareAnchorKeywordPattern = new(
     @"^\s*(?:Enchanted|Equipped)\s+creature\s+has\s+(?<kw>[a-z][a-z ]+?)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Arm 4: "All <Subtype> creatures have <keyword>." — global tribal keyword grant.
+  // Captures the oracle-capitalised creature subtype (e.g. "Sliver") and the keyword
+  // name. No "you control" suffix; no "Other" qualifier; no controller on the filter.
+  private static readonly Regex _bareAllKeywordPattern = new(
+    @"^\s*All\s+(?<sub>[A-Z][a-z]+)\s+creatures\s+have\s+(?<kw>[a-z][a-z ]+?)\.?\s*$",
+    RegexOptions.Compiled
   );
 
   // Arm 3: "Other <filter> [you control] have <keyword>." — "Other" prefix signals
@@ -3078,6 +3133,34 @@ public sealed class StaticAbilityParser : IAbilityParser
           CardTypes = ["creature"],
           Controller = controller,
           Characteristics = chars,
+        };
+      }
+    }
+
+    // --- Shape: "[SubtypeA] [SubtypeB] creatures" (e.g. "Goblin Warrior creatures") ---
+    // Two-word creature subtype immediately before "creatures". Both words are
+    // oracle-capitalised creature subtypes (Rule 205.3m). Must be checked BEFORE
+    // the single-word "[Subtype] creatures" branch so that "Goblin Warrior creatures"
+    // doesn't get partially matched as "Goblin" (leaving " Warrior creatures" unhandled).
+    var twoWordSubtypeCreatureMatch = Regex.Match(
+      text,
+      @"^(?<sub1>[A-Z][a-z]+)\s+(?<sub2>[A-Z][a-z]+)\s+creatures?$",
+      RegexOptions.IgnoreCase
+    );
+    if (twoWordSubtypeCreatureMatch.Success)
+    {
+      var subtype1 = twoWordSubtypeCreatureMatch.Groups["sub1"].Value;
+      var subtype2 = twoWordSubtypeCreatureMatch.Groups["sub2"].Value;
+      // Exclude colour adjectives — "White Green creatures" should not be treated
+      // as two-word subtypes (those would route through the colour branch above).
+      if (!_colorNameToCode.ContainsKey(subtype1) && !_colorNameToCode.ContainsKey(subtype2))
+      {
+        return new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Subtypes = [subtype1, subtype2],
+          Controller = controller,
+          Characteristics = characteristics,
         };
       }
     }
