@@ -10,6 +10,7 @@ using MagicAST.AST.References;
 /// Recognises the bare P/T-modification shape (no keyword conjunction):
 ///   "Target creature gets +N/+M until end of turn."
 ///   "Target creature gets -N/-M until end of turn."
+///   "It gets +N/+M until end of turn."   — pronoun back-reference form
 ///
 /// This is the simple single-effect version. The composite "gets +N/+M and gains
 /// &lt;keyword&gt; until end of turn" case is handled separately by
@@ -21,39 +22,62 @@ using MagicAST.AST.References;
 ///   <item>"Target creature gets +4/+4 until end of turn."  (Titanic Growth)</item>
 ///   <item>"Target creature gets -2/-2 until end of turn."  (Disfigure)</item>
 ///   <item>"Target creature gets -3/-3 until end of turn."  (Last Gasp)</item>
+///   <item>"It gets +2/+4 until end of turn."              (Inspirit — second sentence)</item>
 /// </list>
 /// </summary>
 [SpellRule]
 public sealed class ModifyPTSpellRule : ISpellRule
 {
-  private static readonly Regex _pattern = new(
+  private static readonly Regex _targetCreaturePattern = new(
     @"^Target\s+creature\s+gets\s+(?<p>[+\-]\d+)/(?<t>[+\-]\d+)\s+until\s+end\s+of\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // "It gets +N/+M until end of turn" — pronoun back-reference after an untap or similar effect.
+  private static readonly Regex _itGetsPattern = new(
+    @"^It\s+gets\s+(?<p>[+\-]\d+)/(?<t>[+\-]\d+)\s+until\s+end\s+of\s+turn$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
   public bool TryMatch(string text, out Effect? effect)
   {
     effect = null;
-    var m = _pattern.Match(text.Trim());
-    if (!m.Success)
+    var trimmed = text.Trim();
+
+    var m = _targetCreaturePattern.Match(trimmed);
+    if (m.Success)
     {
-      return false;
+      var power = int.Parse(m.Groups["p"].Value);
+      var toughness = int.Parse(m.Groups["t"].Value);
+      effect = new ModifyPTEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter { CardTypes = ["creature"] },
+        },
+        PowerModifier = LiteralQuantity.Of(power),
+        ToughnessModifier = LiteralQuantity.Of(toughness),
+        Duration = new UntilEndOfTurnDuration(),
+      };
+      return true;
     }
 
-    var power = int.Parse(m.Groups["p"].Value);
-    var toughness = int.Parse(m.Groups["t"].Value);
-
-    effect = new ModifyPTEffect
+    var it = _itGetsPattern.Match(trimmed);
+    if (it.Success)
     {
-      Target = new ObjectReference
+      var power = int.Parse(it.Groups["p"].Value);
+      var toughness = int.Parse(it.Groups["t"].Value);
+      effect = new ModifyPTEffect
       {
-        Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter { CardTypes = ["creature"] },
-      },
-      PowerModifier = LiteralQuantity.Of(power),
-      ToughnessModifier = LiteralQuantity.Of(toughness),
-      Duration = new UntilEndOfTurnDuration(),
-    };
-    return true;
+        Target = new ObjectReference { Kind = ObjectReferenceKind.It },
+        PowerModifier = LiteralQuantity.Of(power),
+        ToughnessModifier = LiteralQuantity.Of(toughness),
+        Duration = new UntilEndOfTurnDuration(),
+      };
+      return true;
+    }
+
+    return false;
   }
 }
