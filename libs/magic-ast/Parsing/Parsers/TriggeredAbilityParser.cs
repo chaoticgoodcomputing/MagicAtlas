@@ -575,7 +575,10 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     }
 
     // Try different trigger event types
-    if (lower.Contains("dies"))
+    // "dies" is modern oracle. Old oracle uses the longform "is put into a graveyard
+    // from the battlefield" (Rule 700.4 — "dies" means exactly this). Both phrasings
+    // describe the same game event; normalise to the same TriggerEvent.Dies branch.
+    if (lower.Contains("dies") || lower.Contains("is put into a graveyard from the battlefield"))
     {
       return ParseDiesTrigger(triggerText, timing);
     }
