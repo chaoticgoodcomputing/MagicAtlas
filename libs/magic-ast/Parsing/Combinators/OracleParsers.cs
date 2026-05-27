@@ -1590,6 +1590,51 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Reconfigure {cost}" keyword.
+  /// Pattern: "Reconfigure" mana-symbol+ [reminder]
+  /// Rule 702.173. An activated ability that lets a player attach this Equipment
+  /// creature to a creature they control, or unattach it, at sorcery speed.
+  /// MAST records the keyword and its reconfigure cost; the attach/unattach
+  /// mechanics, sorcery-speed restriction, and creature-status switching are
+  /// conventionally inferred from the rules (per the descriptive-not-engine
+  /// doctrine), mirroring the EquipEffect pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Reconfigure = (
+    from keyword in Keyword("Reconfigure")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Reconfigure",
+      Effects = [new MagicAST.AST.Effects.Keyword.ReconfigureEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Echo {cost}" keyword.
   /// Pattern: "Echo" mana-symbol+ [reminder]
   /// Rule 702.30. "At the beginning of your upkeep, if this permanent came under
@@ -2042,6 +2087,7 @@ public static class OracleParsers
       .Or(Foretell.Try())
       .Or(Flashback.Try())
       .Or(Equip.Try())
+      .Or(Reconfigure.Try())
       .Or(Morph.Try())
       .Or(Megamorph.Try())
       .Or(Bestow.Try())
