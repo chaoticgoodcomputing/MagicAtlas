@@ -3383,11 +3383,13 @@ public sealed class StaticAbilityParser : IAbilityParser
   );
 
   /// <summary>
-  /// "This &lt;type&gt; enters with N +1/+1 counters on it." — Rules 122 (counters),
-  /// 614.1d (enters-with replacement effects). Handles subject types creature,
-  /// artifact, enchantment, land, and permanent. Count may be a decimal digit,
-  /// the variable "X", or an English word-count ("one" through "ten"). Emits a
-  /// <see cref="StaticAbility"/> wrapping an
+  /// "This &lt;type&gt; enters with N &lt;counterType&gt; counters on it." — Rules 122
+  /// (counters), 614.1d (enters-with replacement effects). Handles subject types
+  /// creature, artifact, enchantment, land, permanent, and Equipment. Count may
+  /// be a decimal digit, the variable "X", an English word-count ("one" through
+  /// "ten"), or the article "a"/"an" (treated as 1). The counter type may be a
+  /// P/T counter ("+1/+1", "-1/-1") or any named counter (e.g., "charge", "oil",
+  /// "loyalty", "javelin"). Emits a <see cref="StaticAbility"/> wrapping an
   /// <see cref="MagicAST.AST.Effects.Replacement.EntersWithCountersEffect"/>
   /// whose <c>Count</c> is either a <see cref="MagicAST.AST.Quantities.LiteralQuantity"/>
   /// or a <see cref="MagicAST.AST.Quantities.VariableQuantity"/>. No
@@ -3436,11 +3438,14 @@ public sealed class StaticAbilityParser : IAbilityParser
   // Matches "This <type> enters with N <counterType> counters on it." where <type> is
   // creature, artifact, enchantment, land, or permanent; N is a decimal digit,
   // the variable "X", an English word-count ("one" through "ten"), or the
-  // article "a"/"an" (treated as 1); and <counterType> is "+1/+1" or "-1/-1".
+  // article "a"/"an" (treated as 1); and <counterType> is either a P/T counter
+  // ("+1/+1", "-1/-1", etc.) or a named counter type (e.g., "charge", "oil",
+  // "loyalty", "javelin" — any single alphanumeric/hyphen/slash token that
+  // immediately precedes "counter(s)").
   // Handles "counter" and "counters" (singular for N=1) and an optional
   // trailing period. Rules: 122 (counters), 614.1d (enters-with replacement).
   private static readonly Regex _entersWithCountersPattern = new(
-    @"^\s*This\s+(?<type>creature|artifact|enchantment|land|permanent)\s+enters\s+with\s+(?<count>\d+|X|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[+-]1/[+-]1)\s+counters?\s+on\s+it\.?\s*$",
+    @"^\s*This\s+(?<type>creature|artifact|enchantment|land|permanent|Equipment)\s+enters\s+with\s+(?<count>\d+|X|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[\w/+-]+)\s+counters?\s+on\s+it\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
