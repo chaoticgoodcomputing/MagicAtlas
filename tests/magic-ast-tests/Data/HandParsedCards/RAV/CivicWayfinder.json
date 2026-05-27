@@ -1,0 +1,111 @@
+{
+  "Input": {
+    "Name": "Civic Wayfinder",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Creature — Elf Druid Warrior",
+    "OracleText": "When this creature enters, you may search your library for a basic land card, reveal it, put it into your hand, then shuffle.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Civic Wayfinder",
+    "TypeLine": {
+      "Raw": "Creature — Elf Druid Warrior",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Druid",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, you may search your library for a basic land card, reveal it, put it into your hand, then shuffle.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "searchLibrary",
+              "Filter": {
+                "Supertypes": [
+                  "Basic"
+                ],
+                "CardTypes": [
+                  "land"
+                ]
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Destination": "Hand",
+              "Revealed": true,
+              "IsOptional": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
