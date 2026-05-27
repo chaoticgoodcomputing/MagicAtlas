@@ -2064,7 +2064,7 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// <summary>
   /// "Enchanted creature can't attack or block." — dual combat restriction
   /// (attacker-side + blocker-side) imposed by an Aura on its enchanted object
-  /// (Rule 509.1d / 509.1c). Emits a <see cref="StaticAbility"/> with two
+  /// (Rule 508.1c / 509.1c). Emits a <see cref="StaticAbility"/> with two
   /// effects:
   /// <list type="bullet">
   ///   <item><see cref="CantAttackEffect"/> targeting <c>EnchantedOrEquipped</c>.</item>

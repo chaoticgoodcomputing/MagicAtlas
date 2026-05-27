@@ -7,7 +7,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Combat-attack restriction (attacker-side): oracle text states that a
-/// creature "can't attack." Rule 509.1d (declare-attackers step; attacking
+/// creature "can't attack." Rule 508.1c (declare-attackers step; attacking
 /// restrictions constrain the set of legal attacker declarations the active
 /// player can make).
 /// </summary>
@@ -19,8 +19,8 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// make at declare-attackers.
 ///
 /// <para>
-/// This is the dual of <see cref="MustAttackEffect"/> — same rule (508/509.1d
-/// boundary), opposite polarity:
+/// This is the dual of <see cref="MustAttackEffect"/> — same rule (508.1c),
+/// opposite polarity:
 /// </para>
 /// <list type="bullet">
 ///   <item><description>
