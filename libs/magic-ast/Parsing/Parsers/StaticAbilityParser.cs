@@ -122,6 +122,18 @@ public sealed class StaticAbilityParser : IAbilityParser
       return enchant;
     }
 
+    // "You control enchanted [type]." — Aura control-steal static (Rules 612,
+    // 702.5). Emits a GainControlEffect targeting EnchantedOrEquipped. The
+    // "you" (controller) is implicit — Rule 612 treats the current controller
+    // of the Aura as the new controller of the enchanted permanent for as long
+    // as the Aura remains attached; no Duration field is needed (Aura-attached
+    // behavior persists while the Aura is on the battlefield).
+    var gainControlEnchanted = TryParseGainControlOfEnchanted(clause);
+    if (gainControlEnchanted != null)
+    {
+      return gainControlEnchanted;
+    }
+
     // "Ward {N}" / "Ward — [effect]" — emits a TriggeredAbility with
     // KeywordSource="Ward", structured as the trigger Rule 702.21 expands to.
     var ward = TryParseWardKeyword(clause);
@@ -1462,6 +1474,54 @@ public sealed class StaticAbilityParser : IAbilityParser
 
     return null;
   }
+
+  /// <summary>
+  /// "You control enchanted [type]." — Aura control-steal continuous effect
+  /// (Rule 612 control-changing effects; Rule 702.5 Aura). Emits a
+  /// <see cref="StaticAbility"/> wrapping a <see cref="GainControlEffect"/>
+  /// whose <c>Target</c> is <see cref="ObjectReferenceKind.EnchantedOrEquipped"/>.
+  ///
+  /// <para>
+  /// No <see cref="GainControlEffect.Duration"/> is set: the controller
+  /// change persists while the Aura remains attached to the permanent —
+  /// Aura-attached continuous effects have no explicit duration clause in
+  /// oracle text; their end condition is implied by the Aura's detachment
+  /// (Rule 702.5d), which the rules engine tracks, not the AST.
+  /// </para>
+  ///
+  /// <para>
+  /// Recognized [type] values: creature, permanent, land, artifact,
+  /// enchantment, planeswalker, equipment (Equipment). The match is
+  /// case-insensitive and the trailing period is optional.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseGainControlOfEnchanted(OracleClause clause)
+  {
+    if (!_gainControlEnchantedPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new GainControlEffect
+        {
+          Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+        }],
+      },
+    ];
+  }
+
+  // Matches "You control enchanted <type>." where <type> is any recognised
+  // permanent type. The type noun is not captured — the target is always
+  // EnchantedOrEquipped regardless of the specific type word used, because
+  // that information is already carried by the sibling "Enchant [type]" line.
+  private static readonly Regex _gainControlEnchantedPattern = new(
+    @"^\s*You\s+control\s+enchanted\s+(?:creature|permanent|land|artifact|enchantment|planeswalker|equipment)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   /// <summary>
   /// Recognizes "[subject] attacks each combat if able." Subject may be the

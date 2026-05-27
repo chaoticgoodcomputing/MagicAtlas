@@ -1,0 +1,91 @@
+{
+  "Input": {
+    "Name": "Steal Enchantment",
+    "ManaCost": "{U}{U}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant enchantment\nYou control enchanted enchantment.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Steal Enchantment",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Enchant enchantment\nYou control enchanted enchantment.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "enchantment"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainControl",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
