@@ -53,7 +53,34 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
     var count = TriggeredRuleHelpers.ParseWordOrDigitCount(text) ?? 1;
     var hasAnother = lower.Contains("another target");
     ObjectReference target;
-    if (lower.Contains("target creature you control"))
+
+    // "put a +1/+1 counter on each other [Subtype] creature you control" —
+    // mass-counter shape for turned-face-up triggers (e.g. Stormwing Dragon).
+    // Must be matched before the "target creature" / "this creature" paths so the
+    // "each other" quantifier lands correctly on an Each reference.
+    var eachOtherMatch = Regex.Match(
+      text,
+      @"\bon\s+each\s+other\s+(?<subtype>[A-Za-z]+)\s+creature\s+you\s+control\b",
+      RegexOptions.IgnoreCase
+    );
+    if (eachOtherMatch.Success)
+    {
+      var subtype = eachOtherMatch.Groups["subtype"].Value;
+      // Capitalise first letter to match oracle-text convention.
+      subtype = char.ToUpperInvariant(subtype[0]) + subtype[1..].ToLowerInvariant();
+      target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Subtypes = [subtype],
+          Controller = ControllerFilter.You,
+          Characteristics = ["other"],
+        },
+      };
+    }
+    else if (lower.Contains("target creature you control"))
     {
       var characteristics = hasAnother ? new[] { "another" } : null;
       target = new ObjectReference

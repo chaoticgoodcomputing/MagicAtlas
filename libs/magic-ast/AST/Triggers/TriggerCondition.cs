@@ -148,6 +148,9 @@ public enum TriggerEvent
   /// <summary>A Vehicle becomes crewed (Rule 702.122)</summary>
   BecomesCrewed,
 
+  /// <summary>A permanent is turned face up (Rule 702.37 — Morph/Megamorph flip)</summary>
+  TurnedFaceUp,
+
   /// <summary>A permanent transforms</summary>
   Transforms,
 
