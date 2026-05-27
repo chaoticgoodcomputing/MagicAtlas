@@ -1,0 +1,102 @@
+{
+  "Input": {
+    "Name": "Goblin Rabblemaster",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Creature — Goblin Warrior",
+    "OracleText": "Other Goblin creatures you control attack each combat if able.\nAt the beginning of combat on your turn, create a 1/1 red Goblin creature token with haste.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Goblin Rabblemaster",
+    "TypeLine": {
+      "Raw": "Creature — Goblin Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Goblin", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "Other Goblin creatures you control attack each combat if able.\nAt the beginning of combat on your turn, create a 1/1 red Goblin creature token with haste.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "mustAttack",
+              "Target": {
+                "Kind": "Self"
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfCombat",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": ["R"],
+                "Types": ["creature"],
+                "Subtypes": ["Goblin"],
+                "Abilities": [
+                  {
+                    "Kind": "static",
+                    "Effects": [
+                      {
+                        "EffectType": "haste",
+                        "IsOptional": false
+                      }
+                    ],
+                    "KeywordSource": "Haste"
+                  }
+                ],
+                "IsCopy": false
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          {"Kind": "generic", "GenericAmount": 2},
+          {"Kind": "colored", "Colors": ["R"]}
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {"ValueType": "fixed", "Value": 2, "Raw": "2"},
+        "Toughness": {"ValueType": "fixed", "Value": 2, "Raw": "2"}
+      }
+    ]
+  }
+}
