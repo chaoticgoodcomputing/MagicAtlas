@@ -1011,15 +1011,6 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
-    // Multicolored qualifier (Rule 105.5 — "two or more colors"). This is a
-    // distinct axis from Colors: the "has any of these colors" semantics of
-    // Colors cannot encode the "two or more" constraint, so we use IsMulticolored.
-    bool? isMulticolored = null;
-    if (Regex.IsMatch(lower, @"\bmulticolored\s+spell\b"))
-    {
-      isMulticolored = true;
-    }
-
     // Color qualifiers: "that's white" / "that's white, blue, black, or red" /
     // "white spell" etc. Look for any colour word in the trigger fragment.
     var colors = new List<string>();
