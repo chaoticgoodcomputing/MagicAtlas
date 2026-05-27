@@ -2588,7 +2588,7 @@ Shared utilities used across multiple `ISpellRule` implementations. Lives outsid
 
 ### `CreateTokenRule` — *sealed class* : ISpellRule
 
-"Create (a|X|&lt;num&gt;) &lt;P&gt;/&lt;T&gt; &lt;color&gt; &lt;subtype&gt; creature token(s)." Handles literal counts ("a"), variable counts ("X"), and numeric literals.
+"Create (a|X|&lt;num&gt;) &lt;P&gt;/&lt;T&gt; &lt;color&gt; &lt;subtype&gt; creature token(s)." Handles literal counts ("a"), variable counts ("X"), and numeric literals. Also handles predefined artifact tokens (Food, Treasure, Clue, Blood) which have no P/T and whose activated ability is reminder text only (Rule 107.10b). Reminder text is stripped by SpellAbilityParser before dispatch.
 
 [Source](Parsing/Parsers/Spell/Rules/CreateTokenRule.cs)
 
