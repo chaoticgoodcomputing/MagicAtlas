@@ -2703,6 +2703,141 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Fading N" keyword.
+  /// Pattern: "Fading" number [reminder]
+  /// Rule 702.32. This permanent enters with N fade counters on it. At the
+  /// beginning of your upkeep, remove a fade counter from it. If you can't,
+  /// sacrifice it. MAST records the keyword and its integer value; the
+  /// upkeep trigger and sacrifice-unless-counter mechanics are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/> and
+  /// <see cref="Devour"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Fading = (
+    from keyword in Keyword("Fading")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Fading",
+      Effects = [new FadingEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Vanishing N" keyword.
+  /// Pattern: "Vanishing" number [reminder]
+  /// Rule 702.63. This permanent enters with N time counters on it. At the
+  /// beginning of your upkeep, remove a time counter from it. When the last
+  /// is removed, sacrifice it. MAST records the keyword and its integer value;
+  /// the upkeep trigger and last-counter sacrifice mechanics are engine
+  /// territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Fading"/> and
+  /// <see cref="Bushido"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Vanishing = (
+    from keyword in Keyword("Vanishing")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Vanishing",
+      Effects = [new VanishingEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Graft N" keyword.
+  /// Pattern: "Graft" number [reminder]
+  /// Rule 702.58. This permanent enters with N +1/+1 counters on it. Whenever
+  /// another creature enters, you may move a +1/+1 counter from this creature
+  /// onto it. MAST records the keyword and its integer value; the
+  /// enters-with-counters and optional counter-move triggered ability are
+  /// engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/> and the
+  /// Modular/Backup family.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Graft = (
+    from keyword in Keyword("Graft")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Graft",
+      Effects = [new GraftEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Dredge N" keyword.
+  /// Pattern: "Dredge" number [reminder]
+  /// Rule 702.52. If you would draw a card, you may mill N cards instead. If
+  /// you do, return this card from your graveyard to your hand. MAST records
+  /// the keyword and its integer value; the draw-replacement choice and
+  /// mill-and-return mechanics are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/> and
+  /// <see cref="Afflict"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Dredge = (
+    from keyword in Keyword("Dredge")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Dredge",
+      Effects = [new DredgeEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Outlast {cost}" keyword.
+  /// Pattern: "Outlast" mana-symbol+ [reminder]
+  /// Rule 702.107. {cost}, {T}: Put a +1/+1 counter on this creature. Outlast
+  /// only as a sorcery. MAST records the keyword and its mana-cost parameter;
+  /// the tap cost, sorcery-speed restriction, and counter-placement are engine
+  /// territory.
+  /// Mana-cost-parameterized keyword; mirrors <see cref="Flashback"/>,
+  /// <see cref="Madness"/>, and the Kicker/Echo/Bestow pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Outlast = (
+    from keyword in Keyword("Outlast")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Outlast",
+      Effects = [new OutlastEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Prepared" keyword state.
   /// Pattern: "This" "creature" "enters" "prepared" [reminder]
   /// (Foundations Remastered prepare-layout cards). Oracle text reads "This creature
@@ -3051,7 +3186,12 @@ public static class OracleParsers
       .Or(Afterlife.Try())
       .Or(Warp.Try())
       .Or(Devour.Try())
-      .Or(Firebending.Try());
+      .Or(Firebending.Try())
+      .Or(Fading.Try())
+      .Or(Vanishing.Try())
+      .Or(Graft.Try())
+      .Or(Dredge.Try())
+      .Or(Outlast.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
