@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Stoneforge Masterwork",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "Equipped creature gets +1/+1 for each creature you control.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Stoneforge Masterwork",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": ["Artifact"],
+      "Subtypes": ["Equipment"]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature gets +1/+1 for each creature you control.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "count",
+                "CountOf": "creature you control"
+              },
+              "ToughnessModifier": {
+                "QuantityType": "count",
+                "CountOf": "creature you control"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Equip",
+          "Effects": [
+            {
+              "EffectType": "equip",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 1
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}
