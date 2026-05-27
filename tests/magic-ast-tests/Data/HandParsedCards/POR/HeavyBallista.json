@@ -1,0 +1,112 @@
+{
+  "Input": {
+    "Name": "Heavy Ballista",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Creature — Human Soldier",
+    "OracleText": "{T}: This creature deals 2 damage to target attacking or blocking creature.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Heavy Ballista",
+    "TypeLine": {
+      "Raw": "Creature — Human Soldier",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Soldier"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: This creature deals 2 damage to target attacking or blocking creature.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Source": {
+                "Kind": "Self"
+              },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Characteristics": [
+                    "attacking or blocking"
+                  ]
+                }
+              },
+              "IsOptional": false
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
