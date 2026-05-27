@@ -1,0 +1,121 @@
+{
+  "Input": {
+    "Name": "Fleetfoot Dancer",
+    "ManaCost": "{1}{R}{W}",
+    "TypeLine": "Creature — Elf",
+    "OracleText": "Haste, lifelink\nThis creature enters with a shield counter on it. (If it would be dealt damage or destroyed, remove a shield counter from it instead.)",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Fleetfoot Dancer",
+    "TypeLine": {
+      "Raw": "Creature — Elf",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Haste, lifelink\nThis creature enters with a shield counter on it. (If it would be dealt damage or destroyed, remove a shield counter from it instead.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "haste",
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Haste"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "lifelink",
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Lifelink"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "entersWithCounters",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "CounterType": "shield",
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

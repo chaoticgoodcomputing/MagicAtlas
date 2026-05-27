@@ -4617,7 +4617,7 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseEntersWithCounters(OracleClause clause)
   {
-    var match = _entersWithCountersPattern.Match(clause.RawText);
+    var match = _entersWithCountersPattern.Match(StripReminderText(clause.RawText));
     if (!match.Success)
     {
       return null;
