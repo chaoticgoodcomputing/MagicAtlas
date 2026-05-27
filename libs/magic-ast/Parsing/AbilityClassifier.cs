@@ -597,6 +597,28 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Creatures [without <keyword>] can't block this turn." — one-shot blocking
+    // restriction applied by a spell (Falter, Cosmotronic Wave). The "this turn"
+    // duration marks this as an imperative spell-resolution instruction (Rule 509.1c),
+    // not the declarative static "This creature can't block." that lives on a
+    // permanent. Without this route the clause defaults to Static and stalls in
+    // StaticAbilityParser.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Creatures(\s+without\s+\S+)?\s+can'?t\s+block\s+this\s+turn\.?\s*$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Ability-word conditional spell-effect: "[AbilityWord] — If <condition>,
     // <spell-verb> …". The ability word itself (e.g. "Fateful hour", Rule 702.95)
     // has no rules meaning — it gates an otherwise normal spell-resolution
