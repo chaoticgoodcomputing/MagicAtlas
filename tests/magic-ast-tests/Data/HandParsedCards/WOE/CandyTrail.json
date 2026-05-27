@@ -48,7 +48,7 @@
               },
               "RawText": "Create a Food token. If this spell was bargained, create two Food tokens instead.",
               "Pattern": "UnparsedSpell",
-              "LastAttemptedRule": "SpellAbilityParser.UntapTargetRule",
+              "LastAttemptedRule": "SpellAbilityParser.YouLoseLifeSpellRule",
               "FailurePosition": 87
             }
           ]
