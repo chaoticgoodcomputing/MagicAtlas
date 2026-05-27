@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Stalking Tiger",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Creature — Cat",
+    "OracleText": "This creature can't be blocked by more than one creature.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Stalking Tiger",
+    "TypeLine": {
+      "Raw": "Creature — Cat",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature can't be blocked by more than one creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "MaxBlockers": 1,
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

@@ -450,9 +450,19 @@ public sealed class StaticAbilityParser : IAbilityParser
       return enchantedCantAttackOrBlock;
     }
 
+    // "Enchanted creature can't be blocked by more than one creature." — Aura
+    // single-blocker restriction (Rule 509.1b). Placed before TryParseCantBeBlocked
+    // so the enchanted-subject shape is tried before the self-subject shape.
+    var enchantedCantBeBlockedByMoreThanOne = TryParseEnchantedCantBeBlockedByMoreThanOne(clause);
+    if (enchantedCantBeBlockedByMoreThanOne != null)
+    {
+      return enchantedCantBeBlockedByMoreThanOne;
+    }
+
     // "This (creature|land|permanent) can't be blocked." — Rule 509.1b evasion
-    // (full unblockability). Full declarative sentence, not a keyword token, so
-    // no KeywordSource is set. Mirrors TryParseCantBlock in structure.
+    // (full unblockability or single-blocker restriction). Full declarative
+    // sentence, not a keyword token, so no KeywordSource is set. Mirrors
+    // TryParseCantBlock in structure.
     var cantBeBlocked = TryParseCantBeBlocked(clause);
     if (cantBeBlocked != null)
     {
@@ -4171,6 +4181,28 @@ public sealed class StaticAbilityParser : IAbilityParser
       ];
     }
 
+    // Blocker-count restriction: "This creature can't be blocked by more than one
+    // creature." — Rule 509.1b. MaxBlockers = 1 records that at most one creature
+    // may be declared as a blocker against this attacker. Placed before the power
+    // and color arms because the "more than one creature" phrase is syntactically
+    // unambiguous and must not fall through to the filter arms.
+    if (_cantBeBlockedByMoreThanOnePattern.IsMatch(clause.RawText))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects =
+          [
+            new CantBeBlockedEffect
+            {
+              MaxBlockers = 1,
+            },
+          ],
+        },
+      ];
+    }
+
     // Power-threshold variant: "This (creature|Vehicle) can't be blocked by creatures
     // with power N or less." — Rule 509.1b. The threshold N maps to a LessThanOrEqual
     // comparison on ObjectFilter.PowerComparison. Placed before the color arm because
@@ -4250,6 +4282,16 @@ public sealed class StaticAbilityParser : IAbilityParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // Matches "This creature can't be blocked by more than one creature." —
+  // blocker-count restriction (Stalking Tiger pattern, Rule 509.1b).
+  // Maps to MaxBlockers = 1 on CantBeBlockedEffect. The "more than one"
+  // phrase is the standard oracle wording; no count capture is needed since
+  // the only legal printed value is "one" (the grammar caps at 1 blocker).
+  private static readonly Regex _cantBeBlockedByMoreThanOnePattern = new(
+    @"^\s*This\s+(?:creature|permanent)\s+can'?t\s+be\s+blocked\s+by\s+more\s+than\s+one\s+creature\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   // Matches "This (creature|Vehicle) can't be blocked by creatures with power N or less."
   // Captures the numeric threshold for the LessThanOrEqual comparison.
   // The "or less" phrasing is standard oracle wording for ≤ (Rule 509.1b).
@@ -4262,6 +4304,48 @@ public sealed class StaticAbilityParser : IAbilityParser
   // Captures the color name for mapping to WUBRG code.
   private static readonly Regex _cantBeBlockedByColorPattern = new(
     @"^\s*This\s+(?:creature|permanent)\s+can'?t\s+be\s+blocked\s+by\s+(?<color>white|blue|black|red|green)\s+creatures\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "Enchanted creature can't be blocked by more than one creature." — Aura
+  /// single-blocker restriction (Rule 509.1b). Emits a
+  /// <see cref="StaticAbility"/> wrapping a <see cref="CantBeBlockedEffect"/>
+  /// with <see cref="CantBeBlockedEffect.MaxBlockers"/> = 1 and
+  /// <see cref="CantBeBlockedEffect.Target"/> =
+  /// <c>EnchantedOrEquipped</c>. No <c>KeywordSource</c>: full declarative
+  /// sentence. Mirrors <see cref="TryParseCantBeBlocked"/> for the self-subject
+  /// variant (Stalking Tiger shape).
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEnchantedCantBeBlockedByMoreThanOne(OracleClause clause)
+  {
+    if (!_enchantedCantBeBlockedByMoreThanOnePattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects =
+        [
+          new CantBeBlockedEffect
+          {
+            Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+            MaxBlockers = 1,
+          },
+        ],
+      },
+    ];
+  }
+
+  // Matches "Enchanted creature can't be blocked by more than one creature." —
+  // Aura single-blocker restriction. The "Equipped" variant is included for
+  // symmetry in case a future Equipment prints the same restriction, consistent
+  // with how other Enchanted/Equipped patterns are registered.
+  private static readonly Regex _enchantedCantBeBlockedByMoreThanOnePattern = new(
+    @"^\s*(?:Enchanted|Equipped)\s+creature\s+can'?t\s+be\s+blocked\s+by\s+more\s+than\s+one\s+creature\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
