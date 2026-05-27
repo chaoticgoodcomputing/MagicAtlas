@@ -739,7 +739,10 @@ public sealed class StaticAbilityParser : IAbilityParser
   // Arm 2: "<filter> [tokens] you control have <keyword>."
   // Captures the noun-phrase before the optional "tokens" word and the trailing keyword.
   // The "token" group is present only when the literal word "tokens" appears in the phrase,
-  // indicating the grant is restricted to token permanents.
+  // indicating the grant is restricted to token permanents. BuildBareGrantFilterTarget
+  // disambiguates the filter noun into three shapes: bare card-type ("Creatures"),
+  // "[Subtype] creatures" (subtype + card-type), and bare plural subtype ("Goblins",
+  // "Warlocks", etc.) — the last added in batch 33 for the lord-grants-keyword cluster.
   private static readonly Regex _bareFilterKeywordPattern = new(
     @"^\s*(?<filter>[A-Za-z][A-Za-z ]+?)\s+(?<token>tokens?\s+)?you\s+control\s+have\s+(?<kw>[a-z][a-z ]+?)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
@@ -789,6 +792,29 @@ public sealed class StaticAbilityParser : IAbilityParser
           CardTypes = ["creature"],
           Subtypes = [subtype],
           Characteristics = isToken ? (IReadOnlyList<string>?)["token"] : null,
+          Controller = ControllerFilter.You,
+        },
+      };
+    }
+
+    // Bare plural subtype (e.g. "Goblins", "Warlocks", "Zombies") — no explicit
+    // "creatures" word. The capitalised plural noun is the distinguishing feature;
+    // the singular form is produced by <see cref="DepluralizeSubtype"/> so known
+    // irregular plurals ("Elves" → "Elf") round-trip correctly. No CardTypes is
+    // emitted: the subtype constraint on ObjectFilter.Subtypes already scopes the
+    // filter to permanents carrying that subtype, regardless of card type (matching
+    // the convention established by Sachi's Shamans you control gold).
+    var bareSubtypeMatch = Regex.Match(filterText.Trim(), @"^(?<sub>[A-Z][a-z]+)s?$");
+    if (bareSubtypeMatch.Success && !isToken)
+    {
+      var pluralWord = bareSubtypeMatch.Groups[0].Value;
+      var subtype = DepluralizeSubtype(pluralWord);
+      return new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter
+        {
+          Subtypes = [subtype],
           Controller = ControllerFilter.You,
         },
       };
@@ -2181,6 +2207,18 @@ public sealed class StaticAbilityParser : IAbilityParser
       {
         KeywordSource = "Deathtouch",
         Effects = [new MagicAST.AST.Effects.Keyword.DeathtouchEffect { IsOptional = false }],
+      },
+      // Menace: this creature can't be blocked except by two or more creatures.
+      // Rule 702.110. EvasionEffect with MinimumBlockers=2; CanBeBlockedBy carries
+      // the creature-typed filter (any two-or-more creatures qualify as blockers).
+      "menace" => new StaticAbility
+      {
+        KeywordSource = "Menace",
+        Effects = [new MagicAST.AST.Effects.Keyword.EvasionEffect
+        {
+          CanBeBlockedBy = new ObjectFilter { CardTypes = ["creature"] },
+          MinimumBlockers = 2,
+        }],
       },
       _ => null,
     };

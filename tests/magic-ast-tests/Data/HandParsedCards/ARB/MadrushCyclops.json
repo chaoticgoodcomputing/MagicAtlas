@@ -1,0 +1,125 @@
+{
+  "Input": {
+    "Name": "Madrush Cyclops",
+    "ManaCost": "{1}{B}{R}{G}",
+    "TypeLine": "Creature — Cyclops",
+    "OracleText": "Creatures you control have haste.",
+    "Power": "3",
+    "Toughness": "4",
+    "Colors": [
+      "B",
+      "R",
+      "G"
+    ],
+    "ColorIdentity": [
+      "B",
+      "R",
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Madrush Cyclops",
+    "TypeLine": {
+      "Raw": "Creature — Cyclops",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cyclops"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Creatures you control have haste.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Haste",
+                "Effects": [
+                  {
+                    "EffectType": "haste",
+                    "IsOptional": false
+                  }
+                ]
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}{R}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "R",
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "R",
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
