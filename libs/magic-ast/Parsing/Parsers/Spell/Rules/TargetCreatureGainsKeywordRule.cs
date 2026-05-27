@@ -20,6 +20,9 @@ using MagicAST.AST.References;
 ///   <item>"Target creature gains flying until end of turn."  (Jump)</item>
 ///   <item>"Target creature gains haste until end of turn."  (Unnatural Speed)</item>
 ///   <item>"Target creature gains deathtouch until end of turn."  (Lace with Moonglove)</item>
+///   <item>"Target creature gains shroud until end of turn."  (Mage's Guile)</item>
+///   <item>"Target creature gains shadow until end of turn."  (Shadow Rift)</item>
+///   <item>"Target creature gains undying until end of turn."  (Undying Evil)</item>
 /// </list>
 ///
 /// Multi-keyword forms ("gains flying and lifelink") and composite forms
@@ -162,6 +165,21 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
       {
         KeywordSource = "Defender",
         Effects = [new DefenderEffect()],
+      },
+      "shroud" => new StaticAbility
+      {
+        KeywordSource = "Shroud",
+        Effects = [new ShroudEffect()],
+      },
+      "shadow" => new StaticAbility
+      {
+        KeywordSource = "Shadow",
+        Effects = [new ShadowEffect()],
+      },
+      "undying" => new StaticAbility
+      {
+        KeywordSource = "Undying",
+        Effects = [new UndyingEffect()],
       },
       _ => null,
     };
