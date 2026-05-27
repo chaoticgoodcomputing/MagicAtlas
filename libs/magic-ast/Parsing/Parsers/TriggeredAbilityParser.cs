@@ -679,6 +679,20 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
+    // TurnedFaceUp trigger: "When this creature is turned face up" — Rule 702.37 (Morph/Megamorph).
+    // Turning a permanent face up is the keyword action defined in Rule 702.37e. The trigger fires
+    // when the morph or megamorph cost is paid and the card flips from its face-down state. The
+    // subject is always the source permanent ("this creature"), so no subtype filter is needed on
+    // the trigger itself; the filter captures only the self-reference.
+    if (lower.Contains("turned face up"))
+    {
+      var turnedFaceUp = TryParseTurnedFaceUpTrigger(triggerText, timing);
+      if (turnedFaceUp is not null)
+      {
+        return turnedFaceUp;
+      }
+    }
+
     return null;
   }
 
@@ -1313,6 +1327,34 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     {
       Timing = timing,
       Event = TriggerEvent.BecomesTarget,
+      Filter = filter,
+    };
+  }
+
+  /// <summary>
+  /// "When this creature is turned face up" — Rule 702.37 (Morph/Megamorph) face-up trigger.
+  /// The trigger fires when the face-down permanent's morph or megamorph cost is paid and
+  /// the card becomes face up (Rule 702.37e/f). Subject is always "this creature" — the
+  /// permanent whose triggered ability this is.
+  /// </summary>
+  private static TriggerCondition? TryParseTurnedFaceUpTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    var lower = triggerText.ToLowerInvariant();
+    if (!lower.Contains("turned face up"))
+    {
+      return null;
+    }
+
+    // Subject filter: "this creature" is the only oracle shape for this trigger.
+    var filter = new ObjectFilter { CardTypes = ["creature"] };
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.TurnedFaceUp,
       Filter = filter,
     };
   }
