@@ -902,6 +902,148 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // FADING / VANISHING / GRAFT KEYWORDS (counter-based permanence)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Fading N: This permanent enters with N fade counters on it. At the
+  /// beginning of your upkeep, remove a fade counter from it. If you can't,
+  /// sacrifice it.
+  /// Rule 702.32. MAST records the keyword and its integer value; the
+  /// counter-removal upkeep trigger and sacrifice-unless-counter mechanics
+  /// are engine territory.
+  /// </summary>
+  public static KeywordDefinition Fading { get; } =
+    new()
+    {
+      Name = "Fading",
+      RuleReference = "702.32",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Fading",
+        Effects = [new FadingEffect
+        {
+          Value = ParseIntValue("Fading", parameter),
+        }],
+      },
+    };
+
+  /// <summary>
+  /// Vanishing N: This permanent enters with N time counters on it. At the
+  /// beginning of your upkeep, remove a time counter from it. When the last
+  /// is removed, sacrifice it.
+  /// Rule 702.63. MAST records the keyword and its integer value; the
+  /// counter-removal upkeep trigger and last-counter sacrifice mechanics
+  /// are engine territory. Mirrors Fading (702.32) but uses time counters
+  /// and triggers on the last counter rather than inability to remove.
+  /// </summary>
+  public static KeywordDefinition Vanishing { get; } =
+    new()
+    {
+      Name = "Vanishing",
+      RuleReference = "702.63",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Vanishing",
+        Effects = [new VanishingEffect
+        {
+          Value = ParseIntValue("Vanishing", parameter),
+        }],
+      },
+    };
+
+  /// <summary>
+  /// Graft N: This permanent enters with N +1/+1 counters on it. Whenever
+  /// another creature enters, you may move a +1/+1 counter from this creature
+  /// onto it.
+  /// Rule 702.58. MAST records the keyword and its integer value; the
+  /// enters-with-counters and optional counter-move triggered ability are
+  /// engine territory.
+  /// </summary>
+  public static KeywordDefinition Graft { get; } =
+    new()
+    {
+      Name = "Graft",
+      RuleReference = "702.58",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Graft",
+        Effects = [new GraftEffect
+        {
+          Value = ParseIntValue("Graft", parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // DREDGE KEYWORD
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Dredge N: If you would draw a card, you may mill N cards instead. If you
+  /// do, return this card from your graveyard to your hand.
+  /// Rule 702.52. MAST records the keyword and its integer value; the
+  /// draw-replacement choice and mill-and-return mechanics are engine territory.
+  /// </summary>
+  public static KeywordDefinition Dredge { get; } =
+    new()
+    {
+      Name = "Dredge",
+      RuleReference = "702.52",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Dredge",
+        Effects = [new DredgeEffect
+        {
+          Value = ParseIntValue("Dredge", parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // OUTLAST KEYWORD
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Outlast {cost}: {cost}, {T}: Put a +1/+1 counter on this creature.
+  /// Outlast only as a sorcery.
+  /// Rule 702.107. Category is Activated because the comp-rules expansion is
+  /// an activated ability (702.107a), but the oracle-text shorthand reads as a
+  /// keyword followed by a mana-cost parameter. MAST records the keyword's
+  /// presence and cost; the tap cost, sorcery-speed restriction, and
+  /// counter-placement are engine territory.
+  /// </summary>
+  public static KeywordDefinition Outlast { get; } =
+    new()
+    {
+      Name = "Outlast",
+      RuleReference = "702.107",
+      Category = KeywordCategory.Activated,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Outlast",
+        Effects = [new OutlastEffect
+        {
+          Cost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // CUMULATIVE UPKEEP KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -2021,6 +2163,11 @@ public static class KeywordDefinitions
       Prepared,
       DoctorsCompanion,
       Firebending,
+      Fading,
+      Vanishing,
+      Graft,
+      Dredge,
+      Outlast,
       // More keywords can be added here as needed
     ];
 
