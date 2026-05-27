@@ -72,6 +72,61 @@ public static class KeywordDefinitions
     };
 
   /// <summary>
+  /// Shadow: This creature can't be blocked except by creatures with shadow, and a
+  /// creature without shadow can't be blocked by creatures with shadow.
+  /// Rule 702.28. Mutual evasion: only shadow can block shadow. EvasionEffect with
+  /// CanBeBlockedBy restricted to the "shadow" characteristic.
+  /// </summary>
+  public static KeywordDefinition Shadow { get; } =
+    new()
+    {
+      Name = "Shadow",
+      RuleReference = "702.28",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Shadow",
+        Effects = [new EvasionEffect
+        {
+          CanBeBlockedBy = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Characteristics = ["shadow"],
+          },
+        }],
+      },
+    };
+
+  /// <summary>
+  /// Intimidate: This creature can't be blocked except by artifact creatures and/or
+  /// creatures that share a color with it.
+  /// Rule 702.13. EvasionEffect with CanBeBlockedBy covering the artifact-type and
+  /// shares-a-color predicates; mirrors Fear (702.36) but substitutes the color-share
+  /// predicate for the fixed black-color predicate.
+  /// </summary>
+  public static KeywordDefinition Intimidate { get; } =
+    new()
+    {
+      Name = "Intimidate",
+      RuleReference = "702.13",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Intimidate",
+        Effects = [new EvasionEffect
+        {
+          CanBeBlockedBy = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Characteristics = ["artifact", "shares a color"],
+          },
+        }],
+      },
+    };
+
+  /// <summary>
   /// Menace: This creature can't be blocked except by two or more creatures.
   /// Rule 702.111. Evasion keyword whose distinguishing feature is a minimum
   /// blocker count rather than a characteristic filter on the blockers.
@@ -246,6 +301,50 @@ public static class KeywordDefinitions
       {
         KeywordSource = "Mentor",
         Effects = [new MentorEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Myriad: Triggered keyword ability. Whenever this creature attacks, for each
+  /// opponent other than defending player, you may create a token copy tapped and
+  /// attacking that player or a planeswalker they control; exile the tokens at end
+  /// of combat.
+  /// Rule 702.116. MAST records keyword presence; the per-opponent copy-creation,
+  /// tapped-and-attacking, and delayed-exile semantics are engine territory.
+  /// Mirrors EvolveEffect and FlankingEffect: parameterless keyword marker.
+  /// </summary>
+  public static KeywordDefinition Myriad { get; } =
+    new()
+    {
+      Name = "Myriad",
+      RuleReference = "702.116",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Myriad",
+        Effects = [new MyriadEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Melee: Triggered keyword ability. Whenever this creature attacks, it gets
+  /// +1/+1 until end of turn for each opponent you attacked with a creature this combat.
+  /// Rule 702.121. MAST records keyword presence; the per-opponent attack counting
+  /// and temporary P/T buff are engine territory. Mirrors EvolveEffect and
+  /// FlankingEffect: parameterless keyword marker.
+  /// </summary>
+  public static KeywordDefinition Melee { get; } =
+    new()
+    {
+      Name = "Melee",
+      RuleReference = "702.121",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Melee",
+        Effects = [new MeleeEffect()],
       },
     };
 
@@ -703,6 +802,8 @@ public static class KeywordDefinitions
     [
       Flying,
       Fear,
+      Shadow,
+      Intimidate,
       Menace,
       FirstStrike,
       DoubleStrike,
@@ -725,6 +826,8 @@ public static class KeywordDefinitions
       Plot,
       Undying,
       Mentor,
+      Myriad,
+      Melee,
       Saddle,
       Megamorph,
       CumulativeUpkeep,

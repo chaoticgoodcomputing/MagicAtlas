@@ -2737,6 +2737,50 @@ public sealed class StaticAbilityParser : IAbilityParser
           MinimumBlockers = 2,
         }],
       },
+      // Shadow: only creatures with shadow can block this creature, and this creature
+      // can only block other shadow creatures. Rule 702.28. Mutual evasion —
+      // EvasionEffect with CanBeBlockedBy restricted to the "shadow" characteristic.
+      "shadow" => new StaticAbility
+      {
+        KeywordSource = "Shadow",
+        Effects = [new MagicAST.AST.Effects.Keyword.EvasionEffect
+        {
+          CanBeBlockedBy = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Characteristics = ["shadow"],
+          },
+        }],
+      },
+      // Intimidate: can't be blocked except by artifact creatures and/or creatures
+      // sharing a color. Rule 702.13. Mirrors Fear (702.36) but with the color-share
+      // predicate instead of the fixed black-color predicate.
+      "intimidate" => new StaticAbility
+      {
+        KeywordSource = "Intimidate",
+        Effects = [new MagicAST.AST.Effects.Keyword.EvasionEffect
+        {
+          CanBeBlockedBy = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Characteristics = ["artifact", "shares a color"],
+          },
+        }],
+      },
+      // Myriad: triggered keyword. MAST records keyword presence; the per-opponent
+      // copy-creation and delayed-exile semantics are engine territory. Rule 702.116.
+      "myriad" => new StaticAbility
+      {
+        KeywordSource = "Myriad",
+        Effects = [new MagicAST.AST.Effects.Keyword.MyriadEffect()],
+      },
+      // Melee: triggered keyword. MAST records keyword presence; the per-opponent
+      // attack counting and P/T buff are engine territory. Rule 702.121.
+      "melee" => new StaticAbility
+      {
+        KeywordSource = "Melee",
+        Effects = [new MagicAST.AST.Effects.Keyword.MeleeEffect()],
+      },
       _ => null,
     };
   }
