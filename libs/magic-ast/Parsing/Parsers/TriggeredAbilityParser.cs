@@ -621,6 +621,19 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
+    // Block trigger: "Whenever this creature blocks" / "Whenever [CardName] blocks" /
+    // "Whenever this creature blocks a creature" — Rule 509 (Declare Blockers Step).
+    // Fires when the named or self-referencing creature is declared as a blocker.
+    // Exclude "becomes blocked" (BecomesBlocked event) which also contains the word "blocks".
+    if (lower.Contains("blocks") && !lower.Contains("becomes blocked"))
+    {
+      var blocks = TryParseBlocksTrigger(triggerText, timing);
+      if (blocks is not null)
+      {
+        return blocks;
+      }
+    }
+
     // DealsCombatDamageToPlayer trigger: "Whenever this creature deals combat damage to a player".
     // Combat damage step: Rule 510 (Combat Damage Step). A triggered ability with
     // TriggerEvent.DealsCombatDamageToPlayer fires whenever the named source deals
@@ -761,6 +774,32 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     {
       Timing = timing,
       Event = TriggerEvent.Attacks,
+      Filter = filter,
+    };
+  }
+
+  /// <summary>
+  /// "Whenever this creature blocks" / "Whenever [CardName] blocks" /
+  /// "Whenever this creature blocks a creature" — Rule 509 (Declare Blockers Step).
+  /// Fires when the named creature is declared as a blocker. The optional
+  /// "blocks a creature" qualifier is descriptive (all blockers block creatures);
+  /// it doesn't alter the trigger semantics, so the filter is the same either way.
+  /// </summary>
+  private static TriggerCondition? TryParseBlocksTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    var filter = ParseObjectFilter(triggerText);
+    if (filter == null)
+    {
+      return null;
+    }
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.Blocks,
       Filter = filter,
     };
   }
@@ -1296,7 +1335,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     const string FunctionWords = "of|the|a|an|from|for|to|in|at|with|by|and|or|as";
     return Regex.IsMatch(
       stripped,
-      @"^[A-Z][A-Za-z'\-]*(?:\s+(?:[A-Z][A-Za-z'\-]*|" + FunctionWords + @"))*\s+(enters|dies|attacks)\b",
+      @"^[A-Z][A-Za-z'\-]*(?:\s+(?:[A-Z][A-Za-z'\-]*|" + FunctionWords + @"))*\s+(enters|dies|attacks|blocks)\b",
       RegexOptions.CultureInvariant
     );
   }
