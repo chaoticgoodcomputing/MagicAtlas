@@ -187,6 +187,15 @@ public enum TriggerEvent
   /// <summary>A player scries or surveils (combined trigger)</summary>
   ScryOrSurveil,
 
+  /// <summary>
+  /// A permanent enters the battlefield or dies (combined trigger).
+  /// Rule 603: "When this creature enters or dies, [effect]."
+  /// Both zone-change events (battlefield entry and battlefield→graveyard) share a
+  /// single triggered ability; the ability triggers on whichever event occurs first
+  /// on each occurrence.
+  /// </summary>
+  EntersOrDies,
+
   /// <summary>Unrecognized trigger event</summary>
   Other,
 }
