@@ -1,0 +1,79 @@
+{
+  "Input": {
+    "Name": "Skeleton Archer",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Creature — Skeleton Archer",
+    "OracleText": "When this creature enters, it deals 1 damage to any target.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Skeleton Archer",
+    "TypeLine": {
+      "Raw": "Creature — Skeleton Archer",
+      "Types": ["Creature"],
+      "Subtypes": ["Skeleton", "Archer"]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, it deals 1 damage to any target.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Source": { "Kind": "It" },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": { "Kind": "AnyTarget" },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
