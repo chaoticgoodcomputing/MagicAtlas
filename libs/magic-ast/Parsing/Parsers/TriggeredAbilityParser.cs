@@ -1150,15 +1150,21 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   {
     var lower = text.ToLowerInvariant();
 
-    // Possessive cue: any "you control" / "an opponent controls" qualifier
+    // Possessive cue: any "you control" / "under your control" / "an opponent controls" qualifier
     // lands on the filter's Controller axis. Applies on top of card-type
     // matching below.
+    // "under your control" is the older oracle phrasing for what modern oracle writes as
+    // "you control" (Rule 109.5 — an object is under a player's control if they own it
+    // or have been given control of it). Both phrasings describe the same relationship.
     ControllerFilter? controller = null;
-    if (Regex.IsMatch(lower, @"\byou\s+control\b"))
+    if (Regex.IsMatch(lower, @"\byou\s+control\b") || Regex.IsMatch(lower, @"\bunder\s+your\s+control\b"))
     {
       controller = ControllerFilter.You;
     }
-    else if (Regex.IsMatch(lower, @"\ban\s+opponent\s+controls\b"))
+    else if (
+      Regex.IsMatch(lower, @"\ban\s+opponent\s+controls\b")
+      || Regex.IsMatch(lower, @"\bunder\s+an\s+opponent'?s\s+control\b")
+    )
     {
       controller = ControllerFilter.Opponent;
     }
