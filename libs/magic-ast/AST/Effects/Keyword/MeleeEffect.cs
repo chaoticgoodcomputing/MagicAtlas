@@ -9,8 +9,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// creature attacks, it gets +1/+1 until end of turn for each opponent you attacked
 /// with a creature this combat. MAST records the keyword's presence; the per-opponent
 /// attack counting and temporary P/T buff are engine territory per the
-/// descriptive-not-engine doctrine. Mirrors EvolveEffect, FlankingEffect, MyriadEffect,
-/// and MentorEffect exactly: parameterless, four trait interfaces.
+/// descriptive-not-engine doctrine. Parameterless, four trait interfaces.
 /// </summary>
 [OracleEffect("melee")]
 public sealed record MeleeEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect

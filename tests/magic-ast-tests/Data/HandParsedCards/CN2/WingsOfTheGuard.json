@@ -1,0 +1,108 @@
+{
+  "Input": {
+    "Name": "Wings of the Guard",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Bird",
+    "OracleText": "Flying\nMelee (Whenever this creature attacks, it gets +1/+1 until end of turn for each opponent you attacked this combat.)",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Wings of the Guard",
+    "TypeLine": {
+      "Raw": "Creature — Bird",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Bird"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying\nMelee (Whenever this creature attacks, it gets +1/+1 until end of turn for each opponent you attacked this combat.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "flying",
+                  "reach"
+                ]
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Melee",
+          "Reminder": {
+            "Text": "(Whenever this creature attacks, it gets +1/+1 until end of turn for each opponent you attacked this combat.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "melee"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
