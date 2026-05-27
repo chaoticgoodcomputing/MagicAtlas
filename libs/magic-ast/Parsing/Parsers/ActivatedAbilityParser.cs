@@ -7,6 +7,7 @@ using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Counter;
+using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Damage;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Modification;
@@ -432,6 +433,20 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     if (regenerateEffect != null)
     {
       return new List<Effect> { regenerateEffect };
+    }
+
+    // Exile target card from a graveyard
+    var exileFromGraveyard = TryParseExileFromGraveyardEffect(effectPart);
+    if (exileFromGraveyard != null)
+    {
+      return new List<Effect> { exileFromGraveyard };
+    }
+
+    // Target player loses N life
+    var loseLife = TryParseLoseLifeEffect(effectPart);
+    if (loseLife != null)
+    {
+      return new List<Effect> { loseLife };
     }
 
     // For now, we can't parse other effect types
@@ -1678,14 +1693,16 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     }
 
     // Pattern: "This [type] gains [keyword]" — self-targeting activated ability effect.
+    // Captures 1–2 word keywords (e.g. "first strike", "double strike") using a
+    // negative-lookahead on the second word to avoid swallowing "until"/"until end".
     var selfMatch = Regex.Match(
       effectText,
-      @"^This\s+\w+\s+gains?\s+(\w+)",
+      @"^This\s+\w+\s+gains?\s+(?<kw>[a-z]+(?:\s+(?!until|for|as\b)[a-z]+)?)",
       RegexOptions.IgnoreCase
     );
     if (selfMatch.Success)
     {
-      var selfKeyword = selfMatch.Groups[1].Value;
+      var selfKeyword = selfMatch.Groups["kw"].Value.ToLowerInvariant().Trim();
       var selfAbility = BuildGrantedKeywordAbility(selfKeyword);
       if (selfAbility is not null)
       {
@@ -1703,6 +1720,34 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
           Target = ObjectReference.Self(),
           GainedAbility = selfAbility,
           Duration = selfDuration,
+        };
+      }
+    }
+
+    // Pattern: "Target creature gains [keyword] until end of turn" —
+    // single-keyword UEOT grant on a targeted creature (combat trick shape).
+    // Captures 1–2 word keywords; the negative-lookahead on "until" prevents
+    // the optional second word from consuming the duration clause.
+    var targetCreatureGainsMatch = Regex.Match(
+      effectText,
+      @"^Target\s+creature\s+gains?\s+(?<kw>[a-z]+(?:\s+(?!until|for|as\b)[a-z]+)?)\s+until\s+end\s+of\s+turn$",
+      RegexOptions.IgnoreCase
+    );
+    if (targetCreatureGainsMatch.Success)
+    {
+      var targetKeyword = targetCreatureGainsMatch.Groups["kw"].Value.ToLowerInvariant().Trim();
+      var targetAbility = BuildGrantedKeywordAbility(targetKeyword);
+      if (targetAbility is not null)
+      {
+        return new GainAbilityEffect
+        {
+          Target = new ObjectReference
+          {
+            Kind = ObjectReferenceKind.Target,
+            Filter = new ObjectFilter { CardTypes = ["creature"] },
+          },
+          GainedAbility = targetAbility,
+          Duration = new UntilEndOfTurnDuration(),
         };
       }
     }
@@ -1762,25 +1807,59 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   private static Ability? BuildGrantedKeywordAbility(string keywordRaw)
   {
     var keyword = keywordRaw.Trim().ToLowerInvariant();
-    Effect? effect = keyword switch
+
+    // Multi-word keywords (first strike, double strike) use CombatDamageTimingEffect.
+    // Single-word keywords use their dedicated effect type.
+    return keyword switch
     {
-      "lifelink" => new LifelinkEffect(),
-      "haste" => new HasteEffect(),
-      "trample" => new TrampleEffect(),
-      "vigilance" => new VigilanceEffect(),
-      "reach" => new ReachEffect(),
-      "indestructible" => new IndestructibleEffect(),
+      "lifelink" => new StaticAbility { KeywordSource = "Lifelink", Effects = [new LifelinkEffect()] },
+      "haste" => new StaticAbility { KeywordSource = "Haste", Effects = [new HasteEffect()] },
+      "trample" => new StaticAbility { KeywordSource = "Trample", Effects = [new TrampleEffect()] },
+      "vigilance" => new StaticAbility { KeywordSource = "Vigilance", Effects = [new VigilanceEffect()] },
+      "reach" => new StaticAbility { KeywordSource = "Reach", Effects = [new ReachEffect()] },
+      "indestructible" => new StaticAbility { KeywordSource = "Indestructible", Effects = [new IndestructibleEffect()] },
+      "deathtouch" => new StaticAbility { KeywordSource = "Deathtouch", Effects = [new DeathtouchEffect()] },
+      "hexproof" => new StaticAbility { KeywordSource = "Hexproof", Effects = [new HexproofEffect()] },
+      "shroud" => new StaticAbility { KeywordSource = "Shroud", Effects = [new ShroudEffect()] },
+      "flying" => new StaticAbility
+      {
+        KeywordSource = "Flying",
+        Effects =
+        [
+          new EvasionEffect
+          {
+            CanBeBlockedBy = new ObjectFilter
+            {
+              CardTypes = ["creature"],
+              Characteristics = ["flying", "reach"],
+            },
+          },
+        ],
+      },
+      "menace" => new StaticAbility
+      {
+        KeywordSource = "Menace",
+        Effects =
+        [
+          new EvasionEffect
+          {
+            CanBeBlockedBy = new ObjectFilter { CardTypes = ["creature"] },
+            MinimumBlockers = 2,
+          },
+        ],
+      },
+      "first strike" => new StaticAbility
+      {
+        KeywordSource = "First strike",
+        Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.First }],
+      },
+      "double strike" => new StaticAbility
+      {
+        KeywordSource = "Double strike",
+        Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both }],
+      },
       _ => null,
     };
-
-    if (effect is null)
-    {
-      return null;
-    }
-
-    // Title-case the keyword for KeywordSource (matches direct-keyword ability convention).
-    var keywordSource = char.ToUpperInvariant(keyword[0]) + keyword[1..];
-    return new StaticAbility { Effects = [effect], KeywordSource = keywordSource };
   }
 
   /// <summary>
@@ -1866,6 +1945,77 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     }
 
     return null;
+  }
+
+  /// <summary>
+  /// Tries to parse "Exile target card from a graveyard." —
+  /// single-card graveyard-exile as an activated ability effect (Rule 701.7).
+  /// The most common activated-ability exile pattern (17 corpus lines): used on
+  /// hosers like Withered Wretch that repeatedly pick off graveyard cards.
+  /// </summary>
+  private static ExileEffect? TryParseExileFromGraveyardEffect(string effectText)
+  {
+    var trimmed = effectText.Trim().TrimEnd('.').Trim();
+    if (!Regex.IsMatch(
+          trimmed,
+          @"^Exile\s+target\s+card\s+from\s+a\s+graveyard$",
+          RegexOptions.IgnoreCase))
+    {
+      return null;
+    }
+    return new ExileEffect
+    {
+      Target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["card"],
+          Zone = Zone.Graveyard,
+        },
+      },
+    };
+  }
+
+  /// <summary>
+  /// Tries to parse "Target player loses N life." —
+  /// targeted life-loss as an activated ability effect (Rule 119).
+  /// Covers artifacts like Onyx Goblet and activated drain effects where
+  /// the controller chooses a player to lose a literal amount of life.
+  /// </summary>
+  private static LoseLifeEffect? TryParseLoseLifeEffect(string effectText)
+  {
+    var trimmed = effectText.Trim().TrimEnd('.').Trim();
+    var m = Regex.Match(
+      trimmed,
+      @"^Target\s+player\s+loses\s+(?<amount>\d+|one|two|three|four|five)\s+life$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var rawAmount = m.Groups["amount"].Value.ToLowerInvariant();
+    int amount = rawAmount switch
+    {
+      "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      "four" => 4,
+      "five" => 5,
+      _ => int.Parse(rawAmount),
+    };
+
+    return new LoseLifeEffect
+    {
+      Amount = LiteralQuantity.Of(amount),
+      Player = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = ["player"] },
+      },
+    };
   }
 
   /// <summary>
