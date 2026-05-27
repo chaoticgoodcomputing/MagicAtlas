@@ -1,0 +1,103 @@
+{
+  "Input": {
+    "Name": "Indrik Stomphowler",
+    "ManaCost": "{4}{G}",
+    "TypeLine": "Creature — Beast",
+    "OracleText": "When this creature enters, destroy target artifact or enchantment.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Indrik Stomphowler",
+    "TypeLine": {
+      "Raw": "Creature — Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, destroy target artifact or enchantment.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "artifact",
+                    "enchantment"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
