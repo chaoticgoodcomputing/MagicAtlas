@@ -31,7 +31,7 @@ public static class AggregateTriageReportStep
   /// in <see cref="TriageReport.TopYieldClusters"/>. Matches the typical
   /// family-contract dispatch batch size in <c>mast-tdd-loop</c>.
   /// </summary>
-  private const int YieldBatchSize = 5;
+  private const int YieldBatchSize = 20;
 
   /// <summary>
   /// Build the triage report.
@@ -63,6 +63,9 @@ public static class AggregateTriageReportStep
 
       var totalCards = all.Count;
       var passingCards = all.Count(r => r.Lines.All(l => l.Patterns.Count == 0));
+
+      var totalAbilities = allLines.Sum(x => x.line.TotalAbilities);
+      var parsedAbilities = allLines.Sum(x => x.line.ParsedAbilities);
 
       // (pattern, rule) -> line ids (using identity of (cardId, lineIndex))
       var keyToLineIds = new Dictionary<GapKey, HashSet<(string, int)>>();
@@ -216,6 +219,33 @@ public static class AggregateTriageReportStep
         )
         .ToList();
 
+      // Line-frequency-ranked gap surface — same entries, different ranking
+      // axis. Surfaces high-frequency parser bail points that have broad
+      // corpus impact even when they don't exclusively flip whole cards.
+      var topGapsByFreq = keyToLineIds
+        .Keys.OrderByDescending(k => keyToLineIds[k].Count)
+        .ThenByDescending(k => keyToCardIds[k].Count)
+        .Take(MaxTopGaps)
+        .Select(
+          (key, idx) =>
+            BuildGapEntry(
+              key,
+              idx + 1,
+              keyToLineIds[key],
+              keyToCardIds[key],
+              keyToExclusiveCards[key],
+              keyToExclusiveLines[key],
+              patternToRelated.TryGetValue(key.Pattern, out var rel2) ? rel2 : new List<string>(),
+              keyToPositions.TryGetValue(key, out var pos2) ? pos2 : new List<int>(),
+              allLines,
+              cardLookup,
+              handParsedNames,
+              totalCards,
+              totalLines
+            )
+        )
+        .ToList();
+
       // Data-derived clustering pass: lexical-template clustering + greedy
       // set-cover yield projection. Independent of the hand-coded pattern
       // taxonomy above. Orchestrator should weigh both surfaces.
@@ -228,11 +258,13 @@ public static class AggregateTriageReportStep
         {
           CardCoverage = StatOf(passingCards, totalCards),
           LineCoverage = StatOf(passingLines, totalLines),
+          AbilityCoverage = StatOf(parsedAbilities, totalAbilities),
           DistinctUnresolvedPatterns = distinctPatterns,
           HandParsedCoverage = ratchet,
         },
         TopYieldClusters = topYieldClusters,
         TopGaps = topGaps,
+        TopGapsByLineFrequency = topGapsByFreq,
       };
     };
 
