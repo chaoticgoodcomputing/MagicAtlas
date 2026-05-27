@@ -1,0 +1,79 @@
+{
+  "Input": {
+    "Name": "Two-Headed Giant of Foriys",
+    "ManaCost": "{4}{R}",
+    "TypeLine": "Creature — Giant",
+    "OracleText": "Trample\nThis creature can block an additional creature each combat.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Two-Headed Giant of Foriys",
+    "TypeLine": {
+      "Raw": "Creature — Giant",
+      "Types": ["Creature"],
+      "Subtypes": ["Giant"]
+    },
+    "Oracle": {
+      "RawText": "Trample\nThis creature can block an additional creature each combat.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "trample"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "blockAdditional",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
