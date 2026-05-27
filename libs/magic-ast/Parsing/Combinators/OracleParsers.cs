@@ -791,6 +791,26 @@ public static class OracleParsers
   /// Parser for the "Melee" keyword.
   #endregion
 
+  /// <summary>
+  /// Parser for the "Split second" keyword.
+  /// Pattern: "Split" "second" [reminder]
+  /// Rule 702.61. As long as this spell is on the stack, players can't cast spells or
+  /// activate abilities that aren't mana abilities. MAST records the keyword's presence;
+  /// the stack-restriction semantics are engine territory. Multi-word keyword via
+  /// sequential Keyword() combinators, mirroring FirstStrike and CumulativeUpkeep.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> SplitSecond = (
+    from split in Keyword("Split")
+    from second in Keyword("second")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Split second",
+      Effects = [new SplitSecondEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #region Combat Timing Keywords
 
   /// <summary>
@@ -2128,6 +2148,24 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Skulk" keyword.
+  /// Pattern: "Skulk" [reminder]
+  /// Rule 702.116b. This creature can't be blocked by creatures with greater power.
+  /// MAST records the keyword's presence; the power-comparison blocking restriction
+  /// is engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Skulk = (
+    from kw in Keyword("Skulk")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Skulk",
+      Effects = [new SkulkEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Sunburst" keyword.
   /// Pattern: "Sunburst" [reminder]
   /// Rule 702.44. This permanent enters with a +1/+1 counter on it for each
@@ -2147,6 +2185,24 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Horsemanship" keyword.
+  /// Pattern: "Horsemanship" [reminder]
+  /// Rule 702.32. This creature can't be blocked except by creatures with
+  /// horsemanship. MAST records the keyword's presence; the mutual-horsemanship
+  /// blocking restriction is engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Horsemanship = (
+    from kw in Keyword("Horsemanship")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Horsemanship",
+      Effects = [new HorsemanshipEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Unleash" keyword.
   /// Pattern: "Unleash" [reminder]
   /// Rule 702.97. You may have this creature enter with a +1/+1 counter on it;
@@ -2161,6 +2217,26 @@ public static class OracleParsers
     {
       KeywordSource = "Unleash",
       Effects = [new UnleashEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Battle cry" keyword.
+  /// Pattern: "Battle" "cry" [reminder]
+  /// Rule 702.91. Whenever this creature attacks, each other attacking creature gets
+  /// +1/+0 until end of turn. Although mechanically a triggered ability, MAST models
+  /// it as a keyword marker (same approach as Flanking, Evolve, Exalted); the attack
+  /// trigger and pump expansion are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> BattleCry = (
+    from battle in Keyword("Battle")
+    from cry in Keyword("cry")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Battle cry",
+      Effects = [new BattleCryEffect()],
       Reminder = reminder,
     }
   );
@@ -2220,6 +2296,25 @@ public static class OracleParsers
     {
       KeywordSource = "Ingest",
       Effects = [new IngestEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Soulbond" keyword.
+  /// Pattern: "Soulbond" [reminder]
+  /// Rule 702.95. You may pair this creature with another unpaired creature when
+  /// either enters. They remain paired for as long as you control both of them.
+  /// MAST records the keyword's presence; the pairing mechanics and any granted
+  /// abilities are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Soulbond = (
+    from kw in Keyword("Soulbond")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Soulbond",
+      Effects = [new SoulbondEffect()],
       Reminder = reminder,
     }
   );
@@ -2328,7 +2423,12 @@ public static class OracleParsers
     .Or(Learn)
     .Or(Retrace)
     .Or(Sunburst)
-    .Or(Ingest);
+    .Or(Ingest)
+    .Or(Skulk)
+    .Or(Horsemanship)
+    .Or(SplitSecond)
+    .Or(BattleCry)
+    .Or(Soulbond);
 
   /// <summary>
   /// Parses any parameterized keyword ability.

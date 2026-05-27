@@ -260,6 +260,30 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // STACK RESTRICTION KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Split second: As long as this spell is on the stack, players can't cast spells
+  /// or activate abilities that aren't mana abilities.
+  /// Rule 702.61. MAST records the keyword's presence; the stack-restriction
+  /// semantics are engine territory.
+  /// </summary>
+  public static KeywordDefinition SplitSecond { get; } =
+    new()
+    {
+      Name = "Split second",
+      RuleReference = "702.61",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Split second",
+        Effects = [new SplitSecondEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // COMBAT TRIGGERED KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -326,6 +350,47 @@ public static class KeywordDefinitions
     };
 
   /// <summary>
+  /// Battle cry: Whenever this creature attacks, each other attacking creature gets
+  /// +1/+0 until end of turn.
+  /// Rule 702.91. Although mechanically a triggered ability, MAST models it as a
+  /// keyword marker (same approach as Flanking, Evolve, Exalted); the attack trigger
+  /// and pump expansion are engine territory.
+  /// </summary>
+  public static KeywordDefinition BattleCry { get; } =
+    new()
+    {
+      Name = "Battle cry",
+      RuleReference = "702.91",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Battle cry",
+        Effects = [new BattleCryEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Soulbond: You may pair this creature with another unpaired creature when either
+  /// enters. They remain paired for as long as you control both of them.
+  /// Rule 702.95. MAST records the keyword's presence; the pairing mechanics and any
+  /// granted abilities are engine territory (same approach as Flanking and Evolve).
+  /// </summary>
+  public static KeywordDefinition Soulbond { get; } =
+    new()
+    {
+      Name = "Soulbond",
+      RuleReference = "702.95",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Soulbond",
+        Effects = [new SoulbondEffect()],
+      },
+    };
+
+  /// <summary>
   /// Myriad: Triggered keyword ability. Whenever this creature attacks, for each
   /// opponent other than defending player, you may create a token copy tapped and
   /// attacking that player or a planeswalker they control; exile the tokens at end
@@ -345,6 +410,44 @@ public static class KeywordDefinitions
       {
         KeywordSource = "Myriad",
         Effects = [new MyriadEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Skulk: This creature can't be blocked by creatures with greater power.
+  /// Rule 702.116b. An evasion keyword — MAST records the keyword's presence;
+  /// the power-comparison blocking restriction is engine territory.
+  /// </summary>
+  public static KeywordDefinition Skulk { get; } =
+    new()
+    {
+      Name = "Skulk",
+      RuleReference = "702.116b",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Skulk",
+        Effects = [new SkulkEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Horsemanship: This creature can't be blocked except by creatures with horsemanship.
+  /// Rule 702.32. An evasion keyword — MAST records the keyword's presence;
+  /// the mutual-horsemanship blocking restriction is engine territory.
+  /// </summary>
+  public static KeywordDefinition Horsemanship { get; } =
+    new()
+    {
+      Name = "Horsemanship",
+      RuleReference = "702.32",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Horsemanship",
+        Effects = [new HorsemanshipEffect()],
       },
     };
 
@@ -1247,6 +1350,11 @@ public static class KeywordDefinitions
       Sunburst,
       Fabricate,
       Ingest,
+      Skulk,
+      Horsemanship,
+      SplitSecond,
+      BattleCry,
+      Soulbond,
       // More keywords can be added here as needed
     ];
 

@@ -1,0 +1,84 @@
+{
+  "Input": {
+    "Name": "Goblin Wardriver",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature — Goblin Warrior",
+    "OracleText": "Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)\nBattle cry",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Goblin Wardriver",
+    "TypeLine": {
+      "Raw": "Creature — Goblin Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Goblin", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)\nBattle cry",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Battle cry",
+          "Reminder": {
+            "Text": "(Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "battleCry"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Battle cry",
+          "Effects": [
+            {
+              "EffectType": "battleCry"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
