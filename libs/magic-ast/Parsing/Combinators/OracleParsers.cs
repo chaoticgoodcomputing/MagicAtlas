@@ -10,6 +10,7 @@ using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Timing;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Keywords;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using Superpower.Model;
@@ -785,6 +786,26 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Affinity for [text]" keyword.
+  /// Pattern: "Affinity" "for" Word+ [reminder]
+  /// Rule 702.41. The parameter text between "for" and the optional reminder
+  /// (or end-of-input) is captured as the literal type/subtype label; the
+  /// <see cref="KeywordDefinitions.Affinity"/> expansion maps it to an
+  /// <see cref="ObjectFilter"/> on the cost-reduction's per-object axis.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Affinity = (
+    from keyword in Keyword("Affinity")
+    from forKw in Keyword("for")
+    from typeWords in Token.EqualTo(OracleToken.Word).AtLeastOnce()
+    from reminder in _optionalReminder
+    let parameter = string.Join(" ", typeWords.Select(t => t.ToStringValue()))
+    select (StaticAbility)KeywordDefinitions.Affinity.CreateExpansion(parameter) with
+    {
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Entwine {cost}" — Rule 702.41. The cost is parsed by the
   /// shared mana-cost parser so multi-symbol entwine costs (e.g. {1}{B}) land
   /// as full <see cref="MagicAST.AST.Costs.ManaCost"/> nodes rather than
@@ -1439,6 +1460,7 @@ public static class OracleParsers
       .Or(PartnerWith.Try())
       .Or(Partner.Try())
       .Or(ChooseABackground.Try())
+      .Or(Affinity.Try())
       .Or(Entwine.Try())
       .Or(Typecycling.Try())
       .Or(Cycling.Try())
