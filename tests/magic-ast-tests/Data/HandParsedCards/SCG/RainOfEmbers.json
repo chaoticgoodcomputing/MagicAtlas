@@ -1,0 +1,79 @@
+{
+  "Input": {
+    "Name": "Rain of Embers",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Rain of Embers deals 1 damage to each creature and each player.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Rain of Embers",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Rain of Embers deals 1 damage to each creature and each player.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "IsOptional": false,
+              "Effects": [
+                {
+                  "EffectType": "dealDamage",
+                  "Source": { "Kind": "Self" },
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Target": {
+                    "Kind": "Each",
+                    "Filter": {
+                      "CardTypes": ["creature"]
+                    }
+                  },
+                  "IsOptional": false
+                },
+                {
+                  "EffectType": "dealDamage",
+                  "Source": { "Kind": "Self" },
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Target": { "Kind": "EachPlayer" },
+                  "IsOptional": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}
