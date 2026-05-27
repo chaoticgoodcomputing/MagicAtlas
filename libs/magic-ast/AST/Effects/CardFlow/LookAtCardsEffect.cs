@@ -34,6 +34,16 @@ public sealed record LookAtCardsEffect : Effect, IOptionalEffect, IDurativeEffec
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Location { get; init; }
 
+  /// <summary>
+  /// True when oracle text specifies "then put them back in any order" — the
+  /// controller reorders all looked-at cards and returns them to the same zone.
+  /// Distinct from scry (top/bottom choice) and surveil (graveyard option).
+  /// Rule 701.12 (look) does not define a default disposition; the clause must
+  /// be explicit in oracle text.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool PutBackInAnyOrder { get; init; }
+
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
   public bool IsOptional { get; init; }
 
