@@ -1,0 +1,101 @@
+{
+  "Input": {
+    "Name": "Backup Agent",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Human Advisor",
+    "OracleText": "Backup 1 (When this creature enters, put a +1/+1 counter on target creature. If that's another creature, it gains the following ability until end of turn.)\nReach",
+    "Power": "1",
+    "Toughness": "2",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Backup Agent",
+    "TypeLine": {
+      "Raw": "Creature — Human Advisor",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Advisor"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Backup 1 (When this creature enters, put a +1/+1 counter on target creature. If that's another creature, it gains the following ability until end of turn.)\nReach",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Backup",
+          "Reminder": {
+            "Text": "(When this creature enters, put a +1/+1 counter on target creature. If that's another creature, it gains the following ability until end of turn.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "backup",
+              "Value": 1,
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Reach",
+          "Effects": [
+            {
+              "EffectType": "reach"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

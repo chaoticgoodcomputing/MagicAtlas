@@ -1,0 +1,93 @@
+{
+  "Input": {
+    "Name": "Jawbone Duelist",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Phyrexian Human Knight",
+    "OracleText": "Toxic 1 (Whenever this creature deals combat damage to a player, that player gets a poison counter.)",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Jawbone Duelist",
+    "TypeLine": {
+      "Raw": "Creature — Phyrexian Human Knight",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Human",
+        "Knight"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Toxic 1 (Whenever this creature deals combat damage to a player, that player gets a poison counter.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Toxic",
+          "Reminder": {
+            "Text": "(Whenever this creature deals combat damage to a player, that player gets a poison counter.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "toxic",
+              "Value": 1,
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
