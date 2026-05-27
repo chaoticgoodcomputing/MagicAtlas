@@ -196,6 +196,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return drawReplacement;
     }
 
+    // "If you would create a Clue, Food, or Treasure token, instead create
+    // one of each." — Rule 614 pure substitution: the original token creation
+    // is replaced by creating one of each listed token type (Academy Manufactor
+    // shape). More specific than the augmentation pattern below — must be tried
+    // first so the "instead" keyword routes here, not to the "plus" branch.
+    var tokenSubstitution = TryParseTokenSubstitutionReplacement(clause);
+    if (tokenSubstitution != null)
+    {
+      return tokenSubstitution;
+    }
+
     // "If one or more tokens would be created under your control, those tokens
     // plus that many [token-def] are created instead." — Rule 614 augmentation
     // (Doubling Season / Chatterfang shape). OriginalEventOccurs=true: the
@@ -204,6 +215,26 @@ public sealed class StaticAbilityParser : IAbilityParser
     if (tokenAugmentation != null)
     {
       return tokenAugmentation;
+    }
+
+    // "If an effect would create one or more tokens under your control, it
+    // creates twice that many of those tokens instead." — Rule 614 scaling
+    // replacement: the token count is doubled (Doubling Season token line).
+    // OriginalEventOccurs=false with a Modifier of Type "double".
+    var tokenDoubling = TryParseTokenDoublingReplacement(clause);
+    if (tokenDoubling != null)
+    {
+      return tokenDoubling;
+    }
+
+    // "If an effect would put one or more counters on a permanent you control,
+    // it puts twice that many of those counters on that permanent instead." —
+    // Rule 614 scaling replacement: the counter count is doubled (Doubling
+    // Season counter line). OriginalEventOccurs=false with Modifier "double".
+    var counterDoubling = TryParseCounterDoublingReplacement(clause);
+    if (counterDoubling != null)
+    {
+      return counterDoubling;
     }
 
     // "This creature gets +N/+M for each <filter> you control." — self
@@ -1043,6 +1074,212 @@ public sealed class StaticAbilityParser : IAbilityParser
     ["red"] = "R",
     ["green"] = "G",
   };
+
+  /// <summary>
+  /// "If you would create a Clue, Food, or Treasure token, instead create one
+  /// of each." — Rule 614.1a pure substitution: the original single-token
+  /// creation is replaced by creating one of each listed predefined token type
+  /// (Academy Manufactor shape). The event filter captures the disjunction of
+  /// subtypes; the replacement is a <see cref="CompositeEffect"/> with one
+  /// <see cref="CreateTokenEffect"/> per listed token type.
+  /// <para>
+  /// <see cref="ReplacementEffect.OriginalEventOccurs"/> is <c>false</c>:
+  /// the original token does NOT appear — the replacement produces all three
+  /// predefined tokens instead.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseTokenSubstitutionReplacement(OracleClause clause)
+  {
+    var match = _tokenSubstitutionPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    // Parse the comma-separated list of token subtypes from the "a X, Y, or Z token" clause.
+    var subtypeList = match.Groups["subtypes"].Value;
+    var subtypes = ParseDisjunctionList(subtypeList);
+    if (subtypes.Count == 0)
+    {
+      return null;
+    }
+
+    // Build one CreateTokenEffect per subtype using predefined token factories.
+    var createEffects = new List<Effect>();
+    foreach (var subtype in subtypes)
+    {
+      var token = subtype switch
+      {
+        "Clue" => MagicAST.AST.Effects.TokenDefinition.Clue(),
+        "Food" => MagicAST.AST.Effects.TokenDefinition.Food(),
+        "Treasure" => MagicAST.AST.Effects.TokenDefinition.Treasure(),
+        "Blood" => MagicAST.AST.Effects.TokenDefinition.Blood(),
+        _ => null,
+      };
+      if (token is null)
+      {
+        return null; // Unknown predefined token type — bail.
+      }
+      createEffects.Add(new MagicAST.AST.Effects.TokenCopy.CreateTokenEffect
+      {
+        Count = MagicAST.AST.Quantities.LiteralQuantity.Of(1),
+        Token = token,
+      });
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Replacement.ReplacementEffect
+        {
+          Event = new MagicAST.AST.Effects.Replacement.TokenCreationEvent
+          {
+            TokenFilter = new ObjectFilter
+            {
+              Subtypes = subtypes,
+            },
+          },
+          OriginalEventOccurs = false,
+          Replacement = new MagicAST.AST.Effects.Core.CompositeEffect
+          {
+            Effects = createEffects,
+          },
+        }],
+      },
+    ];
+  }
+
+  // Pattern: "If you would create a [Subtype1], [Subtype2], or [Subtype3] token,
+  // instead create one of each."
+  // The subtypes group captures the comma-and-"or"-delimited list between "a " and
+  // " token". The list must contain at least two elements (single-element would be
+  // a different pattern — "If you would create a Treasure token, instead ...").
+  private static readonly Regex _tokenSubstitutionPattern = new(
+    @"^\s*If\s+you\s+would\s+create\s+a\s+(?<subtypes>[A-Z][a-z]+(?:,\s+[A-Z][a-z]+)*,?\s+or\s+[A-Z][a-z]+)\s+token,\s+instead\s+create\s+one\s+of\s+each\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// Parses a comma-and-"or"-delimited English list into individual tokens.
+  /// Handles "A, B, or C", "A or B", and "A, B, C, or D" shapes.
+  /// </summary>
+  private static IReadOnlyList<string> ParseDisjunctionList(string text)
+  {
+    // Split on ", " and " or " to get individual tokens.
+    // Handle "A, B, or C" → ["A", "B", "C"]
+    var result = new List<string>();
+    var parts = text.Split(new[] { ", or ", ",or ", " or " }, StringSplitOptions.RemoveEmptyEntries);
+    foreach (var part in parts)
+    {
+      var trimmed = part.Trim();
+      // The first part may contain further comma-separated items: "A, B" from "A, B, or C"
+      var subParts = trimmed.Split(',', StringSplitOptions.RemoveEmptyEntries);
+      foreach (var sub in subParts)
+      {
+        var s = sub.Trim();
+        if (s.Length > 0)
+        {
+          result.Add(s);
+        }
+      }
+    }
+    return result;
+  }
+
+  /// <summary>
+  /// "If an effect would create one or more tokens under your control, it creates
+  /// twice that many of those tokens instead." — Rule 614.1a scaling replacement:
+  /// the original token-creation count is doubled (Doubling Season token line).
+  /// <see cref="ReplacementEffect.OriginalEventOccurs"/> is <c>false</c>: the
+  /// original event is fully replaced by the doubled version. The scaling is
+  /// described by <see cref="ReplacementModifier"/> with <c>Type = "double"</c>;
+  /// no separate <see cref="ReplacementEffect.Replacement"/> is needed since the
+  /// replacement IS the scaled original event.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseTokenDoublingReplacement(OracleClause clause)
+  {
+    if (!_tokenDoublingPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Replacement.ReplacementEffect
+        {
+          Event = new MagicAST.AST.Effects.Replacement.TokenCreationEvent
+          {
+            MinimumQuantity = 1,
+            Controller = ObjectReference.You(),
+          },
+          OriginalEventOccurs = false,
+          Modifier = new MagicAST.AST.Effects.Replacement.ReplacementModifier
+          {
+            Type = "double",
+          },
+        }],
+      },
+    ];
+  }
+
+  // Pattern: "If an effect would create one or more tokens under your control,
+  // it creates twice that many of those tokens instead."
+  private static readonly Regex _tokenDoublingPattern = new(
+    @"^\s*If\s+an\s+effect\s+would\s+create\s+one\s+or\s+more\s+tokens\s+under\s+your\s+control,\s+it\s+creates\s+twice\s+that\s+many\s+of\s+those\s+tokens\s+instead\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "If an effect would put one or more counters on a permanent you control, it
+  /// puts twice that many of those counters on that permanent instead." — Rule 614
+  /// scaling replacement: the counter-placement count is doubled (Doubling Season
+  /// counter line). Same pattern as
+  /// <see cref="TryParseTokenDoublingReplacement"/> but on the
+  /// <see cref="CounterPlacementEvent"/> axis.
+  /// <see cref="ReplacementEffect.OriginalEventOccurs"/> is <c>false</c>; the
+  /// scaling is carried by <see cref="ReplacementModifier"/> <c>Type = "double"</c>.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseCounterDoublingReplacement(OracleClause clause)
+  {
+    if (!_counterDoublingPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Replacement.ReplacementEffect
+        {
+          Event = new MagicAST.AST.Effects.Replacement.CounterPlacementEvent
+          {
+            MinimumQuantity = 1,
+            AffectedObjects = new ObjectFilter
+            {
+              CardTypes = ["permanent"],
+              Controller = ControllerFilter.You,
+            },
+          },
+          OriginalEventOccurs = false,
+          Modifier = new MagicAST.AST.Effects.Replacement.ReplacementModifier
+          {
+            Type = "double",
+          },
+        }],
+      },
+    ];
+  }
+
+  // Pattern: "If an effect would put one or more counters on a permanent you
+  // control, it puts twice that many of those counters on that permanent instead."
+  private static readonly Regex _counterDoublingPattern = new(
+    @"^\s*If\s+an\s+effect\s+would\s+put\s+one\s+or\s+more\s+counters\s+on\s+a\s+permanent\s+you\s+control,\s+it\s+puts\s+twice\s+that\s+many\s+of\s+those\s+counters\s+on\s+that\s+permanent\s+instead\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   /// <summary>
   /// Maps a small-count token (digit or number-word "one".."ten") onto an
