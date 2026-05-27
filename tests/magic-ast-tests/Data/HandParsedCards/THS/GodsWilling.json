@@ -1,0 +1,84 @@
+{
+  "Input": {
+    "Name": "Gods Willing",
+    "ManaCost": "{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Target creature you control gains protection from the color of your choice until end of turn.\nScry 1.",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Gods Willing",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Target creature you control gains protection from the color of your choice until end of turn.\nScry 1.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Protection",
+                "Effects": [
+                  {
+                    "EffectType": "protection",
+                    "From": [
+                      {
+                        "Kind": "ChosenColor"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "scry",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}
