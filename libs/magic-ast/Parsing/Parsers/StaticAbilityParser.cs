@@ -266,7 +266,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     // with AsLongAsDuration. The condition text is stored verbatim — not
     // parsed further. Placed last so more-specific rules above get first look
     // at the full text; only reaches here when every other rule returns null.
-    var asLongAs = TryParseAsLongAsStaticGrant(clause);
+    var asLongAs = TryParseAsLongAsStaticGrant(clause, classification);
     if (asLongAs != null)
     {
       return asLongAs;
@@ -2048,7 +2048,7 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// The peeled condition text (e.g. <c>"it's untapped"</c>) is stored verbatim
   /// on <see cref="AsLongAsDuration.Condition"/> — not parsed further.
   /// </summary>
-  private static IReadOnlyList<Ability>? TryParseAsLongAsStaticGrant(OracleClause clause)
+  private static IReadOnlyList<Ability>? TryParseAsLongAsStaticGrant(OracleClause clause, ClauseClassification classification)
   {
     // Peel " as long as <condition>." from the end of the clause.
     var suffixMatch = _asLongAsSuffixPattern.Match(clause.RawText);
@@ -2061,6 +2061,20 @@ public sealed class StaticAbilityParser : IAbilityParser
     var conditionText = suffixMatch.Groups["cond"].Value.Trim();
     var duration = new AsLongAsDuration { Condition = conditionText };
 
+    // Strip any ability-word prefix ("Threshold — ", "Metalcraft — ", etc.)
+    // from remainingText. The classifier has already captured the word into
+    // classification.AbilityWord (Rule 207.2c). Without stripping, the em-dash
+    // prefix breaks every downstream sub-parser regex that anchors on "This".
+    string? abilityWord = classification.AbilityWord;
+    if (abilityWord is not null)
+    {
+      var emDashIdx = remainingText.IndexOf('—');
+      if (emDashIdx >= 0)
+      {
+        remainingText = remainingText[(emDashIdx + 1)..].TrimStart();
+      }
+    }
+
     // Sub-parser A: "This creature/This permanent gets +N/+M"
     var ptMatch = _selfGetsPTPattern.Match(remainingText);
     if (ptMatch.Success)
@@ -2071,6 +2085,7 @@ public sealed class StaticAbilityParser : IAbilityParser
       [
         new StaticAbility
         {
+          AbilityWord = abilityWord,
           Effects = [new MagicAST.AST.Effects.Modification.ModifyPTEffect
           {
             Target = ObjectReference.Self(),
@@ -2095,6 +2110,7 @@ public sealed class StaticAbilityParser : IAbilityParser
         [
           new StaticAbility
           {
+            AbilityWord = abilityWord,
             Effects = [new MagicAST.AST.Effects.Modification.GainAbilityEffect
             {
               Target = ObjectReference.Self(),
