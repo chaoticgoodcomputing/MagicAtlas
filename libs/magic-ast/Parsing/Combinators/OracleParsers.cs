@@ -415,6 +415,24 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Improvise" keyword.
+  /// Pattern: "Improvise" [reminder]
+  /// Rule 702.126. Each artifact you tap after you're done activating mana abilities
+  /// pays for {1}. MAST records keyword presence; the per-artifact cost-reduction
+  /// mechanic is engine territory. Mirrors Convoke/Delve exactly.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Improvise = (
+    from keyword in Keyword("Improvise")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Improvise",
+      Effects = [new ImproviseEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Exalted" keyword.
   /// Pattern: "Exalted" [reminder]
   /// Rule 702.83. Whenever a creature you control attacks alone, that creature
@@ -1395,6 +1413,7 @@ public static class OracleParsers
     .Or(Banding)
     .Or(Convoke)
     .Or(Delve)
+    .Or(Improvise)
     .Or(Exalted)
     .Or(Infect)
     .Or(Wither)

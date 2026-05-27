@@ -354,6 +354,25 @@ public static class KeywordDefinitions
       },
     };
 
+  /// <summary>
+  /// Improvise: Each artifact you tap after you're done activating mana abilities pays for {1}.
+  /// Rule 702.126. A parameterless cost-modifier keyword — MAST records the keyword's
+  /// presence; the per-artifact cost-reduction mechanic is engine territory.
+  /// </summary>
+  public static KeywordDefinition Improvise { get; } =
+    new()
+    {
+      Name = "Improvise",
+      RuleReference = "702.126",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Improvise",
+        Effects = [new ImproviseEffect()],
+      },
+    };
+
   // ═══════════════════════════════════════════════════════════════════════════
   // KICKER KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -428,6 +447,7 @@ public static class KeywordDefinitions
       PartnerWith,
       Partner,
       Delve,
+      Improvise,
       Kicker,
       Unearth,
       // More keywords can be added here as needed
