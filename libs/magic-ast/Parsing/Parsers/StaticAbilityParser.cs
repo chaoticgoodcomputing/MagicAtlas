@@ -247,6 +247,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return counterDoubling;
     }
 
+    // "[CardName]'s power is equal to the number of [type] you control." —
+    // Characteristic-defining ability (Rule 604.3) that defines the creature's
+    // power (and/or toughness) as equal to a count of permanents. The * in the
+    // P/T box is explained by this ability. Emits a DefinePTEffect with a
+    // CountQuantity, wrapped in a StaticAbility.
+    var definePT = TryParseDefinePT(clause);
+    if (definePT != null)
+    {
+      return definePT;
+    }
+
     // "This creature gets +N/+M for each <filter> you control." — self
     // P/T modifier scaled by a count of permanents the controller controls
     // (Rule 613.4c, layer 7c — effects and counters that modify power and/or
@@ -624,6 +635,84 @@ public sealed class StaticAbilityParser : IAbilityParser
   // the terminal period.
   private static readonly Regex _selfPTForEachPattern = new(
     @"^\s*This\s+creature\s+gets\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\s+for\s+each\s+(?<filter>.+?\s+you\s+control)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "[CardName]'s power is equal to the number of [type] you control." —
+  /// characteristic-defining ability (Rule 604.3) that defines the creature's
+  /// power, toughness, or both as equal to a count of objects. The * in the
+  /// P/T box is explained by this oracle line.
+  ///
+  /// <para>
+  /// Three patterns are recognised:
+  /// <list type="bullet">
+  ///   <item><c>[Name]'s power is equal to the number of [filter].</c></item>
+  ///   <item><c>[Name]'s toughness is equal to the number of [filter].</c></item>
+  ///   <item><c>[Name]'s power and toughness are each equal to the number of [filter].</c></item>
+  /// </list>
+  /// All three emit a <see cref="DefinePTEffect"/> with the appropriate
+  /// <see cref="PTCharacteristic"/> and a <see cref="CountQuantity"/> whose
+  /// <c>CountOf</c> is the filter noun-phrase verbatim from oracle text.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseDefinePT(OracleClause clause)
+  {
+    // Try "power and toughness are each equal to" first (most specific).
+    var bothMatch = _definePTBothPattern.Match(clause.RawText);
+    if (bothMatch.Success)
+    {
+      var filter = bothMatch.Groups["filter"].Value.Trim();
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new DefinePTEffect
+          {
+            Characteristic = PTCharacteristic.Both,
+            Value = new MagicAST.AST.Quantities.CountQuantity { CountOf = filter },
+          }],
+        },
+      ];
+    }
+
+    // Try "power is equal to" or "toughness is equal to".
+    var singleMatch = _definePTSinglePattern.Match(clause.RawText);
+    if (singleMatch.Success)
+    {
+      var which = singleMatch.Groups["which"].Value.ToLowerInvariant();
+      var filter = singleMatch.Groups["filter"].Value.Trim();
+      var characteristic = which == "power"
+        ? PTCharacteristic.Power
+        : PTCharacteristic.Toughness;
+
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new DefinePTEffect
+          {
+            Characteristic = characteristic,
+            Value = new MagicAST.AST.Quantities.CountQuantity { CountOf = filter },
+          }],
+        },
+      ];
+    }
+
+    return null;
+  }
+
+  // "[Name]'s power and toughness are each equal to the number of [filter]."
+  // The <name> capture is non-greedy to stop at the possessive. The <filter>
+  // capture grabs everything between "the number of " and the terminal period.
+  private static readonly Regex _definePTBothPattern = new(
+    @"^\s*.+?'s\s+power\s+and\s+toughness\s+are\s+each\s+equal\s+to\s+the\s+number\s+of\s+(?<filter>.+?)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // "[Name]'s (power|toughness) is equal to the number of [filter]."
+  private static readonly Regex _definePTSinglePattern = new(
+    @"^\s*.+?'s\s+(?<which>power|toughness)\s+is\s+equal\s+to\s+the\s+number\s+of\s+(?<filter>.+?)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
