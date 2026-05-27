@@ -1,0 +1,81 @@
+{
+  "Input": {
+    "Name": "Ray of Erasure",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Target player mills a card.\nDraw a card at the beginning of the next turn's upkeep.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": ["Mill"],
+    "Id": "5a09fc0b-7b9c-4283-8336-f2607f5ffaf5",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Ray of Erasure",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Target player mills a card.\nDraw a card at the beginning of the next turn's upkeep.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "mill",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["player"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              },
+              "Duration": {
+                "DurationType": "atBeginningOfNextUpkeep"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}

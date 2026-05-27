@@ -59,3 +59,10 @@ public sealed record UntilEndOfCombatDuration : Duration;
 /// </summary>
 [OracleDuration("atBeginningOfNextEndStep")]
 public sealed record AtBeginningOfNextEndStepDuration : Duration;
+
+/// <summary>
+/// "at the beginning of the next turn's upkeep" — delayed draw shape (e.g. Jolt, Ray of Erasure).
+/// Rule 313.1: upkeep step is the first step of the beginning phase.
+/// </summary>
+[OracleDuration("atBeginningOfNextUpkeep")]
+public sealed record AtBeginningOfNextUpkeepDuration : Duration;
