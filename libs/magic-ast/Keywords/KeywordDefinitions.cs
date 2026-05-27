@@ -1,12 +1,14 @@
 namespace MagicAST.Keywords;
 
 using MagicAST.AST.Abilities;
+using MagicAST.AST.Costs;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Damage;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Parsing;
 
 /// <summary>
 /// Registry of all standard Magic keyword definitions and their expansions.
@@ -284,6 +286,33 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // KICKER KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Kicker [cost]: You may pay an additional [cost] as you cast this spell.
+  /// Rule 702.33. Scope: single-cost kicker only (Rule 702.33a). Multi-cost
+  /// kicker (Rule 702.33b) and Multikicker (Rule 702.33c) are deferred.
+  /// </summary>
+  public static KeywordDefinition Kicker { get; } =
+    new()
+    {
+      Name = "Kicker",
+      RuleReference = "702.33",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Kicker",
+        Effects = [new KickerEffect
+        {
+          Cost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -303,8 +332,25 @@ public static class KeywordDefinitions
       Protection,
       Crew,
       PartnerWith,
+      Kicker,
       // More keywords can be added here as needed
     ];
+
+  /// <summary>
+  /// Parses a mana-cost parameter string (e.g., "{W}", "{4}{G}", "{2}") into a
+  /// <see cref="ManaCost"/>. Delegates to <see cref="ManaCostParser"/> which owns
+  /// the mana-symbol lexing logic.
+  /// </summary>
+  private static ManaCost ParseManaCost(string? parameter)
+  {
+    if (string.IsNullOrWhiteSpace(parameter))
+    {
+      throw new ArgumentException("Kicker requires a mana cost parameter.", nameof(parameter));
+    }
+
+    var parsed = new ManaCostParser().Parse(parameter.Trim());
+    return new ManaCost { Symbols = parsed.Symbols.ToList() };
+  }
 
   private static int ParseCrewPower(string? parameter)
   {
