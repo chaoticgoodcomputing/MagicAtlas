@@ -1,0 +1,91 @@
+{
+  "Input": {
+    "Name": "Boros Garrison",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "{T}: Add {R}{W}.\nThis land enters tapped.\nWhen this land enters, return a land you control to its owner's hand.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Boros Garrison",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": [
+        "Land"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: Add {R}{W}.\nThis land enters tapped.\nWhen this land enters, return a land you control to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{R}{W}"
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "entersTapped"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "land"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Any",
+                "Filter": {
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "Controller": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
+      }
+    ]
+  }
+}
