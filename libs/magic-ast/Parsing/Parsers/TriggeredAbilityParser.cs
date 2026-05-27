@@ -555,6 +555,16 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
+    // Draw-card trigger: "Whenever you draw a card"
+    if (lower.Contains("draw") && lower.Contains("card"))
+    {
+      var drawCard = TryParseDrawCardTrigger(triggerText, timing);
+      if (drawCard is not null)
+      {
+        return drawCard;
+      }
+    }
+
     // Scry-or-surveil trigger: "Whenever you scry or surveil"
     if (lower.Contains("scry") || lower.Contains("surveil"))
     {
@@ -1036,6 +1046,29 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     {
       Timing = timing,
       Event = TriggerEvent.ScryOrSurveil,
+      Filter = new ObjectFilter { Controller = ControllerFilter.You },
+    };
+  }
+
+  /// <summary>
+  /// "Whenever you draw a card" — draw-card trigger (Rule 121: Drawing a Card).
+  /// Fires whenever the controller draws a card by any means. Controller defaults to You.
+  /// </summary>
+  private static TriggerCondition? TryParseDrawCardTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    var lower = triggerText.ToLowerInvariant();
+    if (!Regex.IsMatch(lower, @"\byou\s+draw\s+a\s+card\b"))
+    {
+      return null;
+    }
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.DrawsCard,
       Filter = new ObjectFilter { Controller = ControllerFilter.You },
     };
   }
