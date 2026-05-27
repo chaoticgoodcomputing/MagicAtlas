@@ -3,6 +3,7 @@ namespace MagicAST.AST.Effects.Keyword;
 using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Traits;
+using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
@@ -11,10 +12,25 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// replacement effects) — that the permanent enters tapped instead of
 /// untapped — is derived from this descriptive declaration; MAST does not
 /// model the replacement-event machinery itself.
+///
+/// <para>When the effect is scoped to permanents other than the source itself
+/// (e.g., "Creatures your opponents control enter tapped."), the
+/// <see cref="Scope"/> field holds an <see cref="ObjectFilter"/> describing
+/// which permanents the replacement applies to. Null means the effect applies
+/// to the source permanent itself (the normal self-enters-tapped shape).</para>
 /// </summary>
 [OracleEffect("entersTapped")]
 public sealed record EntersTappedEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 {
+  /// <summary>
+  /// Filter describing which permanents enter tapped under this static ability.
+  /// Null for the standard self-enters-tapped shape ("This land enters tapped.").
+  /// Populated when the ability applies to a broader set of permanents, e.g.
+  /// "Creatures your opponents control enter tapped." maps to
+  /// <c>{ CardTypes: ["creature"], Controller: "Opponent" }</c>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectFilter? Scope { get; init; }
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
   public bool IsOptional { get; init; }
 
