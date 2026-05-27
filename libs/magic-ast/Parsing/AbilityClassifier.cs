@@ -552,6 +552,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target creature you control deals damage equal to its power to target creature ..."
+    // — bite mechanic (CR 701.14 adjacent): one-directional power-based damage spell
+    // (Rabid Bite, Tail Swipe). No numeric amount between "deals" and "damage" — the
+    // amount is a derived reference ("equal to its power"). Without this route the clause
+    // defaults to Static and stalls in StaticAbilityParser.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+creature\s+you\s+control\s+deals\s+damage\s+equal\s+to\s+its\s+power\s+to\s+target\b",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "[Self] deals N damage to ..." — self-by-name spell-resolution dealDamage.
     // Take Down's modal options ("Take Down deals 4 damage to target creature
     // with flying.") open with the card's own name rather than a recognised

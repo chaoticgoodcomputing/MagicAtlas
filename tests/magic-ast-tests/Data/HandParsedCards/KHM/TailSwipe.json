@@ -1,0 +1,71 @@
+{
+  "Input": {
+    "Name": "Tail Swipe",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Instant",
+    "OracleText": "Target creature you control deals damage equal to its power to target creature or planeswalker you don't control.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Tail Swipe",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Target creature you control deals damage equal to its power to target creature or planeswalker you don't control.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Source": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              },
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "Power",
+                "Source": "it"
+              },
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature", "planeswalker"],
+                  "Controller": "Opponent"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
