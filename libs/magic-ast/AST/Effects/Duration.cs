@@ -66,3 +66,12 @@ public sealed record AtBeginningOfNextEndStepDuration : Duration;
 /// </summary>
 [OracleDuration("atBeginningOfNextUpkeep")]
 public sealed record AtBeginningOfNextUpkeepDuration : Duration;
+
+/// <summary>
+/// "at end of combat" — delayed removal timing (e.g. Phantom creature counter-removal pattern).
+/// The effect is scheduled to occur at the end of combat step (Rule 511 — End of Combat Step).
+/// Distinct from "until end of combat" (<see cref="UntilEndOfCombatDuration"/>), which marks
+/// a continuous effect's expiry point; this marks a one-shot event's scheduled trigger time.
+/// </summary>
+[OracleDuration("atEndOfCombat")]
+public sealed record AtEndOfCombatDuration : Duration;
