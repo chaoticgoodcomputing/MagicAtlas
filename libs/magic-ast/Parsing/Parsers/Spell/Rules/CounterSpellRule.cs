@@ -5,15 +5,18 @@ using MagicAST.AST.Costs;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Control;
 using MagicAST.AST.References;
+using MagicAST.Parsing;
 
 /// <summary>
 /// "Counter target spell." with optional color/type qualifiers and an optional
-/// "unless its controller pays {X}" tail. Rule 701.6.
+/// "unless its controller pays {cost}" tail. Rule 701.6.
 /// Handles these filter dimensions in one consolidated surface:
 ///   - color words (white, blue, black, red, green, colorless, multicolored)
 ///   - non&lt;color&gt; predicates (nonblue, nonred, …) → Characteristics
 ///   - bare card-type qualifier before "spell" (artifact, land, enchantment, …) → CardTypes
 ///   - "with mana value N" → ManaValueComparison
+///   - "unless its controller pays {cost}" where cost is any mana expression
+///     ({1}, {X}, {1}{U}, etc.) — parsed via ManaCostParser
 /// </summary>
 [SpellRule]
 public sealed class CounterSpellRule : ISpellRule
@@ -25,7 +28,7 @@ public sealed class CounterSpellRule : ISpellRule
   //   optional card-type qualifier  e.g. "artifact", "instant", "creature"
   //   literal "spell"
   //   optional "with mana value N"
-  //   optional "unless its controller pays {X}"
+  //   optional "unless its controller pays {cost}"  — captures full mana expression
   private static readonly Regex Pattern = new(
     @"^Counter\s+target\s+"
     + @"(?<noncolor>non(?:white|blue|black|red|green))?\s*"
@@ -34,9 +37,11 @@ public sealed class CounterSpellRule : ISpellRule
     + @"(?<cardtype>artifact|enchantment|land|instant|sorcery|creature|noncreature|permanent)?\s*"
     + @"spell"
     + @"(?:\s+with\s+mana\s+value\s+(?<mv>\d+))?"
-    + @"(?:\s+unless\s+its\s+controller\s+pays\s+\{(?<unlessx>[A-Za-z])\})?\.?$",
+    + @"(?:\s+unless\s+its\s+controller\s+pays\s+(?<unless>(?:\{[^}]+\})+))?\.?$",
     RegexOptions.IgnoreCase
   );
+
+  private readonly ManaCostParser _manaCostParser = new();
 
   public bool TryMatch(string text, out Effect? effect)
   {
@@ -69,12 +74,13 @@ public sealed class CounterSpellRule : ISpellRule
     var filter = SpellRuleHelpers.BuildSpellFilter(colorWords, nonColorWord, cardTypeWord, manaValueComparison);
 
     UnlessClause? unless = null;
-    if (m.Groups["unlessx"].Success)
+    if (m.Groups["unless"].Success)
     {
+      var parsed = _manaCostParser.Parse(m.Groups["unless"].Value);
       unless = new UnlessClause
       {
         Player = new ObjectReference { Kind = ObjectReferenceKind.Controller },
-        Cost = new ManaCost { Symbols = [new ManaSymbol { Kind = ManaSymbolKind.Variable }] },
+        Cost = new ManaCost { Symbols = [.. parsed.Symbols] },
       };
     }
     effect = new CounterSpellEffect
