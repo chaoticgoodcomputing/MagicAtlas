@@ -507,17 +507,18 @@ public sealed class AbilityClassifier
     // Glorious Anthem's "Creatures you control get +1/+1." which has no duration).
     //
     // Handled subjects:
-    //   "Creatures you control get ..." (e.g., Charge, Bar the Door)
-    //   "All creatures get ..."         (e.g., Shrivel, Infest, Languish)
-    //   "Attacking creatures get ..."   (e.g., Army of Allah)
-    //   "Blocking creatures get ..."    (e.g., Piety, Hold the Line)
+    //   "Creatures you control get ..."           (e.g., Charge, Bar the Door)
+    //   "Creatures your opponents control get ..."  (e.g., Cower in Fear, Make Obsolete)
+    //   "All creatures get ..."                   (e.g., Shrivel, Infest, Languish)
+    //   "Attacking creatures get ..."             (e.g., Army of Allah)
+    //   "Blocking creatures get ..."              (e.g., Piety, Hold the Line)
     //
     // Without these rules the classifier defaults to Static, routing these lines
     // to StaticAbilityParser where all spell-form mass anthems stall.
     if (
       Regex.IsMatch(
         clause.RawText,
-        @"^\s*(Creatures\s+you\s+control|All\s+creatures|Attacking\s+creatures|Blocking\s+creatures)"
+        @"^\s*(Creatures\s+you\s+control|Creatures\s+your\s+opponents\s+control|All\s+creatures|Attacking\s+creatures|Blocking\s+creatures)"
         + @"\s+get\s+[+\-]\d+/[+\-]\d+\s+until\s+end\s+of\s+turn",
         RegexOptions.IgnoreCase
       )
