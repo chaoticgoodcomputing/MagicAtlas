@@ -2202,11 +2202,24 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// <see cref="ObjectFilter"/> covering the common shapes ("creature", "land",
   /// "permanent"); more elaborate shapes (e.g. "Enchant creature you control")
   /// land their qualifiers on the filter axes.
+  /// <para>
+  /// Reminder text is stripped before matching (Rule 207.2). Many Aura printings
+  /// carry a parenthetical on the Enchant line explaining the targeting mechanic,
+  /// e.g. "Enchant creature (Target a creature as you cast this. This card enters
+  /// attached to that creature.)". The parenthetical carries no rules semantics
+  /// beyond what the Enchant keyword already encodes; stripping it here lets the
+  /// descriptor noun-phrase match normally.
+  /// </para>
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseEnchant(OracleClause clause)
   {
+    // Strip trailing reminder text so "Enchant creature (Target a creature as you
+    // cast this. This card enters attached to that creature.)" reduces to
+    // "Enchant creature" before the descriptor match.
+    var rawText = StripReminderText(clause.RawText);
+
     var match = Regex.Match(
-      clause.RawText,
+      rawText,
       @"^\s*Enchant\s+(?<descriptor>.+?)\.?\s*$",
       RegexOptions.IgnoreCase
     );
@@ -2244,6 +2257,17 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// Builds an <see cref="ObjectFilter"/> from the descriptor noun-phrase that
   /// follows the <c>Enchant</c> keyword. Returns null for descriptors the
   /// parser doesn't yet recognise so the fallback path can report the gap.
+  /// <para>
+  /// Two shapes are recognised:
+  /// <list type="bullet">
+  ///   <item>Simple-noun shape: "creature", "land", "permanent", "artifact",
+  ///         "enchantment", "planeswalker", "player" — emits a single-element
+  ///         <see cref="ObjectFilter.CardTypes"/> list.</item>
+  ///   <item>Disjunctive shape: "typeA or typeB" (e.g. "artifact or creature") —
+  ///         emits a two-element <see cref="ObjectFilter.CardTypes"/> list. Both
+  ///         named types must be members of the recognised simple-noun set.</item>
+  /// </list>
+  /// </para>
   /// </summary>
   private static ObjectFilter? BuildEnchantFilter(string descriptor)
   {
@@ -2267,6 +2291,19 @@ public sealed class StaticAbilityParser : IAbilityParser
     if (simpleTypes.Contains(d))
     {
       return new ObjectFilter { CardTypes = [d], Controller = controller };
+    }
+
+    // Disjunctive shape: "typeA or typeB" (e.g. "artifact or creature").
+    // Both halves must be recognised simple types.
+    var orMatch = Regex.Match(d, @"^(?<a>[a-z]+)\s+or\s+(?<b>[a-z]+)$", RegexOptions.IgnoreCase);
+    if (orMatch.Success)
+    {
+      var typeA = orMatch.Groups["a"].Value;
+      var typeB = orMatch.Groups["b"].Value;
+      if (simpleTypes.Contains(typeA) && simpleTypes.Contains(typeB))
+      {
+        return new ObjectFilter { CardTypes = [typeA, typeB], Controller = controller };
+      }
     }
 
     return null;
