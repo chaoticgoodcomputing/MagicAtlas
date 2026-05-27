@@ -8,14 +8,31 @@ using MagicAST.AST.Quantities;
 /// <summary>
 /// "Create (a|X|&lt;num&gt;) &lt;P&gt;/&lt;T&gt; &lt;color&gt; &lt;subtype&gt; creature token(s)."
 /// Handles literal counts ("a"), variable counts ("X"), and numeric literals.
+/// Also handles predefined artifact tokens (Food, Treasure, Clue, Blood) which
+/// have no P/T and whose activated ability is reminder text only (Rule 107.10b).
+/// Reminder text is stripped by <see cref="SpellAbilityParser"/> before dispatch.
 /// </summary>
 [SpellRule(Priority = 60)]
 public sealed class CreateTokenRule : ISpellRule
 {
-  private static readonly Regex Pattern = new(
+  private static readonly Regex CreaturePattern = new(
     @"^Create\s+(?<count>a|X|Y|Z|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<power>\d+)/(?<toughness>\d+)\s+(?<color>white|blue|black|red|green)\s+(?<subtype>\w+)\s+creature\s+tokens?$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
+
+  // Predefined artifact token patterns (Rule 107.10b). Reminder text is already
+  // stripped by SpellAbilityParser.StripReminderText before these are evaluated.
+  private static readonly Regex FoodTokenPattern =
+    new(@"^create a Food token\.?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  private static readonly Regex TreasureTokenPattern =
+    new(@"^create a Treasure token\.?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  private static readonly Regex ClueTokenPattern =
+    new(@"^create a Clue token\.?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  private static readonly Regex BloodTokenPattern =
+    new(@"^create a Blood token\.?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   private static readonly IReadOnlyDictionary<string, string> ColorMap = new Dictionary<string, string>(
     StringComparer.OrdinalIgnoreCase
@@ -31,7 +48,57 @@ public sealed class CreateTokenRule : ISpellRule
   public bool TryMatch(string text, out Effect? effect)
   {
     effect = null;
-    var m = Pattern.Match(text);
+
+    // --- Predefined artifact token: Food ---
+    if (FoodTokenPattern.IsMatch(text))
+    {
+      effect = new CreateTokenEffect
+      {
+        Count = LiteralQuantity.Of(1),
+        Token = TokenDefinition.Food(),
+        IsOptional = false,
+      };
+      return true;
+    }
+
+    // --- Predefined artifact token: Treasure ---
+    if (TreasureTokenPattern.IsMatch(text))
+    {
+      effect = new CreateTokenEffect
+      {
+        Count = LiteralQuantity.Of(1),
+        Token = TokenDefinition.Treasure(),
+        IsOptional = false,
+      };
+      return true;
+    }
+
+    // --- Predefined artifact token: Clue ---
+    if (ClueTokenPattern.IsMatch(text))
+    {
+      effect = new CreateTokenEffect
+      {
+        Count = LiteralQuantity.Of(1),
+        Token = TokenDefinition.Clue(),
+        IsOptional = false,
+      };
+      return true;
+    }
+
+    // --- Predefined artifact token: Blood ---
+    if (BloodTokenPattern.IsMatch(text))
+    {
+      effect = new CreateTokenEffect
+      {
+        Count = LiteralQuantity.Of(1),
+        Token = TokenDefinition.Blood(),
+        IsOptional = false,
+      };
+      return true;
+    }
+
+    // --- P/T creature token ---
+    var m = CreaturePattern.Match(text);
     if (!m.Success)
     {
       return false;

@@ -1,0 +1,79 @@
+{
+  "Input": {
+    "Name": "Crack Open",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Destroy target artifact.\nCreate a Treasure token. (It's an artifact with \"{T}, Sacrifice this artifact: Add one mana of any color.\")",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Crack Open",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Destroy target artifact.\nCreate a Treasure token. (It's an artifact with \"{T}, Sacrifice this artifact: Add one mana of any color.\")",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["artifact"]
+                }
+              },
+              "CantBeRegenerated": false,
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Types": ["artifact"],
+                "Subtypes": ["Treasure"],
+                "IsCopy": false,
+                "AbilityText": ["{T}, Sacrifice this artifact: Add one mana of any color."]
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
