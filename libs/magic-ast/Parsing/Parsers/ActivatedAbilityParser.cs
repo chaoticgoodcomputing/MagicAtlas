@@ -382,6 +382,13 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return new List<Effect> { createToken };
     }
 
+    // Regenerate this creature / target [type]
+    var regenerateEffect = TryParseRegenerateEffect(effectPart);
+    if (regenerateEffect != null)
+    {
+      return new List<Effect> { regenerateEffect };
+    }
+
     // For now, we can't parse other effect types
     // Return null to signal that we need to fall back to unparsed
     return null;
@@ -1417,6 +1424,51 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     if (digitMatch.Success)
     {
       return int.Parse(digitMatch.Groups[1].Value);
+    }
+
+    return null;
+  }
+
+  /// <summary>
+  /// Tries to parse "Regenerate this creature." / "Regenerate target [type]." effects.
+  /// Rule 701.19. Creates a regeneration shield on the target permanent: the next
+  /// time it would be destroyed this turn, instead remove all damage, tap it, and
+  /// remove it from combat if applicable. MAST records the effect and target only;
+  /// the shield / destruction-replacement semantics are engine territory.
+  /// </summary>
+  private static RegenerateEffect? TryParseRegenerateEffect(string effectText)
+  {
+    var trimmed = effectText.Trim().TrimEnd('.').Trim();
+    var lower = trimmed.ToLowerInvariant();
+
+    if (!lower.StartsWith("regenerate "))
+    {
+      return null;
+    }
+
+    // "Regenerate this creature" — self-reference
+    if (lower == "regenerate this creature" || lower == "regenerate this permanent")
+    {
+      return new RegenerateEffect { Target = ObjectReference.Self() };
+    }
+
+    // "Regenerate target [type]"
+    var m = Regex.Match(
+      trimmed,
+      @"^regenerate\s+target\s+(?<type>\w+)$",
+      RegexOptions.IgnoreCase
+    );
+    if (m.Success)
+    {
+      var cardType = m.Groups["type"].Value.ToLowerInvariant();
+      return new RegenerateEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter { CardTypes = [cardType] },
+        },
+      };
     }
 
     return null;
