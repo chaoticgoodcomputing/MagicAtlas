@@ -1,0 +1,105 @@
+{
+  "Input": {
+    "Name": "Maulfist Squad",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Creature — Human Artificer",
+    "OracleText": "Menace\nFabricate 1 (When this creature enters, put a +1/+1 counter on it or create a 1/1 colorless Servo artifact creature token.)",
+    "Power": "3",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Maulfist Squad",
+    "TypeLine": {
+      "Raw": "Creature — Human Artificer",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Artificer"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Menace\nFabricate 1 (When this creature enters, put a +1/+1 counter on it or create a 1/1 colorless Servo artifact creature token.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Menace",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ]
+              },
+              "MinimumBlockers": 2,
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Fabricate",
+          "Effects": [
+            {
+              "EffectType": "fabricate",
+              "Value": 1,
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

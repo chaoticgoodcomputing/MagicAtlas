@@ -1,0 +1,74 @@
+{
+  "Input": {
+    "Name": "Suntouched Myr",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact Creature — Myr",
+    "OracleText": "Sunburst (This creature enters with a +1/+1 counter on it for each color of mana spent to cast it.)",
+    "Power": "0",
+    "Toughness": "0",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Suntouched Myr",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Myr",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Myr"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Sunburst (This creature enters with a +1/+1 counter on it for each color of mana spent to cast it.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Sunburst",
+          "Effects": [
+            {
+              "EffectType": "sunburst",
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        }
+      }
+    ]
+  }
+}
