@@ -6,25 +6,37 @@
     "OracleText": "This creature can't be blocked.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Talas Warrior",
     "TypeLine": {
       "Raw": "Creature — Human Pirate Warrior",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Pirate", "Warrior"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Pirate",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "This creature can't be blocked.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "cantBeBlocked",
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -33,19 +45,36 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

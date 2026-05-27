@@ -6,16 +6,24 @@
     "OracleText": "Changeling (This card is every creature type.)",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Woodland Changeling",
     "TypeLine": {
       "Raw": "Creature — Shapeshifter",
       "Supertypes": [],
-      "Types": ["Creature"],
-      "Subtypes": ["Shapeshifter"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Shapeshifter"
+      ]
     },
     "Oracle": {
       "RawText": "Changeling (This card is every creature type.)",
@@ -23,9 +31,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Changeling",
-          "Effect": {
-            "EffectType": "changeling"
-          }
+          "Effects": [
+            {
+              "EffectType": "changeling"
+            }
+          ]
         }
       ]
     },
@@ -34,17 +44,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

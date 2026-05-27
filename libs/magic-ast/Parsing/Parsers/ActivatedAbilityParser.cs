@@ -1341,7 +1341,7 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
 
     // Title-case the keyword for KeywordSource (matches direct-keyword ability convention).
     var keywordSource = char.ToUpperInvariant(keyword[0]) + keyword[1..];
-    return new StaticAbility { Effect = effect, KeywordSource = keywordSource };
+    return new StaticAbility { Effects = [effect], KeywordSource = keywordSource };
   }
 
   /// <summary>

@@ -6,15 +6,23 @@
     "OracleText": "Trample, haste\nMountaincycling {2} ({2}, Discard this card: Search your library for a Mountain card, reveal it, put it into your hand, then shuffle.)",
     "Power": "5",
     "Toughness": "4",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Hill Gigas",
     "TypeLine": {
       "Raw": "Creature — Giant",
-      "Types": ["Creature"],
-      "Subtypes": ["Giant"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Giant"
+      ]
     },
     "Oracle": {
       "RawText": "Trample, haste\nMountaincycling {2} ({2}, Discard this card: Search your library for a Mountain card, reveal it, put it into your hand, then shuffle.)",
@@ -22,30 +30,39 @@
         {
           "Kind": "static",
           "KeywordSource": "Trample",
-          "Effect": {
-            "EffectType": "trample"
-          }
+          "Effects": [
+            {
+              "EffectType": "trample"
+            }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "haste",
-          "Effect": {
-            "EffectType": "haste"
-          }
+          "Effects": [
+            {
+              "EffectType": "haste"
+            }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "Mountaincycling",
-          "Effect": {
-            "EffectType": "typecycling",
-            "Type": "Mountain",
-            "Cost": {
-              "CostType": "mana",
-              "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 }
-              ]
+          "Effects": [
+            {
+              "EffectType": "typecycling",
+              "Type": "Mountain",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 2
+                  }
+                ]
+              }
             }
-          }
+          ]
         }
       ]
     },
@@ -54,18 +71,49 @@
         "Kind": "manaCost",
         "Raw": "{4}{R}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 6
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
-        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
       }
     ]
   }

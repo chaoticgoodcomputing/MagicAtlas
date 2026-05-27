@@ -31,9 +31,9 @@ public class KeywordExpanderTests
       var staticAbility = (StaticAbility)ability;
 
       Assert.That(staticAbility.KeywordSource, Is.EqualTo("Flying"));
-      Assert.That(staticAbility.Effect, Is.InstanceOf<EvasionEffect>());
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<EvasionEffect>());
 
-      var evasion = (EvasionEffect)staticAbility.Effect;
+      var evasion = (EvasionEffect)staticAbility.Effects[0];
       Assert.That(evasion.CanBeBlockedBy, Is.Not.Null);
       Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item("flying"));
       Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item("reach"));
@@ -48,9 +48,9 @@ public class KeywordExpanderTests
       var staticAbility = (StaticAbility)ability;
 
       Assert.That(staticAbility.KeywordSource, Is.EqualTo("First strike"));
-      Assert.That(staticAbility.Effect, Is.InstanceOf<CombatDamageTimingEffect>());
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<CombatDamageTimingEffect>());
 
-      var timing = (CombatDamageTimingEffect)staticAbility.Effect;
+      var timing = (CombatDamageTimingEffect)staticAbility.Effects[0];
       Assert.That(timing.Timing, Is.EqualTo(CombatDamageTiming.First));
   }
 
@@ -62,9 +62,9 @@ public class KeywordExpanderTests
       Assert.That(ability, Is.InstanceOf<StaticAbility>());
       var staticAbility = (StaticAbility)ability;
 
-      Assert.That(staticAbility.Effect, Is.InstanceOf<CombatDamageTimingEffect>());
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<CombatDamageTimingEffect>());
 
-      var timing = (CombatDamageTimingEffect)staticAbility.Effect;
+      var timing = (CombatDamageTimingEffect)staticAbility.Effects[0];
       Assert.That(timing.Timing, Is.EqualTo(CombatDamageTiming.Both));
   }
 
@@ -77,7 +77,7 @@ public class KeywordExpanderTests
       var staticAbility = (StaticAbility)ability;
 
       Assert.That(staticAbility.KeywordSource, Is.EqualTo("Lifelink"));
-      Assert.That(staticAbility.Effect, Is.InstanceOf<LifelinkEffect>());
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<LifelinkEffect>());
   }
 
   [Test]
@@ -89,7 +89,7 @@ public class KeywordExpanderTests
       var staticAbility = (StaticAbility)ability;
 
       Assert.That(staticAbility.KeywordSource, Is.EqualTo("Vigilance"));
-      Assert.That(staticAbility.Effect, Is.InstanceOf<VigilanceEffect>());
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<VigilanceEffect>());
   }
 
   [Test]
@@ -101,9 +101,9 @@ public class KeywordExpanderTests
       var staticAbility = (StaticAbility)ability;
 
       Assert.That(staticAbility.KeywordSource, Is.EqualTo("Protection"));
-      Assert.That(staticAbility.Effect, Is.InstanceOf<ProtectionEffect>());
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<ProtectionEffect>());
 
-      var protection = (ProtectionEffect)staticAbility.Effect;
+      var protection = (ProtectionEffect)staticAbility.Effects[0];
       Assert.That(protection.From, Has.Count.EqualTo(1));
       Assert.That(protection.From[0].Kind, Is.EqualTo(ProtectionQualityKind.Color));
       Assert.That(protection.From[0].Value, Is.EqualTo("red"));
@@ -117,9 +117,9 @@ public class KeywordExpanderTests
       Assert.That(ability, Is.InstanceOf<StaticAbility>());
       var staticAbility = (StaticAbility)ability;
 
-      Assert.That(staticAbility.Effect, Is.InstanceOf<ProtectionEffect>());
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<ProtectionEffect>());
 
-      var protection = (ProtectionEffect)staticAbility.Effect;
+      var protection = (ProtectionEffect)staticAbility.Effects[0];
       Assert.That(protection.From, Has.Count.EqualTo(2));
 
       Assert.That(protection.From[0].Kind, Is.EqualTo(ProtectionQualityKind.Subtype));
@@ -134,7 +134,7 @@ public class KeywordExpanderTests
   {
       var ability = _expander.Expand("Protection", "everything");
 
-      var protection = (ProtectionEffect)((StaticAbility)ability).Effect;
+      var protection = (ProtectionEffect)((StaticAbility)ability).Effects[0];
 
       Assert.That(protection.From, Has.Count.EqualTo(1));
       Assert.That(protection.From[0].Kind, Is.EqualTo(ProtectionQualityKind.Everything));

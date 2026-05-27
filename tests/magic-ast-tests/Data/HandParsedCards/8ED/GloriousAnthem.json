@@ -4,38 +4,48 @@
     "ManaCost": "{1}{W}{W}",
     "TypeLine": "Enchantment",
     "OracleText": "Creatures you control get +1/+1.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Glorious Anthem",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Creatures you control get +1/+1.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "modifyPT",
-            "Target": {
-              "Kind": "Each",
-              "Filter": {
-                "CardTypes": ["creature"],
-                "Controller": "You"
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
               }
-            },
-            "PowerModifier": {
-              "QuantityType": "literal",
-              "Value": 1
-            },
-            "ToughnessModifier": {
-              "QuantityType": "literal",
-              "Value": 1
             }
-          }
+          ]
         }
       ]
     },
@@ -44,14 +54,37 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
     ]
   }
 }

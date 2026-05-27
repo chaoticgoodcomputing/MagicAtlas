@@ -6,15 +6,24 @@
     "OracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nWhen this creature enters, you may put a +1/+1 counter on another target creature.",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Living Totem",
     "TypeLine": {
       "Raw": "Creature — Plant Elemental",
-      "Types": ["Creature"],
-      "Subtypes": ["Plant", "Elemental"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Plant",
+        "Elemental"
+      ]
     },
     "Oracle": {
       "RawText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nWhen this creature enters, you may put a +1/+1 counter on another target creature.",
@@ -22,9 +31,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Convoke",
-          "Effect": {
-            "EffectType": "convoke"
-          }
+          "Effects": [
+            {
+              "EffectType": "convoke"
+            }
+          ]
         },
         {
           "Kind": "triggered",
@@ -32,7 +43,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -41,8 +54,12 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Characteristics": ["another"]
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Characteristics": [
+                    "another"
+                  ]
                 }
               },
               "CounterType": "+1/+1",
@@ -61,18 +78,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

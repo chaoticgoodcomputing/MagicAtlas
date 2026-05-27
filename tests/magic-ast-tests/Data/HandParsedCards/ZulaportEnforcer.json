@@ -6,9 +6,15 @@
     "OracleText": "Level up {4} ({4}: Put a level counter on this. Level up only as a sorcery.)\nLEVEL 1-2\n3/3\nLEVEL 3+\n5/5\nThis creature can't be blocked except by black creatures.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"],
-    "Keywords": ["Level Up"],
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
+    "Keywords": [
+      "Level Up"
+    ],
     "Id": "1975d18a-df3f-4c1f-8fde-d11dabbc4adc",
     "Layout": "leveler"
   },
@@ -16,8 +22,13 @@
     "Name": "Zulaport Enforcer",
     "TypeLine": {
       "Raw": "Creature — Human Warrior",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Warrior"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "Level up {4} ({4}: Put a level counter on this. Level up only as a sorcery.)\nLEVEL 1-2\n3/3\nLEVEL 3+\n5/5\nThis creature can't be blocked except by black creatures.",
@@ -34,24 +45,46 @@
             {
               "MinLevel": 1,
               "MaxLevel": 2,
-              "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
-              "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+              "Power": {
+                "ValueType": "fixed",
+                "Raw": "3",
+                "Value": 3
+              },
+              "Toughness": {
+                "ValueType": "fixed",
+                "Raw": "3",
+                "Value": 3
+              },
               "Abilities": []
             },
             {
               "MinLevel": 3,
-              "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
-              "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
+              "Power": {
+                "ValueType": "fixed",
+                "Raw": "5",
+                "Value": 5
+              },
+              "Toughness": {
+                "ValueType": "fixed",
+                "Raw": "5",
+                "Value": 5
+              },
               "Abilities": [
                 {
                   "Kind": "static",
-                  "Effect": {
-                    "EffectType": "evasion",
-                    "CanBeBlockedBy": {
-                      "CardTypes": ["creature"],
-                      "Colors": ["B"]
+                  "Effects": [
+                    {
+                      "EffectType": "evasion",
+                      "CanBeBlockedBy": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "Colors": [
+                          "B"
+                        ]
+                      }
                     }
-                  }
+                  ]
                 }
               ]
             }
@@ -63,18 +96,46 @@
       {
         "Kind": "manaCost",
         "Raw": "{B}",
-        "Symbols": [{ "Kind": "colored", "Colors": ["B"] }],
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
         "ManaValue": 1,
         "IsVariable": false
       },
-      { "Kind": "colors", "Colors": ["B"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       },
-      { "Kind": "layout", "Layout": "leveler" }
+      {
+        "Kind": "layout",
+        "Layout": "leveler"
+      }
     ]
   }
 }

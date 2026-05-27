@@ -14,20 +14,29 @@
     "TypeLine": {
       "Raw": "Creature — Eldrazi",
       "Supertypes": [],
-      "Types": ["Creature"],
-      "Subtypes": ["Eldrazi"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Eldrazi"
+      ]
     },
     "Oracle": {
       "RawText": "This creature enters with X +1/+1 counters on it.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "entersWithCounters",
-            "Count": { "QuantityType": "variable", "Name": "X" },
-            "CounterType": "+1/+1",
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "entersWithCounters",
+              "Count": {
+                "QuantityType": "variable",
+                "Name": "X"
+              },
+              "CounterType": "+1/+1",
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -36,16 +45,32 @@
         "Kind": "manaCost",
         "Raw": "{X}",
         "Symbols": [
-          { "Kind": "variable" }
+          {
+            "Kind": "variable"
+          }
         ],
         "IsVariable": true
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "0", "Value": 0 },
-        "Toughness": { "ValueType": "fixed", "Raw": "0", "Value": 0 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        }
       }
     ]
   }

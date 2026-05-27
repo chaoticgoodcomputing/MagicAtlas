@@ -13,40 +13,55 @@
     "Name": "Gorgon's Head",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature has deathtouch.\nEquip {2}",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "gainAbility",
-            "Target": { "Kind": "EnchantedOrEquipped" },
-            "GainedAbility": {
-              "Kind": "static",
-              "KeywordSource": "Deathtouch",
-              "Effect": {
-                "EffectType": "deathtouch",
-                "IsOptional": false
-              }
-            },
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Deathtouch",
+                "Effects": [
+                  {
+                    "EffectType": "deathtouch",
+                    "IsOptional": false
+                  }
+                ]
+              },
+              "IsOptional": false
+            }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "Equip",
-          "Effect": {
-            "EffectType": "equip",
-            "Cost": {
-              "CostType": "mana",
-              "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 }
-              ]
+          "Effects": [
+            {
+              "EffectType": "equip",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 2
+                  }
+                ]
+              }
             }
-          }
+          ]
         }
       ]
     },
@@ -55,7 +70,10 @@
         "Kind": "manaCost",
         "Raw": "{1}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          }
         ],
         "ManaValue": 1
       },

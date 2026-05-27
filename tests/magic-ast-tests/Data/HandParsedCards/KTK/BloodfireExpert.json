@@ -6,16 +6,25 @@
     "OracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
     "Power": "3",
     "Toughness": "1",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Bloodfire Expert",
     "TypeLine": {
       "Raw": "Creature — Efreet Monk",
       "Supertypes": [],
-      "Types": ["Creature"],
-      "Subtypes": ["Efreet", "Monk"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Efreet",
+        "Monk"
+      ]
     },
     "Oracle": {
       "RawText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
@@ -23,9 +32,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Prowess",
-          "Effect": {
-            "EffectType": "prowess"
-          }
+          "Effects": [
+            {
+              "EffectType": "prowess"
+            }
+          ]
         }
       ]
     },
@@ -34,17 +45,43 @@
         "Kind": "manaCost",
         "Raw": "{2}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

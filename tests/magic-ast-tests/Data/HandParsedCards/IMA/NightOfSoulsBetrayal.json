@@ -27,25 +27,27 @@
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "modifyPT",
-            "Target": {
-              "Kind": "Each",
-              "Filter": {
-                "CardTypes": [
-                  "creature"
-                ]
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": -1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": -1
               }
-            },
-            "PowerModifier": {
-              "QuantityType": "literal",
-              "Value": -1
-            },
-            "ToughnessModifier": {
-              "QuantityType": "literal",
-              "Value": -1
             }
-          }
+          ]
         }
       ]
     },

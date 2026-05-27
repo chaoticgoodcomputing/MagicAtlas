@@ -38,7 +38,9 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["permanent"],
+                        "CardTypes": [
+                          "permanent"
+                        ],
                         "Controller": "You",
                         "Zone": "Graveyard"
                       }
@@ -56,7 +58,9 @@
                     "Target": {
                       "Kind": "Designated",
                       "Filter": {
-                        "Characteristics": ["your commander"],
+                        "Characteristics": [
+                          "your commander"
+                        ],
                         "Zone": "CommandZone"
                       }
                     }
@@ -70,15 +74,20 @@
         {
           "Kind": "static",
           "KeywordSource": "Entwine",
-          "Effect": {
-            "EffectType": "entwine",
-            "Cost": {
-              "CostType": "mana",
-              "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 }
-              ]
+          "Effects": [
+            {
+              "EffectType": "entwine",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 2
+                  }
+                ]
+              }
             }
-          }
+          ]
         }
       ]
     },

@@ -13,17 +13,21 @@
     "Name": "Tawnos's Weaponry",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "You may choose not to untap this artifact during your untap step.\n{2}, {T}: Target creature gets +1/+1 for as long as this artifact remains tapped.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "skipUntap",
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "skipUntap",
+              "IsOptional": false
+            }
+          ]
         },
         {
           "Kind": "activated",
@@ -31,17 +35,26 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
               ]
             },
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
               "EffectType": "modifyPT",
               "Target": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["creature"] }
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
               },
               "PowerModifier": {
                 "QuantityType": "literal",
@@ -66,12 +79,21 @@
         "Kind": "manaCost",
         "Raw": "{2}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] }
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
     ]
   }
 }

@@ -31,38 +31,42 @@
         {
           "Kind": "static",
           "KeywordSource": "Enchant",
-          "Effect": {
-            "EffectType": "enchantRestriction",
-            "LegalTargets": {
-              "CardTypes": [
-                "land"
-              ]
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "land"
+                ]
+              }
             }
-          }
+          ]
         },
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "gainAbility",
-            "Target": {
-              "Kind": "EnchantedOrEquipped"
-            },
-            "GainedAbility": {
-              "Kind": "activated",
-              "Costs": [
-                {
-                  "CostType": "tap"
-                }
-              ],
-              "Effects": [
-                {
-                  "EffectType": "addMana",
-                  "Mana": "{G}{G}"
-                }
-              ],
-              "IsManaAbility": true
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "tap"
+                  }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "addMana",
+                    "Mana": "{G}{G}"
+                  }
+                ],
+                "IsManaAbility": true
+              }
             }
-          }
+          ]
         }
       ]
     },

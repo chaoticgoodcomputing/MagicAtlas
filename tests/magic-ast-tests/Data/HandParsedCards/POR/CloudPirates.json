@@ -6,15 +6,24 @@
     "OracleText": "Flying\nThis creature can block only creatures with flying.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Cloud Pirates",
     "TypeLine": {
       "Raw": "Creature — Human Pirate",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Pirate"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Pirate"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nThis creature can block only creatures with flying.",
@@ -22,23 +31,36 @@
         {
           "Kind": "static",
           "KeywordSource": "Flying",
-          "Effect": {
-            "EffectType": "evasion",
-            "CanBeBlockedBy": {
-              "CardTypes": ["creature"],
-              "Characteristics": ["flying", "reach"]
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "flying",
+                  "reach"
+                ]
+              }
             }
-          }
+          ]
         },
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "canBlockOnly",
-            "Filter": {
-              "CardTypes": ["creature"],
-              "Characteristics": ["with flying"]
+          "Effects": [
+            {
+              "EffectType": "canBlockOnly",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "with flying"
+                ]
+              }
             }
-          }
+          ]
         }
       ]
     },
@@ -47,16 +69,39 @@
         "Kind": "manaCost",
         "Raw": "{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 1
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

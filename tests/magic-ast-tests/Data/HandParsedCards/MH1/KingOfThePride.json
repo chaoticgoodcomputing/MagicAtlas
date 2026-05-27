@@ -6,36 +6,58 @@
     "OracleText": "Other Cats you control get +2/+1.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "King of the Pride",
     "TypeLine": {
       "Raw": "Creature — Cat",
-      "Types": ["Creature"],
-      "Subtypes": ["Cat"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat"
+      ]
     },
     "Oracle": {
       "RawText": "Other Cats you control get +2/+1.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "modifyPT",
-            "Target": {
-              "Kind": "Each",
-              "Filter": {
-                "CardTypes": ["creature"],
-                "Subtypes": ["Cat"],
-                "Controller": "You",
-                "Characteristics": ["other"]
-              }
-            },
-            "PowerModifier": { "QuantityType": "literal", "Value": 2 },
-            "ToughnessModifier": { "QuantityType": "literal", "Value": 1 },
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Cat"
+                  ],
+                  "Controller": "You",
+                  "Characteristics": [
+                    "other"
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -44,18 +66,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

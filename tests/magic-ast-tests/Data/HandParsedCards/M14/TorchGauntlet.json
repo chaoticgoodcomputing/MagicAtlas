@@ -13,41 +13,52 @@
     "Name": "Torch Gauntlet",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature gets +2/+0.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "modifyPT",
-            "Target": {
-              "Kind": "EnchantedOrEquipped"
-            },
-            "PowerModifier": {
-              "QuantityType": "literal",
-              "Value": 2
-            },
-            "ToughnessModifier": {
-              "QuantityType": "literal",
-              "Value": 0
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              }
             }
-          }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "Equip",
-          "Effect": {
-            "EffectType": "equip",
-            "Cost": {
-              "CostType": "mana",
-              "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 }
-              ]
+          "Effects": [
+            {
+              "EffectType": "equip",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 2
+                  }
+                ]
+              }
             }
-          }
+          ]
         }
       ]
     },
@@ -56,7 +67,10 @@
         "Kind": "manaCost",
         "Raw": "{2}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
         ],
         "ManaValue": 2
       },

@@ -29,24 +29,26 @@
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "modifyPT",
-            "Target": {
-              "Kind": "Self"
-            },
-            "PowerModifier": {
-              "QuantityType": "literal",
-              "Value": 0
-            },
-            "ToughnessModifier": {
-              "QuantityType": "literal",
-              "Value": 3
-            },
-            "Duration": {
-              "DurationType": "asLongAs",
-              "Condition": "it's untapped"
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "it's untapped"
+              }
             }
-          }
+          ]
         }
       ]
     },

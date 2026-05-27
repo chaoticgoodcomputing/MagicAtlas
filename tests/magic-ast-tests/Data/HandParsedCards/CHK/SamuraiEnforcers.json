@@ -6,16 +6,25 @@
     "OracleText": "Bushido 2 (Whenever this creature blocks or becomes blocked, it gets +2/+2 until end of turn.)",
     "Power": "4",
     "Toughness": "4",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Samurai Enforcers",
     "TypeLine": {
       "Raw": "Creature — Human Samurai",
       "Supertypes": [],
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Samurai"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Samurai"
+      ]
     },
     "Oracle": {
       "RawText": "Bushido 2 (Whenever this creature blocks or becomes blocked, it gets +2/+2 until end of turn.)",
@@ -23,11 +32,13 @@
         {
           "Kind": "static",
           "KeywordSource": "Bushido",
-          "Effect": {
-            "EffectType": "bushido",
-            "Value": 2,
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "bushido",
+              "Value": 2,
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -36,18 +47,49 @@
         "Kind": "manaCost",
         "Raw": "{4}{W}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 6
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
-        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
       }
     ]
   }

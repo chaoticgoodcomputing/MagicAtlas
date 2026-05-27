@@ -6,15 +6,24 @@
     "OracleText": "Defender",
     "Power": "4",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Monoist Sentry",
     "TypeLine": {
       "Raw": "Artifact Creature — Robot",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Robot"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Robot"
+      ]
     },
     "Oracle": {
       "RawText": "Defender",
@@ -22,9 +31,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Defender",
-          "Effect": {
-            "EffectType": "defender"
-          }
+          "Effects": [
+            {
+              "EffectType": "defender"
+            }
+          ]
         }
       ]
     },
@@ -35,18 +46,24 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

@@ -6,25 +6,35 @@
     "OracleText": "This creature can't block.",
     "Power": "3",
     "Toughness": "3",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Scavenging Scarab",
     "TypeLine": {
       "Raw": "Creature — Insect",
-      "Types": ["Creature"],
-      "Subtypes": ["Insect"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Insect"
+      ]
     },
     "Oracle": {
       "RawText": "This creature can't block.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "cantBlock",
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "cantBlock",
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -33,18 +43,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

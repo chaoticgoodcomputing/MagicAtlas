@@ -13,8 +13,13 @@
     "Name": "Steel Wall",
     "TypeLine": {
       "Raw": "Artifact Creature — Wall",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Wall"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Wall"
+      ]
     },
     "Oracle": {
       "RawText": "Defender (This creature can't attack.)",
@@ -22,9 +27,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Defender",
-          "Effect": {
-            "EffectType": "defender"
-          }
+          "Effects": [
+            {
+              "EffectType": "defender"
+            }
+          ]
         }
       ]
     },

@@ -346,7 +346,7 @@ public sealed class StaticAbilityParser : IAbilityParser
       [
         new StaticAbility
         {
-          Effect = new MagicAST.AST.Effects.Timing.CantBeCastEffect(),
+          Effects = [new MagicAST.AST.Effects.Timing.CantBeCastEffect()],
           AffectedObjects = new ObjectFilter
           {
             CardTypes = ["spell"],
@@ -367,7 +367,7 @@ public sealed class StaticAbilityParser : IAbilityParser
       [
         new StaticAbility
         {
-          Effect = new MagicAST.AST.Effects.Timing.CantBeCastEffect(),
+          Effects = [new MagicAST.AST.Effects.Timing.CantBeCastEffect()],
           AffectedObjects = new ObjectFilter
           {
             CardTypes = ["spell"],
@@ -414,12 +414,12 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new ModifyPTEffect
+        Effects = [new ModifyPTEffect
         {
           Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
           PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
           ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
-        },
+        }],
       },
     ];
   }
@@ -474,7 +474,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MagicAST.AST.Effects.Core.CompositeEffect
+        Effects = [new MagicAST.AST.Effects.Core.CompositeEffect
         {
           Effects =
           [
@@ -490,7 +490,7 @@ public sealed class StaticAbilityParser : IAbilityParser
               GainedAbility = grantedAbility,
             },
           ],
-        },
+        }],
       },
     ];
   }
@@ -548,11 +548,11 @@ public sealed class StaticAbilityParser : IAbilityParser
       [
         new StaticAbility
         {
-          Effect = new GainAbilityEffect
+          Effects = [new GainAbilityEffect
           {
             Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
             GainedAbility = grantedAbility,
-          },
+          }],
         },
       ];
     }
@@ -587,11 +587,11 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new GainAbilityEffect
+        Effects = [new GainAbilityEffect
         {
           Target = target,
           GainedAbility = grantedAbility2,
-        },
+        }],
       },
     ];
   }
@@ -695,7 +695,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new ModifyPTEffect
+        Effects = [new ModifyPTEffect
         {
           Target = new ObjectReference
           {
@@ -710,7 +710,7 @@ public sealed class StaticAbilityParser : IAbilityParser
           },
           PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
           ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
-        },
+        }],
       },
     ];
   }
@@ -757,7 +757,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MagicAST.AST.Effects.Replacement.ReplacementEffect
+        Effects = [new MagicAST.AST.Effects.Replacement.ReplacementEffect
         {
           Event = new MagicAST.AST.Effects.Replacement.DrawCardEvent
           {
@@ -769,7 +769,7 @@ public sealed class StaticAbilityParser : IAbilityParser
             Count = MagicAST.AST.Quantities.LiteralQuantity.Of(count),
             Player = ObjectReference.You(),
           },
-        },
+        }],
       },
     ];
   }
@@ -824,7 +824,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MagicAST.AST.Effects.Replacement.LegendRuleSuppressionEffect(),
+        Effects = [new MagicAST.AST.Effects.Replacement.LegendRuleSuppressionEffect()],
       },
     ];
   }
@@ -859,10 +859,10 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MagicAST.AST.Effects.Resource.CostReductionEffect
+        Effects = [new MagicAST.AST.Effects.Resource.CostReductionEffect
         {
           Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount),
-        },
+        }],
         Condition = new MagicAST.AST.Abilities.Condition { Text = conditionText },
       },
     ];
@@ -906,7 +906,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = effect,
+        Effects = [effect],
         Condition = new MagicAST.AST.Abilities.Condition { Text = conditionText },
       },
     ];
@@ -940,7 +940,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MagicAST.AST.Effects.Resource.CostReductionEffect
+        Effects = [new MagicAST.AST.Effects.Resource.CostReductionEffect
         {
           Amount = new MagicAST.AST.Quantities.DerivedQuantity
           {
@@ -948,7 +948,7 @@ public sealed class StaticAbilityParser : IAbilityParser
             Source = source,
           },
           BasedOn = source,
-        },
+        }],
       },
     ];
   }
@@ -1051,10 +1051,10 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MagicAST.AST.Effects.Control.DoesntUntapEffect
+        Effects = [new MagicAST.AST.Effects.Control.DoesntUntapEffect
         {
           WhoseUntapStep = possessive,
-        },
+        }],
       },
     ];
   }
@@ -1113,7 +1113,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MagicAST.AST.Effects.Keyword.EvasionEffect { CanBeBlockedBy = canBeBlockedBy },
+        Effects = [new MagicAST.AST.Effects.Keyword.EvasionEffect { CanBeBlockedBy = canBeBlockedBy }],
       },
     ];
   }
@@ -1154,10 +1154,10 @@ public sealed class StaticAbilityParser : IAbilityParser
       new StaticAbility
       {
         KeywordSource = "Enchant",
-        Effect = new MagicAST.AST.Effects.Combat.EnchantRestrictionEffect
+        Effects = [new MagicAST.AST.Effects.Combat.EnchantRestrictionEffect
         {
           LegalTargets = filter,
-        },
+        }],
       },
     ];
   }
@@ -1223,7 +1223,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MustAttackEffect { Target = target },
+        Effects = [new MustAttackEffect { Target = target }],
       },
     ];
   }
@@ -1254,7 +1254,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MustBeBlockedEffect { Target = ObjectReference.Self() },
+        Effects = [new MustBeBlockedEffect { Target = ObjectReference.Self() }],
       },
     ];
   }
@@ -1285,7 +1285,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MustBlockEffect { Target = target },
+        Effects = [new MustBlockEffect { Target = target }],
       },
     ];
   }
@@ -1366,11 +1366,11 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new GainAbilityEffect
+        Effects = [new GainAbilityEffect
         {
           Target = target,
           GainedAbility = innerAbility,
-        },
+        }],
       },
     ];
   }
@@ -1613,13 +1613,13 @@ public sealed class StaticAbilityParser : IAbilityParser
       [
         new StaticAbility
         {
-          Effect = new MagicAST.AST.Effects.Modification.ModifyPTEffect
+          Effects = [new MagicAST.AST.Effects.Modification.ModifyPTEffect
           {
             Target = ObjectReference.Self(),
             PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
             ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
             Duration = duration,
-          },
+          }],
         },
       ];
     }
@@ -1637,12 +1637,12 @@ public sealed class StaticAbilityParser : IAbilityParser
         [
           new StaticAbility
           {
-            Effect = new MagicAST.AST.Effects.Modification.GainAbilityEffect
+            Effects = [new MagicAST.AST.Effects.Modification.GainAbilityEffect
             {
               Target = ObjectReference.Self(),
               GainedAbility = grantedAbility,
               Duration = duration,
-            },
+            }],
           },
         ];
       }
@@ -1685,70 +1685,70 @@ public sealed class StaticAbilityParser : IAbilityParser
       "first strike" => new StaticAbility
       {
         KeywordSource = "First strike",
-        Effect = new MagicAST.AST.Effects.Combat.CombatDamageTimingEffect
+        Effects = [new MagicAST.AST.Effects.Combat.CombatDamageTimingEffect
         {
           Timing = MagicAST.AST.Effects.Combat.CombatDamageTiming.First,
-        },
+        }],
       },
       "double strike" => new StaticAbility
       {
         KeywordSource = "Double strike",
-        Effect = new MagicAST.AST.Effects.Combat.CombatDamageTimingEffect
+        Effects = [new MagicAST.AST.Effects.Combat.CombatDamageTimingEffect
         {
           Timing = MagicAST.AST.Effects.Combat.CombatDamageTiming.Both,
-        },
+        }],
       },
       "flying" => new StaticAbility
       {
         KeywordSource = "Flying",
-        Effect = new MagicAST.AST.Effects.Keyword.EvasionEffect
+        Effects = [new MagicAST.AST.Effects.Keyword.EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter
           {
             CardTypes = ["creature"],
             Characteristics = ["flying", "reach"],
           },
-        },
+        }],
       },
       "indestructible" => new StaticAbility
       {
         KeywordSource = "Indestructible",
-        Effect = new MagicAST.AST.Effects.Keyword.IndestructibleEffect(),
+        Effects = [new MagicAST.AST.Effects.Keyword.IndestructibleEffect()],
       },
       "vigilance" => new StaticAbility
       {
         KeywordSource = "Vigilance",
-        Effect = new MagicAST.AST.Effects.Keyword.VigilanceEffect(),
+        Effects = [new MagicAST.AST.Effects.Keyword.VigilanceEffect()],
       },
       "haste" => new StaticAbility
       {
         KeywordSource = "Haste",
-        Effect = new MagicAST.AST.Effects.Keyword.HasteEffect(),
+        Effects = [new MagicAST.AST.Effects.Keyword.HasteEffect()],
       },
       "lifelink" => new StaticAbility
       {
         KeywordSource = "Lifelink",
-        Effect = new MagicAST.AST.Effects.Damage.LifelinkEffect(),
+        Effects = [new MagicAST.AST.Effects.Damage.LifelinkEffect()],
       },
       "reach" => new StaticAbility
       {
         KeywordSource = "Reach",
-        Effect = new MagicAST.AST.Effects.Keyword.ReachEffect(),
+        Effects = [new MagicAST.AST.Effects.Keyword.ReachEffect()],
       },
       "trample" => new StaticAbility
       {
         KeywordSource = "Trample",
-        Effect = new MagicAST.AST.Effects.Keyword.TrampleEffect(),
+        Effects = [new MagicAST.AST.Effects.Keyword.TrampleEffect()],
       },
       "defender" => new StaticAbility
       {
         KeywordSource = "Defender",
-        Effect = new MagicAST.AST.Effects.Keyword.DefenderEffect { IsOptional = false },
+        Effects = [new MagicAST.AST.Effects.Keyword.DefenderEffect { IsOptional = false }],
       },
       "deathtouch" => new StaticAbility
       {
         KeywordSource = "Deathtouch",
-        Effect = new MagicAST.AST.Effects.Keyword.DeathtouchEffect { IsOptional = false },
+        Effects = [new MagicAST.AST.Effects.Keyword.DeathtouchEffect { IsOptional = false }],
       },
       _ => null,
     };
@@ -1813,7 +1813,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new ModifyPTEffect
+        Effects = [new ModifyPTEffect
         {
           Target = new ObjectReference
           {
@@ -1822,7 +1822,7 @@ public sealed class StaticAbilityParser : IAbilityParser
           },
           PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
           ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
-        },
+        }],
       },
     ];
   }
@@ -2006,7 +2006,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new EntersTappedEffect(),
+        Effects = [new EntersTappedEffect()],
       },
     ];
   }
@@ -2037,7 +2037,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new CantBlockEffect(),
+        Effects = [new CantBlockEffect()],
       },
     ];
   }
@@ -2066,7 +2066,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new CantBeBlockedEffect(),
+        Effects = [new CantBeBlockedEffect()],
       },
     ];
   }
@@ -2117,14 +2117,14 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new CanBlockOnlyEffect
+        Effects = [new CanBlockOnlyEffect
         {
           Filter = new ObjectFilter
           {
             CardTypes = ["creature"],
             Characteristics = [$"with {characteristic}"],
           },
-        },
+        }],
       },
     ];
   }
@@ -2162,7 +2162,7 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MagicAST.AST.Effects.Timing.SkipUntapEffect { IsOptional = false },
+        Effects = [new MagicAST.AST.Effects.Timing.SkipUntapEffect { IsOptional = false }],
       },
     ];
   }
@@ -2203,12 +2203,12 @@ public sealed class StaticAbilityParser : IAbilityParser
     [
       new StaticAbility
       {
-        Effect = new MagicAST.AST.Effects.Replacement.EntersWithCountersEffect
+        Effects = [new MagicAST.AST.Effects.Replacement.EntersWithCountersEffect
         {
           Count = count,
           CounterType = "+1/+1",
           IsOptional = false,
-        },
+        }],
       },
     ];
   }

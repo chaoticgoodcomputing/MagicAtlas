@@ -6,17 +6,28 @@
     "OracleText": "Level up {2} ({2}: Put a level counter on this. Level up only as a sorcery.)\nLEVEL 1-4\n2/2\nLEVEL 5+\n5/5\nFirst strike",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Level Up"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Level Up"
+    ],
     "Layout": "leveler"
   },
   "Output": {
     "Name": "Caravan Escort",
     "TypeLine": {
       "Raw": "Creature — Human Knight",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Knight"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Knight"
+      ]
     },
     "Oracle": {
       "RawText": "Level up {2} ({2}: Put a level counter on this. Level up only as a sorcery.)\nLEVEL 1-4\n2/2\nLEVEL 5+\n5/5\nFirst strike",
@@ -33,22 +44,40 @@
             {
               "MinLevel": 1,
               "MaxLevel": 4,
-              "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-              "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+              "Power": {
+                "ValueType": "fixed",
+                "Raw": "2",
+                "Value": 2
+              },
+              "Toughness": {
+                "ValueType": "fixed",
+                "Raw": "2",
+                "Value": 2
+              },
               "Abilities": []
             },
             {
               "MinLevel": 5,
-              "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
-              "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
+              "Power": {
+                "ValueType": "fixed",
+                "Raw": "5",
+                "Value": 5
+              },
+              "Toughness": {
+                "ValueType": "fixed",
+                "Raw": "5",
+                "Value": 5
+              },
               "Abilities": [
                 {
                   "Kind": "static",
                   "KeywordSource": "First strike",
-                  "Effect": {
-                    "EffectType": "combatDamageTiming",
-                    "Timing": "First"
-                  }
+                  "Effects": [
+                    {
+                      "EffectType": "combatDamageTiming",
+                      "Timing": "First"
+                    }
+                  ]
                 }
               ]
             }
@@ -61,19 +90,45 @@
         "Kind": "manaCost",
         "Raw": "{W}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 1,
         "IsVariable": false
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       },
-      { "Kind": "layout", "Layout": "leveler" }
+      {
+        "Kind": "layout",
+        "Layout": "leveler"
+      }
     ]
   }
 }

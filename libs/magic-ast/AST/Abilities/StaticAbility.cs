@@ -16,9 +16,9 @@ public sealed record StaticAbility : Ability
   public override AbilityKind AbilityKind => AbilityKind.Static;
 
   /// <summary>
-  /// The continuous effect this static ability creates.
+  /// The continuous effects this static ability creates.
   /// </summary>
-  public required Effect Effect { get; init; }
+  public required IReadOnlyList<Effect> Effects { get; init; }
 
   /// <summary>
   /// Optional condition for when this static ability applies.

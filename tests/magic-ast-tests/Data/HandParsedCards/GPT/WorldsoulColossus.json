@@ -6,16 +6,26 @@
     "OracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nThis creature enters with X +1/+1 counters on it.",
     "Power": "0",
     "Toughness": "0",
-    "Colors": ["G", "W"],
-    "ColorIdentity": ["G", "W"]
+    "Colors": [
+      "G",
+      "W"
+    ],
+    "ColorIdentity": [
+      "G",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Worldsoul Colossus",
     "TypeLine": {
       "Raw": "Creature — Elemental",
       "Supertypes": [],
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental"
+      ]
     },
     "Oracle": {
       "RawText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nThis creature enters with X +1/+1 counters on it.",
@@ -23,19 +33,26 @@
         {
           "Kind": "static",
           "KeywordSource": "Convoke",
-          "Effect": {
-            "EffectType": "convoke",
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "convoke",
+              "IsOptional": false
+            }
+          ]
         },
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "entersWithCounters",
-            "Count": { "QuantityType": "variable", "Name": "X" },
-            "CounterType": "+1/+1",
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "entersWithCounters",
+              "Count": {
+                "QuantityType": "variable",
+                "Name": "X"
+              },
+              "CounterType": "+1/+1",
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -44,18 +61,50 @@
         "Kind": "manaCost",
         "Raw": "{X}{G}{W}",
         "Symbols": [
-          { "Kind": "variable" },
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "IsVariable": true
       },
-      { "Kind": "colors", "Colors": ["G", "W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G", "W"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G",
+          "W"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "0", "Value": 0 },
-        "Toughness": { "ValueType": "fixed", "Raw": "0", "Value": 0 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        }
       }
     ]
   }

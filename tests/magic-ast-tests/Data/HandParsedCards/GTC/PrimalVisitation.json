@@ -6,15 +6,25 @@
     "OracleText": "Enchant creature\nEnchanted creature gets +3/+3 and has haste.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G", "R"],
-    "ColorIdentity": ["G", "R"]
+    "Colors": [
+      "G",
+      "R"
+    ],
+    "ColorIdentity": [
+      "G",
+      "R"
+    ]
   },
   "Output": {
     "Name": "Primal Visitation",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nEnchanted creature gets +3/+3 and has haste.",
@@ -22,41 +32,59 @@
         {
           "Kind": "static",
           "KeywordSource": "Enchant",
-          "Effect": {
-            "EffectType": "enchantRestriction",
-            "LegalTargets": {
-              "CardTypes": ["creature"]
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ]
+              }
             }
-          }
+          ]
         },
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "composite",
-            "IsOptional": false,
-            "Effects": [
-              {
-                "EffectType": "modifyPT",
-                "Target": { "Kind": "EnchantedOrEquipped" },
-                "PowerModifier": { "QuantityType": "literal", "Value": 3 },
-                "ToughnessModifier": { "QuantityType": "literal", "Value": 3 },
-                "IsOptional": false
-              },
-              {
-                "EffectType": "gainAbility",
-                "Target": { "Kind": "EnchantedOrEquipped" },
-                "GainedAbility": {
-                  "Kind": "static",
-                  "KeywordSource": "Haste",
-                  "Effect": {
-                    "EffectType": "haste",
-                    "IsOptional": false
-                  }
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "IsOptional": false,
+              "Effects": [
+                {
+                  "EffectType": "modifyPT",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 3
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 3
+                  },
+                  "IsOptional": false
                 },
-                "IsOptional": false
-              }
-            ]
-          }
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "KeywordSource": "Haste",
+                    "Effects": [
+                      {
+                        "EffectType": "haste",
+                        "IsOptional": false
+                      }
+                    ]
+                  },
+                  "IsOptional": false
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -65,19 +93,38 @@
         "Kind": "manaCost",
         "Raw": "{3}{R}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["G", "R"]
+        "Colors": [
+          "G",
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G", "R"]
+        "ColorIdentity": [
+          "G",
+          "R"
+        ]
       }
     ]
   }

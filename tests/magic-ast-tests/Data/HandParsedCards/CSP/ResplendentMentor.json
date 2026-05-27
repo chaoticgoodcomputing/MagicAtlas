@@ -6,51 +6,68 @@
     "OracleText": "White creatures you control have \"{T}: You gain 1 life.\"",
     "Power": "1",
     "Toughness": "4",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Resplendent Mentor",
     "TypeLine": {
       "Raw": "Creature — Human Cleric",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Cleric"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "White creatures you control have \"{T}: You gain 1 life.\"",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "gainAbility",
-            "Target": {
-              "Kind": "Each",
-              "Filter": {
-                "CardTypes": ["creature"],
-                "Colors": ["W"],
-                "Controller": "You"
-              }
-            },
-            "GainedAbility": {
-              "Kind": "activated",
-              "Costs": [
-                { "CostType": "tap" }
-              ],
-              "Effects": [
-                {
-                  "EffectType": "gainLife",
-                  "Amount": {
-                    "QuantityType": "literal",
-                    "Value": 1
-                  },
-                  "Player": {
-                    "Kind": "You"
-                  }
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Colors": [
+                    "W"
+                  ],
+                  "Controller": "You"
                 }
-              ],
-              "IsManaAbility": false
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "tap"
+                  }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "gainLife",
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                ],
+                "IsManaAbility": false
+              }
             }
-          }
+          ]
         }
       ]
     },
@@ -59,18 +76,30 @@
         "Kind": "manaCost",
         "Raw": "{4}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

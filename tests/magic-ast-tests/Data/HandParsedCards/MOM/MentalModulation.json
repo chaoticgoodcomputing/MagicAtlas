@@ -6,27 +6,35 @@
     "OracleText": "This spell costs {1} less to cast during your turn.\nTap target artifact or creature.\nDraw a card.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Mental Modulation",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "This spell costs {1} less to cast during your turn.\nTap target artifact or creature.\nDraw a card.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "costReduction",
-            "Amount": {
-              "QuantityType": "literal",
-              "Value": 1
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
-          },
+          ],
           "Condition": {
             "Text": "during your turn"
           }
@@ -39,7 +47,10 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact", "creature"]
+                  "CardTypes": [
+                    "artifact",
+                    "creature"
+                  ]
                 }
               }
             }
@@ -67,18 +78,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

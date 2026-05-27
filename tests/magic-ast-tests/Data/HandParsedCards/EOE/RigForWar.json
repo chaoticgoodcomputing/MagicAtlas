@@ -6,14 +6,20 @@
     "OracleText": "Target creature gets +3/+0 and gains first strike and reach until end of turn.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Rig for War",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Target creature gets +3/+0 and gains first strike and reach until end of turn.",
@@ -26,7 +32,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "PowerModifier": {
@@ -49,10 +57,12 @@
               "GainedAbility": {
                 "Kind": "static",
                 "KeywordSource": "First strike",
-                "Effect": {
-                  "EffectType": "combatDamageTiming",
-                  "Timing": "First"
-                }
+                "Effects": [
+                  {
+                    "EffectType": "combatDamageTiming",
+                    "Timing": "First"
+                  }
+                ]
               },
               "Duration": {
                 "DurationType": "untilEndOfTurn"
@@ -66,9 +76,11 @@
               "GainedAbility": {
                 "Kind": "static",
                 "KeywordSource": "Reach",
-                "Effect": {
-                  "EffectType": "reach"
-                }
+                "Effects": [
+                  {
+                    "EffectType": "reach"
+                  }
+                ]
               },
               "Duration": {
                 "DurationType": "untilEndOfTurn"
@@ -83,18 +95,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

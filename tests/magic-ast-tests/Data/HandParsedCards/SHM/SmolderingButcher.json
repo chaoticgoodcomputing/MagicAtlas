@@ -6,16 +6,25 @@
     "OracleText": "Wither (This deals damage to creatures in the form of -1/-1 counters.)",
     "Power": "4",
     "Toughness": "2",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Smoldering Butcher",
     "TypeLine": {
       "Raw": "Creature — Elemental Warrior",
       "Supertypes": [],
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental", "Warrior"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "Wither (This deals damage to creatures in the form of -1/-1 counters.)",
@@ -23,10 +32,12 @@
         {
           "Kind": "static",
           "KeywordSource": "Wither",
-          "Effect": {
-            "EffectType": "wither",
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "wither",
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -35,17 +46,43 @@
         "Kind": "manaCost",
         "Raw": "{3}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 4
       },
-      { "Kind": "colors", "Colors": ["B"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

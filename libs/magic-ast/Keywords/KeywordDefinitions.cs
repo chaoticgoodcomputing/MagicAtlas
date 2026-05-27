@@ -32,14 +32,14 @@ public static class KeywordDefinitions
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Flying",
-        Effect = new EvasionEffect
+        Effects = [new EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter
           {
             CardTypes = ["creature"],
             Characteristics = ["flying", "reach"],
           },
-        },
+        }],
       },
     };
 
@@ -58,11 +58,11 @@ public static class KeywordDefinitions
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Menace",
-        Effect = new EvasionEffect
+        Effects = [new EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter { CardTypes = ["creature"] },
           MinimumBlockers = 2,
-        },
+        }],
       },
     };
 
@@ -84,7 +84,7 @@ public static class KeywordDefinitions
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "First strike",
-        Effect = new CombatDamageTimingEffect { Timing = CombatDamageTiming.First },
+        Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.First }],
       },
     };
 
@@ -102,7 +102,7 @@ public static class KeywordDefinitions
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Double strike",
-        Effect = new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both },
+        Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both }],
       },
     };
 
@@ -124,7 +124,7 @@ public static class KeywordDefinitions
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Lifelink",
-        Effect = new LifelinkEffect(),
+        Effects = [new LifelinkEffect()],
       },
     };
 
@@ -146,7 +146,7 @@ public static class KeywordDefinitions
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Vigilance",
-        Effect = new VigilanceEffect(),
+        Effects = [new VigilanceEffect()],
       },
     };
 
@@ -175,7 +175,7 @@ public static class KeywordDefinitions
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Storm",
-        Effect = new StormEffect(),
+        Effects = [new StormEffect()],
       },
     };
 
@@ -199,7 +199,7 @@ public static class KeywordDefinitions
       CreateExpansion = parameter => new StaticAbility
       {
         KeywordSource = "Protection",
-        Effect = new ProtectionEffect { From = ParseProtectionQualities(parameter) },
+        Effects = [new ProtectionEffect { From = ParseProtectionQualities(parameter) }],
       },
     };
 
@@ -225,10 +225,10 @@ public static class KeywordDefinitions
       CreateExpansion = parameter => new StaticAbility
       {
         KeywordSource = "Crew",
-        Effect = new CrewEffect
+        Effects = [new CrewEffect
         {
           Power = new LiteralQuantity { Value = ParseCrewPower(parameter) },
-        },
+        }],
       },
     };
 
@@ -252,11 +252,11 @@ public static class KeywordDefinitions
       CreateExpansion = parameter => new StaticAbility
       {
         KeywordSource = "Partner with",
-        Effect = new PartnerEffect
+        Effects = [new PartnerEffect
         {
           PartnerType = PartnerType.PartnerWith,
           PartnerName = parameter?.Trim(),
-        },
+        }],
       },
     };
 

@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Basri's Lieutenant",
     "ManaCost": "{3}{W}",
-    "TypeLine": "Creature \u2014 Human Knight",
+    "TypeLine": "Creature — Human Knight",
     "OracleText": "Vigilance, protection from multicolored\nWhen this creature enters, put a +1/+1 counter on target creature you control.\nWhenever this creature or another creature you control dies, if it had a +1/+1 counter on it, create a 2/2 white Knight creature token with vigilance.",
     "Power": "3",
     "Toughness": "4",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Basri's Lieutenant",
     "TypeLine": {
-      "Raw": "Creature \u2014 Human Knight",
+      "Raw": "Creature — Human Knight",
       "Types": [
         "Creature"
       ],
@@ -31,22 +31,26 @@
         {
           "Kind": "static",
           "KeywordSource": "Vigilance",
-          "Effect": {
-            "EffectType": "vigilance"
-          }
+          "Effects": [
+            {
+              "EffectType": "vigilance"
+            }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "Protection",
-          "Effect": {
-            "EffectType": "protection",
-            "From": [
-              {
-                "Kind": "Characteristic",
-                "Value": "multicolored"
-              }
-            ]
-          }
+          "Effects": [
+            {
+              "EffectType": "protection",
+              "From": [
+                {
+                  "Kind": "Characteristic",
+                  "Value": "multicolored"
+                }
+              ]
+            }
+          ]
         },
         {
           "Kind": "triggered",
@@ -117,9 +121,11 @@
                   {
                     "Kind": "static",
                     "KeywordSource": "Vigilance",
-                    "Effect": {
-                      "EffectType": "vigilance"
-                    }
+                    "Effects": [
+                      {
+                        "EffectType": "vigilance"
+                      }
+                    ]
                   }
                 ]
               }

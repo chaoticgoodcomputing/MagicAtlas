@@ -36,30 +36,36 @@
         {
           "Kind": "static",
           "KeywordSource": "Haste",
-          "Effect": {
-            "EffectType": "haste"
-          }
+          "Effects": [
+            {
+              "EffectType": "haste"
+            }
+          ]
         },
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "gainAbility",
-            "Target": {
-              "Kind": "Self"
-            },
-            "GainedAbility": {
-              "Kind": "static",
-              "KeywordSource": "First strike",
-              "Effect": {
-                "EffectType": "combatDamageTiming",
-                "Timing": "First"
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "First strike",
+                "Effects": [
+                  {
+                    "EffectType": "combatDamageTiming",
+                    "Timing": "First"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "it's equipped"
               }
-            },
-            "Duration": {
-              "DurationType": "asLongAs",
-              "Condition": "it's equipped"
             }
-          }
+          ]
         },
         {
           "Kind": "triggered",

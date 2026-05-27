@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Vito, Thorn of the Dusk Rose",
     "ManaCost": "{2}{B}",
-    "TypeLine": "Legendary Creature \u2014 Vampire Cleric",
+    "TypeLine": "Legendary Creature — Vampire Cleric",
     "OracleText": "Whenever you gain life, target opponent loses that much life.\n{3}{B}{B}: Creatures you control gain lifelink until end of turn.",
     "Power": "1",
     "Toughness": "3",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Vito, Thorn of the Dusk Rose",
     "TypeLine": {
-      "Raw": "Legendary Creature \u2014 Vampire Cleric",
+      "Raw": "Legendary Creature — Vampire Cleric",
       "Supertypes": [
         "Legendary"
       ],
@@ -98,9 +98,11 @@
               "GainedAbility": {
                 "Kind": "static",
                 "KeywordSource": "Lifelink",
-                "Effect": {
-                  "EffectType": "lifelink"
-                }
+                "Effects": [
+                  {
+                    "EffectType": "lifelink"
+                  }
+                ]
               },
               "Duration": {
                 "DurationType": "untilEndOfTurn"

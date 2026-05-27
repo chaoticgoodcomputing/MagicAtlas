@@ -6,15 +6,23 @@
     "OracleText": "Defender",
     "Power": "0",
     "Toughness": "5",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Murmuring Phantasm",
     "TypeLine": {
       "Raw": "Creature — Spirit",
-      "Types": ["Creature"],
-      "Subtypes": ["Spirit"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spirit"
+      ]
     },
     "Oracle": {
       "RawText": "Defender",
@@ -22,9 +30,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Defender",
-          "Effect": {
-            "EffectType": "defender"
-          }
+          "Effects": [
+            {
+              "EffectType": "defender"
+            }
+          ]
         }
       ]
     },
@@ -39,18 +49,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

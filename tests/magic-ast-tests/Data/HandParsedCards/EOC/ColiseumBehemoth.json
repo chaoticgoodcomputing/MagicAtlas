@@ -30,9 +30,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Trample",
-          "Effect": {
-            "EffectType": "trample"
-          }
+          "Effects": [
+            {
+              "EffectType": "trample"
+            }
+          ]
         },
         {
           "Kind": "triggered",

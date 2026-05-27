@@ -6,15 +6,24 @@
     "OracleText": "Morph {U} (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Scornful Egotist",
     "TypeLine": {
       "Raw": "Creature — Human Wizard",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Wizard"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "Morph {U} (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)",
@@ -22,15 +31,22 @@
         {
           "Kind": "static",
           "KeywordSource": "Morph",
-          "Effect": {
-            "EffectType": "morph",
-            "Cost": {
-              "CostType": "mana",
-              "Symbols": [
-                { "Kind": "colored", "Colors": ["U"] }
-              ]
+          "Effects": [
+            {
+              "EffectType": "morph",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ]
+                  }
+                ]
+              }
             }
-          }
+          ]
         }
       ]
     },
@@ -39,18 +55,30 @@
         "Kind": "manaCost",
         "Raw": "{7}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 7 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 7
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 8
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

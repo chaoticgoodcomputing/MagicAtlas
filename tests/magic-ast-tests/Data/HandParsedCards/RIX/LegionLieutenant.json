@@ -6,36 +6,61 @@
     "OracleText": "Other Vampires you control get +1/+1.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["W", "B"],
-    "ColorIdentity": ["W", "B"]
+    "Colors": [
+      "W",
+      "B"
+    ],
+    "ColorIdentity": [
+      "W",
+      "B"
+    ]
   },
   "Output": {
     "Name": "Legion Lieutenant",
     "TypeLine": {
       "Raw": "Creature — Vampire Knight",
-      "Types": ["Creature"],
-      "Subtypes": ["Vampire", "Knight"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire",
+        "Knight"
+      ]
     },
     "Oracle": {
       "RawText": "Other Vampires you control get +1/+1.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "modifyPT",
-            "Target": {
-              "Kind": "Each",
-              "Filter": {
-                "CardTypes": ["creature"],
-                "Subtypes": ["Vampire"],
-                "Controller": "You",
-                "Characteristics": ["other"]
-              }
-            },
-            "PowerModifier": { "QuantityType": "literal", "Value": 1 },
-            "ToughnessModifier": { "QuantityType": "literal", "Value": 1 },
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Vampire"
+                  ],
+                  "Controller": "You",
+                  "Characteristics": [
+                    "other"
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -44,18 +69,34 @@
         "Kind": "manaCost",
         "Raw": "{W}{B}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["W", "B"]
+        "Colors": [
+          "W",
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "B"]
+        "ColorIdentity": [
+          "W",
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

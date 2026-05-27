@@ -33,63 +33,67 @@
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "modifyPT",
-            "Target": {
-              "Kind": "Each",
-              "Filter": {
-                "CardTypes": [
-                  "creature"
-                ],
-                "Subtypes": [
-                  "Snake"
-                ],
-                "Controller": "You",
-                "Characteristics": [
-                  "other"
-                ]
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Snake"
+                  ],
+                  "Controller": "You",
+                  "Characteristics": [
+                    "other"
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
               }
-            },
-            "PowerModifier": {
-              "QuantityType": "literal",
-              "Value": 0
-            },
-            "ToughnessModifier": {
-              "QuantityType": "literal",
-              "Value": 1
             }
-          }
+          ]
         },
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "gainAbility",
-            "Target": {
-              "Kind": "Each",
-              "Filter": {
-                "Subtypes": [
-                  "Shaman"
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "Subtypes": [
+                    "Shaman"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "tap"
+                  }
                 ],
-                "Controller": "You"
+                "Effects": [
+                  {
+                    "EffectType": "addMana",
+                    "Mana": "{G}{G}",
+                    "AnyColor": false
+                  }
+                ],
+                "IsManaAbility": true
               }
-            },
-            "GainedAbility": {
-              "Kind": "activated",
-              "Costs": [
-                {
-                  "CostType": "tap"
-                }
-              ],
-              "Effects": [
-                {
-                  "EffectType": "addMana",
-                  "Mana": "{G}{G}",
-                  "AnyColor": false
-                }
-              ],
-              "IsManaAbility": true
             }
-          }
+          ]
         }
       ]
     },
