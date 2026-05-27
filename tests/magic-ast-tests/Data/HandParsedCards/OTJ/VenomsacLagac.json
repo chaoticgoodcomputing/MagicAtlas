@@ -1,0 +1,111 @@
+{
+  "Input": {
+    "Name": "Venomsac Lagac",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Lizard Mount",
+    "OracleText": "Deathtouch\nWhenever this creature attacks while saddled, it gets +0/+3 until end of turn.\nSaddle 2 (Tap any number of other creatures you control with total power 2 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Venomsac Lagac",
+    "TypeLine": {
+      "Raw": "Creature — Lizard Mount",
+      "Types": ["Creature"],
+      "Subtypes": ["Lizard", "Mount"]
+    },
+    "Oracle": {
+      "RawText": "Deathtouch\nWhenever this creature attacks while saddled, it gets +0/+3 until end of turn.\nSaddle 2 (Tap any number of other creatures you control with total power 2 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Deathtouch",
+          "Effects": [
+            {
+              "EffectType": "deathtouch"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "InterveningIf": {
+            "Text": "this permanent is saddled"
+          },
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "It"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Saddle",
+          "Reminder": {
+            "Text": "(Tap any number of other creatures you control with total power 2 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "saddle",
+              "Value": 2
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

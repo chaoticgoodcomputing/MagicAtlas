@@ -353,6 +353,33 @@ public static class KeywordDefinitions
       },
     };
 
+  /// <summary>
+  /// Saddle N: Tap any number of other untapped creatures you control with total
+  /// power N or greater — this Mount becomes saddled until end of turn. Activate
+  /// only as a sorcery.
+  /// Rule 702.171. Category is Activated because the comp-rules expansion is an
+  /// activated ability (702.171a), but the oracle-text shorthand reads as a keyword
+  /// followed by a numeric threshold parameter. Structurally mirrors Crew (702.122)
+  /// but applies to Mounts; the saddled designation is engine territory.
+  /// </summary>
+  public static KeywordDefinition Saddle { get; } =
+    new()
+    {
+      Name = "Saddle",
+      RuleReference = "702.171",
+      Category = KeywordCategory.Activated,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Saddle",
+        Effects = [new SaddleEffect
+        {
+          Value = ParseSaddleValue(parameter),
+        }],
+      },
+    };
+
   // ═══════════════════════════════════════════════════════════════════════════
   // PARTNER KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -636,6 +663,7 @@ public static class KeywordDefinitions
       Plot,
       Undying,
       Mentor,
+      Saddle,
       // More keywords can be added here as needed
     ];
 
@@ -666,6 +694,24 @@ public static class KeywordDefinitions
     {
       throw new ArgumentException(
         $"Crew parameter must be an integer, got '{parameter}'.",
+        nameof(parameter)
+      );
+    }
+
+    return value;
+  }
+
+  private static int ParseSaddleValue(string? parameter)
+  {
+    if (string.IsNullOrWhiteSpace(parameter))
+    {
+      throw new ArgumentException("Saddle requires a numeric parameter.", nameof(parameter));
+    }
+
+    if (!int.TryParse(parameter.Trim(), out var value))
+    {
+      throw new ArgumentException(
+        $"Saddle parameter must be an integer, got '{parameter}'.",
         nameof(parameter)
       );
     }
