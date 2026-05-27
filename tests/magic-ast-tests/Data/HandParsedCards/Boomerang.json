@@ -1,0 +1,51 @@
+{
+  "Input": {
+    "Name": "Boomerang",
+    "ManaCost": "{U}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Return target permanent to its owner's hand.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Boomerang",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Return target permanent to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["permanent"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}{U}",
+        "Symbols": [
+          {"Kind": "colored", "Colors": ["U"]},
+          {"Kind": "colored", "Colors": ["U"]}
+        ],
+        "ManaValue": 2
+      },
+      {"Kind": "colors", "Colors": ["U"]},
+      {"Kind": "colorIdentity", "ColorIdentity": ["U"]}
+    ]
+  }
+}

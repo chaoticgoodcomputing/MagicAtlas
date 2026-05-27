@@ -1,0 +1,52 @@
+{
+  "Input": {
+    "Name": "Disperse",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Return target nonland permanent to its owner's hand.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Disperse",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Return target nonland permanent to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["permanent"],
+                  "Characteristics": ["nonland"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          {"Kind": "generic", "GenericAmount": 1},
+          {"Kind": "colored", "Colors": ["U"]}
+        ],
+        "ManaValue": 2
+      },
+      {"Kind": "colors", "Colors": ["U"]},
+      {"Kind": "colorIdentity", "ColorIdentity": ["U"]}
+    ]
+  }
+}

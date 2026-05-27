@@ -1,0 +1,48 @@
+{
+  "Input": {
+    "Name": "Unsummon",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Return target creature to its owner's hand.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Unsummon",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Return target creature to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [{"Kind": "colored", "Colors": ["U"]}],
+        "ManaValue": 1
+      },
+      {"Kind": "colors", "Colors": ["U"]},
+      {"Kind": "colorIdentity", "ColorIdentity": ["U"]}
+    ]
+  }
+}
