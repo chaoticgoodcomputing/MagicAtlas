@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Hoverguard Sweepers",
+    "ManaCost": "{4}{U}{U}",
+    "TypeLine": "Creature — Drone",
+    "OracleText": "When this creature enters, you may return target artifact or creature to its owner's hand.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Hoverguard Sweepers",
+    "TypeLine": {
+      "Raw": "Creature — Drone",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Drone"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, you may return target artifact or creature to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature",
+                    "artifact"
+                  ]
+                }
+              },
+              "IsOptional": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
