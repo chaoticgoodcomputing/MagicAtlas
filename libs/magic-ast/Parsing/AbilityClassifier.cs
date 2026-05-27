@@ -311,6 +311,28 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target player discards/draws/gains/loses/mills ..." — spell-resolution
+    // player-targeting resource instructions (e.g., "Target player discards their hand,
+    // then draws four cards." — Wheel and Deal). The subject "Target player" marks this
+    // as a one-shot imperative spell effect (Rule 113.3a) addressed to a targeted player,
+    // not a continuous static. Without this check these lines fall through to the
+    // Static default and stall in StaticAbilityParser.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+player\s+(discards?|draws?|gains?|loses?|mills?|returns?|exiles?)\s+",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Target [filter] blocks this turn if able." — spell-resolution single-target
     // block requirement (e.g., Culling Mark). The static "[subject] blocks each
     // combat if able" recognizer in StaticAbilityParser is the wrong route: this
