@@ -1,0 +1,69 @@
+{
+  "Input": {
+    "Name": "Sage of Mysteries",
+    "ManaCost": "{U}",
+    "TypeLine": "Creature — Human Wizard",
+    "OracleText": "Constellation — Whenever an enchantment you control enters, target player mills two cards.",
+    "Power": "0",
+    "Toughness": "2",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Sage of Mysteries",
+    "TypeLine": {
+      "Raw": "Creature — Human Wizard",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Wizard"]
+    },
+    "Oracle": {
+      "RawText": "Constellation — Whenever an enchantment you control enters, target player mills two cards.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "AbilityWord": "Constellation",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["enchantment"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "mill",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["player"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 1
+      },
+      { "Kind": "colors", "Colors": ["U"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "0", "Value": 0 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}

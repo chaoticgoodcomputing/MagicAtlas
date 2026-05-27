@@ -1,0 +1,76 @@
+{
+  "Input": {
+    "Name": "Nexus Wardens",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Creature — Satyr Archer",
+    "OracleText": "Reach\nConstellation — Whenever an enchantment you control enters, you gain 2 life.",
+    "Power": "1",
+    "Toughness": "4",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Nexus Wardens",
+    "TypeLine": {
+      "Raw": "Creature — Satyr Archer",
+      "Types": ["Creature"],
+      "Subtypes": ["Satyr", "Archer"]
+    },
+    "Oracle": {
+      "RawText": "Reach\nConstellation — Whenever an enchantment you control enters, you gain 2 life.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Reach",
+          "Effects": [
+            {
+              "EffectType": "reach"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "AbilityWord": "Constellation",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["enchantment"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 3
+      },
+      { "Kind": "colors", "Colors": ["G"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+      }
+    ]
+  }
+}
