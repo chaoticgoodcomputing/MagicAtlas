@@ -990,12 +990,34 @@ public sealed class TriggeredAbilityParser : IAbilityParser
 
     // Card-type qualifiers on the cast spell ("creature spell", "noncreature spell", etc.)
     var characteristics = new List<string>();
-    foreach (var word in new[] { "creature", "noncreature", "instant", "sorcery", "artifact", "enchantment" })
+
+    // "instant or sorcery spell" — combined disjunction (Rule 700.4). Must be
+    // detected before the per-word loop so both halves are captured: the loop
+    // pattern \binstant\s+spell\b won't match when "or sorcery" sits between the
+    // two words, and \bsorcery\s+spell\b would only capture the second half.
+    if (Regex.IsMatch(lower, @"\binstant\s+or\s+sorcery\s+spell\b"))
     {
-      if (Regex.IsMatch(lower, $@"\b{Regex.Escape(word)}\s+spell\b"))
+      characteristics.Add("instant");
+      characteristics.Add("sorcery");
+    }
+    else
+    {
+      foreach (var word in new[] { "creature", "noncreature", "instant", "sorcery", "artifact", "enchantment" })
       {
-        characteristics.Add(word);
+        if (Regex.IsMatch(lower, $@"\b{Regex.Escape(word)}\s+spell\b"))
+        {
+          characteristics.Add(word);
+        }
       }
+    }
+
+    // Multicolored qualifier (Rule 105.5 — "two or more colors"). This is a
+    // distinct axis from Colors: the "has any of these colors" semantics of
+    // Colors cannot encode the "two or more" constraint, so we use IsMulticolored.
+    bool? isMulticolored = null;
+    if (Regex.IsMatch(lower, @"\bmulticolored\s+spell\b"))
+    {
+      isMulticolored = true;
     }
 
     // Color qualifiers: "that's white" / "that's white, blue, black, or red" /

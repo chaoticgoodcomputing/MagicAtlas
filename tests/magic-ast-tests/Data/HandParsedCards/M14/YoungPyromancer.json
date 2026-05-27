@@ -1,0 +1,119 @@
+{
+  "Input": {
+    "Name": "Young Pyromancer",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature — Human Shaman",
+    "OracleText": "Whenever you cast an instant or sorcery spell, create a 1/1 red Elemental creature token.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Young Pyromancer",
+    "TypeLine": {
+      "Raw": "Creature — Human Shaman",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Shaman"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever you cast an instant or sorcery spell, create a 1/1 red Elemental creature token.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell"
+              ],
+              "Characteristics": [
+                "instant",
+                "sorcery"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": [
+                  "R"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Elemental"
+                ],
+                "IsCopy": false
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
