@@ -3083,6 +3083,12 @@ public sealed class StaticAbilityParser : IAbilityParser
   ///   <item><c>All creatures get …</c> — global creature buff; no controller.</item>
   ///   <item><c>Creatures get …</c> / <c>Creatures you control get …</c> — card-type
   ///         filter; optional controller scope.</item>
+  ///   <item><c>Other creatures you control get …</c> — "Other" prefix adds
+  ///         <c>Characteristics: ["other"]</c>; no subtype (Benalish Marshal shape).</item>
+  ///   <item><c>Attacking creatures you control get …</c> — combat-state filter;
+  ///         <c>Characteristics: ["attacking"]</c> (Goblin Oriflamme shape).</item>
+  ///   <item><c>Creatures your opponents control get …</c> — opponent-scoped debuff;
+  ///         <c>Controller: Opponent</c> (Cumber Stone shape).</item>
   ///   <item><c>White creatures get …</c> — color + card-type filter.</item>
   ///   <item><c>Dragon creatures you control get …</c> — subtype + card-type + controller.</item>
   ///   <item><c>Elves you control get …</c> — bare subtype (depluralised) + controller.</item>
@@ -3183,12 +3189,19 @@ public sealed class StaticAbilityParser : IAbilityParser
     // entry so the AST preserves the exclusion-of-self semantics.
     IReadOnlyList<string>? characteristics = isOther ? ["other"] : null;
 
-    // Peel optional "you control" controller suffix.
+    // Peel optional controller suffix — "you control" or "your opponents control".
+    // The suffix determines whether the filter applies to the active player's
+    // permanents (Controller.You) or to all opponents' permanents (Controller.Opponent).
     ControllerFilter? controller = null;
     if (text.EndsWith(" you control", StringComparison.OrdinalIgnoreCase))
     {
       controller = ControllerFilter.You;
       text = text[..^" you control".Length].Trim();
+    }
+    else if (text.EndsWith(" your opponents control", StringComparison.OrdinalIgnoreCase))
+    {
+      controller = ControllerFilter.Opponent;
+      text = text[..^" your opponents control".Length].Trim();
     }
 
     // --- Shape: "[Color] creatures" (e.g. "White creatures", "Black creatures") ---
@@ -3232,17 +3245,20 @@ public sealed class StaticAbilityParser : IAbilityParser
       };
     }
 
-    // --- Shape: "tapped creatures" / "untapped creatures" / "nontoken creatures" ---
+    // --- Shape: "tapped creatures" / "untapped creatures" / "nontoken creatures" /
+    //            "attacking creatures" ---
     // State-based or token-status modifier immediately before "creatures". These are
-    // game-state predicates (Rule 109.3 for tapped/untapped, Rule 111 for token),
-    // not subtypes, so they ride on Characteristics rather than Subtypes or CardTypes.
-    // The modifier word is appended to any existing characteristics (e.g. the "other"
-    // characteristic set by isOther) so the combined filter is accurate.
+    // game-state predicates (Rule 109.3 for tapped/untapped, Rule 111 for token,
+    // Rule 508 for attacking), not subtypes, so they ride on Characteristics rather
+    // than Subtypes or CardTypes. The modifier word is appended to any existing
+    // characteristics (e.g. the "other" characteristic set by isOther) so the
+    // combined filter is accurate.
     foreach (var (prefix, characteristic) in new[]
     {
       ("tapped creature", "tapped"),
       ("untapped creature", "untapped"),
       ("nontoken creature", "nontoken"),
+      ("attacking creature", "attacking"),
     })
     {
       // Accept both singular and plural: "tapped creature" and "tapped creatures".
