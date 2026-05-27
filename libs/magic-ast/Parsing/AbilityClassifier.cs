@@ -493,6 +493,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target creature deals damage to itself equal to its power." — spell-resolution
+    // self-damage pattern (Repentance, Justice Strike). The subject is "Target creature",
+    // not the spell itself, and there is no numeric amount token between "deals" and
+    // "damage" — the amount is a derived reference ("equal to its power"). Without this
+    // rule the line defaults to Static and stalls in StaticAbilityParser.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+creature\s+deals\s+damage\s+to\s+itself\b",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "[Self] deals N damage to ..." — self-by-name spell-resolution dealDamage.
     // Take Down's modal options ("Take Down deals 4 damage to target creature
     // with flying.") open with the card's own name rather than a recognised

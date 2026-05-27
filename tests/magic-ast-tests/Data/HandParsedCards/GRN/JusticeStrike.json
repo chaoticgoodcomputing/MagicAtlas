@@ -1,0 +1,65 @@
+{
+  "Input": {
+    "Name": "Justice Strike",
+    "ManaCost": "{R}{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Target creature deals damage to itself equal to its power.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["R", "W"],
+    "ColorIdentity": ["R", "W"]
+  },
+  "Output": {
+    "Name": "Justice Strike",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Target creature deals damage to itself equal to its power.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Source": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              },
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "Power",
+                "Source": "it"
+              },
+              "Target": {
+                "Kind": "It"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{R}{W}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R", "W"]
+      }
+    ]
+  }
+}
