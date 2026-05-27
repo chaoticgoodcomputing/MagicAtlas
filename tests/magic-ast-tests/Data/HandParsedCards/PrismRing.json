@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Prism Ring",
+    "ManaCost": "{1}",
+    "TypeLine": "Artifact",
+    "OracleText": "As this artifact enters, choose a color.\nWhenever you cast a spell of the chosen color, you gain 1 life.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "403f99de-493a-4f0f-81e4-fcd29d6e9340",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Prism Ring",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "As this artifact enters, choose a color.\nWhenever you cast a spell of the chosen color, you gain 1 life.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "chooseColorOnEntry"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
