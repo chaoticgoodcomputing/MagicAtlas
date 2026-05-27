@@ -35,12 +35,34 @@ public sealed record EntersTappedEffect : Effect, IOptionalEffect, IDurativeEffe
   public UnlessClause? UnlessClause { get; init; }
 
   /// <summary>
-  /// Board-state condition under which this land enters untapped instead.
-  /// Captures the fastland / checkland oracle shape: "This land enters tapped
-  /// unless [condition]." Rule 614.1c (as-enters replacement effect).
+  /// Board-state condition that gates whether this permanent enters tapped.
+  /// Two oracle shapes share this field:
+  /// <list type="bullet">
+  ///   <item>Fastland / checkland — "This land enters tapped <em>unless</em>
+  ///         [condition]." <see cref="EntryConditionIsPositive"/> = false
+  ///         (default): the condition text describes when it enters
+  ///         <em>untapped</em>; the land enters tapped in all other cases.</item>
+  ///   <item>Slow land — "<em>If</em> [condition], this land enters tapped."
+  ///         <see cref="EntryConditionIsPositive"/> = true: the condition text
+  ///         describes when it enters <em>tapped</em>; the land enters untapped
+  ///         in all other cases.</item>
+  /// </list>
   /// Distinct from <see cref="UnlessClause"/> which represents the
-  /// "unless [player] pays [cost]" cost-prevention pattern.
+  /// "unless [player] pays [cost]" cost-prevention pattern (Rule 614.1c).
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Condition? EntryCondition { get; init; }
+
+  /// <summary>
+  /// Polarity of <see cref="EntryCondition"/>.
+  /// <c>false</c> (default) — the condition is the "unless" negation branch:
+  ///   the land enters tapped when the condition does NOT hold
+  ///   (fastland / checkland shape: "enters tapped unless [condition]").
+  /// <c>true</c> — the condition is the positive "if" branch:
+  ///   the land enters tapped when the condition DOES hold
+  ///   (slow land shape: "if [condition], this land enters tapped").
+  /// Omitted from serialization when false (the implied default).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool EntryConditionIsPositive { get; init; }
 }
