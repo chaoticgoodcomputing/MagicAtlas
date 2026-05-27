@@ -134,6 +134,15 @@ public sealed class ClauseSplitter
         continue;
       }
 
+      // Mana-symbol reminder lines (e.g. "({R/W} can be paid with either {R} or {W}.)") are
+      // cosmetic oracle annotations that gloss the card's hybrid or Phyrexian mana cost.
+      // They carry no oracle-ability semantics (Rule 107.4) and must be dropped here so
+      // they do not produce spurious UnparsedAbility nodes in Oracle.Abilities.
+      if (IsManaSymbolReminder(paragraphText))
+      {
+        continue;
+      }
+
       // Level-up cost paragraphs ("Level up {cost} (reminder)") start a
       // multi-stanza superstructure. Consume the cost paragraph plus all
       // following LEVEL stanza paragraphs (with their P/T and inner-ability
@@ -246,6 +255,50 @@ public sealed class ClauseSplitter
   /// </summary>
   private static bool IsAdditionalCostPrefix(string text) =>
     text.StartsWith("As an additional cost to cast this spell,", StringComparison.OrdinalIgnoreCase);
+
+  /// <summary>
+  /// Recognises standalone mana-symbol reminder lines added to cards with hybrid,
+  /// Phyrexian, monocolored-hybrid, and snow mana costs. These lines are cosmetic
+  /// oracle annotations — not abilities — and must be dropped at clause-split time
+  /// so they do not produce spurious <c>UnparsedAbility</c> nodes.
+  ///
+  /// <para>
+  /// Examples:
+  /// <code>
+  ///   ({R/W} can be paid with either {R} or {W}.)
+  ///   ({W/P} can be paid with either {W} or 2 life.)
+  ///   ({G/P} can be paid with either {G} or 2 life.)
+  ///   ({S} can be paid with one mana from a snow source.)
+  /// </code>
+  /// </para>
+  ///
+  /// <para>
+  /// The pattern is deliberately narrow to avoid stripping genuine keyword
+  /// reminders such as:
+  /// <list type="bullet">
+  ///   <item>Echo: <c>(At the beginning of your upkeep, if this...)</c></item>
+  ///   <item>Bestow: <c>(If you cast this card for its bestow cost...)</c></item>
+  ///   <item>Persist: <c>(When this creature dies, if it had no -1/-1 counters...)</c></item>
+  /// </list>
+  /// Those lines begin with <c>(At the beginning</c>, <c>(If you cast</c>, or
+  /// <c>(When this creature</c> — none of which open with a mana symbol.
+  /// </para>
+  ///
+  /// <para>
+  /// Rule 107.4: Mana symbols represent amounts of mana that must be paid,
+  /// or produced, or cost alterations (for hybrid and Phyrexian variants).
+  /// These reminder lines exist solely to gloss the hybrid/Phyrexian cost
+  /// printed on the card face; they carry no oracle-rule semantics of their own.
+  /// </para>
+  /// </summary>
+  private static readonly System.Text.RegularExpressions.Regex ManaSymbolReminderPattern =
+    new(
+      @"^\s*\(\s*\{[^}]+\}\s+can\s+be\s+paid\s+with\b[^)]*\)\s*\.?\s*$",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase
+    );
+
+  private static bool IsManaSymbolReminder(string text) =>
+    ManaSymbolReminderPattern.IsMatch(text);
 
   /// <summary>
   /// Recognises the head paragraph of a Level Up cluster: a line that opens

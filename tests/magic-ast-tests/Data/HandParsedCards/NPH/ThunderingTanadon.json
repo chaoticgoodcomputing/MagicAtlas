@@ -1,0 +1,78 @@
+{
+  "Input": {
+    "Name": "Thundering Tanadon",
+    "ManaCost": "{4}{G/P}{G/P}",
+    "TypeLine": "Artifact Creature — Phyrexian Beast",
+    "OracleText": "({G/P} can be paid with either {G} or 2 life.)\nTrample",
+    "Power": "5",
+    "Toughness": "4",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Thundering Tanadon",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Phyrexian Beast",
+      "Types": ["Artifact", "Creature"],
+      "Subtypes": ["Phyrexian", "Beast"]
+    },
+    "Oracle": {
+      "RawText": "({G/P} can be paid with either {G} or 2 life.)\nTrample",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "trample"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G/P}{G/P}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"],
+            "IsPhyrexian": true
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"],
+            "IsPhyrexian": true
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
