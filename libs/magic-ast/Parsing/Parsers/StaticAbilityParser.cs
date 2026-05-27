@@ -79,6 +79,19 @@ public sealed class StaticAbilityParser : IAbilityParser
       return mustBeBlocked;
     }
 
+    // "All creatures able to block [this/enchanted] creature do so." — Lure-type
+    // universal block requirement (Rule 509.1c). Every creature that can legally
+    // block the named attacker must do so. Distinct from MustBeBlockedEffect (at
+    // least one blocker required) and MustBlockEffect (a specific creature must
+    // block). Three shapes: "this creature" (Self), "enchanted creature"
+    // (EnchantedOrEquipped), and — handled in the spell parser — "target creature
+    // this turn" (Target + UntilEndOfTurnDuration).
+    var allMustBlock = TryParseAllMustBlock(clause);
+    if (allMustBlock != null)
+    {
+      return allMustBlock;
+    }
+
     // "[subject] blocks each combat if able." — blocker-side Rule 509.1c
     // requirement (e.g., Grand Melee's "All creatures block each combat if
     // able"). Mirrors TryParseMustAttack but lands on a MustBlockEffect.
@@ -2492,6 +2505,51 @@ public sealed class StaticAbilityParser : IAbilityParser
 
   private static readonly Regex _mustBeBlockedPattern = new(
     @"^\s*\S.*?\s+must\s+be\s+blocked\s+if\s+able\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "All creatures able to block [this/enchanted] creature do so." —
+  /// Lure-type universal block requirement (Rule 509.1c). Recognises two
+  /// static-ability shapes:
+  /// <list type="bullet">
+  ///   <item><c>All creatures able to block this creature do so.</c>
+  ///         — Self reference; static ability printed directly on the creature
+  ///         (e.g., a creature with an intrinsic Lure text).</item>
+  ///   <item><c>All creatures able to block enchanted creature do so.</c>
+  ///         — EnchantedOrEquipped reference; Aura static (e.g., Lure).</item>
+  /// </list>
+  /// The spell form ("...target creature this turn...") is handled separately
+  /// by <c>AllMustBlockTargetRule</c> in the spell-rule pipeline.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseAllMustBlock(OracleClause clause)
+  {
+    var m = _allMustBlockPattern.Match(clause.RawText);
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var subject = m.Groups["subject"].Value.Trim().ToLowerInvariant();
+    var blockTarget = subject switch
+    {
+      "enchanted creature" => new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+      _ => ObjectReference.Self(), // "this creature" or any self-referential subject
+    };
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new AllMustBlockEffect { BlockTarget = blockTarget }],
+      },
+    ];
+  }
+
+  // "All creatures able to block <subject> do so."
+  // Subject is "this creature" (Self) or "enchanted creature" (EnchantedOrEquipped).
+  private static readonly Regex _allMustBlockPattern = new(
+    @"^\s*All\s+creatures\s+able\s+to\s+block\s+(?<subject>this\s+creature|enchanted\s+creature)\s+do\s+so\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
