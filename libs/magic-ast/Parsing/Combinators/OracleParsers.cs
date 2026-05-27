@@ -1716,6 +1716,47 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Afflict N" keyword.
+  /// Pattern: "Afflict" number [reminder]
+  /// Rule 702.130. A triggered keyword ability: whenever this creature becomes
+  /// blocked, the defending player loses N life. MAST records the keyword and its
+  /// integer value; the becomes-blocked trigger and life-loss are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Afflict = (
+    from keyword in Keyword("Afflict")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Afflict",
+      Effects = [new AfflictEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Afterlife N" keyword.
+  /// Pattern: "Afterlife" number [reminder]
+  /// Rule 702.135. A triggered keyword ability: when this creature dies, create N
+  /// 1/1 white and black Spirit creature tokens with flying. MAST records the keyword
+  /// and its integer value; the dies-trigger and token-creation are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/> and
+  /// <see cref="Afflict"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Afterlife = (
+    from keyword in Keyword("Afterlife")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Afterlife",
+      Effects = [new AfterlifeEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Equip {cost}" keyword.
   /// Pattern: "Equip" mana-symbol+ [reminder]
   /// Rule 702.6. An activated ability that attaches this Equipment to a creature
@@ -2414,6 +2455,62 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Riot" keyword.
+  /// Pattern: "Riot" [reminder]
+  /// Rule 702.138. This creature enters with your choice of a +1/+1 counter or
+  /// haste. MAST records keyword presence; the entry-time choice, counter-placement,
+  /// and conditional haste-grant are engine territory. Parameterless keyword marker.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Riot = (
+    from kw in Keyword("Riot")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Riot",
+      Effects = [new RiotEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Training" keyword.
+  /// Pattern: "Training" [reminder]
+  /// Rule 702.151. Whenever this creature attacks with another creature with greater
+  /// power, put a +1/+1 counter on this creature. MAST records keyword presence;
+  /// the attack trigger, power comparison, and counter-placement are engine territory.
+  /// Parameterless keyword marker — mirrors EvolveEffect and MentorEffect.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Training = (
+    from kw in Keyword("Training")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Training",
+      Effects = [new TrainingEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Dethrone" keyword.
+  /// Pattern: "Dethrone" [reminder]
+  /// Rule 702.107. Whenever this creature attacks the player with the most life or
+  /// tied for most life, put a +1/+1 counter on it. MAST records keyword presence;
+  /// the most-life check, attack trigger, and counter-placement are engine territory.
+  /// Parameterless keyword marker — mirrors EvolveEffect and MeleeEffect.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Dethrone = (
+    from kw in Keyword("Dethrone")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Dethrone",
+      Effects = [new DethroneEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Start your engines!" keyword.
   /// Pattern: "Start" "your" "engines" [reminder]
   /// (Aetherdrift). "If you have no speed, it starts at 1. It increases once on
@@ -2547,7 +2644,10 @@ public static class OracleParsers
     .Or(Soulbond)
     .Or(LivingWeapon)
     .Or(UmbraArmor)
-    .Or(StartYourEngines);
+    .Or(StartYourEngines)
+    .Or(Riot)
+    .Or(Training)
+    .Or(Dethrone);
 
   /// <summary>
   /// Parses any parameterized keyword ability.
@@ -2589,7 +2689,9 @@ public static class OracleParsers
       .Or(Ninjutsu.Try())
       .Or(Buyback.Try())
       .Or(Hideaway.Try())
-      .Or(Mobilize.Try());
+      .Or(Mobilize.Try())
+      .Or(Afflict.Try())
+      .Or(Afterlife.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).

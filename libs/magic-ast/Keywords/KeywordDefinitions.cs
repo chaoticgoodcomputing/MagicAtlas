@@ -933,6 +933,123 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // ENTRY CHOICE KEYWORDS (Riot)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Riot: This creature enters with your choice of a +1/+1 counter or haste.
+  /// Rule 702.138. Parameterless keyword marker.
+  /// </summary>
+  public static KeywordDefinition Riot { get; } =
+    new()
+    {
+      Name = "Riot",
+      RuleReference = "702.138",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Riot",
+        Effects = [new RiotEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ATTACK COUNTER KEYWORDS (Training, Dethrone)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Training: Whenever this creature attacks with another creature with greater
+  /// power, put a +1/+1 counter on this creature.
+  /// Rule 702.151. Parameterless keyword marker.
+  /// </summary>
+  public static KeywordDefinition Training { get; } =
+    new()
+    {
+      Name = "Training",
+      RuleReference = "702.151",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Training",
+        Effects = [new TrainingEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Dethrone: Whenever this creature attacks the player with the most life or
+  /// tied for most life, put a +1/+1 counter on it.
+  /// Rule 702.107. Parameterless keyword marker.
+  /// </summary>
+  public static KeywordDefinition Dethrone { get; } =
+    new()
+    {
+      Name = "Dethrone",
+      RuleReference = "702.107",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Dethrone",
+        Effects = [new DethroneEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BLOCKED TRIGGER KEYWORDS (Afflict)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Afflict N: Whenever this creature becomes blocked, defending player loses N life.
+  /// Rule 702.130. Integer-parameterized keyword marker.
+  /// </summary>
+  public static KeywordDefinition Afflict { get; } =
+    new()
+    {
+      Name = "Afflict",
+      RuleReference = "702.130",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Afflict",
+        Effects = [new AfflictEffect
+        {
+          Value = ParseIntValue("Afflict", parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // DEATH TRIGGER KEYWORDS (Afterlife)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Afterlife N: When this creature dies, create N 1/1 white and black Spirit
+  /// creature tokens with flying.
+  /// Rule 702.135. Integer-parameterized keyword marker.
+  /// </summary>
+  public static KeywordDefinition Afterlife { get; } =
+    new()
+    {
+      Name = "Afterlife",
+      RuleReference = "702.135",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Afterlife",
+        Effects = [new AfterlifeEffect
+        {
+          Value = ParseIntValue("Afterlife", parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ATTACK SUPPORT KEYWORDS (Enlist, Backup)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1497,6 +1614,11 @@ public static class KeywordDefinitions
       Hideaway,
       Mobilize,
       StartYourEngines,
+      Riot,
+      Training,
+      Dethrone,
+      Afflict,
+      Afterlife,
       // More keywords can be added here as needed
     ];
 
