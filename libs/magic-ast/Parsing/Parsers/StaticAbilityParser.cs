@@ -284,6 +284,20 @@ public sealed class StaticAbilityParser : IAbilityParser
       return selfPTForEach;
     }
 
+    // "(Enchanted|Equipped) creature gets +N/+M for each <filter> you control." —
+    // Equipment/Aura P/T modifier scaled by a count of permanents the controller
+    // controls (Rule 613.4c, layer 7c). Mirrors TryParseSelfPTForEach but targets
+    // EnchantedOrEquipped instead of Self. The Stoneforge Masterwork pattern:
+    // "+1/+1 for each creature you control." Placed BEFORE TryParseAnthemModifyPT
+    // so the "for each" suffix is tried before the literal-modifier surface (the
+    // anthem regex is anchored and won't match the "for each" trailing text, but
+    // ordering keeps the intent explicit).
+    var enchantedPTForEach = TryParseEnchantedPTForEach(clause);
+    if (enchantedPTForEach != null)
+    {
+      return enchantedPTForEach;
+    }
+
     // "Enchanted creature gets +N/+N." — anthem-style Aura P/T grant.
     // No Duration: the modifier persists while the Aura is attached (Rule
     // 303/702.5). Descriptive shape on EnchantedOrEquipped with literal
@@ -754,6 +768,73 @@ public sealed class StaticAbilityParser : IAbilityParser
   // the terminal period.
   private static readonly Regex _selfPTForEachPattern = new(
     @"^\s*This\s+creature\s+gets\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\s+for\s+each\s+(?<filter>.+?\s+you\s+control)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "(Enchanted|Equipped) creature gets +N/+M for each &lt;filter&gt; you control." —
+  /// Aura/Equipment P/T modifier scaled by a count of permanents (Rule 613.4c, layer 7c).
+  /// The Stoneforge Masterwork shape: "+1/+1 for each creature you control." Emits a
+  /// <see cref="StaticAbility"/> wrapping a <see cref="ModifyPTEffect"/> with
+  /// <see cref="ObjectReferenceKind.EnchantedOrEquipped"/> as the target. Both
+  /// <c>PowerModifier</c> and <c>ToughnessModifier</c> are
+  /// <see cref="MagicAST.AST.Quantities.CountQuantity"/> instances when the
+  /// corresponding increment is 1; the zero side uses
+  /// <see cref="MagicAST.AST.Quantities.LiteralQuantity.Of(int)"/> of 0. No Duration:
+  /// the modifier persists while the Aura/Equipment is attached (Rule 303/702.5).
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEnchantedPTForEach(OracleClause clause)
+  {
+    var match = _enchantedPTForEachPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var psign = match.Groups["psign"].Value;
+    var p = int.Parse(match.Groups["p"].Value);
+    var tsign = match.Groups["tsign"].Value;
+    var t = int.Parse(match.Groups["t"].Value);
+
+    var power = psign == "-" ? -p : p;
+    var toughness = tsign == "-" ? -t : t;
+
+    // Only handle multiplier-1 increments — cards with higher per-item
+    // increments are a distinct shape and should fall through to the fallback.
+    if (Math.Abs(power) > 1 || Math.Abs(toughness) > 1)
+    {
+      return null;
+    }
+
+    var filterPhrase = match.Groups["filter"].Value.Trim();
+
+    MagicAST.AST.Quantities.Quantity powerModifier = power == 0
+      ? MagicAST.AST.Quantities.LiteralQuantity.Of(0)
+      : new MagicAST.AST.Quantities.CountQuantity { CountOf = filterPhrase };
+
+    MagicAST.AST.Quantities.Quantity toughnessModifier = toughness == 0
+      ? MagicAST.AST.Quantities.LiteralQuantity.Of(0)
+      : new MagicAST.AST.Quantities.CountQuantity { CountOf = filterPhrase };
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new ModifyPTEffect
+        {
+          Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+          PowerModifier = powerModifier,
+          ToughnessModifier = toughnessModifier,
+        }],
+      },
+    ];
+  }
+
+  // "(Enchanted|Equipped) creature gets +N/+M for each <filter> you control."
+  // Mirrors _selfPTForEachPattern but matches the Enchanted/Equipped subject prefix
+  // instead of "This creature". The filter capture includes the "you control" suffix.
+  private static readonly Regex _enchantedPTForEachPattern = new(
+    @"^\s*(?:Enchanted|Equipped)\s+creature\s+gets\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\s+for\s+each\s+(?<filter>.+?\s+you\s+control)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
