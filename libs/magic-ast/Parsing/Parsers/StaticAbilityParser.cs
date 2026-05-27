@@ -177,6 +177,16 @@ public sealed class StaticAbilityParser : IAbilityParser
       return typeSpellCostReduction;
     }
 
+    // "TypeA and TypeB spells you cast cost {N} less to cast." and
+    // "TypeA spells and TypeB spells you cast cost {N} less to cast." —
+    // conjunctive two-type filtered cost reduction (Rule 117.6). Covers the
+    // Banneret family and the Starnheim Courser / Goblin Electromancer shapes.
+    var conjunctiveSpellCostReduction = TryParseConjunctiveTypeSpellCostReduction(clause);
+    if (conjunctiveSpellCostReduction != null)
+    {
+      return conjunctiveSpellCostReduction;
+    }
+
     // "The \"legend rule\" doesn't apply." — Rule 704.5j state-based-action
     // suppression (Mirror Gallery). Parameterless; the mere presence of the
     // effect records the suppression.
@@ -1196,6 +1206,151 @@ public sealed class StaticAbilityParser : IAbilityParser
     @"^\s*(?<filter>[A-Z][A-Za-z]+)\s+spells\s+you\s+cast\s+cost\s+\{(?<amount>\d+)\}\s+less\s+to\s+cast\.?\s*$",
     RegexOptions.Compiled
   );
+
+  /// <summary>
+  /// "TypeA and TypeB spells you cast cost {N} less to cast." (phrasing A)
+  /// "TypeA spells and TypeB spells you cast cost {N} less to cast." (phrasing B)
+  ///
+  /// Two-type conjunctive cost reduction (Rule 117.6). The two types classify
+  /// the disjunctive set of spells that benefit — a spell qualifies if it
+  /// belongs to either type.
+  ///
+  /// Encoding conventions (descriptive, mirrors oracle structure):
+  /// - If both nouns are card types (Rule 205.2): emit
+  ///   <c>CardTypes: [typeA, typeB]</c> (no "spell" root — the type pair is
+  ///   sufficient to describe the filter without creating a nonsensical
+  ///   intersection).
+  /// - If both nouns are subtypes (Rule 205.3) — the banneret pattern
+  ///   ("Kithkin spells and Soldier spells"): emit
+  ///   <c>CardTypes: ["spell"], Subtypes: [typeA, typeB]</c>.
+  /// - Mixed (one card type, one subtype): not yet in the corpus; falls
+  ///   through to null.
+  ///
+  /// Returns null for any noun that fails classification so the fallback
+  /// parser can record an honest failure.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseConjunctiveTypeSpellCostReduction(OracleClause clause)
+  {
+    // Phrasing A: "TypeA and TypeB spells you cast cost {N} less to cast."
+    var matchA = _conjunctiveTypeSpellCostReductionPatternA.Match(clause.RawText);
+    // Phrasing B: "TypeA spells and TypeB spells you cast cost {N} less to cast."
+    var matchB = _conjunctiveTypeSpellCostReductionPatternB.Match(clause.RawText);
+
+    string typeA, typeB;
+    int amount;
+
+    if (matchA.Success)
+    {
+      typeA  = matchA.Groups["typeA"].Value.Trim();
+      typeB  = matchA.Groups["typeB"].Value.Trim();
+      amount = int.Parse(matchA.Groups["amount"].Value);
+    }
+    else if (matchB.Success)
+    {
+      typeA  = matchB.Groups["typeA"].Value.Trim();
+      typeB  = matchB.Groups["typeB"].Value.Trim();
+      amount = int.Parse(matchB.Groups["amount"].Value);
+    }
+    else
+    {
+      return null;
+    }
+
+    var affected = BuildConjunctiveTypeSpellFilter(typeA, typeB);
+    if (affected is null)
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Resource.CostReductionEffect
+        {
+          Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount),
+        }],
+        AffectedObjects = affected,
+      },
+    ];
+  }
+
+  // Phrasing A: "Artifact and enchantment spells you cast cost {1} less to cast."
+  // typeA is capitalised; typeB is lowercase (oracle style: "Instant and sorcery").
+  private static readonly Regex _conjunctiveTypeSpellCostReductionPatternA = new(
+    @"^\s*(?<typeA>[A-Z][A-Za-z]+)\s+and\s+(?<typeB>[A-Za-z]+)\s+spells\s+you\s+cast\s+cost\s+\{(?<amount>\d+)\}\s+less\s+to\s+cast\.?\s*$",
+    RegexOptions.Compiled
+  );
+
+  // Phrasing B: "Kithkin spells and Soldier spells you cast cost {1} less to cast."
+  private static readonly Regex _conjunctiveTypeSpellCostReductionPatternB = new(
+    @"^\s*(?<typeA>[A-Z][A-Za-z]+)\s+spells\s+and\s+(?<typeB>[A-Za-z]+)\s+spells\s+you\s+cast\s+cost\s+\{(?<amount>\d+)\}\s+less\s+to\s+cast\.?\s*$",
+    RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// Classifies two filter nouns captured from a conjunctive oracle phrase
+  /// and builds an <see cref="ObjectFilter"/> that covers spells of either
+  /// type. Returns <see langword="null"/> for unrecognised or mixed-tier
+  /// noun pairs (triggers an honest fallback failure rather than silently
+  /// emitting a wrong filter).
+  /// </summary>
+  private static ObjectFilter? BuildConjunctiveTypeSpellFilter(string nounA, string nounB)
+  {
+    var aIsCardType   = _spellFilterCardTypes.Contains(nounA);
+    var bIsCardType   = _spellFilterCardTypes.Contains(nounB);
+    var aIsColor      = _colorNameToCode.ContainsKey(nounA);
+    var bIsColor      = _colorNameToCode.ContainsKey(nounB);
+    var aIsSupertype  = _spellFilterSupertypes.Contains(nounA);
+    var bIsSupertype  = _spellFilterSupertypes.Contains(nounB);
+
+    // Both card types (Rule 205.2) — e.g. "Artifact and enchantment spells",
+    // "Instant and sorcery spells". Emit as CardTypes disjunction; omit the
+    // "spell" root because instant/sorcery cards that are on the stack are
+    // always spells, and adding it would create an unreachable intersection
+    // with types like Instant that cannot also be a "spell" card type.
+    if (aIsCardType && bIsCardType)
+    {
+      return new ObjectFilter
+      {
+        CardTypes = [nounA.ToLowerInvariant(), nounB.ToLowerInvariant()],
+        Controller = ControllerFilter.You,
+      };
+    }
+
+    // Both colour names (Rule 105) — e.g. "Red spells and white spells"
+    // (Familiar cycle from Planeshift). Emit as Colors disjunction.
+    if (aIsColor && bIsColor)
+    {
+      _ = _colorNameToCode.TryGetValue(nounA, out var codeA);
+      _ = _colorNameToCode.TryGetValue(nounB, out var codeB);
+      return new ObjectFilter
+      {
+        CardTypes = ["spell"],
+        Colors = [codeA!, codeB!],
+        Controller = ControllerFilter.You,
+      };
+    }
+
+    // One colour, one card type — not yet in corpus; fall through to null.
+    // Both supertypes — not yet in corpus; fall through to null.
+
+    // Otherwise treat both as creature/permanent subtypes (Rule 205.3) —
+    // e.g. "Kithkin spells and Soldier spells" (Banneret cycle from
+    // Morningtide). Root the filter at "spell" and carry both subtypes.
+    if (!aIsCardType && !bIsCardType && !aIsColor && !bIsColor
+        && !aIsSupertype && !bIsSupertype)
+    {
+      return new ObjectFilter
+      {
+        CardTypes = ["spell"],
+        Subtypes = [Capitalize(nounA), Capitalize(nounB)],
+        Controller = ControllerFilter.You,
+      };
+    }
+
+    return null;
+  }
 
   // Card types the filter may name (lowercased on emit, matching the
   // existing CardTypes convention — see GaddockTeeg).

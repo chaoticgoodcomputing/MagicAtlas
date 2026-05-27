@@ -1,0 +1,57 @@
+{
+  "Input": {
+    "Name": "Ballyrush Banneret",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Kithkin Soldier",
+    "OracleText": "Kithkin spells and Soldier spells you cast cost {1} less to cast.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Ballyrush Banneret",
+    "TypeLine": {
+      "Raw": "Creature — Kithkin Soldier",
+      "Types": ["Creature"],
+      "Subtypes": ["Kithkin", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "Kithkin spells and Soldier spells you cast cost {1} less to cast.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 1 }
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": ["spell"],
+            "Subtypes": ["Kithkin", "Soldier"],
+            "Controller": "You"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["W"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 2, "Raw": "2" },
+        "Toughness": { "ValueType": "fixed", "Value": 1, "Raw": "1" }
+      }
+    ]
+  }
+}
