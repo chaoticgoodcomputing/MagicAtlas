@@ -1,0 +1,71 @@
+{
+  "Input": {
+    "Name": "Frost Breath",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Tap up to two target creatures. Those creatures don't untap during their controller's next untap step.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Frost Breath",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Tap up to two target creatures. Those creatures don't untap during their controller's next untap step.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                },
+                "Quantity": {
+                  "QuantityType": "upTo",
+                  "Maximum": 2,
+                  "Minimum": 0
+                }
+              },
+              "IsOptional": false
+            },
+            {
+              "EffectType": "doesntUntap",
+              "Target": {
+                "Kind": "It"
+              },
+              "WhoseUntapStep": "their controller's next",
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
