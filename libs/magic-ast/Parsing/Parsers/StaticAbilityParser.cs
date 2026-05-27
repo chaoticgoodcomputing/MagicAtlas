@@ -3169,6 +3169,45 @@ public sealed class StaticAbilityParser : IAbilityParser
       }
     }
 
+    // --- Shape: "Creature tokens" — global token P/T modifier (Rule 111 + 613.1c) ---
+    // "Creature tokens" has no subtype and no controller: the modifier applies to ALL
+    // creature tokens on the battlefield regardless of controller (e.g. Illness in the
+    // Ranks, Leyline of the Meek, Virulent Plague). The token predicate rides on
+    // Characteristics: ["token"] consistent with the convention used by
+    // TryParseBareKeywordGrant / BuildBareGrantFilterTarget for the same subject.
+    if (text.Equals("creature tokens", StringComparison.OrdinalIgnoreCase) ||
+        text.Equals("creature token", StringComparison.OrdinalIgnoreCase))
+    {
+      var chars = characteristics is null
+        ? (IReadOnlyList<string>)["token"]
+        : [..characteristics, "token"];
+      return new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Controller = controller,
+        Characteristics = chars,
+      };
+    }
+
+    // --- Shape: "Face-down creatures" — characteristic filter (Rule 707, face-down permanents) ---
+    // "Face-down creatures" is a game-state predicate, not a subtype (Rule 707.2):
+    // the creature's subtype is hidden while it is face-down. The predicate lives on
+    // Characteristics: ["face-down"] so the filter accurately encodes the oracle
+    // intent (e.g. Ixidor, Reality Sculptor).
+    if (text.Equals("face-down creatures", StringComparison.OrdinalIgnoreCase) ||
+        text.Equals("face-down creature", StringComparison.OrdinalIgnoreCase))
+    {
+      var chars = characteristics is null
+        ? (IReadOnlyList<string>)["face-down"]
+        : [..characteristics, "face-down"];
+      return new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Controller = controller,
+        Characteristics = chars,
+      };
+    }
+
     // --- Shape: "[SubtypeA] [SubtypeB] creatures" (e.g. "Goblin Warrior creatures") ---
     // Two-word creature subtype immediately before "creatures". Both words are
     // oracle-capitalised creature subtypes (Rule 205.3m). Must be checked BEFORE
