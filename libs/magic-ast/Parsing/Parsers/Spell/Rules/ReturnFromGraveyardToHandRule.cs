@@ -7,6 +7,7 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// "Return target [filter] card from your graveyard to your hand."
+/// Also handles the untyped form: "Return target card from your graveyard to your hand."
 /// Source zone on <see cref="ObjectFilter.Zone"/>.
 /// </summary>
 [SpellRule]
@@ -17,7 +18,7 @@ public sealed class ReturnFromGraveyardToHandRule : ISpellRule
     effect = null;
     var m = Regex.Match(
       text,
-      @"^Return\s+target\s+(?<filter>permanent|creature|artifact|enchantment|land|card|nonland\s+permanent)\s+card\s+from\s+your\s+graveyard\s+to\s+your\s+hand$",
+      @"^Return\s+target\s+(?:(?<filter>permanent|creature|artifact|enchantment|land|nonland\s+permanent)\s+)?card\s+from\s+your\s+graveyard\s+to\s+your\s+hand$",
       RegexOptions.IgnoreCase
     );
     if (!m.Success)
@@ -25,6 +26,7 @@ public sealed class ReturnFromGraveyardToHandRule : ISpellRule
       return false;
     }
 
+    // filter group is empty for the untyped "target card" form (e.g. Regrowth)
     var filterText = m.Groups["filter"].Value.ToLowerInvariant();
     var cardTypes = filterText switch
     {
@@ -33,7 +35,6 @@ public sealed class ReturnFromGraveyardToHandRule : ISpellRule
       "artifact" => new List<string> { "artifact" },
       "enchantment" => new List<string> { "enchantment" },
       "land" => new List<string> { "land" },
-      "card" => new List<string> { "card" },
       _ => new List<string> { "card" },
     };
     var characteristics =
