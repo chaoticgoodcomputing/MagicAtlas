@@ -1444,6 +1444,50 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Plot {cost}" keyword.
+  /// Pattern: "Plot" mana-symbol+ [reminder]
+  /// Rule 702.170. "You may pay [cost] and exile this card from your hand. Cast it
+  /// as a sorcery on a later turn without paying its mana cost. Plot only as a
+  /// sorcery." MAST records the keyword and the plot cost; the exile-from-hand,
+  /// deferred-cast, and sorcery-speed restrictions are engine territory. Mirrors
+  /// the Kicker/Unearth/Bestow/Echo/Equip pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Plot = (
+    from keyword in Keyword("Plot")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Plot",
+      Effects = [new PlotEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -1514,7 +1558,8 @@ public static class OracleParsers
       .Or(Bestow.Try())
       .Or(Echo.Try())
       .Or(Kicker.Try())
-      .Or(Unearth.Try());
+      .Or(Unearth.Try())
+      .Or(Plot.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).

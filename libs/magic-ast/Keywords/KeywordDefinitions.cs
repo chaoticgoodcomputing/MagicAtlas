@@ -501,6 +501,36 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // PLOT KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Plot [cost]: You may pay [cost] and exile this card from your hand. Cast it
+  /// as a sorcery on a later turn without paying its mana cost. Plot only as a
+  /// sorcery.
+  /// Rule 702.170. Scope: mana-cost parameter (all known printings).
+  /// The exile-from-hand, deferred-cast, and sorcery-speed restrictions are
+  /// engine territory — MAST records the keyword's presence and cost only.
+  /// </summary>
+  public static KeywordDefinition Plot { get; } =
+    new()
+    {
+      Name = "Plot",
+      RuleReference = "702.170",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Plot",
+        Effects = [new PlotEffect
+        {
+          Cost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -529,6 +559,7 @@ public static class KeywordDefinitions
       Unearth,
       Affinity,
       Evolve,
+      Plot,
       // More keywords can be added here as needed
     ];
 
