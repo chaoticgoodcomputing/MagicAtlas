@@ -154,6 +154,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return conditionalCostReduction;
     }
 
+    // "[Filter] spells you cast cost {N} less to cast." — type/color/subtype/
+    // supertype-filtered cost reduction (Rule 117.6). The filter goes on
+    // StaticAbility.AffectedObjects; the effect is a flat-amount
+    // CostReductionEffect. Generic-mana amounts only — colored / hybrid
+    // reductions (Ragemonger shape) are out of scope.
+    var typeSpellCostReduction = TryParseTypeSpellCostReduction(clause);
+    if (typeSpellCostReduction != null)
+    {
+      return typeSpellCostReduction;
+    }
+
     // "The \"legend rule\" doesn't apply." — Rule 704.5j state-based-action
     // suppression (Mirror Gallery). Parameterless; the mere presence of the
     // effect records the suppression.
@@ -967,6 +978,164 @@ public sealed class StaticAbilityParser : IAbilityParser
       },
     ];
   }
+
+  /// <summary>
+  /// "&lt;filter&gt; spells you cast cost {N} less to cast." — type/color/
+  /// subtype/supertype-filtered cost reduction (Rule 117.6 — cost
+  /// modification). The filter noun-phrase before "spells" maps onto a
+  /// <see cref="ObjectFilter"/> with <c>CardTypes: ["spell"]</c> as the root,
+  /// augmented by one of:
+  /// <list type="bullet">
+  ///   <item><c>Colors</c> — when the filter is a colour name
+  ///         (Red/White/Blue/Black/Green).</item>
+  ///   <item><c>CardTypes</c> — when the filter names another card type
+  ///         (Artifact/Creature/Enchantment/Instant/Sorcery/Planeswalker/Land/
+  ///         Battle); the type is appended so the filter becomes
+  ///         <c>["spell", "&lt;type&gt;"]</c>.</item>
+  ///   <item><c>Supertypes</c> — when the filter names a supertype
+  ///         (Legendary/Snow/Basic).</item>
+  ///   <item><c>Subtypes</c> — otherwise (Angel, Aura, Giant, Goblin, …).</item>
+  /// </list>
+  /// The trailing "you cast" qualifier maps to
+  /// <c>Controller = ControllerFilter.You</c>. The reduction amount is a
+  /// generic literal (e.g. <c>{1}</c>, <c>{2}</c>) emitted as a
+  /// <see cref="MagicAST.AST.Quantities.LiteralQuantity"/>; coloured /
+  /// hybrid-cost reductions (Ragemonger shape) are not covered here.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseTypeSpellCostReduction(OracleClause clause)
+  {
+    var match = _typeSpellCostReductionPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var filterText = match.Groups["filter"].Value.Trim();
+    var amount = int.Parse(match.Groups["amount"].Value);
+
+    var affected = BuildTypeSpellFilter(filterText);
+    if (affected is null)
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Resource.CostReductionEffect
+        {
+          Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount),
+        }],
+        AffectedObjects = affected,
+      },
+    ];
+  }
+
+  // Pattern: a single capitalised noun (no internal spaces — keeps compound
+  // filters like "Instant and sorcery" or "White creature" out of scope so
+  // they fall through to the fallback for a future family), then
+  // " spells you cast cost {N} less to cast." with optional trailing period.
+  // Amount is restricted to a single generic-mana digit (the cluster covers
+  // {1} and {2} cleanly); coloured-cost reductions are a separate family.
+  private static readonly Regex _typeSpellCostReductionPattern = new(
+    @"^\s*(?<filter>[A-Z][A-Za-z]+)\s+spells\s+you\s+cast\s+cost\s+\{(?<amount>\d+)\}\s+less\s+to\s+cast\.?\s*$",
+    RegexOptions.Compiled
+  );
+
+  // Card types the filter may name (lowercased on emit, matching the
+  // existing CardTypes convention — see GaddockTeeg).
+  private static readonly HashSet<string> _spellFilterCardTypes =
+    new(StringComparer.OrdinalIgnoreCase)
+    {
+      "Artifact", "Creature", "Enchantment", "Instant", "Sorcery",
+      "Planeswalker", "Land", "Battle", "Tribal",
+    };
+
+  // Supertypes the filter may name (PascalCase on emit — the supertype
+  // axis preserves casing, matching how the TypeLine record encodes them).
+  private static readonly HashSet<string> _spellFilterSupertypes =
+    new(StringComparer.OrdinalIgnoreCase)
+    {
+      "Legendary", "Snow", "Basic", "World", "Ongoing",
+    };
+
+  /// <summary>
+  /// Maps the filter noun captured before "spells" onto an
+  /// <see cref="ObjectFilter"/> rooted at <c>CardTypes: ["spell"]</c>. The
+  /// noun is classified in priority order: colour → card type → supertype →
+  /// subtype (catch-all). Returns <see langword="null"/> when the noun is
+  /// empty (defensive — the regex requires at least one letter).
+  /// </summary>
+  private static ObjectFilter? BuildTypeSpellFilter(string filterNoun)
+  {
+    if (string.IsNullOrWhiteSpace(filterNoun))
+    {
+      return null;
+    }
+
+    // Colour adjective (Rule 105) — emit as Colors single-letter code.
+    if (_colorNameToCode.TryGetValue(filterNoun, out var colorCode))
+    {
+      return new ObjectFilter
+      {
+        CardTypes = ["spell"],
+        Colors = [colorCode],
+        Controller = ControllerFilter.You,
+      };
+    }
+
+    // Colorless filter (Rule 105.1 — "Colorless is not a color"); encoded
+    // as IsColorless rather than on the Colors axis.
+    if (filterNoun.Equals("Colorless", StringComparison.OrdinalIgnoreCase))
+    {
+      return new ObjectFilter
+      {
+        CardTypes = ["spell"],
+        IsColorless = true,
+        Controller = ControllerFilter.You,
+      };
+    }
+
+    // Card type (Rule 205.2) — appended to the CardTypes axis so the filter
+    // reads as "a spell that is also of type X" (multi-element CardTypes
+    // precedent: e.g. "artifact land" → ["artifact", "land"]).
+    if (_spellFilterCardTypes.Contains(filterNoun))
+    {
+      return new ObjectFilter
+      {
+        CardTypes = ["spell", filterNoun.ToLowerInvariant()],
+        Controller = ControllerFilter.You,
+      };
+    }
+
+    // Supertype (Rule 205.4) — emit on the Supertypes axis, PascalCase.
+    if (_spellFilterSupertypes.Contains(filterNoun))
+    {
+      return new ObjectFilter
+      {
+        CardTypes = ["spell"],
+        Supertypes = [Capitalize(filterNoun)],
+        Controller = ControllerFilter.You,
+      };
+    }
+
+    // Otherwise treat as a creature/permanent subtype (Rule 205.3) — the
+    // catch-all branch handles tribal lords ("Angel spells", "Giant spells",
+    // "Goblin spells", …) and equipment/aura subtypes ("Aura spells",
+    // "Equipment spells", …).
+    return new ObjectFilter
+    {
+      CardTypes = ["spell"],
+      Subtypes = [Capitalize(filterNoun)],
+      Controller = ControllerFilter.You,
+    };
+  }
+
+  // Lowercase the rest, uppercase the first letter — matches oracle-text
+  // casing for both subtypes and supertypes.
+  private static string Capitalize(string s) =>
+    s.Length == 0 ? s : char.ToUpperInvariant(s[0]) + s[1..].ToLowerInvariant();
 
   /// <summary>
   /// "During your turn, [self] has [keyword]." — produces a static ability
