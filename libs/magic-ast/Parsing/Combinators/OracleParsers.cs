@@ -806,7 +806,7 @@ public static class OracleParsers
   );
 
   /// <summary>
-  /// Parser for "Entwine {cost}" — Rule 702.41. The cost is parsed by the
+  /// Parser for "Entwine {cost}" — Rule 702.42. The cost is parsed by the
   /// shared mana-cost parser so multi-symbol entwine costs (e.g. {1}{B}) land
   /// as full <see cref="MagicAST.AST.Costs.ManaCost"/> nodes rather than
   /// free-text fragments.
