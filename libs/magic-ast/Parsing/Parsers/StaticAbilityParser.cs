@@ -3410,6 +3410,31 @@ public sealed class StaticAbilityParser : IAbilityParser
         KeywordSource = "Hexproof",
         Effects = [new MagicAST.AST.Effects.Keyword.HexproofEffect()],
       },
+      // Fear: can't be blocked except by artifact creatures and/or black creatures.
+      // Rule 702.36. Mirrors Intimidate (702.13) but with a fixed black-color predicate
+      // instead of the color-share predicate. EvasionEffect with CanBeBlockedBy carrying
+      // Characteristics: ["artifact", "black"].
+      "fear" => new StaticAbility
+      {
+        KeywordSource = "Fear",
+        Effects = [new MagicAST.AST.Effects.Keyword.EvasionEffect
+        {
+          CanBeBlockedBy = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Characteristics = ["artifact", "black"],
+          },
+        }],
+      },
+      // Shroud (Rule 702.18): this permanent can't be the target of spells or abilities.
+      // A legacy protection keyword largely superseded by Hexproof; differs from Hexproof
+      // in that it applies to the controller's own spells and abilities as well.
+      // MAST records the keyword's presence; the targeting restriction is engine territory.
+      "shroud" => new StaticAbility
+      {
+        KeywordSource = "Shroud",
+        Effects = [new MagicAST.AST.Effects.Keyword.ShroudEffect()],
+      },
       // Daybound (Rule 702.145b). Found on front faces of day/night DFCs. MAST
       // records the keyword's presence and phase; the day/night transformation
       // rules (Rule 731) are engine territory.
