@@ -1,0 +1,73 @@
+{
+  "Input": {
+    "Name": "Mental Note",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Mill two cards.\nDraw a card.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": ["Mill"],
+    "Id": "1f343724-6ecd-494f-8bfc-93676af4e173",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Mental Note",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Mill two cards.\nDraw a card.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "mill",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
