@@ -71,6 +71,9 @@ public enum TriggerEvent
   /// <summary>A creature blocks</summary>
   Blocks,
 
+  /// <summary>A creature attacks or blocks (compound trigger — Rule 508/509)</summary>
+  AttacksOrBlocks,
+
   /// <summary>A creature becomes blocked</summary>
   BecomesBlocked,
 

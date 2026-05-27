@@ -1,0 +1,85 @@
+{
+  "Input": {
+    "Name": "Merfolk Skyscout",
+    "ManaCost": "{2}{U}{U}",
+    "TypeLine": "Creature — Merfolk Scout",
+    "OracleText": "Flying\nWhenever this creature attacks or blocks, untap target permanent.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Merfolk Skyscout",
+    "TypeLine": {
+      "Raw": "Creature — Merfolk Scout",
+      "Types": ["Creature"],
+      "Subtypes": ["Merfolk", "Scout"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nWhenever this creature attacks or blocks, untap target permanent.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": ["flying", "reach"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "AttacksOrBlocks",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["permanent"]
+                }
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+      }
+    ]
+  }
+}
