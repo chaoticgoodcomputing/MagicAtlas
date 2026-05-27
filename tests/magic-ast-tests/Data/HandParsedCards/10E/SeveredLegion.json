@@ -1,0 +1,104 @@
+{
+  "Input": {
+    "Name": "Severed Legion",
+    "ManaCost": "{1}{B}{B}",
+    "TypeLine": "Creature — Zombie",
+    "OracleText": "Fear (This creature can't be blocked except by artifact creatures and/or black creatures.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Severed Legion",
+    "TypeLine": {
+      "Raw": "Creature — Zombie",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Fear (This creature can't be blocked except by artifact creatures and/or black creatures.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Fear",
+          "Reminder": {
+            "Text": "(This creature can't be blocked except by artifact creatures and/or black creatures.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "artifact",
+                  "black"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

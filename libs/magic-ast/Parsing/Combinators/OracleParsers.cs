@@ -78,6 +78,32 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Fear" keyword.
+  /// Pattern: "Fear" [reminder]
+  /// Rule 702.36. This creature can't be blocked except by artifact creatures
+  /// and/or black creatures. MAST records keyword presence; the evasion
+  /// semantics are expressed via EvasionEffect with a Characteristics-stretch
+  /// ObjectFilter covering both the artifact type and the black color qualifier.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Fear = (
+    from keyword in Keyword("Fear")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Fear",
+      Effects = [new EvasionEffect
+      {
+        CanBeBlockedBy = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Characteristics = ["artifact", "black"],
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Vigilance" keyword.
   /// Pattern: "Vigilance" [reminder]
   /// </summary>
@@ -1498,6 +1524,7 @@ public static class OracleParsers
   /// </summary>
   public static readonly TokenListParser<OracleToken, StaticAbility> SimpleKeyword = Flying
     .Try()
+    .Or(Fear)
     .Or(Menace)
     .Or(Vigilance)
     .Or(Trample)
