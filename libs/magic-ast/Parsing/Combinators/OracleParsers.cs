@@ -1581,6 +1581,58 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Hideaway N" keyword.
+  /// Pattern: "Hideaway" number [reminder]
+  /// Rule 702.74. A triggered keyword ability: when this permanent enters, look
+  /// at the top N cards of your library, exile one face down, then put the rest
+  /// on the bottom in a random order. MAST records the keyword and its integer
+  /// lookahead count; the ETB trigger, look/exile/shuffle semantics are engine
+  /// territory.
+  /// Integer-parameterized keyword using <see cref="LiteralQuantity"/>; mirrors
+  /// the <see cref="Crew"/> combinator shape.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Hideaway = (
+    from keyword in Keyword("Hideaway")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Hideaway",
+      Effects = [new HideawayEffect
+      {
+        Amount = new LiteralQuantity { Value = int.Parse(value.ToStringValue()) },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Mobilize N" keyword.
+  /// Pattern: "Mobilize" number [reminder]
+  /// Rule 702.175 (Tarkir: Dragonstorm). A triggered keyword ability: whenever
+  /// this creature attacks, create N tapped and attacking 1/1 red Warrior
+  /// creature tokens. Sacrifice them at the beginning of the next end step.
+  /// MAST records the keyword and its integer token-creation count; the attack
+  /// trigger, token-creation, and delayed-sacrifice semantics are engine territory.
+  /// Integer-parameterized keyword using <see cref="LiteralQuantity"/>; mirrors
+  /// <see cref="Hideaway"/> and <see cref="Crew"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Mobilize = (
+    from keyword in Keyword("Mobilize")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Mobilize",
+      Effects = [new MobilizeEffect
+      {
+        Amount = new LiteralQuantity { Value = int.Parse(value.ToStringValue()) },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Equip {cost}" keyword.
   /// Pattern: "Equip" mana-symbol+ [reminder]
   /// Rule 702.6. An activated ability that attaches this Equipment to a creature
@@ -2044,6 +2096,70 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Living weapon" keyword.
+  /// Pattern: "Living" "weapon" [reminder]
+  /// Rule 702.77. When this Equipment enters, create a 0/0 black Phyrexian Germ
+  /// creature token, then attach this to it. Although mechanically a triggered
+  /// ability, MAST records keyword presence; the ETB trigger, token-creation,
+  /// and auto-attach semantics are engine territory. Multi-word keyword via
+  /// sequential Keyword() combinators, mirroring FirstStrike and CumulativeUpkeep.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> LivingWeapon = (
+    from living in Keyword("Living")
+    from weapon in Keyword("weapon")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Living weapon",
+      Effects = [new LivingWeaponEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Umbra armor" keyword (Totem armor in comp-rules).
+  /// Pattern: "Umbra" "armor" [reminder]
+  /// Rule 702.102. "If enchanted creature would be destroyed, instead remove all
+  /// damage from it and destroy this Aura." Oracle text uses "Umbra armor"; the
+  /// comp-rules name is "totem armor". MAST records keyword presence using the
+  /// comp-rules discriminator "totemArmor"; the replacement-effect semantics are
+  /// engine territory. Multi-word keyword; mirrors LivingWeapon.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> UmbraArmor = (
+    from umbra in Keyword("Umbra")
+    from armor in Keyword("armor")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Totem armor",
+      Effects = [new TotemArmorEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Start your engines!" keyword.
+  /// Pattern: "Start" "your" "engines" [reminder]
+  /// (Aetherdrift). "If you have no speed, it starts at 1. It increases once on
+  /// each of your turns when an opponent loses life. Max speed is 4." The '!'
+  /// is silently dropped by the tokenizer (unknown-character handling), so the
+  /// combinator matches "Start your engines". MAST records keyword presence;
+  /// the speed-counter semantics are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> StartYourEngines = (
+    from start in Keyword("Start")
+    from your in Token.EqualTo(OracleToken.Your)
+    from engines in Keyword("engines")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Start your engines",
+      Effects = [new StartYourEnginesEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -2099,7 +2215,10 @@ public static class OracleParsers
     .Or(Mountainwalk)
     .Or(Plainswalk)
     .Or(Swampwalk)
-    .Or(Extort);
+    .Or(Extort)
+    .Or(LivingWeapon)
+    .Or(UmbraArmor)
+    .Or(StartYourEngines);
 
   /// <summary>
   /// Parses any parameterized keyword ability.
@@ -2135,7 +2254,9 @@ public static class OracleParsers
       .Or(Plot.Try())
       .Or(CumulativeUpkeep.Try())
       .Or(Dash.Try())
-      .Or(Ninjutsu.Try());
+      .Or(Ninjutsu.Try())
+      .Or(Hideaway.Try())
+      .Or(Mobilize.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).

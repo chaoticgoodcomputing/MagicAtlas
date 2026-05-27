@@ -214,6 +214,24 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Start your engines!" — Aetherdrift keyword (Rule 702.178). The oracle
+    // text always appears as "Start your engines! (reminder...)" which tokenizes
+    // as three Word tokens (Start, your, engines) plus optional reminder text.
+    // IsSingleKeyword uses significantTokens <= 2 and would miss this three-word
+    // keyword, routing it to the Static default at 0.50 confidence where the
+    // StaticAbilityParser then fails on the reminder's "If" clause. Intercept it
+    // here with the same pattern used for "Choose a Background" (Rule 702.124g)
+    // — a raw-text prefix check that bypasses the heuristic.
+    if (clause.RawText.TrimStart().StartsWith("Start your engines", StringComparison.OrdinalIgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.95,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Check for single keyword (may need expansion). Skipped when the clause
     // leads with a spell-instruction verb (e.g. "Scry 1.", "Mill 2."): those
     // shapes are imperative resolution steps, not statics, even though they

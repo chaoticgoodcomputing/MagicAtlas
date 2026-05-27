@@ -1,0 +1,79 @@
+{
+  "Input": {
+    "Name": "Point the Way",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\n{3}{G}, Sacrifice this enchantment: Search your library for a basic land card, put it onto the battlefield, then shuffle.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Point the Way",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\n{3}{G}, Sacrifice this enchantment: Search your library for a basic land card, put it onto the battlefield, then shuffle.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Start your engines",
+          "Effects": [
+            {
+              "EffectType": "startYourEngines"
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 3 },
+                { "Kind": "colored", "Colors": ["G"] }
+              ]
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["enchantment"],
+                "Characteristics": ["this permanent"]
+              },
+              "Quantity": { "QuantityType": "literal", "Value": 1 }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "unparsed",
+              "SourceSpan": { "Start": 180, "Length": 86 },
+              "RawText": "Search your library for a basic land card, put it onto the battlefield, then shuffle."
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
