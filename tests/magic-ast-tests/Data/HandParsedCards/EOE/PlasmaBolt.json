@@ -1,0 +1,100 @@
+{
+  "Input": {
+    "Name": "Plasma Bolt",
+    "ManaCost": "{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Plasma Bolt deals 2 damage to any target.\nVoid — Plasma Bolt deals 3 damage instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Plasma Bolt",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Plasma Bolt deals 2 damage to any target.\nVoid — Plasma Bolt deals 3 damage instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Target": {
+                "Kind": "AnyTarget"
+              },
+              "Source": {
+                "Kind": "Self"
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 42,
+            "Length": 128
+          },
+          "RawText": "Void — Plasma Bolt deals 3 damage instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Static ability parser not yet implemented",
+              "Location": {
+                "Start": 42,
+                "Length": 128
+              },
+              "RawText": "Void — Plasma Bolt deals 3 damage instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+              "Pattern": "ConditionalEffect",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 42
+            }
+          ],
+          "AbilityWord": "Void"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{R}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
+    ]
+  }
+}
