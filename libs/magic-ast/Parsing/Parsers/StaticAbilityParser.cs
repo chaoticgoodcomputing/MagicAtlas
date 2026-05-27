@@ -2729,14 +2729,16 @@ public sealed class StaticAbilityParser : IAbilityParser
   );
 
   /// <summary>
-  /// "This creature enters with N +1/+1 counters on it." — Rule 614.1c
-  /// self-replacement effect. Emits a <see cref="StaticAbility"/> wrapping an
+  /// "This &lt;type&gt; enters with N +1/+1 counters on it." — Rules 122 (counters),
+  /// 614.1d (enters-with replacement effects). Handles subject types creature,
+  /// artifact, enchantment, land, and permanent. Count may be a decimal digit,
+  /// the variable "X", or an English word-count ("one" through "ten"). Emits a
+  /// <see cref="StaticAbility"/> wrapping an
   /// <see cref="MagicAST.AST.Effects.Replacement.EntersWithCountersEffect"/>
   /// whose <c>Count</c> is either a <see cref="MagicAST.AST.Quantities.LiteralQuantity"/>
-  /// (for digit-N printings) or a <see cref="MagicAST.AST.Quantities.VariableQuantity"/>
-  /// (for "X" printings). No <c>KeywordSource</c>: the oracle text is a full
-  /// declarative sentence, not a keyword token. Mirrors
-  /// <see cref="TryParseEntersTapped"/> in structure.
+  /// or a <see cref="MagicAST.AST.Quantities.VariableQuantity"/>. No
+  /// <c>KeywordSource</c>: the oracle text is a full declarative sentence, not
+  /// a keyword token. Mirrors <see cref="TryParseEntersTapped"/> in structure.
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseEntersWithCounters(OracleClause clause)
   {
@@ -2747,9 +2749,19 @@ public sealed class StaticAbilityParser : IAbilityParser
     }
 
     var countText = match.Groups["count"].Value;
-    MagicAST.AST.Quantities.Quantity count = countText.Equals("X", StringComparison.OrdinalIgnoreCase)
-      ? MagicAST.AST.Quantities.VariableQuantity.X
-      : MagicAST.AST.Quantities.LiteralQuantity.Of(int.Parse(countText));
+    MagicAST.AST.Quantities.Quantity count;
+    if (countText.Equals("X", StringComparison.OrdinalIgnoreCase))
+    {
+      count = MagicAST.AST.Quantities.VariableQuantity.X;
+    }
+    else if (TryParseSmallCount(countText.ToLowerInvariant(), out var intCount))
+    {
+      count = MagicAST.AST.Quantities.LiteralQuantity.Of(intCount);
+    }
+    else
+    {
+      return null;
+    }
 
     return
     [
@@ -2765,11 +2777,13 @@ public sealed class StaticAbilityParser : IAbilityParser
     ];
   }
 
-  // Matches "This creature enters with N +1/+1 counters on it." where N is
-  // a decimal digit or the variable "X". Handles "counter" and "counters"
-  // (singular for N=1) and an optional trailing period.
+  // Matches "This <type> enters with N +1/+1 counters on it." where <type> is
+  // creature, artifact, enchantment, land, or permanent, and N is a decimal
+  // digit, the variable "X", or an English word-count ("one" through "ten").
+  // Handles "counter" and "counters" (singular for N=1) and an optional
+  // trailing period. Rules: 122 (counters), 614.1d (enters-with replacement).
   private static readonly Regex _entersWithCountersPattern = new(
-    @"^\s*This\s+creature\s+enters\s+with\s+(?<count>\d+|X)\s+\+1/\+1\s+counters?\s+on\s+it\.?\s*$",
+    @"^\s*This\s+(?<type>creature|artifact|enchantment|land|permanent)\s+enters\s+with\s+(?<count>\d+|X|one|two|three|four|five|six|seven|eight|nine|ten)\s+\+1/\+1\s+counters?\s+on\s+it\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
