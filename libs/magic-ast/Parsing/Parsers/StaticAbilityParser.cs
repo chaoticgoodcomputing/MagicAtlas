@@ -271,6 +271,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return cantBlock;
     }
 
+    // "Enchanted creature can't attack or block." — dual combat restriction on the
+    // attached object (Pacifism / Luminous Bonds Aura shape). Emits two effects —
+    // CantAttackEffect and CantBlockEffect — both targeting EnchantedOrEquipped.
+    // Must be placed AFTER TryParseCantBlock to avoid shadowing the self-subject
+    // single-restriction shape, and BEFORE TryParseCantBeBlocked for symmetry.
+    var enchantedCantAttackOrBlock = TryParseEnchantedCantAttackOrBlock(clause);
+    if (enchantedCantAttackOrBlock != null)
+    {
+      return enchantedCantAttackOrBlock;
+    }
+
     // "This (creature|land|permanent) can't be blocked." — Rule 509.1b evasion
     // (full unblockability). Full declarative sentence, not a keyword token, so
     // no KeywordSource is set. Mirrors TryParseCantBlock in structure.
@@ -2047,6 +2058,56 @@ public sealed class StaticAbilityParser : IAbilityParser
   // The trailing period is optional for minor formatting variants.
   private static readonly Regex _cantBlockPattern = new(
     @"^\s*This\s+(?:creature|land|permanent)\s+can'?t\s+block\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "Enchanted creature can't attack or block." — dual combat restriction
+  /// (attacker-side + blocker-side) imposed by an Aura on its enchanted object
+  /// (Rule 509.1d / 509.1c). Emits a <see cref="StaticAbility"/> with two
+  /// effects:
+  /// <list type="bullet">
+  ///   <item><see cref="CantAttackEffect"/> targeting <c>EnchantedOrEquipped</c>.</item>
+  ///   <item><see cref="CantBlockEffect"/> targeting <c>EnchantedOrEquipped</c>.</item>
+  /// </list>
+  /// Both effects carry <c>IsOptional = false</c> — the restriction is mandatory
+  /// and does not have a "You may" prefix.
+  /// <para>
+  /// Per the multi-effect-per-clause doctrine, the conjunction "can't attack or
+  /// block" in a single oracle line bundles both restrictions into one
+  /// <c>StaticAbility.Effects</c> list rather than splitting into two ability
+  /// nodes.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEnchantedCantAttackOrBlock(OracleClause clause)
+  {
+    if (!_enchantedCantAttackOrBlockPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    var target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped };
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects =
+        [
+          new CantAttackEffect { Target = target, IsOptional = false },
+          new CantBlockEffect  { Target = target, IsOptional = false },
+        ],
+      },
+    ];
+  }
+
+  // Matches "Enchanted creature can't attack or block."
+  // The subject is always "Enchanted creature" for this Aura-body shape.
+  // "Equipped creature" is included for symmetry (same multi-effect semantics
+  // would apply to an Equipment printing of this restriction).
+  // The trailing period is optional for minor formatting variants.
+  private static readonly Regex _enchantedCantAttackOrBlockPattern = new(
+    @"^\s*(?:Enchanted|Equipped)\s+creature\s+can'?t\s+attack\s+or\s+block\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
