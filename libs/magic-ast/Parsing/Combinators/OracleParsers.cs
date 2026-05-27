@@ -548,6 +548,26 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Evolve" keyword.
+  /// Pattern: "Evolve" [reminder]
+  /// Rule 702.100. Whenever a creature you control enters, if that creature has
+  /// greater power or toughness than this creature, put a +1/+1 counter on this
+  /// creature. Although mechanically a triggered ability, MAST models it as a
+  /// keyword marker (same approach as Prowess, Exalted); the trigger /
+  /// power-comparison / counter-placement are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Evolve = (
+    from kw in Keyword("Evolve")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Evolve",
+      Effects = [new EvolveEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -1461,6 +1481,7 @@ public static class OracleParsers
     .Or(Persist)
     .Or(Flanking)
     .Or(Ascend)
+    .Or(Evolve)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)
