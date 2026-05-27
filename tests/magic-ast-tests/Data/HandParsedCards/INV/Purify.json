@@ -1,0 +1,59 @@
+{
+  "Input": {
+    "Name": "Purify",
+    "ManaCost": "{4}{W}{W}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Destroy all artifacts and enchantments.",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": [],
+    "Id": "f1c7a3e8-4d2b-4a9f-8c6e-1b3d5f7a9c2e",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Purify",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Destroy all artifacts and enchantments.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["artifact", "enchantment"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{W}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "Input": {
+    "Name": "Planar Cleansing",
+    "ManaCost": "{3}{W}{W}{W}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Destroy all nonland permanents.",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": [],
+    "Id": "e3a7c1d5-9b4f-4e8a-b2c6-7d1f3a5e9b2c",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Planar Cleansing",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Destroy all nonland permanents.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["permanent"],
+                  "Characteristics": ["nonland"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}{W}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}
