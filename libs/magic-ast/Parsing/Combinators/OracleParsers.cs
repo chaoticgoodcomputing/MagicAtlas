@@ -752,6 +752,42 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Daybound" keyword.
+  /// Pattern: "Daybound" [reminder]
+  /// Rule 702.145b. Found on the front faces of day/night double-faced cards.
+  /// MAST records the keyword's presence and phase; the day/night transformation
+  /// rules (Rule 731) are engine territory per the descriptive-not-engine doctrine.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Daybound = (
+    from kw in Keyword("Daybound")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Daybound",
+      Effects = [new DayNightEffect { Phase = DayNightPhase.Daybound }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Nightbound" keyword.
+  /// Pattern: "Nightbound" [reminder]
+  /// Rule 702.145e. Found on the back faces of day/night double-faced cards.
+  /// MAST records the keyword's presence and phase; the day/night transformation
+  /// rules (Rule 731) are engine territory per the descriptive-not-engine doctrine.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Nightbound = (
+    from kw in Keyword("Nightbound")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Nightbound",
+      Effects = [new DayNightEffect { Phase = DayNightPhase.Nightbound }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Melee" keyword.
   #endregion
 
@@ -2054,6 +2090,8 @@ public static class OracleParsers
     .Or(Shadow)
     .Or(Intimidate)
     .Or(Myriad)
+    .Or(Daybound)
+    .Or(Nightbound)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)
