@@ -17,9 +17,16 @@ public sealed record PreventDamageEffect : Effect, IOptionalEffect, IDurativeEff
   public Quantity? Amount { get; init; }
 
   /// <summary>
-  /// True if preventing all damage.
+  /// True if preventing all damage (no quantity limit).
   /// </summary>
   public bool All { get; init; }
+
+  /// <summary>
+  /// True if only combat damage is prevented (oracle says "combat damage").
+  /// False/absent means all damage (regardless of source type) is prevented.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool CombatOnly { get; init; }
 
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectReference? Source { get; init; }

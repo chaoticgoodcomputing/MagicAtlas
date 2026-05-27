@@ -1,0 +1,61 @@
+{
+  "Input": {
+    "Name": "Hold at Bay",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Prevent the next 7 damage that would be dealt to any target this turn.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Hold at Bay",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Prevent the next 7 damage that would be dealt to any target this turn.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "preventDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 7
+              },
+              "Target": {
+                "Kind": "AnyTarget"
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}
