@@ -148,6 +148,20 @@ public sealed class StaticAbilityParser : IAbilityParser
       return gainControlEnchanted;
     }
 
+    // "Enchanted [type] is a(n) [BasicLandType]." — layer-4 (CR 613.1d)
+    // subtype-changing Aura static. Replaces the enchanted permanent's subtypes
+    // with the named basic land type (Spreading Seas, Convincing Mirage, etc.).
+    // No Duration: the effect persists while the Aura is attached (Rule 702.5).
+    // Placed after TryParseGainControlOfEnchanted (both target EnchantedOrEquipped
+    // via a declarative "Enchanted [type] is…" sentence) — the gainControl shape
+    // uses "you control" while this shape uses "is a(n) [Subtype]", so they
+    // cannot shadow each other regardless of order.
+    var changeSubtype = TryParseEnchantedLandIsSubtype(clause);
+    if (changeSubtype != null)
+    {
+      return changeSubtype;
+    }
+
     // "Ward {N}" / "Ward — [effect]" — emits a TriggeredAbility with
     // KeywordSource="Ward", structured as the trigger Rule 702.21 expands to.
     var ward = TryParseWardKeyword(clause);
@@ -2837,6 +2851,67 @@ public sealed class StaticAbilityParser : IAbilityParser
     @"^\s*You\s+control\s+enchanted\s+(?:creature|permanent|land|artifact|enchantment|planeswalker|equipment)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
+
+  /// <summary>
+  /// "Enchanted [type] is a(n) [BasicLandType]." — layer-4 (CR 613.1d)
+  /// subtype-changing Aura static. Emits a
+  /// <see cref="ChangeSubtypeEffect"/> whose
+  /// <c>Target</c> is <see cref="ObjectReferenceKind.EnchantedOrEquipped"/> and
+  /// whose <c>Subtypes</c> list carries the single basic land type named in the
+  /// oracle line. No <c>Duration</c>: the effect persists while the Aura is
+  /// attached (Rule 702.5 / 613.1d).
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEnchantedLandIsSubtype(OracleClause clause)
+  {
+    var match = _enchantedLandIsSubtypePattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    // Normalise to oracle-capitalised form (Island, Forest, etc.).
+    var rawSubtype = match.Groups["subtype"].Value.Trim();
+    var subtype = char.ToUpperInvariant(rawSubtype[0]) + rawSubtype[1..].ToLowerInvariant();
+
+    // Guard: only basic land subtypes are handled here. Any other word falls
+    // through to the fallback so the gap is surfaced rather than silently
+    // misclassified as a subtype change.
+    if (!_basicLandTypes.Contains(subtype))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new ChangeSubtypeEffect
+        {
+          Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+          Subtypes = [subtype],
+        }],
+      },
+    ];
+  }
+
+  // "Enchanted land is a(n) <Subtype>." — single basic land subtype declaration.
+  // The article group is non-capturing; only <subtype> is needed.
+  private static readonly Regex _enchantedLandIsSubtypePattern = new(
+    @"^\s*Enchanted\s+land\s+is\s+an?\s+(?<subtype>[A-Z][a-z]+)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Exhaustive set of CR 305.6 basic land subtypes. Used as a whitelist so
+  // non-subtype words (e.g., a future card like "Enchanted land is a Desert.")
+  // don't silently match before the fallback can surface the gap.
+  private static readonly HashSet<string> _basicLandTypes =
+  [
+    "Plains",
+    "Island",
+    "Swamp",
+    "Mountain",
+    "Forest",
+  ];
 
   /// <summary>
   /// Recognizes "[subject] attacks each combat if able." Subject may be the
