@@ -1,0 +1,69 @@
+{
+  "Input": {
+    "Name": "Spell Pierce",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Counter target noncreature spell unless its controller pays {2}.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Spell Pierce",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Counter target noncreature spell unless its controller pays {2}.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "counterSpell",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["spell"],
+                  "Characteristics": ["noncreature"]
+                }
+              },
+              "UnlessClause": {
+                "Player": {
+                  "Kind": "Controller"
+                },
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    { "Kind": "generic", "GenericAmount": 2 }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
