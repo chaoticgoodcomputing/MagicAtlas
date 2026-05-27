@@ -1,0 +1,113 @@
+{
+  "Input": {
+    "Name": "Dusk Charger",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Creature — Horse",
+    "OracleText": "Ascend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)\nThis creature gets +2/+2 as long as you have the city's blessing.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Dusk Charger",
+    "TypeLine": {
+      "Raw": "Creature — Horse",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Horse"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Ascend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)\nThis creature gets +2/+2 as long as you have the city's blessing.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Ascend",
+          "Effects": [
+            {
+              "EffectType": "ascend",
+              "IsOptional": false
+            }
+          ],
+          "Reminder": {
+            "Text": "(If you control ten or more permanents, you get the city's blessing for the rest of the game.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "you have the city's blessing"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

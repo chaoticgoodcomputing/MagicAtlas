@@ -1,0 +1,121 @@
+{
+  "Input": {
+    "Name": "Skymarcher Aspirant",
+    "ManaCost": "{W}",
+    "TypeLine": "Creature — Vampire Soldier",
+    "OracleText": "Ascend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)\nThis creature has flying as long as you have the city's blessing.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Skymarcher Aspirant",
+    "TypeLine": {
+      "Raw": "Creature — Vampire Soldier",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire",
+        "Soldier"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Ascend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)\nThis creature has flying as long as you have the city's blessing.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Ascend",
+          "Effects": [
+            {
+              "EffectType": "ascend",
+              "IsOptional": false
+            }
+          ],
+          "Reminder": {
+            "Text": "(If you control ten or more permanents, you get the city's blessing for the rest of the game.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Flying",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Characteristics": [
+                        "flying",
+                        "reach"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "you have the city's blessing"
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

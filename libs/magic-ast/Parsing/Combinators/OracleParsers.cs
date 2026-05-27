@@ -528,6 +528,26 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Ascend" keyword.
+  /// Pattern: "Ascend" [reminder]
+  /// Rule 702.131. If you control ten or more permanents, you get the city's
+  /// blessing for the rest of the game. Applies to both permanents (Rule
+  /// 702.131b) and spells (Rule 702.131a); the parser treats both as keyword
+  /// presence. MAST records the keyword's presence; the city's-blessing
+  /// designation and downstream effects are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Ascend = (
+    from kw in Keyword("Ascend")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Ascend",
+      Effects = [new AscendEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -1440,6 +1460,7 @@ public static class OracleParsers
     .Or(Wither)
     .Or(Persist)
     .Or(Flanking)
+    .Or(Ascend)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)
