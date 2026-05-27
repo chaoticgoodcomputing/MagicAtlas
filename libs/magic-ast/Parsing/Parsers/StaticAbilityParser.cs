@@ -3368,22 +3368,25 @@ public sealed class StaticAbilityParser : IAbilityParser
   );
 
   /// <summary>
-  /// "This (creature|land|permanent) can't be blocked." — Rule 509.1b full
-  /// unblockability, or "This creature can't be blocked by [color] creatures."
-  /// — color-restricted variant. Full declarative sentence, so no
-  /// <c>KeywordSource</c> is set. Mirrors <see cref="TryParseCantBlock"/>
-  /// in structure.
-  /// <para>
-  /// When a color qualifier is present (<c>BlockedByFilter</c> is set), the
-  /// creature can still be blocked — just not by creatures of the named
-  /// color(s). This is descriptively distinct from full unblockability
-  /// (null filter) and from <see cref="EvasionEffect.CanBeBlockedBy"/>
-  /// ("can't be blocked EXCEPT by"), which names what CAN block.
-  /// </para>
+  /// "This (creature|land|permanent|Vehicle) can't be blocked." — Rule 509.1b
+  /// full unblockability. Also handles two filter-restricted variants:
+  /// <list type="bullet">
+  ///   <item>"This creature can't be blocked by [color] creatures." —
+  ///         color-restricted evasion. <see cref="CantBeBlockedEffect.BlockedByFilter"/>
+  ///         carries a color constraint; all other creatures may still block.</item>
+  ///   <item>"This (creature|Vehicle) can't be blocked by creatures with power N or less."
+  ///         — power-threshold evasion (Daunt / Steel Leaf Champion shape, Rule 509.1b).
+  ///         <see cref="CantBeBlockedEffect.BlockedByFilter"/> carries a
+  ///         <see cref="Comparison"/> on <see cref="ObjectFilter.PowerComparison"/>
+  ///         with <see cref="ComparisonOperator.LessThanOrEqual"/> and the printed
+  ///         threshold value. The "or less" phrasing maps directly to ≤.</item>
+  /// </list>
+  /// Full declarative sentences in all three cases, so no <c>KeywordSource</c> is set.
+  /// Mirrors <see cref="TryParseCantBlock"/> in structure.
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseCantBeBlocked(OracleClause clause)
   {
-    // Full unblockability: "This (creature|land|permanent) can't be blocked."
+    // Full unblockability: "This (creature|land|permanent|Vehicle) can't be blocked."
     if (_cantBeBlockedPattern.IsMatch(clause.RawText))
     {
       return
@@ -3391,6 +3394,37 @@ public sealed class StaticAbilityParser : IAbilityParser
         new StaticAbility
         {
           Effects = [new CantBeBlockedEffect()],
+        },
+      ];
+    }
+
+    // Power-threshold variant: "This (creature|Vehicle) can't be blocked by creatures
+    // with power N or less." — Rule 509.1b. The threshold N maps to a LessThanOrEqual
+    // comparison on ObjectFilter.PowerComparison. Placed before the color arm because
+    // the "by creatures with power" prefix is more specific than the bare color-name
+    // lookup and should win first.
+    var powerMatch = _cantBeBlockedByPowerPattern.Match(clause.RawText);
+    if (powerMatch.Success && int.TryParse(powerMatch.Groups["value"].Value, out var threshold))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects =
+          [
+            new CantBeBlockedEffect
+            {
+              BlockedByFilter = new ObjectFilter
+              {
+                CardTypes = ["creature"],
+                PowerComparison = new Comparison
+                {
+                  Operator = ComparisonOperator.LessThanOrEqual,
+                  Value = threshold,
+                },
+              },
+            },
+          ],
         },
       ];
     }
@@ -3434,11 +3468,20 @@ public sealed class StaticAbilityParser : IAbilityParser
     return null;
   }
 
-  // Matches "This (creature|land|permanent) can't be blocked."
-  // The permanent-type noun covers the oracle printings seen in the corpus.
+  // Matches "This (creature|land|permanent|Vehicle) can't be blocked."
+  // The permanent-type noun covers the oracle printings seen in the corpus;
+  // Vehicle is included for Artifact — Vehicle cards.
   // The trailing period is optional for minor formatting variants.
   private static readonly Regex _cantBeBlockedPattern = new(
-    @"^\s*This\s+(?:creature|land|permanent)\s+can'?t\s+be\s+blocked\.?\s*$",
+    @"^\s*This\s+(?:creature|land|permanent|Vehicle)\s+can'?t\s+be\s+blocked\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches "This (creature|Vehicle) can't be blocked by creatures with power N or less."
+  // Captures the numeric threshold for the LessThanOrEqual comparison.
+  // The "or less" phrasing is standard oracle wording for ≤ (Rule 509.1b).
+  private static readonly Regex _cantBeBlockedByPowerPattern = new(
+    @"^\s*This\s+(?:creature|Vehicle|permanent)\s+can'?t\s+be\s+blocked\s+by\s+creatures\s+with\s+power\s+(?<value>\d+)\s+or\s+less\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
