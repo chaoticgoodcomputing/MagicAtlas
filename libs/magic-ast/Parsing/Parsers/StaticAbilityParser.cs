@@ -459,6 +459,20 @@ public sealed class StaticAbilityParser : IAbilityParser
       return enchantedCantBeBlockedByMoreThanOne;
     }
 
+    // "This creature can't attack unless defending player controls an [land type]." —
+    // attacker-side conditional restriction (Rule 508.1c). The restriction is lifted
+    // only when the stated board-state condition holds. Attacker-side dual of landwalk
+    // (which lifts a blocker-side restriction). UnlessDefendingControls carries the
+    // EvasionCondition with ConditionType=DefendingPlayerControls and the land subtype
+    // on PermanentFilter, mirroring the landwalk shape from OracleParsers.Landwalk.
+    // Must be placed AFTER TryParseEnchantedCantAttackOrBlock to avoid conflicting with
+    // the Aura "can't attack or block" pattern.
+    var cantAttackUnlessDefending = TryParseCantAttackUnlessDefendingControls(clause);
+    if (cantAttackUnlessDefending != null)
+    {
+      return cantAttackUnlessDefending;
+    }
+
     // "This (creature|land|permanent) can't be blocked." — Rule 509.1b evasion
     // (full unblockability or single-blocker restriction). Full declarative
     // sentence, not a keyword token, so no KeywordSource is set. Mirrors
@@ -4148,6 +4162,81 @@ public sealed class StaticAbilityParser : IAbilityParser
   private static readonly Regex _enchantedCantAttackOrBlockPattern = new(
     @"^\s*(?:Enchanted|Equipped)\s+creature\s+can'?t\s+attack\s+or\s+block\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "This creature can't attack unless defending player controls an [land type]." —
+  /// attacker-side conditional restriction (Rule 508.1c). The creature is forbidden
+  /// from attacking except when the defending player satisfies the stated board-state
+  /// condition. This is the attacker-side dual of the landwalk family:
+  /// <list type="bullet">
+  ///   <item>Landwalk (<see cref="EvasionEffect"/> with
+  ///         <see cref="EvasionCondition.ConditionType"/> =
+  ///         <c>DefendingPlayerControls</c>) records that a blocker-side restriction
+  ///         is lifted when defending player controls the named land.</item>
+  ///   <item>This shape records that an attacker-side restriction applies unless
+  ///         defending player controls the named land.</item>
+  /// </list>
+  ///
+  /// <para>
+  /// Both the "This creature" (self-referential) and "[CardName]" (name-referential)
+  /// phrasings are recognised; both produce a <see cref="CantAttackEffect"/> with a
+  /// null <see cref="CantAttackEffect.Target"/> (self) because the ability is always
+  /// printed on the creature the restriction applies to.
+  /// </para>
+  ///
+  /// <para>
+  /// <see cref="CantAttackEffect.UnlessDefendingControls"/> carries an
+  /// <see cref="EvasionCondition"/> with
+  /// <see cref="EvasionConditionType.DefendingPlayerControls"/> and a
+  /// <see cref="EvasionCondition.PermanentFilter"/> of
+  /// <c>ObjectFilter { Subtypes: [landType] }</c> — identical to the filter shape
+  /// used by <c>OracleParsers.Landwalk</c> for the corresponding landwalk keyword.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseCantAttackUnlessDefendingControls(OracleClause clause)
+  {
+    var match = _cantAttackUnlessDefendingControlsPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var landType = match.Groups["land"].Value;
+    // Normalise capitalisation: oracle text always capitalises basic land type names
+    // (Island, Forest, Swamp, Mountain, Plains) — pass through verbatim so the filter
+    // Subtypes value matches the oracle-text spelling (e.g. "Island" not "island").
+    return
+    [
+      new StaticAbility
+      {
+        Effects =
+        [
+          new CantAttackEffect
+          {
+            IsOptional = false,
+            UnlessDefendingControls = new EvasionCondition
+            {
+              ConditionType = EvasionConditionType.DefendingPlayerControls,
+              PermanentFilter = new ObjectFilter { Subtypes = [landType] },
+            },
+          },
+        ],
+      },
+    ];
+  }
+
+  // Matches both phrasings:
+  //   "This creature can't attack unless defending player controls an Island."
+  //   "This creature can't attack unless defending player controls a Forest."
+  //   "[Name] can't attack unless defending player controls an Island."
+  // The leading subject is flexible ("This creature" or a card name — any non-empty
+  // text up to "can't attack"). The land-type capture group picks up any single
+  // capitalised word following "a" or "an" (the article varies by land name).
+  // The trailing period is optional for minor formatting variants.
+  private static readonly Regex _cantAttackUnlessDefendingControlsPattern = new(
+    @"^\s*(?:This\s+creature|\S+(?:\s+\S+)*?)\s+can'?t\s+attack\s+unless\s+defending\s+player\s+controls\s+an?\s+(?<land>[A-Z][a-z]+)\.?\s*$",
+    RegexOptions.Compiled
   );
 
   /// <summary>

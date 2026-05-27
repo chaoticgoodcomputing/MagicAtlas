@@ -1,6 +1,7 @@
 namespace MagicAST.AST.Effects.Combat;
 
 using System.Text.Json.Serialization;
+using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Traits;
 using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
@@ -49,6 +50,16 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// e.g. <c>EnchantedOrEquipped</c> for the Aura body
 /// "Enchanted creature can't attack."
 /// </para>
+/// <para>
+/// When <see cref="UnlessDefendingControls"/> is set, the restriction is
+/// conditioned on the defending player's board state: the creature is permitted
+/// to attack only when the stated condition holds (e.g. "unless defending player
+/// controls an Island"). This is the attacker-side dual of landwalk — where
+/// landwalk records that a blocker-side restriction lifts when defending player
+/// controls the land, this records that an attacker-side restriction applies
+/// unconditionally except when defending player controls the land.
+/// Rule 508.1c; descriptive only — MAST does not evaluate the condition.
+/// </para>
 /// </remarks>
 [OracleEffect("cantAttack")]
 public sealed record CantAttackEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
@@ -79,4 +90,23 @@ public sealed record CantAttackEffect : Effect, IOptionalEffect, IDurativeEffect
   /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public UnlessClause? UnlessClause { get; init; }
+
+  /// <summary>
+  /// Board-state condition that lifts this attack restriction. When set, the
+  /// oracle line reads "can't attack unless defending player controls [permanent]"
+  /// and the condition uses <see cref="EvasionConditionType.DefendingPlayerControls"/>
+  /// with the land-type (or other permanent type) on
+  /// <see cref="EvasionCondition.PermanentFilter"/>.
+  ///
+  /// <para>
+  /// Reuses <see cref="EvasionCondition"/> from the landwalk family because the
+  /// "defending player controls [land]" predicate is identical in both directions:
+  /// landwalk records that a blocker-side restriction is lifted when the condition
+  /// holds; this records that an attacker-side restriction applies unless the same
+  /// condition holds. The shared predicate type keeps the domain model coherent and
+  /// avoids a separate near-duplicate type.
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public EvasionCondition? UnlessDefendingControls { get; init; }
 }
