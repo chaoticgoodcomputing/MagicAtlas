@@ -375,6 +375,31 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // CITY'S BLESSING KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Ascend: If you control ten or more permanents, you get the city's blessing
+  /// for the rest of the game.
+  /// Rule 702.131. Applies to both permanents (Rule 702.131b) and spells (Rule
+  /// 702.131a). MAST records the keyword's presence; the city's-blessing
+  /// designation and downstream effects are engine territory.
+  /// </summary>
+  public static KeywordDefinition Ascend { get; } =
+    new()
+    {
+      Name = "Ascend",
+      RuleReference = "702.131",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Ascend",
+        Effects = [new AscendEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // KICKER KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -474,6 +499,7 @@ public static class KeywordDefinitions
       Partner,
       Delve,
       Improvise,
+      Ascend,
       Kicker,
       Unearth,
       Affinity,

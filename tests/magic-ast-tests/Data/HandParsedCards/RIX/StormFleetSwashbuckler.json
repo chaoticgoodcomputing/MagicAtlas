@@ -1,0 +1,117 @@
+{
+  "Input": {
+    "Name": "Storm Fleet Swashbuckler",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature — Human Pirate",
+    "OracleText": "Ascend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)\nThis creature has double strike as long as you have the city's blessing.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Storm Fleet Swashbuckler",
+    "TypeLine": {
+      "Raw": "Creature — Human Pirate",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Pirate"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Ascend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)\nThis creature has double strike as long as you have the city's blessing.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Ascend",
+          "Effects": [
+            {
+              "EffectType": "ascend",
+              "IsOptional": false
+            }
+          ],
+          "Reminder": {
+            "Text": "(If you control ten or more permanents, you get the city's blessing for the rest of the game.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Double strike",
+                "Effects": [
+                  {
+                    "EffectType": "combatDamageTiming",
+                    "Timing": "Both"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "you have the city's blessing"
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
