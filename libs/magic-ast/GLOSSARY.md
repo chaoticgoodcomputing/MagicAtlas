@@ -2982,6 +2982,16 @@ All variants map to a single `SearchLibraryEffect` with `Destination = Hand`. Th
 
 [Source](Parsing/Parsers/Spell/Rules/SearchLibraryToHandRule.cs)
 
+### `SearchLibraryToTopRule` — *sealed class* : ISpellRule
+
+Spell-resolution rule for the Vampiric Tutor pattern: "Search your library for a [type] card, then shuffle and put that card on top." Handles:
+
+"a card" — any card (Filter.CardTypes = ["card"]) "a [type] card" — typed filter, e.g. "a creature card", "a basic land card" (type word(s) parsed into CardTypes / Supertypes)
+
+All variants map to a single `SearchLibraryEffect` with `Destination = TopOfLibrary`. The shuffle and put-on-top clauses are folded into the effect per the convention established by `SearchLibraryToHandRule` and `SearchLibraryToBattlefieldRule`. Rule 701.23 (Search).
+
+[Source](Parsing/Parsers/Spell/Rules/SearchLibraryToTopRule.cs)
+
 ### `SelfDealsDamageToAnyTargetRule` — *sealed class* : ISpellRule
 
 "[Self] deals N damage to any target." — bare self-by-name dealDamage with AnyTarget. Covers clean burn spells like Open Fire, Shock, Lightning Strike where the spell names itself as the source and targets "any target" (player, creature, or planeswalker) without any type filter. Distinct from `SelfDealsDamageToTypeDisjunctionRule` (which requires a specific type or type disjunction) and `SelfDealsDamageToFilteredCreatureRule` (which requires a trailing "with [characteristic]" qualifier).
@@ -3041,6 +3051,12 @@ Untap spell rules — two shapes:
 Covers the bare card-type target shapes most common in the corpus: creature and permanent.
 
 [Source](Parsing/Parsers/Spell/Rules/UntapTargetRule.cs)
+
+### `YouLoseLifeSpellRule` — *sealed class* : ISpellRule
+
+"You lose N life." — spell-resolution life-loss addressed to the controller. Covers the second sentence of Vampiric Tutor and Imperial Seal patterns (Rule 119.3). Distinct from `LoseLifeEachSpellRule` which handles "Each player/opponent loses N life." N may be a literal digit or a word ("one"…"ten") or a variable (X, Y, Z).
+
+[Source](Parsing/Parsers/Spell/Rules/YouLoseLifeSpellRule.cs)
 
 ## `/Parsing/Parsers/Triggered/`
 
