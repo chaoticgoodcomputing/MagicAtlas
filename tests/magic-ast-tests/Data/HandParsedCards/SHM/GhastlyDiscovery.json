@@ -1,0 +1,82 @@
+{
+  "Input": {
+    "Name": "Ghastly Discovery",
+    "ManaCost": "{3}{U}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Draw two cards, then discard a card.\nConspire (As you cast this spell, you may tap two untapped creatures you control that share a color with it. When you do, copy it.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B", "U"],
+    "ColorIdentity": ["B", "U"]
+  },
+  "Output": {
+    "Name": "Ghastly Discovery",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Draw two cards, then discard a card.\nConspire (As you cast this spell, you may tap two untapped creatures you control that share a color with it. When you do, copy it.)",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": { "QuantityType": "literal", "Value": 2 },
+              "Player": { "Kind": "You" }
+            },
+            {
+              "EffectType": "discardCards",
+              "Count": { "QuantityType": "literal", "Value": 1 },
+              "Player": { "Kind": "You" },
+              "Random": false
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 37,
+            "Length": 131
+          },
+          "RawText": "Conspire (As you cast this spell, you may tap two untapped creatures you control that share a color with it. When you do, copy it.)",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Static ability parser not yet implemented",
+              "Location": {
+                "Start": 37,
+                "Length": 131
+              },
+              "RawText": "Conspire (As you cast this spell, you may tap two untapped creatures you control that share a color with it. When you do, copy it.)",
+              "Pattern": "UnparsedStatic",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 37
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "U"]
+      }
+    ]
+  }
+}
