@@ -1,0 +1,102 @@
+{
+  "Input": {
+    "Name": "Marchesa's Emissary",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Creature — Human Rogue",
+    "OracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)\nDethrone (Whenever this creature attacks the player with the most life or tied for most life, put a +1/+1 counter on it.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Marchesa's Emissary",
+    "TypeLine": {
+      "Raw": "Creature — Human Rogue",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Rogue"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)\nDethrone (Whenever this creature attacks the player with the most life or tied for most life, put a +1/+1 counter on it.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Hexproof",
+          "Effects": [
+            {
+              "EffectType": "hexproof"
+            }
+          ],
+          "Reminder": {
+            "Text": "(This creature can't be the target of spells or abilities your opponents control.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Dethrone",
+          "Effects": [
+            {
+              "EffectType": "dethrone"
+            }
+          ],
+          "Reminder": {
+            "Text": "(Whenever this creature attacks the player with the most life or tied for most life, put a +1/+1 counter on it.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
