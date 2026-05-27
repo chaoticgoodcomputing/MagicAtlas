@@ -634,6 +634,102 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Shadow" keyword.
+  /// Pattern: "Shadow" [reminder]
+  /// Rule 702.28. This creature can't be blocked except by creatures with shadow,
+  /// and a creature without shadow can't be blocked by creatures with shadow.
+  /// Mutual evasion: only shadow can block shadow. EvasionEffect with CanBeBlockedBy
+  /// restricted to the "shadow" characteristic (same convention as Flying's
+  /// "flying"/"reach" filter).
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Shadow = (
+    from kw in Keyword("Shadow")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Shadow",
+      Effects = [new EvasionEffect
+      {
+        CanBeBlockedBy = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Characteristics = ["shadow"],
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Intimidate" keyword.
+  /// Pattern: "Intimidate" [reminder]
+  /// Rule 702.13. This creature can't be blocked except by artifact creatures
+  /// and/or creatures that share a color with it. EvasionEffect with CanBeBlockedBy
+  /// covering the artifact-type and "shares a color" predicates; mirrors Fear
+  /// (702.36) but substitutes the color-share predicate for the fixed black-color
+  /// predicate.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Intimidate = (
+    from kw in Keyword("Intimidate")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Intimidate",
+      Effects = [new EvasionEffect
+      {
+        CanBeBlockedBy = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Characteristics = ["artifact", "shares a color"],
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Myriad" keyword.
+  /// Pattern: "Myriad" [reminder]
+  /// Rule 702.116. Whenever this creature attacks, for each opponent other than
+  /// defending player, you may create a token copy tapped and attacking that player
+  /// or a planeswalker they control; exile the tokens at end of combat. Although
+  /// mechanically a triggered ability (and may create a delayed triggered ability),
+  /// MAST models it as a keyword marker (same approach as Evolve, Flanking, Mentor);
+  /// the per-opponent copy-creation, tapped-and-attacking, and delayed-exile semantics
+  /// are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Myriad = (
+    from kw in Keyword("Myriad")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Myriad",
+      Effects = [new MyriadEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Melee" keyword.
+  /// Pattern: "Melee" [reminder]
+  /// Rule 702.121. Whenever this creature attacks, it gets +1/+1 until end of turn
+  /// for each opponent you attacked with a creature this combat. Although mechanically
+  /// a triggered ability, MAST models it as a keyword marker (same approach as Evolve,
+  /// Flanking, Myriad, Mentor); the per-opponent attack counting and temporary P/T
+  /// buff are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Melee = (
+    from kw in Keyword("Melee")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Melee",
+      Effects = [new MeleeEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -1710,6 +1806,10 @@ public static class OracleParsers
     .Or(Ascend)
     .Or(Evolve)
     .Or(Mentor)
+    .Or(Shadow)
+    .Or(Intimidate)
+    .Or(Myriad)
+    .Or(Melee)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)

@@ -1,0 +1,126 @@
+{
+  "Input": {
+    "Name": "Grenzo's Ruffians",
+    "ManaCost": "{2}{R}{R}",
+    "TypeLine": "Creature — Goblin",
+    "OracleText": "Melee (Whenever this creature attacks, it gets +1/+1 until end of turn for each opponent you attacked this combat.)\nWhenever this creature deals combat damage to an opponent, it deals that much damage to each other opponent.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Grenzo's Ruffians",
+    "TypeLine": {
+      "Raw": "Creature — Goblin",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Melee (Whenever this creature attacks, it gets +1/+1 until end of turn for each opponent you attacked this combat.)\nWhenever this creature deals combat damage to an opponent, it deals that much damage to each other opponent.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Melee",
+          "Reminder": {
+            "Text": "(Whenever this creature attacks, it gets +1/+1 until end of turn for each opponent you attacked this combat.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "melee"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "calculated",
+                "Expression": "that much",
+                "Operation": "match"
+              },
+              "Target": {
+                "Kind": "EachOpponent",
+                "Filter": {
+                  "Characteristics": [
+                    "other"
+                  ]
+                }
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
