@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "Mind Rot",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Target player discards two cards.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Mind Rot",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Target player discards two cards.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "discardCards",
+              "Count": { "QuantityType": "literal", "Value": 2 },
+              "Player": {
+                "Kind": "Target",
+                "Filter": { "CardTypes": ["player"] }
+              },
+              "Random": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}
