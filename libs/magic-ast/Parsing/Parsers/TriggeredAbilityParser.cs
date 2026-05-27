@@ -961,6 +961,16 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       characteristics.Add("this spell from anywhere other than exile");
     }
 
+    // Heroic ability-word (Rule 702.108): "Whenever you cast a spell that targets
+    // this creature, ...". The "that targets this creature" clause is the
+    // Heroic-specific constraint on the cast spell (Rule 115.1 — targeted spells).
+    // Model it as a Characteristic so the trigger filter describes the oracle text
+    // faithfully without introducing engine targeting semantics.
+    if (Regex.IsMatch(lower, @"\bthat\s+targets?\s+this\s+(creature|permanent|card)\b"))
+    {
+      characteristics.Add("targeting this creature");
+    }
+
     // Build filter. Suppress CardTypes=["spell"] when no qualifiers were
     // detected and the controller is non-You (matches RhysticStudy's gold).
     var hasAnyQualifier = characteristics.Count > 0 || colors.Count > 0;
@@ -1161,6 +1171,15 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     if (lower.Contains("a land") || lower.Contains("another land"))
     {
       return new ObjectFilter { CardTypes = ["land"], Controller = controller };
+    }
+
+    // Constellation ability-word (Rule 702.110): "an enchantment you control enters" —
+    // Rule 207.2c ability-word prefix peeled before this call; the trigger body is
+    // "Whenever an enchantment you control enters, ...". Model the subject as a plain
+    // enchantment filter with a You controller.
+    if (lower.Contains("an enchantment") || lower.Contains("another enchantment"))
+    {
+      return new ObjectFilter { CardTypes = ["enchantment"], Controller = controller };
     }
 
     // Self-by-name pattern, e.g. "When Denethor enters" / "Whenever Barrin dies".
