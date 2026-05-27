@@ -583,6 +583,18 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
+    // BecomesTarget trigger: "When this creature becomes the target of a spell or ability".
+    // Rule 114.9 — a permanent becomes the target of a spell or ability when that spell or
+    // ability is placed on the stack. The subject is the source creature (this creature).
+    if (lower.Contains("becomes the target"))
+    {
+      var becomesTarget = TryParseBecomesTargetTrigger(triggerText, timing);
+      if (becomesTarget is not null)
+      {
+        return becomesTarget;
+      }
+    }
+
     return null;
   }
 
@@ -1022,6 +1034,39 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     }
 
     return null;
+  }
+
+  /// <summary>
+  /// "When this creature becomes the target of a spell or ability" —
+  /// Rule 114.9 trigger. The subject "this creature" is the source permanent;
+  /// the filter carries the subject's card type. Only the self-reference shape
+  /// is modelled here; third-party-target shapes ("whenever target creature
+  /// becomes the target...") are out of scope for this surface.
+  /// </summary>
+  private static TriggerCondition? TryParseBecomesTargetTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    var lower = triggerText.ToLowerInvariant();
+    if (!lower.Contains("becomes the target"))
+    {
+      return null;
+    }
+
+    // Subject is "this [type]"; delegate to the shared self-reference helper.
+    var filter = ParseObjectFilter(triggerText);
+    if (filter == null)
+    {
+      return null;
+    }
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.BecomesTarget,
+      Filter = filter,
+    };
   }
 
   /// <summary>
