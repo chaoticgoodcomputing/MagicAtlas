@@ -1088,6 +1088,57 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // LIVING WEAPON KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Living weapon: When this Equipment enters, create a 0/0 black Phyrexian
+  /// Germ creature token, then attach this to it.
+  /// Rule 702.77. Although mechanically a triggered ability, MAST records it as
+  /// a keyword marker — same approach as Evolve and Flanking; the ETB trigger,
+  /// token-creation, and auto-attach semantics are engine territory.
+  /// </summary>
+  public static KeywordDefinition LivingWeapon { get; } =
+    new()
+    {
+      Name = "Living weapon",
+      RuleReference = "702.77",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Living weapon",
+        Effects = [new LivingWeaponEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TOTEM ARMOR KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Totem armor (oracle text: "Umbra armor"): If enchanted creature would be
+  /// destroyed, instead remove all damage from it and destroy this Aura.
+  /// Rule 702.102. The oracle text uses "Umbra armor" while the comp-rules name
+  /// is "totem armor"; the keyword name stored here matches the comp-rules term.
+  /// MAST records the keyword's presence; the replacement-effect semantics are
+  /// engine territory.
+  /// </summary>
+  public static KeywordDefinition TotemArmor { get; } =
+    new()
+    {
+      Name = "Totem armor",
+      RuleReference = "702.102",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Totem armor",
+        Effects = [new TotemArmorEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // COMBAT DAMAGE TRIGGERED COUNTER KEYWORDS (Renown, Bloodthirst, Sunburst, Fabricate, Ingest)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1111,6 +1162,36 @@ public static class KeywordDefinitions
         Effects = [new RenownEffect
         {
           Value = ParseIntValue("Renown", parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // HIDEAWAY KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Hideaway N: When this permanent enters, look at the top N cards of your
+  /// library, exile one face down, then put the rest on the bottom in a random
+  /// order.
+  /// Rule 702.74. Category is Triggered because the comp-rules expansion is a
+  /// triggered ability that fires when the permanent enters. MAST records the
+  /// keyword and its integer lookahead count.
+  /// </summary>
+  public static KeywordDefinition Hideaway { get; } =
+    new()
+    {
+      Name = "Hideaway",
+      RuleReference = "702.74",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Hideaway",
+        Effects = [new HideawayEffect
+        {
+          Amount = new LiteralQuantity { Value = ParseIntValue("Hideaway", parameter) },
         }],
       },
     };
@@ -1265,6 +1346,62 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // MOBILIZE KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Mobilize N: Whenever this creature attacks, create N tapped and attacking
+  /// 1/1 red Warrior creature tokens. Sacrifice them at the beginning of the
+  /// next end step.
+  /// Rule 702.175 (Tarkir: Dragonstorm). Category is Triggered because the
+  /// comp-rules expansion is a triggered ability. MAST records the keyword and
+  /// its integer token-creation count.
+  /// </summary>
+  public static KeywordDefinition Mobilize { get; } =
+    new()
+    {
+      Name = "Mobilize",
+      RuleReference = "702.175",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Mobilize",
+        Effects = [new MobilizeEffect
+        {
+          Amount = new LiteralQuantity { Value = ParseIntValue("Mobilize", parameter) },
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // START YOUR ENGINES KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Start your engines! (Aetherdrift): If you have no speed, it starts at 1.
+  /// It increases once on each of your turns when an opponent loses life. Max
+  /// speed is 4.
+  /// MAST records the keyword's presence; the speed initialization and increment
+  /// semantics are engine territory. The '!' is silently dropped by the
+  /// tokenizer, so the combinator matches "Start your engines".
+  /// </summary>
+  public static KeywordDefinition StartYourEngines { get; } =
+    new()
+    {
+      Name = "Start your engines",
+      RuleReference = "702.178",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Start your engines",
+        Effects = [new StartYourEnginesEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // RECONFIGURE KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1355,6 +1492,11 @@ public static class KeywordDefinitions
       SplitSecond,
       BattleCry,
       Soulbond,
+      LivingWeapon,
+      TotemArmor,
+      Hideaway,
+      Mobilize,
+      StartYourEngines,
       // More keywords can be added here as needed
     ];
 
