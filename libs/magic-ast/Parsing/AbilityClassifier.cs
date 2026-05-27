@@ -192,11 +192,12 @@ public sealed class AbilityClassifier
     // Check for modal ability: Choose
     if (StartsWithChoose(tokens))
     {
+      var trimmed = clause.RawText.TrimStart();
+
       // Exception: "Choose a Background" is a named partner-variant keyword
       // (Rule 702.124g, descriptive). Route it to the static keyword parser
       // so it lands as a StaticAbility with KeywordSource="Choose a Background"
       // rather than as an unparsable modal selection.
-      var trimmed = clause.RawText.TrimStart();
       if (trimmed.StartsWith("Choose a Background", StringComparison.OrdinalIgnoreCase))
       {
         return new ClauseClassification
@@ -206,6 +207,24 @@ public sealed class AbilityClassifier
           AbilityWord = abilityWord,
         };
       }
+
+      // Exception: "Choose target [type]..." is a targeting instruction on a
+      // spell effect (e.g. "Choose target artifact or enchantment. Its owner
+      // shuffles it into their library." — Unravel the Aether). This is NOT a
+      // modal selection (mode choice); it resolves as a single spell effect
+      // (Rule 701.19, 701.20). Route to the spell parser so
+      // ShuffleIntoLibraryRule can handle the two-sentence form via
+      // IMultiSpellRule.TryMatchMulti.
+      if (Regex.IsMatch(trimmed, @"^Choose\s+target\s+", RegexOptions.IgnoreCase))
+      {
+        return new ClauseClassification
+        {
+          Kind = AbilityKind.Spell,
+          Confidence = 0.90,
+          AbilityWord = abilityWord,
+        };
+      }
+
       return new ClauseClassification
       {
         Kind = AbilityKind.Modal,
