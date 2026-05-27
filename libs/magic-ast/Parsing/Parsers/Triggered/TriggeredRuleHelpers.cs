@@ -94,24 +94,42 @@ internal static class TriggeredRuleHelpers
     return colors;
   }
 
+  // Captures the subtype word(s) between a color word and "creature token" in
+  // the canonical "P/T color [Subtype] creature token" oracle pattern.
+  // Handles optional "you may" prefix and trailing "with [ability]" suffixes.
+  // Captures one or two consecutive words so two-word subtypes (e.g. "Spike Drone")
+  // could appear, though single-word is the overwhelmingly common case (Rule 205.3m).
+  private static readonly Regex _creatureTokenSubtypePattern = new(
+    @"\d+/\d+\s+(?:white|blue|black|red|green)\s+(?<sub1>[A-Z][a-z]+)(?:\s+(?<sub2>[A-Z][a-z]+))?\s+creature\s+token",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  /// <summary>
+  /// Extracts creature subtypes from oracle token-creation text.
+  /// Uses the structural position (word(s) between color and "creature token") so
+  /// arbitrary MTG creature subtypes are handled without a closed enumeration.
+  /// Rule 205.3m — creature subtypes are listed after the card's types.
+  /// </summary>
   public static List<string> ParseCreatureSubtypes(string text)
   {
     var subtypes = new List<string>();
-    var knownTypes = new[]
+    var match = _creatureTokenSubtypePattern.Match(text);
+    if (!match.Success)
     {
-      "Saproling", "Zombie", "Spirit", "Goblin", "Soldier", "Human", "Elf",
-      "Warrior", "Wolf", "Dragon", "Thopter", "Servo", "Knight", "Vampire",
-      "Cat", "Bat", "Bird", "Insect", "Squirrel", "Citizen", "Rat", "Angel",
-      "Detective", "Robot", "Kraken", "Eldrazi", "Phyrexian", "Germ", "Golem",
-      "Rebel", "Hero", "Ally", "Orc", "Army",
-    };
-    foreach (var type in knownTypes)
-    {
-      if (text.Contains(type, System.StringComparison.OrdinalIgnoreCase))
-      {
-        subtypes.Add(type);
-      }
+      return subtypes;
     }
+
+    // sub1 is always present on a successful match; capitalize first letter.
+    var raw1 = match.Groups["sub1"].Value;
+    subtypes.Add(char.ToUpperInvariant(raw1[0]) + raw1[1..]);
+
+    // sub2 is present only for two-word subtypes (uncommon but possible).
+    if (match.Groups["sub2"].Success)
+    {
+      var raw2 = match.Groups["sub2"].Value;
+      subtypes.Add(char.ToUpperInvariant(raw2[0]) + raw2[1..]);
+    }
+
     return subtypes;
   }
 
