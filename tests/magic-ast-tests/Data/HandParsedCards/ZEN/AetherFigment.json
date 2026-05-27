@@ -1,0 +1,121 @@
+{
+  "Input": {
+    "Name": "Aether Figment",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Creature — Illusion",
+    "OracleText": "Kicker {3} (You may pay an additional {3} as you cast this spell.)\nIf this creature was kicked, it enters with two +1/+1 counters on it.\nThis creature can't be blocked.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Aether Figment",
+    "TypeLine": {
+      "Raw": "Creature — Illusion",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Illusion"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Kicker {3} (You may pay an additional {3} as you cast this spell.)\nIf this creature was kicked, it enters with two +1/+1 counters on it.\nThis creature can't be blocked.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Kicker",
+          "Effects": [
+            {
+              "EffectType": "kicker",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 3
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "entersWithCounters",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "CounterType": "+1/+1",
+              "IsOptional": false
+            }
+          ],
+          "Condition": {
+            "Text": "this creature was kicked"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

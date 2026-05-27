@@ -441,6 +441,19 @@ public sealed class StaticAbilityParser : IAbilityParser
       return blockAdditional;
     }
 
+    // "If this creature was kicked, it enters with N +1/+1 counters on it." —
+    // Rule 614.1c conditional self-replacement effect gated on the kicker
+    // having been paid (Rule 702.33). Emits an EntersWithCountersEffect wrapped
+    // in a StaticAbility whose Condition.Text is "this creature was kicked".
+    // Placed before TryParseEntersWithCounters so the conditional form is
+    // recognized first (the unconditional "This creature enters with..." shape
+    // cannot start with "If", so ordering is unambiguous either way).
+    var kickedEntersWithCounters = TryParseKickerConditionalEntersWithCounters(clause);
+    if (kickedEntersWithCounters != null)
+    {
+      return kickedEntersWithCounters;
+    }
+
     // "This creature enters with N +1/+1 counters on it." — Rule 614.1c
     // self-replacement effect property recorded as a static-ability-attached
     // EntersWithCountersEffect. No KeywordSource: the oracle text is a full
@@ -4211,6 +4224,72 @@ public sealed class StaticAbilityParser : IAbilityParser
   // optional for minor formatting variants.
   private static readonly Regex _skipUntapPattern = new(
     @"^\s*You\s+may\s+choose\s+not\s+to\s+untap\s+this\s+(?:creature|permanent|artifact|enchantment|land)\s+during\s+your\s+untap\s+step\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "If this creature was kicked, it enters with N &lt;counterType&gt; counters on it." —
+  /// Rule 614.1c conditional self-replacement effect gated on the kicker having been
+  /// paid (Rule 702.33). Emits a <see cref="StaticAbility"/> wrapping an
+  /// <see cref="MagicAST.AST.Effects.Replacement.EntersWithCountersEffect"/> with
+  /// <c>Condition.Text = "this creature was kicked"</c>. Count may be an English
+  /// word-count ("a"/"an" → 1, "two" through "ten") or a decimal digit. Counter type
+  /// may be a P/T counter ("+1/+1") or any named counter. All 13 oracle lines in the
+  /// corpus use "+1/+1" as the counter type; the pattern accepts any counter token for
+  /// forward compatibility.
+  ///
+  /// <para>
+  /// Distinct from <see cref="TryParseEntersWithCounters"/>: that rule handles the
+  /// unconditional "This creature enters with N counters on it." declarative. This rule
+  /// handles the conditional form introduced by "If this creature was kicked, ...".
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseKickerConditionalEntersWithCounters(OracleClause clause)
+  {
+    var match = _kickerConditionalEntersWithCountersPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var countText = match.Groups["count"].Value;
+    MagicAST.AST.Quantities.Quantity count;
+    if (TryParseSmallCount(countText.ToLowerInvariant(), out var intCount))
+    {
+      count = MagicAST.AST.Quantities.LiteralQuantity.Of(intCount);
+    }
+    else
+    {
+      return null;
+    }
+
+    var counterType = match.Groups["counterType"].Value;
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Replacement.EntersWithCountersEffect
+        {
+          Count = count,
+          CounterType = counterType,
+          IsOptional = false,
+        }],
+        Condition = new MagicAST.AST.Abilities.Condition
+        {
+          Text = "this creature was kicked",
+        },
+      },
+    ];
+  }
+
+  // "If this creature was kicked, it enters with N <counterType> counters on it."
+  // The condition phrase is fixed ("this creature was kicked"); count may be a
+  // decimal digit, an English word-count ("one" through "ten"), or the article
+  // "a"/"an" (treated as 1). Counter type is any single alphanumeric/symbol token
+  // immediately before "counter(s)" — covers "+1/+1" and named counters.
+  private static readonly Regex _kickerConditionalEntersWithCountersPattern = new(
+    @"^\s*If\s+this\s+creature\s+was\s+kicked,\s+it\s+enters\s+with\s+(?<count>\d+|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[\w/+-]+)\s+counters?\s+on\s+it\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
