@@ -1,0 +1,146 @@
+{
+  "Input": {
+    "Name": "Fire-Field Ogre",
+    "ManaCost": "{1}{U}{B}{R}",
+    "TypeLine": "Creature — Ogre Mutant",
+    "OracleText": "First strike\nUnearth {U}{B}{R} ({U}{B}{R}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)",
+    "Power": "4",
+    "Toughness": "2",
+    "Colors": [
+      "B",
+      "R",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "R",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Fire-Field Ogre",
+    "TypeLine": {
+      "Raw": "Creature — Ogre Mutant",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Ogre",
+        "Mutant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "First strike\nUnearth {U}{B}{R} ({U}{B}{R}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "First",
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "First strike"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "unearth",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ]
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "B"
+                    ]
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "R"
+                    ]
+                  }
+                ]
+              },
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Unearth",
+          "Reminder": {
+            "Text": "({U}{B}{R}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}{B}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "R",
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "B",
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

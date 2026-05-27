@@ -381,6 +381,30 @@ public static class KeywordDefinitions
       },
     };
 
+  /// <summary>
+  /// Unearth [cost]: Return this card from your graveyard to the battlefield.
+  /// It gains haste. Exile it at the beginning of the next end step or if it
+  /// would leave the battlefield. Unearth only as a sorcery.
+  /// Rule 702.84. Scope: mana-cost parameter (all known printings).
+  /// </summary>
+  public static KeywordDefinition Unearth { get; } =
+    new()
+    {
+      Name = "Unearth",
+      RuleReference = "702.84",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Unearth",
+        Effects = [new UnearthEffect
+        {
+          Cost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
   // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
@@ -405,6 +429,7 @@ public static class KeywordDefinitions
       Partner,
       Delve,
       Kicker,
+      Unearth,
       // More keywords can be added here as needed
     ];
 
