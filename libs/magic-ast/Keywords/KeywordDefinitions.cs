@@ -6,6 +6,7 @@ using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Damage;
 using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects.Resource;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 using MagicAST.Parsing;
@@ -401,6 +402,31 @@ public static class KeywordDefinitions
     };
 
   /// <summary>
+  /// Affinity for [text]: This spell costs {1} less to cast for each [text] you control.
+  /// Rule 702.41. The parameter is a free-text type/subtype label (e.g., "artifacts",
+  /// "Cats", "Plains", "historic permanents"). MAST captures it as a structured
+  /// <see cref="ObjectFilter"/> on the cost-reduction's per-object axis.
+  /// </summary>
+  public static KeywordDefinition Affinity { get; } =
+    new()
+    {
+      Name = "Affinity",
+      RuleReference = "702.41",
+      Category = KeywordCategory.CostModifier,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.CardType,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = $"Affinity for {parameter?.Trim()}",
+        Effects = [new CostReductionEffect
+        {
+          Amount = LiteralQuantity.Of(1),
+          PerObject = BuildAffinityFilter(parameter),
+        }],
+      },
+    };
+
+  /// <summary>
   /// Unearth [cost]: Return this card from your graveyard to the battlefield.
   /// It gains haste. Exile it at the beginning of the next end step or if it
   /// would leave the battlefield. Unearth only as a sorcery.
@@ -450,6 +476,7 @@ public static class KeywordDefinitions
       Improvise,
       Kicker,
       Unearth,
+      Affinity,
       // More keywords can be added here as needed
     ];
 
@@ -566,5 +593,110 @@ public static class KeywordDefinitions
     // Default: treat as a subtype (e.g., "Demons", "Dragons", "Goblins")
     // Subtypes are capitalized in oracle text
     return new ProtectionQuality { Kind = ProtectionQualityKind.Subtype, Value = quality };
+  }
+
+  /// <summary>
+  /// Maps the literal "Affinity for X" parameter text to a structured
+  /// <see cref="ObjectFilter"/> for the per-object cost-reduction axis. Rule 702.41.
+  /// Three branches keyed by lexical convention in oracle text:
+  /// - Lowercase card-type plurals ("artifacts", "creatures", "enchantments", ...)
+  ///   → <c>CardTypes</c> singular.
+  /// - Basic-land subtype labels (the five plus their plurals — "Plains" is its own
+  ///   plural, the other four pluralize) → <c>Subtypes</c> as the basic-land token.
+  /// - Capitalized plural subtype labels ("Cats", "Humans", "Frogs", ...)
+  ///   → <c>Subtypes</c> singular.
+  /// Anything else falls through to a <c>Characteristics</c> entry preserving the
+  /// raw lowercase form (e.g., "historic permanents", "snow lands"); composite
+  /// shapes are out of scope for this batch's parser surface.
+  /// </summary>
+  private static ObjectFilter BuildAffinityFilter(string? parameter)
+  {
+    if (string.IsNullOrWhiteSpace(parameter))
+    {
+      throw new ArgumentException("Affinity requires a type parameter.", nameof(parameter));
+    }
+
+    var raw = parameter.Trim();
+
+    // Card-type plurals: lowercase in oracle text. Singularize via trailing-s strip
+    // (with the sorceries→sorcery special case mirroring Protection).
+    var cardTypes = new[]
+    {
+      "artifacts",
+      "creatures",
+      "enchantments",
+      "instants",
+      "sorceries",
+      "lands",
+      "planeswalkers",
+      "battles",
+    };
+    if (cardTypes.Contains(raw))
+    {
+      var singular = raw.TrimEnd('s');
+      if (singular == "sorcerie")
+      {
+        singular = "sorcery";
+      }
+      else if (singular == "batt") // "battles" → "battle"
+      {
+        singular = "battle";
+      }
+      else if (singular == "land")
+      {
+        // "lands" already strips to "land"; keep as-is.
+      }
+
+      return new ObjectFilter
+      {
+        CardTypes = [singular],
+        Controller = ControllerFilter.You,
+      };
+    }
+
+    // Basic-land subtype labels. "Plains" is its own plural; the others
+    // pluralize regularly. Match either form, normalize to the singular
+    // subtype as it appears on a basic land's type line.
+    var basicLandPlural = new Dictionary<string, string>(StringComparer.Ordinal)
+    {
+      ["Plains"] = "Plains",
+      ["Islands"] = "Island",
+      ["Swamps"] = "Swamp",
+      ["Mountains"] = "Mountain",
+      ["Forests"] = "Forest",
+    };
+    if (basicLandPlural.TryGetValue(raw, out var basicSubtype))
+    {
+      return new ObjectFilter
+      {
+        Subtypes = [basicSubtype],
+        Controller = ControllerFilter.You,
+      };
+    }
+
+    // Capitalized plural subtype labels (creature/artifact/land subtypes other
+    // than basics): "Cats", "Humans", "Frogs", "Equipment", "Gates", "Towns", ...
+    // Heuristic: starts with a capital letter; singularize by trailing-s strip
+    // (irregular plurals are out of scope — none in the current corpus's
+    // single-word Affinity surface).
+    if (char.IsUpper(raw[0]) && !raw.Contains(' '))
+    {
+      var singular = raw.EndsWith("s") ? raw[..^1] : raw;
+      return new ObjectFilter
+      {
+        Subtypes = [singular],
+        Controller = ControllerFilter.You,
+      };
+    }
+
+    // Fallback: preserve the raw text as a free-form characteristic. Multi-word
+    // ("historic permanents", "snow lands", "artifact creatures") and unknown
+    // shapes land here. Surfaces such cards for follow-up parsing rather than
+    // silently mis-routing them through a singular card-type or subtype branch.
+    return new ObjectFilter
+    {
+      Characteristics = [raw.ToLowerInvariant()],
+      Controller = ControllerFilter.You,
+    };
   }
 }

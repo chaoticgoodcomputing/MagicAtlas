@@ -1,0 +1,59 @@
+{
+  "Input": {
+    "Name": "Frogmite",
+    "ManaCost": "{4}",
+    "TypeLine": "Artifact Creature — Frog",
+    "OracleText": "Affinity for artifacts (This spell costs {1} less to cast for each artifact you control.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Frogmite",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Frog",
+      "Types": ["Artifact", "Creature"],
+      "Subtypes": ["Frog"]
+    },
+    "Oracle": {
+      "RawText": "Affinity for artifacts (This spell costs {1} less to cast for each artifact you control.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Affinity for artifacts",
+          "Reminder": {
+            "Text": "(This spell costs {1} less to cast for each artifact you control.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "PerObject": {
+                "CardTypes": ["artifact"],
+                "Controller": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 }
+        ],
+        "ManaValue": 4
+      },
+      { "Kind": "colors", "Colors": [] },
+      { "Kind": "colorIdentity", "ColorIdentity": [] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
