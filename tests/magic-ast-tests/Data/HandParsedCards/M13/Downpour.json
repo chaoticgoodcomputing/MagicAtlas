@@ -1,0 +1,62 @@
+{
+  "Input": {
+    "Name": "Downpour",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Tap up to three target creatures.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Downpour",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Tap up to three target creatures.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                },
+                "Quantity": {
+                  "QuantityType": "upTo",
+                  "Maximum": 3,
+                  "Minimum": 0
+                }
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
