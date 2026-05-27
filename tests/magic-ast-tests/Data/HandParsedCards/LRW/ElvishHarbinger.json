@@ -1,0 +1,107 @@
+{
+  "Input": {
+    "Name": "Elvish Harbinger",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Creature — Elf Druid",
+    "OracleText": "When this creature enters, you may search your library for an Elf card, reveal it, put it into your hand, then shuffle.",
+    "Power": "1",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Elvish Harbinger",
+    "TypeLine": {
+      "Raw": "Creature — Elf Druid",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Druid"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, you may search your library for an Elf card, reveal it, put it into your hand, then shuffle.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "searchLibrary",
+              "Filter": {
+                "Subtypes": [
+                  "Elf"
+                ]
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Destination": "Hand",
+              "Revealed": true,
+              "IsOptional": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
