@@ -1,0 +1,94 @@
+{
+  "Input": {
+    "Name": "Spectral Gateguards",
+    "ManaCost": "{4}{W}",
+    "TypeLine": "Creature — Spirit Soldier",
+    "OracleText": "Soulbond (You may pair this creature with another unpaired creature when either enters the battlefield. They remain paired for as long as you control both of them.)\nAs long as Spectral Gateguards is paired with another creature, both creatures have vigilance.",
+    "Power": "2",
+    "Toughness": "5",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Spectral Gateguards",
+    "TypeLine": {
+      "Raw": "Creature — Spirit Soldier",
+      "Types": ["Creature"],
+      "Subtypes": ["Spirit", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "Soulbond (You may pair this creature with another unpaired creature when either enters the battlefield. They remain paired for as long as you control both of them.)\nAs long as Spectral Gateguards is paired with another creature, both creatures have vigilance.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Soulbond",
+          "Effects": [
+            {
+              "EffectType": "soulbond"
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 165,
+            "Length": 94
+          },
+          "RawText": "As long as Spectral Gateguards is paired with another creature, both creatures have vigilance.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Static ability parser not yet implemented",
+              "Location": {
+                "Start": 165,
+                "Length": 94
+              },
+              "RawText": "As long as Spectral Gateguards is paired with another creature, both creatures have vigilance.",
+              "Pattern": "AsLongAsCondition",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 165
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
