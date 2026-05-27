@@ -1758,9 +1758,12 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// <summary>
   /// "During your turn, [self] has [keyword]." — produces a static ability
   /// guarded by a <see cref="MagicAST.AST.Abilities.Condition"/> whose text
-  /// preserves the duration clause. The keyword tail is wrapped in the
-  /// canonical effect node so the resulting ability mirrors the same shape
-  /// a non-conditional version of that keyword would carry.
+  /// preserves the duration clause. The keyword tail is resolved via
+  /// <see cref="MapKeywordToStaticAbility"/> so the resulting ability mirrors
+  /// the same shape a non-conditional version of that keyword would carry —
+  /// including <see cref="MagicAST.AST.Abilities.Ability.KeywordSource"/>.
+  /// Every keyword understood by <c>MapKeywordToStaticAbility</c> is
+  /// automatically handled here; no separate switch is maintained.
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseConditionalSelfKeyword(OracleClause clause)
   {
@@ -1773,27 +1776,20 @@ public sealed class StaticAbilityParser : IAbilityParser
     {
       return null;
     }
-    var kw = match.Groups["kw"].Value.ToLowerInvariant().Trim();
-    Effect? effect = kw switch
-    {
-      "indestructible" => new MagicAST.AST.Effects.Keyword.IndestructibleEffect(),
-      "haste" => new MagicAST.AST.Effects.Keyword.HasteEffect(),
-      "trample" => new MagicAST.AST.Effects.Keyword.TrampleEffect(),
-      "lifelink" => new MagicAST.AST.Effects.Damage.LifelinkEffect(),
-      "vigilance" => new MagicAST.AST.Effects.Keyword.VigilanceEffect(),
-      "reach" => new MagicAST.AST.Effects.Keyword.ReachEffect(),
-      _ => null,
-    };
-    if (effect is null)
+    var kw = match.Groups["kw"].Value.Trim();
+    var conditionText = match.Groups["cond"].Value.Trim();
+    // Delegate to the shared keyword→StaticAbility map so that every keyword
+    // supported by TryParseKeywordList is also supported here.
+    var keywordAbility = MapKeywordToStaticAbility(kw);
+    if (keywordAbility is null)
     {
       return null;
     }
-    var conditionText = match.Groups["cond"].Value.Trim();
+    // Attach the "During [period]" condition to the mapped ability.
     return
     [
-      new StaticAbility
+      keywordAbility with
       {
-        Effects = [effect],
         Condition = new MagicAST.AST.Abilities.Condition { Text = conditionText },
       },
     ];
