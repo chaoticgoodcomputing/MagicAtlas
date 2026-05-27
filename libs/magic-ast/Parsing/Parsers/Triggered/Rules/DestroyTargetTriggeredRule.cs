@@ -8,7 +8,7 @@ using MagicAST.Parsing.Parsers.Spell;
 
 /// <summary>
 /// "destroy target [filter]." — single-target destroy on the triggered side.
-/// Delegates filter parsing to <see cref="SpellRuleHelpers.ParseDestroyFilter"/>
+/// Delegates filter parsing to <see cref="SpellRuleHelpers.ParseTargetFilter"/>
 /// (same lexical surface as <see cref="Spell.Rules.DestroyTargetSimpleRule"/>).
 /// Covers: land, artifact, enchantment, creature, permanent, and richer filter
 /// phrases (color + type, non- prefix, etc.).
@@ -33,7 +33,7 @@ public sealed class DestroyTargetTriggeredRule : ITriggeredRule
     }
 
     var filterPhrase = m.Groups["filter"].Value.Trim();
-    var filter = SpellRuleHelpers.ParseDestroyFilter(filterPhrase);
+    var filter = SpellRuleHelpers.ParseTargetFilter(filterPhrase);
     if (filter is null)
     {
       return false;

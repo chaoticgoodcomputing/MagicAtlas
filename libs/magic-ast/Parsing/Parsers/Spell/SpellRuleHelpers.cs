@@ -122,11 +122,11 @@ internal static class SpellRuleHelpers
   }
 
   // ---------------------------------------------------------------------------
-  // Destroy-filter helpers
+  // Target-filter helpers (shared by Destroy and Exile rules)
   // ---------------------------------------------------------------------------
 
   /// <summary>
-  /// Card-type oracle tokens accepted in a destroy filter phrase — both singular
+  /// Card-type oracle tokens accepted in a target filter phrase — both singular
   /// and plural forms. Values are the canonical lowercase singular strings stored
   /// in <see cref="ObjectFilter.CardTypes"/>.
   /// </summary>
@@ -151,17 +151,17 @@ internal static class SpellRuleHelpers
       { "sorceries", "sorcery" },
     };
 
-  // Regex for a destroy filter phrase:
+  // Regex for a target/destroy filter phrase:
   //   [non<X> ] [color ] <noun>
   // Examples: "nonbasic lands", "white creatures", "black creature", "Spirit"
-  private static readonly Regex DestroyFilterPattern = new(
+  private static readonly Regex TargetFilterPattern = new(
     @"^(?:non(?<nonnoun>[A-Za-z]+)\s+)?(?:(?<color>white|blue|black|red|green)\s+)?(?<noun>[A-Za-z]+)$",
     RegexOptions.Compiled | RegexOptions.IgnoreCase
   );
 
   /// <summary>
-  /// Parses a destroy-rule filter phrase (the words after "Destroy all" or
-  /// "Destroy target") into an <see cref="ObjectFilter"/>.
+  /// Parses a target/destroy filter phrase (the words after "Destroy all",
+  /// "Destroy target", or "Exile target") into an <see cref="ObjectFilter"/>.
   /// Supports:
   /// <list type="bullet">
   ///   <item>Bare card type: "creature", "lands"</item>
@@ -171,9 +171,9 @@ internal static class SpellRuleHelpers
   /// </list>
   /// Returns <c>null</c> if the phrase does not match the expected shape.
   /// </summary>
-  public static ObjectFilter? ParseDestroyFilter(string filterPhrase)
+  public static ObjectFilter? ParseTargetFilter(string filterPhrase)
   {
-    var m = DestroyFilterPattern.Match(filterPhrase.Trim());
+    var m = TargetFilterPattern.Match(filterPhrase.Trim());
     if (!m.Success)
     {
       return null;
