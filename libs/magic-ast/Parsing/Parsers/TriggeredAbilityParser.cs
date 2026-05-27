@@ -1129,9 +1129,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   /// Detects the "[Self-name] enters/dies/attacks" shape, where the card refers
   /// to itself by its own name rather than by "this creature". The heuristic:
   /// after stripping the leading trigger timing keyword, the remaining trigger
-  /// text begins with one or more capitalized words and ends with a recognized
-  /// event verb. The parser does not currently have access to the card name, so
-  /// this is a structural match, not a name-equality check.
+  /// text begins with one or more name-words and ends with a recognized event
+  /// verb. Name-words are either capitalised content words (e.g. "Goblin",
+  /// "Chieftain") or lowercase function words that legally appear in MTG card
+  /// names ("of", "the", "a", "an", "from", "for", "to", "in", "at", "with").
+  /// The parser does not have access to the card name at this point, so this is
+  /// a structural match, not a name-equality check.
   /// </summary>
   private static bool IsSelfByNameTrigger(string triggerText)
   {
@@ -1143,10 +1146,14 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       RegexOptions.IgnoreCase
     );
 
-    // Capitalized name (one or more comma-free words), then an event verb.
+    // Name word: capitalised content word OR lowercase function word that can
+    // legally appear in a card name (prepositions / articles / conjunctions).
+    // First word MUST be capitalised (card names begin with a capital letter).
+    // Subsequent words may be function words ("Hag of Noxious Nightmares").
+    const string FunctionWords = "of|the|a|an|from|for|to|in|at|with|by|and|or|as";
     return Regex.IsMatch(
       stripped,
-      @"^[A-Z][A-Za-z'\-]*(?:\s+[A-Z][A-Za-z'\-]*)*\s+(enters|dies|attacks)\b",
+      @"^[A-Z][A-Za-z'\-]*(?:\s+(?:[A-Z][A-Za-z'\-]*|" + FunctionWords + @"))*\s+(enters|dies|attacks)\b",
       RegexOptions.CultureInvariant
     );
   }
