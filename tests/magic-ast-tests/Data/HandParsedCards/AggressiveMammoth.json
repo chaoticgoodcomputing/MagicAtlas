@@ -3,7 +3,7 @@
     "Name": "Aggressive Mammoth",
     "ManaCost": "{3}{G}{G}{G}",
     "TypeLine": "Creature — Elephant",
-    "OracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nOther creatures you control have trample.",
+    "OracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nOther creatures you control have trample.\nCreatures with power less than Aggressive Mammoth's power can't block it.",
     "Power": "8",
     "Toughness": "8",
     "Colors": [
@@ -25,7 +25,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nOther creatures you control have trample.",
+      "RawText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nOther creatures you control have trample.\nCreatures with power less than Aggressive Mammoth's power can't block it.",
       "Abilities": [
         {
           "Kind": "static",
@@ -66,6 +66,18 @@
                 ]
               },
               "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "BlockedByFilter": {
+                "CardTypes": ["creature"],
+                "Characteristics": ["with power less than this creature's power"]
+              }
             }
           ]
         }
