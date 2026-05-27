@@ -422,6 +422,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return canBlockOnly;
     }
 
+    // "You have no maximum hand size." — Rule 402.2. A continuous static effect
+    // that removes the controller's maximum hand size restriction. Parameterless;
+    // the subject is always "You" (the controller). No target, duration, or
+    // condition needed — the effect persists by virtue of the permanent's presence
+    // on the battlefield (Rule 604.3).
+    var noMaxHandSize = TryParseNoMaxHandSize(clause);
+    if (noMaxHandSize != null)
+    {
+      return noMaxHandSize;
+    }
+
     return null;
   }
 
@@ -3441,6 +3452,35 @@ public sealed class StaticAbilityParser : IAbilityParser
   // trailing period. Rules: 122 (counters), 614.1d (enters-with replacement).
   private static readonly Regex _entersWithCountersPattern = new(
     @"^\s*This\s+(?<type>creature|artifact|enchantment|land|permanent)\s+enters\s+with\s+(?<count>\d+|X|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[+-]1/[+-]1)\s+counters?\s+on\s+it\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "You have no maximum hand size." — Rule 402.2. A continuous static
+  /// effect that removes the controller's maximum hand size restriction for
+  /// as long as the source permanent is on the battlefield (Rule 604.3).
+  /// The subject is always "You" (the controller); no target, duration, or
+  /// condition field is needed. Parameterless, mirroring the AscendEffect
+  /// and TakeInitiativeEffect parser surfaces.
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseNoMaxHandSize(OracleClause clause)
+  {
+    if (!_noMaxHandSizePattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Keyword.NoMaxHandSizeEffect()],
+      },
+    ];
+  }
+
+  private static readonly Regex _noMaxHandSizePattern = new(
+    @"^\s*You\s+have\s+no\s+maximum\s+hand\s+size\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
