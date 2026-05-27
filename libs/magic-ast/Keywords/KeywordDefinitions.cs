@@ -400,6 +400,50 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // SPEED KEYWORDS (Aetherdrift — Rules 702.178–702.179)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Start your engines!: If you have no speed, it starts at 1. It increases
+  /// once on each of your turns when an opponent loses life. Max speed is 4.
+  /// Rule 702.179. MAST records the keyword's presence; the speed-counter
+  /// management mechanics are engine territory.
+  /// </summary>
+  public static KeywordDefinition StartYourEngines { get; } =
+    new()
+    {
+      Name = "Start your engines!",
+      RuleReference = "702.179",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Start your engines!",
+        Effects = [new StartYourEnginesEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Max speed: An ability that grants an ability to the permanent or card
+  /// it's on only if that permanent's controller has a speed of 4.
+  /// Rule 702.178. MAST records the keyword's presence as a minimal marker;
+  /// the speed-4 condition check and gated inner ability are engine territory.
+  /// </summary>
+  public static KeywordDefinition MaxSpeed { get; } =
+    new()
+    {
+      Name = "Max speed",
+      RuleReference = "702.178",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Max speed",
+        Effects = [new MaxSpeedEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // KICKER KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -500,6 +544,8 @@ public static class KeywordDefinitions
       Delve,
       Improvise,
       Ascend,
+      StartYourEngines,
+      MaxSpeed,
       Kicker,
       Unearth,
       Affinity,
