@@ -553,6 +553,28 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "All creatures able to block target creature this turn do so." — Lure-type
+    // one-shot spell effect (Rule 509.1c). The "target creature" and "this turn"
+    // markers together distinguish the spell form from the static-ability forms
+    // ("...this creature..." and "...enchanted creature...") which carry no duration
+    // and are handled by StaticAbilityParser. Without this rule the line defaults to
+    // Static and stalls there.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*All\s+creatures\s+able\s+to\s+block\s+target\s+creature\s+this\s+turn\s+do\s+so",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Target creature deals damage to itself equal to its power." — spell-resolution
     // self-damage pattern (Repentance, Justice Strike). The subject is "Target creature",
     // not the spell itself, and there is no numeric amount token between "deals" and

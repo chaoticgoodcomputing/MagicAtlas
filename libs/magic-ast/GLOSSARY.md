@@ -598,6 +598,14 @@ Filed under `CardFlow` alongside `SurveilEffect`: the keyword's primary descript
 
 ## `/AST/Effects/Combat/`
 
+### `AllMustBlockEffect` — *sealed record* : Effect, IDurativeEffect
+
+"All creatures able to block [Target] do so." — Lure-type forcing requirement. Rule 509.1c (block requirements that the defending player must satisfy when possible).
+
+- **Effect discriminator:** `allMustBlock`
+
+[Source](AST/Effects/Combat/AllMustBlockEffect.cs)
+
 ### `BlockAdditionalEffect` — *sealed record* : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 
 Combat-block permission (blocker-side): oracle text states that a creature "can block an additional creature each combat." Rule 509.1a (the defending player may declare more than one blocker for the same or additional attackers when an effect explicitly grants the extra-blocker permission).
@@ -2575,6 +2583,12 @@ Shared utilities used across multiple `ISpellRule` implementations. Lives outsid
 "Add {mana}." — bare add-mana spell instruction (e.g., Infernal Plunge's main effect). Covers the same oracle pattern that ActivatedAbilityParser handles on the right-hand side of a mana ability cost, but here it appears as the whole spell body after the additional-cost prefix has been stripped by ClauseSplitter.
 
 [Source](Parsing/Parsers/Spell/Rules/AddManaSpellRule.cs)
+
+### `AllMustBlockTargetRule` — *sealed class* : ISpellRule
+
+"All creatures able to block target creature this turn do so." — Lure-type spell. Rule 509.1c forcing requirement applied transiently until end of turn.
+
+[Source](Parsing/Parsers/Spell/Rules/AllMustBlockTargetRule.cs)
 
 ### `CantBeCounteredRule` — *sealed class* : ISpellRule
 

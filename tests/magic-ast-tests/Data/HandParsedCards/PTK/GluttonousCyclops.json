@@ -1,0 +1,74 @@
+{
+  "Input": {
+    "Name": "Gluttonous Cyclops",
+    "ManaCost": "{5}{R}",
+    "TypeLine": "Creature — Cyclops",
+    "OracleText": "All creatures able to block this creature do so.",
+    "Power": "5",
+    "Toughness": "3",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Gluttonous Cyclops",
+    "TypeLine": {
+      "Raw": "Creature — Cyclops",
+      "Types": ["Creature"],
+      "Subtypes": ["Cyclops"]
+    },
+    "Oracle": {
+      "RawText": "All creatures able to block this creature do so.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "allMustBlock",
+              "BlockTarget": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
