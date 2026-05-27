@@ -455,20 +455,30 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   }
 
   /// <summary>
-  /// "Target creature gets [+-]N/[+-]M (until end of turn | for as long as [condition])." —
-  /// P/T modification on an activated ability's effect. Handles both the
-  /// <c>UntilEndOfTurn</c> and <c>AsLongAs</c> duration shapes so activated
-  /// abilities such as Tawnos's Weaponry ("{2}, {T}: Target creature gets +1/+1
-  /// for as long as this artifact remains tapped.") parse correctly.
+  /// "Target creature gets [+-](N|X)/[+-](M|X) (until end of turn | for as long as [condition])." —
+  /// P/T modification on an activated ability's effect. Handles both literal
+  /// modifiers (+1/+1, -2/-2) and variable modifiers (+X/+X, +X/-X, -X/-X)
+  /// covering the Chatterfang shape "{B}, Sacrifice X Squirrels: Target
+  /// creature gets +X/-X until end of turn." Variable negation is encoded
+  /// descriptively as a <see cref="CalculatedQuantity"/> with
+  /// <c>Operation = "negate"</c> wrapping the <see cref="VariableQuantity"/>
+  /// — see manifest's "Variable-negation convention" note.
   /// </summary>
   private static ModifyPTEffect? TryParseModifyPTEffect(string effectText)
   {
     var trimmed = effectText.Trim().TrimEnd('.').Trim();
 
-    // Shape A: "Target creature gets +N/+M until end of turn"
+    // Token grammar for one modifier side: [+\-](\d+|X) e.g. "+1", "-2", "+X", "-X".
+    // The literal and variable shapes share a single grammar so a single match
+    // captures e.g. "+X/-X" (Chatterfang) or "+1/+1" (Tawnos's Weaponry).
+    const string modGrammar = @"(?<{0}>[+\-](?:\d+|X))";
+    var pGroup = string.Format(modGrammar, "p");
+    var tGroup = string.Format(modGrammar, "t");
+
+    // Shape A: "Target creature gets <mod>/<mod> until end of turn"
     var eotMatch = System.Text.RegularExpressions.Regex.Match(
       trimmed,
-      @"^Target\s+creature\s+gets\s+(?<p>[+\-]\d+)/(?<t>[+\-]\d+)\s+until\s+end\s+of\s+turn$",
+      $@"^Target\s+creature\s+gets\s+{pGroup}/{tGroup}\s+until\s+end\s+of\s+turn$",
       System.Text.RegularExpressions.RegexOptions.IgnoreCase
     );
     if (eotMatch.Success)
@@ -480,16 +490,16 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
           Kind = ObjectReferenceKind.Target,
           Filter = new ObjectFilter { CardTypes = ["creature"] },
         },
-        PowerModifier = LiteralQuantity.Of(int.Parse(eotMatch.Groups["p"].Value)),
-        ToughnessModifier = LiteralQuantity.Of(int.Parse(eotMatch.Groups["t"].Value)),
+        PowerModifier = ParseSignedModifier(eotMatch.Groups["p"].Value),
+        ToughnessModifier = ParseSignedModifier(eotMatch.Groups["t"].Value),
         Duration = new UntilEndOfTurnDuration(),
       };
     }
 
-    // Shape B: "Target creature gets +N/+M for as long as [condition]"
+    // Shape B: "Target creature gets <mod>/<mod> for as long as [condition]"
     var asLongAsMatch = System.Text.RegularExpressions.Regex.Match(
       trimmed,
-      @"^Target\s+creature\s+gets\s+(?<p>[+\-]\d+)/(?<t>[+\-]\d+)\s+for\s+as\s+long\s+as\s+(?<cond>.+)$",
+      $@"^Target\s+creature\s+gets\s+{pGroup}/{tGroup}\s+for\s+as\s+long\s+as\s+(?<cond>.+)$",
       System.Text.RegularExpressions.RegexOptions.IgnoreCase
     );
     if (asLongAsMatch.Success)
@@ -501,13 +511,48 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
           Kind = ObjectReferenceKind.Target,
           Filter = new ObjectFilter { CardTypes = ["creature"] },
         },
-        PowerModifier = LiteralQuantity.Of(int.Parse(asLongAsMatch.Groups["p"].Value)),
-        ToughnessModifier = LiteralQuantity.Of(int.Parse(asLongAsMatch.Groups["t"].Value)),
+        PowerModifier = ParseSignedModifier(asLongAsMatch.Groups["p"].Value),
+        ToughnessModifier = ParseSignedModifier(asLongAsMatch.Groups["t"].Value),
         Duration = new AsLongAsDuration { Condition = asLongAsMatch.Groups["cond"].Value.Trim() },
       };
     }
 
     return null;
+  }
+
+  /// <summary>
+  /// Maps a signed modifier token (e.g. "+1", "-2", "+X", "-X") onto a
+  /// <see cref="Quantity"/>. Literals fold the sign into the
+  /// <see cref="LiteralQuantity.Value"/>; the variable case keeps the variable
+  /// name and (for "-X") wraps it in a <see cref="CalculatedQuantity"/> with
+  /// <c>Operation = "negate"</c>. The descriptive form preserves the variable
+  /// identity while making the sign explicit on the wrapper — no new AST type
+  /// needed (per skill discipline: model what oracle text *says*, compose with
+  /// existing primitives).
+  /// </summary>
+  private static Quantity ParseSignedModifier(string token)
+  {
+    var sign = token[0]; // '+' or '-'
+    var rest = token[1..];
+    if (string.Equals(rest, "X", StringComparison.OrdinalIgnoreCase)
+      || string.Equals(rest, "Y", StringComparison.OrdinalIgnoreCase)
+      || string.Equals(rest, "Z", StringComparison.OrdinalIgnoreCase))
+    {
+      var variable = new VariableQuantity { Name = rest.ToUpperInvariant() };
+      if (sign == '+')
+      {
+        return variable;
+      }
+      return new CalculatedQuantity
+      {
+        Expression = $"-{rest.ToUpperInvariant()}",
+        BaseQuantity = variable,
+        Operation = "negate",
+      };
+    }
+
+    var magnitude = int.Parse(rest);
+    return LiteralQuantity.Of(sign == '-' ? -magnitude : magnitude);
   }
 
   /// <summary>
@@ -1029,21 +1074,40 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       {
         var typeRaw = match.Groups[1].Value;
         var type = typeRaw.ToLowerInvariant();
+        var wasPlural = type.EndsWith("s") && type != "this";
         // Handle plurals (e.g., "Squirrels" -> "Squirrel")
-        if (type.EndsWith("s") && type != "this")
+        if (wasPlural)
         {
           type = type[..^1];
         }
-        // Capitalized self-reference (e.g., "Sacrifice Denethor") — the card
-        // refers to itself by name. Encode as a "this permanent" self-reference
-        // on Characteristics rather than a literal Subtypes entry, matching
-        // the gold convention for self-by-name cost references.
-        if (char.IsUpper(typeRaw[0]))
+        // Capitalized SINGULAR self-reference (e.g., "Sacrifice Denethor") —
+        // the card refers to itself by name. Encode as a "this permanent"
+        // self-reference on Characteristics rather than a literal Subtypes
+        // entry, matching the gold convention for self-by-name cost
+        // references.
+        //
+        // Capitalized PLURAL (e.g., "Sacrifice X Squirrels") is a creature
+        // subtype, not a self-reference — oracle text capitalizes creature
+        // subtypes (Rule 205.3m). Singularize and emit on Subtypes. Without
+        // this distinction the plural-subtype case collapses onto the
+        // "this permanent" self-ref shape, which mis-models the cost
+        // (sacrificing N Squirrels you control vs. sacrificing the card
+        // itself N times).
+        if (char.IsUpper(typeRaw[0]) && !wasPlural)
         {
           filter = new ObjectFilter { Characteristics = ["this permanent"] };
         }
         else
         {
+          // Title-case the subtype to match oracle-text capitalisation
+          // convention. Subtype names are proper-noun-ish (Squirrel, Goblin,
+          // Treasure, etc.) and the existing CreateTokenEffect emitters
+          // (e.g. ActivatedAbilityParser.TryParseCreateTokenEffect at the
+          // top of this file) already title-case their subtype output.
+          if (char.IsUpper(typeRaw[0]) && type.Length > 0)
+          {
+            type = char.ToUpperInvariant(type[0]) + type[1..];
+          }
           filter = new ObjectFilter { Subtypes = [type] };
         }
       }
