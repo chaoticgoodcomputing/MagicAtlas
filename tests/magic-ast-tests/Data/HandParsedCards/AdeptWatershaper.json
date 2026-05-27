@@ -1,0 +1,109 @@
+{
+  "Input": {
+    "Name": "Adept Watershaper",
+    "ManaCost": "{2}{W}",
+    "TypeLine": "Creature — Merfolk Cleric",
+    "OracleText": "Other tapped creatures you control have indestructible.",
+    "Power": "3",
+    "Toughness": "4",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Adept Watershaper",
+    "TypeLine": {
+      "Raw": "Creature — Merfolk Cleric",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Merfolk",
+        "Cleric"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Other tapped creatures you control have indestructible.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You",
+                  "Characteristics": [
+                    "other",
+                    "tapped"
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Indestructible",
+                "Effects": [
+                  {
+                    "EffectType": "indestructible"
+                  }
+                ]
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}

@@ -2794,6 +2794,14 @@ public sealed class StaticAbilityParser : IAbilityParser
         KeywordSource = "Melee",
         Effects = [new MagicAST.AST.Effects.Keyword.MeleeEffect()],
       },
+      // Hexproof (Rule 702.11): this permanent can't be the target of spells or
+      // abilities opponents control. MAST records the keyword's presence; the
+      // targeting restriction is engine territory.
+      "hexproof" => new StaticAbility
+      {
+        KeywordSource = "Hexproof",
+        Effects = [new MagicAST.AST.Effects.Keyword.HexproofEffect()],
+      },
       _ => null,
     };
   }
@@ -2937,6 +2945,52 @@ public sealed class StaticAbilityParser : IAbilityParser
         Controller = controller,
         Characteristics = characteristics,
       };
+    }
+
+    // --- Shape: "artifact creatures" — both card types (Rule 205.2) ---
+    // Must be checked BEFORE the generic "[Subtype] creatures" branch because
+    // "artifact" is a card type (not a creature subtype) and would otherwise be
+    // misclassified as a Subtypes entry. The filter records both card types so
+    // the AST accurately represents "permanents that are artifacts and creatures".
+    if (text.Equals("artifact creatures", StringComparison.OrdinalIgnoreCase) ||
+        text.Equals("artifact creature", StringComparison.OrdinalIgnoreCase))
+    {
+      return new ObjectFilter
+      {
+        CardTypes = ["artifact", "creature"],
+        Controller = controller,
+        Characteristics = characteristics,
+      };
+    }
+
+    // --- Shape: "tapped creatures" / "untapped creatures" / "nontoken creatures" ---
+    // State-based or token-status modifier immediately before "creatures". These are
+    // game-state predicates (Rule 109.3 for tapped/untapped, Rule 111 for token),
+    // not subtypes, so they ride on Characteristics rather than Subtypes or CardTypes.
+    // The modifier word is appended to any existing characteristics (e.g. the "other"
+    // characteristic set by isOther) so the combined filter is accurate.
+    foreach (var (prefix, characteristic) in new[]
+    {
+      ("tapped creature", "tapped"),
+      ("untapped creature", "untapped"),
+      ("nontoken creature", "nontoken"),
+    })
+    {
+      // Accept both singular and plural: "tapped creature" and "tapped creatures".
+      var pluralPrefix = prefix + "s";
+      if (text.Equals(prefix, StringComparison.OrdinalIgnoreCase) ||
+          text.Equals(pluralPrefix, StringComparison.OrdinalIgnoreCase))
+      {
+        var chars = characteristics is null
+          ? (IReadOnlyList<string>)[characteristic]
+          : [..characteristics, characteristic];
+        return new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Controller = controller,
+          Characteristics = chars,
+        };
+      }
     }
 
     // --- Shape: "[Subtype] creatures" (e.g. "Dragon creatures", "Bird creatures") ---
