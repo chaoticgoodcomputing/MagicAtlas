@@ -493,6 +493,22 @@ public sealed class StaticAbilityParser : IAbilityParser
       return blockAdditional;
     }
 
+    // "[AbilityWord] — This creature enters with N <counterType> counters on it
+    // if <condition>." — Rule 614.1c conditional enters-with-counters gated on a
+    // state predicate expressed as a trailing "if <condition>" clause. The ability
+    // word (e.g. "Raid") is a label with no rules meaning (Rule 207.2c); the
+    // gating condition comes from the trailing "if <condition>" fragment.
+    // Canonical Raid example: "Raid — This creature enters with a +1/+1 counter
+    // on it if you attacked this turn." (6 cards in KTK/DTK/FRF corpus). Placed
+    // before TryParseKickerConditionalEntersWithCounters and TryParseEntersWithCounters
+    // because both of those anchors end at the period — the trailing "if ..." suffix
+    // prevents them from matching.
+    var abilityWordConditionalEntersWithCounters = TryParseAbilityWordConditionalEntersWithCounters(clause);
+    if (abilityWordConditionalEntersWithCounters != null)
+    {
+      return abilityWordConditionalEntersWithCounters;
+    }
+
     // "If this creature was kicked, it enters with N +1/+1 counters on it." —
     // Rule 614.1c conditional self-replacement effect gated on the kicker
     // having been paid (Rule 702.33). Emits an EntersWithCountersEffect wrapped
@@ -4598,6 +4614,78 @@ public sealed class StaticAbilityParser : IAbilityParser
   // immediately before "counter(s)" — covers "+1/+1" and named counters.
   private static readonly Regex _kickerConditionalEntersWithCountersPattern = new(
     @"^\s*If\s+this\s+creature\s+was\s+kicked,\s+it\s+enters\s+with\s+(?<count>\d+|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[\w/+-]+)\s+counters?\s+on\s+it\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "[AbilityWord] — This creature enters with N &lt;counterType&gt; counters on it
+  /// if &lt;condition&gt;." — Rule 614.1c conditional self-replacement effect gated
+  /// on a state predicate expressed as a trailing "if &lt;condition&gt;" clause.
+  ///
+  /// <para>
+  /// The ability word prefix (e.g., "Raid —") has no rules meaning (Rule 207.2c)
+  /// and is stripped before matching the body. The gating condition is extracted
+  /// from the trailing "if &lt;condition&gt;" fragment and stored on
+  /// <see cref="StaticAbility.Condition"/>. The ability word itself is surfaced
+  /// on <see cref="Ability.AbilityWord"/>.
+  /// </para>
+  ///
+  /// <para>
+  /// Canonical form: "Raid — This creature enters with a +1/+1 counter on it
+  /// if you attacked this turn." (6 cards in the KTK/DTK/FRF corpus).
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseAbilityWordConditionalEntersWithCounters(OracleClause clause)
+  {
+    var match = _abilityWordConditionalEntersWithCountersPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var abilityWord = match.Groups["abilityWord"].Success
+      ? match.Groups["abilityWord"].Value.Trim()
+      : null;
+
+    var countText = match.Groups["count"].Value;
+    MagicAST.AST.Quantities.Quantity count;
+    if (TryParseSmallCount(countText.ToLowerInvariant(), out var intCount))
+    {
+      count = MagicAST.AST.Quantities.LiteralQuantity.Of(intCount);
+    }
+    else
+    {
+      return null;
+    }
+
+    var counterType = match.Groups["counterType"].Value;
+    var conditionText = match.Groups["condition"].Value.Trim();
+
+    return
+    [
+      new StaticAbility
+      {
+        AbilityWord = abilityWord,
+        Effects = [new MagicAST.AST.Effects.Replacement.EntersWithCountersEffect
+        {
+          Count = count,
+          CounterType = counterType,
+          IsOptional = false,
+        }],
+        Condition = new MagicAST.AST.Abilities.Condition
+        {
+          Text = conditionText,
+        },
+      },
+    ];
+  }
+
+  // "[AbilityWord] — This creature enters with N <counterType> counters on it if <condition>."
+  // The optional ability-word prefix (any word or two-word phrase before " — ") is captured
+  // into <abilityWord>. The count token and counter type are as in _entersWithCountersPattern.
+  // The condition is everything after "if " up to the terminal period.
+  private static readonly Regex _abilityWordConditionalEntersWithCountersPattern = new(
+    @"^\s*(?:(?<abilityWord>[A-Z][A-Za-z ]+?)\s+—\s+)?This\s+creature\s+enters\s+with\s+(?<count>\d+|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[\w/+-]+)\s+counters?\s+on\s+it\s+if\s+(?<condition>.+?)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
