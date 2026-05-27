@@ -1,0 +1,122 @@
+{
+  "Input": {
+    "Name": "Felhide Petrifier",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Minotaur Warrior",
+    "OracleText": "Deathtouch\nOther Minotaur creatures you control have deathtouch.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Felhide Petrifier",
+    "TypeLine": {
+      "Raw": "Creature — Minotaur Warrior",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Minotaur",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Deathtouch\nOther Minotaur creatures you control have deathtouch.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Deathtouch",
+          "Effects": [
+            {
+              "EffectType": "deathtouch",
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Minotaur"
+                  ],
+                  "Controller": "You",
+                  "Characteristics": [
+                    "other"
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Deathtouch",
+                "Effects": [
+                  {
+                    "EffectType": "deathtouch",
+                    "IsOptional": false
+                  }
+                ]
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

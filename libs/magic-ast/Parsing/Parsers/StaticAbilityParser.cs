@@ -713,6 +713,51 @@ public sealed class StaticAbilityParser : IAbilityParser
       ];
     }
 
+    // Arm 3: "Other <filter> [you control] have <keyword>." — lord-grants-keyword
+    // with the "Other" exclusion-of-self prefix (Rule 613.1c). The "Other" qualifier
+    // maps to Characteristics: ["other"] on the filter, matching the convention used
+    // by TryParseTribalAnthemModifyPT and TryParseLordPTBuff. Filter parsing is
+    // delegated to ParseLordPTFilter (isOther: true) which handles the full range
+    // of filter shapes: bare "creatures", "[Subtype] creatures", bare plural subtype,
+    // "[Color] creatures", and the optional "you control" controller suffix.
+    var otherMatch = _bareOtherKeywordPattern.Match(rawText);
+    if (otherMatch.Success)
+    {
+      var otherFilterText = otherMatch.Groups["filter"].Value.Trim();
+      // Include trailing "you control" in the filter text so ParseLordPTFilter
+      // can peel it and set Controller = ControllerFilter.You.
+      if (otherMatch.Groups["ctrl"].Success)
+      {
+        otherFilterText = otherFilterText + " you control";
+      }
+      var otherKw = otherMatch.Groups["kw"].Value.Trim().ToLowerInvariant();
+      var otherGranted = MapKeywordToStaticAbility(otherKw);
+      if (otherGranted is null)
+      {
+        return null;
+      }
+      var otherFilter = ParseLordPTFilter(otherFilterText, isOther: true);
+      if (otherFilter is null)
+      {
+        return null;
+      }
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new GainAbilityEffect
+          {
+            Target = new ObjectReference
+            {
+              Kind = ObjectReferenceKind.Each,
+              Filter = otherFilter,
+            },
+            GainedAbility = otherGranted,
+          }],
+        },
+      ];
+    }
+
     // Arm 2: filter target — "<filter> [tokens] you control have <keyword>."
     // Handles: "Creature tokens you control have <kw>.",
     //          "<Subtype> tokens you control have <kw>.",
@@ -757,6 +802,17 @@ public sealed class StaticAbilityParser : IAbilityParser
   private static readonly Regex _bareAnchorKeywordPattern = new(
     @"^\s*(?:Enchanted|Equipped)\s+creature\s+has\s+(?<kw>[a-z][a-z ]+?)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Arm 3: "Other <filter> [you control] have <keyword>." — "Other" prefix signals
+  // the exclusion-of-self qualifier (Characteristics: ["other"]). The optional
+  // "you control" group <ctrl> is captured separately so it can be stitched back
+  // onto <filter> before passing to ParseLordPTFilter (which strips it and sets
+  // Controller = ControllerFilter.You). Without "you control" the grant applies to
+  // all qualifying permanents regardless of controller (e.g. Zombie Master).
+  private static readonly Regex _bareOtherKeywordPattern = new(
+    @"^\s*Other\s+(?<filter>[A-Za-z][A-Za-z ]+?)\s+(?<ctrl>you\s+control\s+)?have\s+(?<kw>[a-z][a-z ]+?)\.?\s*$",
+    RegexOptions.Compiled
   );
 
   // Arm 2: "<filter> [tokens] you control have <keyword>."
