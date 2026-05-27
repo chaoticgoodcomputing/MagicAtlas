@@ -1,0 +1,96 @@
+{
+  "Input": {
+    "Name": "Fresh-Faced Recruit",
+    "ManaCost": "{1}{R/W}",
+    "TypeLine": "Creature — Human Soldier",
+    "OracleText": "During your turn, this creature has first strike.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Fresh-Faced Recruit",
+    "TypeLine": {
+      "Raw": "Creature — Human Soldier",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Soldier"
+      ]
+    },
+    "Oracle": {
+      "RawText": "During your turn, this creature has first strike.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "First strike",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "First"
+            }
+          ],
+          "Condition": {
+            "Text": "During your turn"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R/W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "R",
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
