@@ -441,7 +441,9 @@ public sealed class StaticAbilityParser : IAbilityParser
     // "Enchanted creature can't attack or block." (Pacifism / Luminous Bonds) — dual
     // combat restriction. Also handles the Arrest / Lawmage's Binding extension:
     // "... and its activated abilities can't be activated." — adds a third
-    // CantActivateAbilitiesEffect. Both forms target EnchantedOrEquipped.
+    // CantActivateAbilitiesEffect. Also handles the bare attack-only form:
+    // "Enchanted creature can't attack." (Cessation / Weight of Conscience) — single
+    // CantAttackEffect. All forms target EnchantedOrEquipped.
     // Must be placed AFTER TryParseCantBlock to avoid shadowing the self-subject
     // single-restriction shape, and BEFORE TryParseCantBeBlocked for symmetry.
     var enchantedCantAttackOrBlock = TryParseEnchantedCantAttackOrBlock(clause);
@@ -4079,25 +4081,24 @@ public sealed class StaticAbilityParser : IAbilityParser
   );
 
   /// <summary>
-  /// "Enchanted creature can't attack or block." (Pacifism shape) and
-  /// "Enchanted creature can't attack or block, and its activated abilities
-  /// can't be activated." (Arrest / Lawmage's Binding shape) — dual or triple
-  /// combat/activation restriction imposed by an Aura on its enchanted object
-  /// (Rule 508.1c / 509.1c / 602.5).
+  /// Three related Aura/Equipment combat-restriction shapes on the enchanted or
+  /// equipped object (Rule 508.1c / 509.1c / 602.5):
   ///
-  /// <para>
-  /// The basic form emits a <see cref="StaticAbility"/> with two effects:
   /// <list type="bullet">
-  ///   <item><see cref="CantAttackEffect"/> targeting <c>EnchantedOrEquipped</c>.</item>
-  ///   <item><see cref="CantBlockEffect"/> targeting <c>EnchantedOrEquipped</c>.</item>
+  ///   <item><b>Arrest form</b>: "Enchanted creature can't attack or block, and its
+  ///         activated abilities can't be activated." — emits
+  ///         <see cref="CantAttackEffect"/>, <see cref="CantBlockEffect"/>, and
+  ///         <see cref="CantActivateAbilitiesEffect"/>, all targeting
+  ///         <c>EnchantedOrEquipped</c>.</item>
+  ///   <item><b>Pacifism form</b>: "Enchanted creature can't attack or block." — emits
+  ///         <see cref="CantAttackEffect"/> and <see cref="CantBlockEffect"/>, both
+  ///         targeting <c>EnchantedOrEquipped</c>.</item>
+  ///   <item><b>Bare attack-only form</b>: "Enchanted creature can't attack." — emits
+  ///         a single <see cref="CantAttackEffect"/> targeting
+  ///         <c>EnchantedOrEquipped</c>. Corpus examples: Cessation (ULG),
+  ///         Weight of Conscience (MOR).</item>
   /// </list>
-  /// </para>
-  /// <para>
-  /// The extended Arrest form appends a third effect:
-  /// <list type="bullet">
-  ///   <item><see cref="CantActivateAbilitiesEffect"/> targeting <c>EnchantedOrEquipped</c>.</item>
-  /// </list>
-  /// </para>
+  ///
   /// All effects carry <c>IsOptional = false</c> — the restrictions are mandatory
   /// and do not have "You may" prefixes.
   /// <para>
@@ -4143,6 +4144,23 @@ public sealed class StaticAbilityParser : IAbilityParser
       ];
     }
 
+    // Bare attack-only form: "Enchanted creature can't attack." (no "or block").
+    // Cessation (ULG) / Weight of Conscience (MOR) shape — the Aura restricts
+    // attacking but leaves blocking unrestricted.
+    if (_enchantedCantAttackOnlyPattern.IsMatch(clause.RawText))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects =
+          [
+            new CantAttackEffect { Target = target, IsOptional = false },
+          ],
+        },
+      ];
+    }
+
     return null;
   }
 
@@ -4161,6 +4179,14 @@ public sealed class StaticAbilityParser : IAbilityParser
   // The trailing period is optional for minor formatting variants.
   private static readonly Regex _enchantedCantAttackOrBlockPattern = new(
     @"^\s*(?:Enchanted|Equipped)\s+creature\s+can'?t\s+attack\s+or\s+block\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches "Enchanted creature can't attack." — bare attack-only restriction with
+  // no "or block" suffix. Cessation (ULG) / Weight of Conscience (MOR) shape.
+  // Must appear AFTER the "or block" pattern so the two-restriction form wins first.
+  private static readonly Regex _enchantedCantAttackOnlyPattern = new(
+    @"^\s*(?:Enchanted|Equipped)\s+creature\s+can'?t\s+attack\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
