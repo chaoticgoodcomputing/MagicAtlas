@@ -1,0 +1,102 @@
+{
+  "Input": {
+    "Name": "Forest Bear",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Bear",
+    "OracleText": "When you control no Forests, sacrifice this creature.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Forest Bear",
+    "TypeLine": {
+      "Raw": "Creature — Bear",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Bear"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When you control no Forests, sacrifice this creature.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "ControlNoLandType",
+            "Filter": {
+              "CardTypes": [
+                "land"
+              ],
+              "Subtypes": [
+                "Forest"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "It"
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
