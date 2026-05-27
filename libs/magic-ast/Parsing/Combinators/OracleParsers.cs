@@ -575,6 +575,26 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Melee" keyword.
+  /// Pattern: "Melee" [reminder]
+  /// Rule 702.121. A triggered keyword ability: whenever this creature attacks,
+  /// it gets +1/+1 until end of turn for each opponent you attacked with a creature
+  /// this combat. Although mechanically a triggered ability, MAST models it as a
+  /// keyword marker (same approach as Flanking, Evolve, Exalted); the attack-count
+  /// comparison and +1/+1 grant are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Melee = (
+    from kw in Keyword("Melee")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Melee",
+      Effects = [new MeleeEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Ascend" keyword.
   /// Pattern: "Ascend" [reminder]
   /// Rule 702.131. If you control ten or more permanents, you get the city's
@@ -1707,6 +1727,7 @@ public static class OracleParsers
     .Or(Persist)
     .Or(Undying)
     .Or(Flanking)
+    .Or(Melee)
     .Or(Ascend)
     .Or(Evolve)
     .Or(Mentor)

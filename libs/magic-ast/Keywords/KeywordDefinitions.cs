@@ -229,6 +229,27 @@ public static class KeywordDefinitions
     };
 
   /// <summary>
+  /// Melee: Whenever this creature attacks, it gets +1/+1 until end of turn for each
+  /// opponent you attacked with a creature this combat.
+  /// Rule 702.121. Although mechanically a triggered ability, MAST models it as a
+  /// keyword marker (same approach as Flanking, Evolve, Exalted); the attack-count
+  /// comparison and +1/+1 grant are engine territory.
+  /// </summary>
+  public static KeywordDefinition Melee { get; } =
+    new()
+    {
+      Name = "Melee",
+      RuleReference = "702.121",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Melee",
+        Effects = [new MeleeEffect()],
+      },
+    };
+
+  /// <summary>
   /// Mentor: Whenever this creature attacks, put a +1/+1 counter on target attacking
   /// creature with power less than this creature's power.
   /// Rule 702.134. Although mechanically a triggered ability, MAST records the
@@ -709,6 +730,7 @@ public static class KeywordDefinitions
       Lifelink,
       Indestructible,
       Flanking,
+      Melee,
       Vigilance,
       Storm,
       Protection,
