@@ -129,6 +129,29 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // DURABILITY KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Indestructible: This permanent can't be destroyed. Damage and "destroy"
+  /// effects that would destroy it have no effect.
+  /// Rule 702.12
+  /// </summary>
+  public static KeywordDefinition Indestructible { get; } =
+    new()
+    {
+      Name = "Indestructible",
+      RuleReference = "702.12",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Indestructible",
+        Effects = [new IndestructibleEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // COMBAT BEHAVIOR KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -274,6 +297,7 @@ public static class KeywordDefinitions
       FirstStrike,
       DoubleStrike,
       Lifelink,
+      Indestructible,
       Vigilance,
       Storm,
       Protection,

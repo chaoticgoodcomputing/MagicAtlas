@@ -260,6 +260,24 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Indestructible" keyword.
+  /// Pattern: "Indestructible" [reminder]
+  /// Rule 702.12. This permanent can't be destroyed. Effects that say "destroy"
+  /// don't destroy it, and if its toughness is 0 or less it isn't destroyed.
+  /// MAST records keyword presence; engine-territory semantics are omitted.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Indestructible = (
+    from keyword in Keyword("Indestructible")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Indestructible",
+      Effects = [new IndestructibleEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Hexproof" keyword.
   /// Pattern: "Hexproof" [reminder]
   /// Rule 702.11. This permanent can't be the target of spells or abilities
@@ -1220,6 +1238,7 @@ public static class OracleParsers
     .Or(Defender)
     .Or(Cascade)
     .Or(Deathtouch)
+    .Or(Indestructible)
     .Or(Hexproof)
     .Or(Shroud)
     .Or(Prowess)
