@@ -1047,6 +1047,11 @@ Enlist (Rule 702.154). A static ability and triggered ability that allows this c
 
 "This [permanent] enters tapped." A static-ability-attached effect that records the oracle-level property. Rules-engine treatment (Rule 614, replacement effects) — that the permanent enters tapped instead of untapped — is derived from this descriptive declaration; MAST does not model the replacement-event machinery itself.
 
+Two conditional shapes are covered by the optional `EntryCondition` + `EntryConditionIsPositive` pair:
+
+- **Fastland / checkland** — "This land enters tapped *unless* [condition]." `EntryConditionIsPositive = false` (default, omitted from JSON). The condition text captures the board state under which the land enters *untapped*. Example: `EntryCondition.Text = "you control two or fewer other lands"`.
+- **Slow land** — "*If* [condition], this land enters tapped." `EntryConditionIsPositive = true`. The condition text captures the board state under which the land enters *tapped*. Example: `EntryCondition.Text = "you control two or more other lands"`.
+
 - **Effect discriminator:** `entersTapped`
 
 [Source](AST/Effects/Keyword/EntersTappedEffect.cs)

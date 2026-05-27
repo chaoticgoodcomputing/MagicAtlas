@@ -349,8 +349,11 @@ public sealed class StaticAbilityParser : IAbilityParser
       return enchantedPTAndKeyword;
     }
 
-    // "This [permanent/land/...] enters tapped." — Rule 614 replacement-effect
+    // "This [permanent/land/...] enters tapped [unless condition]." and
+    // "If [condition], this [permanent] enters tapped." — Rule 614 replacement-effect
     // property recorded as a static-ability-attached <see cref="EntersTappedEffect"/>.
+    // The fastland/checkland "unless" shape and the slow-land "if" shape both route
+    // here; polarity is distinguished by <c>EntryConditionIsPositive</c>.
     // No KeywordSource: the oracle text is a full sentence, not a keyword token.
     // Placed last in the chain because the sentence shape is unambiguous and
     // won't compete with any keyword-dispatch path above.
@@ -3550,42 +3553,66 @@ public sealed class StaticAbilityParser : IAbilityParser
   }
 
   /// <summary>
-  /// "This [permanent/land/creature/artifact/enchantment] enters tapped[unless condition]." —
-  /// Rule 614 property recorded as a <see cref="EntersTappedEffect"/> on a
-  /// <see cref="StaticAbility"/>. No <c>KeywordSource</c> is set: oracle text
-  /// uses a full declarative sentence, not a keyword token. MAST records what
-  /// the oracle text <em>says</em>; the replacement-effect machinery Rule 614
-  /// derives at run-time is out of scope.
+  /// Two oracle shapes for conditional enters-tapped, both emitting
+  /// <see cref="EntersTappedEffect"/> on a <see cref="StaticAbility"/>:
   ///
-  /// <para>When oracle text carries "unless [condition]" (fastland / checkland
-  /// shape, e.g. "This land enters tapped unless you control two or fewer other
-  /// lands."), the condition text is captured in
-  /// <see cref="EntersTappedEffect.EntryCondition"/>. This is distinct from
-  /// <see cref="UnlessClause"/> which represents "unless [player] pays [cost]".</para>
+  /// <list type="bullet">
+  ///   <item>"This [permanent] enters tapped [unless condition]." —
+  ///         Rule 614 fastland / checkland shape. <c>EntryConditionIsPositive</c>
+  ///         stays false (default); the condition text from the "unless" clause
+  ///         captures when the land enters <em>untapped</em>.</item>
+  ///   <item>"If [condition], this [permanent] enters tapped." —
+  ///         Rule 614 slow-land shape. <c>EntryConditionIsPositive</c> = true;
+  ///         the leading "If" clause captures when the land enters
+  ///         <em>tapped</em>.</item>
+  /// </list>
+  ///
+  /// No <c>KeywordSource</c> is set: oracle text uses a full declarative
+  /// sentence, not a keyword token. The replacement-effect machinery Rule 614
+  /// derives at run-time is out of scope for MAST.
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseEntersTapped(OracleClause clause)
   {
+    // Arm 1: "This [permanent] enters tapped [unless condition]." (fastland/checkland)
     var match = _entersTappedPattern.Match(clause.RawText);
-    if (!match.Success)
+    if (match.Success)
     {
-      return null;
+      var conditionGroup = match.Groups["condition"];
+      Condition? entryCondition = conditionGroup.Success
+        ? new Condition { Text = conditionGroup.Value.Trim() }
+        : null;
+
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new EntersTappedEffect { EntryCondition = entryCondition }],
+        },
+      ];
     }
 
-    var conditionGroup = match.Groups["condition"];
-    Condition? entryCondition = conditionGroup.Success
-      ? new Condition { Text = conditionGroup.Value.Trim() }
-      : null;
+    // Arm 2: "If [condition], this [permanent] enters tapped." (slow land)
+    var ifMatch = _entersTappedIfConditionPattern.Match(clause.RawText);
+    if (ifMatch.Success)
+    {
+      var conditionText = ifMatch.Groups["condition"].Value.Trim();
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new EntersTappedEffect
+          {
+            EntryCondition = new Condition { Text = conditionText },
+            EntryConditionIsPositive = true,
+          }],
+        },
+      ];
+    }
 
-    return
-    [
-      new StaticAbility
-      {
-        Effects = [new EntersTappedEffect { EntryCondition = entryCondition }],
-      },
-    ];
+    return null;
   }
 
-  // Matches "This [permanent|land|creature|artifact|enchantment] enters tapped[.]"
+  // Arm 1: "This [permanent|land|creature|artifact|enchantment] enters tapped[.]"
   // optionally followed by "unless [condition text]."
   // The permanent-type noun is flexible to cover the full range of oracle
   // printings. The trailing period is optional to accommodate minor formatting
@@ -3594,6 +3621,15 @@ public sealed class StaticAbilityParser : IAbilityParser
   private static readonly Regex _entersTappedPattern = new(
     @"^\s*This\s+(?:permanent|land|creature|artifact|enchantment|spell)\s+enters\s+tapped"
     + @"(?:\s+unless\s+(?<condition>[^.]+?))?\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Arm 2: "If [condition], this [permanent] enters tapped." — slow land shape.
+  // The condition is a leading "If" clause that precedes the "this ... enters
+  // tapped" sentence. EntryConditionIsPositive = true distinguishes this from
+  // the "unless" negation shape above.
+  private static readonly Regex _entersTappedIfConditionPattern = new(
+    @"^\s*If\s+(?<condition>[^,]+),\s+this\s+(?:permanent|land|creature|artifact|enchantment|spell)\s+enters\s+tapped\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
