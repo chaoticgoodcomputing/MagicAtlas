@@ -6,25 +6,35 @@
     "OracleText": "This creature can't be blocked.",
     "Power": "6",
     "Toughness": "6",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Tidal Kraken",
     "TypeLine": {
       "Raw": "Creature — Kraken",
-      "Types": ["Creature"],
-      "Subtypes": ["Kraken"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kraken"
+      ]
     },
     "Oracle": {
       "RawText": "This creature can't be blocked.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "cantBeBlocked",
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -33,20 +43,42 @@
         "Kind": "manaCost",
         "Raw": "{5}{U}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 8
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

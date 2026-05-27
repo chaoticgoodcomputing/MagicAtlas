@@ -7,22 +7,29 @@
     "Power": null,
     "Toughness": null,
     "Colors": [],
-    "ColorIdentity": ["B", "R"]
+    "ColorIdentity": [
+      "B",
+      "R"
+    ]
   },
   "Output": {
     "Name": "Akoum Refuge",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {B} or {R}.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "entersTapped"
-          }
+          "Effects": [
+            {
+              "EffectType": "entersTapped"
+            }
+          ]
         },
         {
           "Kind": "triggered",
@@ -30,7 +37,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"]
+              "CardTypes": [
+                "land"
+              ]
             }
           },
           "Effects": [
@@ -49,7 +58,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -68,7 +79,10 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "R"]
+        "ColorIdentity": [
+          "B",
+          "R"
+        ]
       }
     ]
   }

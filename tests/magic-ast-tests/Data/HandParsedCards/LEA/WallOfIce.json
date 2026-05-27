@@ -6,15 +6,23 @@
     "OracleText": "Defender (This creature can't attack.)",
     "Power": "0",
     "Toughness": "7",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Wall of Ice",
     "TypeLine": {
       "Raw": "Creature — Wall",
-      "Types": ["Creature"],
-      "Subtypes": ["Wall"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Wall"
+      ]
     },
     "Oracle": {
       "RawText": "Defender (This creature can't attack.)",
@@ -22,9 +30,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Defender",
-          "Effect": {
-            "EffectType": "defender"
-          }
+          "Effects": [
+            {
+              "EffectType": "defender"
+            }
+          ]
         }
       ]
     },
@@ -39,18 +49,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

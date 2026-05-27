@@ -33,20 +33,22 @@
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "evasion",
-            "CanBeBlockedBy": {
-              "CardTypes": [
-                "creature"
-              ],
-              "Characteristics": [
-                "flying",
-                "reach"
-              ]
-            },
-            "IsOptional": false
-          },
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "flying",
+                  "reach"
+                ]
+              },
+              "IsOptional": false
+            }
+          ]
         },
         {
           "Kind": "unparsed",

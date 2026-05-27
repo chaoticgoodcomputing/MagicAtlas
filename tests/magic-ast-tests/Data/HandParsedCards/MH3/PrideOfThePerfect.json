@@ -4,38 +4,48 @@
     "ManaCost": "{3}{B}",
     "TypeLine": "Enchantment",
     "OracleText": "Elves you control get +2/+0.",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Pride of the Perfect",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Elves you control get +2/+0.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "modifyPT",
-            "Target": {
-              "Kind": "Each",
-              "Filter": {
-                "Subtypes": ["Elf"],
-                "Controller": "You"
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "Subtypes": [
+                    "Elf"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
               }
-            },
-            "PowerModifier": {
-              "QuantityType": "literal",
-              "Value": 2
-            },
-            "ToughnessModifier": {
-              "QuantityType": "literal",
-              "Value": 0
             }
-          }
+          ]
         }
       ]
     },
@@ -44,13 +54,31 @@
         "Kind": "manaCost",
         "Raw": "{3}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 4
       },
-      { "Kind": "colors", "Colors": ["B"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["B"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
     ]
   }
 }

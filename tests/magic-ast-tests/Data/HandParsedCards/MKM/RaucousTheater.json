@@ -7,14 +7,22 @@
     "Power": null,
     "Toughness": null,
     "Colors": [],
-    "ColorIdentity": ["B", "R"]
+    "ColorIdentity": [
+      "B",
+      "R"
+    ]
   },
   "Output": {
     "Name": "Raucous Theater",
     "TypeLine": {
       "Raw": "Land — Swamp Mountain",
-      "Types": ["Land"],
-      "Subtypes": ["Swamp", "Mountain"]
+      "Types": [
+        "Land"
+      ],
+      "Subtypes": [
+        "Swamp",
+        "Mountain"
+      ]
     },
     "Oracle": {
       "RawText": "({T}: Add {B} or {R}.)\nThis land enters tapped.\nWhen this land enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
@@ -22,7 +30,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -34,9 +44,11 @@
         },
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "entersTapped"
-          }
+          "Effects": [
+            {
+              "EffectType": "entersTapped"
+            }
+          ]
         },
         {
           "Kind": "triggered",
@@ -44,7 +56,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"]
+              "CardTypes": [
+                "land"
+              ]
             }
           },
           "Effects": [
@@ -70,7 +84,10 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "R"]
+        "ColorIdentity": [
+          "B",
+          "R"
+        ]
       }
     ]
   }

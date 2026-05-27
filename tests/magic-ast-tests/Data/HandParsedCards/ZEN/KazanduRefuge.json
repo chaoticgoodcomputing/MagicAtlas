@@ -7,22 +7,29 @@
     "Power": null,
     "Toughness": null,
     "Colors": [],
-    "ColorIdentity": ["G", "R"]
+    "ColorIdentity": [
+      "G",
+      "R"
+    ]
   },
   "Output": {
     "Name": "Kazandu Refuge",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {R} or {G}.",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "entersTapped"
-          }
+          "Effects": [
+            {
+              "EffectType": "entersTapped"
+            }
+          ]
         },
         {
           "Kind": "triggered",
@@ -30,7 +37,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"]
+              "CardTypes": [
+                "land"
+              ]
             }
           },
           "Effects": [
@@ -49,7 +58,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -68,7 +79,10 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R", "G"]
+        "ColorIdentity": [
+          "R",
+          "G"
+        ]
       }
     ]
   }

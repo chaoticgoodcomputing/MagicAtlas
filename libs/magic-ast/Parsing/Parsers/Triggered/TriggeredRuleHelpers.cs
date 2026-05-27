@@ -155,6 +155,6 @@ internal static class TriggeredRuleHelpers
       return null;
     }
     var keywordSource = char.ToUpperInvariant(lower[0]) + lower[1..];
-    return new StaticAbility { Effect = effect, KeywordSource = keywordSource };
+    return new StaticAbility { Effects = [effect], KeywordSource = keywordSource };
   }
 }

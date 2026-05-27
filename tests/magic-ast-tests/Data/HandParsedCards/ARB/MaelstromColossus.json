@@ -13,8 +13,13 @@
     "Name": "Maelstrom Colossus",
     "TypeLine": {
       "Raw": "Artifact Creature — Golem",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Golem"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Golem"
+      ]
     },
     "Oracle": {
       "RawText": "Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)",
@@ -22,9 +27,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Cascade",
-          "Effect": {
-            "EffectType": "cascade"
-          }
+          "Effects": [
+            {
+              "EffectType": "cascade"
+            }
+          ]
         }
       ]
     },

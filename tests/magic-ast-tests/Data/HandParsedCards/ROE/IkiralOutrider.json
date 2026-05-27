@@ -4,19 +4,30 @@
     "ManaCost": "{1}{W}",
     "TypeLine": "Creature — Cat Soldier",
     "OracleText": "Level up {4} ({4}: Put a level counter on this. Level up only as a sorcery.)\nLEVEL 1-3\n2/6\nVigilance\nLEVEL 4+\n3/10\nVigilance",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
     "Power": "1",
     "Toughness": "1",
-    "Keywords": ["Level Up"],
+    "Keywords": [
+      "Level Up"
+    ],
     "Layout": "leveler"
   },
   "Output": {
     "Name": "Ikiral Outrider",
     "TypeLine": {
       "Raw": "Creature — Cat Soldier",
-      "Types": ["Creature"],
-      "Subtypes": ["Cat", "Soldier"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "Level up {4} ({4}: Put a level counter on this. Level up only as a sorcery.)\nLEVEL 1-3\n2/6\nVigilance\nLEVEL 4+\n3/10\nVigilance",
@@ -33,29 +44,49 @@
             {
               "MinLevel": 1,
               "MaxLevel": 3,
-              "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-              "Toughness": { "ValueType": "fixed", "Raw": "6", "Value": 6 },
+              "Power": {
+                "ValueType": "fixed",
+                "Raw": "2",
+                "Value": 2
+              },
+              "Toughness": {
+                "ValueType": "fixed",
+                "Raw": "6",
+                "Value": 6
+              },
               "Abilities": [
                 {
                   "Kind": "static",
                   "KeywordSource": "Vigilance",
-                  "Effect": {
-                    "EffectType": "vigilance"
-                  }
+                  "Effects": [
+                    {
+                      "EffectType": "vigilance"
+                    }
+                  ]
                 }
               ]
             },
             {
               "MinLevel": 4,
-              "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
-              "Toughness": { "ValueType": "fixed", "Raw": "10", "Value": 10 },
+              "Power": {
+                "ValueType": "fixed",
+                "Raw": "3",
+                "Value": 3
+              },
+              "Toughness": {
+                "ValueType": "fixed",
+                "Raw": "10",
+                "Value": 10
+              },
               "Abilities": [
                 {
                   "Kind": "static",
                   "KeywordSource": "Vigilance",
-                  "Effect": {
-                    "EffectType": "vigilance"
-                  }
+                  "Effects": [
+                    {
+                      "EffectType": "vigilance"
+                    }
+                  ]
                 }
               ]
             }
@@ -68,19 +99,48 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       },
-      { "Kind": "layout", "Layout": "leveler" }
+      {
+        "Kind": "layout",
+        "Layout": "leveler"
+      }
     ]
   }
 }

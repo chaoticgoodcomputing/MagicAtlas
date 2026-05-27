@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Hobblefiend",
     "ManaCost": "{1}{R}",
-    "TypeLine": "Creature \u2014 Devil",
+    "TypeLine": "Creature — Devil",
     "OracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\n{1}, Sacrifice another creature: Put a +1/+1 counter on this creature.",
     "Power": "2",
     "Toughness": "1",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Hobblefiend",
     "TypeLine": {
-      "Raw": "Creature \u2014 Devil",
+      "Raw": "Creature — Devil",
       "Types": [
         "Creature"
       ],
@@ -30,9 +30,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Trample",
-          "Effect": {
-            "EffectType": "trample"
-          }
+          "Effects": [
+            {
+              "EffectType": "trample"
+            }
+          ]
         },
         {
           "Kind": "activated",

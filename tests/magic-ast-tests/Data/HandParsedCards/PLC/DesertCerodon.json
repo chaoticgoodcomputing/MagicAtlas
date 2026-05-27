@@ -6,15 +6,23 @@
     "OracleText": "Cycling {R} ({R}, Discard this card: Draw a card.)",
     "Power": "6",
     "Toughness": "4",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Desert Cerodon",
     "TypeLine": {
       "Raw": "Creature — Beast",
-      "Types": ["Creature"],
-      "Subtypes": ["Beast"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Beast"
+      ]
     },
     "Oracle": {
       "RawText": "Cycling {R} ({R}, Discard this card: Draw a card.)",
@@ -22,18 +30,22 @@
         {
           "Kind": "static",
           "KeywordSource": "Cycling",
-          "Effect": {
-            "EffectType": "cycling",
-            "Cost": {
-              "CostType": "mana",
-              "Symbols": [
-                {
-                  "Kind": "colored",
-                  "Colors": ["R"]
-                }
-              ]
+          "Effects": [
+            {
+              "EffectType": "cycling",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "R"
+                    ]
+                  }
+                ]
+              }
             }
-          }
+          ]
         }
       ]
     },
@@ -48,18 +60,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 6
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

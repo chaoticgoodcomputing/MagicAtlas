@@ -22,10 +22,12 @@
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "doesntUntap",
-            "WhoseUntapStep": "your"
-          }
+          "Effects": [
+            {
+              "EffectType": "doesntUntap",
+              "WhoseUntapStep": "your"
+            }
+          ]
         },
         {
           "Kind": "triggered",
@@ -106,8 +108,14 @@
         ],
         "ManaValue": 1
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] }
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
     ]
   }
 }

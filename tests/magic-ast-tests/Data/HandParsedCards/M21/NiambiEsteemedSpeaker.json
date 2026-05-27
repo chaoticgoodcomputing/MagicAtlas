@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Niambi, Esteemed Speaker",
     "ManaCost": "{W}{U}",
-    "TypeLine": "Legendary Creature \u2014 Human Cleric",
+    "TypeLine": "Legendary Creature — Human Cleric",
     "OracleText": "Flash\nWhen Niambi enters, you may return another target creature you control to its owner's hand. If you do, you gain life equal to that creature's mana value.\n{1}{W}{U}, {T}, Discard a legendary card: Draw two cards.",
     "Power": "2",
     "Toughness": "1",
@@ -18,7 +18,7 @@
   "Output": {
     "Name": "Niambi, Esteemed Speaker",
     "TypeLine": {
-      "Raw": "Legendary Creature \u2014 Human Cleric",
+      "Raw": "Legendary Creature — Human Cleric",
       "Supertypes": [
         "Legendary"
       ],
@@ -36,11 +36,13 @@
         {
           "Kind": "static",
           "KeywordSource": "Flash",
-          "Effect": {
-            "EffectType": "timingModification",
-            "Modification": "Grant",
-            "Timing": "Instant"
-          }
+          "Effects": [
+            {
+              "EffectType": "timingModification",
+              "Modification": "Grant",
+              "Timing": "Instant"
+            }
+          ]
         },
         {
           "Kind": "triggered",

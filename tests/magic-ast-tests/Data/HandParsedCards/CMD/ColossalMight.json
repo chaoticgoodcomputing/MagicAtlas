@@ -6,14 +6,22 @@
     "OracleText": "Target creature gets +4/+2 and gains trample until end of turn.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G", "R"],
-    "ColorIdentity": ["G", "R"]
+    "Colors": [
+      "G",
+      "R"
+    ],
+    "ColorIdentity": [
+      "G",
+      "R"
+    ]
   },
   "Output": {
     "Name": "Colossal Might",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Target creature gets +4/+2 and gains trample until end of turn.",
@@ -26,7 +34,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "PowerModifier": {
@@ -49,9 +59,11 @@
               "GainedAbility": {
                 "Kind": "static",
                 "KeywordSource": "Trample",
-                "Effect": {
-                  "EffectType": "trample"
-                }
+                "Effects": [
+                  {
+                    "EffectType": "trample"
+                  }
+                ]
               },
               "Duration": {
                 "DurationType": "untilEndOfTurn"
@@ -66,18 +78,34 @@
         "Kind": "manaCost",
         "Raw": "{R}{G}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["G", "R"]
+        "Colors": [
+          "G",
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G", "R"]
+        "ColorIdentity": [
+          "G",
+          "R"
+        ]
       }
     ]
   }

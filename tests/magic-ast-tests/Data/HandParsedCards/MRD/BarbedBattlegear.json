@@ -13,41 +13,52 @@
     "Name": "Barbed Battlegear",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature gets +4/-1.\nEquip {2}",
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "modifyPT",
-            "Target": {
-              "Kind": "EnchantedOrEquipped"
-            },
-            "PowerModifier": {
-              "QuantityType": "literal",
-              "Value": 4
-            },
-            "ToughnessModifier": {
-              "QuantityType": "literal",
-              "Value": -1
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 4
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": -1
+              }
             }
-          }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "Equip",
-          "Effect": {
-            "EffectType": "equip",
-            "Cost": {
-              "CostType": "mana",
-              "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 }
-              ]
+          "Effects": [
+            {
+              "EffectType": "equip",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 2
+                  }
+                ]
+              }
             }
-          }
+          ]
         }
       ]
     },
@@ -56,7 +67,10 @@
         "Kind": "manaCost",
         "Raw": "{3}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
         ],
         "ManaValue": 3
       },

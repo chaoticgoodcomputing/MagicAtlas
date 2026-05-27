@@ -32,18 +32,20 @@
         {
           "Kind": "static",
           "KeywordSource": "Flying",
-          "Effect": {
-            "EffectType": "evasion",
-            "CanBeBlockedBy": {
-              "CardTypes": [
-                "creature"
-              ],
-              "Characteristics": [
-                "flying",
-                "reach"
-              ]
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "flying",
+                  "reach"
+                ]
+              }
             }
-          }
+          ]
         },
         {
           "Kind": "triggered",

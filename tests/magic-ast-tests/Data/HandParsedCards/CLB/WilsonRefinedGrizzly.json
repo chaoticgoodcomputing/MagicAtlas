@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Wilson, Refined Grizzly",
     "ManaCost": "{1}{G}",
-    "TypeLine": "Legendary Creature \u2014 Bear Warrior",
+    "TypeLine": "Legendary Creature — Bear Warrior",
     "OracleText": "This spell can't be countered.\nVigilance, reach, trample\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nChoose a Background (You can have a Background as a second commander.)",
     "Power": "2",
     "Toughness": "2",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Wilson, Refined Grizzly",
     "TypeLine": {
-      "Raw": "Legendary Creature \u2014 Bear Warrior",
+      "Raw": "Legendary Creature — Bear Warrior",
       "Supertypes": [
         "Legendary"
       ],
@@ -42,23 +42,29 @@
         {
           "Kind": "static",
           "KeywordSource": "Vigilance",
-          "Effect": {
-            "EffectType": "vigilance"
-          }
+          "Effects": [
+            {
+              "EffectType": "vigilance"
+            }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "Reach",
-          "Effect": {
-            "EffectType": "reach"
-          }
+          "Effects": [
+            {
+              "EffectType": "reach"
+            }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "Trample",
-          "Effect": {
-            "EffectType": "trample"
-          }
+          "Effects": [
+            {
+              "EffectType": "trample"
+            }
+          ]
         },
         {
           "Kind": "triggered",
@@ -96,10 +102,12 @@
         {
           "Kind": "static",
           "KeywordSource": "Choose a Background",
-          "Effect": {
-            "EffectType": "partner",
-            "PartnerType": "ChooseABackground"
-          }
+          "Effects": [
+            {
+              "EffectType": "partner",
+              "PartnerType": "ChooseABackground"
+            }
+          ]
         }
       ]
     },

@@ -6,15 +6,23 @@
     "OracleText": "Flash\nEnchant creature\nWhen this Aura enters, scry 2.\nEnchanted creature gets +3/+3.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Gift of Strands",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Flash\nEnchant creature\nWhen this Aura enters, scry 2.\nEnchanted creature gets +3/+3.",
@@ -22,21 +30,27 @@
         {
           "Kind": "static",
           "KeywordSource": "Flash",
-          "Effect": {
-            "EffectType": "timingModification",
-            "Modification": "Grant",
-            "Timing": "Instant"
-          }
+          "Effects": [
+            {
+              "EffectType": "timingModification",
+              "Modification": "Grant",
+              "Timing": "Instant"
+            }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "Enchant",
-          "Effect": {
-            "EffectType": "enchantRestriction",
-            "LegalTargets": {
-              "CardTypes": ["creature"]
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ]
+              }
             }
-          }
+          ]
         },
         {
           "Kind": "triggered",
@@ -44,7 +58,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["aura"]
+              "CardTypes": [
+                "aura"
+              ]
             }
           },
           "Effects": [
@@ -59,20 +75,22 @@
         },
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "modifyPT",
-            "Target": {
-              "Kind": "EnchantedOrEquipped"
-            },
-            "PowerModifier": {
-              "QuantityType": "literal",
-              "Value": 3
-            },
-            "ToughnessModifier": {
-              "QuantityType": "literal",
-              "Value": 3
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              }
             }
-          }
+          ]
         }
       ]
     },
@@ -81,18 +99,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

@@ -6,15 +6,26 @@
     "OracleText": "Persist (When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["G", "W"],
-    "ColorIdentity": ["G", "W"]
+    "Colors": [
+      "G",
+      "W"
+    ],
+    "ColorIdentity": [
+      "G",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Safehold Elite",
     "TypeLine": {
       "Raw": "Creature — Elf Scout",
-      "Types": ["Creature"],
-      "Subtypes": ["Elf", "Scout"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Scout"
+      ]
     },
     "Oracle": {
       "RawText": "Persist (When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)",
@@ -22,10 +33,12 @@
         {
           "Kind": "static",
           "KeywordSource": "Persist",
-          "Effect": {
-            "EffectType": "persist",
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "persist",
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -34,17 +47,46 @@
         "Kind": "manaCost",
         "Raw": "{1}{G/W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "hybrid", "Colors": ["G", "W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "G",
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["W", "G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W", "G"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W",
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W",
+          "G"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

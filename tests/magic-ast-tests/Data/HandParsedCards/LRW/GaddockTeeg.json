@@ -35,9 +35,11 @@
       "Abilities": [
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "cantBeCast"
-          },
+          "Effects": [
+            {
+              "EffectType": "cantBeCast"
+            }
+          ],
           "AffectedObjects": {
             "CardTypes": [
               "spell"
@@ -53,9 +55,11 @@
         },
         {
           "Kind": "static",
-          "Effect": {
-            "EffectType": "cantBeCast"
-          },
+          "Effects": [
+            {
+              "EffectType": "cantBeCast"
+            }
+          ],
           "AffectedObjects": {
             "CardTypes": [
               "spell"

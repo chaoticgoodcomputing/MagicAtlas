@@ -6,15 +6,23 @@
     "OracleText": "Cycling {2} ({2}, Discard this card: Draw a card.)",
     "Power": "5",
     "Toughness": "5",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Yoked Plowbeast",
     "TypeLine": {
       "Raw": "Creature — Beast",
-      "Types": ["Creature"],
-      "Subtypes": ["Beast"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Beast"
+      ]
     },
     "Oracle": {
       "RawText": "Cycling {2} ({2}, Discard this card: Draw a card.)",
@@ -22,18 +30,20 @@
         {
           "Kind": "static",
           "KeywordSource": "Cycling",
-          "Effect": {
-            "EffectType": "cycling",
-            "Cost": {
-              "CostType": "mana",
-              "Symbols": [
-                {
-                  "Kind": "generic",
-                  "GenericAmount": 2
-                }
-              ]
+          "Effects": [
+            {
+              "EffectType": "cycling",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 2
+                  }
+                ]
+              }
             }
-          }
+          ]
         }
       ]
     },
@@ -48,22 +58,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 7
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

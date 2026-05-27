@@ -64,14 +64,14 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Flying",
-      Effect = new EvasionEffect
+      Effects = [new EvasionEffect
       {
         CanBeBlockedBy = new ObjectFilter
         {
           CardTypes = ["creature"],
           Characteristics = ["flying", "reach"],
         },
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -86,7 +86,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Vigilance",
-      Effect = new VigilanceEffect(),
+      Effects = [new VigilanceEffect()],
       Reminder = reminder,
     }
   );
@@ -102,11 +102,11 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Menace",
-      Effect = new EvasionEffect
+      Effects = [new EvasionEffect
       {
         CanBeBlockedBy = new ObjectFilter { CardTypes = ["creature"] },
         MinimumBlockers = 2,
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -121,7 +121,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Trample",
-      Effect = new TrampleEffect(),
+      Effects = [new TrampleEffect()],
       Reminder = reminder,
     }
   );
@@ -136,7 +136,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = keyword.ToStringValue(),
-      Effect = new HasteEffect(),
+      Effects = [new HasteEffect()],
       Reminder = reminder,
     }
   );
@@ -151,7 +151,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Lifelink",
-      Effect = new LifelinkEffect(),
+      Effects = [new LifelinkEffect()],
       Reminder = reminder,
     }
   );
@@ -166,7 +166,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Reach",
-      Effect = new ReachEffect(),
+      Effects = [new ReachEffect()],
       Reminder = reminder,
     }
   );
@@ -181,11 +181,11 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Flash",
-      Effect = new TimingModificationEffect
+      Effects = [new TimingModificationEffect
       {
         Modification = TimingModificationType.Grant,
         Timing = TimingWindow.Instant,
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -201,7 +201,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Storm",
-      Effect = new StormEffect(),
+      Effects = [new StormEffect()],
       Reminder = reminder,
     }
   );
@@ -220,7 +220,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Defender",
-      Effect = new DefenderEffect(),
+      Effects = [new DefenderEffect()],
       Reminder = reminder,
     }
   );
@@ -237,7 +237,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Cascade",
-      Effect = new CascadeEffect(),
+      Effects = [new CascadeEffect()],
       Reminder = reminder,
     }
   );
@@ -254,7 +254,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Deathtouch",
-      Effect = new DeathtouchEffect(),
+      Effects = [new DeathtouchEffect()],
       Reminder = reminder,
     }
   );
@@ -271,7 +271,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Hexproof",
-      Effect = new HexproofEffect(),
+      Effects = [new HexproofEffect()],
       Reminder = reminder,
     }
   );
@@ -288,7 +288,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Shroud",
-      Effect = new ShroudEffect(),
+      Effects = [new ShroudEffect()],
       Reminder = reminder,
     }
   );
@@ -305,7 +305,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Prowess",
-      Effect = new ProwessEffect(),
+      Effects = [new ProwessEffect()],
       Reminder = reminder,
     }
   );
@@ -322,7 +322,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Devoid",
-      Effect = new DevoidEffect(),
+      Effects = [new DevoidEffect()],
       Reminder = reminder,
     }
   );
@@ -338,7 +338,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Changeling",
-      Effect = new ChangelingEffect(),
+      Effects = [new ChangelingEffect()],
       Reminder = reminder,
     }
   );
@@ -355,7 +355,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Banding",
-      Effect = new BandingEffect(),
+      Effects = [new BandingEffect()],
       Reminder = reminder,
     }
   );
@@ -373,7 +373,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Convoke",
-      Effect = new ConvokeEffect(),
+      Effects = [new ConvokeEffect()],
       Reminder = reminder,
     }
   );
@@ -392,7 +392,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Exalted",
-      Effect = new ExaltedEffect(),
+      Effects = [new ExaltedEffect()],
       Reminder = reminder,
     }
   );
@@ -411,7 +411,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Infect",
-      Effect = new InfectEffect(),
+      Effects = [new InfectEffect()],
       Reminder = reminder,
     }
   );
@@ -429,7 +429,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Wither",
-      Effect = new WitherEffect(),
+      Effects = [new WitherEffect()],
       Reminder = reminder,
     }
   );
@@ -448,7 +448,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Persist",
-      Effect = new PersistEffect { IsOptional = false },
+      Effects = [new PersistEffect { IsOptional = false }],
       Reminder = reminder,
     }
   );
@@ -468,7 +468,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "First strike",
-      Effect = new CombatDamageTimingEffect { Timing = CombatDamageTiming.First },
+      Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.First }],
       Reminder = reminder,
     }
   );
@@ -484,7 +484,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Double strike",
-      Effect = new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both },
+      Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both }],
       Reminder = reminder,
     }
   );
@@ -506,14 +506,14 @@ public static class OracleParsers
       select new StaticAbility
       {
         KeywordSource = keywordName,
-        Effect = new EvasionEffect
+        Effects = [new EvasionEffect
         {
           UnblockableCondition = new EvasionCondition
           {
             ConditionType = EvasionConditionType.DefendingPlayerControls,
             PermanentFilter = new ObjectFilter { Subtypes = [landType] },
           },
-        },
+        }],
         Reminder = reminder,
       };
   }
@@ -578,7 +578,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Protection",
-      Effect = new ProtectionEffect { From = new[] { first }.Concat(rest).ToArray() },
+      Effects = [new ProtectionEffect { From = new[] { first }.Concat(rest).ToArray() }],
       Reminder = reminder,
     }
   );
@@ -655,10 +655,10 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Crew",
-      Effect = new CrewEffect
+      Effects = [new CrewEffect
       {
         Power = new LiteralQuantity { Value = int.Parse(n.ToStringValue()) },
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -679,11 +679,11 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Partner with",
-      Effect = new PartnerEffect
+      Effects = [new PartnerEffect
       {
         PartnerType = PartnerType.PartnerWith,
         PartnerName = string.Join(" ", nameWords.Select(t => t.ToStringValue())),
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -716,7 +716,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Entwine",
-      Effect = new EntwineEffect
+      Effects = [new EntwineEffect
       {
         Cost = new MagicAST.AST.Costs.ManaCost
         {
@@ -724,7 +724,7 @@ public static class OracleParsers
             .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
             .ToList(),
         },
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -761,7 +761,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Cycling",
-      Effect = new CyclingEffect
+      Effects = [new CyclingEffect
       {
         Cost = new MagicAST.AST.Costs.ManaCost
         {
@@ -769,7 +769,7 @@ public static class OracleParsers
             .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
             .ToList(),
         },
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -816,7 +816,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = kwText,
-      Effect = new TypecyclingEffect
+      Effects = [new TypecyclingEffect
       {
         Type = char.ToUpperInvariant(landType[0]) + landType[1..],
         Cost = new MagicAST.AST.Costs.ManaCost
@@ -825,7 +825,7 @@ public static class OracleParsers
             .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
             .ToList(),
         },
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -859,7 +859,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Madness",
-      Effect = new MadnessEffect
+      Effects = [new MadnessEffect
       {
         Cost = new MagicAST.AST.Costs.ManaCost
         {
@@ -867,7 +867,7 @@ public static class OracleParsers
             .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
             .ToList(),
         },
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -901,7 +901,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Foretell",
-      Effect = new ForetellEffect
+      Effects = [new ForetellEffect
       {
         Cost = new MagicAST.AST.Costs.ManaCost
         {
@@ -909,7 +909,7 @@ public static class OracleParsers
             .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
             .ToList(),
         },
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -943,7 +943,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Flashback",
-      Effect = new FlashbackEffect
+      Effects = [new FlashbackEffect
       {
         Cost = new MagicAST.AST.Costs.ManaCost
         {
@@ -951,7 +951,7 @@ public static class OracleParsers
             .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
             .ToList(),
         },
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -970,7 +970,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Choose a Background",
-      Effect = new PartnerEffect { PartnerType = PartnerType.ChooseABackground },
+      Effects = [new PartnerEffect { PartnerType = PartnerType.ChooseABackground }],
       Reminder = reminder,
     }
   );
@@ -1008,7 +1008,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Morph",
-      Effect = new MorphEffect
+      Effects = [new MorphEffect
       {
         Cost = new MagicAST.AST.Costs.ManaCost
         {
@@ -1016,7 +1016,7 @@ public static class OracleParsers
             .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
             .ToList(),
         },
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -1040,7 +1040,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Bushido",
-      Effect = new BushidoEffect { Value = int.Parse(value.ToStringValue()) },
+      Effects = [new BushidoEffect { Value = int.Parse(value.ToStringValue()) }],
       Reminder = reminder,
     }
   );
@@ -1061,7 +1061,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Soulshift",
-      Effect = new SoulshiftEffect { Value = int.Parse(value.ToStringValue()) },
+      Effects = [new SoulshiftEffect { Value = int.Parse(value.ToStringValue()) }],
       Reminder = reminder,
     }
   );
@@ -1098,7 +1098,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Equip",
-      Effect = new EquipEffect
+      Effects = [new EquipEffect
       {
         Cost = new MagicAST.AST.Costs.ManaCost
         {
@@ -1106,7 +1106,7 @@ public static class OracleParsers
             .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
             .ToList(),
         },
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -1142,7 +1142,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Echo",
-      Effect = new EchoEffect
+      Effects = [new EchoEffect
       {
         Cost = new MagicAST.AST.Costs.ManaCost
         {
@@ -1150,7 +1150,7 @@ public static class OracleParsers
             .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
             .ToList(),
         },
-      },
+      }],
       Reminder = reminder,
     }
   );
@@ -1186,7 +1186,7 @@ public static class OracleParsers
     select new StaticAbility
     {
       KeywordSource = "Bestow",
-      Effect = new BestowEffect
+      Effects = [new BestowEffect
       {
         Cost = new MagicAST.AST.Costs.ManaCost
         {
@@ -1194,7 +1194,7 @@ public static class OracleParsers
             .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
             .ToList(),
         },
-      },
+      }],
       Reminder = reminder,
     }
   );

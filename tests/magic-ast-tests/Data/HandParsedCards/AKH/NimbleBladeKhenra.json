@@ -6,16 +6,25 @@
     "OracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
     "Power": "1",
     "Toughness": "3",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Nimble-Blade Khenra",
     "TypeLine": {
       "Raw": "Creature — Jackal Warrior",
       "Supertypes": [],
-      "Types": ["Creature"],
-      "Subtypes": ["Jackal", "Warrior"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Jackal",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
@@ -23,9 +32,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Prowess",
-          "Effect": {
-            "EffectType": "prowess"
-          }
+          "Effects": [
+            {
+              "EffectType": "prowess"
+            }
+          ]
         }
       ]
     },
@@ -34,17 +45,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

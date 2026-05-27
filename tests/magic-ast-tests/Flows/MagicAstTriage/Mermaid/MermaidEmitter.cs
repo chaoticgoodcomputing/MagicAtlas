@@ -243,7 +243,8 @@ public static class MermaidEmitter
             case StaticAbility sta:
                 id = ctx.EmitNode("StaticAbility");
                 ctx.EmitEdge(parentId, id);
-                WalkEffect(sta.Effect, id, ctx);
+                foreach (var effect in sta.Effects)
+                    WalkEffect(effect, id, ctx);
                 break;
 
             case ModalAbility ma:
@@ -741,7 +742,8 @@ public static class MermaidEmitter
                     CollectEffectPaths(e, typeName, ctx, edgeCounts);
                 break;
             case StaticAbility sta:
-                CollectEffectPaths(sta.Effect, typeName, ctx, edgeCounts);
+                foreach (var e in sta.Effects)
+                    CollectEffectPaths(e, typeName, ctx, edgeCounts);
                 break;
             case ModalAbility ma:
                 foreach (var mode in ma.Modes)

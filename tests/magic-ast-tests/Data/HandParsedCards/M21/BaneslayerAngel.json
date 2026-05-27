@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Baneslayer Angel",
     "ManaCost": "{3}{W}{W}",
-    "TypeLine": "Creature \u2014 Angel",
+    "TypeLine": "Creature — Angel",
     "OracleText": "Flying, first strike, lifelink, protection from Demons and from Dragons",
     "Power": "5",
     "Toughness": "5",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Baneslayer Angel",
     "TypeLine": {
-      "Raw": "Creature \u2014 Angel",
+      "Raw": "Creature — Angel",
       "Supertypes": [],
       "Types": [
         "Creature"
@@ -31,50 +31,58 @@
         {
           "Kind": "static",
           "KeywordSource": "Flying",
-          "Effect": {
-            "EffectType": "evasion",
-            "CanBeBlockedBy": {
-              "CardTypes": [
-                "creature"
-              ],
-              "Characteristics": [
-                "flying",
-                "reach"
-              ]
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "flying",
+                  "reach"
+                ]
+              }
             }
-          }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "First strike",
-          "Effect": {
-            "EffectType": "combatDamageTiming",
-            "Timing": "First"
-          }
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "First"
+            }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "Lifelink",
-          "Effect": {
-            "EffectType": "lifelink"
-          }
+          "Effects": [
+            {
+              "EffectType": "lifelink"
+            }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "Protection",
-          "Effect": {
-            "EffectType": "protection",
-            "From": [
-              {
-                "Kind": "Subtype",
-                "Value": "Demons"
-              },
-              {
-                "Kind": "Subtype",
-                "Value": "Dragons"
-              }
-            ]
-          }
+          "Effects": [
+            {
+              "EffectType": "protection",
+              "From": [
+                {
+                  "Kind": "Subtype",
+                  "Value": "Demons"
+                },
+                {
+                  "Kind": "Subtype",
+                  "Value": "Dragons"
+                }
+              ]
+            }
+          ]
         }
       ]
     },

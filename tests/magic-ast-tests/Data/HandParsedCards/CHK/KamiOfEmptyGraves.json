@@ -6,16 +6,24 @@
     "OracleText": "Soulshift 3 (When this creature dies, you may return target Spirit card with mana value 3 or less from your graveyard to your hand.)",
     "Power": "4",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Kami of Empty Graves",
     "TypeLine": {
       "Raw": "Creature — Spirit",
       "Supertypes": [],
-      "Types": ["Creature"],
-      "Subtypes": ["Spirit"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spirit"
+      ]
     },
     "Oracle": {
       "RawText": "Soulshift 3 (When this creature dies, you may return target Spirit card with mana value 3 or less from your graveyard to your hand.)",
@@ -23,11 +31,13 @@
         {
           "Kind": "static",
           "KeywordSource": "Soulshift",
-          "Effect": {
-            "EffectType": "soulshift",
-            "Value": 3,
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "soulshift",
+              "Value": 3,
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -36,17 +46,43 @@
         "Kind": "manaCost",
         "Raw": "{3}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 4
       },
-      { "Kind": "colors", "Colors": ["B"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

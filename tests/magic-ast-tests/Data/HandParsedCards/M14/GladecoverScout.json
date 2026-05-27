@@ -6,16 +6,25 @@
     "OracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Gladecover Scout",
     "TypeLine": {
       "Raw": "Creature — Elf Scout",
       "Supertypes": [],
-      "Types": ["Creature"],
-      "Subtypes": ["Elf", "Scout"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Scout"
+      ]
     },
     "Oracle": {
       "RawText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)",
@@ -23,9 +32,11 @@
         {
           "Kind": "static",
           "KeywordSource": "Hexproof",
-          "Effect": {
-            "EffectType": "hexproof"
-          }
+          "Effects": [
+            {
+              "EffectType": "hexproof"
+            }
+          ]
         }
       ]
     },
@@ -34,16 +45,39 @@
         "Kind": "manaCost",
         "Raw": "{G}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 1
       },
-      { "Kind": "colors", "Colors": ["G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

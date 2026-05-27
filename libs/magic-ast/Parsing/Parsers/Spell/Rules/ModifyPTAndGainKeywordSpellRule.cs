@@ -127,78 +127,78 @@ public sealed class ModifyPTAndGainKeywordSpellRule : ISpellRule, IMultiSpellRul
       "trample" => new StaticAbility
       {
         KeywordSource = "Trample",
-        Effect = new TrampleEffect(),
+        Effects = [new TrampleEffect()],
       },
       "first strike" => new StaticAbility
       {
         KeywordSource = "First strike",
-        Effect = new CombatDamageTimingEffect { Timing = CombatDamageTiming.First },
+        Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.First }],
       },
       "reach" => new StaticAbility
       {
         KeywordSource = "Reach",
-        Effect = new ReachEffect(),
+        Effects = [new ReachEffect()],
       },
       "flying" => new StaticAbility
       {
         KeywordSource = "Flying",
-        Effect = new EvasionEffect
+        Effects = [new EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter
           {
             CardTypes = ["creature"],
             Characteristics = ["flying", "reach"],
           },
-        },
+        }],
       },
       "double strike" => new StaticAbility
       {
         KeywordSource = "Double strike",
-        Effect = new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both },
+        Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both }],
       },
       "haste" => new StaticAbility
       {
         KeywordSource = "Haste",
-        Effect = new HasteEffect(),
+        Effects = [new HasteEffect()],
       },
       "deathtouch" => new StaticAbility
       {
         KeywordSource = "Deathtouch",
-        Effect = new DeathtouchEffect(),
+        Effects = [new DeathtouchEffect()],
       },
       "lifelink" => new StaticAbility
       {
         KeywordSource = "Lifelink",
-        Effect = new LifelinkEffect(),
+        Effects = [new LifelinkEffect()],
       },
       "vigilance" => new StaticAbility
       {
         KeywordSource = "Vigilance",
-        Effect = new VigilanceEffect(),
+        Effects = [new VigilanceEffect()],
       },
       "menace" => new StaticAbility
       {
         KeywordSource = "Menace",
-        Effect = new EvasionEffect
+        Effects = [new EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter { CardTypes = ["creature"] },
           MinimumBlockers = 2,
-        },
+        }],
       },
       "indestructible" => new StaticAbility
       {
         KeywordSource = "Indestructible",
-        Effect = new IndestructibleEffect(),
+        Effects = [new IndestructibleEffect()],
       },
       "hexproof" => new StaticAbility
       {
         KeywordSource = "Hexproof",
-        Effect = new HexproofEffect(),
+        Effects = [new HexproofEffect()],
       },
       "shroud" => new StaticAbility
       {
         KeywordSource = "Shroud",
-        Effect = new ShroudEffect(),
+        Effects = [new ShroudEffect()],
       },
       _ => null,
     };

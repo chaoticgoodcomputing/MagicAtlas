@@ -6,16 +6,25 @@
     "OracleText": "Flying\nExalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Aven Squire",
     "TypeLine": {
       "Raw": "Creature — Bird Soldier",
       "Supertypes": [],
-      "Types": ["Creature"],
-      "Subtypes": ["Bird", "Soldier"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Bird",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nExalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)",
@@ -23,21 +32,30 @@
         {
           "Kind": "static",
           "KeywordSource": "Flying",
-          "Effect": {
-            "EffectType": "evasion",
-            "CanBeBlockedBy": {
-              "CardTypes": ["creature"],
-              "Characteristics": ["flying", "reach"]
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "flying",
+                  "reach"
+                ]
+              }
             }
-          }
+          ]
         },
         {
           "Kind": "static",
           "KeywordSource": "Exalted",
-          "Effect": {
-            "EffectType": "exalted",
-            "IsOptional": false
-          }
+          "Effects": [
+            {
+              "EffectType": "exalted",
+              "IsOptional": false
+            }
+          ]
         }
       ]
     },
@@ -46,17 +64,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }
