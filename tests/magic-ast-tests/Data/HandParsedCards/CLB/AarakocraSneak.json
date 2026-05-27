@@ -1,0 +1,85 @@
+{
+  "Input": {
+    "Name": "Aarakocra Sneak",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Creature — Bird Rogue",
+    "OracleText": "Flying\nWhen this creature enters, you take the initiative.",
+    "Power": "1",
+    "Toughness": "4",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Aarakocra Sneak",
+    "TypeLine": {
+      "Raw": "Creature — Bird Rogue",
+      "Types": ["Creature"],
+      "Subtypes": ["Bird", "Rogue"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nWhen this creature enters, you take the initiative.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": ["flying", "reach"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "takeInitiative"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
