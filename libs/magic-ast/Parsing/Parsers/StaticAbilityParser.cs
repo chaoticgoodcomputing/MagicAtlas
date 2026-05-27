@@ -2475,34 +2475,50 @@ public sealed class StaticAbilityParser : IAbilityParser
   }
 
   /// <summary>
-  /// "This [permanent/land/creature/artifact/enchantment] enters tapped." —
+  /// "This [permanent/land/creature/artifact/enchantment] enters tapped[unless condition]." —
   /// Rule 614 property recorded as a <see cref="EntersTappedEffect"/> on a
   /// <see cref="StaticAbility"/>. No <c>KeywordSource</c> is set: oracle text
   /// uses a full declarative sentence, not a keyword token. MAST records what
   /// the oracle text <em>says</em>; the replacement-effect machinery Rule 614
   /// derives at run-time is out of scope.
+  ///
+  /// <para>When oracle text carries "unless [condition]" (fastland / checkland
+  /// shape, e.g. "This land enters tapped unless you control two or fewer other
+  /// lands."), the condition text is captured in
+  /// <see cref="EntersTappedEffect.EntryCondition"/>. This is distinct from
+  /// <see cref="UnlessClause"/> which represents "unless [player] pays [cost]".</para>
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseEntersTapped(OracleClause clause)
   {
-    if (!_entersTappedPattern.IsMatch(clause.RawText))
+    var match = _entersTappedPattern.Match(clause.RawText);
+    if (!match.Success)
     {
       return null;
     }
+
+    var conditionGroup = match.Groups["condition"];
+    Condition? entryCondition = conditionGroup.Success
+      ? new Condition { Text = conditionGroup.Value.Trim() }
+      : null;
+
     return
     [
       new StaticAbility
       {
-        Effects = [new EntersTappedEffect()],
+        Effects = [new EntersTappedEffect { EntryCondition = entryCondition }],
       },
     ];
   }
 
-  // Matches "This [permanent|land|creature|artifact|enchantment] enters tapped."
+  // Matches "This [permanent|land|creature|artifact|enchantment] enters tapped[.]"
+  // optionally followed by "unless [condition text]."
   // The permanent-type noun is flexible to cover the full range of oracle
   // printings. The trailing period is optional to accommodate minor formatting
-  // variants.
+  // variants. The named capture group <condition> captures the board-state
+  // predicate text after "unless" for fastland / checkland entries.
   private static readonly Regex _entersTappedPattern = new(
-    @"^\s*This\s+(?:permanent|land|creature|artifact|enchantment|spell)\s+enters\s+tapped\.?\s*$",
+    @"^\s*This\s+(?:permanent|land|creature|artifact|enchantment|spell)\s+enters\s+tapped"
+    + @"(?:\s+unless\s+(?<condition>[^.]+?))?\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

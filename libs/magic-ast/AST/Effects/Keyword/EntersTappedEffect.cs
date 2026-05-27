@@ -1,6 +1,7 @@
 namespace MagicAST.AST.Effects.Keyword;
 
 using System.Text.Json.Serialization;
+using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Traits;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
@@ -32,4 +33,14 @@ public sealed record EntersTappedEffect : Effect, IOptionalEffect, IDurativeEffe
   /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public UnlessClause? UnlessClause { get; init; }
+
+  /// <summary>
+  /// Board-state condition under which this land enters untapped instead.
+  /// Captures the fastland / checkland oracle shape: "This land enters tapped
+  /// unless [condition]." Rule 614.1c (as-enters replacement effect).
+  /// Distinct from <see cref="UnlessClause"/> which represents the
+  /// "unless [player] pays [cost]" cost-prevention pattern.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Condition? EntryCondition { get; init; }
 }
