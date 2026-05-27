@@ -1290,6 +1290,29 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Saddle N" keyword.
+  /// Pattern: "Saddle" number [reminder]
+  /// Rule 702.171. An activated keyword ability: tap any number of other untapped
+  /// creatures you control with total power N or greater — this Mount becomes
+  /// saddled until end of turn. Activate only as a sorcery. MAST records the
+  /// keyword and its integer threshold value; the activation semantics and saddled
+  /// designation are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/> and
+  /// <see cref="Soulshift"/>. Structurally mirrors Crew (702.122) but for Mounts.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Saddle = (
+    from keyword in Keyword("Saddle")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Saddle",
+      Effects = [new SaddleEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Equip {cost}" keyword.
   /// Pattern: "Equip" mana-symbol+ [reminder]
   /// Rule 702.6. An activated ability that attaches this Equipment to a creature
@@ -1612,6 +1635,7 @@ public static class OracleParsers
       .Or(Crew.Try())
       .Or(Bushido.Try())
       .Or(Soulshift.Try())
+      .Or(Saddle.Try())
       .Or(PartnerWith.Try())
       .Or(Partner.Try())
       .Or(ChooseABackground.Try())

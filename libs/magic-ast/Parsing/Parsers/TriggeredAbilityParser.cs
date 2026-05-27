@@ -130,6 +130,30 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       triggerPart = trailingIfMatch.Groups["head"].Value.Trim();
     }
 
+    // "Attacks while saddled" — Rule 702.171 Mount mechanic. The "while [condition]"
+    // suffix on an attack trigger is an inline condition attached to the trigger text
+    // (not a post-comma intervening-if). Extract it and promote to InterveningIf.
+    // Pattern: "[subject] attacks while [condition]" → trigger on Attacks + interveningIf.
+    // Normalise "while saddled" to "this permanent is saddled" for consistency with
+    // the Condition.Text vocabulary used elsewhere (plain predicate, no dangling phrases).
+    if (interveningIf is null)
+    {
+      var whileCondMatch = Regex.Match(
+        triggerPart,
+        @"^(?<head>.+attacks)\s+while\s+(?<cond>.+)$",
+        RegexOptions.IgnoreCase
+      );
+      if (whileCondMatch.Success)
+      {
+        var condText = whileCondMatch.Groups["cond"].Value.Trim().ToLowerInvariant();
+        // Normalise bare adjective "saddled" → "this permanent is saddled".
+        // Other "while [adj]" forms are preserved as-is.
+        var normalised = condText == "saddled" ? "this permanent is saddled" : condText;
+        interveningIf = new Condition { Text = normalised };
+        triggerPart = whileCondMatch.Groups["head"].Value.Trim();
+      }
+    }
+
     // Parse trigger event and filter
     var trigger = ParseTriggerCondition(triggerPart, triggerTiming.Value);
     if (trigger == null)
