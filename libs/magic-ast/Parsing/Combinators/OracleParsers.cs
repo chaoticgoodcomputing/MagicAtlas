@@ -614,6 +614,26 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Mentor" keyword.
+  /// Pattern: "Mentor" [reminder]
+  /// Rule 702.134. Whenever this creature attacks, put a +1/+1 counter on target
+  /// attacking creature with power less than this creature's power. Although
+  /// mechanically a triggered ability, MAST models it as a keyword marker
+  /// (same approach as Evolve, Flanking, Exalted); the trigger / target-selection /
+  /// counter-placement are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Mentor = (
+    from kw in Keyword("Mentor")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Mentor",
+      Effects = [new MentorEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -1574,6 +1594,7 @@ public static class OracleParsers
     .Or(Flanking)
     .Or(Ascend)
     .Or(Evolve)
+    .Or(Mentor)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)

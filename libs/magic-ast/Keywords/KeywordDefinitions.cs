@@ -228,6 +228,27 @@ public static class KeywordDefinitions
       },
     };
 
+  /// <summary>
+  /// Mentor: Whenever this creature attacks, put a +1/+1 counter on target attacking
+  /// creature with power less than this creature's power.
+  /// Rule 702.134. Although mechanically a triggered ability, MAST records the
+  /// keyword's presence only — the trigger / target-selection / counter-placement
+  /// are engine territory (same approach as Evolve, Flanking, Exalted).
+  /// </summary>
+  public static KeywordDefinition Mentor { get; } =
+    new()
+    {
+      Name = "Mentor",
+      RuleReference = "702.134",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Mentor",
+        Effects = [new MentorEffect()],
+      },
+    };
+
   // ═══════════════════════════════════════════════════════════════════════════
   // COMBAT BEHAVIOR KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -614,6 +635,7 @@ public static class KeywordDefinitions
       Evolve,
       Plot,
       Undying,
+      Mentor,
       // More keywords can be added here as needed
     ];
 
