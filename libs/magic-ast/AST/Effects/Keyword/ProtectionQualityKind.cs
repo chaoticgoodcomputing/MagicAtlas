@@ -25,4 +25,11 @@ public enum ProtectionQualityKind
 
   /// <summary>Everything (protection from everything)</summary>
   Everything,
+
+  /// <summary>
+  /// A color chosen by the controller at resolution time, i.e. "protection from
+  /// the color of your choice". The specific color is not known at parse time —
+  /// oracle text records the instruction to choose, not the chosen value.
+  /// </summary>
+  ChosenColor,
 }
