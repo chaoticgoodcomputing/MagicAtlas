@@ -24,6 +24,10 @@ public sealed class ReturnToHandRule : ITriggeredRule
       return false;
     }
 
+    // Detect whether the phrasing is a targeted ("target X") or indefinite
+    // ("a land you control") reference. Indefinite = no "target" keyword.
+    var isTargeted = Regex.IsMatch(lower, @"\btarget\b");
+
     var isOptional =
       lower.Contains("you may return")
       || lower.StartsWith("you may ")
@@ -39,7 +43,7 @@ public sealed class ReturnToHandRule : ITriggeredRule
     }
 
     var cardTypes = new List<string>();
-    foreach (var t in new[] { "creature", "planeswalker", "artifact", "enchantment", "permanent" })
+    foreach (var t in new[] { "creature", "planeswalker", "artifact", "enchantment", "permanent", "land" })
     {
       if (Regex.IsMatch(lower, $@"\b{t}\b"))
       {
@@ -68,9 +72,16 @@ public sealed class ReturnToHandRule : ITriggeredRule
       Controller = controller,
     };
 
+    // Targeted phrasing ("return target X") → ObjectReferenceKind.Target.
+    // Indefinite phrasing ("return a land you control") → ObjectReferenceKind.Any:
+    // the controller picks one qualifying object at resolution without it being a
+    // formal target (Rule 701.10; no targeting declaration, no shroud/hexproof
+    // interaction). Rule 601.2c contrast: "target" requires a targeting declaration.
+    var refKind = isTargeted ? ObjectReferenceKind.Target : ObjectReferenceKind.Any;
+
     effect = new ReturnToHandEffect
     {
-      Target = new ObjectReference { Kind = ObjectReferenceKind.Target, Filter = filter },
+      Target = new ObjectReference { Kind = refKind, Filter = filter },
       IsOptional = isOptional,
     };
     return true;

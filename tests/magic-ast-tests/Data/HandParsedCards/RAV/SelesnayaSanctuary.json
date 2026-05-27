@@ -1,0 +1,91 @@
+{
+  "Input": {
+    "Name": "Selesnya Sanctuary",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "{T}: Add {G}{W}.\nThis land enters tapped.\nWhen this land enters, return a land you control to its owner's hand.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [
+      "G",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Selesnya Sanctuary",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": [
+        "Land"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: Add {G}{W}.\nThis land enters tapped.\nWhen this land enters, return a land you control to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{G}{W}"
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "entersTapped"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "land"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Any",
+                "Filter": {
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "Controller": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G",
+          "W"
+        ]
+      }
+    ]
+  }
+}
