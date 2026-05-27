@@ -1,0 +1,90 @@
+{
+  "Input": {
+    "Name": "Adaptive Snapjaw",
+    "ManaCost": "{4}{G}",
+    "TypeLine": "Creature — Lizard Beast",
+    "OracleText": "Evolve (Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)",
+    "Power": "6",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Adaptive Snapjaw",
+    "TypeLine": {
+      "Raw": "Creature — Lizard Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Lizard",
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Evolve (Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Evolve",
+          "Reminder": {
+            "Text": "(Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "evolve"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
