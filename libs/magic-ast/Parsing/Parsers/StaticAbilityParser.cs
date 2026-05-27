@@ -2209,7 +2209,7 @@ public sealed class StaticAbilityParser : IAbilityParser
         Effects = [new MagicAST.AST.Effects.Keyword.DeathtouchEffect { IsOptional = false }],
       },
       // Menace: this creature can't be blocked except by two or more creatures.
-      // Rule 702.110. EvasionEffect with MinimumBlockers=2; CanBeBlockedBy carries
+      // Rule 702.111. EvasionEffect with MinimumBlockers=2; CanBeBlockedBy carries
       // the creature-typed filter (any two-or-more creatures qualify as blockers).
       "menace" => new StaticAbility
       {

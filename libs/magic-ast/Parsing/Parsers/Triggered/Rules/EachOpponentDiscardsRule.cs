@@ -8,10 +8,9 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// "each opponent discards a card" — ETB discard effect imposed on all opponents
-/// simultaneously. Rule 701.7 (discard); Rule 800.4b (simultaneous actions for
-/// multiple players). MAST records the discard event and the player scope
-/// (EachOpponent); the simultaneous discard order for multiplayer (Rule 800.4b)
-/// is engine territory, not described by the oracle text.
+/// simultaneously. Rule 701.9 (Discard). MAST records the discard event and the
+/// player scope (EachOpponent); the simultaneous discard order for multiplayer is
+/// engine territory, not described by the oracle text.
 ///
 /// <para>
 /// This rule covers the bare single-card form only. Counts other than one
