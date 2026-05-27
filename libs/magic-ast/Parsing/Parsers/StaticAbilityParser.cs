@@ -633,7 +633,11 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseEnchantedPTAndKeyword(OracleClause clause)
   {
-    var match = _enchantedPTAndKeywordPattern.Match(clause.RawText);
+    // Strip trailing parenthetical reminder text before matching so lines like
+    // "Enchanted creature gets +2/+0 and has trample. (It can deal excess...)"
+    // still match the end-anchored pattern (Rule 207.2 — reminder text is not rules text).
+    var rawText = StripReminderText(clause.RawText);
+    var match = _enchantedPTAndKeywordPattern.Match(rawText);
     if (!match.Success)
     {
       return null;
