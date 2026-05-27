@@ -938,6 +938,114 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // SPELL-CAST RECURSION KEYWORDS (Rebound, Buyback, Retrace)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Rebound: If you cast this spell from your hand, exile it as it resolves.
+  /// At the beginning of your next upkeep, you may cast this card from exile
+  /// without paying its mana cost.
+  /// Rule 702.88. Parameterless keyword marker.
+  /// </summary>
+  public static KeywordDefinition Rebound { get; } =
+    new()
+    {
+      Name = "Rebound",
+      RuleReference = "702.88",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Rebound",
+        Effects = [new ReboundEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Buyback [cost]: You may pay an additional [cost] as you cast this spell.
+  /// If you do, put this card into your hand as it resolves.
+  /// Rule 702.26. Scope: mana-cost parameter (all known printed instances).
+  /// </summary>
+  public static KeywordDefinition Buyback { get; } =
+    new()
+    {
+      Name = "Buyback",
+      RuleReference = "702.26",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Buyback",
+        Effects = [new BuybackEffect
+        {
+          BuybackCost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
+  /// <summary>
+  /// Retrace: You may cast this card from your graveyard by discarding a land
+  /// card in addition to paying its other costs.
+  /// Rule 702.75. Parameterless keyword marker.
+  /// </summary>
+  public static KeywordDefinition Retrace { get; } =
+    new()
+    {
+      Name = "Retrace",
+      RuleReference = "702.75",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Retrace",
+        Effects = [new RetraceEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CREATURE MECHANIC KEYWORDS (Unleash, Learn)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Unleash: You may have this creature enter with a +1/+1 counter on it.
+  /// It can't block as long as it has a +1/+1 counter on it.
+  /// Rule 702.97. Parameterless keyword marker.
+  /// </summary>
+  public static KeywordDefinition Unleash { get; } =
+    new()
+    {
+      Name = "Unleash",
+      RuleReference = "702.97",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Unleash",
+        Effects = [new UnleashEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Learn: You may reveal a Lesson card you own from outside the game and put
+  /// it into your hand, or discard a card to draw a card.
+  /// Rule 702.148. Parameterless keyword action marker.
+  /// </summary>
+  public static KeywordDefinition Learn { get; } =
+    new()
+    {
+      Name = "Learn",
+      RuleReference = "702.148",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Learn",
+        Effects = [new LearnEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // RECONFIGURE KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1013,6 +1121,11 @@ public static class KeywordDefinitions
       Modular,
       Backup,
       Reconfigure,
+      Rebound,
+      Buyback,
+      Retrace,
+      Unleash,
+      Learn,
       // More keywords can be added here as needed
     ];
 
