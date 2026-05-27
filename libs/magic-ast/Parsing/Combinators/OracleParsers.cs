@@ -1237,6 +1237,50 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Kicker {cost}" keyword.
+  /// Pattern: "Kicker" mana-symbol+ [reminder]
+  /// Rule 702.33. "You may pay an additional [cost] as you cast this spell."
+  /// MAST records the keyword and the kicker cost; the conditional resolution
+  /// of kicked effects is engine territory. Mirrors the Bestow/Echo/Equip pattern.
+  /// Scope: single-cost kicker only (Rule 702.33a). Multi-cost ("and/or") and
+  /// Multikicker are deferred to a future batch.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Kicker = (
+    from keyword in Keyword("Kicker")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Kicker",
+      Effects = [new KickerEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -1299,7 +1343,8 @@ public static class OracleParsers
       .Or(Equip.Try())
       .Or(Morph.Try())
       .Or(Bestow.Try())
-      .Or(Echo.Try());
+      .Or(Echo.Try())
+      .Or(Kicker.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
