@@ -348,27 +348,6 @@ public static class KeywordDefinitions
       },
     };
 
-  /// <summary>
-  /// Melee: Triggered keyword ability. Whenever this creature attacks, it gets
-  /// +1/+1 until end of turn for each opponent you attacked with a creature this combat.
-  /// Rule 702.121. MAST records keyword presence; the per-opponent attack counting
-  /// and temporary P/T buff are engine territory. Mirrors EvolveEffect and
-  /// FlankingEffect: parameterless keyword marker.
-  /// </summary>
-  public static KeywordDefinition Melee { get; } =
-    new()
-    {
-      Name = "Melee",
-      RuleReference = "702.121",
-      Category = KeywordCategory.Triggered,
-      HasParameter = false,
-      CreateExpansion = _ => new StaticAbility
-      {
-        KeywordSource = "Melee",
-        Effects = [new MeleeEffect()],
-      },
-    };
-
   // ═══════════════════════════════════════════════════════════════════════════
   // COMBAT BEHAVIOR KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -849,7 +828,6 @@ public static class KeywordDefinitions
       Undying,
       Mentor,
       Myriad,
-      Melee,
       Saddle,
       Megamorph,
       CumulativeUpkeep,

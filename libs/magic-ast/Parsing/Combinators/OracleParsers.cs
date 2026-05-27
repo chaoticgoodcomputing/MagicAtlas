@@ -732,24 +732,6 @@ public static class OracleParsers
 
   /// <summary>
   /// Parser for the "Melee" keyword.
-  /// Pattern: "Melee" [reminder]
-  /// Rule 702.121. Whenever this creature attacks, it gets +1/+1 until end of turn
-  /// for each opponent you attacked with a creature this combat. Although mechanically
-  /// a triggered ability, MAST models it as a keyword marker (same approach as Evolve,
-  /// Flanking, Myriad, Mentor); the per-opponent attack counting and temporary P/T
-  /// buff are engine territory.
-  /// </summary>
-  public static readonly TokenListParser<OracleToken, StaticAbility> Melee = (
-    from kw in Keyword("Melee")
-    from reminder in _optionalReminder
-    select new StaticAbility
-    {
-      KeywordSource = "Melee",
-      Effects = [new MeleeEffect()],
-      Reminder = reminder,
-    }
-  );
-
   #endregion
 
   #region Combat Timing Keywords
@@ -1830,7 +1812,6 @@ public static class OracleParsers
     .Or(Shadow)
     .Or(Intimidate)
     .Or(Myriad)
-    .Or(Melee)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)
