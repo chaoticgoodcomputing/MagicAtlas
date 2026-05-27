@@ -254,10 +254,13 @@ public sealed class StaticAbilityParser : IAbilityParser
       return tokenAugmentation;
     }
 
-    // "If an effect would create one or more tokens under your control, it
-    // creates twice that many of those tokens instead." — Rule 614 scaling
-    // replacement: the token count is doubled (Doubling Season token line).
-    // OriginalEventOccurs=false with a Modifier of Type "double".
+    // Two phrasings of the token-count doubling replacement (Rule 614):
+    // • "If an effect would create one or more tokens under your control, it
+    //   creates twice that many of those tokens instead." (Doubling Season)
+    // • "If one or more tokens would be created under your control, twice that
+    //   many of those tokens are created instead." (Parallel Lives / Anointed
+    //   Procession — passive-voice variant, same AST shape).
+    // Both: OriginalEventOccurs=false with Modifier Type "double".
     var tokenDoubling = TryParseTokenDoublingReplacement(clause);
     if (tokenDoubling != null)
     {
@@ -1797,18 +1800,25 @@ public sealed class StaticAbilityParser : IAbilityParser
   }
 
   /// <summary>
-  /// "If an effect would create one or more tokens under your control, it creates
-  /// twice that many of those tokens instead." — Rule 614.1a scaling replacement:
-  /// the original token-creation count is doubled (Doubling Season token line).
-  /// <see cref="ReplacementEffect.OriginalEventOccurs"/> is <c>false</c>: the
-  /// original event is fully replaced by the doubled version. The scaling is
-  /// described by <see cref="ReplacementModifier"/> with <c>Type = "double"</c>;
-  /// no separate <see cref="ReplacementEffect.Replacement"/> is needed since the
-  /// replacement IS the scaled original event.
+  /// Two phrasings of the token-doubling replacement effect (Rule 614.1a):
+  /// <list type="bullet">
+  ///   <item><c>"If an effect would create one or more tokens under your control,
+  ///   it creates twice that many of those tokens instead."</c> — Doubling Season
+  ///   wording (effect-as-agent).</item>
+  ///   <item><c>"If one or more tokens would be created under your control, twice
+  ///   that many of those tokens are created instead."</c> — Parallel Lives /
+  ///   Anointed Procession wording (passive voice).</item>
+  /// </list>
+  /// Both share the same AST shape:
+  /// <see cref="ReplacementEffect.OriginalEventOccurs"/> is <c>false</c> and
+  /// <see cref="ReplacementModifier"/> has <c>Type = "double"</c>. No separate
+  /// <see cref="ReplacementEffect.Replacement"/> is needed — the replacement IS
+  /// the scaled original event.
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseTokenDoublingReplacement(OracleClause clause)
   {
-    if (!_tokenDoublingPattern.IsMatch(clause.RawText))
+    if (!_tokenDoublingPattern.IsMatch(clause.RawText)
+        && !_tokenDoublingPassivePattern.IsMatch(clause.RawText))
     {
       return null;
     }
@@ -1835,9 +1845,16 @@ public sealed class StaticAbilityParser : IAbilityParser
   }
 
   // Pattern: "If an effect would create one or more tokens under your control,
-  // it creates twice that many of those tokens instead."
+  // it creates twice that many of those tokens instead." (Doubling Season)
   private static readonly Regex _tokenDoublingPattern = new(
     @"^\s*If\s+an\s+effect\s+would\s+create\s+one\s+or\s+more\s+tokens\s+under\s+your\s+control,\s+it\s+creates\s+twice\s+that\s+many\s+of\s+those\s+tokens\s+instead\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Pattern: "If one or more tokens would be created under your control, twice
+  // that many of those tokens are created instead." (Parallel Lives / Anointed Procession)
+  private static readonly Regex _tokenDoublingPassivePattern = new(
+    @"^\s*If\s+one\s+or\s+more\s+tokens\s+would\s+be\s+created\s+under\s+your\s+control,\s+twice\s+that\s+many\s+of\s+those\s+tokens\s+are\s+created\s+instead\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

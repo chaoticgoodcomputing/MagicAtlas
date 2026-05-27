@@ -1,0 +1,82 @@
+{
+  "Input": {
+    "Name": "Anointed Procession",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Enchantment",
+    "OracleText": "If one or more tokens would be created under your control, twice that many of those tokens are created instead.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Anointed Procession",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If one or more tokens would be created under your control, twice that many of those tokens are created instead.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "tokenCreation",
+                "MinimumQuantity": 1,
+                "Controller": {
+                  "Kind": "You"
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Modifier": {
+                "Type": "double"
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}
