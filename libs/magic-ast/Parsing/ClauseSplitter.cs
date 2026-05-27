@@ -143,6 +143,16 @@ public sealed class ClauseSplitter
         continue;
       }
 
+      // Cycling-provenance reminder lines (e.g. "(Cycling from Tranquil Thicket.)") are
+      // standalone parenthetical annotations that record which cycling ability produced a
+      // given game action in certain printed or digital formats. They carry no oracle-ability
+      // semantics and must be dropped here so they do not produce spurious UnparsedAbility
+      // nodes in Oracle.Abilities.
+      if (IsCyclingProvenanceReminder(paragraphText))
+      {
+        continue;
+      }
+
       // Level-up cost paragraphs ("Level up {cost} (reminder)") start a
       // multi-stanza superstructure. Consume the cost paragraph plus all
       // following LEVEL stanza paragraphs (with their P/T and inner-ability
@@ -299,6 +309,36 @@ public sealed class ClauseSplitter
 
   private static bool IsManaSymbolReminder(string text) =>
     ManaSymbolReminderPattern.IsMatch(text);
+
+  /// <summary>
+  /// Recognises standalone cycling-provenance reminder lines that appear as separate
+  /// oracle text paragraphs in certain printed or digital formats. These lines record
+  /// which cycling ability produced a given game action — for example:
+  /// <code>
+  ///   (Cycling from Tranquil Thicket.)
+  ///   (cycling from Forgotten Cave.)
+  ///   (Cycling from Shoreline Ranger.)
+  /// </code>
+  ///
+  /// <para>
+  /// The pattern is deliberately narrow: it requires the line to be a complete
+  /// parenthetical that contains "cycling from" followed by one or more non-empty words
+  /// (the card name). It does not match lines where "cycling from" appears mid-sentence
+  /// in a genuine oracle ability, such as:
+  /// <list type="bullet">
+  ///   <item>"Return up to two target cards with cycling from your graveyard to your hand."</item>
+  /// </list>
+  /// Those lines do not start with "(" and thus do not match this regex.
+  /// </para>
+  /// </summary>
+  private static readonly System.Text.RegularExpressions.Regex CyclingProvenanceReminderPattern =
+    new(
+      @"^\s*\(.*[Cc]ycling\s+from\b.*\)\s*\.?\s*$",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase
+    );
+
+  private static bool IsCyclingProvenanceReminder(string text) =>
+    CyclingProvenanceReminderPattern.IsMatch(text);
 
   /// <summary>
   /// Recognises the head paragraph of a Level Up cluster: a line that opens

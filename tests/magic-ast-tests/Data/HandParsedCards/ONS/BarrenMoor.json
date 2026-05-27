@@ -1,0 +1,83 @@
+{
+  "Input": {
+    "Name": "Barren Moor",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "This land enters tapped.\n{T}: Add {B}.\nCycling {B} ({B}, Discard this card: Draw a card.)\n(Cycling from Barren Moor.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Barren Moor",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": [
+        "Land"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This land enters tapped.\n{T}: Add {B}.\nCycling {B} ({B}, Discard this card: Draw a card.)\n(Cycling from Barren Moor.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "entersTapped"
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{B}"
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Cycling",
+          "Effects": [
+            {
+              "EffectType": "cycling",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "B"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}
