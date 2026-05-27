@@ -1,0 +1,120 @@
+{
+  "Input": {
+    "Name": "Rograkh, Son of Rohgahh",
+    "ManaCost": "{0}",
+    "TypeLine": "Legendary Creature — Kobold Warrior",
+    "OracleText": "First strike, menace, trample\nPartner (You can have two commanders if both have partner.)",
+    "Power": "0",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Rograkh, Son of Rohgahh",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Kobold Warrior",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kobold",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "First strike, menace, trample\nPartner (You can have two commanders if both have partner.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "First strike",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "First"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Menace",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ]
+              },
+              "MinimumBlockers": 2
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "trample"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Partner",
+          "Reminder": {
+            "Text": "(You can have two commanders if both have partner.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "partner",
+              "PartnerType": "Partner"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{0}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 0
+          }
+        ],
+        "ManaValue": 0
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

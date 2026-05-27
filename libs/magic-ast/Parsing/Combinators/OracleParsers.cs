@@ -727,6 +727,28 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the bare "Partner" keyword (parameterless).
+  /// Pattern: "Partner" [reminder]
+  /// Rule 702.124. Allows any two Partner commanders to be paired together.
+  /// Must be placed AFTER PartnerWith in the Or-chain: "Partner with [Name]"
+  /// leads with the same "Partner" token; PartnerWith.Try() backtracks if
+  /// "with" is absent, leaving this parser to match the bare form.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Partner = (
+    from kw in Keyword("Partner")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Partner",
+      Effects = [new PartnerEffect
+      {
+        PartnerType = PartnerType.Partner,
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Entwine {cost}" — Rule 702.41. The cost is parsed by the
   /// shared mana-cost parser so multi-symbol entwine costs (e.g. {1}{B}) land
   /// as full <see cref="MagicAST.AST.Costs.ManaCost"/> nodes rather than
@@ -1333,6 +1355,7 @@ public static class OracleParsers
       .Or(Bushido.Try())
       .Or(Soulshift.Try())
       .Or(PartnerWith.Try())
+      .Or(Partner.Try())
       .Or(ChooseABackground.Try())
       .Or(Entwine.Try())
       .Or(Typecycling.Try())

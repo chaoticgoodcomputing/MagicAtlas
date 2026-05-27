@@ -309,6 +309,28 @@ public static class KeywordDefinitions
       },
     };
 
+  /// <summary>
+  /// Partner (parameterless): You can have two commanders if both have partner.
+  /// Rule 702.124. The bare form allows any two Partner commanders to pair up,
+  /// as opposed to Partner with [Name] which binds two specific cards.
+  /// </summary>
+  public static KeywordDefinition Partner { get; } =
+    new()
+    {
+      Name = "Partner",
+      RuleReference = "702.124",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Partner",
+        Effects = [new PartnerEffect
+        {
+          PartnerType = PartnerType.Partner,
+        }],
+      },
+    };
+
   // ═══════════════════════════════════════════════════════════════════════════
   // KICKER KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -357,6 +379,7 @@ public static class KeywordDefinitions
       Protection,
       Crew,
       PartnerWith,
+      Partner,
       Kicker,
       // More keywords can be added here as needed
     ];
