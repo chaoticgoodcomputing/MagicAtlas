@@ -6,7 +6,8 @@ using MagicAST.AST.Effects.ZoneChange;
 using MagicAST.AST.References;
 
 /// <summary>
-/// "return ... to its owner's hand" — type-disjunction, you-control, optional "you may"/"up to N".
+/// "return ... to its owner's hand" — type-disjunction, you-control, optional "you may"/"up to N",
+/// and non-prefix qualifiers (e.g. "nonland permanent", "nontoken creature").
 /// </summary>
 [TriggeredRule]
 public sealed class ReturnToHandRule : ITriggeredRule
@@ -40,6 +41,14 @@ public sealed class ReturnToHandRule : ITriggeredRule
     else if (Regex.IsMatch(lower, @"\bother\s+target\b"))
     {
       characteristics.Add("other");
+    }
+
+    // Capture any "non<X>" qualifier that precedes a card-type token.
+    // e.g. "target nonland permanent" → characteristics: ["nonland"]
+    var nonMatch = Regex.Match(lower, @"\b(non\w+)\s+(?:creature|planeswalker|artifact|enchantment|permanent|land)\b");
+    if (nonMatch.Success)
+    {
+      characteristics.Add(nonMatch.Groups[1].Value);
     }
 
     var cardTypes = new List<string>();
