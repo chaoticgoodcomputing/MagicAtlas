@@ -79,7 +79,7 @@
               },
               "RawText": "Tap two untapped artifacts you control: Target creature can't be blocked this turn.",
               "Pattern": "UnparsedSpell",
-              "LastAttemptedRule": "SpellAbilityParser.UntapTargetRule",
+              "LastAttemptedRule": "SpellAbilityParser.YouLoseLifeSpellRule",
               "FailurePosition": 98
             }
           ]
