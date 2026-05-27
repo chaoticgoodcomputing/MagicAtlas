@@ -175,9 +175,10 @@ public sealed class StaticAbilityParser : IAbilityParser
 
     // "This creature gets +N/+M for each <filter> you control." — self
     // P/T modifier scaled by a count of permanents the controller controls
-    // (Rule 613.1c, layer 7C). PowerModifier or ToughnessModifier is a
-    // CountQuantity whose CountOf captures the filter + "you control" as a
-    // free-text phrase; the zero side uses LiteralQuantity.Of(0).
+    // (Rule 613.4c, layer 7c — effects and counters that modify power and/or
+    // toughness). PowerModifier or ToughnessModifier is a CountQuantity whose
+    // CountOf captures the filter + "you control" as a free-text phrase; the
+    // zero side uses LiteralQuantity.Of(0).
     var selfPTForEach = TryParseSelfPTForEach(clause);
     if (selfPTForEach != null)
     {
@@ -454,7 +455,8 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// <summary>
   /// "This creature gets +N/+M for each &lt;filter&gt; you control." —
   /// self-referential P/T modifier scaled by a count of permanents the
-  /// controller controls (Rule 613.1c, layer 7C). The per-count increment
+  /// controller controls (Rule 613.4c, layer 7c — PT-modifier sublayer,
+  /// with Rule 613.1g as the parent Layer 7 entry). The per-count increment
   /// must be 1 for both power and toughness sides — cards with multipliers
   /// other than 1 are not covered by this surface.
   ///

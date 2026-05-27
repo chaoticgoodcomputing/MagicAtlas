@@ -584,8 +584,9 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     }
 
     // BecomesTarget trigger: "When this creature becomes the target of a spell or ability".
-    // Rule 114.9 — a permanent becomes the target of a spell or ability when that spell or
-    // ability is placed on the stack. The subject is the source creature (this creature).
+    // Triggered-ability machinery: Rule 603.1-603.2. The "becomes the target" relationship
+    // is defined in Rule 115.1 (Targets — an object becomes a target when a spell or ability
+    // that targets it is put on the stack). The subject is the source creature (this creature).
     if (lower.Contains("becomes the target"))
     {
       var becomesTarget = TryParseBecomesTargetTrigger(triggerText, timing);
@@ -1038,7 +1039,8 @@ public sealed class TriggeredAbilityParser : IAbilityParser
 
   /// <summary>
   /// "When this creature becomes the target of a spell or ability" —
-  /// Rule 114.9 trigger. The subject "this creature" is the source permanent;
+  /// triggered-ability machinery: Rule 603.1-603.2; "becomes the target"
+  /// relationship: Rule 115.1. The subject "this creature" is the source permanent;
   /// the filter carries the subject's card type. Only the self-reference shape
   /// is modelled here; third-party-target shapes ("whenever target creature
   /// becomes the target...") are out of scope for this surface.

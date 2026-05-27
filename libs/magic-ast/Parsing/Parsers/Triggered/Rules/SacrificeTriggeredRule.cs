@@ -7,7 +7,7 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// "sacrifice it" — triggered self-sacrifice on the creature that fired the
-/// trigger (Rule 701.17). The pronoun "it" refers back to the trigger subject
+/// trigger (Rule 701.21a — Sacrifice). The pronoun "it" refers back to the trigger subject
 /// and maps to <see cref="ObjectReferenceKind.It"/>, matching the pronoun-
 /// reference convention used elsewhere in triggered rules.
 /// </summary>
