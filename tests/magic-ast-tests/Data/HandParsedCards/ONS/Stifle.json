@@ -1,0 +1,56 @@
+{
+  "Input": {
+    "Name": "Stifle",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Counter target activated or triggered ability.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Stifle",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Counter target activated or triggered ability.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "counterSpell",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["activatedAbility", "triggeredAbility"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
