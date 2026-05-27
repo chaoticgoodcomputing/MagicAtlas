@@ -1855,6 +1855,114 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for "Dash {cost}" keyword.
+  /// Pattern: "Dash" mana-symbol+ [reminder]
+  /// Rule 702.109. "You may cast this card for its dash cost. If you do, it gains
+  /// haste, and it's returned from the battlefield to its owner's hand at the
+  /// beginning of the next end step." MAST records the keyword and its cost; the
+  /// haste-grant and return-to-hand semantics are engine territory. Mirrors the
+  /// Kicker/Bestow/Echo/Equip pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Dash = (
+    from keyword in Keyword("Dash")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Dash",
+      Effects = [new DashEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Ninjutsu {cost}" keyword.
+  /// Pattern: "Ninjutsu" mana-symbol+ [reminder]
+  /// Rule 702.49. "[Cost], Return an unblocked attacker you control to hand: Put
+  /// this card onto the battlefield from your hand tapped and attacking." MAST
+  /// records the keyword and the ninjutsu cost; the return-attacker and
+  /// enter-tapped-and-attacking semantics are engine territory. Mirrors the
+  /// Bestow/Kicker/Echo/Equip pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Ninjutsu = (
+    from keyword in Keyword("Ninjutsu")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Ninjutsu",
+      Effects = [new NinjutsuEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Extort" keyword.
+  /// Pattern: "Extort" [reminder]
+  /// Rule 702.101. "Whenever you cast a spell, you may pay {W/B}. If you do,
+  /// each opponent loses 1 life and you gain that much life." MAST records the
+  /// keyword's presence; the spell-cast trigger and life-drain/gain are engine
+  /// territory. Mirrors AscendEffect, ConvokeEffect, EvolveEffect, and
+  /// PersistEffect: parameterless keyword marker.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Extort = (
+    from kw in Keyword("Extort")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Extort",
+      Effects = [new ExtortEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Composite Parsers
@@ -1907,7 +2015,8 @@ public static class OracleParsers
     .Or(Islandwalk)
     .Or(Mountainwalk)
     .Or(Plainswalk)
-    .Or(Swampwalk);
+    .Or(Swampwalk)
+    .Or(Extort);
 
   /// <summary>
   /// Parses any parameterized keyword ability.
@@ -1940,7 +2049,9 @@ public static class OracleParsers
       .Or(Kicker.Try())
       .Or(Unearth.Try())
       .Or(Plot.Try())
-      .Or(CumulativeUpkeep.Try());
+      .Or(CumulativeUpkeep.Try())
+      .Or(Dash.Try())
+      .Or(Ninjutsu.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).

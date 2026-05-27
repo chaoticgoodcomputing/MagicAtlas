@@ -1,0 +1,111 @@
+{
+  "Input": {
+    "Name": "Dokuchi Shadow-Walker",
+    "ManaCost": "{4}{B}{B}",
+    "TypeLine": "Creature — Ogre Ninja",
+    "OracleText": "Ninjutsu {3}{B} ({3}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Dokuchi Shadow-Walker",
+    "TypeLine": {
+      "Raw": "Creature — Ogre Ninja",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Ogre",
+        "Ninja"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Ninjutsu {3}{B} ({3}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Ninjutsu",
+          "Reminder": {
+            "Text": "({3}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "ninjutsu",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 3
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "B"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
