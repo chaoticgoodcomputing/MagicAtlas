@@ -708,6 +708,15 @@ Combat damage timing options.
 
 ## `/AST/Effects/Control/`
 
+### `ChangeTargetEffect` — *sealed record* : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+
+"Change the target of target spell with a single target." Redirects the single target of a spell on the stack to a new legal target. Rule 115.7. Covers Divert, Misdirection, and functional equivalents.
+
+- **Effect discriminator:** `changeTarget`
+- **`Spell`** — `ObjectReference` (Kind=Target, Filter={CardTypes=["spell"], Characteristics=["single target"]}) — the spell whose target is being changed.
+
+[Source](AST/Effects/Control/ChangeTargetEffect.cs)
+
 ### `CounterSpellEffect` — *sealed record* : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 
 "counter [target spell/ability]"

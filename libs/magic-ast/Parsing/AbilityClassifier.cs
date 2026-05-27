@@ -888,6 +888,9 @@ public sealed class AbilityClassifier
     "Train",
     "Exert",
     "Venture",
+    // Target-redirection imperative (Rule 115.7): "Change the target of …" — one-shot
+    // spell-resolution instruction, not a declarative static.
+    "Change",
   ];
 
   /// <summary>
