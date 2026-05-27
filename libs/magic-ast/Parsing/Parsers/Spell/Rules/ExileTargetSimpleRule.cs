@@ -6,28 +6,33 @@ using MagicAST.AST.Effects.ZoneChange;
 using MagicAST.AST.References;
 
 /// <summary>
-/// "Destroy target [filter]." — single-target destroy spell.
-/// Covers bare card-type targets (creature, artifact, land, …) and richer filter
-/// phrases via <see cref="SpellRuleHelpers.ParseTargetFilter"/>:
+/// "Exile target [filter]." — single-target exile spell.
+/// Covers bare card-type targets (creature, artifact, enchantment, permanent, …)
+/// and richer filter phrases via <see cref="SpellRuleHelpers.ParseTargetFilter"/>:
 /// <list type="bullet">
 ///   <item>Subtype-only: "Spirit", "Human"</item>
-///   <item>Color + card type: "black creature", "white creature"</item>
+///   <item>Color + card type: "black creature", "white artifact"</item>
 ///   <item>non- prefix + card type: "nonbasic land"</item>
 /// </list>
+/// Coexistence with <see cref="ExileTargetLandRule"/>: both rules dispatch at
+/// priority 50; alphabetical ordering puts ExileTargetLandRule ahead of
+/// ExileTargetSimpleRule, so the bare "land" shape is still claimed by the
+/// specialised rule. This rule handles all other card-type filters.
+/// Rule 701.13 (exile action) + Rule 205.3 (card types).
 /// </summary>
 [SpellRule]
-public sealed class DestroyTargetSimpleRule : ISpellRule
+public sealed class ExileTargetSimpleRule : ISpellRule
 {
-  // Simple bare card-type targets (fast path — preserves existing behaviour).
+  // Simple bare card-type targets (fast path).
   private static readonly Regex SimplePattern = new(
-    @"^Destroy\s+target\s+(?<type>creature|artifact|enchantment|land|planeswalker|permanent)$",
+    @"^Exile\s+target\s+(?<type>creature|artifact|enchantment|planeswalker|permanent|instant|sorcery)$",
     RegexOptions.Compiled | RegexOptions.IgnoreCase
   );
 
-  // Richer filter: one or more words after "Destroy target"
+  // Richer filter: one or more words after "Exile target"
   // (covers color+type, subtype-only, non-prefix patterns).
   private static readonly Regex FilterPattern = new(
-    @"^Destroy\s+target\s+(?<filter>.+)$",
+    @"^Exile\s+target\s+(?<filter>.+)$",
     RegexOptions.Compiled | RegexOptions.IgnoreCase
   );
 
@@ -35,11 +40,11 @@ public sealed class DestroyTargetSimpleRule : ISpellRule
   {
     effect = null;
 
-    // Fast path: bare card-type target (Destroy target creature, etc.)
+    // Fast path: bare card-type target (Exile target creature, etc.)
     var simple = SimplePattern.Match(text);
     if (simple.Success)
     {
-      effect = new DestroyEffect
+      effect = new ExileEffect
       {
         Target = new ObjectReference
         {
@@ -64,7 +69,7 @@ public sealed class DestroyTargetSimpleRule : ISpellRule
       return false;
     }
 
-    effect = new DestroyEffect
+    effect = new ExileEffect
     {
       Target = new ObjectReference
       {

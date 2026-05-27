@@ -1,0 +1,57 @@
+{
+  "Input": {
+    "Name": "Shattering Blow",
+    "ManaCost": "{1}{R/W}",
+    "TypeLine": "Instant",
+    "OracleText": "Exile target artifact.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["W", "R"],
+    "ColorIdentity": ["W", "R"]
+  },
+  "Output": {
+    "Name": "Shattering Blow",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Exile target artifact.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["artifact"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R/W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "hybrid", "Colors": ["W", "R"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W", "R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "R"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "Input": {
+    "Name": "Scour from Existence",
+    "ManaCost": "{7}",
+    "TypeLine": "Instant",
+    "OracleText": "Exile target permanent.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Scour from Existence",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Exile target permanent.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["permanent"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{7}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 7 }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

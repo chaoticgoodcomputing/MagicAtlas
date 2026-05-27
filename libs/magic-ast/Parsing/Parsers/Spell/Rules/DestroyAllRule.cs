@@ -8,7 +8,7 @@ using MagicAST.AST.References;
 /// <summary>
 /// "Destroy all [filter]." — mass-destroy spell.
 /// Covers single-token type/subtype filters (lands, creatures, Plains, Auras, …)
-/// and richer multi-word filters via <see cref="SpellRuleHelpers.ParseDestroyFilter"/>:
+/// and richer multi-word filters via <see cref="SpellRuleHelpers.ParseTargetFilter"/>:
 /// <list type="bullet">
 ///   <item>non- prefix: "nonbasic lands", "nonland creatures"</item>
 ///   <item>color + type: "white creatures", "black creatures"</item>
@@ -109,7 +109,7 @@ public sealed class DestroyAllRule : ISpellRule
     }
 
     // Multi-word (or unlisted single-token) path: delegate to the shared helper.
-    var filter = SpellRuleHelpers.ParseDestroyFilter(filterPhrase);
+    var filter = SpellRuleHelpers.ParseTargetFilter(filterPhrase);
     if (filter is null)
     {
       return false;
