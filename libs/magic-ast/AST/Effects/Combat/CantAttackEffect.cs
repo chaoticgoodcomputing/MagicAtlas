@@ -6,52 +6,52 @@ using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
-/// Combat-block restriction (blocker-side): oracle text states that a creature
-/// "can't block." Rule 509.1c (declare-blockers step; blocking restrictions
-/// constrain the set of legal blocker declarations the defending player can
-/// make).
+/// Combat-attack restriction (attacker-side): oracle text states that a
+/// creature "can't attack." Rule 509.1d (declare-attackers step; attacking
+/// restrictions constrain the set of legal attacker declarations the active
+/// player can make).
 /// </summary>
 /// <remarks>
 /// MAST describes what the oracle text says, not what the rules engine
 /// enforces. The presence of this effect on a <c>StaticAbility</c> records that
-/// the card's oracle line imposes a "can't block" restriction on the named
-/// object; it does not model the runtime decision that the defending player
-/// must make at declare-blockers.
+/// the card's oracle line imposes a "can't attack" restriction on the named
+/// object; it does not model the runtime decision that the active player must
+/// make at declare-attackers.
 ///
 /// <para>
-/// This is the dual of <see cref="MustBlockEffect"/> — same rule (509.1c),
-/// opposite polarity:
+/// This is the dual of <see cref="MustAttackEffect"/> — same rule (508/509.1d
+/// boundary), opposite polarity:
 /// </para>
 /// <list type="bullet">
 ///   <item><description>
-///     <see cref="MustBlockEffect"/> is a blocker-side <i>requirement</i>:
-///     the listed creature must be declared as a blocker when it legally can.
+///     <see cref="MustAttackEffect"/> is an attacker-side <i>requirement</i>:
+///     the listed creature must be declared as an attacker when it legally
+///     can.
 ///   </description></item>
 ///   <item><description>
-///     <see cref="CantBlockEffect"/> is a blocker-side <i>restriction</i>:
-///     the listed creature is excluded from the set of legal blocker
+///     <see cref="CantAttackEffect"/> is an attacker-side <i>restriction</i>:
+///     the listed creature is excluded from the set of legal attacker
 ///     declarations.
 ///   </description></item>
 /// </list>
 /// <para>
-/// Distinct from <see cref="MustBeBlockedEffect"/>, which is an attacker-side
-/// requirement under the same rule. Distinct from
-/// <c>DefenderEffect</c> (Rule 702.3) — that's the formal keyword ability
-/// (printed as "Defender") which also imposes a can't-attack restriction.
-/// "This creature can't block." is the sentence form on cards that aren't
-/// formally Defenders.
+/// Directly parallels <see cref="CantBlockEffect"/> (Rule 509.1c) on the
+/// blocker side. The two are often paired in a single oracle clause, e.g.
+/// "Enchanted creature can't attack or block." Per the multi-effect-per-clause
+/// doctrine that clause yields two <see cref="Effect"/> records on one
+/// <c>StaticAbility</c> — a <see cref="CantAttackEffect"/> and a
+/// <see cref="CantBlockEffect"/> — not a combined node.
 /// </para>
 /// <para>
 /// When <see cref="Target"/> is null, the restriction applies to the static
 /// ability's controlling object (the card the ability is printed on),
-/// e.g. "This creature can't block." When set, it names a distinct object,
+/// e.g. "This creature can't attack." When set, it names a distinct object,
 /// e.g. <c>EnchantedOrEquipped</c> for the Aura body
-/// "Enchanted creature can't block." Mirrors
-/// <see cref="CantAttackEffect.Target"/>.
+/// "Enchanted creature can't attack."
 /// </para>
 /// </remarks>
-[OracleEffect("cantBlock")]
-public sealed record CantBlockEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+[OracleEffect("cantAttack")]
+public sealed record CantAttackEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
 {
   /// <summary>
   /// The object the restriction applies to. Null means the static ability's
