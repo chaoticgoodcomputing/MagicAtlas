@@ -681,23 +681,40 @@ public sealed class StaticAbilityParser : IAbilityParser
   );
 
   /// <summary>
-  /// "This creature gets +N/+M for each &lt;filter&gt; you control." —
-  /// self-referential P/T modifier scaled by a count of permanents the
-  /// controller controls (Rule 613.4c, layer 7c — PT-modifier sublayer,
-  /// with Rule 613.1g as the parent Layer 7 entry). The per-count increment
-  /// must be 1 for both power and toughness sides — cards with multipliers
-  /// other than 1 are not covered by this surface.
+  /// Two shapes of self-referential P/T modifier scaled by a count:
+  ///
+  /// <list type="bullet">
+  ///   <item><c>"This creature gets +N/+M for each &lt;filter&gt; you control."</c> —
+  ///         scaled by a count of permanents the controller controls
+  ///         (Rule 613.4c, layer 7c). <c>CountOf</c> is the filter
+  ///         noun-phrase followed by "you control" verbatim (e.g.
+  ///         <c>"artifact you control"</c>).</item>
+  ///   <item><c>"This creature gets +N/+M for each &lt;counterType&gt; counter on it."</c> —
+  ///         scaled by the number of named counters on the creature itself
+  ///         (Rule 613.4c, layer 7c — oil-counter / age-counter scaling
+  ///         family). <c>CountOf</c> is the phrase after "for each" verbatim
+  ///         (e.g. <c>"oil counter on it"</c>).</item>
+  /// </list>
   ///
   /// <para>
-  /// The modifier uses a <see cref="MagicAST.AST.Quantities.CountQuantity"/>
-  /// whose <c>CountOf</c> is the filter noun-phrase followed by "you control"
-  /// (verbatim from the oracle line). The zero side uses a
+  /// Both shapes use a <see cref="MagicAST.AST.Quantities.CountQuantity"/>
+  /// for the non-zero side; the zero side uses
   /// <see cref="MagicAST.AST.Quantities.LiteralQuantity"/> of 0.
+  /// Per-count increment must be 1 — larger multipliers fall through to the
+  /// fallback parser.
   /// </para>
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseSelfPTForEach(OracleClause clause)
   {
+    // Try the "you control" shape first (most common).
     var match = _selfPTForEachPattern.Match(clause.RawText);
+
+    // Fall back to the "counter on it" shape.
+    if (!match.Success)
+    {
+      match = _selfPTForEachCounterOnItPattern.Match(clause.RawText);
+    }
+
     if (!match.Success)
     {
       return null;
@@ -719,11 +736,8 @@ public sealed class StaticAbilityParser : IAbilityParser
     }
 
     // The oracle fragment after "for each" and before the period is the
-    // filter description; the "you control" suffix is already part of the
-    // oracle text and is included verbatim in CountOf.
+    // filter description; captured verbatim in CountOf.
     var filterPhrase = match.Groups["filter"].Value.Trim();
-    // filterPhrase is the noun phrase between "for each" and the period;
-    // it already ends with "you control" (captured from the regex).
     var countOf = filterPhrase;
 
     MagicAST.AST.Quantities.Quantity powerModifier = power == 0
@@ -754,6 +768,14 @@ public sealed class StaticAbilityParser : IAbilityParser
   // the terminal period.
   private static readonly Regex _selfPTForEachPattern = new(
     @"^\s*This\s+creature\s+gets\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\s+for\s+each\s+(?<filter>.+?\s+you\s+control)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // "This creature gets +N/+M for each <counterType> counter on it."
+  // Covers oil-counter scaling and any other named-counter-on-self shape.
+  // CountOf captures the full phrase after "for each" — e.g. "oil counter on it".
+  private static readonly Regex _selfPTForEachCounterOnItPattern = new(
+    @"^\s*This\s+creature\s+gets\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\s+for\s+each\s+(?<filter>\S+\s+counter\s+on\s+it)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
