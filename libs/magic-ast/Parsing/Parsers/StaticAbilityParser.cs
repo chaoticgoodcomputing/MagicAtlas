@@ -1827,7 +1827,7 @@ public sealed class StaticAbilityParser : IAbilityParser
 
   /// <summary>
   /// "This spell costs {N} less to cast [condition]." — flat-amount self-cost
-  /// reduction conditioned on game state or timing.  Two condition shapes are
+  /// reduction conditioned on game state or timing.  Three condition shapes are
   /// recognised (Rule 117.6):
   /// <list type="bullet">
   ///   <item><c>during [your turn / each opponent's turn / combat]</c> —
@@ -1835,6 +1835,9 @@ public sealed class StaticAbilityParser : IAbilityParser
   ///   <item><c>if you control a [Subtype]</c> — Wizard's Lightning /
   ///         Squash / Lookout's Dispersal shape; the subtype is any
   ///         capitalised noun (Wizard, Giant, Pirate, …).</item>
+  ///   <item><c>if it targets a tapped [creature|permanent]</c> —
+  ///         Quicksand Whirlpool / Grounded for Life shape (Rule 117.6);
+  ///         the reduction applies when the spell targets a tapped object.</item>
   /// </list>
   /// Emits a <see cref="StaticAbility"/> whose <c>Condition.Text</c> preserves
   /// the oracle-text condition verbatim, wrapping a
@@ -1848,6 +1851,7 @@ public sealed class StaticAbilityParser : IAbilityParser
       @"^\s*This\s+spell\s+costs\s+\{(?<amount>\d+)\}\s+less\s+to\s+cast\s+(?<cond>"
         + @"during\s+(?:your\s+turn|each\s+(?:opponent|player)'?s\s+turn|combat)"
         + @"|if\s+you\s+control\s+an?\s+[A-Z][A-Za-z]+"
+        + @"|if\s+it\s+targets\s+a\s+tapped\s+(?:creature|permanent)"
         + @")\.?\s*$",
       RegexOptions.IgnoreCase
     );
