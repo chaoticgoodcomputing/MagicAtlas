@@ -575,6 +575,27 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Enlist" keyword.
+  /// Pattern: "Enlist" [reminder]
+  /// Rule 702.154. A static ability and triggered ability: as this creature attacks,
+  /// you may tap another untapped creature you control that could have attacked; if
+  /// you do, this creature gets +X/+0 until end of turn where X is that creature's
+  /// power. Although mechanically a static + triggered pair, MAST models it as a
+  /// keyword marker — same approach as Flanking and Evolve; the tapping cost and
+  /// power-addition are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Enlist = (
+    from kw in Keyword("Enlist")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Enlist",
+      Effects = [new EnlistEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Melee" keyword.
   /// Pattern: "Melee" [reminder]
   /// Rule 702.121. A triggered keyword ability: whenever this creature attacks,
@@ -1457,6 +1478,73 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Toxic N" keyword.
+  /// Pattern: "Toxic" number [reminder]
+  /// Rule 702.164. A static ability: whenever this creature deals combat damage to
+  /// a player, that player gets N poison counters in addition to the damage.
+  /// MAST records the keyword and its integer value; the poison-counter placement
+  /// is engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Toxic = (
+    from keyword in Keyword("Toxic")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Toxic",
+      Effects = [new ToxicEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Modular N" keyword.
+  /// Pattern: "Modular" number [reminder]
+  /// Rule 702.43. A static ability and triggered ability: this permanent enters
+  /// with N +1/+1 counters on it; when put into a graveyard from the battlefield
+  /// you may move one counter per counter on it to target artifact creature.
+  /// MAST records the keyword and its integer value; the counter placement and
+  /// death trigger are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/> and
+  /// <see cref="Soulshift"/>. Explicitly anticipated in BushidoEffect.cs remarks.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Modular = (
+    from keyword in Keyword("Modular")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Modular",
+      Effects = [new ModularEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for "Backup N" keyword.
+  /// Pattern: "Backup" number [reminder]
+  /// Rule 702.165. A triggered keyword ability: when this creature enters, put N
+  /// +1/+1 counters on target creature. If that is another creature, it also gains
+  /// the non-backup abilities of this creature printed below this one until end of
+  /// turn. MAST records the keyword and its integer value; the ability-grant and
+  /// "printed below this one" scoping are engine territory.
+  /// Integer-parameterized keyword; mirrors <see cref="Bushido"/> and
+  /// <see cref="Soulshift"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Backup = (
+    from keyword in Keyword("Backup")
+    from value in Token.EqualTo(OracleToken.Number)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Backup",
+      Effects = [new BackupEffect { Value = int.Parse(value.ToStringValue()) }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Equip {cost}" keyword.
   /// Pattern: "Equip" mana-symbol+ [reminder]
   /// Rule 702.6. An activated ability that attaches this Equipment to a creature
@@ -1805,6 +1893,7 @@ public static class OracleParsers
     .Or(Persist)
     .Or(Undying)
     .Or(Flanking)
+    .Or(Enlist)
     .Or(Melee)
     .Or(Ascend)
     .Or(Evolve)
@@ -1830,6 +1919,9 @@ public static class OracleParsers
       .Or(Bushido.Try())
       .Or(Soulshift.Try())
       .Or(Saddle.Try())
+      .Or(Toxic.Try())
+      .Or(Modular.Try())
+      .Or(Backup.Try())
       .Or(PartnerWith.Try())
       .Or(Partner.Try())
       .Or(ChooseABackground.Try())

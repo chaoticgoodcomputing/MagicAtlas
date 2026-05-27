@@ -792,6 +792,114 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // ATTACK SUPPORT KEYWORDS (Enlist, Backup)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Enlist: As this creature attacks, you may tap an untapped creature you control
+  /// that could have attacked. If you do, add its power to this creature's until
+  /// end of turn.
+  /// Rule 702.154. Although mechanically a static + triggered ability pair, MAST
+  /// records it as a keyword marker — same approach as Evolve and Flanking.
+  /// The tapping cost and power-addition are engine territory.
+  /// </summary>
+  public static KeywordDefinition Enlist { get; } =
+    new()
+    {
+      Name = "Enlist",
+      RuleReference = "702.154",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Enlist",
+        Effects = [new EnlistEffect()],
+      },
+    };
+
+  /// <summary>
+  /// Backup N: When this creature enters, put N +1/+1 counters on target creature.
+  /// If that is another creature, it also gains the non-backup abilities printed
+  /// below this one until end of turn.
+  /// Rule 702.165. MAST records the keyword and its integer value; the counter
+  /// placement, ability-grant, and "printed below this one" scoping are engine
+  /// territory.
+  /// </summary>
+  public static KeywordDefinition Backup { get; } =
+    new()
+    {
+      Name = "Backup",
+      RuleReference = "702.165",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Backup",
+        Effects = [new BackupEffect
+        {
+          Value = ParseIntValue("Backup", parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // POISON / COUNTER KEYWORDS (Toxic, Modular)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Toxic N: Whenever this creature deals combat damage to a player, that player
+  /// gets N poison counters in addition to the damage.
+  /// Rule 702.164. MAST records the keyword and its integer value; the
+  /// poison-counter placement and interaction with combat damage are engine
+  /// territory.
+  /// </summary>
+  public static KeywordDefinition Toxic { get; } =
+    new()
+    {
+      Name = "Toxic",
+      RuleReference = "702.164",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Toxic",
+        Effects = [new ToxicEffect
+        {
+          Value = ParseIntValue("Toxic", parameter),
+        }],
+      },
+    };
+
+  /// <summary>
+  /// Modular N: This permanent enters with N +1/+1 counters on it. When it is put
+  /// into a graveyard from the battlefield, you may put a +1/+1 counter on target
+  /// artifact creature for each +1/+1 counter on this permanent.
+  /// Rule 702.43. MAST records the keyword and its integer value; the counter
+  /// placement, death trigger, and optional transfer are engine territory.
+  /// Explicitly named in BushidoEffect.cs as a future peer in the
+  /// integer-parameterized keyword family.
+  /// </summary>
+  public static KeywordDefinition Modular { get; } =
+    new()
+    {
+      Name = "Modular",
+      RuleReference = "702.43",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Modular",
+        Effects = [new ModularEffect
+        {
+          Value = ParseIntValue("Modular", parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -831,6 +939,10 @@ public static class KeywordDefinitions
       Saddle,
       Megamorph,
       CumulativeUpkeep,
+      Enlist,
+      Toxic,
+      Modular,
+      Backup,
       // More keywords can be added here as needed
     ];
 
@@ -879,6 +991,29 @@ public static class KeywordDefinitions
     {
       throw new ArgumentException(
         $"Saddle parameter must be an integer, got '{parameter}'.",
+        nameof(parameter)
+      );
+    }
+
+    return value;
+  }
+
+  /// <summary>
+  /// Generic integer-parameter parser for keywords that carry a single numeric value
+  /// (e.g., Toxic, Modular, Backup). Mirrors ParseCrewPower and ParseSaddleValue but
+  /// takes the keyword name as context for the error message.
+  /// </summary>
+  private static int ParseIntValue(string keywordName, string? parameter)
+  {
+    if (string.IsNullOrWhiteSpace(parameter))
+    {
+      throw new ArgumentException($"{keywordName} requires a numeric parameter.", nameof(parameter));
+    }
+
+    if (!int.TryParse(parameter.Trim(), out var value))
+    {
+      throw new ArgumentException(
+        $"{keywordName} parameter must be an integer, got '{parameter}'.",
         nameof(parameter)
       );
     }

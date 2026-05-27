@@ -1,0 +1,78 @@
+{
+  "Input": {
+    "Name": "Arcbound Worker",
+    "ManaCost": "{1}",
+    "TypeLine": "Artifact Creature — Construct",
+    "OracleText": "Modular 1 (This enters with a +1/+1 counter on it. When it dies, you may put its +1/+1 counters on target artifact creature.)",
+    "Power": "0",
+    "Toughness": "0",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Arcbound Worker",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Construct",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Construct"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Modular 1 (This enters with a +1/+1 counter on it. When it dies, you may put its +1/+1 counters on target artifact creature.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Modular",
+          "Reminder": {
+            "Text": "(This enters with a +1/+1 counter on it. When it dies, you may put its +1/+1 counters on target artifact creature.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "modular",
+              "Value": 1,
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        }
+      }
+    ]
+  }
+}
