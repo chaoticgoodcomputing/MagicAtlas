@@ -200,15 +200,48 @@ public sealed class SpellAbilityParser : IAbilityParser
       {
         return null;
       }
-      var (effect, ruleName) = TryParseEffect(fragment);
+      var (effects, ruleName) = TryParseSentenceEffects(fragment);
       lastAttempted = ruleName;
-      if (effect is null)
+      if (effects is null)
       {
         return null;
       }
-      collected.Add(effect);
+      collected.AddRange(effects);
     }
     return collected;
+  }
+
+  /// <summary>
+  /// Parses a single sentence fragment within a sentence-bundle, trying multi-effect
+  /// rules first (via <see cref="IMultiSpellRule.TryMatchMulti"/>), then falling back
+  /// to single-effect rules. This closes the gap where compound sentences like
+  /// "Target creature gets +N/+M and gains [keyword] until end of turn" only match
+  /// via <see cref="IMultiSpellRule"/> but the sentence-bundle path previously only
+  /// called <see cref="TryParseEffect"/> (single-effect dispatch).
+  /// </summary>
+  private (IReadOnlyList<Effect>? Effects, string? LastAttemptedRule) TryParseSentenceEffects(string text)
+  {
+    var trimmed = text.Trim().TrimEnd('.').Trim();
+
+    // Try multi-effect rules first — compound sentences like "gets +N/+M and gains
+    // [keyword] until end of turn" only match via TryMatchMulti.
+    foreach (var entry in _rules)
+    {
+      if (entry.MultiRule is not null &&
+          entry.MultiRule.TryMatchMulti(trimmed, out var effects) &&
+          effects is not null)
+      {
+        return (effects, entry.Name);
+      }
+    }
+
+    // Fall back to single-effect dispatch.
+    var (single, singleRule) = TryParseEffect(text);
+    if (single is not null)
+    {
+      return (new List<Effect> { single }, singleRule);
+    }
+    return (null, singleRule);
   }
 
   /// <summary>
