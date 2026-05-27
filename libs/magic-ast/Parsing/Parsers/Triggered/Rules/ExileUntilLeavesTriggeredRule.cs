@@ -11,7 +11,7 @@ using MagicAST.AST.References;
 ///
 /// The effect is a temporary exile: the permanent returns when this [type] leaves the
 /// battlefield (Rule 611 — continuous effects with duration). MAST records the exile
-/// action descriptively (Rule 701.10) with an
+/// action descriptively (Rule 701.13 — Exile) with an
 /// <see cref="UntilLeavesBattlefieldDuration"/> whose <c>Object</c> is the literal
 /// self-reference phrase from oracle text ("this enchantment", "this creature", etc.).
 ///

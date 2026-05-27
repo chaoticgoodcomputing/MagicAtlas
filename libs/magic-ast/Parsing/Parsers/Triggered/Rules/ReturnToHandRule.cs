@@ -75,8 +75,8 @@ public sealed class ReturnToHandRule : ITriggeredRule
     // Targeted phrasing ("return target X") → ObjectReferenceKind.Target.
     // Indefinite phrasing ("return a land you control") → ObjectReferenceKind.Any:
     // the controller picks one qualifying object at resolution without it being a
-    // formal target (Rule 701.10; no targeting declaration, no shroud/hexproof
-    // interaction). Rule 601.2c contrast: "target" requires a targeting declaration.
+    // formal target (no targeting declaration, no shroud/hexproof interaction).
+    // Rule 115.1 / 601.2c contrast: only the "target" keyword creates a target.
     var refKind = isTargeted ? ObjectReferenceKind.Target : ObjectReferenceKind.Any;
 
     effect = new ReturnToHandEffect

@@ -100,6 +100,6 @@ public enum ObjectReferenceKind
   /// <summary>A specific named or designated object — e.g. "your commander", "the monarch". Use Filter to describe which.</summary>
   Designated,
 
-  /// <summary>"a [filter] you control" — an indefinite controller-choice reference; controller picks one qualifying permanent at resolution. Not targeted (no "target" keyword). Rule 701.10 (return): the controller simply chooses a qualifying object.</summary>
+  /// <summary>"a [filter] you control" — an indefinite controller-choice reference; controller picks one qualifying permanent at resolution. Not targeted (no "target" keyword in oracle). Distinct from <see cref="Target"/> (Rule 115.1 — only "target" creates a target).</summary>
   Any,
 }
