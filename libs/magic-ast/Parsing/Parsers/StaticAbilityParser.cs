@@ -2794,23 +2794,82 @@ public sealed class StaticAbilityParser : IAbilityParser
   );
 
   /// <summary>
-  /// "... as long as [condition]." — Rule 611 continuous-effect trailing
-  /// duration. Detects the suffix, strips it, then tries to parse the
-  /// remainder as either:
+  /// "... as long as [condition]." / "As long as [condition], it [gets|has] ..." —
+  /// Rule 611 continuous-effect duration in two oracle orderings:
   /// <list type="bullet">
-  ///   <item><c>This creature/This permanent gets +N/+M</c> —
-  ///         <see cref="ModifyPTEffect"/> targeting <c>Self</c>.</item>
-  ///   <item><c>[subject] has [keyword]</c> (unquoted) —
-  ///         <see cref="GainAbilityEffect"/> targeting <c>Self</c>, wrapping
-  ///         the keyword as a nested <see cref="StaticAbility"/>. The subject
-  ///         before "has" collapses to <c>Self</c> per the card-name-as-subject
-  ///         oracle convention.</item>
+  ///   <item><b>Suffix form</b> — condition trails the effect: "This creature gets +N/+M as
+  ///         long as [condition]." Peels the trailing clause and parses the leading
+  ///         text as a P/T buff or keyword grant on <c>Self</c>.</item>
+  ///   <item><b>Leading form</b> — condition precedes the effect: "As long as this creature
+  ///         is equipped, it gets +N/+M." or "As long as this creature is equipped, it has
+  ///         [keyword]." The condition governs a <see cref="ModifyPTEffect"/> or
+  ///         <see cref="GainAbilityEffect"/> targeting <c>Self</c>, stored verbatim on
+  ///         <see cref="AsLongAsDuration.Condition"/>.</item>
   /// </list>
-  /// The peeled condition text (e.g. <c>"it's untapped"</c>) is stored verbatim
-  /// on <see cref="AsLongAsDuration.Condition"/> — not parsed further.
+  /// The condition text (e.g. <c>"it's untapped"</c>, <c>"this creature is equipped"</c>)
+  /// is stored verbatim on <see cref="AsLongAsDuration.Condition"/> — not parsed further.
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseAsLongAsStaticGrant(OracleClause clause, ClauseClassification classification)
   {
+    // Leading form: "As long as <condition>, it [gets +N/+M | has <keyword>]."
+    // Tried first because the suffix pattern's non-greedy <main> group would mis-parse
+    // leading-form text (consuming only "As" as the subject before "long as").
+    var leadingMatch = _asLongAsLeadingPattern.Match(clause.RawText);
+    if (leadingMatch.Success)
+    {
+      var leadingCond = leadingMatch.Groups["cond"].Value.Trim();
+      var effectText = leadingMatch.Groups["effect"].Value.Trim();
+      var leadingDuration = new AsLongAsDuration { Condition = leadingCond };
+
+      // Leading sub-parser A: "it gets +N/+M"
+      var leadingPtMatch = _itGetsPTPattern.Match(effectText);
+      if (leadingPtMatch.Success)
+      {
+        var power = int.Parse(leadingPtMatch.Groups["p"].Value);
+        var toughness = int.Parse(leadingPtMatch.Groups["t"].Value);
+        return
+        [
+          new StaticAbility
+          {
+            Effects = [new MagicAST.AST.Effects.Modification.ModifyPTEffect
+            {
+              Target = ObjectReference.Self(),
+              PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
+              ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
+              Duration = leadingDuration,
+            }],
+          },
+        ];
+      }
+
+      // Leading sub-parser B: "it has <keyword>"
+      var leadingKwMatch = _itHasKeywordPattern.Match(effectText);
+      if (leadingKwMatch.Success)
+      {
+        var kw = leadingKwMatch.Groups["kw"].Value.Trim();
+        var grantedAbility = MapKeywordToStaticAbility(kw);
+        if (grantedAbility != null)
+        {
+          return
+          [
+            new StaticAbility
+            {
+              Effects = [new MagicAST.AST.Effects.Modification.GainAbilityEffect
+              {
+                Target = ObjectReference.Self(),
+                GainedAbility = grantedAbility,
+                Duration = leadingDuration,
+              }],
+            },
+          ];
+        }
+      }
+
+      // Recognise the leading form but can't parse the effect — fall through to suffix.
+      // Do NOT return null here; the suffix branch below may still succeed if the text
+      // happens to also satisfy the suffix pattern (unlikely but safe).
+    }
+
     // Peel " as long as <condition>." from the end of the clause.
     var suffixMatch = _asLongAsSuffixPattern.Match(clause.RawText);
     if (!suffixMatch.Success)
@@ -2885,6 +2944,30 @@ public sealed class StaticAbilityParser : IAbilityParser
 
     return null;
   }
+
+  // Leading form: "As long as <cond>, it [gets|has] <effect>."
+  // <cond> is everything between "As long as " and the comma; <effect> is the
+  // pronoun-led clause after the comma. Named "leading" because the condition
+  // clause leads the sentence — contrast with the suffix pattern below.
+  private static readonly Regex _asLongAsLeadingPattern = new(
+    @"^\s*As\s+long\s+as\s+(?<cond>[^,]+),\s*(?<effect>it\s+.+?)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches the effect sub-clause of the leading form for P/T modifiers.
+  // "it gets +0/+2", "it gets +1/+1", etc. Both sides require an explicit
+  // '+' sign (oracle uses signed notation even for zero modifiers).
+  private static readonly Regex _itGetsPTPattern = new(
+    @"^\s*it\s+gets\s+\+(?<p>\d+)/\+(?<t>\d+)\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches the effect sub-clause of the leading form for keyword grants.
+  // "it has haste", "it has first strike", etc.
+  private static readonly Regex _itHasKeywordPattern = new(
+    @"^\s*it\s+has\s+(?<kw>[A-Za-z][A-Za-z\s]*?)\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   // Strips " as long as <cond>." from the end. The "main" group is everything
   // before the suffix; "cond" is the condition body without the trailing period.
