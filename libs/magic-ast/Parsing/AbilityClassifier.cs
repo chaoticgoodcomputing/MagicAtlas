@@ -625,8 +625,15 @@ public sealed class AbilityClassifier
     // "deals N damage to ..." frame is unambiguously a spell-resolution effect
     // (Rule 113.3a) — same self-by-name convention used elsewhere (e.g.
     // <see cref="ActivatedAbilityParser"/>'s Denethor burn tail).
+    //
+    // Guard: skip when the clause carries a QuotedText token — that token
+    // means the "deals damage" text is inside a nested ability grant
+    // (e.g. "[filter] has \"{T}: This creature deals 1 damage to any target.\"").
+    // Those lines are "[filter] has [quoted ability]" static grants handled by
+    // StaticAbilityParser.TryParseGrantedAbility, not direct spell effects.
     if (
-      Regex.IsMatch(
+      !clause.Tokens.Any(t => t.Kind == OracleToken.QuotedText)
+      && Regex.IsMatch(
         clause.RawText,
         @"^\s*[A-Z]\S*(?:\s+\S+)*?\s+deals?\s+\S+\s+damage\s+to\s+",
         RegexOptions.None
