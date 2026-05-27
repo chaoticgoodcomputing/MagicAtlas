@@ -1,0 +1,106 @@
+{
+  "Input": {
+    "Name": "Spellgorger Weird",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Creature — Weird",
+    "OracleText": "Whenever you cast a noncreature spell, put a +1/+1 counter on Spellgorger Weird.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Spellgorger Weird",
+    "TypeLine": {
+      "Raw": "Creature — Weird",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Weird"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever you cast a noncreature spell, put a +1/+1 counter on Spellgorger Weird.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell"
+              ],
+              "Characteristics": [
+                "noncreature"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
