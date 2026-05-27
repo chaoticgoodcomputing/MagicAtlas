@@ -1,0 +1,56 @@
+{
+  "Input": {
+    "Name": "Burst of Energy",
+    "ManaCost": "{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Untap target permanent.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Burst of Energy",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Untap target permanent.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["permanent"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}
