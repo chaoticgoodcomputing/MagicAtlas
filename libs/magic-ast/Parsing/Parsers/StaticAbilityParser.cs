@@ -201,6 +201,19 @@ public sealed class StaticAbilityParser : IAbilityParser
       return conjunctiveSpellCostReduction;
     }
 
+    // "Noncreature spells cost {N} more to cast." — global noncreature spell
+    // cost increase (Rule 601.2f — total cost modification). Inverse of the
+    // CostReductionEffect family; the filter (noncreature spells) sits on
+    // StaticAbility.AffectedObjects and the increase amount lands on a
+    // CostIncreaseEffect. Covers Thorn of Amethyst / Sphere of Resistance and
+    // the broader "tax" archetype. Tried after all cost-reduction shapes to
+    // keep the "less/more" polarity switch unambiguous.
+    var noncreatureCostIncrease = TryParseNoncreatureSpellCostIncrease(clause);
+    if (noncreatureCostIncrease != null)
+    {
+      return noncreatureCostIncrease;
+    }
+
     // "The \"legend rule\" doesn't apply." — Rule 704.5j state-based-action
     // suppression (Mirror Gallery). Parameterless; the mere presence of the
     // effect records the suppression.
@@ -2268,6 +2281,58 @@ public sealed class StaticAbilityParser : IAbilityParser
   // casing for both subtypes and supertypes.
   private static string Capitalize(string s) =>
     s.Length == 0 ? s : char.ToUpperInvariant(s[0]) + s[1..].ToLowerInvariant();
+
+  /// <summary>
+  /// "Noncreature spells cost {N} more to cast." — global cost increase on all
+  /// noncreature spells (Rule 601.2f — total cost modification). Covers the
+  /// Thorn of Amethyst / Sphere of Resistance "tax" archetype. The filter is
+  /// fixed (<c>CardTypes: ["spell"], Characteristics: ["noncreature"]</c>) and
+  /// has no <c>Controller</c> restriction — the increase applies to all
+  /// players' noncreature spells, not just the controller's. The increase
+  /// amount is a generic-mana literal.
+  ///
+  /// <para>
+  /// The filter lives on <see cref="MagicAST.AST.Abilities.StaticAbility.AffectedObjects"/>;
+  /// the effect is a <see cref="MagicAST.AST.Effects.Resource.CostIncreaseEffect"/>
+  /// with the amount. This mirrors the structural convention used by
+  /// <see cref="TryParseCantBeCastRestriction"/> for the same noncreature-spells
+  /// filter.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseNoncreatureSpellCostIncrease(OracleClause clause)
+  {
+    var match = _noncreatureSpellCostIncreasePattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var amount = int.Parse(match.Groups["amount"].Value);
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Resource.CostIncreaseEffect
+        {
+          Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount),
+        }],
+        AffectedObjects = new ObjectFilter
+        {
+          CardTypes = ["spell"],
+          Characteristics = ["noncreature"],
+        },
+      },
+    ];
+  }
+
+  // "Noncreature spells cost {N} more to cast."
+  // No "you cast" suffix — the tax applies to all players' noncreature spells.
+  // Anchored at both ends; optional trailing period.
+  private static readonly Regex _noncreatureSpellCostIncreasePattern = new(
+    @"^\s*Noncreature\s+spells\s+cost\s+\{(?<amount>\d+)\}\s+more\s+to\s+cast\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   /// <summary>
   /// "During your turn, [self] has [keyword]." — produces a static ability
