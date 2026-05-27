@@ -1245,6 +1245,52 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Megamorph {cost}" keyword.
+  /// Pattern: "Megamorph" mana-symbol+ [reminder]
+  /// Rule 702.37b. A variant of Morph: the player may cast this card face down as a
+  /// 2/2 colorless creature for {3}, and may turn it face up by paying its megamorph
+  /// cost; when turned face up via the megamorph cost, a +1/+1 counter is placed on
+  /// the permanent. MAST records the keyword and the megamorph cost; the
+  /// cast-face-down rules, turn-face-up mechanics, and counter-placement are
+  /// conventionally inferred from the rules (per the descriptive-not-engine doctrine).
+  /// Direct structural mirror of <see cref="Morph"/>.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Megamorph = (
+    from keyword in Keyword("Megamorph")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Megamorph",
+      Effects = [new MegamorphEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Bushido N" keyword.
   /// Pattern: "Bushido" number [reminder]
   /// Rule 702.45. A triggered keyword ability: whenever this creature blocks or becomes
@@ -1648,6 +1694,7 @@ public static class OracleParsers
       .Or(Flashback.Try())
       .Or(Equip.Try())
       .Or(Morph.Try())
+      .Or(Megamorph.Try())
       .Or(Bestow.Try())
       .Or(Echo.Try())
       .Or(Kicker.Try())

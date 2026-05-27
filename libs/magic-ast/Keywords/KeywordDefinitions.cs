@@ -631,6 +631,37 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // MORPH FAMILY KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Megamorph [cost]: A variant of Morph (Rule 702.37b). The player may cast
+  /// this card face down as a 2/2 colorless creature for {3}, and may turn it
+  /// face up by paying its megamorph cost; when turned face up via the megamorph
+  /// cost, a +1/+1 counter is placed on the permanent. MAST records the keyword
+  /// and the megamorph cost; the cast-face-down rules, turn-face-up mechanics,
+  /// and counter-placement are engine territory (descriptive-not-engine doctrine).
+  /// Rule 702.37b.
+  /// </summary>
+  public static KeywordDefinition Megamorph { get; } =
+    new()
+    {
+      Name = "Megamorph",
+      RuleReference = "702.37b",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Megamorph",
+        Effects = [new MegamorphEffect
+        {
+          Cost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -664,6 +695,7 @@ public static class KeywordDefinitions
       Undying,
       Mentor,
       Saddle,
+      Megamorph,
       // More keywords can be added here as needed
     ];
 
