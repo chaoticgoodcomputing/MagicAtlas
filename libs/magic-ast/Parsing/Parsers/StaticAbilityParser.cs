@@ -401,6 +401,16 @@ public sealed class StaticAbilityParser : IAbilityParser
       return cantBeBlocked;
     }
 
+    // "This creature can block an additional creature each combat." — Rule 509.1a
+    // extra-blocker permission (blocker-side grant). Oracle text explicitly allows
+    // the creature to block one more attacker per combat than the default (one).
+    // No KeywordSource: the grant is a full declarative sentence, not a keyword token.
+    var blockAdditional = TryParseBlockAdditional(clause);
+    if (blockAdditional != null)
+    {
+      return blockAdditional;
+    }
+
     // "This creature enters with N +1/+1 counters on it." — Rule 614.1c
     // self-replacement effect property recorded as a static-ability-attached
     // EntersWithCountersEffect. No KeywordSource: the oracle text is a full
@@ -3629,6 +3639,42 @@ public sealed class StaticAbilityParser : IAbilityParser
 
   private static readonly Regex _noMaxHandSizePattern = new(
     @"^\s*You\s+have\s+no\s+maximum\s+hand\s+size\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "This creature can block an additional creature each combat." — Rule 509.1a
+  /// extra-blocker permission. Oracle text grants the controlling creature the
+  /// ability to block one more attacker per combat phase than the default of one.
+  /// Full declarative sentence, so no <c>KeywordSource</c> is set. Mirrors
+  /// <see cref="TryParseCantBlock"/> in structure.
+  /// <para>
+  /// This handles the self-referential shape ("This creature can block an
+  /// additional creature each combat."). The Equipment/Aura shape ("Equipped/
+  /// Enchanted creature can block an additional creature each combat.") and
+  /// the global shape ("Each creature you control can block an additional
+  /// creature each combat.") are distinct families handled elsewhere.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseBlockAdditional(OracleClause clause)
+  {
+    if (!_blockAdditionalPattern.IsMatch(clause.RawText))
+    {
+      return null;
+    }
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new BlockAdditionalEffect()],
+      },
+    ];
+  }
+
+  // Matches "This creature can block an additional creature each combat."
+  // The trailing period is optional for minor formatting variants.
+  private static readonly Regex _blockAdditionalPattern = new(
+    @"^\s*This\s+creature\s+can\s+block\s+an\s+additional\s+creature\s+each\s+combat\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
