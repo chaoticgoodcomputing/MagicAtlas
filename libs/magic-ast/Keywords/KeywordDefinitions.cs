@@ -900,6 +900,37 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // RECONFIGURE KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Reconfigure [cost]: Attach to target creature you control; or unattach
+  /// from a creature. Reconfigure only as a sorcery. While attached, this
+  /// isn't a creature.
+  /// Rule 702.173. Scope: mana-cost parameter (all known printings).
+  /// The attach/unattach mechanics, sorcery-speed restriction, and
+  /// creature-status switching are engine territory — MAST records the
+  /// keyword's presence and cost only, mirroring the EquipEffect pattern.
+  /// </summary>
+  public static KeywordDefinition Reconfigure { get; } =
+    new()
+    {
+      Name = "Reconfigure",
+      RuleReference = "702.173",
+      Category = KeywordCategory.Static,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.ManaCost,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Reconfigure",
+        Effects = [new MagicAST.AST.Effects.Keyword.ReconfigureEffect
+        {
+          Cost = ParseManaCost(parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -943,6 +974,7 @@ public static class KeywordDefinitions
       Toxic,
       Modular,
       Backup,
+      Reconfigure,
       // More keywords can be added here as needed
     ];
 
