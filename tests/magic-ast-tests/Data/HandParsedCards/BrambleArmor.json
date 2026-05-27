@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Bramble Armor",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "When this Equipment enters, attach it to target creature you control.\nEquipped creature gets +2/+1.\nEquip {4} ({4}: Attach to target creature you control. Equip only as a sorcery.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Bramble Armor",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": ["Artifact"],
+      "Subtypes": ["Equipment"]
+    },
+    "Oracle": {
+      "RawText": "When this Equipment enters, attach it to target creature you control.\nEquipped creature gets +2/+1.\nEquip {4} ({4}: Attach to target creature you control. Equip only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["equipment"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Equip",
+          "Effects": [
+            {
+              "EffectType": "equip",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 4
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
