@@ -1,0 +1,131 @@
+{
+  "Input": {
+    "Name": "Chilling Apparition",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Spirit",
+    "OracleText": "{B}: Regenerate this creature.\nWhenever this creature deals combat damage to a player, that player discards a card.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
+    "Keywords": [],
+    "Id": "c20edb71-aa1d-437b-bcfb-953efbe45150",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Chilling Apparition",
+    "TypeLine": {
+      "Raw": "Creature — Spirit",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spirit"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{B}: Regenerate this creature.\nWhenever this creature deals combat damage to a player, that player discards a card.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "regenerate",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "discardCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "ThatPlayer"
+              },
+              "Random": false,
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
