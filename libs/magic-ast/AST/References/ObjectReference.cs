@@ -102,4 +102,7 @@ public enum ObjectReferenceKind
 
   /// <summary>"a [filter] you control" — an indefinite controller-choice reference; controller picks one qualifying permanent at resolution. Not targeted (no "target" keyword in oracle). Distinct from <see cref="Target"/> (Rule 115.1 — only "target" creates a target).</summary>
   Any,
+
+  /// <summary>"both creatures" in a Soulbond paired-grant context (Rule 702.95). Refers to both the creature carrying the soulbond ability and its current pair partner. Only meaningful while the two creatures are paired.</summary>
+  BothPaired,
 }

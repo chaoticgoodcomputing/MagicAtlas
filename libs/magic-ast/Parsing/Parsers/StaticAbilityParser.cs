@@ -2823,6 +2823,33 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseAsLongAsStaticGrant(OracleClause clause, ClauseClassification classification)
   {
+    // Soulbond leading form: "As long as <name> is paired with another creature, both creatures have <keyword>."
+    // Must be tried before the generic leading form because this effect clause starts with
+    // "both creatures" rather than "it", so the generic leading pattern would not match it.
+    var soulbondLeadingMatch = _asLongAsSoulbondLeadingPattern.Match(clause.RawText);
+    if (soulbondLeadingMatch.Success)
+    {
+      var soulbondCond = soulbondLeadingMatch.Groups["cond"].Value.Trim();
+      var soulbondKw = soulbondLeadingMatch.Groups["kw"].Value.Trim();
+      var soulbondDuration = new AsLongAsDuration { Condition = soulbondCond };
+      var soulbondGrantedAbility = MapKeywordToStaticAbility(soulbondKw);
+      if (soulbondGrantedAbility != null)
+      {
+        return
+        [
+          new StaticAbility
+          {
+            Effects = [new MagicAST.AST.Effects.Modification.GainAbilityEffect
+            {
+              Target = new ObjectReference { Kind = ObjectReferenceKind.BothPaired },
+              GainedAbility = soulbondGrantedAbility,
+              Duration = soulbondDuration,
+            }],
+          },
+        ];
+      }
+    }
+
     // Leading form: "As long as <condition>, it [gets +N/+M | has <keyword>]."
     // Tried first because the suffix pattern's non-greedy <main> group would mis-parse
     // leading-form text (consuming only "As" as the subject before "long as").
@@ -2978,6 +3005,16 @@ public sealed class StaticAbilityParser : IAbilityParser
   // "it has haste", "it has first strike", etc.
   private static readonly Regex _itHasKeywordPattern = new(
     @"^\s*it\s+has\s+(?<kw>[A-Za-z][A-Za-z\s]*?)\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Soulbond leading form: "As long as <cond>, both creatures have <keyword>."
+  // Handles the Soulbond paired-grant shape (Rule 702.95) where the effect clause
+  // targets both paired creatures rather than the single self-referential "it".
+  // Separate from _asLongAsLeadingPattern because that pattern requires the effect
+  // to start with "it "; this pattern captures "both creatures have <keyword>" directly.
+  private static readonly Regex _asLongAsSoulbondLeadingPattern = new(
+    @"^\s*As\s+long\s+as\s+(?<cond>[^,]+),\s*both\s+creatures\s+have\s+(?<kw>[A-Za-z][A-Za-z\s]*?)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

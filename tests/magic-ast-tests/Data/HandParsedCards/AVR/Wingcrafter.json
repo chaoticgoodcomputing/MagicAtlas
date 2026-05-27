@@ -1,0 +1,103 @@
+{
+  "Input": {
+    "Name": "Wingcrafter",
+    "ManaCost": "{U}",
+    "TypeLine": "Creature — Human Wizard",
+    "OracleText": "Soulbond (You may pair this creature with another unpaired creature when either enters the battlefield. They remain paired for as long as you control both of them.)\nAs long as Wingcrafter is paired with another creature, both creatures have flying.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Wingcrafter",
+    "TypeLine": {
+      "Raw": "Creature — Human Wizard",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Wizard"]
+    },
+    "Oracle": {
+      "RawText": "Soulbond (You may pair this creature with another unpaired creature when either enters the battlefield. They remain paired for as long as you control both of them.)\nAs long as Wingcrafter is paired with another creature, both creatures have flying.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Soulbond",
+          "Reminder": {
+            "Text": "(You may pair this creature with another unpaired creature when either enters the battlefield. They remain paired for as long as you control both of them.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "soulbond",
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "BothPaired"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Flying",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": ["creature"],
+                      "Characteristics": ["flying", "reach"]
+                    },
+                    "IsOptional": false
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "Wingcrafter is paired with another creature"
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
