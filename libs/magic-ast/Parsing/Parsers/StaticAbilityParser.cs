@@ -178,6 +178,17 @@ public sealed class StaticAbilityParser : IAbilityParser
       return costReduction;
     }
 
+    // "This spell costs {N} less to cast for each [filter]." — per-object cost
+    // reduction (graveyard counts, attacked-this-turn counts, etc.). Handles:
+    //   • "creature card in your graveyard" (Ghoultree, Karador, …)
+    //   • "instant and sorcery card in your graveyard" (Cryptic Serpent, Bedlam Reveler, …)
+    //   • "creature that attacked this turn" (Rowdy Research, Witchstalker Frenzy, …)
+    var costReductionForEach = TryParseCostReductionForEach(clause);
+    if (costReductionForEach != null)
+    {
+      return costReductionForEach;
+    }
+
     // "During [period], [self] has [keyword]." — conditional static keyword
     // (Zurgo's during-your-turn indestructibility).
     var conditionalKeyword = TryParseConditionalSelfKeyword(clause);
@@ -2499,6 +2510,101 @@ public sealed class StaticAbilityParser : IAbilityParser
       },
     ];
   }
+
+  /// <summary>
+  /// "This spell costs {N} less to cast for each [filter]." — per-object cost
+  /// reduction (Rule 117.6). The amount is always a flat generic literal ({1},
+  /// {2}, …); the filter phrase after "for each" determines the
+  /// <see cref="MagicAST.AST.Effects.Resource.CostReductionEffect.PerObject"/>
+  /// value.
+  ///
+  /// <para>
+  /// Three filter shapes are recognised:
+  /// <list type="bullet">
+  ///   <item><c>creature card in your graveyard</c> — emits
+  ///         <c>CardTypes: ["creature"], Controller: You, Zone: Graveyard</c>.
+  ///         Cards: Ghoultree, Karador, Nemesis of Mortals, …</item>
+  ///   <item><c>instant and sorcery card in your graveyard</c> — emits
+  ///         <c>CardTypes: ["instant", "sorcery"], Controller: You, Zone: Graveyard</c>.
+  ///         Cards: Cryptic Serpent, Bedlam Reveler, Eddymurk Crab, …</item>
+  ///   <item><c>creature that attacked this turn</c> — emits
+  ///         <c>CardTypes: ["creature"], History: OtherHistoryPredicate("attacked this turn")</c>.
+  ///         Cards: Rowdy Research, Witchstalker Frenzy, The Mary Janes.</item>
+  /// </list>
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseCostReductionForEach(OracleClause clause)
+  {
+    var match = _costReductionForEachPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var amount = int.Parse(match.Groups["amount"].Value);
+    var filterPhrase = match.Groups["filter"].Value.Trim().ToLowerInvariant();
+
+    ObjectFilter? perObject = null;
+
+    // "creature card in your graveyard"
+    if (filterPhrase == "creature card in your graveyard")
+    {
+      perObject = new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Controller = ControllerFilter.You,
+        Zone = Zone.Graveyard,
+      };
+    }
+    // "instant and sorcery card in your graveyard"
+    else if (filterPhrase == "instant and sorcery card in your graveyard")
+    {
+      perObject = new ObjectFilter
+      {
+        CardTypes = ["instant", "sorcery"],
+        Controller = ControllerFilter.You,
+        Zone = Zone.Graveyard,
+      };
+    }
+    // "creature that attacked this turn"
+    else if (filterPhrase == "creature that attacked this turn")
+    {
+      perObject = new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        History = new MagicAST.AST.References.OtherHistoryPredicate
+        {
+          Description = "attacked this turn",
+        },
+      };
+    }
+
+    if (perObject is null)
+    {
+      // Unrecognised filter phrase — let the fallback record the gap.
+      return null;
+    }
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Resource.CostReductionEffect
+        {
+          Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount),
+          PerObject = perObject,
+        }],
+      },
+    ];
+  }
+
+  // "This spell costs {N} less to cast for each <filter>."
+  // Captures the generic amount and the filter phrase verbatim (trimmed,
+  // without the terminal period).
+  private static readonly Regex _costReductionForEachPattern = new(
+    @"^\s*This\s+spell\s+costs\s+\{(?<amount>\d+)\}\s+less\s+to\s+cast\s+for\s+each\s+(?<filter>.+?)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   /// <summary>
   /// "Ward {N}" / "Ward {X}{Y}" — Rule 702.21 keyword. The reminder-text
