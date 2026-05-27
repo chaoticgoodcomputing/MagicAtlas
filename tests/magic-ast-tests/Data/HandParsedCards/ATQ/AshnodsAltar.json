@@ -1,0 +1,65 @@
+{
+  "Input": {
+    "Name": "Ashnod's Altar",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "Sacrifice a creature: Add {C}{C}.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Ashnod's Altar",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "Sacrifice a creature: Add {C}{C}.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{C}{C}",
+              "AnyColor": false
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

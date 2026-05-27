@@ -90,6 +90,11 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     // TryParseMultiEffectSentences from failing when it encounters them.
     var restrictions = ExtractActivationRestrictions(ref effectPart);
 
+    // Strip trailing parenthetical reminder text (Rule 207.2) before effect
+    // parsing. Reminder text follows the effect sentence as "(explanation...)" —
+    // e.g. "Create a Treasure token. (It's an artifact with ...)".
+    StripTrailingReminder(ref effectPart);
+
     // Parse effects
     var effects = ParseEffects(effectPart);
     if (effects == null || effects.Count == 0)
@@ -184,6 +189,21 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     return restrictions;
   }
 
+  /// <summary>
+  /// Strips a trailing parenthetical "(reminder text)" from <paramref name="effectPart"/>,
+  /// mutating it in place (via ref). Reminder text in oracle cards (Rule 207.2) follows
+  /// the effect sentence as "(explanation...)" and has no rules meaning.
+  /// Only strips the LAST parenthetical so mid-text parens are left intact.
+  /// </summary>
+  private static void StripTrailingReminder(ref string effectPart)
+  {
+    var m = Regex.Match(effectPart, @"\s*\(([^)]+)\)\s*\.?\s*$");
+    if (m.Success)
+    {
+      effectPart = effectPart[..m.Index].Trim();
+    }
+  }
+
   private static ActivationRestriction? TryParseActivationRestriction(string sentence)
   {
     var trimmed = sentence.Trim().TrimEnd('.');
@@ -249,6 +269,15 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       if (discardCost != null)
       {
         costs.Add(discardCost);
+        hasParsedAnyCost = true;
+        continue;
+      }
+
+      // Try pay-life cost (e.g., "Pay 1 life", "Pay 3 life")
+      var payLifeCost = TryParsePayLifeCost(component);
+      if (payLifeCost != null)
+      {
+        costs.Add(payLifeCost);
         hasParsedAnyCost = true;
         continue;
       }
@@ -408,6 +437,17 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Compiled
   );
 
+  /// <summary>
+  /// Matches predefined artifact token creation: "Create [count] [Subtype] token(s)."
+  /// Handles Treasure, Food, Clue, Blood — the standard artifact token subtypes
+  /// whose rules text is reminder-only (Rule 107.10b). Count is "a" (1), a number
+  /// word, or a digit.
+  /// </summary>
+  private static readonly System.Text.RegularExpressions.Regex _createPredefinedTokenPattern = new(
+    @"^Create\s+(?<count>a|an|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<subtype>Treasure|Food|Clue|Blood)\s+tokens?$",
+    System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Compiled
+  );
+
   private static readonly System.Collections.Generic.Dictionary<string, string> _activatedColorMap = new(
     System.StringComparer.OrdinalIgnoreCase
   )
@@ -423,7 +463,51 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   /// </summary>
   private static MagicAST.AST.Effects.TokenCopy.CreateTokenEffect? TryParseCreateTokenEffect(string effectText)
   {
-    var m = _createTokenPattern.Match(effectText.Trim().TrimEnd('.'));
+    var stripped = effectText.Trim().TrimEnd('.').Trim();
+
+    // --- Predefined artifact token: Treasure, Food, Clue, Blood ---
+    var predefined = _createPredefinedTokenPattern.Match(stripped);
+    if (predefined.Success)
+    {
+      var rawPCount = predefined.Groups["count"].Value.ToLowerInvariant();
+      int pCount = rawPCount switch
+      {
+        "a" or "an" or "one" => 1,
+        "two" => 2,
+        "three" => 3,
+        "four" => 4,
+        "five" => 5,
+        "six" => 6,
+        "seven" => 7,
+        "eight" => 8,
+        "nine" => 9,
+        "ten" => 10,
+        _ => int.TryParse(rawPCount, out var pn) ? pn : 1,
+      };
+      var subtype = predefined.Groups["subtype"].Value;
+      // Title-case normalize
+      subtype = char.ToUpperInvariant(subtype[0]) + subtype[1..].ToLowerInvariant();
+      var tokenFactory = subtype switch
+      {
+        "Treasure" => MagicAST.AST.Effects.TokenDefinition.Treasure(),
+        "Food" => MagicAST.AST.Effects.TokenDefinition.Food(),
+        "Clue" => MagicAST.AST.Effects.TokenDefinition.Clue(),
+        "Blood" => MagicAST.AST.Effects.TokenDefinition.Blood(),
+        _ => null,
+      };
+      if (tokenFactory is not null)
+      {
+        return new MagicAST.AST.Effects.TokenCopy.CreateTokenEffect
+        {
+          Count = MagicAST.AST.Quantities.LiteralQuantity.Of(pCount),
+          Token = tokenFactory,
+          IsOptional = false,
+        };
+      }
+    }
+
+    // --- Standard creature token: "Create [count] P/T color subtype creature token(s)" ---
+    var m = _createTokenPattern.Match(stripped);
     if (!m.Success)
     {
       return null;
@@ -436,7 +520,7 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       "a" or "one" => MagicAST.AST.Quantities.LiteralQuantity.Of(1),
       "two" => MagicAST.AST.Quantities.LiteralQuantity.Of(2),
       "three" => MagicAST.AST.Quantities.LiteralQuantity.Of(3),
-      _ => MagicAST.AST.Quantities.LiteralQuantity.Of(int.TryParse(rawCount, out var n) ? n : 1),
+      _ => MagicAST.AST.Quantities.LiteralQuantity.Of(int.TryParse(rawCount, out var ctn) ? ctn : 1),
     };
 
     if (!_activatedColorMap.TryGetValue(m.Groups["color"].Value, out var colorCode))
@@ -444,8 +528,8 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return null;
     }
 
-    var subtype = m.Groups["subtype"].Value;
-    subtype = char.ToUpperInvariant(subtype[0]) + subtype[1..];
+    var ctSubtype = m.Groups["subtype"].Value;
+    ctSubtype = char.ToUpperInvariant(ctSubtype[0]) + ctSubtype[1..];
 
     return new MagicAST.AST.Effects.TokenCopy.CreateTokenEffect
     {
@@ -456,7 +540,7 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
         Toughness = m.Groups["toughness"].Value,
         Colors = [colorCode],
         Types = ["creature"],
-        Subtypes = [subtype],
+        Subtypes = [ctSubtype],
         IsCopy = false,
       },
       IsOptional = false,
@@ -1030,6 +1114,33 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   }
 
   /// <summary>
+  /// Tries to parse pay-life costs like "Pay 1 life", "Pay 3 life".
+  /// Rule 118. The life payment is a cost that reduces the player's life total.
+  /// </summary>
+  private PayLifeCost? TryParsePayLifeCost(string costText)
+  {
+    var trimmed = costText.Trim();
+    var m = Regex.Match(
+      trimmed,
+      @"^Pay\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var rawAmount = m.Groups["amount"].Value;
+    var amount = ParseNumberWord(rawAmount) ?? (int.TryParse(rawAmount, out var n) ? n : (int?)null);
+    if (amount is null)
+    {
+      return null;
+    }
+
+    return new PayLifeCost { Amount = LiteralQuantity.Of(amount.Value) };
+  }
+
+  /// <summary>
   /// Tries to parse remove-counters costs like
   /// "Remove three spore counters from this creature"
   /// or "Remove two charge counters from this permanent".
@@ -1153,54 +1264,72 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     }
     else
     {
-      // Try to extract the type from the text
-      // Pattern: "Sacrifice [article|count] [type]"
-      // Capture the optional article/count so we can distinguish self-reference
-      // from creature-subtype: "Sacrifice Denethor" (no article → self) vs.
-      // "Sacrifice a Saproling" (article "a" → creature subtype, Rule 205.3m).
-      var match = Regex.Match(
+      // Try to extract the type from the text.
+      //
+      // Shape 1: "Sacrifice [count-word] [Subtype]s" — e.g. "Sacrifice three Treasures".
+      // The count word was already parsed into `quantity` above; here we just need
+      // the subtype. We look for an explicit count-word + capitalized-subtype pair
+      // BEFORE the generic article regex so "three" doesn't get captured as the type.
+      var countSubtypeMatch = Regex.Match(
         text,
-        @"(?:Sacrifice|sacrifice) (?<article>a |an |X )?(?<type>\w+)",
-        RegexOptions.IgnoreCase
+        @"(?:Sacrifice|sacrifice)\s+(?:one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+(?<type>[A-Z]\w+?)s?$",
+        RegexOptions.None
       );
-      if (match.Success)
+      if (countSubtypeMatch.Success)
       {
-        var typeRaw = match.Groups["type"].Value;
-        var type = typeRaw.ToLowerInvariant();
-        var hasArticle = match.Groups["article"].Success && match.Groups["article"].Value.Trim() is "a" or "an";
-        var wasPlural = type.EndsWith("s") && type != "this";
-        // Handle plurals (e.g., "Squirrels" -> "Squirrel")
-        if (wasPlural)
+        var typeRaw = countSubtypeMatch.Groups["type"].Value;
+        filter = new ObjectFilter { Subtypes = [typeRaw] };
+      }
+      else
+      {
+        // Shape 2: "Sacrifice [article] [type]"
+        // Capture the optional article/count so we can distinguish self-reference
+        // from creature-subtype: "Sacrifice Denethor" (no article → self) vs.
+        // "Sacrifice a Saproling" (article "a" → creature subtype, Rule 205.3m).
+        var match = Regex.Match(
+          text,
+          @"(?:Sacrifice|sacrifice) (?<article>a |an |X )?(?<type>\w+)",
+          RegexOptions.IgnoreCase
+        );
+        if (match.Success)
         {
-          type = type[..^1];
-        }
-        // Capitalized SINGULAR without an article (e.g., "Sacrifice Denethor") —
-        // the card refers to itself by name. Encode as a "this permanent"
-        // self-reference on Characteristics rather than a literal Subtypes
-        // entry, matching the gold convention for self-by-name cost references.
-        //
-        // Capitalized PLURAL (e.g., "Sacrifice X Squirrels") or capitalized with
-        // an article (e.g., "Sacrifice a Saproling") is a creature subtype, not
-        // a self-reference — oracle text capitalizes creature subtypes (Rule 205.3m).
-        // Singularize and emit on Subtypes. Without this distinction the plural-subtype
-        // case and the article-preceded case collapse onto the "this permanent"
-        // self-ref shape.
-        if (char.IsUpper(typeRaw[0]) && !wasPlural && !hasArticle)
-        {
-          filter = new ObjectFilter { Characteristics = ["this permanent"] };
-        }
-        else
-        {
-          // Title-case the subtype to match oracle-text capitalisation
-          // convention. Subtype names are proper-noun-ish (Squirrel, Goblin,
-          // Treasure, etc.) and the existing CreateTokenEffect emitters
-          // (e.g. ActivatedAbilityParser.TryParseCreateTokenEffect at the
-          // top of this file) already title-case their subtype output.
-          if (char.IsUpper(typeRaw[0]) && type.Length > 0)
+          var typeRaw = match.Groups["type"].Value;
+          var type = typeRaw.ToLowerInvariant();
+          var hasArticle = match.Groups["article"].Success && match.Groups["article"].Value.Trim() is "a" or "an";
+          var wasPlural = type.EndsWith("s") && type != "this";
+          // Handle plurals (e.g., "Squirrels" -> "Squirrel")
+          if (wasPlural)
           {
-            type = char.ToUpperInvariant(type[0]) + type[1..];
+            type = type[..^1];
           }
-          filter = new ObjectFilter { Subtypes = [type] };
+          // Capitalized SINGULAR without an article (e.g., "Sacrifice Denethor") —
+          // the card refers to itself by name. Encode as a "this permanent"
+          // self-reference on Characteristics rather than a literal Subtypes
+          // entry, matching the gold convention for self-by-name cost references.
+          //
+          // Capitalized PLURAL (e.g., "Sacrifice X Squirrels") or capitalized with
+          // an article (e.g., "Sacrifice a Saproling") is a creature subtype, not
+          // a self-reference — oracle text capitalizes creature subtypes (Rule 205.3m).
+          // Singularize and emit on Subtypes. Without this distinction the plural-subtype
+          // case and the article-preceded case collapse onto the "this permanent"
+          // self-ref shape.
+          if (char.IsUpper(typeRaw[0]) && !wasPlural && !hasArticle)
+          {
+            filter = new ObjectFilter { Characteristics = ["this permanent"] };
+          }
+          else
+          {
+            // Title-case the subtype to match oracle-text capitalisation
+            // convention. Subtype names are proper-noun-ish (Squirrel, Goblin,
+            // Treasure, etc.) and the existing CreateTokenEffect emitters
+            // (e.g. ActivatedAbilityParser.TryParseCreateTokenEffect at the
+            // top of this file) already title-case their subtype output.
+            if (char.IsUpper(typeRaw[0]) && type.Length > 0)
+            {
+              type = char.ToUpperInvariant(type[0]) + type[1..];
+            }
+            filter = new ObjectFilter { Subtypes = [type] };
+          }
         }
       }
     }
