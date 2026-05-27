@@ -1,0 +1,64 @@
+{
+  "Input": {
+    "Name": "Goblin War Buggy",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature — Goblin",
+    "OracleText": "Haste\nEcho {1}{R} (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Goblin War Buggy",
+    "TypeLine": {
+      "Raw": "Creature — Goblin",
+      "Types": ["Creature"],
+      "Subtypes": ["Goblin"]
+    },
+    "Oracle": {
+      "RawText": "Haste\nEcho {1}{R} (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Haste",
+          "Effect": {
+            "EffectType": "haste"
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Echo",
+          "Effect": {
+            "EffectType": "echo",
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 1 },
+                { "Kind": "colored", "Colors": ["R"] }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["R"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
