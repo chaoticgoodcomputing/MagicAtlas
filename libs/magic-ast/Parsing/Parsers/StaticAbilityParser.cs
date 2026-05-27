@@ -1057,6 +1057,8 @@ public sealed class StaticAbilityParser : IAbilityParser
     }
     value = token switch
     {
+      "a" => 1,
+      "an" => 1,
       "one" => 1,
       "two" => 2,
       "three" => 3,
@@ -2830,6 +2832,8 @@ public sealed class StaticAbilityParser : IAbilityParser
       return null;
     }
 
+    var counterType = match.Groups["counterType"].Value;
+
     return
     [
       new StaticAbility
@@ -2837,20 +2841,21 @@ public sealed class StaticAbilityParser : IAbilityParser
         Effects = [new MagicAST.AST.Effects.Replacement.EntersWithCountersEffect
         {
           Count = count,
-          CounterType = "+1/+1",
+          CounterType = counterType,
           IsOptional = false,
         }],
       },
     ];
   }
 
-  // Matches "This <type> enters with N +1/+1 counters on it." where <type> is
-  // creature, artifact, enchantment, land, or permanent, and N is a decimal
-  // digit, the variable "X", or an English word-count ("one" through "ten").
+  // Matches "This <type> enters with N <counterType> counters on it." where <type> is
+  // creature, artifact, enchantment, land, or permanent; N is a decimal digit,
+  // the variable "X", an English word-count ("one" through "ten"), or the
+  // article "a"/"an" (treated as 1); and <counterType> is "+1/+1" or "-1/-1".
   // Handles "counter" and "counters" (singular for N=1) and an optional
   // trailing period. Rules: 122 (counters), 614.1d (enters-with replacement).
   private static readonly Regex _entersWithCountersPattern = new(
-    @"^\s*This\s+(?<type>creature|artifact|enchantment|land|permanent)\s+enters\s+with\s+(?<count>\d+|X|one|two|three|four|five|six|seven|eight|nine|ten)\s+\+1/\+1\s+counters?\s+on\s+it\.?\s*$",
+    @"^\s*This\s+(?<type>creature|artifact|enchantment|land|permanent)\s+enters\s+with\s+(?<count>\d+|X|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[+-]1/[+-]1)\s+counters?\s+on\s+it\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
