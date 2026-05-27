@@ -202,8 +202,11 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   private static Parenthetical? ExtractTrailingReminder(ref string effectPart)
   {
     // Match a trailing (possibly multi-sentence) parenthetical at the end of the text.
-    // Pattern: optional whitespace, open-paren, content (no nesting), close-paren, end.
-    var m = Regex.Match(effectPart, @"\s*\(([^)]+)\)\s*$");
+    // Pattern: optional whitespace, open-paren, content (no nesting), close-paren,
+    // optional trailing period (oracle convention places the sentence-terminating
+    // period AFTER the reminder paren — e.g. "you get {E}{E} (two energy counters)."),
+    // then end-of-string.
+    var m = Regex.Match(effectPart, @"\s*\(([^)]+)\)\s*\.?\s*$");
     if (!m.Success)
     {
       return null;
