@@ -1079,11 +1079,14 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         "planeswalker",
         "permanent",
         "battle",
-        // Subtype self-reference: "this Aura" — oracle text uses the
-        // subtype word when the card has no relevant supertype/cardtype
-        // distinction (e.g., Aura enchantments). Treated descriptively
-        // as a CardTypes singleton; MAST records the word the text used.
+        // Subtype self-reference: "this Aura" / "this Equipment" — oracle text
+        // uses the subtype word when the card has no relevant supertype/cardtype
+        // distinction (e.g., Aura enchantments, Equipment artifacts). Treated
+        // descriptively as a CardTypes singleton; MAST records the word the
+        // text used (Rule 701.3 — "Attach" applies to Equipment, Aura, and
+        // Fortification; the subtype word in the trigger is the self-reference cue).
         "aura",
+        "equipment",
       }
     )
     {
