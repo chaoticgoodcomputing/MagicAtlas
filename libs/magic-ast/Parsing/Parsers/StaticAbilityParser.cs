@@ -7,6 +7,7 @@ using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Modification;
+using MagicAST.AST.Effects.Timing;
 using MagicAST.AST.References;
 using MagicAST.Parsing.Combinators;
 using MagicAST.Parsing.Tokens;
@@ -393,9 +394,10 @@ public sealed class StaticAbilityParser : IAbilityParser
       return cantBlock;
     }
 
-    // "Enchanted creature can't attack or block." — dual combat restriction on the
-    // attached object (Pacifism / Luminous Bonds Aura shape). Emits two effects —
-    // CantAttackEffect and CantBlockEffect — both targeting EnchantedOrEquipped.
+    // "Enchanted creature can't attack or block." (Pacifism / Luminous Bonds) — dual
+    // combat restriction. Also handles the Arrest / Lawmage's Binding extension:
+    // "... and its activated abilities can't be activated." — adds a third
+    // CantActivateAbilitiesEffect. Both forms target EnchantedOrEquipped.
     // Must be placed AFTER TryParseCantBlock to avoid shadowing the self-subject
     // single-restriction shape, and BEFORE TryParseCantBeBlocked for symmetry.
     var enchantedCantAttackOrBlock = TryParseEnchantedCantAttackOrBlock(clause);
@@ -3718,44 +3720,80 @@ public sealed class StaticAbilityParser : IAbilityParser
   );
 
   /// <summary>
-  /// "Enchanted creature can't attack or block." — dual combat restriction
-  /// (attacker-side + blocker-side) imposed by an Aura on its enchanted object
-  /// (Rule 508.1c / 509.1c). Emits a <see cref="StaticAbility"/> with two
-  /// effects:
+  /// "Enchanted creature can't attack or block." (Pacifism shape) and
+  /// "Enchanted creature can't attack or block, and its activated abilities
+  /// can't be activated." (Arrest / Lawmage's Binding shape) — dual or triple
+  /// combat/activation restriction imposed by an Aura on its enchanted object
+  /// (Rule 508.1c / 509.1c / 602.5).
+  ///
+  /// <para>
+  /// The basic form emits a <see cref="StaticAbility"/> with two effects:
   /// <list type="bullet">
   ///   <item><see cref="CantAttackEffect"/> targeting <c>EnchantedOrEquipped</c>.</item>
   ///   <item><see cref="CantBlockEffect"/> targeting <c>EnchantedOrEquipped</c>.</item>
   /// </list>
-  /// Both effects carry <c>IsOptional = false</c> — the restriction is mandatory
-  /// and does not have a "You may" prefix.
+  /// </para>
   /// <para>
-  /// Per the multi-effect-per-clause doctrine, the conjunction "can't attack or
-  /// block" in a single oracle line bundles both restrictions into one
-  /// <c>StaticAbility.Effects</c> list rather than splitting into two ability
-  /// nodes.
+  /// The extended Arrest form appends a third effect:
+  /// <list type="bullet">
+  ///   <item><see cref="CantActivateAbilitiesEffect"/> targeting <c>EnchantedOrEquipped</c>.</item>
+  /// </list>
+  /// </para>
+  /// All effects carry <c>IsOptional = false</c> — the restrictions are mandatory
+  /// and do not have "You may" prefixes.
+  /// <para>
+  /// Per the multi-effect-per-clause doctrine, all restrictions in a single oracle
+  /// line are bundled into one <c>StaticAbility.Effects</c> list rather than
+  /// splitting into multiple ability nodes.
   /// </para>
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseEnchantedCantAttackOrBlock(OracleClause clause)
   {
-    if (!_enchantedCantAttackOrBlockPattern.IsMatch(clause.RawText))
-    {
-      return null;
-    }
-
     var target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped };
 
-    return
-    [
-      new StaticAbility
-      {
-        Effects =
-        [
-          new CantAttackEffect { Target = target, IsOptional = false },
-          new CantBlockEffect  { Target = target, IsOptional = false },
-        ],
-      },
-    ];
+    // Extended Arrest form: "... can't attack or block, and its activated abilities can't be activated."
+    if (_enchantedArrestPattern.IsMatch(clause.RawText))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects =
+          [
+            new CantAttackEffect              { Target = target, IsOptional = false },
+            new CantBlockEffect               { Target = target, IsOptional = false },
+            new CantActivateAbilitiesEffect   { Target = target, IsOptional = false },
+          ],
+        },
+      ];
+    }
+
+    // Basic Pacifism form: "... can't attack or block."
+    if (_enchantedCantAttackOrBlockPattern.IsMatch(clause.RawText))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects =
+          [
+            new CantAttackEffect { Target = target, IsOptional = false },
+            new CantBlockEffect  { Target = target, IsOptional = false },
+          ],
+        },
+      ];
+    }
+
+    return null;
   }
+
+  // Matches "Enchanted creature can't attack or block, and its activated abilities can't be activated."
+  // The Arrest / Lawmage's Binding extended form. Must be checked BEFORE the basic form because
+  // the basic pattern's end-anchor would reject this line while this pattern is more specific.
+  private static readonly Regex _enchantedArrestPattern = new(
+    @"^\s*(?:Enchanted|Equipped)\s+creature\s+can'?t\s+attack\s+or\s+block,\s+and\s+its\s+activated\s+abilities\s+can'?t\s+be\s+activated\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   // Matches "Enchanted creature can't attack or block."
   // The subject is always "Enchanted creature" for this Aura-body shape.
