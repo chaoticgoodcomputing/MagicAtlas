@@ -1,0 +1,73 @@
+{
+  "Input": {
+    "Name": "Onyx Goblet",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Artifact",
+    "OracleText": "{T}: Target player loses 1 life.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Onyx Goblet",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "{T}: Target player loses 1 life.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["player"]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}
