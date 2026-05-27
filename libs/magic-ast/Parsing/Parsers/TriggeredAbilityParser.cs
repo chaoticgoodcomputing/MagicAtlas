@@ -653,51 +653,30 @@ public sealed class TriggeredAbilityParser : IAbilityParser
 
   /// <summary>
   /// "Whenever [CardName] attacks" — self-by-name attack trigger (Rule 508).
+  /// "Whenever this creature attacks" — anonymous self-reference attack trigger.
   /// "Whenever a creature you control attacks" — controller-filter attack trigger.
-  /// Both emit <see cref="TriggerEvent.Attacks"/>. The filter distinguishes:
-  /// - Self-by-name: <c>CardTypes: ["creature"]</c> (no Controller — the name collapses to a
-  ///   creature type reference per the card-name-as-subject convention).
-  /// - Controller-filter: <c>CardTypes: ["creature"], Controller: You</c>.
+  /// All emit <see cref="TriggerEvent.Attacks"/>. The filter shape is shared with
+  /// dies/enters via <see cref="ParseObjectFilter"/>, which already handles
+  /// "this creature", self-by-name, and the "a creature [you control]" shapes
+  /// uniformly.
   /// </summary>
   private static TriggerCondition? TryParseAttacksTrigger(
     string triggerText,
     TriggerTiming timing
   )
   {
-    var lower = triggerText.ToLowerInvariant();
-
-    // Self-by-name: "Whenever [CardName] attacks" — one or more capitalized words
-    // followed by "attacks" (IsSelfByNameTrigger already handles this pattern for
-    // dies/enters; reuse that check, then delegate to ParseObjectFilter for the filter).
-    if (IsSelfByNameTrigger(triggerText))
+    var filter = ParseObjectFilter(triggerText);
+    if (filter == null)
     {
-      return new TriggerCondition
-      {
-        Timing = timing,
-        Event = TriggerEvent.Attacks,
-        Filter = new ObjectFilter { CardTypes = ["creature"] },
-      };
+      return null;
     }
 
-    // Controller-filter: "Whenever a creature you control attacks"
-    if (
-      Regex.IsMatch(lower, @"\ba\s+creature\s+you\s+control\s+attacks\b")
-      || Regex.IsMatch(lower, @"\bcreatures?\s+you\s+control\s+attack\b")
-    )
+    return new TriggerCondition
     {
-      return new TriggerCondition
-      {
-        Timing = timing,
-        Event = TriggerEvent.Attacks,
-        Filter = new ObjectFilter
-        {
-          CardTypes = ["creature"],
-          Controller = ControllerFilter.You,
-        },
-      };
-    }
-
-    return null;
+      Timing = timing,
+      Event = TriggerEvent.Attacks,
+      Filter = filter,
+    };
   }
 
   /// <summary>
