@@ -911,6 +911,37 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     }
 
     var remainder = text["Untap ".Length..].Trim();
+
+    // "another target creature or land [you control]" — excludes the source
+    // permanent from targeting ("another" → Characteristics: ["another"]) and
+    // accepts either a creature or a land as the target. Rule 701.20 / 115.1.
+    if (remainder.StartsWith("another target ", StringComparison.OrdinalIgnoreCase))
+    {
+      var afterAnotherTarget = remainder["another target ".Length..].Trim();
+      var creatureOrLandMatch = Regex.Match(
+        afterAnotherTarget,
+        @"^(?:creature\s+or\s+land|land\s+or\s+creature)(?:\s+you\s+control)?$",
+        RegexOptions.IgnoreCase
+      );
+      if (creatureOrLandMatch.Success)
+      {
+        var hasController = afterAnotherTarget.Contains(" you control", StringComparison.OrdinalIgnoreCase);
+        return new UntapEffect
+        {
+          Target = new ObjectReference
+          {
+            Kind = ObjectReferenceKind.Target,
+            Filter = new ObjectFilter
+            {
+              CardTypes = ["creature", "land"],
+              Characteristics = ["another"],
+              Controller = hasController ? ControllerFilter.You : null,
+            },
+          },
+        };
+      }
+    }
+
     if (!remainder.StartsWith("target ", StringComparison.OrdinalIgnoreCase))
     {
       return null;
