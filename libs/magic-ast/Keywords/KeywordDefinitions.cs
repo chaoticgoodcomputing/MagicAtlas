@@ -556,6 +556,33 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // GRAVEYARD RECURSION KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Undying: When this creature dies, if it had no +1/+1 counters on it,
+  /// return it to the battlefield under its owner's control with a +1/+1
+  /// counter on it.
+  /// Rule 702.93. Mirror of Persist (Rule 702.78) with opposite polarity:
+  /// Persist checks for no -1/-1 counters; Undying checks for no +1/+1
+  /// counters. MAST records keyword presence; the dies-trigger, counter-check,
+  /// and return-to-battlefield semantics are engine territory.
+  /// </summary>
+  public static KeywordDefinition Undying { get; } =
+    new()
+    {
+      Name = "Undying",
+      RuleReference = "702.93",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Undying",
+        Effects = [new UndyingEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -586,6 +613,7 @@ public static class KeywordDefinitions
       Affinity,
       Evolve,
       Plot,
+      Undying,
       // More keywords can be added here as needed
     ];
 
