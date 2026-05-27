@@ -1,0 +1,90 @@
+{
+  "Input": {
+    "Name": "Bastion Inventor",
+    "ManaCost": "{5}{U}",
+    "TypeLine": "Creature — Vedalken Artificer",
+    "OracleText": "Improvise (Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)\nHexproof (This creature can't be the target of spells or abilities your opponents control.)",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Bastion Inventor",
+    "TypeLine": {
+      "Raw": "Creature — Vedalken Artificer",
+      "Types": ["Creature"],
+      "Subtypes": ["Vedalken", "Artificer"]
+    },
+    "Oracle": {
+      "RawText": "Improvise (Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)\nHexproof (This creature can't be the target of spells or abilities your opponents control.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "improvise",
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Improvise",
+          "Reminder": {
+            "Text": "(Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "hexproof",
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Hexproof",
+          "Reminder": {
+            "Text": "(This creature can't be the target of spells or abilities your opponents control.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}
