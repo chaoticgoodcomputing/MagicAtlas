@@ -97,6 +97,13 @@ public sealed class AbilityClassifier
       "Fateful hour",
       // Adventure
       "Adventure",
+      // Speed mechanic (Aetherdrift — Rule 702.178). "Max speed — [ability]" lines
+      // have the same structural signature as ability-word-prefixed activated or
+      // static abilities. We add it here so TryExtractAbilityWord can surface it,
+      // and the "Max speed" route below overrides classification to Static so that
+      // StaticAbilityParser can record the keyword's presence as a minimal marker
+      // (engine-territory content after the em-dash is deferred).
+      "Max speed",
     };
 
   /// <summary>
@@ -147,6 +154,23 @@ public sealed class AbilityClassifier
       {
         Kind = AbilityKind.Activated,
         Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "Max speed — [ability]" — Rule 702.178 keyword ability (Aetherdrift).
+    // Regardless of the body content (activated, static, or triggered), MAST
+    // records the keyword's presence as a minimal StaticAbility marker and
+    // defers the engine-territory gated ability to the rules engine. Routing
+    // unconditionally to Static ensures StaticAbilityParser's MaxSpeed
+    // combinator fires and produces StaticAbility { KeywordSource = "Max speed" }
+    // without trying to parse the post-dash body.
+    if (abilityWord is "Max speed")
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.95,
         AbilityWord = abilityWord,
       };
     }

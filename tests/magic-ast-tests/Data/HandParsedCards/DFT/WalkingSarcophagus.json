@@ -1,0 +1,83 @@
+{
+  "Input": {
+    "Name": "Walking Sarcophagus",
+    "ManaCost": "{2}",
+    "TypeLine": "Artifact Creature — Zombie Cat",
+    "OracleText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nMax speed — This creature gets +1/+2.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Walking Sarcophagus",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Zombie Cat",
+      "Types": ["Artifact", "Creature"],
+      "Subtypes": ["Zombie", "Cat"]
+    },
+    "Oracle": {
+      "RawText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\nMax speed — This creature gets +1/+2.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Start your engines!",
+          "Effects": [
+            {
+              "EffectType": "startYourEngines",
+              "IsOptional": false
+            }
+          ],
+          "Reminder": {
+            "Text": "(If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Max speed",
+          "Effects": [
+            {
+              "EffectType": "maxSpeed",
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}

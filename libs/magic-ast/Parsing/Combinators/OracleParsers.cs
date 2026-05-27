@@ -548,6 +548,53 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Start your engines!" keyword.
+  /// Pattern: "Start"(Word) "your"(Your) "engines"(Word) [!-dropped] [reminder]
+  /// Rule 702.179. Initialises a player's speed counter at 1 if they have
+  /// none; it increases once per turn when an opponent loses life (max 4).
+  /// The "!" is silently dropped by the tokenizer (not a recognised
+  /// punctuation token). "your" is a structural keyword token (OracleToken.Your),
+  /// so it must be matched with Token.EqualTo(OracleToken.Your), not Keyword().
+  /// MAST records the keyword's presence; the speed-counter management
+  /// mechanics are engine territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> StartYourEngines = (
+    from start in Keyword("Start")
+    from your in Token.EqualTo(OracleToken.Your)
+    from engines in Keyword("engines")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Start your engines!",
+      Effects = [new StartYourEnginesEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Max speed" keyword.
+  /// Pattern: "Max" "speed" EmDash [remainder of line is engine territory]
+  /// Rule 702.178. Grants an ability only if the controller has speed 4.
+  /// The parser matches the ability-word prefix ("Max speed —") and records
+  /// the keyword's presence as a minimal marker; the gated inner ability
+  /// content (everything after the em-dash on the same oracle line) is
+  /// engine territory and is not modelled further in this batch.
+  /// Placed AFTER StartYourEngines to avoid any token confusion.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> MaxSpeed = (
+    from max in Keyword("Max")
+    from speed in Keyword("speed")
+    from dash in Token.EqualTo(OracleToken.EmDash)
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Max speed",
+      Effects = [new MaxSpeedEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -1461,6 +1508,8 @@ public static class OracleParsers
     .Or(Persist)
     .Or(Flanking)
     .Or(Ascend)
+    .Or(StartYourEngines)
+    .Or(MaxSpeed)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)
