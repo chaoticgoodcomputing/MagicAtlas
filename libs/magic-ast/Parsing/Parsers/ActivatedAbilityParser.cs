@@ -866,6 +866,28 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return null;
     }
 
+    // Match "target X or Y" (two card types) or "target X" (single card type).
+    var orTargetMatch = System.Text.RegularExpressions.Regex.Match(
+      rest,
+      @"\btarget\s+(\w+)\s+or\s+(\w+)",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase
+    );
+    if (orTargetMatch.Success)
+    {
+      var noun1 = orTargetMatch.Groups[1].Value.ToLowerInvariant();
+      if (noun1.EndsWith("s") && noun1.Length > 1)
+      {
+        noun1 = noun1[..^1];
+      }
+      var noun2 = orTargetMatch.Groups[2].Value.ToLowerInvariant();
+      if (noun2.EndsWith("s") && noun2.Length > 1)
+      {
+        noun2 = noun2[..^1];
+      }
+      var orFilter = new ObjectFilter { CardTypes = [noun1, noun2] };
+      return new TapEffect { Target = ObjectReference.Target(orFilter), Count = count };
+    }
+
     var targetMatch = System.Text.RegularExpressions.Regex.Match(
       rest,
       @"\btarget\s+(\w+)",
@@ -1540,8 +1562,10 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   }
 
   /// <summary>
-  /// Tries to parse "Creatures you control gain [ability] until end of turn" effects.
-  /// Pattern: "Creatures you control gain lifelink until end of turn"
+  /// Tries to parse "gains [keyword]" effects on a specific target.
+  /// Supported patterns:
+  /// - "Creatures you control gain [keyword]" (Each, creatureFilter)
+  /// - "This [type] gains [keyword] until end of turn" (Self)
   /// </summary>
   private GainAbilityEffect? TryParseGainAbilityEffect(string effectText)
   {
@@ -1551,6 +1575,36 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     if (!lower.Contains("gain"))
     {
       return null;
+    }
+
+    // Pattern: "This [type] gains [keyword]" — self-targeting activated ability effect.
+    var selfMatch = Regex.Match(
+      effectText,
+      @"^This\s+\w+\s+gains?\s+(\w+)",
+      RegexOptions.IgnoreCase
+    );
+    if (selfMatch.Success)
+    {
+      var selfKeyword = selfMatch.Groups[1].Value;
+      var selfAbility = BuildGrantedKeywordAbility(selfKeyword);
+      if (selfAbility is not null)
+      {
+        Duration? selfDuration = null;
+        if (lower.Contains("until end of turn"))
+        {
+          selfDuration = new UntilEndOfTurnDuration();
+        }
+        else if (lower.Contains("until your next turn"))
+        {
+          selfDuration = new UntilYourNextTurnDuration();
+        }
+        return new GainAbilityEffect
+        {
+          Target = ObjectReference.Self(),
+          GainedAbility = selfAbility,
+          Duration = selfDuration,
+        };
+      }
     }
 
     // Pattern: "Creatures you control gain [ability]"
