@@ -471,6 +471,26 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Flanking" keyword.
+  /// Pattern: "Flanking" [reminder]
+  /// Rule 702.25. A triggered keyword ability: whenever a creature without flanking
+  /// blocks this creature, the blocking creature gets -1/-1 until end of turn.
+  /// Although mechanically triggered, MAST models it as a keyword marker (same
+  /// approach as Exalted and Prowess); the trigger-and-debuff expansion is engine
+  /// territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Flanking = (
+    from kw in Keyword("Flanking")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Flanking",
+      Effects = [new FlankingEffect()],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   #region Combat Timing Keywords
@@ -1250,6 +1270,7 @@ public static class OracleParsers
     .Or(Infect)
     .Or(Wither)
     .Or(Persist)
+    .Or(Flanking)
     .Or(FirstStrike)
     .Or(DoubleStrike)
     .Or(Forestwalk)

@@ -1,0 +1,95 @@
+{
+  "Input": {
+    "Name": "Benalish Cavalry",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Human Knight",
+    "OracleText": "Flanking (Whenever a creature without flanking blocks this creature, the blocking creature gets -1/-1 until end of turn.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Benalish Cavalry",
+    "TypeLine": {
+      "Raw": "Creature — Human Knight",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Knight"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flanking (Whenever a creature without flanking blocks this creature, the blocking creature gets -1/-1 until end of turn.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flanking",
+          "Reminder": {
+            "Text": "(Whenever a creature without flanking blocks this creature, the blocking creature gets -1/-1 until end of turn.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "flanking"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1,
+            "IsPhyrexian": false,
+            "IsSnow": false
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
