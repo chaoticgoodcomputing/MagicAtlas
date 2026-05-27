@@ -358,7 +358,7 @@ public sealed class AbilityClassifier
     if (
       Regex.IsMatch(
         clause.RawText,
-        @"^\s*Target\s+(player|opponent)\s+(discards?|draws?|gains?|loses?|mills?|returns?|exiles?)\s+",
+        @"^\s*Target\s+(player|opponent)\s+(discards?|draws?|gains?|loses?|mills?|returns?|exiles?|sacrifices?)\s+",
         RegexOptions.IgnoreCase
       )
     )
