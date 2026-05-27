@@ -1166,16 +1166,29 @@ public sealed class StaticAbilityParser : IAbilityParser
   );
 
   /// <summary>
-  /// "This spell costs {N} less to cast during [your turn / each opponent's turn / ...]." —
-  /// emits a <see cref="StaticAbility"/> with a <see cref="MagicAST.AST.Abilities.Condition"/>
-  /// preserving the duration clause, wrapping a <see cref="MagicAST.AST.Effects.Resource.CostReductionEffect"/>
-  /// whose <c>Amount</c> is the literal generic-mana reduction. Rule 117.6 (cost reductions).
+  /// "This spell costs {N} less to cast [condition]." — flat-amount self-cost
+  /// reduction conditioned on game state or timing.  Two condition shapes are
+  /// recognised (Rule 117.6):
+  /// <list type="bullet">
+  ///   <item><c>during [your turn / each opponent's turn / combat]</c> —
+  ///         Mental Modulation shape.</item>
+  ///   <item><c>if you control a [Subtype]</c> — Wizard's Lightning /
+  ///         Squash / Lookout's Dispersal shape; the subtype is any
+  ///         capitalised noun (Wizard, Giant, Pirate, …).</item>
+  /// </list>
+  /// Emits a <see cref="StaticAbility"/> whose <c>Condition.Text</c> preserves
+  /// the oracle-text condition verbatim, wrapping a
+  /// <see cref="MagicAST.AST.Effects.Resource.CostReductionEffect"/> with a
+  /// literal generic-mana <c>Amount</c>.
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseConditionalSpellCostReduction(OracleClause clause)
   {
     var match = Regex.Match(
       clause.RawText,
-      @"^\s*This\s+spell\s+costs\s+\{(?<amount>\d+)\}\s+less\s+to\s+cast\s+(?<cond>during\s+(?:your\s+turn|each\s+(?:opponent|player)'?s\s+turn|combat))\.?\s*$",
+      @"^\s*This\s+spell\s+costs\s+\{(?<amount>\d+)\}\s+less\s+to\s+cast\s+(?<cond>"
+        + @"during\s+(?:your\s+turn|each\s+(?:opponent|player)'?s\s+turn|combat)"
+        + @"|if\s+you\s+control\s+an?\s+[A-Z][A-Za-z]+"
+        + @")\.?\s*$",
       RegexOptions.IgnoreCase
     );
     if (!match.Success)
@@ -1183,8 +1196,9 @@ public sealed class StaticAbilityParser : IAbilityParser
       return null;
     }
     var amount = int.Parse(match.Groups["amount"].Value);
-    // Preserve oracle-text casing for the condition (the lower-case "during"
-    // that follows "to cast " is correct as-is; don't recapitalize).
+    // Preserve oracle-text casing for the condition verbatim so the fixture
+    // comparison sees exactly what the oracle line says (e.g. "if you control
+    // a Wizard", "during your turn").
     var conditionText = match.Groups["cond"].Value;
     return
     [
