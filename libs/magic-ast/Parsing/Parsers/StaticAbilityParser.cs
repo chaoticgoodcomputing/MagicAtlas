@@ -375,6 +375,21 @@ public sealed class StaticAbilityParser : IAbilityParser
       return enchantedPTAndKeyword;
     }
 
+    // "This land enters tapped. As it enters, choose a color[.]" — two-sentence
+    // combo on a single oracle line (Thriving Isle family). The first sentence is
+    // the Rule 614 enters-tapped replacement; the second is the as-enters
+    // color-choice declaration. Per the multi-effect-per-clause doctrine one
+    // oracle LINE = one ability, so both effects land in a single
+    // <see cref="StaticAbility.Effects"/> list. Placed BEFORE
+    // TryParseEntersTapped so the bare single-sentence shape never sees this
+    // clause (the combo regex is anchored at both ends and will not match a
+    // plain "This land enters tapped." line).
+    var entersTappedAndChooseColor = TryParseEntersTappedAndChooseColor(clause);
+    if (entersTappedAndChooseColor != null)
+    {
+      return entersTappedAndChooseColor;
+    }
+
     // "This [permanent/land/...] enters tapped [unless condition]." and
     // "If [condition], this [permanent] enters tapped." — Rule 614 replacement-effect
     // property recorded as a static-ability-attached <see cref="EntersTappedEffect"/>.
@@ -3944,6 +3959,68 @@ public sealed class StaticAbilityParser : IAbilityParser
   // is handled separately; this pattern covers the standalone line only.
   private static readonly Regex _chooseColorOnEntryPattern = new(
     @"^\s*As\s+this\s+(?:permanent|land|creature|artifact|enchantment)\s+enters,\s+choose\s+a\s+color(?:\s+(?<restriction>other\s+than\s+[a-z]+?))?\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "This land enters tapped. As it enters, choose a color[.]" — two-sentence
+  /// combo on a single oracle line (Thriving Isle family, Rule 614.1c). The
+  /// first sentence is the as-enters tapped replacement; the second is the
+  /// color-choice declaration. Per the multi-effect-per-clause doctrine the two
+  /// sentences share one oracle line and therefore produce one
+  /// <see cref="StaticAbility"/> whose <see cref="StaticAbility.Effects"/> list
+  /// contains both effects in source order: <see cref="EntersTappedEffect"/>
+  /// followed by <see cref="ChooseColorOnEntryEffect"/>.
+  ///
+  /// <para>The "As it enters" preamble (rather than "As this land enters") is
+  /// the printed form on the Thriving cycle because "this land" was already
+  /// named by the first sentence. The pattern also handles the optional
+  /// "other than [color]" restriction on <see cref="ChooseColorOnEntryEffect.Restriction"/>.</para>
+  ///
+  /// <para>The permanent-type noun in the first sentence is open-ended to cover
+  /// any future non-land printings using the same shape.</para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEntersTappedAndChooseColor(OracleClause clause)
+  {
+    var match = _entersTappedAndChooseColorPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var restrictionGroup = match.Groups["restriction"];
+    string? restriction = restrictionGroup.Success
+      ? restrictionGroup.Value.Trim()
+      : null;
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects =
+        [
+          new EntersTappedEffect(),
+          new ChooseColorOnEntryEffect
+          {
+            Restriction = restriction,
+          },
+        ],
+      },
+    ];
+  }
+
+  // Matches the two-sentence combo:
+  //   "This [permanent-type] enters tapped. As it enters, choose a color[.]"
+  // with an optional "other than [color]" restriction on the second sentence.
+  // The permanent-type noun is open-ended (land/creature/artifact/enchantment/
+  // permanent) to cover all oracle printings. "As it enters" (not "As this
+  // [type] enters") is the printed form on cards where the first sentence
+  // already named the permanent with "This land". Both sentences may end with
+  // a period; the final period is optional.
+  private static readonly Regex _entersTappedAndChooseColorPattern = new(
+    @"^\s*This\s+(?:permanent|land|creature|artifact|enchantment)\s+enters\s+tapped\."
+    + @"\s+As\s+it\s+enters,\s+choose\s+a\s+color"
+    + @"(?:\s+(?<restriction>other\s+than\s+[a-z]+?))?\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
