@@ -1,0 +1,117 @@
+{
+  "Input": {
+    "Name": "Spikewheel Acrobat",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Creature — Human Performer",
+    "OracleText": "Spectacle {1}{R} (You may cast this spell for its spectacle cost rather than its mana cost if an opponent lost life this turn.)\nThis creature enters with a +1/+1 counter on it if an opponent lost life this turn.",
+    "Power": "3",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Spikewheel Acrobat",
+    "TypeLine": {
+      "Raw": "Creature — Human Performer",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Performer"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Spectacle {1}{R} (You may cast this spell for its spectacle cost rather than its mana cost if an opponent lost life this turn.)\nThis creature enters with a +1/+1 counter on it if an opponent lost life this turn.",
+      "Abilities": [
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 127
+          },
+          "RawText": "Spectacle {1}{R} (You may cast this spell for its spectacle cost rather than its mana cost if an opponent lost life this turn.)",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Static ability parser not yet implemented",
+              "Location": {
+                "Start": 0,
+                "Length": 127
+              },
+              "RawText": "Spectacle {1}{R} (You may cast this spell for its spectacle cost rather than its mana cost if an opponent lost life this turn.)",
+              "Pattern": "ConditionalEffect",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 0
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "entersWithCounters",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "CounterType": "+1/+1",
+              "IsOptional": false
+            }
+          ],
+          "Condition": {
+            "Text": "an opponent lost life this turn"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
