@@ -400,6 +400,26 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target creature you control fights target creature ..." — fight keyword
+    // action (CR 701.14). The "fights" verb marks this as a one-shot imperative
+    // spell-resolution instruction, not a continuous static. Without this route
+    // the clause defaults to Static and stalls in StaticAbilityParser.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+\S.*?\s+fights\s+target\s+",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Target player mills N cards." / "Target opponent mills N cards." — Rule 701.17
     // mill keyword action targeting a specific player or opponent. The "Target" subject
     // and imperative "mills" verb mark this as a one-shot spell-resolution instruction
