@@ -1402,6 +1402,136 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // CONVERGE ABILITY WORD
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Converge — ability word. Effects scale with the number of colors of mana
+  /// spent to cast the spell. MAST records the ability-word marker; the
+  /// color-counting and scaled-effect semantics are engine territory.
+  /// Mirrors Sunburst (Rule 702.44) which describes the same color-counting
+  /// concept as a keyword ability; Converge is an ability word (Rule 207.2c).
+  /// </summary>
+  public static KeywordDefinition Converge { get; } =
+    new()
+    {
+      Name = "Converge",
+      RuleReference = "207.2c",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Converge",
+        Effects = [new ConvergeEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // FOR MIRRODIN KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// For Mirrodin! (Phyrexia: All Will Be One). When this Equipment enters,
+  /// create a 2/2 red Rebel creature token, then attach this to it. Although
+  /// mechanically a triggered ability, MAST records it as a keyword marker —
+  /// same approach as Living Weapon (Rule 702.77); the ETB trigger,
+  /// token-creation, and auto-attach semantics are engine territory.
+  /// The '!' in oracle text is silently dropped by the tokenizer.
+  /// </summary>
+  public static KeywordDefinition ForMirrodin { get; } =
+    new()
+    {
+      Name = "For Mirrodin",
+      RuleReference = "702.77",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "For Mirrodin",
+        Effects = [new ForMirrodinEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PREPARED KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Prepared — keyword state printed as "This creature enters prepared." on
+  /// the front face of prepare-layout double-faced cards. While prepared, the
+  /// controller may cast a copy of the attached spell; doing so unprepares it.
+  /// MAST records the keyword's presence; the prepared-state and copy-cast
+  /// mechanics are engine territory per the descriptive-not-engine doctrine.
+  /// </summary>
+  public static KeywordDefinition Prepared { get; } =
+    new()
+    {
+      Name = "Prepared",
+      RuleReference = "702.177",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Prepared",
+        Effects = [new PreparedEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // DOCTOR'S COMPANION KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Doctor's companion (Doctor Who Commander). You can have two commanders
+  /// if the other is the Doctor. A variant of the Partner keyword restricted
+  /// to Doctor-subtype commanders. MAST records the keyword's presence;
+  /// the commander-pairing restriction is engine territory.
+  /// Mirrors Partner (Rule 702.124) but with the Doctor-constraint.
+  /// </summary>
+  public static KeywordDefinition DoctorsCompanion { get; } =
+    new()
+    {
+      Name = "Doctor's companion",
+      RuleReference = "702.124",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Doctor's companion",
+        Effects = [new DoctorsCompanionEffect()],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // FIREBENDING KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Firebending N (Avatar: The Last Airbender). A triggered keyword ability:
+  /// whenever this creature attacks, add N {R}. This mana lasts until end of
+  /// combat. MAST records the keyword and its integer value; the attack trigger,
+  /// mana-addition, and end-of-combat duration are engine territory.
+  /// Integer-parameterized keyword; mirrors the Bushido/Modular/Backup family.
+  /// </summary>
+  public static KeywordDefinition Firebending { get; } =
+    new()
+    {
+      Name = "Firebending",
+      RuleReference = "702.175",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.Number,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = "Firebending",
+        Effects = [new FirebendingEffect
+        {
+          Value = ParseIntValue("Firebending", parameter),
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // RECONFIGURE KEYWORDS
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1497,6 +1627,11 @@ public static class KeywordDefinitions
       Hideaway,
       Mobilize,
       StartYourEngines,
+      Converge,
+      ForMirrodin,
+      Prepared,
+      DoctorsCompanion,
+      Firebending,
       // More keywords can be added here as needed
     ];
 
