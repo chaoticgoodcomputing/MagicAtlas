@@ -802,7 +802,7 @@ public sealed class StaticAbilityParser : IAbilityParser
   );
 
   /// <summary>
-  /// Bare keyword grant on an anchor or filter target — four arms in one surface:
+  /// Bare keyword grant on an anchor or filter target — five arms in one surface:
   /// <list type="bullet">
   ///   <item><c>(Enchanted|Equipped) creature has &lt;keyword&gt;.</c> — the Aura/Equipment
   ///         static grant (Rule 702.5). Emits a <see cref="StaticAbility"/> wrapping a
@@ -821,6 +821,12 @@ public sealed class StaticAbilityParser : IAbilityParser
   ///         continuous grant on a token (or creature) filter (Rule 613.1c). The filter arm
   ///         parses the leading noun phrase to determine card type, subtype, and the
   ///         <c>token</c> predicate (placed on <see cref="ObjectFilter.Characteristics"/>).</item>
+  ///   <item><c>Each creature you control with a +1/+1 counter on it has &lt;keyword&gt;.</c> —
+  ///         counter-filtered lord grant (Rule 613.1c). The "with a +1/+1 counter on it"
+  ///         predicate is encoded as <c>Characteristics: ["with a +1/+1 counter"]</c> on
+  ///         the <see cref="ObjectFilter"/>. Covers the Outlast-lord family (Abzan Falconer,
+  ///         Tuskguard Captain, etc.) and keyword-grant counters-matter cards (Crowned
+  ///         Ceratok, Sapphire Drake, etc.).</item>
   /// </list>
   /// All arms share <see cref="MapKeywordToStaticAbility"/> so any keyword added there
   /// is available to every target shape without further edits.
@@ -950,6 +956,43 @@ public sealed class StaticAbilityParser : IAbilityParser
       ];
     }
 
+    // Arm 5: "Each creature you control with a +1/+1 counter on it has <keyword>."
+    // Lord-grants-keyword where the subject filter carries a counter predicate.
+    // Encodes the "+1/+1 counter on it" condition as Characteristics: ["with a +1/+1 counter"]
+    // on the filter, consistent with how "tapped"/"untapped" predicates are stored
+    // in the lord-PT filter shapes (ParseLordPTFilter). The Each-kinded reference plus
+    // Controller = You mirrors the filter-arm shape from TryParseLordPTBuff.
+    var counterKeywordMatch = _eachCreatureWithCounterKeywordPattern.Match(rawText);
+    if (counterKeywordMatch.Success)
+    {
+      var counterKw = counterKeywordMatch.Groups["kw"].Value.Trim().ToLowerInvariant();
+      var counterGranted = MapKeywordToStaticAbility(counterKw);
+      if (counterGranted is null)
+      {
+        return null;
+      }
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new GainAbilityEffect
+          {
+            Target = new ObjectReference
+            {
+              Kind = ObjectReferenceKind.Each,
+              Filter = new ObjectFilter
+              {
+                CardTypes = ["creature"],
+                Controller = ControllerFilter.You,
+                Characteristics = ["with a +1/+1 counter"],
+              },
+            },
+            GainedAbility = counterGranted,
+          }],
+        },
+      ];
+    }
+
     // Arm 2: filter target — "<filter> [tokens] you control have <keyword>."
     // Handles: "Creature tokens you control have <kw>.",
     //          "<Subtype> tokens you control have <kw>.",
@@ -1024,6 +1067,19 @@ public sealed class StaticAbilityParser : IAbilityParser
   // "Warlocks", etc.) — the last added in batch 33 for the lord-grants-keyword cluster.
   private static readonly Regex _bareFilterKeywordPattern = new(
     @"^\s*(?<filter>[A-Za-z][A-Za-z ]+?)\s+(?<token>tokens?\s+)?you\s+control\s+have\s+(?<kw>[a-z][a-z ]+?)\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Arm 5: "Each creature you control with a +1/+1 counter on it has <keyword>."
+  // Matches the lord-grants-keyword pattern where the subject filter is augmented
+  // by the "+1/+1 counter" predicate. The counter characteristic is stored verbatim
+  // as Characteristics: ["with a +1/+1 counter"] on the ObjectFilter, consistent with
+  // how "tapped"/"untapped" predicates are encoded on the lord-PT filter shapes.
+  // "Each" (universal quantifier) signals the Each-kinded ObjectReference; the
+  // "you control" clause sets Controller = You. The trailing reminder text is stripped
+  // before matching so lines like "...has trample. (It can deal excess...)" still match.
+  private static readonly Regex _eachCreatureWithCounterKeywordPattern = new(
+    @"^\s*Each\s+creatures?\s+you\s+control\s+with\s+a\s+\+1/\+1\s+counter\s+on\s+(?:it|them)\s+ha(?:s|ve)\s+(?<kw>[a-z][a-z ]+?)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
