@@ -8,7 +8,7 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// "you get {E}", "you get {E}{E}", ... — energy-counter gain triggered effect.
-/// Rule 107.4f: An energy counter is a counter that can be placed on a player.
+/// Rule 107.14: Energy counters are a player resource represented by the {E} symbol.
 /// Each "{E}" symbol in the oracle text represents one energy counter; we count
 /// the symbols to derive the literal amount.
 /// </summary>

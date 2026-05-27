@@ -9,7 +9,8 @@ using MagicAST.AST.Effects.Traits;
 
 /// <summary>
 /// "you get {E}", "you get {E}{E}", etc. — the player gains N energy counters.
-/// Rule 107.4f / 107.6: An energy counter is a counter that can be placed on a player.
+/// Rule 107.14: Energy counters are a player resource represented by the {E} symbol;
+/// see rule 122 for the generic counter framework.
 /// Each {E} symbol in the cost-style notation represents one energy counter.
 /// MAST-descriptive: this models the verb + count. Player-state bookkeeping
 /// (where the counters live, how they're spent) is engine territory.
