@@ -497,6 +497,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       "for each",
       "surveil",
       "transform",
+      "proliferate",
     ];
     foreach (var s in starters)
     {

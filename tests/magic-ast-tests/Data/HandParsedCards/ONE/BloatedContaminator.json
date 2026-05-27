@@ -1,0 +1,129 @@
+{
+  "Input": {
+    "Name": "Bloated Contaminator",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Creature — Phyrexian Beast",
+    "OracleText": "Trample\nToxic 1 (Players dealt combat damage by this creature also get a poison counter.)\nWhenever this creature deals combat damage to a player, proliferate. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Toxic",
+      "Trample",
+      "Proliferate"
+    ],
+    "Id": "411bda96-6c65-475d-9850-0a9b3eefa553",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Bloated Contaminator",
+    "TypeLine": {
+      "Raw": "Creature — Phyrexian Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Trample\nToxic 1 (Players dealt combat damage by this creature also get a poison counter.)\nWhenever this creature deals combat damage to a player, proliferate. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "trample",
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Toxic",
+          "Reminder": {
+            "Text": "(Players dealt combat damage by this creature also get a poison counter.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "toxic",
+              "Value": 1,
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "proliferate"
+            }
+          ],
+          "Reminder": {
+            "Text": "Choose any number of permanents and/or players, then give each another counter of each kind already there."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
