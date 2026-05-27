@@ -535,6 +535,26 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Undying" keyword.
+  /// Pattern: "Undying" [reminder]
+  /// Rule 702.93. When this creature dies, if it had no +1/+1 counters on it,
+  /// return it to the battlefield under its owner's control with a +1/+1 counter
+  /// on it. Mirror of Persist with opposite polarity. MAST records keyword
+  /// presence; the dies-trigger, counter-check, and return semantics are engine
+  /// territory.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Undying = (
+    from kw in Keyword("Undying")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Undying",
+      Effects = [new UndyingEffect { IsOptional = false }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Flanking" keyword.
   /// Pattern: "Flanking" [reminder]
   /// Rule 702.25. A triggered keyword ability: whenever a creature without flanking
@@ -1550,6 +1570,7 @@ public static class OracleParsers
     .Or(Infect)
     .Or(Wither)
     .Or(Persist)
+    .Or(Undying)
     .Or(Flanking)
     .Or(Ascend)
     .Or(Evolve)

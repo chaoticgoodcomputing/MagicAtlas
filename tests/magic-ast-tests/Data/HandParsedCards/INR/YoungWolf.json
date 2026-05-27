@@ -1,0 +1,86 @@
+{
+  "Input": {
+    "Name": "Young Wolf",
+    "ManaCost": "{G}",
+    "TypeLine": "Creature — Wolf",
+    "OracleText": "Undying (When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Young Wolf",
+    "TypeLine": {
+      "Raw": "Creature — Wolf",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Wolf"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Undying (When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Undying",
+          "Reminder": {
+            "Text": "(When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "undying",
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
