@@ -915,7 +915,7 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// <summary>
   /// "If one or more tokens would be created under your control, those tokens
   /// plus that many &lt;P&gt;/&lt;T&gt; &lt;color&gt; &lt;subtype&gt; creature
-  /// tokens are created instead." — Rule 614.2 augmentation: the original token
+  /// tokens are created instead." — Rule 614.1a (replacement effects using "instead"): the original token
   /// creation still occurs, AND an equal number of additional tokens (per the
   /// supplied token definition) are also created. Chatterfang shape; Doubling
   /// Season shares the structural pattern with a tweak ("twice that many").
