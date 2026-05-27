@@ -1,0 +1,124 @@
+{
+  "Input": {
+    "Name": "Aspect of Mongoose",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nEnchanted creature can't be blocked by more than one creature.\n{2}{G}: Return Aspect of Mongoose to its owner's hand.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Aspect of Mongoose",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nEnchanted creature can't be blocked by more than one creature.\n{2}{G}: Return Aspect of Mongoose to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ]
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "MaxBlockers": 1,
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "unparsed",
+              "SourceSpan": {
+                "Start": 87,
+                "Length": 47
+              },
+              "RawText": "Return Aspect of Mongoose to its owner's hand.",
+              "IsOptional": false
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
