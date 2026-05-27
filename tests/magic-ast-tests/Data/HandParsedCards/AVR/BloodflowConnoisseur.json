@@ -1,0 +1,79 @@
+{
+  "Input": {
+    "Name": "Bloodflow Connoisseur",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Vampire",
+    "OracleText": "Sacrifice a creature: Put a +1/+1 counter on Bloodflow Connoisseur.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Bloodflow Connoisseur",
+    "TypeLine": {
+      "Raw": "Creature — Vampire",
+      "Types": ["Creature"],
+      "Subtypes": ["Vampire"]
+    },
+    "Oracle": {
+      "RawText": "Sacrifice a creature: Put a +1/+1 counter on Bloodflow Connoisseur.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "Input": {
+    "Name": "Necrosavant",
+    "ManaCost": "{3}{B}{B}",
+    "TypeLine": "Creature — Zombie",
+    "OracleText": "Flying\nSacrifice a creature: Regenerate this creature.",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Necrosavant",
+    "TypeLine": {
+      "Raw": "Creature — Zombie",
+      "Types": ["Creature"],
+      "Subtypes": ["Zombie"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nSacrifice a creature: Regenerate this creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": ["flying", "reach"]
+              },
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Flying"
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "regenerate",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["B"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
+        "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 }
+      }
+    ]
+  }
+}
