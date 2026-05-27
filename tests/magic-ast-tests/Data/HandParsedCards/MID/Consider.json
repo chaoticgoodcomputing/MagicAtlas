@@ -1,0 +1,70 @@
+{
+  "Input": {
+    "Name": "Consider",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\nDraw a card.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Consider",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\nDraw a card.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "surveil",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
