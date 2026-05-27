@@ -66,3 +66,13 @@ public sealed record AtBeginningOfNextEndStepDuration : Duration;
 /// </summary>
 [OracleDuration("atBeginningOfNextUpkeep")]
 public sealed record AtBeginningOfNextUpkeepDuration : Duration;
+
+/// <summary>
+/// "at the beginning of the next cleanup step" — delayed sacrifice trigger for
+/// the cast-as-flash-with-consequence pattern (Armor of Thorns, Rule 702.8e).
+/// Rule 514.1: the cleanup step is the final step of the ending phase. MAST
+/// records only that the consequence fires at that step boundary; enforcement
+/// is engine territory.
+/// </summary>
+[OracleDuration("atBeginningOfNextCleanupStep")]
+public sealed record AtBeginningOfNextCleanupStepDuration : Duration;
