@@ -954,6 +954,11 @@ public sealed class AbilityClassifier
     // Target-redirection imperative (Rule 115.7): "Change the target of …" — one-shot
     // spell-resolution instruction, not a declarative static.
     "Change",
+    // Control-change imperative (Rule 701.8 / CR 613.1a — Layer 2): "Gain control of …"
+    // is a one-shot resolution instruction on spells (Act of Treason, Threaten, etc.),
+    // not a declarative static. The imperative form "Gain" (second person) differs from
+    // the third-person "gains" that appears on permanent-static oracle text.
+    "Gain",
   ];
 
   /// <summary>
