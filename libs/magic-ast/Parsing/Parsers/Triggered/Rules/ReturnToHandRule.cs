@@ -56,6 +56,10 @@ public sealed class ReturnToHandRule : ITriggeredRule
     {
       controller = ControllerFilter.You;
     }
+    else if (Regex.IsMatch(lower, @"\ban\s+opponent\s+controls\b"))
+    {
+      controller = ControllerFilter.Opponent;
+    }
 
     var filter = new ObjectFilter
     {

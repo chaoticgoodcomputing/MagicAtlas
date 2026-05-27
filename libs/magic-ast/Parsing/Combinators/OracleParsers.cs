@@ -1112,6 +1112,50 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Echo {cost}" keyword.
+  /// Pattern: "Echo" mana-symbol+ [reminder]
+  /// Rule 702.30. "At the beginning of your upkeep, if this permanent came under
+  /// your control since the beginning of your last upkeep, sacrifice it unless
+  /// you pay [cost]." MAST records the keyword and the echo cost; the
+  /// upkeep-trigger / sacrifice-unless-pay semantics are engine territory.
+  /// Mirrors the Bestow/Equip/Cycling pattern exactly.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Echo = (
+    from keyword in Keyword("Echo")
+    from costSymbols in Token
+      .Matching<OracleToken>(
+        k =>
+          k == OracleToken.GenericMana
+          || k == OracleToken.WhiteMana
+          || k == OracleToken.BlueMana
+          || k == OracleToken.BlackMana
+          || k == OracleToken.RedMana
+          || k == OracleToken.GreenMana
+          || k == OracleToken.ColorlessMana
+          || k == OracleToken.VariableMana
+          || k == OracleToken.HybridMana
+          || k == OracleToken.PhyrexianMana,
+        "mana symbol"
+      )
+      .AtLeastOnce()
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Echo",
+      Effect = new EchoEffect
+      {
+        Cost = new MagicAST.AST.Costs.ManaCost
+        {
+          Symbols = costSymbols
+            .Select(t => new MagicAST.Parsing.ManaCostParser().Parse(t.ToStringValue()).Symbols[0])
+            .ToList(),
+        },
+      },
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Bestow {cost}" keyword.
   /// Pattern: "Bestow" mana-symbol+ [reminder]
   /// Rule 702.103. If you cast this card for its bestow cost, it's an Aura spell
@@ -1214,7 +1258,8 @@ public static class OracleParsers
       .Or(Flashback.Try())
       .Or(Equip.Try())
       .Or(Morph.Try())
-      .Or(Bestow.Try());
+      .Or(Bestow.Try())
+      .Or(Echo.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
