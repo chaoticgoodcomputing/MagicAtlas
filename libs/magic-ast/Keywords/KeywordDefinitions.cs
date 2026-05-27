@@ -73,14 +73,14 @@ public static class KeywordDefinitions
 
   /// <summary>
   /// Menace: This creature can't be blocked except by two or more creatures.
-  /// Rule 702.110. Evasion keyword whose distinguishing feature is a minimum
+  /// Rule 702.111. Evasion keyword whose distinguishing feature is a minimum
   /// blocker count rather than a characteristic filter on the blockers.
   /// </summary>
   public static KeywordDefinition Menace { get; } =
     new()
     {
       Name = "Menace",
-      RuleReference = "702.110",
+      RuleReference = "702.111",
       Category = KeywordCategory.Static,
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility

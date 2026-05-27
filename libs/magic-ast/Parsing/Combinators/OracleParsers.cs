@@ -121,7 +121,7 @@ public static class OracleParsers
   /// <summary>
   /// Parser for the "Menace" keyword.
   /// Pattern: "Menace" [reminder]
-  /// Rule 702.110. Evasion ability requiring two or more blockers.
+  /// Rule 702.111. Evasion ability requiring two or more blockers.
   /// </summary>
   public static readonly TokenListParser<OracleToken, StaticAbility> Menace = (
     from keyword in Keyword("Menace")
