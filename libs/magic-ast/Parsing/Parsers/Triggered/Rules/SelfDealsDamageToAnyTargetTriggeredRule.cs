@@ -11,9 +11,10 @@ using MagicAST.AST.References;
 /// (creature, player, or planeswalker). Covers cards whose triggered ETB ability
 /// reads "When this [creature|artifact] enters, it deals N damage to any target."
 ///
-/// Rule 603: triggered abilities (When/Whenever/At). Rule 119.3: damage dealt by
-/// a source. Rule 115.1: targets — a target may be any player, creature, or
-/// planeswalker unless otherwise restricted.
+/// Rule 603: triggered abilities (When/Whenever/At). Rule 120.1-120.2: dealing
+/// damage (a source deals damage to a permanent/player). Rule 115.4: "any target"
+/// — a target may be any player, creature, planeswalker, or battle unless
+/// otherwise restricted.
 ///
 /// Distinct from <see cref="SelfDealsDamageToYouRule"/> (targets the controller only)
 /// and the spell-side <see cref="Spell.Rules.SelfDealsDamageToAnyTargetRule"/>
