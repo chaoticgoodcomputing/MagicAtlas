@@ -1,0 +1,120 @@
+{
+  "Input": {
+    "Name": "Flame-Kin Zealot",
+    "ManaCost": "{1}{R}{W}",
+    "TypeLine": "Creature — Elemental Warrior",
+    "OracleText": "When this creature enters, creatures you control get +1/+1 and gain haste until end of turn.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["R", "W"],
+    "ColorIdentity": ["R", "W"]
+  },
+  "Output": {
+    "Name": "Flame-Kin Zealot",
+    "TypeLine": {
+      "Raw": "Creature — Elemental Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Elemental", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, creatures you control get +1/+1 and gain haste until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "IsOptional": false,
+              "Effects": [
+                {
+                  "EffectType": "modifyPT",
+                  "Target": {
+                    "Kind": "Each",
+                    "Filter": {
+                      "CardTypes": ["creature"],
+                      "Controller": "You"
+                    }
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Duration": {
+                    "DurationType": "untilEndOfTurn"
+                  }
+                },
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "Each",
+                    "Filter": {
+                      "CardTypes": ["creature"],
+                      "Controller": "You"
+                    }
+                  },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "KeywordSource": "Haste",
+                    "Effects": [
+                      {
+                        "EffectType": "haste",
+                        "IsOptional": false
+                      }
+                    ]
+                  },
+                  "Duration": {
+                    "DurationType": "untilEndOfTurn"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R", "W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
