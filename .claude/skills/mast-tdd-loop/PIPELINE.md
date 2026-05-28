@@ -67,14 +67,16 @@ Red #1 doesn't always fire — if your gold uses only existing AST primitives, R
 
 The parser produces an `UnparsedAbility` or wrong node. Read `lastAttemptedRule` — that's where the parser gave up, and usually where the gap lives (extend the rule, don't reach for a sibling). Use `/tmp/mast-diffs/{Set}_{Card}.expected.json` + `.actual.json` (auto-dumped on failure) for the field-level diff.
 
-Extend the appropriate `IAbilityParser` in `libs/magic-ast/Parsing/Parsers/`. The dispatch table is reflection-discovered via `[OracleAbilityParser(AbilityKind.X)]` — **do not edit `OracleParser.cs` or `AbilityParserRegistry.cs`.** New ability-kind parser → new file with the attribute (registry auto-discovers it). Existing parser missing a case → extend the relevant private method.
+Extend the appropriate `IAbilityParser` in `libs/magic-ast/Parsing/Parsers/`. The dispatch table is reflection-discovered via `[OracleAbilityParser(AbilityKind.X)]` — **do not edit `OracleParser.cs` or `AbilityParserRegistry.cs`.** New ability-kind parser → new file with the attribute (registry auto-discovers it).
+
+For the families that are already one-file-per-rule registries — Spell, Static, Triggered (conditions *and* effects), Activated (costs *and* effects), and keywords — a missing case is a **new rule file**, not an edit to the parser. Drop a `[SpellRule]` / `[StaticRule]` / `[TriggerConditionRule]` / `[TriggeredRule]` / `[ActivatedCostRule]` / `[ActivatedEffectRule]` / `[StructuralKeyword]` class in the parser's `Rules/` directory (or `Tokens/Keywords/`); the registry discovers it by reflection and dispatches by descending `Priority`. Migrate the priority order-preserving when extracting (`Priority = 1000 - legacy chain index`) so relative dispatch order is unchanged. Edit a parser's own body only for genuinely cross-cutting orchestration (trigger timing/split, the multi-sentence effect pre-pass); `AbilityClassifier.cs` is the only parser surface that still routinely takes in-place edits.
 
 <a id="sibling-shape-allowance"></a>
 ### Sibling-shape allowance
 
 A family addresses one ability shape, but the same fixture card may carry a sibling ability needing a separate parser surface for that card's test to pass. You MAY add a tight sibling surface only when ALL of these hold:
 
-1. Single-shape — one new method or one new `[SpellRule]`/`[TriggeredRule]` file, not a family's worth of work.
+1. Single-shape — one new rule file (`[SpellRule]` / `[StaticRule]` / `[TriggerConditionRule]` / `[TriggeredRule]` / `[ActivatedCostRule]` / `[ActivatedEffectRule]`) or, for the unconverted classifier, one new method — not a family's worth of work.
 2. The sibling does NOT belong to another family in-flight this batch (check the briefing). Conflict → BAIL on the multi-ability card.
 3. Fully covered by **existing** AST types (consult `GLOSSARY.md`). Needs a new type → BAIL.
 4. Genuinely smaller than the family work — a paragraph, not a section. A new ability-kind parser is not acceptable.

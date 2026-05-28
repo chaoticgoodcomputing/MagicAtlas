@@ -100,9 +100,9 @@ Dispatch a `mast-judge` sub-agent to verify rules-accuracy. **Policy:** judge an
 
 Merge in **file-affinity order**, NUnit-gating after each group. Two individually-green branches can be jointly-red — Step 6 catches that, and no-ratchet-tolerance means any red halts the batch (roll back the merges, investigate per Stop conditions).
 
-1. Unique-file agents first (trivial auto-merge; `--ours` on any GLOSSARY conflict).
-2. Keyword-batch agents sequentially — `KeywordDefinitions.cs`/`OracleParsers.cs` conflicts are additive, keep both sides.
-3. Hot-file parser agents sequentially: StaticAbilityParser → TriggeredAbilityParser → AbilityClassifier → ActivatedAbilityParser.
+1. Unique-file rule agents first (the overwhelming majority — every keyword and spell/static/triggered/activated rule is its own file; trivial auto-merge; `--ours` on any GLOSSARY conflict).
+2. `AbilityClassifier.cs` agents sequentially — the one remaining hot file; routing entries are additive, keep both sides.
+3. Parser-orchestration agents last (rare): an agent that edited a thin dispatcher body in `TriggeredAbilityParser.cs`/`ActivatedAbilityParser.cs` (timing/split/multi-sentence only — adding a *rule* never lands here).
 4. `nx run mast:test` after each group; final joint run must be 100% green.
 
 See [Hot files](#hot-files) for the conflict-resolution protocol.
@@ -124,21 +124,18 @@ The orchestrator dispatches up to N sub-agents per batch (default N=20; mega-bat
 
 | Group | Typical target files | Cap per batch |
 |---|---|---|
-| **Unique-file agents** (`Triggered/Rules/`, `Spell/Rules/`) | each creates a new reflection-discovered file | Unlimited — never collide |
-| **Keyword-batch** | `KeywordDefinitions.cs` + `OracleParsers.cs` | ~4 (≈5 keywords each) — hot |
-| **StaticAbilityParser** | `StaticAbilityParser.cs` (new private method each) | ~6 — hot |
-| **TriggeredAbilityParser** | `TriggeredAbilityParser.cs` (new trigger conditions) | ~4 — hot |
-| **AbilityClassifier** | `AbilityClassifier.cs` (new routing entries) | ~4 — hot |
-| **ActivatedAbilityParser** | `ActivatedAbilityParser.cs` | 1–2 — hot |
+| **Unique-file rule agents** (`Spell/Rules/`, `Static/Rules/`, `Triggered/Rules/`, `Activated/Rules/`, `Tokens/Keywords/`) | each creates a new reflection-discovered file (`[SpellRule]`, `[StaticRule]`, `[TriggeredRule]`, `[TriggerConditionRule]`, `[ActivatedEffectRule]`, `[ActivatedCostRule]`, `[StructuralKeyword]`) | Unlimited — never collide |
+| **AbilityClassifier** | `AbilityClassifier.cs` (new routing entries) | ~4 — the one remaining hot file |
+| **Parser orchestration** | a thin dispatcher body in `TriggeredAbilityParser.cs` / `ActivatedAbilityParser.cs` (timing/split/multi-sentence pre-pass only — adding a *rule* never lands here) | 1 per file — rare |
 | **Combo-depth** | various — user-requested cards to 100% coverage | orchestrator judgment |
 
 ### Hot files
 
-Five files take concurrent edits and produce the bulk of merge conflicts: `KeywordDefinitions.cs`, `OracleParsers.cs`, `StaticAbilityParser.cs`, `TriggeredAbilityParser.cs`, `AbilityClassifier.cs`. The unique-file rule directories never collide — each rule is its own `[SpellRule]`/`[TriggeredRule]` file.
+The one-file-per-rule reflection registry now covers keywords, spell rules, static rules, triggered conditions, triggered effects, and activated costs/effects — adding any of these is dropping a *new* file under the relevant `Rules/` (or `Tokens/Keywords/`) directory, so those agents never collide. **`AbilityClassifier.cs` is the only remaining hot monolith** (routing entries are still edited in-place).
 
-**Interim protocol:** cap each hot file per the table; serialize overflow. Resolve conflicts with a dedicated **resolver sub-agent** per hot file ("keep BOTH sides — these are additive registry entries / dispatch-chain extensions"), which is faster and less error-prone than inline orchestrator resolution and keeps conflict noise out of orchestrator context.
+**Resolver protocol (AbilityClassifier overflow):** cap it per the table and serialize overflow. If two agents must both edit `AbilityClassifier.cs`, resolve conflicts with a dedicated **resolver sub-agent** ("keep BOTH sides — these are additive routing entries"), which is faster and less error-prone than inline orchestrator resolution and keeps conflict noise out of orchestrator context. The same applies in the rare case two agents edit one parser's orchestration body.
 
-**Architectural fix (planned):** extend the reflection-discovered one-file-per-rule pattern to the hot files — one file per keyword, per static rule, per trigger condition, per classifier entry. Then every agent adds a *new* file and the hot-file collision class disappears. Until that lands, the caps and resolver protocol are the mitigation.
+**Architectural fix (mostly landed):** the merge-conflict-elimination refactor is essentially complete. Keywords (`Tokens/Keywords/`) and spell/static/triggered/activated rules each live one-file-per-rule and are reflection-discovered by descending `Priority`. The legacy `KeywordDefinitions.cs`, the monolithic `Parsing/OracleParsers.cs`, and the hand-ordered `TryParse*` dispatch chains inside the static/triggered/activated parsers are deleted — those parsers are now thin registry dispatchers (`Parsing/Combinators/OracleParsers.cs` survives only as a ~40-line shim onto the keyword registry). **Only `AbilityClassifier.cs` remains to convert** (one file per routing entry) to close the hot-file class entirely.
 
 ## Stop conditions
 
