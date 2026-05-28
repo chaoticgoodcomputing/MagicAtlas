@@ -4010,6 +4010,38 @@ public sealed class StaticAbilityParser : IAbilityParser
           Phase = MagicAST.AST.Effects.Keyword.DayNightPhase.Nightbound,
         }],
       },
+      // Phasing (Rule 702.26): this permanent phases in or out before the controller's
+      // untap step. MAST records the keyword's presence; phase bookkeeping is engine territory.
+      "phasing" => new StaticAbility
+      {
+        KeywordSource = "Phasing",
+        Effects = [new MagicAST.AST.Effects.Keyword.PhasingEffect { IsOptional = false }],
+      },
+      // Provoke (Rule 702.39): a triggered keyword ability. Whenever this creature attacks,
+      // the controller may have a target creature the defending player controls untap and block
+      // this creature if able. MAST records the keyword's presence; the trigger and force-block
+      // mechanics are engine territory.
+      "provoke" => new StaticAbility
+      {
+        KeywordSource = "Provoke",
+        Effects = [new MagicAST.AST.Effects.Keyword.ProvokeEffect { IsOptional = false }],
+      },
+      // Cipher (Rule 702.99): exile this spell card encoded on a creature you control;
+      // whenever that creature deals combat damage to a player, cast a copy for free.
+      // MAST records the keyword's presence; the encoding and free-cast mechanics are engine territory.
+      "cipher" => new StaticAbility
+      {
+        KeywordSource = "Cipher",
+        Effects = [new MagicAST.AST.Effects.Keyword.CipherEffect { IsOptional = false }],
+      },
+      // Haunt (Rule 702.55): when this creature dies, exile it haunting target creature.
+      // MAST records the keyword's presence; the exile-on-death and haunt-trigger mechanics
+      // are engine territory.
+      "haunt" => new StaticAbility
+      {
+        KeywordSource = "Haunt",
+        Effects = [new MagicAST.AST.Effects.Keyword.HauntEffect { IsOptional = false }],
+      },
       _ => null,
     };
   }

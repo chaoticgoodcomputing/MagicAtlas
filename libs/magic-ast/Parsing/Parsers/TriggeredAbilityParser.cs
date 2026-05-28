@@ -602,6 +602,20 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
+    // Haunt compound trigger: "When this creature enters or the creature it haunts dies"
+    // (Rule 702.55). Fires in two cases: when this creature enters the battlefield, OR
+    // when the creature it haunts dies. The two events are combined into the single
+    // TriggerEvent.EntersOrHauntedCreatureDies value. Must be tested BEFORE the generic
+    // "enters" and "dies" branches — this trigger contains both words.
+    if (lower.Contains("enters") && lower.Contains("haunts") && lower.Contains("dies"))
+    {
+      var hauntTrigger = TryParseHauntCompoundTrigger(triggerText, timing);
+      if (hauntTrigger is not null)
+      {
+        return hauntTrigger;
+      }
+    }
+
     // Compound "enters or dies" trigger — must be checked BEFORE the individual
     // "dies" and "enters" branches so the disjunction isn't split and
     // misclassified as a plain Dies or Enters event.
@@ -956,6 +970,45 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       @"^[A-Z][A-Za-z'\-]*(?:\s+(?:[A-Z][A-Za-z'\-]*|" + FunctionWords + @"))*\s+attacks\s+or\s+blocks\b",
       RegexOptions.CultureInvariant
     );
+  }
+
+  /// <summary>
+  /// "When this creature enters or the creature it haunts dies" — Haunt compound
+  /// trigger (Rule 702.55). The trigger fires in two situations: (1) when this
+  /// creature enters the battlefield, and (2) when the creature this card haunts
+  /// dies. Both events are described by the single oracle clause, modelled here
+  /// as <see cref="TriggerEvent.EntersOrHauntedCreatureDies"/>. The filter always
+  /// describes a creature (self-referential, matching "this creature").
+  ///
+  /// Recognised pattern (case-insensitive):
+  /// <c>When this creature enters or the creature it haunts dies</c>
+  /// </summary>
+  private static readonly System.Text.RegularExpressions.Regex _hauntCompoundTriggerPattern =
+    new(
+      @"^when\s+this\s+creature\s+enters\s+or\s+the\s+creature\s+it\s+haunts\s+dies$",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase |
+      System.Text.RegularExpressions.RegexOptions.Compiled
+    );
+
+  private static TriggerCondition? TryParseHauntCompoundTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    if (!_hauntCompoundTriggerPattern.IsMatch(triggerText.Trim()))
+    {
+      return null;
+    }
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.EntersOrHauntedCreatureDies,
+      Filter = new MagicAST.AST.References.ObjectFilter
+      {
+        CardTypes = ["creature"],
+      },
+    };
   }
 
   /// <summary>

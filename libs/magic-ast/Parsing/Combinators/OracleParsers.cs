@@ -1780,6 +1780,34 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for "Champion a/an [type]" keyword.
+  /// Pattern: "Champion" ("a" | "an") Word+ [reminder]
+  /// Rule 702.71. A keyword ability: when this creature enters the battlefield,
+  /// sacrifice it unless you exile another creature of the specified type you
+  /// control. When this creature leaves the battlefield, that card returns.
+  /// The article "a"/"an" is consumed but not stored; the type word(s) are
+  /// joined into a single string and placed on <see cref="ChampionEffect.CreatureType"/>.
+  /// "Champion a creature" → CreatureType = "creature" (no subtype restriction);
+  /// "Champion an Elemental" → CreatureType = "Elemental".
+  /// Mirrors the Affinity word-parameter combinator pattern.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Champion = (
+    from kw in Keyword("Champion")
+    from article in Token.EqualTo(OracleToken.Word)
+                         .Where(t => t.ToStringValue().Equals("a", StringComparison.OrdinalIgnoreCase)
+                                  || t.ToStringValue().Equals("an", StringComparison.OrdinalIgnoreCase))
+    from typeWords in Token.EqualTo(OracleToken.Word).AtLeastOnce()
+    from reminder in _optionalReminder
+    let creatureType = string.Join(" ", typeWords.Select(t => t.ToStringValue()))
+    select new StaticAbility
+    {
+      KeywordSource = $"Champion a {creatureType}",
+      Effects = [new ChampionEffect { CreatureType = creatureType, IsOptional = false }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for "Equip {cost}" keyword.
   /// Pattern: "Equip" mana-symbol+ [reminder]
   /// Rule 702.6. An activated ability that attaches this Equipment to a creature
@@ -2967,6 +2995,87 @@ public static class OracleParsers
     }
   );
 
+  /// <summary>
+  /// Parser for the "Phasing" keyword.
+  /// Pattern: "Phasing" [reminder]
+  /// Rule 702.26. A keyword ability that causes a permanent to sometimes be
+  /// treated as though it does not exist. Before the controller's untap step,
+  /// the permanent alternately phases in and phases out. MAST records the
+  /// keyword's presence; the phase-bookkeeping is engine territory.
+  /// Mirrors the Wither/Persist/Undying pattern exactly.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Phasing = (
+    from kw in Keyword("Phasing")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Phasing",
+      Effects = [new PhasingEffect { IsOptional = false }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Provoke" keyword.
+  /// Pattern: "Provoke" [reminder]
+  /// Rule 702.39. A keyword triggered ability on an attacking creature: the
+  /// controller may have a target creature the defending player controls untap
+  /// and block this creature if able. MAST records the keyword's presence;
+  /// the untap-and-force-block mechanics are engine territory.
+  /// Mirrors the Wither/Persist/Undying pattern exactly.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Provoke = (
+    from kw in Keyword("Provoke")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Provoke",
+      Effects = [new ProvokeEffect { IsOptional = false }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Cipher" keyword.
+  /// Pattern: "Cipher" [reminder]
+  /// Rule 702.99. A keyword ability on instants and sorceries that allows the
+  /// controller to exile the spell card encoded on a creature they control.
+  /// Whenever that creature deals combat damage to a player, its controller may
+  /// cast a copy of the encoded card without paying its mana cost. MAST records
+  /// the keyword's presence; the encoding, copy-creation, and free-cast semantics
+  /// are engine territory. Mirrors the Wither/Persist/Undying pattern exactly.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Cipher = (
+    from kw in Keyword("Cipher")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Cipher",
+      Effects = [new CipherEffect { IsOptional = false }],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
+  /// Parser for the "Haunt" keyword.
+  /// Pattern: "Haunt" [reminder]
+  /// Rule 702.55. A keyword ability that exiles a card to "haunt" a target
+  /// creature. For creature cards: when this creature dies, exile it haunting
+  /// target creature. MAST records the keyword's presence; the exile-on-death
+  /// and haunt-trigger mechanics are engine territory.
+  /// Mirrors the Wither/Persist/Undying pattern exactly.
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> Haunt = (
+    from kw in Keyword("Haunt")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Haunt",
+      Effects = [new HauntEffect { IsOptional = false }],
+      Reminder = reminder,
+    }
+  );
+
   #endregion
 
   /// <summary>
@@ -3139,7 +3248,11 @@ public static class OracleParsers
     .Or(Converge)
     .Or(ForMirrodin)
     .Or(Prepared)
-    .Or(DoctorsCompanion);
+    .Or(DoctorsCompanion)
+    .Or(Phasing)
+    .Or(Provoke)
+    .Or(Cipher)
+    .Or(Haunt);
 
   /// <summary>
   /// Parses any parameterized keyword ability.
@@ -3191,7 +3304,8 @@ public static class OracleParsers
       .Or(Vanishing.Try())
       .Or(Graft.Try())
       .Or(Dredge.Try())
-      .Or(Outlast.Try());
+      .Or(Outlast.Try())
+      .Or(Champion.Try());
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).

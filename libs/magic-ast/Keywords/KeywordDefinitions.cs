@@ -2079,6 +2079,115 @@ public static class KeywordDefinitions
     };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // PHASING / PROVOKE / CIPHER / HAUNT / CHAMPION KEYWORDS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// <summary>
+  /// Phasing: This permanent phases in or out before you untap during each of
+  /// your untap steps. Rule 702.26. MAST records the keyword's presence;
+  /// the phase-bookkeeping is engine territory.
+  /// </summary>
+  public static KeywordDefinition Phasing { get; } =
+    new()
+    {
+      Name = "Phasing",
+      RuleReference = "702.26",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Phasing",
+        Effects = [new PhasingEffect { IsOptional = false }],
+      },
+    };
+
+  /// <summary>
+  /// Provoke: Whenever this creature attacks, you may have target creature
+  /// the defending player controls untap and block it if able.
+  /// Rule 702.39. MAST records the keyword's presence; the attack trigger
+  /// and force-block mechanics are engine territory.
+  /// </summary>
+  public static KeywordDefinition Provoke { get; } =
+    new()
+    {
+      Name = "Provoke",
+      RuleReference = "702.39",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Provoke",
+        Effects = [new ProvokeEffect { IsOptional = false }],
+      },
+    };
+
+  /// <summary>
+  /// Cipher: Then you may exile this spell card encoded on a creature you
+  /// control. Whenever that creature deals combat damage to a player, its
+  /// controller may cast a copy of the encoded card without paying its mana
+  /// cost. Rule 702.99. MAST records the keyword's presence; the encoding,
+  /// copy-creation, and free-cast mechanics are engine territory.
+  /// </summary>
+  public static KeywordDefinition Cipher { get; } =
+    new()
+    {
+      Name = "Cipher",
+      RuleReference = "702.99",
+      Category = KeywordCategory.Static,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Cipher",
+        Effects = [new CipherEffect { IsOptional = false }],
+      },
+    };
+
+  /// <summary>
+  /// Haunt: When this creature dies, exile it haunting target creature.
+  /// Rule 702.55. MAST records the keyword's presence; the exile-on-death
+  /// and haunt-trigger mechanics are engine territory.
+  /// </summary>
+  public static KeywordDefinition Haunt { get; } =
+    new()
+    {
+      Name = "Haunt",
+      RuleReference = "702.55",
+      Category = KeywordCategory.Triggered,
+      HasParameter = false,
+      CreateExpansion = _ => new StaticAbility
+      {
+        KeywordSource = "Haunt",
+        Effects = [new HauntEffect { IsOptional = false }],
+      },
+    };
+
+  /// <summary>
+  /// Champion a [type]: When this enters the battlefield, sacrifice it unless
+  /// you exile another creature of the named type you control. When this
+  /// leaves the battlefield, that card returns. Rule 702.71. MAST records
+  /// the keyword's presence and the creature type parameter; the
+  /// sacrifice-unless and return mechanics are engine territory.
+  /// </summary>
+  public static KeywordDefinition Champion { get; } =
+    new()
+    {
+      Name = "Champion",
+      RuleReference = "702.71",
+      Category = KeywordCategory.Triggered,
+      HasParameter = true,
+      ParameterType = KeywordParameterType.CardType,
+      CreateExpansion = parameter => new StaticAbility
+      {
+        KeywordSource = $"Champion a {parameter?.Trim() ?? "creature"}",
+        Effects = [new ChampionEffect
+        {
+          CreatureType = parameter?.Trim() ?? "creature",
+          IsOptional = false,
+        }],
+      },
+    };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // ALL DEFINITIONS (must be after individual definitions to avoid null refs)
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -2168,6 +2277,11 @@ public static class KeywordDefinitions
       Graft,
       Dredge,
       Outlast,
+      Phasing,
+      Provoke,
+      Cipher,
+      Haunt,
+      Champion,
       // More keywords can be added here as needed
     ];
 

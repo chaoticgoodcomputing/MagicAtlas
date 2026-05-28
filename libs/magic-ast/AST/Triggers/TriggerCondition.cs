@@ -206,6 +206,15 @@ public enum TriggerEvent
   /// </summary>
   ControlNoLandType,
 
+  /// <summary>
+  /// Compound Haunt trigger: fires both when this creature enters the battlefield
+  /// and when the creature it haunts dies (Rule 702.55). Unique to the Haunt
+  /// mechanic — oracle text: "When this creature enters or the creature it haunts
+  /// dies, [effect]." Descriptive record of the compound trigger condition; the
+  /// dual-event semantics are engine territory.
+  /// </summary>
+  EntersOrHauntedCreatureDies,
+
   /// <summary>Unrecognized trigger event</summary>
   Other,
 }
