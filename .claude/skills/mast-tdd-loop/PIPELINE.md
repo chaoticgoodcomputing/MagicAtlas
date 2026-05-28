@@ -30,7 +30,13 @@ Create `tests/magic-ast-tests/Data/HandParsedCards/{Set}/{CardName}.json`:
 }
 ```
 
+**The `Input` block is handed to you in the dispatch prompt** — the orchestrator copies the exemplar's `Input` DTO verbatim from `triage-report.json` (`Name`, `ManaCost`, `TypeLine`, `OracleText`, `Power`, `Toughness`, `Colors`, `ColorIdentity`; DFCs carry a `CardFaces` block). Copy it straight into the fixture. **Do not fetch card data from the network / Scryfall** — the handed DTO and the local `oracle-cards.json` are the only sources. (If you must find a cleaner alternate exemplar, `jq` `oracle-cards.json` locally.)
+
 **Card-scope rule:** every ability on the card must be gold-modeled, even abilities no current parser produces — otherwise the per-card `Parser_ProducesExpectedOutput` test can't go green. If a card is too complex to fully gold-model this batch, swap it for a cleaner exemplar (scan `candidateLines[]` deeper by `cleanlinessScore`).
+
+### Rule citations in doc-comments — cite from the briefing, never from memory
+
+The briefing's "Relevant rules" section gives you the **exact CR rule number(s) + quoted text** for this family — the orchestrator pulled them from `rules-structure.json` so you don't have to, and so you can't hallucinate one. When you add a new AST node, cite **that** number/text in its XML doc-comment. Do NOT write a rule number from memory or beyond what the briefing provided; guessed numbers were a recurring defect (e.g. Multikicker cited 702.32 vs the real 702.33; a node citing a nonexistent "701.12"). If no number was provided and you think one applies, note it in your report rather than guessing — the judge cross-references every citation against `rules-structure.json`.
 
 ### JSON casing
 
@@ -100,8 +106,8 @@ If any criterion fails, BAIL on the multi-ability card; the orchestrator swaps i
 1. **{Card Name}** — `{oracle line}` (cleanliness={score})
 ... (1-3 cards)
 
-### Relevant rules
-- **{Rule number} {Rule title}** — {1-2 sentences quoted from the rules data}
+### Relevant rules  (REQUIRED — pulled verbatim from rules-structure.json; the agent cites these, the judge cross-references them)
+- **{exact CR rule number, e.g. 702.33c} {Rule title}** — "{verbatim text quoted from rules-structure.json}"
 
 ### AST types in scope (convenience pointer — sub-agents can read GLOSSARY.md directly)
 - **`{TypeName}`** — `[OracleEffect("{discriminator}")]`. Inherits `Effect, IOptionalEffect, ...`.
@@ -117,7 +123,7 @@ If any criterion fails, BAIL on the multi-ability card; the orchestrator swaps i
 - {term} — referenced in oracle but missing from glossary.json
 ```
 
-Keep it ~200 words per family. Informative, not prescriptive about parser shape — agents own the AST shape and parser design. The rules section is strongly recommended but not strictly mandatory (sub-agents have `glossary.json` in their worktree); inline citations save a `jq` query and remain the canonical reference for the family.
+Keep it ~200 words per family. Informative, not prescriptive about parser shape — agents own the AST shape and parser design. The **"Relevant rules" block is mandatory and must carry the exact rule number + verbatim text pulled from `rules-structure.json`** — it is the canonical reference the agent cites in doc-comments and the judge cross-references, so pull it accurately (don't paraphrase a number from memory). **The exemplar `Input` DTO is not part of the briefing — it goes into the dispatch prompt (Step 3) verbatim**, so the agent writes the fixture without re-fetching card data.
 
 <a id="batch-report"></a>
 ### Batch report template

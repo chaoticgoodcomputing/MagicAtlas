@@ -19,7 +19,7 @@ These hold for every batch and every agent. They are stated once, here.
 
 - **Gold AST = eventual truth, never a snapshot.** The hand-parsed JSON is what a fully-implemented parser *should* emit, not what the current parser emits. Never `"Kind": "unparsed"`, never embedded `Diagnostics[]`, never `Pattern` strings copied from `FallbackParser`. Getting this wrong inverts the TDD direction — the test "passes" by matching the parser's current limitations. (This is the test-overfit guard: fixtures are the committed failing test; workers extend the parser to meet them, never edit them to pass.)
 - **Fixtures are immutable to parser work.** Whoever writes the gold owns it. An agent closing a parser gap must NOT edit a fixture to make a test pass. If a gold looks wrong, STOP and report — orchestrator-side fix.
-- **GLOSSARY.md is orchestrator-only.** `libs/magic-ast/GLOSSARY.md` is the tracked, auto-generated AST index. Sub-agents **read it freely, never regenerate it.** `nx run magic-ast:glossary` runs on `main`, once, at the end of a batch. Any in-worktree regen is a guaranteed merge conflict for no benefit — no sub-agent's tests depend on the regenerated glossary.
+- **GLOSSARY.md is orchestrator-only.** `libs/magic-ast/GLOSSARY.md` is the tracked, auto-generated AST index. Sub-agents **read it freely, never regenerate it.** `nx run magic-ast:glossary` runs on the integration branch, once, at the end of a batch. Any in-worktree regen is a guaranteed merge conflict for no benefit — no sub-agent's tests depend on the regenerated glossary.
 - **All git uses `git -C "$WORKTREE_ROOT"`.** Capture `WORKTREE_ROOT="$(pwd)"` at session start. CWD-based git can land commits on the wrong branch.
 - **MAST describes, it does not execute.** Model what oracle text *says*, not what the rules *do* at runtime. No turn-state, priority, stack ordering, or layering fields. (See memory `feedback_mast_describes_not_executes`.)
 - **No ratchet tolerance.** The NUnit suite is 100% green to land a batch, full stop.
@@ -47,14 +47,17 @@ Step 3   Dispatch N combined agents in parallel (worktree isolation), one per fa
 Step 4   Judge novel-shape branches (per policy). HALT on any FAIL.
 Step 5   Merge by file-affinity order. NUnit gate after each merge group.
 Step 6   NUnit 100% green required (joint regressions surface here).
-Step 7   Regenerate GLOSSARY.md once on main, commit.
-Step 8   Re-run triage. Report. Loop or stop.
+Step 7   Regenerate GLOSSARY.md once on the integration branch, commit.
+Step 8   Re-run triage. Reap worktrees (nx run mast:worktree-clean). Report. Loop or stop.
 ```
 
 ### Step 0 — Pre-flight
 
 - **Permission mode.** You (orchestrator) must be in an executing mode (`default`/`acceptEdits`), NOT plan mode, before dispatching. Sub-agents inherit the parent's permission mode and cannot escape it — a child dispatched from plan mode will *propose* edits instead of making them, no matter what its prompt says. This is the root cause behind stalled "zero-commit" agents; the prompt-level "do not enter plan mode" mandate (Step 3) is the second half of the fix, not the whole fix.
-- **Worktree base.** The repo sets `worktree.baseRef: "head"` in `.claude/settings.json`, so each sub-agent worktree branches from current local `main` HEAD at spawn (not stale `origin/HEAD`). Sanity-check `git log --oneline -1 HEAD` matches `main` in any worktree. If a worktree references pre-consolidation paths or test counts disagree wildly with the briefing, STOP — its branch may predate the `baseRef` setting.
+- **Worktree isolation + base — BOTH are required.** These are two independent settings, and getting either wrong corrupts the run (this is the root cause of the batch-1 base-contamination incident):
+  1. **Every `Agent` spawn MUST pass `isolation: "worktree"`.** Without it the agent runs *in the orchestrator's own checkout* and its `git checkout`/commit moves the primary branch — that is exactly what hijacked the integration branch and stranded agents on a stale ancestor. No exceptions; a spawn missing it is a bug, not a shortcut.
+  2. **`worktree.baseRef: "head"`** is set in `.claude/settings.json`, so each isolated worktree branches from the **current local HEAD** — whatever branch you have checked out (e.g. `feat/mast-improvements`), **not** `main`/`origin/HEAD`. This is correct; do not "fix" it toward `main`. The integration branch is wherever you are checked out, and you merge agent branches back into *that* — there is no `main` in this loop.
+- **Canary the isolation, don't trust the config.** Before a large batch, spawn ONE agent whose prompt's first action reports `git rev-parse --show-toplevel` (must be under `.claude/worktrees/`, NOT the repo root) and `git log --oneline -1 HEAD` (must match your HEAD). If toplevel is the main repo, or HEAD is a stale base (e.g. the expected just-landed files are missing), STOP — isolation is broken; fix it before dispatching the rest.
 - **Refresh triage:** `nx run mast:run`.
 
 ### Step 1 — Pick families
@@ -72,19 +75,22 @@ Choose batch size by the number of **non-overlapping** families, constrained by 
 
 ### Step 2 — Brief each family
 
-Write one batch briefing to `docs/judgments/briefing-{YYYY-MM-DD}.md` (suffix `-N` if it exists). One section per family, **~200 words, informative not prescriptive** — establish rules facts, don't dictate AST shape (agents own that). For each family: identify the MTG mechanic(s), look them up in `glossary.json`/`rules-structure.json`, and write: failure signal, cards in family, relevant rules (quoted), AST types likely in scope (convenience pointer to GLOSSARY.md, not a whitelist), expected generalization, anti-patterns. The full briefing template is in [PIPELINE.md](PIPELINE.md#briefing-template).
+Write one batch briefing to `docs/judgments/briefing-{YYYY-MM-DD}.md` (suffix `-N` if it exists). One section per family, **~200 words, informative not prescriptive** — establish rules facts, don't dictate AST shape (agents own that). For each family: identify the MTG mechanic(s) and **pull the canonical rule data — the exact CR rule number(s) AND verbatim quoted text — from `rules-structure.json`** (`jq` it; do not paraphrase a number from memory). Write: failure signal, cards in family, **relevant rules (number + quoted text — this block is the ground truth the agent cites verbatim in doc-comments and the judge cross-references, so it must be accurate)**, AST types likely in scope (convenience pointer to GLOSSARY.md, not a whitelist), expected generalization, anti-patterns. The full briefing template is in [PIPELINE.md](PIPELINE.md#briefing-template). Pulling the rule data here, once, on the orchestrator side is what prevents agents from hallucinating rule numbers.
 
 If a family's mechanic isn't in `glossary.json` at all (and is genuinely MTG-domain, not vernacular), don't dispatch — swap the family or escalate to the human.
 
 ### Step 3 — Dispatch combined agents
 
-Spawn N sub-agents in parallel via `Agent` with `isolation: "worktree"`, one per family (Opus for novel-shape or doctrinal-edge families; Sonnet for mechanical ones). Each agent does the full slice: new AST type if needed → gold fixture(s) → parser surface → tests green → commit. **Family contract:** make ALL the family's fixtures green via ONE consolidated parser surface (one new method, or one extension at `lastAttemptedRule`). If the agent finds itself writing N separate `TryParseX` methods, it has misread the family — bail with a sub-pattern breakdown (that bail refines the triage taxonomy; bailing is not failure).
+Spawn N sub-agents in parallel via `Agent` **with `isolation: "worktree"` on every single spawn** (Step 0 — this is non-negotiable; a spawn without it runs in your checkout and moves your branch), one per family (Opus for novel-shape or doctrinal-edge families; Sonnet for mechanical ones). Each agent does the full slice: new AST type if needed → gold fixture(s) → parser surface → tests green → commit. **Family contract:** make ALL the family's fixtures green via ONE consolidated parser surface (one new method, or one extension at `lastAttemptedRule`). If the agent finds itself writing N separate `TryParseX` methods, it has misread the family — bail with a sub-pattern breakdown (that bail refines the triage taxonomy; bailing is not failure).
 
 **Every dispatch prompt MUST include all of these** (self-contained — the agent shares no context with you):
 
+- **Isolation self-check, FIRST.** "Before any edit/branch/commit: run `git rev-parse --show-toplevel` and `git log --oneline -1 HEAD`. If toplevel is `<repo root>` (not under `.claude/worktrees/`), or the base is missing expected files, STOP — make NO changes — and report `ISOLATION FAILED`/`WRONG BASE` with the sha. Else capture `WORKTREE_ROOT="$(pwd)"` and proceed." (Belt-and-suspenders against a spawn that didn't isolate; it prevents an un-isolated agent from corrupting your checkout.)
 - **Execute, don't plan.** "Do NOT enter plan mode. Make edits, run tests, and commit directly." Inline the relevant steps rather than referencing this skill by name, which can re-trigger plan mode. (Combined with the orchestrator's own execute mode from Step 0 — both halves are required.)
-- **Never touch GLOSSARY.md.** "Do NOT run `nx run magic-ast:glossary` and do NOT edit `libs/magic-ast/GLOSSARY.md`. Read it freely; the orchestrator regenerates on main once at the end."
-- **No self-merge.** "Commit on your worktree branch. Do NOT merge to main — the orchestrator merges."
+- **Hand the card data in-prompt — do NOT make the agent look it up.** Paste the chosen exemplar(s)' `Input` DTO **verbatim from `triage-report.json`** into the prompt: `Name`, `ManaCost`, `TypeLine`, `OracleText`, `Power`, `Toughness`, `Colors`, `ColorIdentity` (for DFCs, the `CardFaces` block). The agent writes the fixture's `Input` straight from this. **Hard rule in the prompt: "The local datasets are the only card source. NEVER hit the network or Scryfall."** If the agent needs a cleaner alternate exemplar it `jq`s the local `oracle-cards.json` — but if you handed it a clean DTO, it shouldn't need to. (Reaching for Scryfall is a HITL stall and a sign the DTO wasn't handed over — or that *your* curated value was wrong; copy from triage, don't retype from memory.)
+- **Cite rules only from the briefing's data — never from memory.** "Use the CR rule number(s) + text the briefing's 'Relevant rules' section gives you (the orchestrator pulled these from `rules-structure.json`); cite them verbatim in doc-comments. Do NOT write a rule number the briefing didn't provide. If you believe a different rule applies, say so in your report — do not guess a number." This kills citation hallucination at the source; the judge (Step 4) cross-references against the same rules data.
+- **Never touch GLOSSARY.md.** "Do NOT run `nx run magic-ast:glossary` and do NOT edit `libs/magic-ast/GLOSSARY.md`. Read it freely; the orchestrator regenerates once at the end."
+- **No self-merge.** "Commit on your worktree branch. Do NOT merge — the orchestrator merges."
 - **Use `git -C "$WORKTREE_ROOT"`** for every git command.
 - **Duplicate-work guard.** When two agents might add the same keyword/rule: "If [X] already exists when you read GLOSSARY.md, SKIP it and pick [alternate scope]."
 - **Scope facts:** family identity (`pattern`, `lastAttemptedRule`), all fixture paths, the briefing path, the gold-AST authoring rules (the Invariants above; full schema-gap reference in [PIPELINE.md](PIPELINE.md#authoring-reference)), and the branch name.
@@ -94,7 +100,9 @@ Wait for all N to report before merging.
 
 ### Step 4 — Judge
 
-Dispatch a `mast-judge` sub-agent to verify rules-accuracy. **Policy:** judge any branch carrying novel-shape work (new AST types, replacement effects, combo depth, architectural changes); **skip** pure established-pattern branches (keyword additions mirroring existing patterns). When the judge runs it is a hard binary gate — **any FAIL HALTs the batch.** Do not merge the offending branch; remediate inline or via a focused follow-up agent, then re-judge. There is no "concern" tier. See `.claude/skills/mast-judge/SKILL.md`. Judge novel-shape branches *before* merging them so `main` stays clean.
+Dispatch a `mast-judge` sub-agent to verify rules-accuracy. **Policy:** judge any branch carrying novel-shape work (new AST types, replacement effects, combo depth, architectural changes); **skip** pure established-pattern branches (keyword additions mirroring existing patterns). When the judge runs it is a hard binary gate — **any FAIL HALTs the batch.** Do not merge the offending branch; remediate inline or via a focused follow-up agent, then re-judge. There is no "concern" tier. See `.claude/skills/mast-judge/SKILL.md`. Judge novel-shape branches *before* merging them so the integration branch stays clean.
+
+The judge verifies **doctrine** (`unparsed` in gold, describe-vs-execute, wrong AST shape/discriminator, missing required fields, free-text where structure exists) **and cross-references each cited CR rule** against `rules-structure.json`. This is cheap and reliable now that citations are orchestrator-sourced (Step 2) rather than agent-guessed: the judge confirms the cited rule exists and its text matches the modeling, and FAILs only on an absent-from-data or contradictory citation — not on subrule-letter precision.
 
 ### Steps 5-6 — Merge and gate
 
@@ -113,8 +121,11 @@ See [Hot files](#hot-files) for the conflict-resolution protocol.
 nx run magic-ast:glossary
 git add libs/magic-ast/GLOSSARY.md
 git commit -m "chore(mast): regenerate GLOSSARY after batch {date}"
-nx run mast:run   # refresh corpus-wide triage
+nx run mast:run            # refresh corpus-wide triage
+nx run mast:worktree-clean # reap this batch's worktrees + merged agent branches
 ```
+
+**Reap worktrees every batch.** `nx run mast:worktree-clean` removes the batch's isolated worktrees (Claude only auto-removes *clean* ones; ours have commits) and deletes the now-**merged** `mast-tdd/*` + `worktree-agent-*` branches. Skipping this is how the pool reached 318 worktrees and forced the in-place-checkout fallback. For a **discarded** batch (branches unmerged), run `bash tools/clean-worktrees.sh --force` to also drop the unmerged branches.
 
 If a batch has an intra-batch second wave that depends on new AST types, regenerate + commit GLOSSARY.md *between* waves so the second wave's briefing can cite accurate signatures. Then produce the batch report ([template in PIPELINE.md](PIPELINE.md#batch-report)) and loop to Step 1, or stop if returns are diminishing.
 

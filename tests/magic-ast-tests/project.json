@@ -33,6 +33,14 @@
         "parallel": false
       }
     },
+    "worktree-clean": {
+      "//": "Reap MAST TDD-loop agent worktrees + merged agent branches (run after every batch). Default deletes only MERGED mast-tdd/* and worktree-agent-* branches; for a DISCARDED batch run `bash tools/clean-worktrees.sh --force` to also drop unmerged ones.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash tools/clean-worktrees.sh",
+        "cwd": "{workspaceRoot}"
+      }
+    },
     "format": {
       "executor": "nx:run-commands",
       "options": {
