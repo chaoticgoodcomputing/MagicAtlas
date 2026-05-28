@@ -29,16 +29,29 @@ public sealed class AddManaEffectRule : IActivatedEffectRule
       manaText = manaText[..^1].Trim();
     }
 
-    // "one mana of any color" — single-pip wildcard production.
-    if (
-      Regex.IsMatch(
-        manaText,
-        @"^one\s+mana\s+of\s+any\s+color$",
-        RegexOptions.IgnoreCase
-      )
-    )
+    // "one mana of any color" optionally followed by a spend restriction —
+    // "Spend this mana only to <X>." (Unclaimed Territory shape). The activated
+    // ParseEffects flow runs a multi-sentence pre-pass first; when the second
+    // sentence has no rule of its own it falls back to matching the WHOLE
+    // combined string against each rule, so this rule must accept the joined
+    // "Add one mana of any color. Spend this mana only to <X>." text. MAST
+    // describes rather than executes, so the restriction is captured verbatim.
+    var anyColorMatch = Regex.Match(
+      manaText,
+      @"^one\s+mana\s+of\s+any\s+color(?:\.\s+Spend\s+this\s+mana\s+only\s+to\s+(?<restriction>.+?))?$",
+      RegexOptions.IgnoreCase
+    );
+    if (anyColorMatch.Success)
     {
-      return new AddManaEffect { Mana = string.Empty, AnyColor = true };
+      var restrictionGroup = anyColorMatch.Groups["restriction"];
+      return new AddManaEffect
+      {
+        Mana = string.Empty,
+        AnyColor = true,
+        SpendRestriction = restrictionGroup.Success
+          ? restrictionGroup.Value.Trim()
+          : null,
+      };
     }
 
     // The mana text should be a sequence of mana symbols like "{G}" or "{C}{C}{C}".
