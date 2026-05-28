@@ -1,0 +1,111 @@
+{
+  "Input": {
+    "Name": "Bushy Bodyguard",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Squirrel Warrior",
+    "OracleText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nWhen this creature enters, you may forage. If you do, put two +1/+1 counters on it. (To forage, exile three cards from your graveyard or sacrifice a Food.)",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Bushy Bodyguard",
+    "TypeLine": {
+      "Raw": "Creature — Squirrel Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Squirrel", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)\nWhen this creature enters, you may forage. If you do, put two +1/+1 counters on it. (To forage, exile three cards from your graveyard or sacrifice a Food.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Offspring",
+          "Effects": [
+            {
+              "EffectType": "offspring",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 2
+                  }
+                ]
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.)"
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "It"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "IsOptional": true
+            }
+          ],
+          "Reminder": {
+            "Text": "To forage, exile three cards from your graveyard or sacrifice a Food."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
