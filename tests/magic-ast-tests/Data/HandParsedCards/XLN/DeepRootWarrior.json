@@ -1,0 +1,86 @@
+{
+  "Input": {
+    "Name": "Deeproot Warrior",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Merfolk Warrior",
+    "OracleText": "Whenever this creature becomes blocked, it gets +1/+1 until end of turn.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Deeproot Warrior",
+    "TypeLine": {
+      "Raw": "Creature — Merfolk Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Merfolk", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "Whenever this creature becomes blocked, it gets +1/+1 until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesBlocked",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "It"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
