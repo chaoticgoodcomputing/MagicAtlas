@@ -74,6 +74,28 @@ public sealed class KeywordExpander : IKeywordExpander
 
   /// <summary>
   /// Creates a KeywordExpander with the standard Magic keyword definitions.
+  ///
+  /// <para>
+  /// Phase-2 bridge: definitions discovered from one-file-per-keyword
+  /// <see cref="IKeyword"/> files (<see cref="KeywordRegistry.RegisteredDefinitions"/>)
+  /// take precedence, then the legacy <see cref="KeywordDefinitions.All"/> fills in any
+  /// keyword not yet migrated. A migrated keyword's legacy entry is therefore shadowed.
+  /// Dedup is by case-insensitive <see cref="KeywordDefinition.Name"/> (the expander's
+  /// constructor builds a name-keyed dictionary and would throw on a duplicate key), so
+  /// this dedup is load-bearing, not cosmetic.
+  /// </para>
   /// </summary>
-  public static KeywordExpander CreateDefault() => new(KeywordDefinitions.All);
+  public static KeywordExpander CreateDefault()
+  {
+    var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    var merged = new List<KeywordDefinition>();
+    foreach (var def in KeywordRegistry.RegisteredDefinitions.Concat(KeywordDefinitions.All))
+    {
+      if (seen.Add(def.Name))
+      {
+        merged.Add(def);
+      }
+    }
+    return new KeywordExpander(merged);
+  }
 }
