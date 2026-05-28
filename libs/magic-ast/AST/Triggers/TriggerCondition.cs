@@ -157,6 +157,13 @@ public enum TriggerEvent
   /// <summary>A permanent transforms</summary>
   Transforms,
 
+  /// <summary>
+  /// A creature mutates (Rule 702.140 Mutate). Fires when a permanent
+  /// is successfully placed over or under a non-Human creature the
+  /// controller owns via a mutate cost payment.
+  /// </summary>
+  Mutates,
+
   // Counter triggers
   /// <summary>A counter is placed on a permanent</summary>
   CounterPlaced,
