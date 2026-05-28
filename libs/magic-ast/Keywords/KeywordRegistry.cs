@@ -41,7 +41,7 @@ public static class KeywordRegistry
   /// the expander's name-keyed dictionary, but kept consistent for determinism).
   /// </summary>
   public static IReadOnlyList<KeywordDefinition> RegisteredDefinitions { get; } =
-    _keywords.Select(k => k.Definition).ToList();
+    _keywords.Select(k => k.Definition).OfType<KeywordDefinition>().ToList();
 
   /// <summary>
   /// The discovered-keyword per-element combinator: a Simple-then-Parameterized Or-chain

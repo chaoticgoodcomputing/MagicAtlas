@@ -23,8 +23,15 @@ public interface IKeyword
   /// The expansion definition — the same <see cref="KeywordDefinition"/> instance that
   /// previously lived as a static property on <c>KeywordDefinitions</c>. Feeds the
   /// keyword-expander registry.
+  ///
+  /// <para>
+  /// <c>null</c> for combinator-only keywords that never had a <c>KeywordDefinition</c>
+  /// (e.g. Flashback, Conspire, Fuse — present in the legacy <c>OracleParsers</c> chain
+  /// but absent from <c>KeywordDefinitions.All</c>). Such keywords still contribute their
+  /// <see cref="Combinator"/> to the parse chain but nothing to the expander.
+  /// </para>
   /// </summary>
-  KeywordDefinition Definition { get; }
+  KeywordDefinition? Definition { get; }
 
   /// <summary>
   /// The oracle-text recognizer — the same combinator that previously lived as a static
