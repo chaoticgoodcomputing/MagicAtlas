@@ -88,6 +88,20 @@ public sealed record ObjectFilter
   public IReadOnlyList<string>? Characteristics { get; init; }
 
   /// <summary>
+  /// Restricts the filter to objects matching the characteristic value CHOSEN as
+  /// this permanent entered — the structured consumer side of a CR 607 linked ability
+  /// (the producer is a "choose a [creature type|color]" effect under
+  /// <c>StaticAbility.When = AsThisEnters</c>, CR 614.1c). Implicit and kind-based:
+  /// a permanent has at most one chosen creature type and one chosen color, so no
+  /// explicit variable name is needed. Replaces free-text
+  /// <c>Characteristics: ["of the chosen type"]</c>.
+  /// e.g. "creatures you control of the chosen type" → <c>Controller=You</c> +
+  /// <c>ChosenCharacteristic=CreatureType</c>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ChosenCharacteristicKind? ChosenCharacteristic { get; init; }
+
+  /// <summary>
   /// Zone restriction: Battlefield, Graveyard, Hand, Library, etc.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -136,6 +150,22 @@ public sealed record ObjectFilter
 
   public static ObjectFilter Player(TextSpan? span = null) =>
     new() { CardTypes = ["player"], SourceSpan = span };
+}
+
+/// <summary>
+/// Which "chosen" characteristic an <see cref="ObjectFilter.ChosenCharacteristic"/>
+/// reference points at — the value selected by a "choose a [creature type|color]"
+/// effect as this permanent entered (CR 607 linked abilities). Kind-based and
+/// implicit: a permanent has at most one chosen creature type and one chosen color.
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum ChosenCharacteristicKind
+{
+  /// <summary>"of the chosen type" — the creature type chosen (Etchings of the Chosen, Unclaimed Territory).</summary>
+  CreatureType,
+
+  /// <summary>"of the chosen color" — the color chosen (Paradise Plume, Thriving lands).</summary>
+  Color,
 }
 
 /// <summary>
