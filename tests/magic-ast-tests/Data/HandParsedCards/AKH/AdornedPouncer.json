@@ -1,0 +1,127 @@
+{
+  "Input": {
+    "Name": "Adorned Pouncer",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Cat",
+    "OracleText": "Double strike\nEternalize {3}{W}{W} ({3}{W}{W}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a 4/4 black Zombie Cat with no mana cost. Eternalize only as a sorcery.)",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Adorned Pouncer",
+    "TypeLine": {
+      "Raw": "Creature — Cat",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Double strike\nEternalize {3}{W}{W} ({3}{W}{W}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a 4/4 black Zombie Cat with no mana cost. Eternalize only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Double strike",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "Both"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Eternalize",
+          "Effects": [
+            {
+              "EffectType": "eternalize",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 3
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "W"
+                    ],
+                    "IsPhyrexian": false,
+                    "IsSnow": false
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "W"
+                    ],
+                    "IsPhyrexian": false,
+                    "IsSnow": false
+                  }
+                ]
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "({3}{W}{W}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a 4/4 black Zombie Cat with no mana cost. Eternalize only as a sorcery.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
