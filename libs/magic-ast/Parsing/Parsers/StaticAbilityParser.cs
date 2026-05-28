@@ -430,6 +430,23 @@ public sealed class StaticAbilityParser : IAbilityParser
       return enchantedPTAndKeyword;
     }
 
+    // "This land enters tapped with two charge counters on it." and
+    // "This land enters tapped with two depletion counters on it." — single-sentence
+    // combo (Vivid land / MMQ depletion-land families, Rule 614.1c). Both
+    // enters-tapped and enters-with-counters are simultaneous replacement effects
+    // recorded on the same oracle line, so per the multi-effect-per-clause doctrine
+    // both effects land in a single <see cref="StaticAbility.Effects"/> list.
+    // Placed BEFORE TryParseEntersTappedAndChooseColor and TryParseEntersTapped
+    // because the "with [count] [counterType] counters on it" suffix distinguishes
+    // this shape from all other enters-tapped forms; the plain enters-tapped regex
+    // would also match "This land enters tapped" as a prefix but is anchored end-to-end
+    // and will not fire on this clause.
+    var entersTappedWithCounters = TryParseEntersTappedWithCounters(clause);
+    if (entersTappedWithCounters != null)
+    {
+      return entersTappedWithCounters;
+    }
+
     // "This land enters tapped. As it enters, choose a color[.]" — two-sentence
     // combo on a single oracle line (Thriving Isle family). The first sentence is
     // the Rule 614 enters-tapped replacement; the second is the as-enters
@@ -4641,6 +4658,77 @@ public sealed class StaticAbilityParser : IAbilityParser
   // is handled separately; this pattern covers the standalone line only.
   private static readonly Regex _chooseColorOnEntryPattern = new(
     @"^\s*As\s+this\s+(?:permanent|land|creature|artifact|enchantment)\s+enters,\s+choose\s+a\s+color(?:\s+(?<restriction>other\s+than\s+[a-z]+?))?\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "This land enters tapped with two charge counters on it." and
+  /// "This land enters tapped with two depletion counters on it." — single-sentence
+  /// Rule 614.1c combo (Vivid land family / MMQ depletion-land family). The
+  /// "enters tapped" and "enters with N counters" are simultaneous replacement effects
+  /// that happen to share one oracle sentence. Per the multi-effect-per-clause doctrine
+  /// both land in one <see cref="StaticAbility"/> whose <see cref="StaticAbility.Effects"/>
+  /// list contains an <see cref="EntersTappedEffect"/> followed by an
+  /// <see cref="MagicAST.AST.Effects.Replacement.EntersWithCountersEffect"/> (in source order).
+  ///
+  /// <para>Generalises to any land that prints "enters tapped with [count] [type] counters
+  /// on it." — the count and counter-type are parsed to a
+  /// <see cref="MagicAST.AST.Quantities.LiteralQuantity"/> and a string respectively,
+  /// consistent with <see cref="TryParseEntersWithCounters"/>.</para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseEntersTappedWithCounters(OracleClause clause)
+  {
+    var match = _entersTappedWithCountersPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var countText = match.Groups["count"].Value;
+    MagicAST.AST.Quantities.Quantity count;
+    if (countText.Equals("X", StringComparison.OrdinalIgnoreCase))
+    {
+      count = MagicAST.AST.Quantities.VariableQuantity.X;
+    }
+    else if (TryParseSmallCount(countText.ToLowerInvariant(), out var intCount))
+    {
+      count = MagicAST.AST.Quantities.LiteralQuantity.Of(intCount);
+    }
+    else
+    {
+      return null;
+    }
+
+    var counterType = match.Groups["counterType"].Value;
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects =
+        [
+          new EntersTappedEffect(),
+          new MagicAST.AST.Effects.Replacement.EntersWithCountersEffect
+          {
+            Count = count,
+            CounterType = counterType,
+            IsOptional = false,
+          },
+        ],
+      },
+    ];
+  }
+
+  // Matches the single-sentence combo:
+  //   "This land enters tapped with [count] [counterType] counters on it."
+  // where [count] is a numeral, the variable "X", or an English word-count
+  // (one–ten), and [counterType] is any named counter type. The permanent-type
+  // noun is restricted to "land" because the pattern is only known to appear on
+  // lands; widening to "permanent|creature|artifact" would require a corpus
+  // check to avoid false positives on other enters-with-counters printings.
+  // Handles "counter" and "counters" and an optional trailing period.
+  private static readonly Regex _entersTappedWithCountersPattern = new(
+    @"^\s*This\s+land\s+enters\s+tapped\s+with\s+(?<count>\d+|X|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[\w/+-]+)\s+counters?\s+on\s+it\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
