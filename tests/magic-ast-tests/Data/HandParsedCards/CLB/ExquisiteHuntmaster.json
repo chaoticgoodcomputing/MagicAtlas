@@ -1,0 +1,152 @@
+{
+  "Input": {
+    "Name": "Exquisite Huntmaster",
+    "ManaCost": "{3}{B}{G}",
+    "TypeLine": "Creature — Elf Warrior",
+    "OracleText": "When this creature dies, create a 1/1 green Elf Warrior creature token.\nEncore {4}{B} ({4}{B}, Exile this card from your graveyard: For each opponent, create a token copy of this card that attacks that opponent this turn if able. Those tokens gain haste. Sacrifice those tokens at the beginning of the next end step. Encore only as a sorcery.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "B",
+      "G"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Exquisite Huntmaster",
+    "TypeLine": {
+      "Raw": "Creature — Elf Warrior",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature dies, create a 1/1 green Elf Warrior creature token.\nEncore {4}{B} ({4}{B}, Exile this card from your graveyard: For each opponent, create a token copy of this card that attacks that opponent this turn if able. Those tokens gain haste. Sacrifice those tokens at the beginning of the next end step. Encore only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": [
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Elf",
+                  "Warrior"
+                ],
+                "IsCopy": false
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Encore",
+          "Effects": [
+            {
+              "EffectType": "encore",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 4
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "B"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "({4}{B}, Exile this card from your graveyard: For each opponent, create a token copy of this card that attacks that opponent this turn if able. Those tokens gain haste. Sacrifice those tokens at the beginning of the next end step. Encore only as a sorcery.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
