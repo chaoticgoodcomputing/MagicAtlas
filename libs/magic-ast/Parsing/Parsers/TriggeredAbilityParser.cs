@@ -1662,34 +1662,11 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   private static readonly Lazy<IReadOnlyList<RuleEntry>> _rules =
     new(DiscoverRules, LazyThreadSafetyMode.ExecutionAndPublication);
 
-  private static IReadOnlyList<RuleEntry> DiscoverRules()
-  {
-    var assembly = typeof(TriggeredAbilityParser).Assembly;
-    var found = new List<RuleEntry>();
-    foreach (var type in assembly.GetTypes())
-    {
-      var attr = type.GetCustomAttribute<Triggered.TriggeredRuleAttribute>(inherit: false);
-      if (attr is null)
-      {
-        continue;
-      }
-      if (!typeof(Triggered.ITriggeredRule).IsAssignableFrom(type))
-      {
-        throw new InvalidOperationException(
-          $"{type.FullName} has [TriggeredRule] but does not implement ITriggeredRule."
-        );
-      }
-      var instance = (Triggered.ITriggeredRule?)Activator.CreateInstance(type)
-        ?? throw new InvalidOperationException(
-          $"Failed to instantiate {type.FullName} (parameterless constructor required)."
-        );
-      found.Add(new RuleEntry(instance, $"TriggeredAbilityParser.{type.Name}", attr.Priority));
-    }
-    return found
-      .OrderByDescending(r => r.Priority)
-      .ThenBy(r => r.Name, StringComparer.Ordinal)
+  private static IReadOnlyList<RuleEntry> DiscoverRules() =>
+    RuleRegistry
+      .Discover<Triggered.ITriggeredRule, Triggered.TriggeredRuleAttribute>("TriggeredAbilityParser")
+      .Select(r => new RuleEntry(r.Rule, r.Name, r.Priority))
       .ToList();
-  }
 
   /// <summary>
   /// Multi-effect dispatch. Tries the two composite-effect orchestration paths

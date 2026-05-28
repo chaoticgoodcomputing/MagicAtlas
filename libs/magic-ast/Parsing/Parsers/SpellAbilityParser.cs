@@ -39,36 +39,11 @@ public sealed class SpellAbilityParser : IAbilityParser
     _rules = DiscoverRules();
   }
 
-  private static IReadOnlyList<RuleEntry> DiscoverRules()
-  {
-    var assembly = typeof(SpellAbilityParser).Assembly;
-    var found = new List<RuleEntry>();
-    foreach (var type in assembly.GetTypes())
-    {
-      var attr = type.GetCustomAttribute<SpellRuleAttribute>(inherit: false);
-      if (attr is null)
-      {
-        continue;
-      }
-      if (!typeof(ISpellRule).IsAssignableFrom(type))
-      {
-        throw new InvalidOperationException(
-          $"{type.FullName} has [SpellRule] but does not implement ISpellRule."
-        );
-      }
-      var instance = (ISpellRule?)Activator.CreateInstance(type)
-        ?? throw new InvalidOperationException(
-          $"Failed to instantiate {type.FullName} (parameterless constructor required)."
-        );
-      var multiRule = instance as IMultiSpellRule;
-      found.Add(new RuleEntry(instance, multiRule, $"SpellAbilityParser.{type.Name}", attr.Priority));
-    }
-    // Highest priority first; stable secondary by name for determinism within a band.
-    return found
-      .OrderByDescending(r => r.Priority)
-      .ThenBy(r => r.Name, StringComparer.Ordinal)
+  private static IReadOnlyList<RuleEntry> DiscoverRules() =>
+    RuleRegistry
+      .Discover<ISpellRule, SpellRuleAttribute>("SpellAbilityParser")
+      .Select(r => new RuleEntry(r.Rule, r.Rule as IMultiSpellRule, r.Name, r.Priority))
       .ToList();
-  }
 
   /// <inheritdoc/>
   public IReadOnlyList<Ability> Parse(OracleClause clause, ClauseClassification classification)

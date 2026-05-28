@@ -28,7 +28,7 @@ namespace MagicAST.Parsing.Parsers.Spell;
 /// </para>
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-public sealed class SpellRuleAttribute : Attribute
+public sealed class SpellRuleAttribute : Attribute, MagicAST.Parsing.Parsers.IPrioritizedRuleAttribute
 {
   /// <summary>
   /// Dispatch priority. Higher = tried first. See type-level docs for the band
