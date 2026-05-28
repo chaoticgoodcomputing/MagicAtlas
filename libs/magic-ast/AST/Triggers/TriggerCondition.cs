@@ -24,6 +24,29 @@ public sealed record TriggerCondition
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectFilter? Filter { get; init; }
+
+  /// <summary>
+  /// Optional ordinal qualifier selecting which occurrence of the trigger event
+  /// (counted within the window described by <see cref="PerTurn"/>) actually fires
+  /// the ability. e.g. "you draw your <i>second</i> card each turn" → <c>Ordinal = 2</c>.
+  /// When null, every matching occurrence triggers (the default for most triggers).
+  /// </summary>
+  /// <remarks>
+  /// This is a descriptive datum, not a runtime counter: MAST records <i>which</i>
+  /// occurrence the oracle text names, leaving the per-turn tally to the engine.
+  /// Rule 603.2 — the event-match is the trigger; the ordinal narrows which match counts.
+  /// </remarks>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? Ordinal { get; init; }
+
+  /// <summary>
+  /// True when the trigger's <see cref="Ordinal"/> is counted on a per-turn basis
+  /// (the "each turn" qualifier — e.g. "your second card <i>each turn</i>"), so the
+  /// occurrence count conceptually resets at turn boundaries. Descriptive only;
+  /// the reset mechanics are engine territory.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? PerTurn { get; init; }
 }
 
 /// <summary>
