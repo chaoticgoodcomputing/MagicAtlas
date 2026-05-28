@@ -336,10 +336,10 @@ public sealed class AbilityClassifier
       };
     }
 
-    // "You may look at the top card of your library any time." — Rule 701.12
-    // (look) + "any time" timing grant. This is a continuous static permission
-    // that persists as long as the source permanent is on the battlefield (Rule
-    // 604.3). "Look" is in _spellInstructionVerbs because it also heads one-shot
+    // "You may look at the top card of your library any time." A continuous
+    // static permission ("any time" timing grant) that persists as long as the
+    // source permanent is on the battlefield (Rule 604.2 — static abilities
+    // create continuous effects). "Look" is in _spellInstructionVerbs because it also heads one-shot
     // spell effects ("Look at target player's hand."), but the "any time" phrase
     // marks this specific line as a declarative static, not a resolution step.
     // Intercept here before StartsWithYouMaySpellInstruction swallows it.

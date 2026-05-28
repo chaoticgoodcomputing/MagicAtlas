@@ -6,7 +6,7 @@ using MagicAST.AST.Effects.Traits;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
-/// Multikicker (Rule 702.32c). "You may pay an additional [cost] any number of times
+/// Multikicker (Rule 702.33c). "You may pay an additional [cost] any number of times
 /// as you cast this spell."
 /// MAST records the keyword's presence and the multikicker cost; the "for each time
 /// it was kicked" scaling on conditional effects is inferred from the rules, mirroring
@@ -14,7 +14,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 ///
 /// <para>
 /// Distinct from <see cref="KickerEffect"/>: Multikicker is paid any number of times
-/// (Rule 702.32c) whereas single-cost Kicker is paid at most once (Rule 702.32a).
+/// (Rule 702.33c) whereas single-cost Kicker is paid at most once (Rule 702.33a).
 /// A separate effect type is used so fixture discriminators and parsers can cleanly
 /// distinguish the two without an IsMultikicker flag on the shared type.
 /// </para>

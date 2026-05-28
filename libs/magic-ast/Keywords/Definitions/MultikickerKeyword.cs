@@ -9,7 +9,7 @@ using static MagicAST.Keywords.Definitions.KeywordCombinators;
 /// <summary>
 /// Multikicker {cost}: You may pay an additional {cost} any number of times as you
 /// cast this spell.
-/// Rule 702.32c. A Kicker variant where the additional cost may be paid any number
+/// Rule 702.33c. A Kicker variant where the additional cost may be paid any number
 /// of times rather than at most once. MAST records the keyword and the multikicker
 /// cost; the "for each time it was kicked" scaling on conditional effects is inferred
 /// from the rules (descriptive-not-engine doctrine).
