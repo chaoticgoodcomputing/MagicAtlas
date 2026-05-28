@@ -1,0 +1,99 @@
+{
+  "Input": {
+    "Name": "Kor Spiritdancer",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Kor Wizard",
+    "OracleText": "This creature gets +2/+2 for each Aura attached to it.\nWhenever you cast an Aura spell, you may draw a card.",
+    "Power": "0",
+    "Toughness": "2",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Kor Spiritdancer",
+    "TypeLine": {
+      "Raw": "Creature — Kor Wizard",
+      "Types": ["Creature"],
+      "Subtypes": ["Kor", "Wizard"]
+    },
+    "Oracle": {
+      "RawText": "This creature gets +2/+2 for each Aura attached to it.\nWhenever you cast an Aura spell, you may draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": { "Kind": "Self" },
+              "PowerModifier": {
+                "QuantityType": "calculated",
+                "Expression": "+2 for each Aura attached to it",
+                "BaseQuantity": {
+                  "QuantityType": "count",
+                  "CountOf": "Aura attached to it"
+                },
+                "Operation": "multiply"
+              },
+              "ToughnessModifier": {
+                "QuantityType": "calculated",
+                "Expression": "+2 for each Aura attached to it",
+                "BaseQuantity": {
+                  "QuantityType": "count",
+                  "CountOf": "Aura attached to it"
+                },
+                "Operation": "multiply"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": ["spell"],
+              "Subtypes": ["Aura"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": { "Kind": "You" },
+              "IsOptional": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "0", "Value": 0 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
