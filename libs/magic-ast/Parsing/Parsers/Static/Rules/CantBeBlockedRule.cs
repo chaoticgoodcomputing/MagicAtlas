@@ -32,6 +32,15 @@ public sealed class CantBeBlockedRule : IStaticRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // "This creature can't be blocked by Walls." — subtype-restricted evasion.
+  // The subtype appears pluralised in oracle text (e.g., "Walls" → subtype "Wall").
+  // Rule 509.1b: certain subtypes (Wall, Human, etc.) may legally appear as blocker
+  // predicates; MAST records the subtype as printed, singular-normalised.
+  private static readonly Regex _cantBeBlockedBySubtypePattern = new(
+    @"^\s*This\s+(?:creature|permanent)\s+can'?t\s+be\s+blocked\s+by\s+(?<subtype>[A-Z][a-zA-Z]*)s\.?\s*$",
+    RegexOptions.Compiled
+  );
+
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
   {
     // Full unblockability: "This (creature|land|permanent|Vehicle) can't be blocked."
@@ -162,6 +171,33 @@ public sealed class CantBeBlockedRule : IStaticRule
           },
         ];
       }
+    }
+
+    // Subtype-restricted variant: "This creature can't be blocked by [Subtype]s."
+    // e.g., "This creature can't be blocked by Walls." → subtype "Wall".
+    // The oracle text always pluralises the subtype; we strip the trailing 's'
+    // to store the canonical singular form matching the MTG subtype list.
+    var subtypeMatch = _cantBeBlockedBySubtypePattern.Match(clause.RawText);
+    if (subtypeMatch.Success)
+    {
+      var subtype = subtypeMatch.Groups["subtype"].Value; // already singular-capitalised
+      return
+      [
+        new StaticAbility
+        {
+          Effects =
+          [
+            new MagicAST.AST.Effects.Combat.CantBeBlockedEffect
+            {
+              BlockedByFilter = new ObjectFilter
+              {
+                CardTypes = ["creature"],
+                Subtypes = [subtype],
+              },
+            },
+          ],
+        },
+      ];
     }
 
     return null;
