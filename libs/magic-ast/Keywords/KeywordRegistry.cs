@@ -19,12 +19,11 @@ using Superpower.Parsers;
 /// </list>
 ///
 /// <para>
-/// This is the registry half of the Phase-2 bridge: consumers try the registry first,
-/// then fall back to the legacy <c>KeywordDefinitions</c> / <c>OracleParsers</c> content
-/// (see <see cref="KeywordExpander.CreateDefault"/> and
-/// <c>OracleParsers.KeywordList</c>). A keyword migrated to a file therefore shadows
-/// its legacy twin without that twin being deleted yet — Stage B migrates the rest in
-/// parallel, Stage C deletes the legacy content.
+/// As of Phase-2 Stage C this registry is the sole source of keyword knowledge: the
+/// legacy <c>KeywordDefinitions</c> static-property list and the per-keyword
+/// <c>OracleParsers</c> combinators have been deleted.
+/// <see cref="KeywordExpander.CreateDefault"/> and <c>OracleParsers.KeywordList</c>
+/// both delegate here directly — no legacy fallback remains.
 /// </para>
 /// </summary>
 public static class KeywordRegistry
@@ -45,41 +44,22 @@ public static class KeywordRegistry
 
   /// <summary>
   /// The discovered-keyword per-element combinator: a Simple-then-Parameterized Or-chain
-  /// mirroring <c>OracleParsers.AnyKeyword</c> = SimpleKeyword.Try().Or(ParameterizedKeyword),
-  /// <i>before</i> any comma-list wrap. Each combinator is wrapped in <c>.Try()</c> so
-  /// first-success-wins backtracks cleanly between candidates (preserving the legacy
-  /// Or-chain semantics).
-  ///
-  /// <para>
-  /// This is the splice point for the bridge: <c>OracleParsers.AnyKeyword</c> tries this
-  /// first, then its legacy chain, so a migrated keyword's file shadows its legacy
-  /// combinator while the comma-list machinery stays owned by <c>OracleParsers</c>
-  /// (splicing here rather than at the list level avoids the
-  /// <c>ManyDelimitedBy</c>-always-succeeds-with-empty trap that would block fallthrough
-  /// for non-migrated keywords if the whole list were tried registry-first).
-  /// </para>
+  /// = <c>SimpleKeyword.Try().Or(ParameterizedKeyword)</c>, <i>before</i> any comma-list
+  /// wrap. Each combinator is wrapped in <c>.Try()</c> so first-success-wins backtracks
+  /// cleanly between candidates. <c>OracleParsers.AnyKeyword</c> delegates to this.
   /// </summary>
   public static TokenListParser<OracleToken, StaticAbility> RegisteredAnyKeyword { get; } =
     BuildAnyKeyword();
 
   /// <summary>
-  /// <see cref="RegisteredAnyKeyword"/> wrapped in <c>ManyDelimitedBy(Comma)</c>, exactly
-  /// matching the <c>OracleParsers.KeywordList</c> shape. Provided as the registry's
-  /// standalone keyword-list combinator; the live bridge splices
-  /// <see cref="RegisteredAnyKeyword"/> rather than this whole list (see that property's
-  /// docs for why).
+  /// <see cref="RegisteredAnyKeyword"/> wrapped in <c>ManyDelimitedBy(Comma)</c>, the
+  /// registry's keyword-list combinator. <c>OracleParsers.KeywordList</c> delegates to
+  /// this.
   /// </summary>
   public static TokenListParser<OracleToken, IReadOnlyList<StaticAbility>> RegisteredKeywordList { get; } =
     RegisteredAnyKeyword
       .ManyDelimitedBy(Token.EqualTo(OracleToken.Comma))
       .Select(arr => (IReadOnlyList<StaticAbility>)arr);
-
-  /// <summary>
-  /// True when at least one keyword has been migrated to a file. Lets consumers skip
-  /// the registry combinator entirely while the <c>Definitions/</c> folder is empty,
-  /// rather than threading a guaranteed-fail parser into their Or-chain.
-  /// </summary>
-  public static bool HasRegisteredKeywords => _keywords.Count > 0;
 
   private static TokenListParser<OracleToken, StaticAbility> BuildAnyKeyword()
   {
