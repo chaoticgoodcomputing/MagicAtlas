@@ -336,6 +336,25 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "You may look at the top card of your library any time." — Rule 701.12
+    // (look) + "any time" timing grant. This is a continuous static permission
+    // that persists as long as the source permanent is on the battlefield (Rule
+    // 604.3). "Look" is in _spellInstructionVerbs because it also heads one-shot
+    // spell effects ("Look at target player's hand."), but the "any time" phrase
+    // marks this specific line as a declarative static, not a resolution step.
+    // Intercept here before StartsWithYouMaySpellInstruction swallows it.
+    if (clause.RawText.TrimStart().StartsWith(
+      "You may look at the top card of your library any time",
+      StringComparison.OrdinalIgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.95,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "You may [spell-verb] ..." optional resolution-step phrasing on a spell
     // (Rule 117.7) — e.g., "You may discard a card. If you do, draw two cards."
     // (Abandon Attachments). The opening "You may" is a player-instruction frame
