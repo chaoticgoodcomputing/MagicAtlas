@@ -1,0 +1,136 @@
+{
+  "Input": {
+    "Name": "Wretched Gryff",
+    "ManaCost": "{7}",
+    "TypeLine": "Creature — Eldrazi Hippogriff",
+    "OracleText": "Emerge {5}{U} (You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value.)\nWhen you cast this spell, draw a card.\nFlying",
+    "Power": "3",
+    "Toughness": "4",
+    "Colors": [],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Wretched Gryff",
+    "TypeLine": {
+      "Raw": "Creature — Eldrazi Hippogriff",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Eldrazi",
+        "Hippogriff"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Emerge {5}{U} (You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value.)\nWhen you cast this spell, draw a card.\nFlying",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Emerge",
+          "Reminder": {
+            "Text": "(You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "emerge",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 5
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "SpellCast",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "flying",
+                  "reach"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{7}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 7
+          }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
