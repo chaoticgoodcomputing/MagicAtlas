@@ -1,0 +1,122 @@
+{
+  "Input": {
+    "Name": "Etchings of the Chosen",
+    "ManaCost": "{1}{W}{B}",
+    "TypeLine": "Enchantment",
+    "OracleText": "As this enchantment enters, choose a creature type.\nCreatures you control of the chosen type get +1/+1.\n{1}, Sacrifice a creature of the chosen type: Target creature you control gains indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)",
+    "Colors": ["B", "W"],
+    "ColorIdentity": ["B", "W"]
+  },
+  "Output": {
+    "Name": "Etchings of the Chosen",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "As this enchantment enters, choose a creature type.\nCreatures you control of the chosen type get +1/+1.\n{1}, Sacrifice a creature of the chosen type: Target creature you control gains indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "When": "asThisEnters",
+          "Effects": [
+            {
+              "EffectType": "chooseCreatureType"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You",
+                  "ChosenCharacteristic": "CreatureType"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 1 }
+              ]
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"],
+                "ChosenCharacteristic": "CreatureType"
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Indestructible",
+                "Effects": [
+                  {
+                    "EffectType": "indestructible"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "W"]
+      }
+    ]
+  }
+}
