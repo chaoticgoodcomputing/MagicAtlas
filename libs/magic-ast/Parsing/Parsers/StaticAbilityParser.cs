@@ -580,6 +580,21 @@ public sealed class StaticAbilityParser : IAbilityParser
       return kickedEntersWithCounters;
     }
 
+    // "This creature enters with a +1/+1 counter on it if an opponent lost life
+    // this turn." — Rule 614.1c conditional self-replacement effect with a
+    // trailing "if [condition]" suffix (Spectacle-adjacent shape). Distinct from
+    // TryParseKickerConditionalEntersWithCounters (leading "If ..., it enters"):
+    // here the condition follows the enters-with clause. Condition.Text is the
+    // verbatim predicate phrase after "if ". Placed BEFORE TryParseEntersWithCounters
+    // so the suffix-conditioned shape is recognised first; the unconditional
+    // regex anchors on "on it." at the end and would fail on the trailing
+    // "if [condition]" text, making ordering functionally unambiguous either way.
+    var conditionalEntersWithCounters = TryParseConditionalEntersWithCounters(clause);
+    if (conditionalEntersWithCounters != null)
+    {
+      return conditionalEntersWithCounters;
+    }
+
     // "This creature enters with N +1/+1 counters on it." — Rule 614.1c
     // self-replacement effect property recorded as a static-ability-attached
     // EntersWithCountersEffect. No KeywordSource: the oracle text is a full
@@ -5455,6 +5470,79 @@ public sealed class StaticAbilityParser : IAbilityParser
   // Rules: 122 (counters), 614.1d (enters-with replacement).
   private static readonly Regex _entersWithCountersPattern = new(
     @"^\s*\S.+?\s+enters\s+with\s+(?<count>\d+|X|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[\w/+-]+)\s+counters?\s+on\s+it\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "This [subject] enters with N &lt;counterType&gt; counters on it if [condition]." —
+  /// Rule 614.1c conditional self-replacement effect with a trailing "if [condition]"
+  /// suffix (Spectacle-adjacent shape, e.g. Spikewheel Acrobat: "...if an opponent
+  /// lost life this turn"). Emits a <see cref="StaticAbility"/> wrapping an
+  /// <see cref="MagicAST.AST.Effects.Replacement.EntersWithCountersEffect"/> with
+  /// <c>Condition.Text</c> set to the verbatim predicate phrase captured after the
+  /// "if " token.
+  ///
+  /// <para>
+  /// Distinct from <see cref="TryParseKickerConditionalEntersWithCounters"/> (leading
+  /// "If this creature was kicked, it enters with…"): the condition comes at the end
+  /// of the clause here, not at the beginning. Distinct from
+  /// <see cref="TryParseEntersWithCounters"/> (unconditional): the unconditional regex
+  /// anchors on "on it." and does not match when a trailing "if…" is present.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Ability>? TryParseConditionalEntersWithCounters(OracleClause clause)
+  {
+    var match = _conditionalEntersWithCountersPattern.Match(clause.RawText);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var countText = match.Groups["count"].Value;
+    MagicAST.AST.Quantities.Quantity count;
+    if (countText.Equals("X", StringComparison.OrdinalIgnoreCase))
+    {
+      count = MagicAST.AST.Quantities.VariableQuantity.X;
+    }
+    else if (TryParseSmallCount(countText.ToLowerInvariant(), out var intCount))
+    {
+      count = MagicAST.AST.Quantities.LiteralQuantity.Of(intCount);
+    }
+    else
+    {
+      return null;
+    }
+
+    var counterType = match.Groups["counterType"].Value;
+    var conditionText = match.Groups["condition"].Value.Trim();
+
+    return
+    [
+      new StaticAbility
+      {
+        Effects = [new MagicAST.AST.Effects.Replacement.EntersWithCountersEffect
+        {
+          Count = count,
+          CounterType = counterType,
+          IsOptional = false,
+        }],
+        Condition = new MagicAST.AST.Abilities.Condition
+        {
+          Text = conditionText,
+        },
+      },
+    ];
+  }
+
+  // "This [subject] enters with N <counterType> counters on it if [condition]."
+  // Subject is any non-empty leading word sequence before "enters with".
+  // Count may be a decimal digit, "X", an English word-count ("one"–"ten"),
+  // or the article "a"/"an" (treated as 1 via TryParseSmallCount).
+  // The "if" suffix is non-optional; the condition phrase is captured verbatim
+  // and stored on Condition.Text. An optional trailing period is consumed.
+  // Rules: 122 (counters), 614.1d (enters-with replacement).
+  private static readonly Regex _conditionalEntersWithCountersPattern = new(
+    @"^\s*\S.+?\s+enters\s+with\s+(?<count>\d+|X|an?|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<counterType>[\w/+-]+)\s+counters?\s+on\s+it\s+if\s+(?<condition>.+?)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
