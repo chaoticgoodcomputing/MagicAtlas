@@ -1,0 +1,91 @@
+{
+  "Input": {
+    "Name": "Kashi-Tribe Warriors",
+    "ManaCost": "{3}{G}{G}",
+    "TypeLine": "Creature — Snake Warrior",
+    "OracleText": "Whenever this creature deals combat damage to a creature, tap that creature and it doesn't untap during its controller's next untap step.",
+    "Power": "2",
+    "Toughness": "4",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Kashi-Tribe Warriors",
+    "TypeLine": {
+      "Raw": "Creature — Snake Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Snake", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "Whenever this creature deals combat damage to a creature, tap that creature and it doesn't untap during its controller's next untap step.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToCreature",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "IsOptional": false,
+              "Effects": [
+                {
+                  "EffectType": "tap",
+                  "Target": {
+                    "Kind": "It"
+                  },
+                  "IsOptional": false
+                },
+                {
+                  "EffectType": "doesntUntap",
+                  "Target": {
+                    "Kind": "It"
+                  },
+                  "WhoseUntapStep": "its controller's next",
+                  "IsOptional": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}

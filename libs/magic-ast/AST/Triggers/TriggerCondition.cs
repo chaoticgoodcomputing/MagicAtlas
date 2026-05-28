@@ -106,6 +106,16 @@ public enum TriggerEvent
   /// <summary>A creature deals combat damage to a player</summary>
   DealsCombatDamageToPlayer,
 
+  /// <summary>
+  /// A creature deals combat damage to a creature — Rule 510.1 (combat damage
+  /// assignment) / Rule 603.2 (the event-match is the trigger). The recipient
+  /// class is a creature rather than a player; the Filter carries the subject
+  /// (what is dealing the damage). Distinct from
+  /// <see cref="DealsCombatDamageToPlayer"/> (player recipient) and
+  /// <see cref="DealsCombatDamage"/> (recipient unspecified).
+  /// </summary>
+  DealsCombatDamageToCreature,
+
   /// <summary>A source deals damage (any damage, not only combat) — Rule 120</summary>
   DealsDamage,
 
