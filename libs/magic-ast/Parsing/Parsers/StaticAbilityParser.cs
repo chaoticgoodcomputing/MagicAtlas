@@ -4908,7 +4908,7 @@ public sealed class StaticAbilityParser : IAbilityParser
 
   /// <summary>
   /// "This (creature|land|permanent|Vehicle) can't be blocked." — Rule 509.1b
-  /// full unblockability. Also handles two filter-restricted variants:
+  /// full unblockability. Also handles three filter-restricted variants:
   /// <list type="bullet">
   ///   <item>"This creature can't be blocked by [color] creatures." —
   ///         color-restricted evasion. <see cref="CantBeBlockedEffect.BlockedByFilter"/>
@@ -4919,8 +4919,19 @@ public sealed class StaticAbilityParser : IAbilityParser
   ///         <see cref="Comparison"/> on <see cref="ObjectFilter.PowerComparison"/>
   ///         with <see cref="ComparisonOperator.LessThanOrEqual"/> and the printed
   ///         threshold value. The "or less" phrasing maps directly to ≤.</item>
+  ///   <item>"Creatures with power less than [CardName]'s power can't block it." —
+  ///         relative-power-threshold evasion (Aggressive Mammoth shape, Rule 509.1b).
+  ///         The oracle subject is the blocker set ("Creatures with power less than …"),
+  ///         not "this creature", but the net effect is attacker-side evasion. Because
+  ///         the comparison value is self-referential (the source creature's own power at
+  ///         the time of the declare-blockers step) rather than a printed integer, the
+  ///         predicate is encoded as
+  ///         <c>Characteristics: ["with power less than this creature's power"]</c> on
+  ///         <see cref="CantBeBlockedEffect.BlockedByFilter"/>.
+  ///         <c>[CardName]</c> may be "this creature" or the printed card name; both
+  ///         forms resolve to Self.</item>
   /// </list>
-  /// Full declarative sentences in all three cases, so no <c>KeywordSource</c> is set.
+  /// Full declarative sentences in all cases, so no <c>KeywordSource</c> is set.
   /// Mirrors <see cref="TryParseCantBlock"/> in structure.
   /// </summary>
   private static IReadOnlyList<Ability>? TryParseCantBeBlocked(OracleClause clause)
@@ -4983,6 +4994,35 @@ public sealed class StaticAbilityParser : IAbilityParser
                   Operator = ComparisonOperator.LessThanOrEqual,
                   Value = threshold,
                 },
+              },
+            },
+          ],
+        },
+      ];
+    }
+
+    // Relative-power-threshold variant: "Creatures with power less than [CardName]'s
+    // power can't block it." — Rule 509.1b. The comparison value is self-referential
+    // (the source creature's own power), not a printed integer, so it cannot be
+    // expressed on ObjectFilter.PowerComparison (which requires a static int).
+    // Stored as Characteristics: ["with power less than this creature's power"] to
+    // preserve the oracle predicate exactly. "[CardName]'s" is the standard oracle
+    // self-reference (Rule 201.4); "this creature's" is the pronoun variant — both
+    // forms are matched by the non-greedy .+? prefix.
+    if (_cantBeBlockedByRelativePowerPattern.IsMatch(clause.RawText))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects =
+          [
+            new CantBeBlockedEffect
+            {
+              BlockedByFilter = new ObjectFilter
+              {
+                CardTypes = ["creature"],
+                Characteristics = ["with power less than this creature's power"],
               },
             },
           ],
@@ -5053,6 +5093,15 @@ public sealed class StaticAbilityParser : IAbilityParser
   // The "or less" phrasing is standard oracle wording for ≤ (Rule 509.1b).
   private static readonly Regex _cantBeBlockedByPowerPattern = new(
     @"^\s*This\s+(?:creature|Vehicle|permanent)\s+can'?t\s+be\s+blocked\s+by\s+creatures\s+with\s+power\s+(?<value>\d+)\s+or\s+less\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches "Creatures with power less than [CardName]'s power can't block it." —
+  // relative-power-threshold evasion. "[CardName]'s" is the oracle self-reference;
+  // the non-greedy .+? prefix captures both "this creature's" and any printed card name.
+  // The trailing period is optional for minor formatting variants.
+  private static readonly Regex _cantBeBlockedByRelativePowerPattern = new(
+    @"^\s*Creatures\s+with\s+power\s+less\s+than\s+.+?'s\s+power\s+can'?t\s+block\s+it\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
