@@ -711,6 +711,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Creatures target player/opponent controls gain [keyword] until end of turn." —
+    // spell-resolution keyword grant to all creatures owned by a targeted player or
+    // opponent (e.g. Savage Alliance mode 1). The "target player/opponent" marks this
+    // as a one-shot imperative spell effect (Rule 113.3a) not a declarative static.
+    // Without this route the clause defaults to Static and stalls there.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Creatures\s+target\s+(player|opponent)\s+controls\s+gain\s+\S+.*?\s+until\s+end\s+of\s+turn\.?\s*$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Creatures [without <keyword>] can't block this turn." — one-shot blocking
     // restriction applied by a spell (Falter, Cosmotronic Wave). The "this turn"
     // duration marks this as an imperative spell-resolution instruction (Rule 509.1c),

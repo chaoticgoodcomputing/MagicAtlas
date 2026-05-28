@@ -147,6 +147,16 @@ public enum ControllerFilter
   You,
   Opponent,
   Any,
+
+  /// <summary>
+  /// Objects controlled by a targeted player or opponent — "creatures target player controls",
+  /// "each creature target opponent controls". The targeting requirement is expressed by the
+  /// parent <see cref="ObjectReference.Kind"/> being <see cref="ObjectReferenceKind.Target"/>
+  /// or by a separate targeting reference on the enclosing effect; this value records only
+  /// that the controller axis is a runtime-chosen target rather than the spell's own
+  /// controller (You) or any opponent (Opponent).
+  /// </summary>
+  Target,
 }
 
 /// <summary>
