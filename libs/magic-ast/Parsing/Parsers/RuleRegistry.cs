@@ -2,16 +2,7 @@ namespace MagicAST.Parsing.Parsers;
 
 using System.Reflection;
 
-/// <summary>
-/// Implemented by every rule-marker attribute (<c>[SpellRule]</c>,
-/// <c>[TriggeredRule]</c>, <c>[StaticRule]</c>, …) so <see cref="RuleRegistry"/>
-/// can read dispatch priority generically without per-attribute reflection.
-/// </summary>
-public interface IPrioritizedRuleAttribute
-{
-  /// <summary>Dispatch priority — higher is tried first.</summary>
-  int Priority { get; }
-}
+// IPrioritizedRuleAttribute lives in its own file (IPrioritizedRuleAttribute.cs).
 
 /// <summary>One discovered rule instance plus its dispatch metadata.</summary>
 /// <typeparam name="TRule">The rule interface (e.g. <c>ISpellRule</c>).</typeparam>

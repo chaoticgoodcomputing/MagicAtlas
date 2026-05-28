@@ -3507,10 +3507,21 @@ public static class OracleParsers
 
   /// <summary>
   /// Parses any keyword ability (simple or parameterized).
+  ///
+  /// <para>
+  /// Phase-2 bridge: tries the reflection-discovered one-file-per-keyword chain
+  /// (<see cref="MagicAST.Keywords.KeywordRegistry.RegisteredAnyKeyword"/>) first, then
+  /// falls back to the legacy <see cref="SimpleKeyword"/> / <see cref="ParameterizedKeyword"/>
+  /// chains below. A keyword migrated to a <c>Keywords/Definitions/</c> file therefore
+  /// shadows its legacy combinator (which stays in place, unused, until Stage C deletes
+  /// it). When the registry is empty its combinator always fails, so this is a no-op
+  /// passthrough to the legacy behaviour.
+  /// </para>
   /// </summary>
-  public static readonly TokenListParser<OracleToken, StaticAbility> AnyKeyword = SimpleKeyword
-    .Try()
-    .Or(ParameterizedKeyword);
+  public static readonly TokenListParser<OracleToken, StaticAbility> AnyKeyword =
+    MagicAST.Keywords.KeywordRegistry.RegisteredAnyKeyword
+      .Try()
+      .Or(SimpleKeyword.Try().Or(ParameterizedKeyword));
 
   /// <summary>
   /// Parses a comma-separated list of keyword abilities.
