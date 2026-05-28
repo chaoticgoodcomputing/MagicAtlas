@@ -46,14 +46,13 @@
           ],
           "Effects": [
             {
-              "EffectType": "unparsed",
-              "SourceSpan": {
-                "Start": 63,
-                "Length": 93
-              },
-              "RawText": "Add one mana of any color. Spend this mana only to cast a creature spell of the chosen type."
+              "EffectType": "addMana",
+              "Mana": "",
+              "AnyColor": true,
+              "SpendRestriction": "cast a creature spell of the chosen type"
             }
-          ]
+          ],
+          "IsManaAbility": true
         }
       ]
     },
