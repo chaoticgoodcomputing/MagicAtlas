@@ -1,0 +1,107 @@
+{
+  "Input": {
+    "Name": "Avatar Enthusiasts",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Kor Ally",
+    "OracleText": "Whenever another Ally you control enters, put a +1/+1 counter on this creature.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Avatar Enthusiasts",
+    "TypeLine": {
+      "Raw": "Creature — Kor Ally",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kor",
+        "Ally"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever another Ally you control enters, put a +1/+1 counter on this creature.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Subtypes": [
+                "Ally"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
