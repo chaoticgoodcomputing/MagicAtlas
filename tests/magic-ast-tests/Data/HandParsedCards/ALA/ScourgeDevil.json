@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Scourge Devil",
+    "ManaCost": "{4}{R}",
+    "TypeLine": "Creature — Devil",
+    "OracleText": "When this creature enters, creatures you control get +1/+0 until end of turn.\nUnearth {2}{R} ({2}{R}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Scourge Devil",
+    "TypeLine": {
+      "Raw": "Creature — Devil",
+      "Types": ["Creature"],
+      "Subtypes": ["Devil"]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, creatures you control get +1/+0 until end of turn.\nUnearth {2}{R} ({2}{R}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Unearth",
+          "Reminder": {
+            "Text": "({2}{R}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "unearth",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  { "Kind": "generic", "GenericAmount": 2 },
+                  { "Kind": "colored", "Colors": ["R"] }
+                ]
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
