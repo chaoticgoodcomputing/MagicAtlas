@@ -29,26 +29,32 @@
       "RawText": "Spectacle {1}{R} (You may cast this spell for its spectacle cost rather than its mana cost if an opponent lost life this turn.)\nThis creature enters with a +1/+1 counter on it if an opponent lost life this turn.",
       "Abilities": [
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 0,
-            "Length": 127
-          },
-          "RawText": "Spectacle {1}{R} (You may cast this spell for its spectacle cost rather than its mana cost if an opponent lost life this turn.)",
-          "Diagnostics": [
+          "Kind": "static",
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Static ability parser not yet implemented",
-              "Location": {
-                "Start": 0,
-                "Length": 127
+              "EffectType": "spectacle",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 1
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "R"
+                    ]
+                  }
+                ]
               },
-              "RawText": "Spectacle {1}{R} (You may cast this spell for its spectacle cost rather than its mana cost if an opponent lost life this turn.)",
-              "Pattern": "ConditionalEffect",
-              "LastAttemptedRule": "StaticAbilityParser.Parse",
-              "FailurePosition": 0
+              "IsOptional": false
             }
-          ]
+          ],
+          "KeywordSource": "Spectacle",
+          "Reminder": {
+            "Text": "(You may cast this spell for its spectacle cost rather than its mana cost if an opponent lost life this turn.)"
+          }
         },
         {
           "Kind": "static",

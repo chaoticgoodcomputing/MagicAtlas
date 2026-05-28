@@ -665,18 +665,6 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
-    // Compound combat trigger: "Whenever this creature attacks or blocks" — Rule 508/509.
-    // Fires when the subject is declared as an attacker OR as a blocker. Must be matched
-    // before the individual "attacks" / "blocks" branches because the compound phrase
-    // contains both keywords as substrings.
-    if (lower.Contains("attacks or blocks"))
-    {
-      var attacksOrBlocks = TryParseAttacksOrBlocksTrigger(triggerText, timing);
-      if (attacksOrBlocks is not null)
-      {
-        return attacksOrBlocks;
-      }
-    }
 
     // Attack trigger: "Whenever [CardName] attacks" / "Whenever a creature you control attacks".
     // Covers self-by-name and controller-filter shapes (Rule 508 — Declare Attackers).
@@ -829,35 +817,6 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         Controller = ControllerFilter.You,
         Characteristics = characteristics,
       },
-    };
-  }
-
-  /// <summary>
-  /// "Whenever this creature attacks or blocks" / "Whenever [CardName] attacks or blocks" /
-  /// "Whenever a creature attacks or blocks" — compound combat trigger (Rules 508/509).
-  /// Fires when the subject is declared as an attacker (Rule 508 — Declare Attackers Step)
-  /// OR as a blocker (Rule 509 — Declare Blockers Step). Emits
-  /// <see cref="TriggerEvent.AttacksOrBlocks"/>. The filter is derived from the subject
-  /// phrase before "attacks or blocks" using the shared <see cref="ParseObjectFilter"/>
-  /// helper, which handles self-reference ("this creature"), self-by-name, and
-  /// controller-qualified shapes uniformly.
-  /// </summary>
-  private static TriggerCondition? TryParseAttacksOrBlocksTrigger(
-    string triggerText,
-    TriggerTiming timing
-  )
-  {
-    var filter = ParseObjectFilter(triggerText);
-    if (filter == null)
-    {
-      return null;
-    }
-
-    return new TriggerCondition
-    {
-      Timing = timing,
-      Event = TriggerEvent.AttacksOrBlocks,
-      Filter = filter,
     };
   }
 
