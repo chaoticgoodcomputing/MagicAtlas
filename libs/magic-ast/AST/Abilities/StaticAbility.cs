@@ -16,9 +16,20 @@ public enum StaticTimingKind
   /// <summary>
   /// "As [this] enters", "[This] enters tapped/with/as …" — a self-replacement
   /// effect that applies as the permanent enters the battlefield (CR 603.6d, 614.1c).
+  /// The affected object is the source permanent itself.
   /// </summary>
   [JsonStringEnumMemberName("asThisEnters")]
   AsThisEnters,
+
+  /// <summary>
+  /// "[Objects] enter [tapped/with/as] …" — a replacement effect on a class of
+  /// OTHER permanents as they enter (CR 614.1d), e.g. "Creatures your opponents
+  /// control enter tapped." Distinct from <see cref="AsThisEnters"/>: the affected
+  /// objects are given by the effect's target / the ability's affected-objects
+  /// filter, not the source permanent.
+  /// </summary>
+  [JsonStringEnumMemberName("asObjectEnters")]
+  AsObjectEnters,
 }
 
 /// <summary>

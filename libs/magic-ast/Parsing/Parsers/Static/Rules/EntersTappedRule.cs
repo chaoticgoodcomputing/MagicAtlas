@@ -79,17 +79,17 @@ public sealed class EntersTappedRule : IStaticRule
     }
 
     // Arm 3: "Creatures your opponents control enter tapped." — Blind Obedience
-    // creature variant (Rule 614). The replacement is scoped to creatures
-    // controlled by opponents rather than the source permanent itself, so the
+    // creature variant. The replacement applies to a class of OTHER permanents
+    // (creatures opponents control), not the source itself (CR 614.1d), so the
     // composite taps each such creature (Target.Kind = Each + filter) as it
-    // enters (When = AsThisEnters).
+    // enters (When = AsObjectEnters, distinct from the self-entry AsThisEnters).
     if (_entersTappedOpponentsCreaturesPattern.IsMatch(clause.RawText))
     {
       return
       [
         new StaticAbility
         {
-          When = StaticTimingKind.AsThisEnters,
+          When = StaticTimingKind.AsObjectEnters,
           Effects = [new MagicAST.AST.Effects.Control.TapEffect
           {
             Target = new ObjectReference
