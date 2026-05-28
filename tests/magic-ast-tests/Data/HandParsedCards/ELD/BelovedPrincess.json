@@ -1,0 +1,83 @@
+{
+  "Input": {
+    "Name": "Beloved Princess",
+    "ManaCost": "{W}",
+    "TypeLine": "Creature — Human Noble",
+    "OracleText": "Lifelink\nThis creature can't be blocked by creatures with power 3 or greater.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Beloved Princess",
+    "TypeLine": {
+      "Raw": "Creature — Human Noble",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Noble"]
+    },
+    "Oracle": {
+      "RawText": "Lifelink\nThis creature can't be blocked by creatures with power 3 or greater.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Lifelink",
+          "Effects": [
+            {
+              "EffectType": "lifelink"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "BlockedByFilter": {
+                "CardTypes": ["creature"],
+                "PowerComparison": {
+                  "Operator": "GreaterThanOrEqual",
+                  "Value": 3
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
