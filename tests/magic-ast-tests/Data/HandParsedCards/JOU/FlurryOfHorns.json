@@ -36,7 +36,7 @@
                 "Abilities": [
                   {
                     "Kind": "static",
-                    "KeywordSource": "haste",
+                    "KeywordSource": "Haste",
                     "Effects": [
                       {
                         "EffectType": "haste"

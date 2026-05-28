@@ -31,9 +31,9 @@ public sealed class CreateTokenRule : ISpellRule
   /// unrecognised keywords — callers must handle the null case.
   ///
   /// <para>
-  /// The <c>KeywordSource</c> string follows each keyword definition's own convention:
-  /// Flying hardcodes <c>"Flying"</c>; Haste preserves oracle-text case (<c>"haste"</c>)
-  /// as in <c>HasteKeyword.cs</c> which uses <c>keyword.ToStringValue()</c>.
+  /// <c>KeywordSource</c> uses the canonical capitalized keyword name
+  /// (e.g. <c>"Flying"</c>, <c>"Haste"</c>), matching the convention across the
+  /// keyword definitions and existing fixtures.
   /// </para>
   /// </summary>
   private static StaticAbility? BuildGrantedKeywordAbility(string keywordText)
@@ -57,7 +57,7 @@ public sealed class CreateTokenRule : ISpellRule
       },
       "haste" => new StaticAbility
       {
-        KeywordSource = keywordText, // preserve oracle-text case (matches HasteKeyword.ToStringValue())
+        KeywordSource = "Haste",
         Effects = [new HasteEffect()],
       },
       _ => null,
