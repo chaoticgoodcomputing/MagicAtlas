@@ -35,7 +35,10 @@ public sealed class SpellCastConditionRule : ITriggerConditionRule
     {
       controller = lower.Contains("opponent")
         ? ControllerFilter.Opponent
-        : (lower.Contains("you") ? ControllerFilter.You : null);
+        : lower.Contains("you")
+          ? ControllerFilter.You
+          // "a player" / "any player" — no restriction to one side; Any encodes this. Rule 102.1.
+          : Regex.IsMatch(lower, @"\ba\s+player\b") ? ControllerFilter.Any : null;
     }
 
     // Card-type qualifiers on the cast spell ("creature spell", "noncreature spell", etc.)

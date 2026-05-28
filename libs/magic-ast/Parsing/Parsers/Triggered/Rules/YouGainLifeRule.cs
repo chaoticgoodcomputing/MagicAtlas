@@ -16,15 +16,17 @@ public sealed class YouGainLifeRule : ITriggeredRule
   public bool TryMatch(string text, out Effect? effect)
   {
     effect = null;
+    // Matches both "you gain N life" and "you may gain N life" (optional form).
     var m = Regex.Match(
       text,
-      @"^you\s+gain\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life$",
+      @"^you\s+(?<may>may\s+)?gain\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life$",
       RegexOptions.IgnoreCase
     );
     if (!m.Success)
     {
       return false;
     }
+    var isOptional = m.Groups["may"].Success;
     var raw = m.Groups["amount"].Value.ToLowerInvariant();
     int amount = raw switch
     {
@@ -44,6 +46,7 @@ public sealed class YouGainLifeRule : ITriggeredRule
     {
       Amount = LiteralQuantity.Of(amount),
       Player = ObjectReference.You(),
+      IsOptional = isOptional,
     };
     return true;
   }
