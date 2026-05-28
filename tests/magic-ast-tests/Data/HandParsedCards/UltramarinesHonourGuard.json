@@ -1,0 +1,127 @@
+{
+  "Input": {
+    "Name": "Ultramarines Honour Guard",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Creature — Astartes Warrior",
+    "OracleText": "Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)\nOther creatures you control get +1/+1.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Ultramarines Honour Guard",
+    "TypeLine": {
+      "Raw": "Creature — Astartes Warrior",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Astartes",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)\nOther creatures you control get +1/+1.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Squad",
+          "Effects": [
+            {
+              "EffectType": "squad",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 2
+                  }
+                ]
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You",
+                  "Characteristics": [
+                    "other"
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
