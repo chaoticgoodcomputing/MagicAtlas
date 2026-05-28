@@ -3,6 +3,7 @@ namespace MagicAST.Parsing.Parsers.Static;
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.References;
 using MagicAST.Parsing;
 using MagicAST.Parsing.Parsers;
