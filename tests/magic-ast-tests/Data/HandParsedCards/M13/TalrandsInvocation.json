@@ -1,0 +1,80 @@
+{
+  "Input": {
+    "Name": "Talrand's Invocation",
+    "ManaCost": "{2}{U}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Create two 2/2 blue Drake creature tokens with flying.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Talrand's Invocation",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Create two 2/2 blue Drake creature tokens with flying.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Token": {
+                "Power": "2",
+                "Toughness": "2",
+                "Colors": ["U"],
+                "Types": ["creature"],
+                "Subtypes": ["Drake"],
+                "Abilities": [
+                  {
+                    "Kind": "static",
+                    "KeywordSource": "Flying",
+                    "Effects": [
+                      {
+                        "EffectType": "evasion",
+                        "CanBeBlockedBy": {
+                          "CardTypes": ["creature"],
+                          "Characteristics": ["flying", "reach"]
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "IsCopy": false
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}

@@ -1,24 +1,68 @@
 namespace MagicAST.Parsing.Parsers.Spell.Rules;
 
 using System.Text.RegularExpressions;
+using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects;
+using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.TokenCopy;
 using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
 
 /// <summary>
-/// "Create (a|X|&lt;num&gt;) &lt;P&gt;/&lt;T&gt; &lt;color&gt; &lt;subtype&gt; creature token(s)."
+/// "Create (a|X|&lt;num&gt;) &lt;P&gt;/&lt;T&gt; &lt;color&gt; &lt;subtype&gt; creature token(s) [with &lt;keyword&gt;]."
 /// Handles literal counts ("a"), variable counts ("X"), and numeric literals.
 /// Also handles predefined artifact tokens (Food, Treasure, Clue, Blood) which
 /// have no P/T and whose activated ability is reminder text only (Rule 107.10b).
 /// Reminder text is stripped by <see cref="SpellAbilityParser"/> before dispatch.
+/// The optional "with &lt;keyword&gt;" suffix captures a single granted keyword ability
+/// for the created token (e.g. "with flying", "with haste").
 /// </summary>
 [SpellRule(Priority = 60)]
 public sealed class CreateTokenRule : ISpellRule
 {
   private static readonly Regex CreaturePattern = new(
-    @"^Create\s+(?<count>a|X|Y|Z|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<power>\d+)/(?<toughness>\d+)\s+(?<color>white|blue|black|red|green)\s+(?<subtype>\w+)\s+creature\s+tokens?$",
+    @"^Create\s+(?<count>a|X|Y|Z|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<power>\d+)/(?<toughness>\d+)\s+(?<color>white|blue|black|red|green)\s+(?<subtype>\w+)\s+creature\s+tokens?(?:\s+with\s+(?<keyword>[a-z][a-z\s]*[a-z]|[a-z]+))?$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
+
+  /// <summary>
+  /// Builds a <see cref="StaticAbility"/> for a single simple keyword granted to a
+  /// created token via "with &lt;keyword&gt;" oracle syntax. Returns <c>null</c> for
+  /// unrecognised keywords — callers must handle the null case.
+  ///
+  /// <para>
+  /// The <c>KeywordSource</c> string follows each keyword definition's own convention:
+  /// Flying hardcodes <c>"Flying"</c>; Haste preserves oracle-text case (<c>"haste"</c>)
+  /// as in <c>HasteKeyword.cs</c> which uses <c>keyword.ToStringValue()</c>.
+  /// </para>
+  /// </summary>
+  private static StaticAbility? BuildGrantedKeywordAbility(string keywordText)
+  {
+    return keywordText.ToLowerInvariant() switch
+    {
+      "flying" => new StaticAbility
+      {
+        KeywordSource = "Flying",
+        Effects =
+        [
+          new EvasionEffect
+          {
+            CanBeBlockedBy = new ObjectFilter
+            {
+              CardTypes = ["creature"],
+              Characteristics = ["flying", "reach"],
+            },
+          },
+        ],
+      },
+      "haste" => new StaticAbility
+      {
+        KeywordSource = keywordText, // preserve oracle-text case (matches HasteKeyword.ToStringValue())
+        Effects = [new HasteEffect()],
+      },
+      _ => null,
+    };
+  }
 
   // Predefined artifact token patterns (Rule 107.10b). Reminder text is already
   // stripped by SpellAbilityParser.StripReminderText before these are evaluated.
@@ -123,6 +167,17 @@ public sealed class CreateTokenRule : ISpellRule
     var subtype = m.Groups["subtype"].Value;
     subtype = char.ToUpperInvariant(subtype[0]) + subtype[1..];
 
+    // Resolve optional "with <keyword>" granted ability.
+    IReadOnlyList<Ability>? grantedAbilities = null;
+    if (m.Groups["keyword"].Success)
+    {
+      var keywordAbility = BuildGrantedKeywordAbility(m.Groups["keyword"].Value.Trim());
+      if (keywordAbility is not null)
+      {
+        grantedAbilities = [keywordAbility];
+      }
+    }
+
     effect = new CreateTokenEffect
     {
       Count = count,
@@ -133,6 +188,7 @@ public sealed class CreateTokenRule : ISpellRule
         Colors = [colorCode],
         Types = ["creature"],
         Subtypes = [subtype],
+        Abilities = grantedAbilities,
         IsCopy = false,
       },
       IsOptional = false,
