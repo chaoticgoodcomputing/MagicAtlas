@@ -1,0 +1,73 @@
+{
+  "Input": {
+    "Name": "Terrus Wurm",
+    "ManaCost": "{6}{B}",
+    "TypeLine": "Creature — Zombie Wurm",
+    "OracleText": "Scavenge {6}{B} ({6}{B}, Exile this card from your graveyard: Put a number of +1/+1 counters equal to this card's power on target creature. Scavenge only as a sorcery.)",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Terrus Wurm",
+    "TypeLine": {
+      "Raw": "Creature — Zombie Wurm",
+      "Types": ["Creature"],
+      "Subtypes": ["Zombie", "Wurm"]
+    },
+    "Oracle": {
+      "RawText": "Scavenge {6}{B} ({6}{B}, Exile this card from your graveyard: Put a number of +1/+1 counters equal to this card's power on target creature. Scavenge only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Scavenge",
+          "Effects": [
+            {
+              "EffectType": "scavenge",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  { "Kind": "generic", "GenericAmount": 6 },
+                  { "Kind": "colored", "Colors": ["B"] }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{6}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 6 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
