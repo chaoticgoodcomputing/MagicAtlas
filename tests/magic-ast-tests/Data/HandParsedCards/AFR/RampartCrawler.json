@@ -1,0 +1,90 @@
+{
+  "Input": {
+    "Name": "Rampart Crawler",
+    "ManaCost": "{B}",
+    "TypeLine": "Creature — Nightmare Beast",
+    "OracleText": "This creature can't be blocked by Walls.",
+    "Power": "1",
+    "Toughness": "2",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Rampart Crawler",
+    "TypeLine": {
+      "Raw": "Creature — Nightmare Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Nightmare",
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature can't be blocked by Walls.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "BlockedByFilter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Wall"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
