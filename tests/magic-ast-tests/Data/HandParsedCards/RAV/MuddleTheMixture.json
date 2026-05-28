@@ -1,0 +1,111 @@
+{
+  "Input": {
+    "Name": "Muddle the Mixture",
+    "ManaCost": "{U}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Counter target instant or sorcery spell.\nTransmute {1}{U}{U} ({1}{U}{U}, Discard this card: Search your library for a card with the same mana value as this card, reveal it, put it into your hand, then shuffle. Transmute only as a sorcery.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Muddle the Mixture",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Counter target instant or sorcery spell.\nTransmute {1}{U}{U} ({1}{U}{U}, Discard this card: Search your library for a card with the same mana value as this card, reveal it, put it into your hand, then shuffle. Transmute only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "counterSpell",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "spell",
+                    "instant",
+                    "sorcery"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Transmute",
+          "Effects": [
+            {
+              "EffectType": "transmute",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 1
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ]
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
