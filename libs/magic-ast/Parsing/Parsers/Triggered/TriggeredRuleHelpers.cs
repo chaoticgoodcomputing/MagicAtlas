@@ -107,7 +107,7 @@ internal static class TriggeredRuleHelpers
   // The color/colorless alternatives and the "creature" / "token" anchors use
   // explicit casing that matches oracle text conventions (lowercase).
   private static readonly Regex _creatureTokenSubtypePattern = new(
-    @"\d+/\d+\s+(?:white|blue|black|red|green|colorless)\s+(?<sub1>[A-Z][a-z]+)(?:\s+(?<sub2>[A-Z][a-z]+))?\s+(?:artifact\s+)?creature\s+tokens?",
+    @"\d+/\d+\s+(?:(?:white|blue|black|red|green|colorless)(?:\s+and\s+(?:white|blue|black|red|green|colorless))*)\s+(?<sub1>[A-Z][a-z]+)(?:\s+(?<sub2>[A-Z][a-z]+))?\s+(?:artifact\s+)?creature\s+tokens?",
     RegexOptions.Compiled
   );
 
