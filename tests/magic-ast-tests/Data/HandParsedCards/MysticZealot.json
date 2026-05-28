@@ -1,0 +1,88 @@
+{
+  "Input": {
+    "Name": "Mystic Zealot",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Creature — Human Nomad Mystic",
+    "OracleText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +1/+1 and has flying.",
+    "Power": "2",
+    "Toughness": "4",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Mystic Zealot",
+    "TypeLine": {
+      "Raw": "Creature — Human Nomad Mystic",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Nomad", "Mystic"]
+    },
+    "Oracle": {
+      "RawText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +1/+1 and has flying.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "AbilityWord": "Threshold",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": { "Kind": "Self" },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "there are seven or more cards in your graveyard"
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": { "Kind": "Self" },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Flying",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": ["creature"],
+                      "Characteristics": ["flying", "reach"]
+                    },
+                    "IsOptional": false
+                  }
+                ]
+              },
+              "IsOptional": false,
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "there are seven or more cards in your graveyard"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 4
+      },
+      { "Kind": "colors", "Colors": ["W"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+      }
+    ]
+  }
+}
