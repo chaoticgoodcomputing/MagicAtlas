@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Sacred Fire",
+    "ManaCost": "{R}{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Sacred Fire deals 2 damage to any target and you gain 2 life.\nFlashback {4}{R}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["R", "W"],
+    "ColorIdentity": ["R", "W"]
+  },
+  "Output": {
+    "Name": "Sacred Fire",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Sacred Fire deals 2 damage to any target and you gain 2 life.\nFlashback {4}{R}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Target": {
+                "Kind": "AnyTarget"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            },
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Flashback",
+          "Effects": [
+            {
+              "EffectType": "flashback",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 4
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": ["R"]
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": ["W"]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{R}{W}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R", "W"]
+      }
+    ]
+  }
+}
