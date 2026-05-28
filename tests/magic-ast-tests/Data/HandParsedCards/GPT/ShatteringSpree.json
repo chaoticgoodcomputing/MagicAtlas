@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Shattering Spree",
+    "ManaCost": "{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Replicate {R} (When you cast this spell, copy it for each time you paid its replicate cost. You may choose new targets for the copies.)\nDestroy target artifact.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Shattering Spree",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Replicate {R} (When you cast this spell, copy it for each time you paid its replicate cost. You may choose new targets for the copies.)\nDestroy target artifact.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Replicate",
+          "Effects": [
+            {
+              "EffectType": "replicate",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  { "Kind": "colored", "Colors": ["R"] }
+                ]
+              },
+              "IsOptional": false
+            }
+          ],
+          "Reminder": {
+            "Text": "(When you cast this spell, copy it for each time you paid its replicate cost. You may choose new targets for the copies.)"
+          }
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["artifact"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{R}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}
