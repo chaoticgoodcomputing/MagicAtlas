@@ -33,7 +33,10 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersWithCounters",
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 3
@@ -41,14 +44,17 @@
               "CounterType": "oil",
               "IsOptional": false
             }
-          ]
+          ],
+          "When": "asThisEnters"
         },
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "PowerModifier": {
                 "QuantityType": "count",
                 "CountOf": "oil counter on it"

@@ -15,7 +15,9 @@
     "Name": "Vivid Crag",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "This land enters tapped with two charge counters on it.\n{T}: Add {R}.\n{T}, Remove a charge counter from this land: Add one mana of any color.",
@@ -24,10 +26,16 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersTapped"
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
             },
             {
-              "EffectType": "entersWithCounters",
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2
@@ -35,7 +43,8 @@
               "CounterType": "charge",
               "IsOptional": false
             }
-          ]
+          ],
+          "When": "asThisEnters"
         },
         {
           "Kind": "activated",

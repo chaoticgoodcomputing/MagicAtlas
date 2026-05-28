@@ -19,7 +19,9 @@ using MagicAST.AST.References;
 /// <see cref="ProtectionQualityKind.ChosenColor"/> — a declarative marker that
 /// the protection quality is controller-chosen at resolution time. MAST records
 /// the instruction to choose, not the chosen value (per the descriptive-not-engine
-/// doctrine; see ChooseColorOnEntryEffect for the analogous as-enters shape).
+/// doctrine; see ChooseColorEffect for the analogous standalone color-choice shape,
+/// which here has no entry timing — the choice is a spell effect, so no
+/// StaticTimingKind.AsThisEnters applies).
 ///
 /// Rule citations: 702.16 (Protection), 702.16e (protection from a player's choice),
 /// 613.1c (Layer 6 — ability-granting continuous effects), 611 (continuous effects

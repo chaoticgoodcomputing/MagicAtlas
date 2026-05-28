@@ -2,6 +2,7 @@ namespace MagicAST.Parsing.Parsers.Static;
 
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.References;
 
 [StaticRule(Priority = 964)]
 public sealed class EntersTappedWithCountersRule : IStaticRule
@@ -40,11 +41,16 @@ public sealed class EntersTappedWithCountersRule : IStaticRule
     [
       new StaticAbility
       {
+        When = StaticTimingKind.AsThisEnters,
         Effects =
         [
-          new MagicAST.AST.Effects.Keyword.EntersTappedEffect(),
-          new MagicAST.AST.Effects.Replacement.EntersWithCountersEffect
+          new MagicAST.AST.Effects.Control.TapEffect
           {
+            Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
+          },
+          new MagicAST.AST.Effects.Counter.PutCountersEffect
+          {
+            Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
             Count = count,
             CounterType = counterType,
             IsOptional = false,

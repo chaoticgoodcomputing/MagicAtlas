@@ -13,7 +13,9 @@
     "Name": "Unclaimed Territory",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "As this land enters, choose a creature type.\n{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a creature spell of the chosen type.",
@@ -22,14 +24,17 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "chooseCreatureTypeOnEntry"
+              "EffectType": "chooseCreatureType"
             }
-          ]
+          ],
+          "When": "asThisEnters"
         },
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -42,7 +47,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {

@@ -2,6 +2,7 @@ namespace MagicAST.Parsing.Parsers.Static;
 
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.References;
 
 [StaticRule(Priority = 961)]
 public sealed class PainlandRule : IStaticRule
@@ -29,11 +30,15 @@ public sealed class PainlandRule : IStaticRule
     [
       new StaticAbility
       {
-        Effects = [new MagicAST.AST.Effects.Keyword.PayLifeOnEntryEffect
+        When = StaticTimingKind.AsThisEnters,
+        Effects = [new MagicAST.AST.Effects.Keyword.PayLifeEffect
         {
           Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount),
           IsOptional = true,
-          IfYouDoNot = new MagicAST.AST.Effects.Keyword.EntersTappedEffect(),
+          IfYouDoNot = new MagicAST.AST.Effects.Control.TapEffect
+          {
+            Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
+          },
         }],
       },
     ];

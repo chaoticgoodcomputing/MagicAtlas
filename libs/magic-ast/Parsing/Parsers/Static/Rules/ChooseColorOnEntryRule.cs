@@ -28,7 +28,8 @@ public sealed class ChooseColorOnEntryRule : IStaticRule
     [
       new StaticAbility
       {
-        Effects = [new MagicAST.AST.Effects.Keyword.ChooseColorOnEntryEffect
+        When = StaticTimingKind.AsThisEnters,
+        Effects = [new MagicAST.AST.Effects.Keyword.ChooseColorEffect
         {
           Restriction = restriction,
         }],

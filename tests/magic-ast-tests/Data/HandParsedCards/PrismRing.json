@@ -16,7 +16,9 @@
     "Name": "Prism Ring",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "As this artifact enters, choose a color.\nWhenever you cast a spell of the chosen color, you gain 1 life.",
@@ -25,9 +27,10 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "chooseColorOnEntry"
+              "EffectType": "chooseColor"
             }
-          ]
+          ],
+          "When": "asThisEnters"
         },
         {
           "Kind": "triggered",
@@ -58,7 +61,10 @@
         "Kind": "manaCost",
         "Raw": "{1}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          }
         ],
         "ManaValue": 1
       },

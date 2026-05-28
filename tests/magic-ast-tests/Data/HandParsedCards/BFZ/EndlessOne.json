@@ -28,7 +28,10 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersWithCounters",
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
               "Count": {
                 "QuantityType": "variable",
                 "Name": "X"
@@ -36,7 +39,8 @@
               "CounterType": "+1/+1",
               "IsOptional": false
             }
-          ]
+          ],
+          "When": "asThisEnters"
         }
       ]
     },

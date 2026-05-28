@@ -2,6 +2,7 @@ namespace MagicAST.Parsing.Parsers.Static;
 
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.References;
 
 [StaticRule(Priority = 963)]
 public sealed class EntersTappedAndChooseColorRule : IStaticRule
@@ -30,10 +31,14 @@ public sealed class EntersTappedAndChooseColorRule : IStaticRule
     [
       new StaticAbility
       {
+        When = StaticTimingKind.AsThisEnters,
         Effects =
         [
-          new MagicAST.AST.Effects.Keyword.EntersTappedEffect(),
-          new MagicAST.AST.Effects.Keyword.ChooseColorOnEntryEffect
+          new MagicAST.AST.Effects.Control.TapEffect
+          {
+            Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
+          },
+          new MagicAST.AST.Effects.Keyword.ChooseColorEffect
           {
             Restriction = restriction,
           },

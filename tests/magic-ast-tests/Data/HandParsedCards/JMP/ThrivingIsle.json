@@ -15,7 +15,9 @@
     "Name": "Thriving Isle",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "This land enters tapped. As it enters, choose a color other than blue.\n{T}: Add {U}.\n{T}: Add one mana of the chosen color.",
@@ -24,13 +26,17 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersTapped"
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
             },
             {
-              "EffectType": "chooseColorOnEntry",
+              "EffectType": "chooseColor",
               "Restriction": "other than blue"
             }
-          ]
+          ],
+          "When": "asThisEnters"
         },
         {
           "Kind": "activated",

@@ -6,15 +6,23 @@
     "OracleText": "Aboroth enters with five -1/-1 counters on it.\nAt the beginning of your upkeep, remove a -1/-1 counter from Aboroth.",
     "Power": "9",
     "Toughness": "9",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Aboroth",
     "TypeLine": {
       "Raw": "Creature — Elemental",
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental"
+      ]
     },
     "Oracle": {
       "RawText": "Aboroth enters with five -1/-1 counters on it.\nAt the beginning of your upkeep, remove a -1/-1 counter from Aboroth.",
@@ -23,7 +31,10 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersWithCounters",
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
               "CounterType": "-1/-1",
               "Count": {
                 "QuantityType": "literal",
@@ -31,7 +42,8 @@
               },
               "IsOptional": false
             }
-          ]
+          ],
+          "When": "asThisEnters"
         },
         {
           "Kind": "triggered",
@@ -63,19 +75,36 @@
         "Kind": "manaCost",
         "Raw": "{5}{G}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 },
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 7
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
