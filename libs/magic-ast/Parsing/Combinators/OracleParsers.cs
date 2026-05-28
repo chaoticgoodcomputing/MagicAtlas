@@ -2506,6 +2506,25 @@ public static class OracleParsers
   );
 
   /// <summary>
+  /// Parser for the "Totem armor" keyword as printed on non-Umbra Auras (e.g. Bear Umbra).
+  /// Pattern: "Totem" "armor" [reminder]
+  /// Rule 702.102. Semantically identical to UmbraArmor — both map to the same
+  /// comp-rules keyword. Kept as a sibling parser so both oracle-text surface forms
+  /// resolve to <see cref="TotemArmorEffect"/> with KeywordSource "Totem armor".
+  /// </summary>
+  public static readonly TokenListParser<OracleToken, StaticAbility> TotemArmor = (
+    from totem in Keyword("Totem")
+    from armor in Keyword("armor")
+    from reminder in _optionalReminder
+    select new StaticAbility
+    {
+      KeywordSource = "Totem armor",
+      Effects = [new TotemArmorEffect()],
+      Reminder = reminder,
+    }
+  );
+
+  /// <summary>
   /// Parser for the "Riot" keyword.
   /// Pattern: "Riot" [reminder]
   /// Rule 702.138. This creature enters with your choice of a +1/+1 counter or
@@ -3406,6 +3425,7 @@ public static class OracleParsers
     .Or(Soulbond)
     .Or(LivingWeapon)
     .Or(UmbraArmor)
+    .Or(TotemArmor)
     .Or(StartYourEngines)
     .Or(Riot)
     .Or(Training)

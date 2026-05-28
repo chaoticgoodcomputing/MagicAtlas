@@ -1,0 +1,109 @@
+{
+  "Input": {
+    "Name": "Bear Umbra",
+    "ManaCost": "{2}{G}{G}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nEnchanted creature gets +3/+3.\nWhenever the enchanted creature attacks, untap all lands you control.\nTotem armor (If enchanted creature would be destroyed, instead remove all damage from it and destroy this Aura.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Bear Umbra",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nEnchanted creature gets +3/+3.\nWhenever the enchanted creature attacks, untap all lands you control.\nTotem armor (If enchanted creature would be destroyed, instead remove all damage from it and destroy this Aura.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": ["creature"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Characteristics": ["enchanted"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["land"],
+                  "Controller": "You"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Totem armor",
+          "Effects": [
+            {
+              "EffectType": "totemArmor"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
