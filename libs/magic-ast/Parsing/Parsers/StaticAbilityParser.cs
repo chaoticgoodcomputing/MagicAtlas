@@ -10,6 +10,7 @@ using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.Effects.Timing;
 using MagicAST.AST.References;
 using MagicAST.Parsing.Combinators;
+using MagicAST.Parsing.Parsers.Static;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using Superpower.Model;
@@ -27,6 +28,13 @@ public sealed class StaticAbilityParser : IAbilityParser
 {
   private readonly OracleTokenizer _tokenizer = new();
   private readonly FallbackParser _fallback = new();
+
+  // Phase 3 registry-first bridge: reflection-discovered IStaticRule implementations,
+  // ordered by descending Priority then ordinal name (see RuleRegistry.Discover).
+  // Empty until Stage B drops the first [StaticRule]-decorated file, so today this
+  // is a no-op and every clause falls through to the legacy chain below.
+  private readonly IReadOnlyList<DiscoveredRule<IStaticRule>> _staticRules =
+    RuleRegistry.Discover<IStaticRule, StaticRuleAttribute>("StaticAbilityParser");
 
   /// <inheritdoc/>
   public IReadOnlyList<Ability> Parse(OracleClause clause, ClauseClassification classification)
@@ -54,6 +62,19 @@ public sealed class StaticAbilityParser : IAbilityParser
   /// </summary>
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
   {
+    // Registry-first bridge (Phase 3): extracted IStaticRule implementations are
+    // tried before the legacy chain so an extracted rule shadows its legacy twin.
+    // The legacy chain below remains the fallback until Stage C deletes the
+    // already-extracted methods. Empty registry today => identical behavior.
+    foreach (var entry in _staticRules)
+    {
+      var registryResult = entry.Rule.TryParse(clause, classification);
+      if (registryResult is { Count: > 0 })
+      {
+        return registryResult;
+      }
+    }
+
     var tokens = clause.Tokens;
 
     // Try parsing as keyword list using token combinators
