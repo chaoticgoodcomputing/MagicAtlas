@@ -1,34 +1,38 @@
 using System.Text.RegularExpressions;
+using MagicAST;
 using MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
 
 namespace MagicAtlas.Ast.Tests.Flows.MagicAstTriage.Clustering;
 
 /// <summary>
-/// Lexical-template clustering + greedy set-cover yield projection over
-/// unparsed oracle lines. Shared between the in-line top-K summary embedded
-/// in <see cref="TriageReport.TopYieldClusters"/> and any future full-detail
-/// emit path.
+/// Lexical-template clustering + proximity-weighted yield ranking over unparsed
+/// oracle lines. Produces the PRIMARY pick surface
+/// (<see cref="TriageReport.TopYieldClusters"/>): each cluster is a buildable
+/// family (one normalized template → one parser surface), annotated with its
+/// proximity-weighted fractional yield and the dominant
+/// <c>(Pattern, LastAttemptedRule)</c> "where it fails" hint.
 /// </summary>
 /// <remarks>
-/// V1 — exact-match template clustering only. No fuzzy merging. Tokenization
-/// is hand-coded placeholder substitution; the win is that the placeholder
-/// rules are simpler than the regex heuristics in
-/// <c>FallbackParser.InferFailurePattern</c> AND the downstream clustering is
-/// data-driven (long-tail templates surface even when no named pattern fits).
+/// Tokenization is symbology-aware placeholder substitution (see
+/// <see cref="Tokenize"/>); the win over <c>FallbackParser.InferFailurePattern</c>
+/// is that the clustering is data-driven (long-tail templates surface even when
+/// no named pattern fits) and the template axis splits coarse failure buckets
+/// (e.g. "UnparsedTriggered") into distinct, individually-pickable families.
 /// </remarks>
 public static class YieldClusterAnalyzer
 {
   private const int MaxExemplars = 5;
 
   /// <summary>
-  /// Cluster all unparsed lines, project yields, run greedy set-cover for
-  /// <paramref name="batchSize"/> picks, and return the top-K cluster
-  /// summaries in greedy-pick order.
+  /// Cluster all unparsed lines by normalized template, compute per-template
+  /// proximity-weighted fractional yield and dominant diagnostic, and return the
+  /// top-<paramref name="batchSize"/> clusters ranked by fractional yield.
   /// </summary>
   public static IReadOnlyList<YieldClusterSummary> ComputeTopYieldClusters(
     IEnumerable<ParseRecord> records,
-    int batchSize
+    int batchSize,
+    IReadOnlySet<string> handParsedNames
   )
   {
     // 1) Per-card unparsed-line list. Card is "unparsed" if it has any line
@@ -39,17 +43,18 @@ public static class YieldClusterAnalyzer
       var lines = rec.Lines.Where(l => l.Patterns.Count > 0).ToList();
       if (lines.Count == 0)
         continue;
-      unparsedCards.Add(new UnparsedCard(rec.ScryfallId, rec.CardName, lines));
+      unparsedCards.Add(new UnparsedCard(rec.ScryfallId, rec.CardName, rec.Input, lines));
     }
 
-    // 2) Tokenize each unparsed line to its template.
+    // 2) Tokenize each unparsed line to its template, carrying the line's
+    //    diagnostics so each cluster can report its dominant (pattern, rule).
     var lineEntries = new List<LineEntry>();
     foreach (var card in unparsedCards)
     {
       foreach (var line in card.Lines)
       {
         var template = Tokenize(line.OracleLine, card.CardName);
-        lineEntries.Add(new LineEntry(card, line.OracleLine, template));
+        lineEntries.Add(new LineEntry(card, line.OracleLine, template, line.Diagnostics));
       }
     }
 
@@ -91,32 +96,45 @@ public static class YieldClusterAnalyzer
       }
     }
 
-    // 6) Greedy set-cover for K=batchSize. Picks clusters in marginal-yield
-    //    order, recomputing remaining uncovered cards after each pick.
-    var remaining = cardToTemplates.ToDictionary(kv => kv.Key, kv => new HashSet<int>(kv.Value));
-    var picked = new HashSet<int>();
-    var summaries = new List<YieldClusterSummary>();
-    var cumulative = 0;
-
-    for (var rank = 1; rank <= batchSize; rank++)
+    // 5a) Per-template proximity-weighted fractional yield: each card with a
+    //     line in template T contributes 1 / (distinct templates on that card).
+    //     Single pass over cards distributing weight to their templates.
+    var templateToFractionalYield = byTemplate.ToDictionary(b => b.TemplateId, _ => 0.0);
+    foreach (var (_, templates) in cardToTemplates)
     {
-      var best = (clusterId: -1, marginal: 0);
-      foreach (var c in byTemplate)
-      {
-        if (picked.Contains(c.TemplateId))
-          continue;
-        var marginal = remaining.Count(kv => kv.Value.Count == 1 && kv.Value.Contains(c.TemplateId));
-        if (marginal > best.marginal)
-          best = (c.TemplateId, marginal);
-      }
+      if (templates.Count == 0)
+        continue;
+      var weight = 1.0 / templates.Count;
+      foreach (var t in templates)
+        templateToFractionalYield[t] += weight;
+    }
 
-      if (best.clusterId == -1)
-        break;
+    // 5b) Per-template dominant (pattern, rule): the most common diagnostic key
+    //     across the cluster's lines — the "where it fails" navigation hint.
+    var templateToDominant = byTemplate.ToDictionary(
+      b => b.TemplateId,
+      b => ComputeDominantDiagnostic(b.Lines)
+    );
 
-      picked.Add(best.clusterId);
-      cumulative += best.marginal;
+    // 6) Rank clusters by proximity-weighted fractional yield (primary), with
+    //    whole-card DirectYield then raw line count as tiebreaks, and emit the
+    //    top batchSize. Fractional yield is the right ranking axis here because
+    //    it surfaces templates that are the last-or-near-last missing piece
+    //    across many partially-complete cards — exactly the families a coarse,
+    //    whole-card-flip ranking buries. Overlap is handled implicitly: a card
+    //    split across N templates contributes 1/N to each, so co-occurring
+    //    templates are discounted rather than both claiming the full card.
+    var ranked = byTemplate
+      .OrderByDescending(b => templateToFractionalYield.GetValueOrDefault(b.TemplateId))
+      .ThenByDescending(b => templateToDirectYield.GetValueOrDefault(b.TemplateId))
+      .ThenByDescending(b => b.Lines.Count)
+      .Take(batchSize)
+      .ToList();
 
-      var bucket = byTemplate.First(c => c.TemplateId == best.clusterId);
+    var summaries = new List<YieldClusterSummary>(ranked.Count);
+    for (var i = 0; i < ranked.Count; i++)
+    {
+      var bucket = ranked[i];
 
       // Exemplar selection: distinct cards with fewest other unparsed
       // templates, then shortest oracle line.
@@ -133,31 +151,25 @@ public static class YieldClusterAnalyzer
           ScryfallId = x.Line.Card.ScryfallId,
           OracleLine = x.Line.OracleLine,
           OtherUnparsedClusters = x.OtherClusters,
+          AlreadyHandParsed = handParsedNames.Contains(x.Line.Card.CardName),
+          Input = x.Line.Card.Input,
         })
         .ToList();
 
+      var (dominantPattern, dominantRule) = templateToDominant[bucket.TemplateId];
+
       summaries.Add(new YieldClusterSummary
       {
-        Rank = rank,
+        Rank = i + 1,
         Template = bucket.Template,
         LineCount = bucket.Lines.Count,
         CardCount = templateToCardIds[bucket.TemplateId].Count,
         DirectYield = templateToDirectYield.GetValueOrDefault(bucket.TemplateId),
-        MarginalYield = best.marginal,
-        CumulativeYield = cumulative,
+        FractionalYield = templateToFractionalYield.GetValueOrDefault(bucket.TemplateId),
+        DominantPattern = dominantPattern,
+        DominantLastAttemptedRule = dominantRule,
         Exemplars = exemplars,
       });
-
-      // Remove flipped cards from remaining; for cards still red, drop the
-      // picked cluster from their uncovered set.
-      var flippedIds = remaining
-        .Where(kv => kv.Value.Count == 1 && kv.Value.Contains(best.clusterId))
-        .Select(kv => kv.Key)
-        .ToList();
-      foreach (var id in flippedIds)
-        remaining.Remove(id);
-      foreach (var kv in remaining)
-        kv.Value.Remove(best.clusterId);
     }
 
     return summaries;
@@ -291,13 +303,45 @@ public static class YieldClusterAnalyzer
     return text;
   }
 
+  /// <summary>
+  /// Most common <c>(Pattern, LastAttemptedRule)</c> across a cluster's lines —
+  /// the cluster's "where it fails" hint. Ties broken deterministically by
+  /// pattern then rule name so the report is stable across runs. Returns
+  /// <c>("Unknown", null)</c> if the cluster carries no diagnostics (shouldn't
+  /// happen — every clustered line is unparsed).
+  /// </summary>
+  private static (string Pattern, string? LastAttemptedRule) ComputeDominantDiagnostic(
+    IReadOnlyList<LineEntry> lines
+  )
+  {
+    var best = lines
+      .SelectMany(l => l.Diagnostics)
+      .GroupBy(d => (d.Pattern, d.LastAttemptedRule))
+      .OrderByDescending(g => g.Count())
+      .ThenBy(g => g.Key.Pattern, StringComparer.Ordinal)
+      .ThenBy(g => g.Key.LastAttemptedRule, StringComparer.Ordinal)
+      .FirstOrDefault();
+
+    return best is null ? ("Unknown", null) : best.Key;
+  }
+
   // ──────────────────────────────────────────────────────────────────────
   // Internal scratch records
   // ──────────────────────────────────────────────────────────────────────
 
-  private sealed record UnparsedCard(string ScryfallId, string CardName, IReadOnlyList<LineOutcome> Lines);
+  private sealed record UnparsedCard(
+    string ScryfallId,
+    string CardName,
+    CardInputDTO Input,
+    IReadOnlyList<LineOutcome> Lines
+  );
 
-  private sealed record LineEntry(UnparsedCard Card, string OracleLine, string Template);
+  private sealed record LineEntry(
+    UnparsedCard Card,
+    string OracleLine,
+    string Template,
+    IReadOnlyList<LineDiagnostic> Diagnostics
+  );
 
   private sealed record ClusterBucket(int TemplateId, string Template, IReadOnlyList<LineEntry> Lines);
 }

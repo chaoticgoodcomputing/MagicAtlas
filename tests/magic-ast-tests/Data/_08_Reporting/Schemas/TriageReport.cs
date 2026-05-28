@@ -16,21 +16,34 @@ public partial record TriageReport
   public required GlobalMetrics GlobalMetrics { get; init; }
 
   /// <summary>
-  /// Discovery-side recommendation: the K clusters greedy set-cover picks as
-  /// the highest-yield batch. Data-derived from oracle-text lexical templates,
-  /// independent of the hand-coded <c>FallbackParser.InferFailurePattern</c>
-  /// taxonomy. Orchestrator should weigh BOTH this list and <see cref="TopGaps"/>
-  /// when choosing the next batch's families.
+  /// PRIMARY pick surface. Data-derived families: unparsed oracle lines
+  /// clustered by normalized lexical template, each enriched with a
+  /// proximity-weighted <see cref="YieldClusterSummary.FractionalYield"/>, the
+  /// dominant <c>(Pattern, LastAttemptedRule)</c> telling the agent WHERE the
+  /// parser bails, and hand-parse-ready exemplars. A template is a buildable
+  /// family — one parser surface closes it — which the coarse
+  /// <c>(Pattern, LastAttemptedRule)</c> gap key is not (it groups failures by
+  /// where the parser stood, not by what's missing). Pick from here;
+  /// <see cref="TopGaps"/> and <see cref="TopGapsByLineFrequency"/> are
+  /// secondary diagnostics.
   /// </summary>
   public required IReadOnlyList<YieldClusterSummary> TopYieldClusters { get; init; }
 
+  /// <summary>
+  /// DIAGNOSTIC surface (not the primary pick surface — see
+  /// <see cref="TopYieldClusters"/>). Failures grouped by the coarse
+  /// <c>(Pattern, LastAttemptedRule)</c> key, ranked by fractional yield. Useful
+  /// for seeing which broad parser bail points dominate the corpus, but a single
+  /// entry often spans several distinct buildable families (e.g.
+  /// "UnparsedTriggered" lumps proliferate-triggers, roll-a-d20, and
+  /// play-a-card-triggers), so it is not pickable as one family.
+  /// </summary>
   public required IReadOnlyList<GapEntry> TopGaps { get; init; }
 
   /// <summary>
-  /// Same gap entries as TopGaps but ranked by raw line frequency (Frequency.Lines)
-  /// descending. Surfaces the highest-frequency parser bail points regardless of
-  /// whether they exclusively flip whole cards. Complements TopGaps' card-yield
-  /// ranking with a parser-surface-improvement perspective.
+  /// DIAGNOSTIC surface. Same gap entries as TopGaps but ranked by raw line
+  /// frequency (Frequency.Lines) descending. Surfaces the highest-frequency
+  /// parser bail points regardless of whether they exclusively flip whole cards.
   /// </summary>
   public required IReadOnlyList<GapEntry> TopGapsByLineFrequency { get; init; }
 }
@@ -42,7 +55,7 @@ public partial record TriageReport
 [FlowthruSchema]
 public partial record YieldClusterSummary
 {
-  /// <summary>Position in the greedy set-cover ranking (1-indexed).</summary>
+  /// <summary>Position in the fractional-yield ranking (1-indexed).</summary>
   public required int Rank { get; init; }
 
   /// <summary>Placeholder-substituted oracle template that defines this cluster.</summary>
@@ -56,19 +69,37 @@ public partial record YieldClusterSummary
 
   /// <summary>
   /// Cards whose ENTIRE unparsed-line set is this single template — closing
-  /// this cluster would flip them green directly. Upper bound on the cluster's
-  /// standalone yield.
+  /// this cluster would flip them green directly. Order-independent whole-card
+  /// yield; a hard floor under <see cref="FractionalYield"/>.
   /// </summary>
   public required int DirectYield { get; init; }
 
   /// <summary>
-  /// Cards this cluster flips when picked at <see cref="Rank"/>, given the
-  /// prior picks already committed. Greedy-set-cover marginal contribution.
+  /// Proximity-weighted yield: the sum, over every card with a line in this
+  /// cluster, of <c>1 / (distinct templates on that card)</c>. A card whose
+  /// only unparsed template is this one contributes 1.0; a card three templates
+  /// away contributes 0.33. Unlike <see cref="DirectYield"/> (whole-card flips
+  /// only), this credits partial progress — so it ranks templates that are the
+  /// last-or-near-last missing piece across the broad base of nearly-complete
+  /// cards. This is the PRIMARY ranking key for the cluster surface.
   /// </summary>
-  public required int MarginalYield { get; init; }
+  public required double FractionalYield { get; init; }
 
-  /// <summary>Running total of <see cref="MarginalYield"/> through this rank.</summary>
-  public required int CumulativeYield { get; init; }
+  /// <summary>
+  /// The most common <c>Diagnostic.Pattern</c> among this cluster's lines —
+  /// the "where it fails" hint. Tells a sub-agent which parser this template
+  /// bails in (e.g. "UnparsedTriggered") without being the cluster key itself.
+  /// </summary>
+  public required string DominantPattern { get; init; }
+
+  /// <summary>
+  /// The most common <c>Diagnostic.LastAttemptedRule</c> among this cluster's
+  /// lines — points at the parser method that gave up. Coarse (often a top-level
+  /// <c>*.Parse</c> dispatcher) when the construct is unrecognized outright; the
+  /// template is the precise family signal, this is the navigation hint. Null
+  /// when no line carried rule telemetry.
+  /// </summary>
+  public string? DominantLastAttemptedRule { get; init; }
 
   /// <summary>
   /// Best fixture candidates — cards with the FEWEST other unparsed templates
@@ -87,6 +118,12 @@ public partial record YieldExemplar
 
   /// <summary>How many OTHER unparsed templates this card has (lower = cleaner fixture).</summary>
   public required int OtherUnparsedClusters { get; init; }
+
+  /// <summary>True if this card already has a hand-parsed fixture under <c>HandParsedCards/</c>.</summary>
+  public required bool AlreadyHandParsed { get; init; }
+
+  /// <summary>The DTO an agent can hand-parse directly without re-fetching from Scryfall.</summary>
+  public required CardInputDTO Input { get; init; }
 }
 
 /// <summary>Coverage and pattern-frequency metrics aggregated across the corpus.</summary>

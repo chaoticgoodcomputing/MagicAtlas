@@ -27,11 +27,15 @@ public static class AggregateTriageReportStep
   private const int MaxTopGaps = 20;
 
   /// <summary>
-  /// Batch size for the data-derived yield-cluster recommendation embedded
-  /// in <see cref="TriageReport.TopYieldClusters"/>. Matches the typical
-  /// family-contract dispatch batch size in <c>mast-tdd-loop</c>.
+  /// Depth of the data-derived yield-cluster surface
+  /// (<see cref="TriageReport.TopYieldClusters"/>) — the PRIMARY pick surface.
+  /// Decoupled from the dispatch batch size: this is "how many buildable
+  /// families to surface for discovery", set deeper than a single batch so the
+  /// long tail (small/partial-card families like specific triggered abilities)
+  /// is visible for the orchestrator to weigh, not just the top whole-card
+  /// flips. The orchestrator still picks a batch's worth from the top.
   /// </summary>
-  private const int YieldBatchSize = 20;
+  private const int YieldClusterSurfaceDepth = 50;
 
   /// <summary>
   /// Build the triage report.
@@ -282,7 +286,11 @@ public static class AggregateTriageReportStep
       // Data-derived clustering pass: lexical-template clustering + greedy
       // set-cover yield projection. Independent of the hand-coded pattern
       // taxonomy above. Orchestrator should weigh both surfaces.
-      var topYieldClusters = YieldClusterAnalyzer.ComputeTopYieldClusters(all, YieldBatchSize);
+      var topYieldClusters = YieldClusterAnalyzer.ComputeTopYieldClusters(
+        all,
+        YieldClusterSurfaceDepth,
+        handParsedNames
+      );
 
       return new TriageReport
       {
