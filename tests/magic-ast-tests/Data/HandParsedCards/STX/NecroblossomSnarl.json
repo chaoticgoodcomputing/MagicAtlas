@@ -1,0 +1,68 @@
+{
+  "Input": {
+    "Name": "Necroblossom Snarl",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "As this land enters, you may reveal a Swamp or Forest card from your hand. If you don't, this land enters tapped.\n{T}: Add {B} or {G}.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Necroblossom Snarl",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": [
+        "Land"
+      ]
+    },
+    "Oracle": {
+      "RawText": "As this land enters, you may reveal a Swamp or Forest card from your hand. If you don't, this land enters tapped.\n{T}: Add {B} or {G}.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "entersTapped",
+              "EntryCondition": {
+                "Text": "you reveal a Swamp or Forest card from your hand"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{B} or {G}"
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
+      }
+    ]
+  }
+}
