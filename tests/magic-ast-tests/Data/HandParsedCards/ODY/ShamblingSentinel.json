@@ -1,0 +1,73 @@
+{
+  "Input": {
+    "Name": "Shambling Sentinel",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Creature — Zombie Soldier",
+    "OracleText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +2/+2 and can't block.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Shambling Sentinel",
+    "TypeLine": {
+      "Raw": "Creature — Zombie Soldier",
+      "Types": ["Creature"],
+      "Subtypes": ["Zombie", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +2/+2 and can't block.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "AbilityWord": "Threshold",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": { "Kind": "Self" },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "there are seven or more cards in your graveyard"
+              }
+            },
+            {
+              "EffectType": "cantBlock",
+              "IsOptional": false,
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": "there are seven or more cards in your graveyard"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 4
+      },
+      { "Kind": "colors", "Colors": ["B"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+      }
+    ]
+  }
+}

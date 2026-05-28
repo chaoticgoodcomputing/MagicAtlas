@@ -3522,17 +3522,65 @@ public sealed class StaticAbilityParser : IAbilityParser
       }
     }
 
-    // Leading form: "As long as <condition>, it [gets +N/+M | has <keyword>]."
+    // Leading form: "As long as <condition>, it/this creature [gets +N/+M | has <keyword>]."
     // Tried first because the suffix pattern's non-greedy <main> group would mis-parse
     // leading-form text (consuming only "As" as the subject before "long as").
-    var leadingMatch = _asLongAsLeadingPattern.Match(clause.RawText);
+    //
+    // When an ability word is present (e.g. "Threshold — As long as …") the em-dash
+    // prefix must be stripped before the leading pattern is applied, because the
+    // pattern anchors on "^\s*As\s+long\s+as". The classifier has already captured
+    // the word in classification.AbilityWord; we peel the prefix here the same way
+    // the suffix branch does at line 3152.
+    string? abilityWordForLeading = classification.AbilityWord;
+    string leadingBodyText = clause.RawText;
+    if (abilityWordForLeading is not null)
+    {
+      var emDashLeadingIdx = leadingBodyText.IndexOf('—');
+      if (emDashLeadingIdx >= 0)
+      {
+        leadingBodyText = leadingBodyText[(emDashLeadingIdx + 1)..].TrimStart();
+      }
+    }
+
+    var leadingMatch = _asLongAsLeadingPattern.Match(leadingBodyText);
     if (leadingMatch.Success)
     {
       var leadingCond = leadingMatch.Groups["cond"].Value.Trim();
       var effectText = leadingMatch.Groups["effect"].Value.Trim();
       var leadingDuration = new AsLongAsDuration { Condition = leadingCond };
 
-      // Leading sub-parser A: "it gets +N/+M"
+      // Leading sub-parser C: "it/this creature gets +N/+M and can't block" (compound).
+      // Tried before sub-parser A so the "and can't block" suffix doesn't break the
+      // simple PT match on an unexpected fallthrough.
+      var leadingPtCantBlockMatch = _itGetsPTAndCantBlockPattern.Match(effectText);
+      if (leadingPtCantBlockMatch.Success)
+      {
+        var power = int.Parse(leadingPtCantBlockMatch.Groups["p"].Value);
+        var toughness = int.Parse(leadingPtCantBlockMatch.Groups["t"].Value);
+        return
+        [
+          new StaticAbility
+          {
+            AbilityWord = abilityWordForLeading,
+            Effects =
+            [
+              new MagicAST.AST.Effects.Modification.ModifyPTEffect
+              {
+                Target = ObjectReference.Self(),
+                PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
+                ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
+                Duration = leadingDuration,
+              },
+              new MagicAST.AST.Effects.Combat.CantBlockEffect
+              {
+                Duration = leadingDuration,
+              },
+            ],
+          },
+        ];
+      }
+
+      // Leading sub-parser A: "it/this creature gets +N/+M"
       var leadingPtMatch = _itGetsPTPattern.Match(effectText);
       if (leadingPtMatch.Success)
       {
@@ -3542,6 +3590,7 @@ public sealed class StaticAbilityParser : IAbilityParser
         [
           new StaticAbility
           {
+            AbilityWord = abilityWordForLeading,
             Effects = [new MagicAST.AST.Effects.Modification.ModifyPTEffect
             {
               Target = ObjectReference.Self(),
@@ -3553,7 +3602,7 @@ public sealed class StaticAbilityParser : IAbilityParser
         ];
       }
 
-      // Leading sub-parser B: "it has <keyword>"
+      // Leading sub-parser B: "it/this creature has <keyword>"
       var leadingKwMatch = _itHasKeywordPattern.Match(effectText);
       if (leadingKwMatch.Success)
       {
@@ -3565,6 +3614,7 @@ public sealed class StaticAbilityParser : IAbilityParser
           [
             new StaticAbility
             {
+              AbilityWord = abilityWordForLeading,
               Effects = [new MagicAST.AST.Effects.Modification.GainAbilityEffect
               {
                 Target = ObjectReference.Self(),
@@ -3656,27 +3706,41 @@ public sealed class StaticAbilityParser : IAbilityParser
     return null;
   }
 
-  // Leading form: "As long as <cond>, it [gets|has] <effect>."
+  // Leading form: "As long as <cond>, it/this creature [gets|has] <effect>."
   // <cond> is everything between "As long as " and the comma; <effect> is the
-  // pronoun-led clause after the comma. Named "leading" because the condition
+  // subject-led clause after the comma. Named "leading" because the condition
   // clause leads the sentence — contrast with the suffix pattern below.
+  // Accepts both the pronoun "it" and the self-referential "this creature" /
+  // "this permanent" subjects, because oracle text uses both forms (e.g. Leonin
+  // Den-Guard uses "it gets" while Threshold-ability-word cards use "this
+  // creature gets").
   private static readonly Regex _asLongAsLeadingPattern = new(
-    @"^\s*As\s+long\s+as\s+(?<cond>[^,]+),\s*(?<effect>it\s+.+?)\.?\s*$",
+    @"^\s*As\s+long\s+as\s+(?<cond>[^,]+),\s*(?<effect>(?:it|this\s+(?:creature|permanent))\s+.+?)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
   // Matches the effect sub-clause of the leading form for P/T modifiers.
-  // "it gets +0/+2", "it gets +1/+1", etc. Both sides require an explicit
-  // '+' sign (oracle uses signed notation even for zero modifiers).
+  // "it gets +0/+2", "it gets +1/+1", "this creature gets +2/+2", etc.
+  // Both sides require an explicit '+' sign (oracle uses signed notation even
+  // for zero modifiers).
   private static readonly Regex _itGetsPTPattern = new(
-    @"^\s*it\s+gets\s+\+(?<p>\d+)/\+(?<t>\d+)\s*$",
+    @"^\s*(?:it|this\s+(?:creature|permanent))\s+gets\s+\+(?<p>\d+)/\+(?<t>\d+)\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches the compound leading-form effect "it/this creature gets +N/+M and
+  // can't block" (Rule 509.1c blocker-side restriction bundled with a P/T buff).
+  // Must be tried before _itGetsPTPattern to avoid the simple PT match consuming
+  // only part of the compound clause.
+  private static readonly Regex _itGetsPTAndCantBlockPattern = new(
+    @"^\s*(?:it|this\s+(?:creature|permanent))\s+gets\s+\+(?<p>\d+)/\+(?<t>\d+)\s+and\s+can'?t\s+block\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
   // Matches the effect sub-clause of the leading form for keyword grants.
-  // "it has haste", "it has first strike", etc.
+  // "it has haste", "it has first strike", "this creature has first strike", etc.
   private static readonly Regex _itHasKeywordPattern = new(
-    @"^\s*it\s+has\s+(?<kw>[A-Za-z][A-Za-z\s]*?)\s*$",
+    @"^\s*(?:it|this\s+(?:creature|permanent))\s+has\s+(?<kw>[A-Za-z][A-Za-z\s]*?)\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
