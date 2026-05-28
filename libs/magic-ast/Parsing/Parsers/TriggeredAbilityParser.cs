@@ -587,6 +587,17 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
+    // Compound "enters or dies" trigger — must be checked BEFORE the individual
+    // "dies" and "enters" branches so the disjunction isn't split and
+    // misclassified as a plain Dies or Enters event.
+    // Rule 603: "When this creature enters or dies, [effect]." fires on either
+    // zone-change event. The oracle text for this pattern always has the exact
+    // phrase "[subject] enters or dies" (never "dies or enters").
+    if (lower.Contains("enters or dies"))
+    {
+      return ParseEntersOrDiesTrigger(triggerText, timing);
+    }
+
     // Try different trigger event types
     // "dies" is modern oracle. Old oracle uses the longform "is put into a graveyard
     // from the battlefield" (Rule 700.4 — "dies" means exactly this). Both phrasings
@@ -1292,6 +1303,30 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   }
 
   /// <summary>
+  /// Parses "enters or dies" compound triggers — fires on either zone-change event.
+  /// Rule 603: "When [subject] enters or dies, [effect]."
+  /// The oracle phrase "enters or dies" (always in that order) denotes a single triggered
+  /// ability that watches for the permanent either entering the battlefield or dying.
+  /// Subject filter is resolved via <see cref="ParseObjectFilter"/>, which handles
+  /// "this creature", self-by-name, and generic creature shapes uniformly.
+  /// </summary>
+  private static TriggerCondition? ParseEntersOrDiesTrigger(string triggerText, TriggerTiming timing)
+  {
+    var filter = ParseObjectFilter(triggerText);
+    if (filter == null)
+    {
+      return null;
+    }
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.EntersOrDies,
+      Filter = filter,
+    };
+  }
+
+  /// <summary>
   /// Parses object filters from trigger text.
   /// Compositional component used by multiple trigger types.
   /// </summary>
@@ -1483,7 +1518,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     const string FunctionWords = "of|the|a|an|from|for|to|in|at|with|by|and|or|as";
     return Regex.IsMatch(
       stripped,
-      @"^[A-Z][A-Za-z'\-]*(?:\s+(?:[A-Z][A-Za-z'\-]*|" + FunctionWords + @"))*\s+(enters|dies|attacks|blocks)\b",
+      @"^[A-Z][A-Za-z'\-]*(?:\s+(?:[A-Z][A-Za-z'\-]*|" + FunctionWords + @"))*\s+(enters\s+or\s+dies|enters|dies|attacks|blocks)\b",
       RegexOptions.CultureInvariant
     );
   }
