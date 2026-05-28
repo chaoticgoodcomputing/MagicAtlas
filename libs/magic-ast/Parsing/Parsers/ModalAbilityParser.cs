@@ -70,6 +70,14 @@ public sealed class ModalAbilityParser : IAbilityParser
       }
     }
 
+    // "Choose one or more" means 1..N, where N is the number of available modes.
+    // TryParseModeSelection can't know N from the header alone (it falls through to
+    // the "choose one" prefix), so resolve the upper bound here now that modes are known.
+    if (clause.RawText.TrimStart().StartsWith("choose one or more", StringComparison.OrdinalIgnoreCase))
+    {
+      selection = ModeSelection.ChooseOneOrMore(modes.Count);
+    }
+
     return [
       new ModalAbility
       {

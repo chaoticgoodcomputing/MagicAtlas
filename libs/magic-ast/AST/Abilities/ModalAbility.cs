@@ -76,6 +76,13 @@ public sealed record ModeSelection
   /// Creates an "up to N" selection.
   /// </summary>
   public static ModeSelection ChooseUpTo(int n) => new() { Minimum = 0, Maximum = n };
+
+  /// <summary>
+  /// Creates a "Choose one or more" selection over <paramref name="modeCount"/> available
+  /// modes: at least one, at most all of them.
+  /// </summary>
+  public static ModeSelection ChooseOneOrMore(int modeCount) =>
+    new() { Minimum = 1, Maximum = modeCount };
 }
 
 /// <summary>

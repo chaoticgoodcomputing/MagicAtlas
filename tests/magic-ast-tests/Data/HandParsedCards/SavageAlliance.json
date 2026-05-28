@@ -40,7 +40,7 @@
           "Kind": "modal",
           "ModeSelection": {
             "Minimum": 1,
-            "Maximum": 1
+            "Maximum": 3
           },
           "Modes": [
             {
