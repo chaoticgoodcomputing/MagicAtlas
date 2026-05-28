@@ -1,0 +1,76 @@
+{
+  "Input": {
+    "Name": "Spider-Man, Web-Slinger",
+    "ManaCost": "{2}{W}",
+    "TypeLine": "Legendary Creature — Spider Human Hero",
+    "OracleText": "Web-slinging {W} (You may cast this spell for {W} if you also return a tapped creature you control to its owner's hand.)",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Spider-Man, Web-Slinger",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Spider Human Hero",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Spider", "Human", "Hero"]
+    },
+    "Oracle": {
+      "RawText": "Web-slinging {W} (You may cast this spell for {W} if you also return a tapped creature you control to its owner's hand.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Web-slinging",
+          "Effects": [
+            {
+              "EffectType": "webSlinging",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  { "Kind": "colored", "Colors": ["W"] }
+                ]
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(You may cast this spell for {W} if you also return a tapped creature you control to its owner's hand.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
