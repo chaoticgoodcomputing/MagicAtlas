@@ -1,0 +1,73 @@
+{
+  "Input": {
+    "Name": "Avalanche Riders",
+    "ManaCost": "{3}{R}",
+    "TypeLine": "Creature — Human Nomad",
+    "OracleText": "Haste\nWhen Avalanche Riders enters, destroy target land.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Avalanche Riders",
+    "TypeLine": {
+      "Raw": "Creature — Human Nomad",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Nomad"]
+    },
+    "Oracle": {
+      "RawText": "Haste\nWhen Avalanche Riders enters, destroy target land.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Haste",
+          "Effects": [
+            {
+              "EffectType": "haste"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["land"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 4
+      },
+      { "Kind": "colors", "Colors": ["R"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
