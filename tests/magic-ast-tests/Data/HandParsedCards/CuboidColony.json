@@ -1,0 +1,109 @@
+{
+  "Input": {
+    "Name": "Cuboid Colony",
+    "ManaCost": "{G}{U}",
+    "TypeLine": "Creature — Insect",
+    "OracleText": "Flash\nFlying, trample\nIncrement (Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["G", "U"],
+    "ColorIdentity": ["G", "U"],
+    "Keywords": ["Flying", "Trample", "Flash", "Increment"]
+  },
+  "Output": {
+    "Name": "Cuboid Colony",
+    "TypeLine": {
+      "Raw": "Creature — Insect",
+      "Types": ["Creature"],
+      "Subtypes": ["Insect"]
+    },
+    "Oracle": {
+      "RawText": "Flash\nFlying, trample\nIncrement (Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flash",
+          "Effects": [
+            {
+              "EffectType": "timingModification",
+              "Modification": "Grant",
+              "Timing": "Instant"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": ["flying", "reach"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "trample"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Increment",
+          "Effects": [
+            {
+              "EffectType": "increment"
+            }
+          ],
+          "Reminder": {
+            "Text": "(Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G", "U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
