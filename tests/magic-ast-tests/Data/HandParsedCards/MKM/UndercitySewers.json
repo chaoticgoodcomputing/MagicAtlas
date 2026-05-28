@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Undercity Sewers",
+    "ManaCost": "",
+    "TypeLine": "Land — Island Swamp",
+    "OracleText": "({T}: Add {U} or {B}.)\nThis land enters tapped.\nWhen this land enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": ["U", "B"]
+  },
+  "Output": {
+    "Name": "Undercity Sewers",
+    "TypeLine": {
+      "Raw": "Land — Island Swamp",
+      "Types": ["Land"],
+      "Subtypes": ["Island", "Swamp"]
+    },
+    "Oracle": {
+      "RawText": "({T}: Add {U} or {B}.)\nThis land enters tapped.\nWhen this land enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{U} or {B}"
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "entersTapped"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["land"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "surveil",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U", "B"]
+      }
+    ]
+  }
+}
