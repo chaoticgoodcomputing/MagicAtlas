@@ -1,0 +1,103 @@
+{
+  "Input": {
+    "Name": "Lat-Nam Adept",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Creature — Human Wizard",
+    "OracleText": "Whenever you draw your second card each turn, put a +1/+1 counter on this creature.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Lat-Nam Adept",
+    "TypeLine": {
+      "Raw": "Creature — Human Wizard",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Wizard"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever you draw your second card each turn, put a +1/+1 counter on this creature.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DrawsCard",
+            "Filter": {
+              "Controller": "You"
+            },
+            "Ordinal": 2,
+            "PerTurn": true
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
