@@ -140,6 +140,18 @@ public partial record GapEntry
   public required CoverageGain ProjectedCoverageGain { get; init; }
 
   /// <summary>
+  /// Proximity-weighted yield: the sum, over every card touching this gap, of
+  /// <c>1 / (distinct gap-keys on that card)</c>. A card one gap away from
+  /// completion contributes 1.0, two-away 0.5, three-away 0.33, etc. This
+  /// generalises the binary "exclusive card" count
+  /// (<see cref="CoverageGain.CardCoveragePct"/>) into a continuous signal:
+  /// gaps that are the last-or-nearly-last missing piece on many cards rank
+  /// highest. It is the primary ranking key for <c>TopGaps</c> — a factor in
+  /// the ranking, not a hard one-away filter.
+  /// </summary>
+  public required double FractionalYield { get; init; }
+
+  /// <summary>
   /// Patterns that frequently co-occur on the same lines as this one
   /// (per-line Jaccard ≥ threshold). The orchestrator should avoid
   /// dispatching paralleled sub-agents on related patterns.

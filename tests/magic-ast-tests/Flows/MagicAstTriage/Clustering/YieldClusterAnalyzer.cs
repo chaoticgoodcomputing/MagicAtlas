@@ -167,7 +167,47 @@ public static class YieldClusterAnalyzer
   // Tokenization — placeholder substitution rules
   // ──────────────────────────────────────────────────────────────────────
 
-  private static readonly Regex ManaSymbolRegex = new(@"\{[^}]*\}", RegexOptions.Compiled);
+  private static readonly Regex SymbolRegex = new(@"\{[^}]*\}", RegexOptions.Compiled);
+
+  // Power/toughness deltas as a UNIT, before number normalization, so that
+  // "+1/+1", "+2/+2", "-1/-1", and "+X/+X" all collapse to one <PT> template
+  // (they all map to the same ModifyPT parser surface). Must run before
+  // NumberRegex, which would otherwise split "+1/+1" into "+<N>/+<N>".
+  private static readonly Regex PowerToughnessRegex = new(
+    @"[+\-](?:\d+|X|Y|Z)/[+\-](?:\d+|X|Y|Z)",
+    RegexOptions.Compiled
+  );
+
+  // Internal sentinel marking a mana-cost symbol; consecutive sentinels collapse
+  // to a single <COST> so "{3}{U}" and "{2}" share a template.
+  private const string CostMarker = "\u0001";
+  private static readonly Regex CostMarkerRunRegex = new(CostMarker + "+", RegexOptions.Compiled);
+
+  // Non-mana action/marker symbols, derived from the canonical Scryfall symbol
+  // table at tests/atlas-flow-test/Data/_01_Raw/Datasets/External/symbology.json
+  // (the entries with represents_mana == false). Embedded rather than loaded at
+  // runtime: the list is tiny and stable, and any symbol NOT in this set is
+  // treated as a cost symbol — so a future mana symbol degrades gracefully to
+  // <COST> instead of crashing. {T} and {E} get their own placeholders because
+  // tap-activated and energy abilities are large, distinct parser surfaces;
+  // the rest collapse to <SYM>.
+  private static readonly IReadOnlyDictionary<string, string> NonManaSymbols =
+    new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+      ["{T}"] = "<TAP>",
+      ["{Q}"] = "<UNTAP>",
+      ["{E}"] = "<ENERGY>",
+      ["{PW}"] = "<SYM>",
+      ["{CHAOS}"] = "<SYM>",
+      ["{A}"] = "<SYM>",
+      ["{TK}"] = "<SYM>",
+      ["{P}"] = "<SYM>",
+    };
+
+  private static readonly Regex NumberWordRegex = new(
+    @"\b(one|two|three|four|five|six|seven|eight|nine|ten)\b",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
   private static readonly Regex NumberRegex = new(@"\b\d+\b", RegexOptions.Compiled);
   private static readonly Regex CardTypeRegex = new(
     @"\b(creatures?|lands?|artifacts?|enchantments?|planeswalkers?|instants?|sorceries|sorcery|permanents?|spells?|tokens?|cards?)\b",
@@ -192,9 +232,14 @@ public static class YieldClusterAnalyzer
 
   /// <summary>
   /// Normalize an oracle line into a comparable template by substituting
-  /// card name, mana costs, types, colors, subtypes, keywords, triggers, and
-  /// numbers with placeholder tokens. Exact-match equality on the result is
-  /// the cluster key.
+  /// card name, mana/action symbols, P/T deltas, types, colors, subtypes,
+  /// keywords, triggers, and numbers with placeholder tokens. Exact-match
+  /// equality on the result is the cluster key. Normalization is deliberately
+  /// aggressive on numeric magnitude: <c>+1/+1</c> and <c>+2/+2</c> collapse to
+  /// the same <c>&lt;PT&gt;</c>, and <c>{2}</c> / <c>{3}{U}</c> collapse to the
+  /// same <c>&lt;COST&gt;</c>, because they map to a single parser surface even
+  /// though the literal text differs (the clusterer's question is "which rule
+  /// to build", not "what does the card do").
   /// </summary>
   public static string Tokenize(string oracleLine, string cardName)
   {
@@ -212,13 +257,26 @@ public static class YieldClusterAnalyzer
       }
     }
 
-    // 2) Placeholder substitutions, ordered most-specific to least.
-    text = ManaSymbolRegex.Replace(text, "<COST>");
+    // 2) P/T deltas as a unit, BEFORE number normalization (so "+1/+1" becomes
+    //    one <PT>, not "+<N>/+<N>").
+    text = PowerToughnessRegex.Replace(text, "<PT>");
+
+    // 3) Symbols: mana-cost symbols → a sentinel (consecutive sentinels collapse
+    //    to one <COST>, so "{3}{U}" and "{2}" share a template); the small set
+    //    of non-mana action symbols → their own placeholders ({T} → <TAP>, etc.).
+    text = SymbolRegex.Replace(
+      text,
+      m => NonManaSymbols.TryGetValue(m.Value, out var placeholder) ? placeholder : CostMarker
+    );
+    text = CostMarkerRunRegex.Replace(text, "<COST>");
+
+    // 4) Placeholder substitutions, ordered most-specific to least.
     text = NonColorRegex.Replace(text, "<NON>");
     text = ColorWordRegex.Replace(text, "<COLOR>");
     text = CardTypeRegex.Replace(text, "<TYPE>");
     text = KeywordRegex.Replace(text, "<KW>");
     text = TriggerWordRegex.Replace(text, "<TRIG>");
+    text = NumberWordRegex.Replace(text, "<N>");
     text = NumberRegex.Replace(text, "<N>");
 
     // 3) Capitalized words remaining are likely subtypes or proper nouns

@@ -4,10 +4,11 @@ using MagicAST;
 namespace MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
 
 /// <summary>
-/// Per-card parse summary produced by the triage flow's parse step. Captures
-/// enough per-line outcome detail for the aggregation step to compute pattern
-/// frequencies, cleanliness scores, and projected coverage gains without
-/// re-parsing.
+/// Per-card parse summary produced by the triage flow's parse step. The parser
+/// is run ONCE over the whole card's oracle text (so multi-line constructs like
+/// modal, saga, and level-up are grouped by <c>ClauseSplitter</c> as the real
+/// parser sees them); per-line outcomes are then derived by attributing each
+/// <c>UnparsedAbility</c> back to the oracle line(s) its <c>SourceSpan</c> covers.
 /// </summary>
 [FlowthruSchema]
 public partial record ParseRecord
@@ -21,15 +22,28 @@ public partial record ParseRecord
   /// <summary>The DTO that was fed to the parser (echoed for downstream display).</summary>
   public required CardInputDTO Input { get; init; }
 
+  /// <summary>
+  /// Total abilities the parser produced for the whole card, from the single
+  /// full-card parse. Authoritative source for the corpus-wide AbilityCoverage
+  /// metric — each ability is counted once even when it spans multiple oracle
+  /// lines (modal, saga, level-up), which a per-line sum would double-count.
+  /// </summary>
+  public required int TotalAbilities { get; init; }
+
+  /// <summary>Card-level count of abilities that were NOT <c>UnparsedAbility</c>.</summary>
+  public required int ParsedAbilities { get; init; }
+
   /// <summary>Per-line outcomes, in oracle-text order. Empty if the card has no oracle text.</summary>
   public required IReadOnlyList<LineOutcome> Lines { get; init; }
 }
 
 /// <summary>
-/// A single newline-bounded oracle line and the diagnostic patterns it produced
-/// when parsed independently. A line is considered "passing" when
-/// <see cref="Patterns"/> is empty (the parser produced a non-<c>UnparsedAbility</c>
-/// for every clause in the line).
+/// A single newline-bounded oracle line and the diagnostics attributed to it
+/// from the full-card parse. A line is considered "passing" when
+/// <see cref="Patterns"/> is empty — i.e. no <c>UnparsedAbility</c>'s
+/// <c>SourceSpan</c> overlaps this line's character range. A multi-line
+/// construct that parses (e.g. a modal "Choose one —" header plus its bullet
+/// options) leaves every one of its lines passing.
 /// </summary>
 [FlowthruSchema]
 public partial record LineOutcome
@@ -39,12 +53,6 @@ public partial record LineOutcome
 
   /// <summary>The raw oracle line text (the chunk between newlines).</summary>
   public required string OracleLine { get; init; }
-
-  /// <summary>Total number of abilities the parser produced for this line.</summary>
-  public required int TotalAbilities { get; init; }
-
-  /// <summary>Number of abilities that were NOT <c>UnparsedAbility</c>.</summary>
-  public required int ParsedAbilities { get; init; }
 
   /// <summary>
   /// One entry per diagnostic emitted while parsing this line. Each entry is the

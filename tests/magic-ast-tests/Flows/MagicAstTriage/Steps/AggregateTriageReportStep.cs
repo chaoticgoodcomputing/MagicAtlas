@@ -64,8 +64,10 @@ public static class AggregateTriageReportStep
       var totalCards = all.Count;
       var passingCards = all.Count(r => r.Lines.All(l => l.Patterns.Count == 0));
 
-      var totalAbilities = allLines.Sum(x => x.line.TotalAbilities);
-      var parsedAbilities = allLines.Sum(x => x.line.ParsedAbilities);
+      // Ability counts are card-level now (one full-card parse per card), so
+      // multi-line abilities aren't double-counted across the lines they span.
+      var totalAbilities = all.Sum(r => r.TotalAbilities);
+      var parsedAbilities = all.Sum(r => r.ParsedAbilities);
 
       // (pattern, rule) -> line ids (using identity of (cardId, lineIndex))
       var keyToLineIds = new Dictionary<GapKey, HashSet<(string, int)>>();
@@ -146,6 +148,31 @@ public static class AggregateTriageReportStep
         })
       );
 
+      // --- Proximity-weighted (fractional) yield ---
+      // Each card touching key K contributes 1 / (distinct gap-keys on that
+      // card): a card one gap from completion contributes 1.0, two-away 0.5,
+      // three-away 0.33. The sum is K's fractional yield — a continuous
+      // generalisation of keyToExclusiveCards (the 1.0 contributors). Computed
+      // by a single pass over cards distributing each card's weight to its keys
+      // (O(total diagnostics), not O(keys × cards)).
+      var keyToFractionalYield = keyToLineIds.Keys.ToDictionary(k => k, _ => 0.0);
+      foreach (var r in all)
+      {
+        var ks = cardKeySets[r.ScryfallId];
+        if (ks.Count == 0)
+        {
+          continue;
+        }
+        var weight = 1.0 / ks.Count;
+        foreach (var k in ks)
+        {
+          if (keyToFractionalYield.ContainsKey(k))
+          {
+            keyToFractionalYield[k] += weight;
+          }
+        }
+      }
+
       // --- Q1 per-line Jaccard related-pattern detection ---
       // Relatedness stays at the *pattern* axis (not the (pattern, rule)
       // composite): the orchestrator's "avoid parallelising related patterns"
@@ -189,9 +216,13 @@ public static class AggregateTriageReportStep
         patternToRelated[a] = related;
       }
 
-      // --- Build top gaps ranked by projected card-coverage gain ---
+      // --- Build top gaps ranked by proximity-weighted fractional yield ---
+      // Fractional yield is the primary key (rewards gaps that are the last-or-
+      // nearly-last missing piece on many cards); exclusive-card count and raw
+      // card count break ties.
       var rankedKeys = keyToLineIds
-        .Keys.OrderByDescending(k => keyToExclusiveCards[k])
+        .Keys.OrderByDescending(k => keyToFractionalYield[k])
+        .ThenByDescending(k => keyToExclusiveCards[k])
         .ThenByDescending(k => keyToCardIds[k].Count)
         .Take(MaxTopGaps)
         .ToList();
@@ -208,6 +239,7 @@ public static class AggregateTriageReportStep
               keyToCardIds[key],
               keyToExclusiveCards[key],
               keyToExclusiveLines[key],
+              keyToFractionalYield[key],
               patternToRelated.TryGetValue(key.Pattern, out var rel) ? rel : new List<string>(),
               keyToPositions.TryGetValue(key, out var pos) ? pos : new List<int>(),
               allLines,
@@ -235,6 +267,7 @@ public static class AggregateTriageReportStep
               keyToCardIds[key],
               keyToExclusiveCards[key],
               keyToExclusiveLines[key],
+              keyToFractionalYield[key],
               patternToRelated.TryGetValue(key.Pattern, out var rel2) ? rel2 : new List<string>(),
               keyToPositions.TryGetValue(key, out var pos2) ? pos2 : new List<int>(),
               allLines,
@@ -275,6 +308,7 @@ public static class AggregateTriageReportStep
     HashSet<string> cardIds,
     int exclusiveCards,
     int exclusiveLines,
+    double fractionalYield,
     IReadOnlyList<string> related,
     IReadOnlyList<int> positions,
     IReadOnlyList<(ParseRecord record, LineOutcome line)> allLines,
@@ -328,6 +362,7 @@ public static class AggregateTriageReportStep
         CardCoveragePct = totalCards == 0 ? 0.0 : 100.0 * exclusiveCards / totalCards,
         LineCoveragePct = totalLines == 0 ? 0.0 : 100.0 * exclusiveLines / totalLines,
       },
+      FractionalYield = fractionalYield,
       RelatedPatterns = related,
       CandidateLines = candidateLines,
     };
