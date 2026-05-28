@@ -595,6 +595,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return drawAndLose;
     }
 
+    var youDrawAndLose = TryParseYouDrawAndYouLoseLife(trimmed);
+    if (youDrawAndLose is not null)
+    {
+      return youDrawAndLose;
+    }
+
     // "create a P1/T1 color1 sub1 creature token, a P2/T2 color2 sub2 creature token,
     // and a P3/T3 color3 sub3 creature token" — multi-token composite triggered
     // effect (Rule 111). Tried before the single-rule loop so the comma-separated
@@ -846,6 +852,51 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     {
       new DrawCardsEffect { Count = LiteralQuantity.Of(drawCount), Player = eachPlayer },
       new LoseLifeEffect { Amount = LiteralQuantity.Of(lifeCount), Player = eachPlayer },
+    };
+  }
+
+  /// <summary>
+  /// Freerunning-style composite: "you draw a card and you lose N life."
+  /// Returns a flat two-element list [drawCards(You, 1), loseLife(You, N)].
+  ///
+  /// <para>
+  /// Covers the Merciless Harlequin ETB trigger shape. The "you draw" and
+  /// "you lose" halves share the same controller reference. The
+  /// <see cref="DrawCardsEffect.IsOptional"/> flag is false (no "you may" prefix).
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseYouDrawAndYouLoseLife(string effectText)
+  {
+    var match = Regex.Match(
+      effectText,
+      @"^you\s+draw\s+(?<draw>a|one|two|three|\d+)\s+cards?\s+and\s+you\s+lose\s+(?<life>\d+|one|two|three)\s+life$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    var drawRaw = match.Groups["draw"].Value.ToLowerInvariant();
+    var lifeRaw = match.Groups["life"].Value.ToLowerInvariant();
+    int drawCount = drawRaw switch
+    {
+      "a" or "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      _ => int.Parse(drawRaw),
+    };
+    int lifeCount = lifeRaw switch
+    {
+      "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      _ => int.Parse(lifeRaw),
+    };
+    var you = ObjectReference.You();
+    return new List<Effect>
+    {
+      new DrawCardsEffect { Count = LiteralQuantity.Of(drawCount), Player = you, IsOptional = false },
+      new LoseLifeEffect { Amount = LiteralQuantity.Of(lifeCount), Player = you },
     };
   }
 
