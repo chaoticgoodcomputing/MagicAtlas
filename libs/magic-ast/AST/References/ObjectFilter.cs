@@ -9,6 +9,15 @@ using System.Text.Json.Serialization;
 public sealed record ObjectFilter
 {
   /// <summary>
+  /// Exact card-name constraint, e.g. "a card named Sorin, Vampire Lord".
+  /// Rule 201.4 (an object "named" a specific card matches only objects with
+  /// that exact name). Distinct from the type/subtype axes: a named-card filter
+  /// pins the identity of the matched object rather than a category of objects.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public string? Name { get; init; }
+
+  /// <summary>
   /// Card types to match: Creature, Artifact, Enchantment, etc.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

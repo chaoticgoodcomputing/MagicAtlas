@@ -1,0 +1,114 @@
+{
+  "Input": {
+    "Name": "Sorin's Guide",
+    "ManaCost": "{3}{B}{B}",
+    "TypeLine": "Creature — Vampire",
+    "OracleText": "When this creature enters, you may search your library and/or graveyard for a card named Sorin, Vampire Lord, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+    "Power": "4",
+    "Toughness": "2",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Sorin's Guide",
+    "TypeLine": {
+      "Raw": "Creature — Vampire",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, you may search your library and/or graveyard for a card named Sorin, Vampire Lord, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "searchLibrary",
+              "Filter": {
+                "Name": "Sorin, Vampire Lord"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Sources": [
+                "Library",
+                "Graveyard"
+              ],
+              "Destination": "Hand",
+              "Revealed": true,
+              "IsOptional": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
