@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Donatello's Technique",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Sneak {U} (You may cast this spell for {U} if you also return an unblocked attacker you control to hand during the declare blockers step.)\nDraw two cards.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Donatello's Technique",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Sneak {U} (You may cast this spell for {U} if you also return an unblocked attacker you control to hand during the declare blockers step.)\nDraw two cards.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "sneak",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "colored",
+                    "Colors": ["U"]
+                  }
+                ]
+              }
+            }
+          ],
+          "KeywordSource": "Sneak",
+          "Reminder": {
+            "Text": "(You may cast this spell for {U} if you also return an unblocked attacker you control to hand during the declare blockers step.)"
+          }
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "You"
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
