@@ -499,6 +499,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       "transform",
       "proliferate",
       "remove",
+      "sacrifice",
     ];
     foreach (var s in starters)
     {
@@ -534,6 +535,20 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       if (phaseTrigger is not null)
       {
         return phaseTrigger;
+      }
+    }
+
+    // State trigger: "When you control no [LandSubtype]" — Rule 603 triggered
+    // ability that fires when the state "you control no lands of that subtype"
+    // becomes true. Common on Islandhome-style creatures (Rule 702 obsolete
+    // keyword errata). The land subtype ("Island", "Forest", etc.) is stored
+    // in the filter's Subtypes axis; CardTypes=["land"] and Controller=You.
+    if (lower.Contains("you control no"))
+    {
+      var controlNo = TryParseControlNoLandTypeTrigger(triggerText, timing);
+      if (controlNo is not null)
+      {
+        return controlNo;
       }
     }
 
@@ -1487,6 +1502,60 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       Timing = timing,
       Event = TriggerEvent.TurnedFaceUp,
       Filter = filter,
+    };
+  }
+
+  /// <summary>
+  /// "When you control no [LandSubtype]" — state-triggered sacrifice ability
+  /// (Rule 603: triggered abilities). Fires when the controlling player
+  /// transitions to controlling no lands of the named basic-land subtype
+  /// (e.g., "When you control no Islands, sacrifice this creature."). This is
+  /// the expanded oracle text for the obsolete Islandhome / Forestwalk-sacrifice
+  /// family (Comprehensive Rules glossary: "Islandhome (Obsolete)"). The land
+  /// subtype is stored in Filter.Subtypes; CardTypes=["land"], Controller=You.
+  ///
+  /// <para>Supported subtypes: Island, Forest, Swamp, Mountain, Plains.</para>
+  /// </summary>
+  private static TriggerCondition? TryParseControlNoLandTypeTrigger(
+    string triggerText,
+    TriggerTiming timing
+  )
+  {
+    // Pattern: "When you control no [LandSubtype]"
+    // The leading trigger timing word has already been validated (When/Whenever)
+    // by the caller; the stripped triggerText includes it.
+    var match = Regex.Match(
+      triggerText,
+      @"^(?:When|Whenever)\s+you\s+control\s+no\s+(?<subtype>Islands?|Forests?|Swamps?|Mountains?|Plains)\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    // Normalise to the canonical singular form for consistency
+    // ("Islands" → "Island", "Forests" → "Forest", etc.).
+    var raw = match.Groups["subtype"].Value.Trim();
+    var subtype = raw.TrimEnd('s');
+    // "Plains" ends in 's' but is already singular — restore it.
+    if (raw.Equals("Plains", StringComparison.OrdinalIgnoreCase))
+    {
+      subtype = "Plains";
+    }
+    // Capitalise first letter to match the land-subtype proper-noun convention.
+    subtype = char.ToUpperInvariant(subtype[0]) + subtype[1..];
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.ControlNoLandType,
+      Filter = new ObjectFilter
+      {
+        CardTypes = ["land"],
+        Subtypes = [subtype],
+        Controller = ControllerFilter.You,
+      },
     };
   }
 

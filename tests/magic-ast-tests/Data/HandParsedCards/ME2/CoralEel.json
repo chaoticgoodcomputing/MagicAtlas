@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Coral Eel",
+    "ManaCost": "{U}",
+    "TypeLine": "Creature — Fish",
+    "OracleText": "When you control no Islands, sacrifice this creature.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Coral Eel",
+    "TypeLine": {
+      "Raw": "Creature — Fish",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Fish"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When you control no Islands, sacrifice this creature.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "ControlNoLandType",
+            "Filter": {
+              "CardTypes": [
+                "land"
+              ],
+              "Subtypes": [
+                "Island"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "It"
+              },
+              "IsOptional": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

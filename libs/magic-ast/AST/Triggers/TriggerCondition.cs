@@ -199,6 +199,13 @@ public enum TriggerEvent
   /// </summary>
   EntersOrDies,
 
+  /// <summary>
+  /// The controlling player transitions to controlling no lands of a given basic-land subtype
+  /// (e.g., "When you control no Islands"). Rule 603 triggered ability; the Filter carries the
+  /// land subtype (Subtypes=["Island"]) and controller (You).
+  /// </summary>
+  ControlNoLandType,
+
   /// <summary>Unrecognized trigger event</summary>
   Other,
 }
