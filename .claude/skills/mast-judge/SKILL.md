@@ -86,11 +86,15 @@ Anything that isn't PASS. Includes (non-exhaustive):
 **Wrong or nonexistent rule citation.**
 - A cited rule number that doesn't exist in `rules-structure.json`, or whose text contradicts what the node models (e.g. citing the Fading rule on a Kicker node). Cross-reference every cited rule against the rules data. (A *missing* citation is not a FAIL; an omitted subrule letter / parent-vs-subrule imprecision is not a FAIL — only absence-from-data or contradiction.)
 
-**Free-text where structure exists.**
-- `Characteristics: ["enchanted land"]` when the same idea is expressible as `CardTypes: ["land"]` + `Target.Kind = EnchantedOrEquipped`. Free text in fixtures is an anti-pattern; structured oracle text does not have the ambiguity that free text introduces.
-- `Characteristics: ["creature or Vehicle"]` when an ObjectFilter disjunction (e.g., `Or: [...]`) is the right shape. Type disjunctions are strong typing — they need typed references.
-- `Characteristics: ["who didn't discard a card"]` when `IfYouDoNot` carries the structural concept.
-- Any `Color: ["C"]`-style encoding of "colorless" where the rule (CR 105.1) explicitly says colorless is not a color. The distinction is rules-load-bearing: "mana of any color" excludes colorless, and a judge would call a tournament violation if colorless mana were used to pay a colored cost.
+**Free text is a general failable anti-pattern.**
+- A free-text string that carries rules-meaningful structure is a FAIL — full stop. The bar is **"could a structured node express this?"**, NOT "does a structured node already exist?". If the concept needs a node that doesn't exist yet, that's a gap to surface (route to design), not a license to inline prose. Structured oracle text does not have the ambiguity free text introduces, and free text is invisible to every downstream consumer of the AST.
+- The only exempt strings are verbatim-by-design fields that intentionally carry no parsed semantics: reminder text, flavor text, card names. Everything else is suspect.
+- Representative FAILs:
+  - `Characteristics: ["enchanted land"]` → `CardTypes: ["land"]` + `Target.Kind = EnchantedOrEquipped`.
+  - `Characteristics: ["creature or Vehicle"]` → an ObjectFilter disjunction (`Or: [...]`). Type disjunctions are strong typing.
+  - `Characteristics: ["who didn't discard a card"]` → `IfYouDoNot` carries the structural concept.
+  - `Characteristics: ["of the chosen type"]` → a structured reference to the linked-ability variable (see below).
+  - Any `Color: ["C"]`-style encoding of "colorless" where CR 105.1 says colorless is not a color (rules-load-bearing: "mana of any color" excludes colorless).
 
 **Escape hatches.**
 - `KeywordReferenceEffect` for a keyword that should be a first-class structured effect.
@@ -107,8 +111,10 @@ Anything that isn't PASS. Includes (non-exhaustive):
 - A required parameter the rule mandates that the AST doesn't carry (e.g., a Menace effect without `MinimumBlockers`).
 - An effect type semantically incompatible with the oracle text (e.g., `DestroyEffect` for "Exile target creature").
 
-**Trigger/timing baked into the effect.**
-- A triggered ability ("When/Whenever [event], [do X]") MUST be a `Trigger` node (timing + event + filter) PLUS a separate effect `X` in `Effects[]`. An effect discriminator that encodes its own firing context is a conflation FAIL — e.g. an effect named `...OnEntry` / `...WhenEnters` / `...AtUpkeep` that bundles "as/when this enters" or a timing into the effect itself instead of letting the ability's `Trigger` (triggered) or static-replacement framing (CR 603.6d / 614.1c, the "As [this] enters …" form is a *static* ability — `Kind: static`) carry the timing. The effect node names the **action** (`chooseCreatureType`), the ability carries the **when**. Cross-check: does a separate trigger/static-ability node exist for the timing, or did the effect swallow it? If swallowed → FAIL. (The genuinely-triggered ETB families — e.g. Thraben Inspector's `Trigger{Event:Enters}` + `investigate` effect — are the correct shape; the `*OnEntry` effect nodes are the anti-pattern.)
+**Timing baked into the effect (timing and effect must be a composite).**
+- *What* an ability does and *when* it does it are SEPARATE, composable nodes — the canonical shape is "At `<Time>`, do `<Effect>`". An effect node names only the **action**; a distinct timing/trigger node carries the **when**. An effect discriminator that bakes its own firing context into itself is a conflation FAIL.
+- Triggered: "When/Whenever [event], [do X]" → a `Trigger` node (timing + event + filter) PLUS a plain effect `X` in `Effects[]`. (Thraben Inspector's `Trigger{Event:Enters}` + `investigate` effect is the correct shape.)
+- Static-with-timing: "As [this] enters, [do X]" is a *static* replacement ability (CR 603.6d / 614.1c — `Kind: static`), but it STILL must decompose into a timing qualifier + a plain effect, not a timing-specific effect. `...OnEntry` / `...WhenEnters` / `...AtUpkeep` discriminators (e.g. `chooseCreatureTypeOnEntry`, `chooseColorOnEntry`, `payLifeOnEntry`) are the anti-pattern: they hard-code the "as it enters" timing into the effect, proliferating one node per (timing × action) pair. The right shape collapses them to one timing wrapper + the plain effect (`chooseCreatureType`, `chooseColor`, `payLife`). Cross-check: does a separate timing node carry the "when," or did the effect swallow it? If swallowed → FAIL.
 
 **Unmodeled linked-ability variable (CR 607).**
 - When a card sets a value as part of one ability and references it in another — "As [this] enters, choose a creature type." + "Creatures you control **of the chosen type** get +1/+1." — the two are *linked abilities* (CR 607; CR 607.4's own example is "As this artifact enters, choose a color"). The choice persists for the life of the permanent and is a per-card variable. FAIL if the consumer encodes "the chosen type/color" as a **free-text** `Characteristics: ["of the chosen type"]` string instead of a structured reference to the declared variable, OR if the producer effect declares no variable for the consumer to reference. (Note: as of this writing the codebase's `Choose*OnEntryEffect` nodes do NOT yet model the producer/consumer link — flag this as a FAIL on any *new* chosen-X work and surface it so the orchestrator routes it to the linked-variable design, rather than perpetuating the free-text shortcut.)
