@@ -24,7 +24,10 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersWithCounters",
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 3
@@ -32,7 +35,8 @@
               "CounterType": "charge",
               "IsOptional": false
             }
-          ]
+          ],
+          "When": "asThisEnters"
         },
         {
           "Kind": "activated",

@@ -49,7 +49,10 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersWithCounters",
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2
@@ -60,7 +63,8 @@
           ],
           "Condition": {
             "Text": "this creature was kicked"
-          }
+          },
+          "When": "asThisEnters"
         },
         {
           "Kind": "static",

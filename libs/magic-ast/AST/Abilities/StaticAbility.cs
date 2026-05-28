@@ -10,12 +10,14 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// composite "At &lt;When&gt;, do &lt;Effect&gt;". Kept deliberately small: timing is a
 /// separate axis from the effect, so an effect node never bakes its own timing in.
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter<StaticTimingKind>))]
 public enum StaticTimingKind
 {
   /// <summary>
   /// "As [this] enters", "[This] enters tapped/with/as …" — a self-replacement
   /// effect that applies as the permanent enters the battlefield (CR 603.6d, 614.1c).
   /// </summary>
+  [JsonStringEnumMemberName("asThisEnters")]
   AsThisEnters,
 }
 

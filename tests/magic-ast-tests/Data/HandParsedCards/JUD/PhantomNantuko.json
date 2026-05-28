@@ -6,15 +6,24 @@
     "OracleText": "If damage would be dealt to Phantom Nantuko, prevent that damage. Remove a +1/+1 counter from Phantom Nantuko.\nPhantom Nantuko enters with two +1/+1 counters on it.",
     "Power": "2",
     "Toughness": "0",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Phantom Nantuko",
     "TypeLine": {
       "Raw": "Creature — Insect Spirit",
-      "Types": ["Creature"],
-      "Subtypes": ["Insect", "Spirit"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Insect",
+        "Spirit"
+      ]
     },
     "Oracle": {
       "RawText": "If damage would be dealt to Phantom Nantuko, prevent that damage. Remove a +1/+1 counter from Phantom Nantuko.\nPhantom Nantuko enters with two +1/+1 counters on it.",
@@ -34,11 +43,15 @@
                   {
                     "EffectType": "preventDamage",
                     "All": true,
-                    "Target": { "Kind": "Self" }
+                    "Target": {
+                      "Kind": "Self"
+                    }
                   },
                   {
                     "EffectType": "removeCounters",
-                    "Target": { "Kind": "Self" },
+                    "Target": {
+                      "Kind": "Self"
+                    },
                     "CounterType": "+1/+1",
                     "Count": {
                       "QuantityType": "literal",
@@ -54,7 +67,10 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersWithCounters",
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
               "CounterType": "+1/+1",
               "Count": {
                 "QuantityType": "literal",
@@ -62,7 +78,8 @@
               },
               "IsOptional": false
             }
-          ]
+          ],
+          "When": "asThisEnters"
         }
       ]
     },
@@ -71,18 +88,49 @@
         "Kind": "manaCost",
         "Raw": "{2}{G}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 4
       },
-      { "Kind": "colors", "Colors": ["G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "0", "Value": 0 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        }
       }
     ]
   }

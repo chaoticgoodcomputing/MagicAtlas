@@ -53,7 +53,10 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersWithCounters",
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
@@ -61,7 +64,8 @@
               "CounterType": "shield",
               "IsOptional": false
             }
-          ]
+          ],
+          "When": "asThisEnters"
         }
       ]
     },

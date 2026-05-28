@@ -7,14 +7,22 @@
     "Power": null,
     "Toughness": null,
     "Colors": [],
-    "ColorIdentity": ["U", "B"]
+    "ColorIdentity": [
+      "U",
+      "B"
+    ]
   },
   "Output": {
     "Name": "Undercity Sewers",
     "TypeLine": {
       "Raw": "Land — Island Swamp",
-      "Types": ["Land"],
-      "Subtypes": ["Island", "Swamp"]
+      "Types": [
+        "Land"
+      ],
+      "Subtypes": [
+        "Island",
+        "Swamp"
+      ]
     },
     "Oracle": {
       "RawText": "({T}: Add {U} or {B}.)\nThis land enters tapped.\nWhen this land enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
@@ -22,7 +30,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -36,9 +46,13 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersTapped"
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
             }
-          ]
+          ],
+          "When": "asThisEnters"
         },
         {
           "Kind": "triggered",
@@ -46,7 +60,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"]
+              "CardTypes": [
+                "land"
+              ]
             }
           },
           "Effects": [
@@ -68,7 +84,10 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "B"]
+        "ColorIdentity": [
+          "U",
+          "B"
+        ]
       }
     ]
   }

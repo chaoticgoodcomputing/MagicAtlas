@@ -2,6 +2,7 @@ namespace MagicAST.Parsing.Parsers.Static;
 
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.References;
 using MagicAST.Parsing;
 
 [StaticRule(Priority = 951)]
@@ -49,8 +50,10 @@ public sealed class ConditionalEntersWithCountersRule : IStaticRule
     [
       new StaticAbility
       {
-        Effects = [new MagicAST.AST.Effects.Replacement.EntersWithCountersEffect
+        When = StaticTimingKind.AsThisEnters,
+        Effects = [new MagicAST.AST.Effects.Counter.PutCountersEffect
         {
+          Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
           Count = count,
           CounterType = counterType,
           IsOptional = false,

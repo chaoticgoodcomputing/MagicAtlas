@@ -6,7 +6,9 @@ using MagicAST.AST.Abilities;
 /// <summary>
 /// "As this [permanent] enters, choose a creature type." — recognizes the
 /// as-enters creature-type-choice declaration (Unclaimed Territory shape) and
-/// emits a <see cref="MagicAST.AST.Effects.Keyword.ChooseCreatureTypeOnEntryEffect"/>.
+/// emits a composite <see cref="StaticAbility"/> carrying
+/// <see cref="StaticTimingKind.AsThisEnters"/> plus a plain
+/// <see cref="MagicAST.AST.Effects.Keyword.ChooseCreatureTypeEffect"/>.
 /// Sibling of <see cref="ChooseColorOnEntryRule"/>; the two regexes are disjoint
 /// ("choose a color" vs "choose a creature type"), so dispatch priority relative
 /// to the color rule is immaterial.
@@ -36,7 +38,8 @@ public sealed class ChooseCreatureTypeOnEntryRule : IStaticRule
     [
       new StaticAbility
       {
-        Effects = [new MagicAST.AST.Effects.Keyword.ChooseCreatureTypeOnEntryEffect
+        When = StaticTimingKind.AsThisEnters,
+        Effects = [new MagicAST.AST.Effects.Keyword.ChooseCreatureTypeEffect
         {
           Restriction = restriction,
         }],

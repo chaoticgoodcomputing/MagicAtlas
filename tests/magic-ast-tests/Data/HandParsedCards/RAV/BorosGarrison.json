@@ -42,9 +42,13 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersTapped"
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
             }
-          ]
+          ],
+          "When": "asThisEnters"
         },
         {
           "Kind": "triggered",

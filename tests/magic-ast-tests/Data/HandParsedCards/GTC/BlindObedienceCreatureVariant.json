@@ -26,15 +26,19 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersTapped",
-              "Scope": {
-                "CardTypes": [
-                  "creature"
-                ],
-                "Controller": "Opponent"
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "Opponent"
+                }
               }
             }
-          ]
+          ],
+          "When": "asThisEnters"
         }
       ]
     },

@@ -26,11 +26,17 @@ public sealed class EntersTappedRule : IStaticRule
 
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
   {
+    // "Enters tapped" is the composite "as this enters, tap it": the timing
+    // (StaticTimingKind.AsThisEnters) lives on the StaticAbility, the action is a
+    // plain TapEffect targeting the permanent itself (CR 603.6d / 614.1c).
+
     // Arm 1: "This [permanent] enters tapped [unless condition]." (fastland/checkland)
     var match = _entersTappedPattern.Match(clause.RawText);
     if (match.Success)
     {
       var conditionGroup = match.Groups["condition"];
+      // The "unless [condition]" clause names when the permanent enters UNtapped;
+      // it gates the as-enters tap and so lives on StaticAbility.Condition.
       Condition? entryCondition = conditionGroup.Success
         ? new Condition { Text = conditionGroup.Value.Trim() }
         : null;
@@ -39,12 +45,21 @@ public sealed class EntersTappedRule : IStaticRule
       [
         new StaticAbility
         {
-          Effects = [new MagicAST.AST.Effects.Keyword.EntersTappedEffect { EntryCondition = entryCondition }],
+          When = StaticTimingKind.AsThisEnters,
+          Effects = [new MagicAST.AST.Effects.Control.TapEffect
+          {
+            Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
+          }],
+          Condition = entryCondition,
         },
       ];
     }
 
     // Arm 2: "If [condition], this [permanent] enters tapped." (slow land)
+    // The condition is the positive "if" gate (the land enters tapped WHEN it
+    // holds); it is carried on StaticAbility.Condition. The predicate wording
+    // ("two or more …") distinguishes it from the fastland "unless" form
+    // ("two or fewer …") in the corpus.
     var ifMatch = _entersTappedIfConditionPattern.Match(clause.RawText);
     if (ifMatch.Success)
     {
@@ -53,33 +68,38 @@ public sealed class EntersTappedRule : IStaticRule
       [
         new StaticAbility
         {
-          Effects = [new MagicAST.AST.Effects.Keyword.EntersTappedEffect
+          When = StaticTimingKind.AsThisEnters,
+          Effects = [new MagicAST.AST.Effects.Control.TapEffect
           {
-            EntryCondition = new Condition { Text = conditionText },
-            EntryConditionIsPositive = true,
+            Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
           }],
+          Condition = new Condition { Text = conditionText },
         },
       ];
     }
 
     // Arm 3: "Creatures your opponents control enter tapped." — Blind Obedience
-    // creature variant (Rule 614). The ability is scoped to creatures controlled
-    // by opponents rather than the source permanent itself. The scope is encoded
-    // as an ObjectFilter on EntersTappedEffect.Scope so downstream consumers can
-    // distinguish "this card enters tapped" (Scope=null) from "opponent creatures
-    // enter tapped" (Scope.Controller=Opponent).
+    // creature variant (Rule 614). The replacement is scoped to creatures
+    // controlled by opponents rather than the source permanent itself, so the
+    // composite taps each such creature (Target.Kind = Each + filter) as it
+    // enters (When = AsThisEnters).
     if (_entersTappedOpponentsCreaturesPattern.IsMatch(clause.RawText))
     {
       return
       [
         new StaticAbility
         {
-          Effects = [new MagicAST.AST.Effects.Keyword.EntersTappedEffect
+          When = StaticTimingKind.AsThisEnters,
+          Effects = [new MagicAST.AST.Effects.Control.TapEffect
           {
-            Scope = new ObjectFilter
+            Target = new ObjectReference
             {
-              CardTypes = ["creature"],
-              Controller = ControllerFilter.Opponent,
+              Kind = ObjectReferenceKind.Each,
+              Filter = new ObjectFilter
+              {
+                CardTypes = ["creature"],
+                Controller = ControllerFilter.Opponent,
+              },
             },
           }],
         },

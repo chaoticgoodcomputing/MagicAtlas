@@ -9,20 +9,21 @@ using MagicAST.AST.References;
 /// "As this land enters, you may reveal a [TypeA] or [TypeB] card from your
 /// hand. If you don't, this land enters tapped."
 ///
-/// <para>Modelled descriptively as the checkland/fastland shape — a single
-/// <c>EntersTappedEffect</c> whose <see cref="MagicAST.AST.Effects.Keyword.EntersTappedEffect.EntryCondition"/>
-/// names the predicate under which the land enters UNtapped, with the default
-/// negative polarity (<c>EntryConditionIsPositive = false</c>): the land enters
-/// tapped whenever the controller does not reveal a qualifying card. The "you
-/// may reveal" choice is recorded as the entry condition's text rather than as a
-/// game action — MAST describes the card, it does not execute the reveal
-/// (descriptive-not-engine doctrine).</para>
+/// <para>Modelled descriptively as the checkland/fastland shape — the composite
+/// "as this enters, tap it" (<c>When = StaticTimingKind.AsThisEnters</c> on the
+/// <see cref="StaticAbility"/>, a plain <c>TapEffect</c> targeting self) gated by
+/// <see cref="StaticAbility.Condition"/>. The condition names the predicate under
+/// which the land enters UNtapped (the controller revealing a qualifying card):
+/// the land enters tapped whenever that does not happen. The "you may reveal"
+/// choice is recorded as the condition's text rather than as a game action — MAST
+/// describes the card, it does not execute the reveal (descriptive-not-engine
+/// doctrine).</para>
 ///
 /// <para>The reveal is a pure entry gate carrying no quantified resource, so it
-/// collapses cleanly onto the existing <c>EntryCondition</c> axis. This differs
-/// from the painland/shockland template (<see cref="PainlandRule"/>) where the
-/// optional action is a life payment — a quantified cost that warrants its own
-/// <c>PayLifeOnEntryEffect</c> field.</para>
+/// collapses cleanly onto the <c>Condition</c> axis. This differs from the
+/// painland/shockland template (<see cref="PainlandRule"/>) where the optional
+/// action is a life payment — a quantified cost that warrants its own
+/// <c>PayLifeEffect</c>.</para>
 /// </summary>
 [StaticRule(Priority = 961)]
 public sealed class RevealOrEntersTappedRule : IStaticRule
@@ -50,10 +51,12 @@ public sealed class RevealOrEntersTappedRule : IStaticRule
     [
       new StaticAbility
       {
-        Effects = [new MagicAST.AST.Effects.Keyword.EntersTappedEffect
+        When = StaticTimingKind.AsThisEnters,
+        Effects = [new MagicAST.AST.Effects.Control.TapEffect
         {
-          EntryCondition = new Condition { Text = $"you {revealText}" },
+          Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
         }],
+        Condition = new Condition { Text = $"you {revealText}" },
       },
     ];
   }

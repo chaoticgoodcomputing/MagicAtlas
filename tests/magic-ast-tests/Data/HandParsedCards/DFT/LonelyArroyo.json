@@ -7,14 +7,21 @@
     "Power": null,
     "Toughness": null,
     "Colors": [],
-    "ColorIdentity": ["U", "W"]
+    "ColorIdentity": [
+      "U",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Lonely Arroyo",
     "TypeLine": {
       "Raw": "Land — Desert",
-      "Types": ["Land"],
-      "Subtypes": ["Desert"]
+      "Types": [
+        "Land"
+      ],
+      "Subtypes": [
+        "Desert"
+      ]
     },
     "Oracle": {
       "RawText": "This land enters tapped.\nWhen this land enters, it deals 1 damage to target opponent.\n{T}: Add {W} or {U}.",
@@ -23,9 +30,13 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersTapped"
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
             }
-          ]
+          ],
+          "When": "asThisEnters"
         },
         {
           "Kind": "triggered",
@@ -33,18 +44,24 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"]
+              "CardTypes": [
+                "land"
+              ]
             }
           },
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Source": { "Kind": "It" },
+              "Source": {
+                "Kind": "It"
+              },
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "Target": { "Kind": "Opponent" },
+              "Target": {
+                "Kind": "Opponent"
+              },
               "IsOptional": false
             }
           ]
@@ -52,7 +69,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -71,7 +90,10 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "W"]
+        "ColorIdentity": [
+          "U",
+          "W"
+        ]
       }
     ]
   }

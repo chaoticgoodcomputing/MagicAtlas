@@ -31,13 +31,16 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersTapped",
-              "EntryCondition": {
-                "Text": "you control two or more other lands"
-              },
-              "EntryConditionIsPositive": true
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
             }
-          ]
+          ],
+          "When": "asThisEnters",
+          "Condition": {
+            "Text": "you control two or more other lands"
+          }
         },
         {
           "Kind": "activated",

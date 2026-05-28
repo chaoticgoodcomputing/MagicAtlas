@@ -15,7 +15,9 @@
     "Name": "Hickory Woodlot",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "This land enters tapped with two depletion counters on it.\n{T}, Remove a depletion counter from this land: Add {G}{G}. If there are no depletion counters on this land, sacrifice it.",
@@ -24,10 +26,16 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "entersTapped"
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
             },
             {
-              "EffectType": "entersWithCounters",
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2
@@ -35,7 +43,8 @@
               "CounterType": "depletion",
               "IsOptional": false
             }
-          ]
+          ],
+          "When": "asThisEnters"
         },
         {
           "Kind": "activated",

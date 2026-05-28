@@ -46,17 +46,21 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "payLifeOnEntry",
+              "EffectType": "payLife",
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 2
               },
               "IsOptional": true,
               "IfYouDoNot": {
-                "EffectType": "entersTapped"
+                "EffectType": "tap",
+                "Target": {
+                  "Kind": "Self"
+                }
               }
             }
-          ]
+          ],
+          "When": "asThisEnters"
         }
       ]
     },
