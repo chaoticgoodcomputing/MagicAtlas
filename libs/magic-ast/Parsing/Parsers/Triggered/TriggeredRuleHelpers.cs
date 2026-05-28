@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects;
+using MagicAST.AST.References;
 using MagicAST.Parsing;
 
 /// <summary>
@@ -200,5 +201,144 @@ internal static class TriggeredRuleHelpers
     }
     var keywordSource = char.ToUpperInvariant(lower[0]) + lower[1..];
     return new StaticAbility { Effects = [effect], KeywordSource = keywordSource };
+  }
+
+  /// <summary>
+  /// Parses object filters from trigger text.
+  /// Compositional component used by multiple trigger types.
+  /// </summary>
+  public static ObjectFilter? ParseObjectFilter(string text)
+  {
+    var lower = text.ToLowerInvariant();
+
+    // Possessive cue: any "you control" / "under your control" / "an opponent controls" qualifier
+    // lands on the filter's Controller axis. Applies on top of card-type
+    // matching below.
+    // "under your control" is the older oracle phrasing for what modern oracle writes as
+    // "you control" (Rule 109.5 — an object is under a player's control if they own it
+    // or have been given control of it). Both phrasings describe the same relationship.
+    ControllerFilter? controller = null;
+    if (Regex.IsMatch(lower, @"\byou\s+control\b") || Regex.IsMatch(lower, @"\bunder\s+your\s+control\b"))
+    {
+      controller = ControllerFilter.You;
+    }
+    else if (
+      Regex.IsMatch(lower, @"\ban\s+opponent\s+controls\b")
+      || Regex.IsMatch(lower, @"\bunder\s+an\s+opponent'?s\s+control\b")
+    )
+    {
+      controller = ControllerFilter.Opponent;
+    }
+
+    // Self-reference by card type: "this [type]" — Oracle text uses the
+    // card's own type word to refer to itself ("this creature", "this land",
+    // "this artifact"...). MAST resolves the self-reference to a filter on
+    // the named type. Order before the "a [type]" path so "this creature"
+    // doesn't fall through to "a creature".
+    foreach (
+      var selfType in new[]
+      {
+        "creature",
+        "land",
+        "artifact",
+        "enchantment",
+        "planeswalker",
+        "permanent",
+        "battle",
+        // Subtype self-reference: oracle text uses the subtype word when the
+        // card's subtype is the most precise type reference available.
+        // Rule 205.3 (Subtypes) — artifact subtypes include Equipment,
+        // Vehicle, Spacecraft; enchantment subtypes include Aura. Each is
+        // treated descriptively as a CardTypes singleton; MAST records the
+        // word the text used, not the resolved card-type hierarchy.
+        "aura",
+        "equipment",
+        "vehicle",
+        "spacecraft",
+      }
+    )
+    {
+      if (Regex.IsMatch(lower, $@"\bthis\s+{selfType}\b"))
+      {
+        return new ObjectFilter { CardTypes = [selfType], Controller = controller };
+      }
+    }
+
+    // "enchanted creature" — the creature to which this Aura is currently attached.
+    // Rule 303.4c: an Aura's "enchanted [type]" refers to the permanent it's attached to.
+    // The "enchanted" characteristic is recorded as a Characteristics entry on the filter;
+    // the card type remains "creature" per the oracle text. This is descriptive — MAST
+    // records the oracle word, not a resolved attachment reference.
+    if (Regex.IsMatch(lower, @"\bthe\s+enchanted\s+creature\b") || Regex.IsMatch(lower, @"\benchanted\s+creature\b"))
+    {
+      return new ObjectFilter { CardTypes = ["creature"], Characteristics = ["enchanted"] };
+    }
+
+    if (lower.Contains("a creature") || lower.Contains("another creature"))
+    {
+      return new ObjectFilter { CardTypes = ["creature"], Controller = controller };
+    }
+
+    if (lower.Contains("a land") || lower.Contains("another land"))
+    {
+      return new ObjectFilter { CardTypes = ["land"], Controller = controller };
+    }
+
+    // Constellation ability-word (Rule 702.110): "an enchantment you control enters" —
+    // Rule 207.2c ability-word prefix peeled before this call; the trigger body is
+    // "Whenever an enchantment you control enters, ...". Model the subject as a plain
+    // enchantment filter with a You controller.
+    if (lower.Contains("an enchantment") || lower.Contains("another enchantment"))
+    {
+      return new ObjectFilter { CardTypes = ["enchantment"], Controller = controller };
+    }
+
+    // Self-by-name pattern, e.g. "When Denethor enters" / "Whenever Barrin dies".
+    // Oracle text uses the card's own short name to refer to itself; treat this
+    // as a self-reference resolved to a creature filter (matches the convention
+    // already used for "this creature" — MAST describes what the text says).
+    if (IsSelfByNameTrigger(text))
+    {
+      return new ObjectFilter { CardTypes = ["creature"], Controller = controller };
+    }
+
+    return null;
+  }
+
+  /// <summary>
+  /// Detects the "[Self-name] enters/dies/attacks" shape, where the card refers
+  /// to itself by its own name rather than by "this creature". The heuristic:
+  /// after stripping the leading trigger timing keyword, the remaining trigger
+  /// text begins with one or more name-words and ends with a recognized event
+  /// verb. Name-words are either capitalised content words (e.g. "Goblin",
+  /// "Chieftain") or lowercase function words that legally appear in MTG card
+  /// names ("of", "the", "a", "an", "from", "for", "to", "in", "at", "with").
+  /// An optional trailing comma on any word is allowed to accommodate legendary
+  /// card names with epithets (e.g. "Kari Zev, Skyship Raider attacks").
+  /// The parser does not have access to the card name at this point, so this is
+  /// a structural match, not a name-equality check.
+  /// </summary>
+  public static bool IsSelfByNameTrigger(string triggerText)
+  {
+    // Strip the leading trigger timing keyword if present.
+    var stripped = Regex.Replace(
+      triggerText.Trim(),
+      @"^(When|Whenever|At)\s+",
+      string.Empty,
+      RegexOptions.IgnoreCase
+    );
+
+    // Name word: capitalised content word OR lowercase function word that can
+    // legally appear in a card name (prepositions / articles / conjunctions).
+    // First word MUST be capitalised (card names begin with a capital letter).
+    // Subsequent words may be function words ("Hag of Noxious Nightmares").
+    // Each word token may optionally end with a comma to handle legendary card
+    // names with epithets, e.g. "Kari Zev, Skyship Raider attacks".
+    const string FunctionWords = "of|the|a|an|from|for|to|in|at|with|by|and|or|as";
+    return Regex.IsMatch(
+      stripped,
+      @"^[A-Z][A-Za-z'\-]*,?(?:\s+(?:[A-Z][A-Za-z'\-]*|" + FunctionWords + @"),?)*\s+(enters\s+or\s+dies|enters|dies|attacks|blocks)\b",
+      RegexOptions.CultureInvariant
+    );
   }
 }
