@@ -1,0 +1,152 @@
+{
+  "Input": {
+    "Name": "Savage Alliance",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Instant",
+    "OracleText": "Escalate {1} (Pay this cost for each mode chosen beyond the first.)\nChoose one or more —\n• Creatures target player controls gain trample until end of turn.\n• Savage Alliance deals 2 damage to target creature.\n• Savage Alliance deals 1 damage to each creature target opponent controls.",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": ["Escalate"]
+  },
+  "Output": {
+    "Name": "Savage Alliance",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Escalate {1} (Pay this cost for each mode chosen beyond the first.)\nChoose one or more —\n• Creatures target player controls gain trample until end of turn.\n• Savage Alliance deals 2 damage to target creature.\n• Savage Alliance deals 1 damage to each creature target opponent controls.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "escalate",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  { "Kind": "generic", "GenericAmount": 1 }
+                ]
+              },
+              "IsOptional": false
+            }
+          ],
+          "KeywordSource": "Escalate",
+          "Reminder": {
+            "Text": "(Pay this cost for each mode chosen beyond the first.)"
+          }
+        },
+        {
+          "Kind": "modal",
+          "ModeSelection": {
+            "Minimum": 1,
+            "Maximum": 1
+          },
+          "Modes": [
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "gainAbility",
+                    "Target": {
+                      "Kind": "Each",
+                      "Filter": {
+                        "CardTypes": ["creature"],
+                        "Controller": "Target"
+                      }
+                    },
+                    "GainedAbility": {
+                      "Kind": "static",
+                      "Effects": [
+                        {
+                          "EffectType": "trample",
+                          "IsOptional": false
+                        }
+                      ],
+                      "KeywordSource": "Trample"
+                    },
+                    "IsOptional": false,
+                    "Duration": {
+                      "DurationType": "untilEndOfTurn"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "dealDamage",
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    },
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": ["creature"]
+                      }
+                    },
+                    "Source": {
+                      "Kind": "Self"
+                    },
+                    "IsOptional": false
+                  }
+                ]
+              }
+            },
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "dealDamage",
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Target": {
+                      "Kind": "Each",
+                      "Filter": {
+                        "CardTypes": ["creature"],
+                        "Controller": "Target"
+                      }
+                    },
+                    "Source": {
+                      "Kind": "Self"
+                    },
+                    "IsOptional": false
+                  }
+                ]
+              }
+            }
+          ],
+          "AllowDuplicates": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}
