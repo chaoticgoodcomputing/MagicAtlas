@@ -1,0 +1,125 @@
+{
+  "Input": {
+    "Name": "Keiga, the Tide Star",
+    "ManaCost": "{5}{U}",
+    "TypeLine": "Legendary Creature — Dragon Spirit",
+    "OracleText": "Flying\nWhen this creature dies, gain control of target creature.",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Keiga, the Tide Star",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Dragon Spirit",
+      "Types": [
+        "Creature"
+      ],
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Subtypes": [
+        "Dragon",
+        "Spirit"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying\nWhen this creature dies, gain control of target creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  "flying",
+                  "reach"
+                ]
+              },
+              "IsOptional": false
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "gainControl",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
