@@ -22,6 +22,11 @@ public sealed class CantBeBlockedRule : IStaticRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  private static readonly Regex _cantBeBlockedByPowerGreaterPattern = new(
+    @"^\s*This\s+(?:creature|Vehicle|permanent)\s+can'?t\s+be\s+blocked\s+by\s+creatures\s+with\s+power\s+(?<value>\d+)\s+or\s+greater\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   private static readonly Regex _cantBeBlockedByRelativePowerPattern = new(
     @"^\s*Creatures\s+with\s+power\s+less\s+than\s+.+?'s\s+power\s+can'?t\s+block\s+it\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
@@ -100,6 +105,37 @@ public sealed class CantBeBlockedRule : IStaticRule
                 {
                   Operator = ComparisonOperator.LessThanOrEqual,
                   Value = threshold,
+                },
+              },
+            },
+          ],
+        },
+      ];
+    }
+
+    // Power-threshold variant: "This (creature|Vehicle) can't be blocked by creatures
+    // with power N or greater." — Rule 509.1b. The threshold N maps to a
+    // GreaterThanOrEqual comparison on ObjectFilter.PowerComparison. Placed immediately
+    // after the "or less" arm; both share the same prefix and differ only in the
+    // trailing comparison word.
+    var powerGreaterMatch = _cantBeBlockedByPowerGreaterPattern.Match(clause.RawText);
+    if (powerGreaterMatch.Success && int.TryParse(powerGreaterMatch.Groups["value"].Value, out var greaterThreshold))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects =
+          [
+            new MagicAST.AST.Effects.Combat.CantBeBlockedEffect
+            {
+              BlockedByFilter = new ObjectFilter
+              {
+                CardTypes = ["creature"],
+                PowerComparison = new MagicAST.AST.References.Comparison
+                {
+                  Operator = ComparisonOperator.GreaterThanOrEqual,
+                  Value = greaterThreshold,
                 },
               },
             },
