@@ -1,0 +1,90 @@
+{
+  "Input": {
+    "Name": "Kodama's Might",
+    "ManaCost": "{G}",
+    "TypeLine": "Instant — Arcane",
+    "OracleText": "Target creature gets +2/+2 until end of turn.\nSplice onto Arcane {G} (As you cast an Arcane spell, you may reveal this card from your hand and pay its splice cost. If you do, add this card's effects to that spell.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Kodama's Might",
+    "TypeLine": {
+      "Raw": "Instant — Arcane",
+      "Types": ["Instant"],
+      "Subtypes": ["Arcane"]
+    },
+    "Oracle": {
+      "RawText": "Target creature gets +2/+2 until end of turn.\nSplice onto Arcane {G} (As you cast an Arcane spell, you may reveal this card from your hand and pay its splice cost. If you do, add this card's effects to that spell.)",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Splice",
+          "Effects": [
+            {
+              "EffectType": "splice",
+              "Subtype": "Arcane",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "colored",
+                    "Colors": ["G"]
+                  }
+                ]
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(As you cast an Arcane spell, you may reveal this card from your hand and pay its splice cost. If you do, add this card's effects to that spell.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
