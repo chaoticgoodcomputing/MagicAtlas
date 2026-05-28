@@ -55,10 +55,13 @@ public sealed class GainAbilityEffectRule : IActivatedEffectRule
       }
     }
 
-    // Pattern: "Target creature gains [keyword] until end of turn".
+    // Pattern: "Target creature [you control] gains [keyword] until end of turn".
+    // The optional "you control" group narrows the target's controller axis
+    // (ObjectFilter.Controller = You). Without it the regex would reject
+    // "Target creature you control gains …" and fall through to unparsed.
     var targetCreatureGainsMatch = Regex.Match(
       effectText,
-      @"^Target\s+creature\s+gains?\s+(?<kw>[a-z]+(?:\s+(?!until|for|as\b)[a-z]+)?)\s+until\s+end\s+of\s+turn$",
+      @"^Target\s+creature(?<youcontrol>\s+you\s+control)?\s+gains?\s+(?<kw>[a-z]+(?:\s+(?!until|for|as\b)[a-z]+)?)\s+until\s+end\s+of\s+turn$",
       RegexOptions.IgnoreCase
     );
     if (targetCreatureGainsMatch.Success)
@@ -67,12 +70,15 @@ public sealed class GainAbilityEffectRule : IActivatedEffectRule
       var targetAbility = ActivatedRuleHelpers.BuildGrantedKeywordAbility(targetKeyword);
       if (targetAbility is not null)
       {
+        var targetFilter = targetCreatureGainsMatch.Groups["youcontrol"].Success
+          ? new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You }
+          : new ObjectFilter { CardTypes = ["creature"] };
         return new GainAbilityEffect
         {
           Target = new ObjectReference
           {
             Kind = ObjectReferenceKind.Target,
-            Filter = new ObjectFilter { CardTypes = ["creature"] },
+            Filter = targetFilter,
           },
           GainedAbility = targetAbility,
           Duration = new UntilEndOfTurnDuration(),
