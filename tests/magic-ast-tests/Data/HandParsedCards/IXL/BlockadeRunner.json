@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Blockade Runner",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Creature — Merfolk",
+    "OracleText": "{U}: This creature can't be blocked this turn.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "59e483df-b58a-401e-85bc-0afda4bf7cac",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Blockade Runner",
+    "TypeLine": {
+      "Raw": "Creature — Merfolk",
+      "Types": ["Creature"],
+      "Subtypes": ["Merfolk"]
+    },
+    "Oracle": {
+      "RawText": "{U}: This creature can't be blocked this turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["U"] }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "Target": {
+                "Kind": "Self"
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
