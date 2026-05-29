@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Akroan Phalanx",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Creature — Human Soldier",
+    "OracleText": "Vigilance\n{2}{R}: Creatures you control get +1/+0 until end of turn.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["W"],
+    "ColorIdentity": ["R", "W"],
+    "Keywords": ["Vigilance"],
+    "Id": "fe23019a-e432-4a27-8acb-b17728a1e8b0",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Akroan Phalanx",
+    "TypeLine": {
+      "Raw": "Creature — Human Soldier",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "Vigilance\n{2}{R}: Creatures you control get +1/+0 until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Vigilance",
+          "Effects": [
+            {
+              "EffectType": "vigilance"
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 2 },
+                { "Kind": "colored", "Colors": ["R"] }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "Duration": {
+                "DurationType": "untilEndOfTurn"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R", "W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+      }
+    ]
+  }
+}
