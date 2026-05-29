@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Torch Fiend",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature — Devil",
+    "OracleText": "{R}, Sacrifice this creature: Destroy target artifact.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": [],
+    "Id": "60c3aa66-2436-40a3-a541-185f457bd55a",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Torch Fiend",
+    "TypeLine": {
+      "Raw": "Creature — Devil",
+      "Types": ["Creature"],
+      "Subtypes": ["Devil"]
+    },
+    "Oracle": {
+      "RawText": "{R}, Sacrifice this creature: Destroy target artifact.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["R"] }
+              ]
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"],
+                "Characteristics": [{ "CharacteristicType": "other", "Description": "this permanent" }]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["artifact"]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}
