@@ -6,14 +6,20 @@
     "OracleText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\n{3}{G}, Sacrifice this enchantment: Search your library for a basic land card, put it onto the battlefield, then shuffle.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Point the Way",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.)\n{3}{G}, Sacrifice this enchantment: Search your library for a basic land card, put it onto the battlefield, then shuffle.",
@@ -33,26 +39,71 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 3 },
-                { "Kind": "colored", "Colors": ["G"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
               ]
             },
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["enchantment"],
-                "Characteristics": [{"CharacteristicType": "other", "Description": "this permanent"}]
+                "CardTypes": [
+                  "enchantment"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "this permanent"
+                  }
+                ]
               },
-              "Quantity": { "QuantityType": "literal", "Value": 1 }
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
           ],
           "Effects": [
             {
-              "EffectType": "unparsed",
-              "SourceSpan": { "Start": 180, "Length": 86 },
-              "RawText": "Search your library for a basic land card, put it onto the battlefield, then shuffle."
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "searchLibrary",
+                  "Filter": {
+                    "CardTypes": [
+                      "land"
+                    ],
+                    "Supertypes": [
+                      "Basic"
+                    ]
+                  },
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Destination": "Battlefield",
+                  "Revealed": false,
+                  "IsOptional": false
+                },
+                {
+                  "EffectType": "shuffle",
+                  "Player": {
+                    "Kind": "You"
+                  },
+                  "IsOptional": false
+                }
+              ],
+              "IsOptional": false
             }
-          ]
+          ],
+          "IsManaAbility": false
         }
       ]
     },
@@ -61,18 +112,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

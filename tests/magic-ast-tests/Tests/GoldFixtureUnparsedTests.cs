@@ -30,7 +30,6 @@ public class GoldFixtureUnparsedTests
     // 4 whole-card overfit fixtures (every ability unparsed) were deleted, not
     // listed — they had zero structured content to preserve.
     "BLB/WildcallSpree",
-    "DFT/PointTheWay",
     "DGM/WearTear",
     "DIS/EnigmaEidolon",
     "EOE/ChoraleoftheVoid",

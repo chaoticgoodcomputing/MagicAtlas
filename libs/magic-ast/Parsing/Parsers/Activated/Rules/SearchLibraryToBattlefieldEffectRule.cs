@@ -34,6 +34,13 @@ public sealed class SearchLibraryToBattlefieldEffectRule : IActivatedEffectRule
     "planeswalker", "battle", "permanent",
   };
 
+  // MTG supertypes (CR 205.4). A qualifier word matching one of these belongs on
+  // the Supertypes axis, NOT Subtypes — e.g. "basic land" → Supertypes=["Basic"].
+  private static readonly HashSet<string> _knownSupertypes = new(StringComparer.OrdinalIgnoreCase)
+  {
+    "basic", "legendary", "snow", "world", "ongoing",
+  };
+
   // Matches: "Search your library for a[n] <qualifier> [card-type] card
   //           [with mana value N or less|greater], put it onto the battlefield[,] then shuffle."
   // The <qual> group captures everything between "for a[n] " and the final "card".
@@ -124,14 +131,20 @@ public sealed class SearchLibraryToBattlefieldEffectRule : IActivatedEffectRule
     if (_knownCardTypes.Contains(last) && parts.Length > 1)
     {
       // e.g. "Rebel permanent" → Subtypes=["Rebel"], CardTypes=["permanent"]
-      var subtypeWords = parts[..^1];
-      var subtypes = subtypeWords
-        .Select(w => char.ToUpperInvariant(w[0]) + w[1..].ToLowerInvariant())
-        .ToList();
+      //      "basic land"      → Supertypes=["Basic"], CardTypes=["land"]
+      // Partition the pre-card-type words into supertypes vs subtypes (CR 205.4).
+      var supertypes = new List<string>();
+      var subtypes = new List<string>();
+      foreach (var w in parts[..^1])
+      {
+        var titled = char.ToUpperInvariant(w[0]) + w[1..].ToLowerInvariant();
+        (_knownSupertypes.Contains(w) ? supertypes : subtypes).Add(titled);
+      }
       return new ObjectFilter
       {
         CardTypes = [last.ToLowerInvariant()],
-        Subtypes = subtypes,
+        Supertypes = supertypes.Count > 0 ? supertypes : null,
+        Subtypes = subtypes.Count > 0 ? subtypes : null,
         ManaValueComparison = mvComparison,
       };
     }
