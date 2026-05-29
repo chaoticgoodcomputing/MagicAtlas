@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Project Path="apps/atlas-api/MagicAtlas.Api.csproj" />
+  <Project Path="libs/atlas-flows/MagicAtlas.Flows.csproj" />
+  <Project Path="libs/magic-ast/MagicAST.csproj" />
+  <Project Path="tests/atlas-flow-test/MagicAtlas.Flows.Harness.csproj" />
+  <Project Path="tests/magic-ast-tests/MagicAtlas.Ast.Tests.csproj" />
+</Solution>
