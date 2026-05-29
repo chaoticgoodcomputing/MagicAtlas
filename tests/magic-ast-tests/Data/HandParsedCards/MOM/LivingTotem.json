@@ -58,7 +58,7 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    "another"
+                    {"CharacteristicType": "other", "Description": "another"}
                   ]
                 }
               },

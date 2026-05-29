@@ -160,7 +160,7 @@ public sealed class AffinityKeyword : IKeyword
     // silently mis-routing them through a singular card-type or subtype branch.
     return new ObjectFilter
     {
-      Characteristics = [raw.ToLowerInvariant()],
+      Characteristics = [Characteristic.FromLabel(raw.ToLowerInvariant())],
       Controller = ControllerFilter.You,
     };
   }

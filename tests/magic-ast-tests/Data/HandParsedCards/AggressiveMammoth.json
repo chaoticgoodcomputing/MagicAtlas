@@ -52,7 +52,7 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    "other"
+                    {"CharacteristicType": "other", "Description": "other"}
                   ]
                 }
               },
@@ -76,7 +76,7 @@
               "EffectType": "cantBeBlocked",
               "BlockedByFilter": {
                 "CardTypes": ["creature"],
-                "Characteristics": ["with power less than this creature's power"]
+                "Characteristics": [{"CharacteristicType": "other", "Description": "with power less than this creature's power"}]
               }
             }
           ]

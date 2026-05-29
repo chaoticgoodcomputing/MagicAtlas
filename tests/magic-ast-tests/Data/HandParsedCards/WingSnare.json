@@ -27,7 +27,7 @@
                 "Kind": "Target",
                 "Filter": {
                   "CardTypes": ["creature"],
-                  "Characteristics": ["flying"]
+                  "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}]
                 }
               }
             }

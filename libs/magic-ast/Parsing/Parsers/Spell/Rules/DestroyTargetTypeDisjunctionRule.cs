@@ -56,7 +56,7 @@ public sealed class DestroyTargetTypeDisjunctionRule : ISpellRule
           Filter = new ObjectFilter
           {
             CardTypes = cardTypes,
-            Characteristics = [keyword],
+            Characteristics = [Characteristic.FromLabel(keyword)],
           },
         },
       };

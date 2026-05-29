@@ -5,6 +5,7 @@ using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Damage;
 using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.References;
 using MagicAST.Keywords;
 using MagicAST.Tests.Infrastructure;
 
@@ -35,8 +36,8 @@ public class KeywordExpanderTests
 
       var evasion = (EvasionEffect)staticAbility.Effects[0];
       Assert.That(evasion.CanBeBlockedBy, Is.Not.Null);
-      Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item("flying"));
-      Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item("reach"));
+      Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item(Characteristic.Keyword(KeywordAbility.Flying)));
+      Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item(Characteristic.Keyword(KeywordAbility.Reach)));
   }
 
   [Test]

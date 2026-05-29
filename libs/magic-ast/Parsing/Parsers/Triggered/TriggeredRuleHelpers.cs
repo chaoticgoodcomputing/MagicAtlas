@@ -183,7 +183,7 @@ internal static class TriggeredRuleHelpers
         CanBeBlockedBy = new MagicAST.AST.References.ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = ["flying", "reach"],
+          Characteristics = [Characteristic.Keyword(KeywordAbility.Flying), Characteristic.Keyword(KeywordAbility.Reach)],
         },
       },
       "vigilance" => new MagicAST.AST.Effects.Keyword.VigilanceEffect(),
@@ -271,7 +271,7 @@ internal static class TriggeredRuleHelpers
     // records the oracle word, not a resolved attachment reference.
     if (Regex.IsMatch(lower, @"\bthe\s+enchanted\s+creature\b") || Regex.IsMatch(lower, @"\benchanted\s+creature\b"))
     {
-      return new ObjectFilter { CardTypes = ["creature"], Characteristics = ["enchanted"] };
+      return new ObjectFilter { CardTypes = ["creature"], Characteristics = [Characteristic.Other("enchanted")] };
     }
 
     if (lower.Contains("a creature") || lower.Contains("another creature"))

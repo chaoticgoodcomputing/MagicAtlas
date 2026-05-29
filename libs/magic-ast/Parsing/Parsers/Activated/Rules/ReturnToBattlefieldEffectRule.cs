@@ -46,7 +46,7 @@ public sealed class ReturnToBattlefieldEffectRule : IActivatedEffectRule
         Filter = new ObjectFilter
         {
           Zone = zone,
-          Characteristics = [what],
+          Characteristics = [Characteristic.FromLabel(what)],
         },
       },
     };

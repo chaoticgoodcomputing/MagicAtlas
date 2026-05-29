@@ -50,7 +50,7 @@ public sealed class CanBlockOnlyRule : IStaticRule
           Filter = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = [$"with {characteristic}"],
+            Characteristics = [Characteristic.FromLabel($"with {characteristic}")],
           },
         }],
       },

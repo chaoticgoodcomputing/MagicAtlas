@@ -101,7 +101,7 @@ public sealed class ReturnKickedDrawRule : ISpellRule, IMultiSpellRule
         Filter = new ObjectFilter
         {
           CardTypes = [typeWord],
-          Characteristics = characteristics,
+          Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
         },
       },
     };

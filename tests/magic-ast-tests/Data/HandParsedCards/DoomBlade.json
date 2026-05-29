@@ -27,7 +27,7 @@
                 "Kind": "Target",
                 "Filter": {
                   "CardTypes": ["creature"],
-                  "Characteristics": ["nonblack"]
+                  "Characteristics": [{"CharacteristicType": "other", "Description": "nonblack"}]
                 }
               }
             }

@@ -76,7 +76,7 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
           CardTypes = ["creature"],
           Subtypes = [subtype],
           Controller = ControllerFilter.You,
-          Characteristics = ["other"],
+          Characteristics = [Characteristic.Other("other")],
         },
       };
     }
@@ -90,7 +90,7 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
         {
           CardTypes = ["creature"],
           Controller = ControllerFilter.You,
-          Characteristics = characteristics,
+          Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
         },
       };
     }
@@ -103,7 +103,7 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = characteristics,
+          Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
         },
       };
     }

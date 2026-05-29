@@ -55,7 +55,7 @@
               "CostType": "sacrifice",
               "Filter": {
                 "CardTypes": ["artifact"],
-                "Characteristics": ["this permanent"]
+                "Characteristics": [{"CharacteristicType": "other", "Description": "this permanent"}]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -70,7 +70,7 @@
                 "Kind": "Target",
                 "Filter": {
                   "Zone": "Graveyard",
-                  "Characteristics": ["creature or Vehicle card"]
+                  "Characteristics": [{"CharacteristicType": "other", "Description": "creature or Vehicle card"}]
                 }
               }
             }

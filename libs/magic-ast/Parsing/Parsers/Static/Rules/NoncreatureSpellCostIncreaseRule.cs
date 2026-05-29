@@ -29,7 +29,7 @@ public sealed class NoncreatureSpellCostIncreaseRule : IStaticRule
         AffectedObjects = new ObjectFilter
         {
           CardTypes = ["spell"],
-          Characteristics = ["noncreature"],
+          Characteristics = [Characteristic.Other("noncreature")],
         },
       },
     ];

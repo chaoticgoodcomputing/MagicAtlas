@@ -27,7 +27,7 @@
                 "Kind": "Each",
                 "Filter": {
                   "CardTypes": ["creature"],
-                  "Characteristics": ["withoutFlying"]
+                  "Characteristics": [{"CharacteristicType": "other", "Description": "withoutFlying"}]
                 }
               },
               "IsOptional": false,

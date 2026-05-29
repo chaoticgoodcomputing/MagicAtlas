@@ -32,7 +32,7 @@ public sealed class ExileAttackingCreatureUnlessRule : ISpellRule
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = ["attacking"],
+          Characteristics = [Characteristic.Other("attacking")],
         },
       },
       UnlessClause = new UnlessClause

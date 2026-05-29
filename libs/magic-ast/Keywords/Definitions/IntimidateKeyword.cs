@@ -36,7 +36,7 @@ public sealed class IntimidateKeyword : IKeyword
           CanBeBlockedBy = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = ["artifact", "shares a color"],
+            Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("shares a color")],
           },
         }],
       },
@@ -54,7 +54,7 @@ public sealed class IntimidateKeyword : IKeyword
         CanBeBlockedBy = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = ["artifact", "shares a color"],
+          Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("shares a color")],
         },
       }],
       Reminder = reminder,

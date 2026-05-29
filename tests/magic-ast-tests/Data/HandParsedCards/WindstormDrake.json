@@ -38,8 +38,8 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  "flying",
-                  "reach"
+                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
+                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
                 ]
               }
             }
@@ -58,8 +58,8 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    "other",
-                    "flying"
+                    {"CharacteristicType": "other", "Description": "other"},
+                    {"CharacteristicType": "keyword", "Keyword": "Flying"}
                   ]
                 }
               },

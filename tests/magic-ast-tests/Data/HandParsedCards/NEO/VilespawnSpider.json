@@ -35,7 +35,7 @@
             "Event": "SpellCast",
             "Filter": {
               "CardTypes": ["spell"],
-              "Characteristics": ["artifact"],
+              "Characteristics": [{"CharacteristicType": "other", "Description": "artifact"}],
               "Controller": "You"
             }
           },

@@ -133,7 +133,7 @@ public sealed class DestroyTargetWithFilterRule : ISpellRule
           Filter = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = [filterPhrase.ToLowerInvariant()],
+            Characteristics = [Characteristic.FromLabel(filterPhrase.ToLowerInvariant())],
           },
         },
       };

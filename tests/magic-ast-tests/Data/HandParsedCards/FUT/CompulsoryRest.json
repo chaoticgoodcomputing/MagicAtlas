@@ -87,7 +87,7 @@
                         "creature"
                       ],
                       "Characteristics": [
-                        "this permanent"
+                        {"CharacteristicType": "other", "Description": "this permanent"}
                       ]
                     },
                     "Quantity": {

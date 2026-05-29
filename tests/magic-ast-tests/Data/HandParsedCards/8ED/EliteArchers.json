@@ -53,7 +53,7 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    "attacking or blocking"
+                    {"CharacteristicType": "other", "Description": "attacking or blocking"}
                   ]
                 }
               },

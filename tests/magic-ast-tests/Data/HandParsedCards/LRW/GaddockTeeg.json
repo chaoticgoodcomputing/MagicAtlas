@@ -45,7 +45,7 @@
               "spell"
             ],
             "Characteristics": [
-              "noncreature"
+              {"CharacteristicType": "other", "Description": "noncreature"}
             ],
             "ManaValueComparison": {
               "Operator": "GreaterThanOrEqual",
@@ -65,8 +65,8 @@
               "spell"
             ],
             "Characteristics": [
-              "noncreature",
-              "with {X} in their mana costs"
+              {"CharacteristicType": "other", "Description": "noncreature"},
+              {"CharacteristicType": "other", "Description": "with {X} in their mana costs"}
             ]
           }
         }

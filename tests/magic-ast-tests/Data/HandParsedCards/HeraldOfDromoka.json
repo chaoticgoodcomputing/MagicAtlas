@@ -53,7 +53,7 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    "other"
+                    {"CharacteristicType": "other", "Description": "other"}
                   ]
                 }
               },

@@ -44,8 +44,8 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    "other",
-                    "tapped"
+                    {"CharacteristicType": "other", "Description": "other"},
+                    {"CharacteristicType": "other", "Description": "tapped"}
                   ]
                 }
               },
@@ -76,8 +76,8 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    "other",
-                    "untapped"
+                    {"CharacteristicType": "other", "Description": "other"},
+                    {"CharacteristicType": "other", "Description": "untapped"}
                   ]
                 }
               },
@@ -121,7 +121,7 @@
                     "land"
                   ],
                   "Characteristics": [
-                    "another"
+                    {"CharacteristicType": "other", "Description": "another"}
                   ],
                   "Controller": "You"
                 }

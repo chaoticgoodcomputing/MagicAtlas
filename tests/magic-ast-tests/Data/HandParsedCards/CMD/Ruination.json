@@ -28,7 +28,7 @@
                 "Kind": "Each",
                 "Filter": {
                   "CardTypes": ["land"],
-                  "Characteristics": ["nonbasic"]
+                  "Characteristics": [{"CharacteristicType": "other", "Description": "nonbasic"}]
                 }
               }
             }

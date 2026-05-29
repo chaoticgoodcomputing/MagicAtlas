@@ -41,8 +41,8 @@ public sealed class MassAnthemSpellRule : ISpellRule
   //   "All creatures"                        → Each, all creatures, no controller filter
   //   "Creatures you control"                → Each, creature, Controller=You
   //   "Creatures your opponents control"     → Each, creature, Controller=Opponent
-  //   "Attacking creatures"                  → Each, creature, Characteristics=["attacking"]
-  //   "Blocking creatures"                   → Each, creature, Characteristics=["blocking"]
+  //   "Attacking creatures"                  → Each, creature, Characteristics=[Characteristic.Other("attacking")]
+  //   "Blocking creatures"                   → Each, creature, Characteristics=[Characteristic.Other("blocking")]
   private static readonly Regex _pattern = new(
     @"^(?<subj>All\s+creatures|Creatures\s+you\s+control|Creatures\s+your\s+opponents\s+control|Attacking\s+creatures|Blocking\s+creatures)"
     + @"\s+get\s+(?<p>[+\-]\d+)/(?<t>[+\-]\d+)\s+until\s+end\s+of\s+turn$",
@@ -106,7 +106,7 @@ public sealed class MassAnthemSpellRule : ISpellRule
       return new ObjectFilter
       {
         CardTypes = ["creature"],
-        Characteristics = ["attacking"],
+        Characteristics = [Characteristic.Other("attacking")],
       };
     }
 
@@ -115,7 +115,7 @@ public sealed class MassAnthemSpellRule : ISpellRule
       return new ObjectFilter
       {
         CardTypes = ["creature"],
-        Characteristics = ["blocking"],
+        Characteristics = [Characteristic.Other("blocking")],
       };
     }
 

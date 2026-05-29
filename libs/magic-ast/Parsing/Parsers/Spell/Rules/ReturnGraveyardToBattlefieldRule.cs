@@ -47,7 +47,7 @@ public sealed class ReturnGraveyardToBattlefieldRule : ISpellRule
         Filter = new ObjectFilter
         {
           CardTypes = cardTypes,
-          Characteristics = characteristics,
+          Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
           Zone = Zone.Graveyard,
           Controller = ControllerFilter.You,
         },

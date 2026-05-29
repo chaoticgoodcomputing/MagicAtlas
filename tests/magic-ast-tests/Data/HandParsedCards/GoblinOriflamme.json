@@ -35,7 +35,7 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    "attacking"
+                    {"CharacteristicType": "other", "Description": "attacking"}
                   ]
                 }
               },

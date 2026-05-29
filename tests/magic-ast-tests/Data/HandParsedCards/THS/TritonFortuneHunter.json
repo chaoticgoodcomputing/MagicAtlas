@@ -28,7 +28,7 @@
             "Filter": {
               "CardTypes": ["spell"],
               "Controller": "You",
-              "Characteristics": ["targeting this creature"]
+              "Characteristics": [{"CharacteristicType": "other", "Description": "targeting this creature"}]
             }
           },
           "Effects": [

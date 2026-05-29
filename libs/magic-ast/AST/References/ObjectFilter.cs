@@ -82,10 +82,13 @@ public sealed record ObjectFilter
   public ControllerFilter? Controller { get; init; }
 
   /// <summary>
-  /// Additional characteristics: "nontoken", "with flying", "tapped", etc.
+  /// Additional characteristic constraints beyond the structured axes above —
+  /// a keyword-ability requirement (<see cref="KeywordCharacteristic"/>) or the
+  /// typed residual (<see cref="OtherCharacteristic"/>) for shapes not yet
+  /// structured. Replaces the former bare-string list (see ADR 0001).
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public IReadOnlyList<string>? Characteristics { get; init; }
+  public IReadOnlyList<Characteristic>? Characteristics { get; init; }
 
   /// <summary>
   /// Restricts the filter to objects matching the characteristic value CHOSEN as

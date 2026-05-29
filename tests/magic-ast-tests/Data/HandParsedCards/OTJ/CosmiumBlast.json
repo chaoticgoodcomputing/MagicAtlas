@@ -32,7 +32,7 @@
                 "Kind": "Target",
                 "Filter": {
                   "CardTypes": ["creature"],
-                  "Characteristics": ["attacking or blocking"]
+                  "Characteristics": [{"CharacteristicType": "other", "Description": "attacking or blocking"}]
                 }
               },
               "IsOptional": false

@@ -70,7 +70,7 @@ public sealed class AttackWithAndAnotherConditionRule : ITriggerConditionRule
       {
         Supertypes = supertypes,
         Controller = ControllerFilter.You,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       },
     };
   }

@@ -75,7 +75,7 @@ public sealed class PutOnTopOfLibraryRule : ISpellRule
         {
           CardTypes = [typeWord],
           Colors = colors,
-          Characteristics = characteristics.Count > 0 ? characteristics : null,
+          Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
           Controller = controller,
         },
       },

@@ -134,7 +134,7 @@ public sealed class LordPTBuffRule : IStaticRule
         CardTypes = ["creature"],
         Colors = [colorCode],
         Controller = controller,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -150,7 +150,7 @@ public sealed class LordPTBuffRule : IStaticRule
       {
         CardTypes = ["artifact", "creature"],
         Controller = controller,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -182,7 +182,7 @@ public sealed class LordPTBuffRule : IStaticRule
         {
           CardTypes = ["creature"],
           Controller = controller,
-          Characteristics = chars,
+          Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
         };
       }
     }
@@ -203,7 +203,7 @@ public sealed class LordPTBuffRule : IStaticRule
       {
         CardTypes = ["creature"],
         Controller = controller,
-        Characteristics = chars,
+        Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -222,7 +222,7 @@ public sealed class LordPTBuffRule : IStaticRule
       {
         CardTypes = ["creature"],
         Controller = controller,
-        Characteristics = chars,
+        Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -249,7 +249,7 @@ public sealed class LordPTBuffRule : IStaticRule
           CardTypes = ["creature"],
           Subtypes = [subtype1, subtype2],
           Controller = controller,
-          Characteristics = characteristics,
+          Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
         };
       }
     }
@@ -274,7 +274,7 @@ public sealed class LordPTBuffRule : IStaticRule
         CardTypes = ["creature"],
         Subtypes = [subtype],
         Controller = controller,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -285,7 +285,7 @@ public sealed class LordPTBuffRule : IStaticRule
       {
         CardTypes = ["creature"],
         Controller = controller,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -311,7 +311,7 @@ public sealed class LordPTBuffRule : IStaticRule
         CardTypes = isOther ? (IReadOnlyList<string>?)["creature"] : null,
         Subtypes = [subtype],
         Controller = controller,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 

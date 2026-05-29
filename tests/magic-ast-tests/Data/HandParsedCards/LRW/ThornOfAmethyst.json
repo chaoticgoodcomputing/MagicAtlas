@@ -26,7 +26,7 @@
           ],
           "AffectedObjects": {
             "CardTypes": ["spell"],
-            "Characteristics": ["noncreature"]
+            "Characteristics": [{"CharacteristicType": "other", "Description": "noncreature"}]
           }
         }
       ]

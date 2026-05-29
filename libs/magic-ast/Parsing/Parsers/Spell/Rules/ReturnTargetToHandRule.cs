@@ -90,7 +90,7 @@ public sealed class ReturnTargetToHandRule : ISpellRule
           {
             CardTypes = [cardType],
             Colors = colors,
-            Characteristics = characteristics,
+            Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
           },
         },
       };
@@ -148,7 +148,7 @@ public sealed class ReturnTargetToHandRule : ISpellRule
         {
           CardTypes = [typeWord],
           Colors = targetColors,
-          Characteristics = targetCharacteristics.Count > 0 ? targetCharacteristics : null,
+          Characteristics = targetCharacteristics.Count > 0 ? targetCharacteristics.Select(Characteristic.FromLabel).ToList() : null,
           Controller = controller,
         },
       },
@@ -223,7 +223,7 @@ public sealed class ReturnTargetToHandRule : ISpellRule
         Filter = new ObjectFilter
         {
           CardTypes = cardTypes,
-          Characteristics = characteristics.Count > 0 ? characteristics : null,
+          Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
           Controller = controller,
         },
       },

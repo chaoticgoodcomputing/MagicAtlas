@@ -41,7 +41,7 @@
               "CostType": "sacrifice",
               "Filter": {
                 "CardTypes": ["enchantment"],
-                "Characteristics": ["this permanent"]
+                "Characteristics": [{"CharacteristicType": "other", "Description": "this permanent"}]
               },
               "Quantity": { "QuantityType": "literal", "Value": 1 }
             }

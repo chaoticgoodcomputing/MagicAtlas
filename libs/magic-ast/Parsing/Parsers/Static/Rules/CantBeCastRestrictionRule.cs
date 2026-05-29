@@ -31,7 +31,7 @@ public sealed class CantBeCastRestrictionRule : IStaticRule
           AffectedObjects = new ObjectFilter
           {
             CardTypes = ["spell"],
-            Characteristics = ["noncreature"],
+            Characteristics = [Characteristic.Other("noncreature")],
             ManaValueComparison = new Comparison
             {
               Operator = ComparisonOperator.GreaterThanOrEqual,
@@ -52,7 +52,7 @@ public sealed class CantBeCastRestrictionRule : IStaticRule
           AffectedObjects = new ObjectFilter
           {
             CardTypes = ["spell"],
-            Characteristics = ["noncreature", "with {X} in their mana costs"],
+            Characteristics = [Characteristic.Other("noncreature"), Characteristic.Other("with {X} in their mana costs")],
           },
         },
       ];

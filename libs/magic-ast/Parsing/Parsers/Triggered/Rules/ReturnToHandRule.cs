@@ -77,7 +77,7 @@ public sealed class ReturnToHandRule : ITriggeredRule
     var filter = new ObjectFilter
     {
       CardTypes = cardTypes,
-      Characteristics = characteristics.Count > 0 ? characteristics : null,
+      Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
       Controller = controller,
     };
 

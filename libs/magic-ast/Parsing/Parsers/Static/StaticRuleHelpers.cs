@@ -273,7 +273,7 @@ internal static class StaticRuleHelpers
           CanBeBlockedBy = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = ["flying", "reach"],
+            Characteristics = [Characteristic.Keyword(KeywordAbility.Flying), Characteristic.Keyword(KeywordAbility.Reach)],
           },
         }],
       },
@@ -340,7 +340,7 @@ internal static class StaticRuleHelpers
           CanBeBlockedBy = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = ["shadow"],
+            Characteristics = [Characteristic.Keyword(KeywordAbility.Shadow)],
           },
         }],
       },
@@ -355,7 +355,7 @@ internal static class StaticRuleHelpers
           CanBeBlockedBy = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = ["artifact", "shares a color"],
+            Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("shares a color")],
           },
         }],
       },
@@ -393,7 +393,7 @@ internal static class StaticRuleHelpers
           CanBeBlockedBy = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = ["artifact", "black"],
+            Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("black")],
           },
         }],
       },

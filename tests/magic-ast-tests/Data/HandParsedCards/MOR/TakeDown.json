@@ -42,7 +42,7 @@
                       "Kind": "Target",
                       "Filter": {
                         "CardTypes": ["creature"],
-                        "Characteristics": ["with flying"]
+                        "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}]
                       }
                     }
                   }
@@ -66,7 +66,7 @@
                       "Kind": "Each",
                       "Filter": {
                         "CardTypes": ["creature"],
-                        "Characteristics": ["with flying"]
+                        "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}]
                       }
                     }
                   }

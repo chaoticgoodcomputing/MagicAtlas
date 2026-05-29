@@ -9,7 +9,7 @@ using MagicAST.AST.References;
 /// "[This creature|CardName] deals N damage to target attacking or blocking creature."
 /// — archer / ballista tap-to-deal-damage pattern. Both subject forms encode the
 /// source as <see cref="ObjectReference.Self()"/>; the target is a creature with
-/// Characteristics = ["attacking or blocking"].
+/// Characteristics = [Characteristic.Other("attacking or blocking")].
 /// </summary>
 [ActivatedEffectRule(Priority = 989)]
 public sealed class SelfDealsDamageToAttackingOrBlockingCreatureEffectRule : IActivatedEffectRule
@@ -57,7 +57,7 @@ public sealed class SelfDealsDamageToAttackingOrBlockingCreatureEffectRule : IAc
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = ["attacking or blocking"],
+          Characteristics = [Characteristic.Other("attacking or blocking")],
         },
       },
     };

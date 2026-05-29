@@ -54,7 +54,7 @@ public sealed class ModifyPTConjunctionRule : ISpellRule
           Filter = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = ["another"],
+            Characteristics = [Characteristic.Other("another")],
           },
         },
         PowerModifier = LiteralQuantity.Of(p2),

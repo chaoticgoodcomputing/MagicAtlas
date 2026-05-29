@@ -39,8 +39,8 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  "flying",
-                  "reach"
+                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
+                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
                 ]
               }
             }
@@ -65,7 +65,7 @@
                 "spell"
               ],
               "Characteristics": [
-                "noncreature"
+                {"CharacteristicType": "other", "Description": "noncreature"}
               ],
               "Controller": "You"
             }

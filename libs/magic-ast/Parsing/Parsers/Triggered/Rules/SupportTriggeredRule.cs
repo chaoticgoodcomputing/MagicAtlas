@@ -63,7 +63,7 @@ public sealed class SupportTriggeredRule : ITriggeredRule
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = ["other"],
+          Characteristics = [Characteristic.Other("other")],
         },
       },
       CounterType = "+1/+1",

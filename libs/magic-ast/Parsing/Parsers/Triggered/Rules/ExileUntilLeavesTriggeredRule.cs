@@ -47,7 +47,7 @@ public sealed class ExileUntilLeavesTriggeredRule : ITriggeredRule
         Filter = new ObjectFilter
         {
           CardTypes = ["permanent"],
-          Characteristics = ["nonland"],
+          Characteristics = [Characteristic.Other("nonland")],
           Controller = ControllerFilter.Opponent,
         },
       },

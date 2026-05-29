@@ -77,23 +77,23 @@ internal static class ActivatedRuleHelpers
     ObjectFilter? filter = null;
     if (lower.Contains("another creature"))
     {
-      filter = new ObjectFilter { CardTypes = ["creature"], Characteristics = ["another"] };
+      filter = new ObjectFilter { CardTypes = ["creature"], Characteristics = [Characteristic.Other("another")] };
     }
     else if (lower.Contains("this creature") || lower.Contains("this permanent"))
     {
-      filter = new ObjectFilter { CardTypes = ["creature"], Characteristics = ["this permanent"] };
+      filter = new ObjectFilter { CardTypes = ["creature"], Characteristics = [Characteristic.Other("this permanent")] };
     }
     else if (lower.Contains("this artifact"))
     {
-      filter = new ObjectFilter { CardTypes = ["artifact"], Characteristics = ["this permanent"] };
+      filter = new ObjectFilter { CardTypes = ["artifact"], Characteristics = [Characteristic.Other("this permanent")] };
     }
     else if (lower.Contains("this enchantment"))
     {
-      filter = new ObjectFilter { CardTypes = ["enchantment"], Characteristics = ["this permanent"] };
+      filter = new ObjectFilter { CardTypes = ["enchantment"], Characteristics = [Characteristic.Other("this permanent")] };
     }
     else if (lower.Contains("this land"))
     {
-      filter = new ObjectFilter { CardTypes = ["land"], Characteristics = ["this permanent"] };
+      filter = new ObjectFilter { CardTypes = ["land"], Characteristics = [Characteristic.Other("this permanent")] };
     }
     else if (lower.Contains(" land") || lower.EndsWith("land"))
     {
@@ -108,7 +108,7 @@ internal static class ActivatedRuleHelpers
       // not a card type or subtype. Encodes as Characteristics: ["token"] to
       // match the gold convention and distinguish from typed-token costs like
       // "Sacrifice a creature token".
-      filter = new ObjectFilter { Characteristics = ["token"] };
+      filter = new ObjectFilter { Characteristics = [Characteristic.Other("token")] };
     }
     else if (lower.Contains("creature"))
     {
@@ -171,7 +171,7 @@ internal static class ActivatedRuleHelpers
           // self-ref shape.
           if (char.IsUpper(typeRaw[0]) && !wasPlural && !hasArticle)
           {
-            filter = new ObjectFilter { Characteristics = ["this permanent"] };
+            filter = new ObjectFilter { Characteristics = [Characteristic.Other("this permanent")] };
           }
           else
           {
@@ -282,7 +282,7 @@ internal static class ActivatedRuleHelpers
             CanBeBlockedBy = new ObjectFilter
             {
               CardTypes = ["creature"],
-              Characteristics = ["flying", "reach"],
+              Characteristics = [Characteristic.Keyword(KeywordAbility.Flying), Characteristic.Keyword(KeywordAbility.Reach)],
             },
           },
         ],

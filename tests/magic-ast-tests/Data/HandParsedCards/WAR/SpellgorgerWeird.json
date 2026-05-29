@@ -37,7 +37,7 @@
                 "spell"
               ],
               "Characteristics": [
-                "noncreature"
+                {"CharacteristicType": "other", "Description": "noncreature"}
               ],
               "Controller": "You"
             }

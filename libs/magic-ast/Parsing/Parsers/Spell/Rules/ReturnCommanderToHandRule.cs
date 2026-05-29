@@ -28,7 +28,7 @@ public sealed class ReturnCommanderToHandRule : ISpellRule
         Kind = ObjectReferenceKind.Designated,
         Filter = new ObjectFilter
         {
-          Characteristics = ["your commander"],
+          Characteristics = [Characteristic.Other("your commander")],
           Zone = Zone.CommandZone,
         },
       },

@@ -28,7 +28,7 @@
                 "Kind": "Each",
                 "Filter": {
                   "CardTypes": ["permanent"],
-                  "Characteristics": ["nonland"]
+                  "Characteristics": [{"CharacteristicType": "other", "Description": "nonland"}]
                 }
               }
             }

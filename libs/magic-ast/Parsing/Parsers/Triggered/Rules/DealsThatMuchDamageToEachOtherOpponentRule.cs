@@ -49,7 +49,7 @@ public sealed class DealsThatMuchDamageToEachOtherOpponentRule : ITriggeredRule
         Kind = ObjectReferenceKind.EachOpponent,
         Filter = new MagicAST.AST.References.ObjectFilter
         {
-          Characteristics = ["other"],
+          Characteristics = [Characteristic.Other("other")],
         },
       },
     };

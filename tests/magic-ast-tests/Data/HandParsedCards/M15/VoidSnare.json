@@ -36,7 +36,7 @@
                     "permanent"
                   ],
                   "Characteristics": [
-                    "nonland"
+                    {"CharacteristicType": "other", "Description": "nonland"}
                   ]
                 }
               }

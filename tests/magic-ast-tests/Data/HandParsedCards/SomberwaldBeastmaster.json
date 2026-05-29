@@ -126,7 +126,7 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    "token"
+                    {"CharacteristicType": "other", "Description": "token"}
                   ],
                   "Controller": "You"
                 }

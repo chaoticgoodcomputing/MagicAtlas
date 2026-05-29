@@ -73,7 +73,7 @@ public sealed class DestroyTargetColorDisjunctionRule : ISpellRule
     {
       CardTypes = [type],
       Colors = colors,
-      Characteristics = characteristics,
+      Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
     };
 
     effect = new DestroyEffect

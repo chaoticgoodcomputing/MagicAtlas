@@ -94,7 +94,7 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
             CanBeBlockedBy = new ObjectFilter
             {
               CardTypes = ["creature"],
-              Characteristics = ["flying", "reach"],
+              Characteristics = [Characteristic.Keyword(KeywordAbility.Flying), Characteristic.Keyword(KeywordAbility.Reach)],
             },
           },
         ],

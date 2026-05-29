@@ -211,7 +211,7 @@ internal static class SpellRuleHelpers
         Colors = colors,
         IsColorless = isColorless,
         IsMulticolored = isMulticolored,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -224,7 +224,7 @@ internal static class SpellRuleHelpers
       Colors = colors,
       IsColorless = isColorless,
       IsMulticolored = isMulticolored,
-      Characteristics = characteristics,
+      Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
     };
   }
 
@@ -301,7 +301,7 @@ internal static class SpellRuleHelpers
     return new ObjectFilter
     {
       CardTypes = cardTypes,
-      Characteristics = characteristics.Count > 0 ? characteristics : null,
+      Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
       Colors = colors,
       IsColorless = isColorless,
       IsMulticolored = isMulticolored,

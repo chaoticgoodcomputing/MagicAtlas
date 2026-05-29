@@ -27,7 +27,7 @@
                 "Kind": "Target",
                 "Filter": {
                   "CardTypes": ["spell"],
-                  "Characteristics": ["single target"]
+                  "Characteristics": [{"CharacteristicType": "other", "Description": "single target"}]
                 }
               }
             }

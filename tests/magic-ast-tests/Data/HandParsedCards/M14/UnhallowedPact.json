@@ -38,7 +38,7 @@
             "Event": "Dies",
             "Filter": {
               "CardTypes": ["creature"],
-              "Characteristics": ["enchanted"]
+              "Characteristics": [{"CharacteristicType": "other", "Description": "enchanted"}]
             }
           },
           "Effects": [

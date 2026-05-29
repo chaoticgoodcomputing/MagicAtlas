@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text;
 using MagicAST;
 using MagicAST.AST;
@@ -818,7 +819,7 @@ public static class MermaidEmitter
         if (filter.Supertypes is { Count: > 0 })
             parts.Add($"Supertypes: [{string.Join(",", filter.Supertypes)}]");
         if (filter.Characteristics is { Count: > 0 })
-            parts.Add($"Char: [{string.Join(",", filter.Characteristics)}]");
+            parts.Add($"Char: [{string.Join(",", filter.Characteristics.Select(c => c switch { KeywordCharacteristic k => k.Keyword.ToString(), OtherCharacteristic o => o.Description, _ => c.ToString() }))}]");
         if (filter.Controller.HasValue)
             parts.Add($"Ctrl: {filter.Controller}");
         return string.Join(" ", parts);

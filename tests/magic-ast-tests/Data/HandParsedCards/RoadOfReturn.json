@@ -59,7 +59,7 @@
                       "Kind": "Designated",
                       "Filter": {
                         "Characteristics": [
-                          "your commander"
+                          {"CharacteristicType": "other", "Description": "your commander"}
                         ],
                         "Zone": "CommandZone"
                       }

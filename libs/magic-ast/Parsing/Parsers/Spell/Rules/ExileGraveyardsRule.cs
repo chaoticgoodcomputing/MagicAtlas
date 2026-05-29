@@ -30,7 +30,7 @@ public sealed class ExileGraveyardsRule : ISpellRule
         {
           CardTypes = ["card"],
           Zone = Zone.Graveyard,
-          Characteristics = ["in any number of target players' graveyards"],
+          Characteristics = [Characteristic.Other("in any number of target players' graveyards")],
         },
       },
     };

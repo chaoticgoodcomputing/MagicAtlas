@@ -27,7 +27,7 @@
                 "Kind": "Target",
                 "Filter": {
                   "CardTypes": ["permanent"],
-                  "Characteristics": ["nonwhite"]
+                  "Characteristics": [{"CharacteristicType": "other", "Description": "nonwhite"}]
                 }
               }
             }

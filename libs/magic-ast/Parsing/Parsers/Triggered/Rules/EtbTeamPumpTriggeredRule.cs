@@ -169,7 +169,7 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
             CanBeBlockedBy = new ObjectFilter
             {
               CardTypes = ["creature"],
-              Characteristics = ["flying", "reach"],
+              Characteristics = [Characteristic.Keyword(KeywordAbility.Flying), Characteristic.Keyword(KeywordAbility.Reach)],
             },
           },
         ],

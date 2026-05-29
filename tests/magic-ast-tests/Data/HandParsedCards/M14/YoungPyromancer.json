@@ -38,8 +38,8 @@
                 "spell"
               ],
               "Characteristics": [
-                "instant",
-                "sorcery"
+                {"CharacteristicType": "other", "Description": "instant"},
+                {"CharacteristicType": "other", "Description": "sorcery"}
               ],
               "Controller": "You"
             }

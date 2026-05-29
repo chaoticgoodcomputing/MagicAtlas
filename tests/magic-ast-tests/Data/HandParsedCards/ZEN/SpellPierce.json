@@ -27,7 +27,7 @@
                 "Kind": "Target",
                 "Filter": {
                   "CardTypes": ["spell"],
-                  "Characteristics": ["noncreature"]
+                  "Characteristics": [{"CharacteristicType": "other", "Description": "noncreature"}]
                 }
               },
               "UnlessClause": {

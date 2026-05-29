@@ -42,8 +42,8 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  "artifact",
-                  "shares a color"
+                  {"CharacteristicType": "other", "Description": "artifact"},
+                  {"CharacteristicType": "other", "Description": "shares a color"}
                 ]
               }
             }

@@ -53,7 +53,7 @@
                     "planeswalker"
                   ],
                   "Characteristics": [
-                    "other"
+                    {"CharacteristicType": "other", "Description": "other"}
                   ]
                 }
               },

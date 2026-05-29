@@ -38,7 +38,7 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    "token"
+                    {"CharacteristicType": "other", "Description": "token"}
                   ],
                   "Controller": "You"
                 }
@@ -54,8 +54,8 @@
                         "creature"
                       ],
                       "Characteristics": [
-                        "flying",
-                        "reach"
+                        {"CharacteristicType": "keyword", "Keyword": "Flying"},
+                        {"CharacteristicType": "keyword", "Keyword": "Reach"}
                       ]
                     },
                     "IsOptional": false
@@ -97,7 +97,7 @@
               "CostType": "sacrifice",
               "Filter": {
                 "Characteristics": [
-                  "token"
+                  {"CharacteristicType": "other", "Description": "token"}
                 ]
               },
               "Quantity": {

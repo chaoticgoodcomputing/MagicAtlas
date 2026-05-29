@@ -262,7 +262,7 @@ public sealed class SpellAbilityParser : IAbilityParser
           Filter = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = ["another"],
+            Characteristics = [Characteristic.Other("another")],
           },
         },
         PowerModifier = LiteralQuantity.Of(p2),

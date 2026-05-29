@@ -58,7 +58,7 @@
                     "EffectType": "evasion",
                     "CanBeBlockedBy": {
                       "CardTypes": ["creature"],
-                      "Characteristics": ["flying", "reach"]
+                      "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
                     },
                     "IsOptional": false
                   }

@@ -41,8 +41,8 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  "flying",
-                  "reach"
+                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
+                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
                 ]
               },
               "IsOptional": false
@@ -71,7 +71,7 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    "other"
+                    {"CharacteristicType": "other", "Description": "other"}
                   ]
                 },
                 "Quantity": {

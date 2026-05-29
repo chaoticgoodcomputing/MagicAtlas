@@ -62,7 +62,7 @@
                 "Kind": "EachOpponent",
                 "Filter": {
                   "Characteristics": [
-                    "other"
+                    {"CharacteristicType": "other", "Description": "other"}
                   ]
                 }
               },

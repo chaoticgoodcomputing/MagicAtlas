@@ -224,7 +224,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
               {
                 CardTypes = ["creature"],
                 Controller = ControllerFilter.You,
-                Characteristics = ["with a +1/+1 counter"],
+                Characteristics = [Characteristic.Other("with a +1/+1 counter")],
               },
             },
             GainedAbility = counterGranted,
@@ -285,7 +285,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = isToken ? (IReadOnlyList<string>?)["token"] : null,
+          Characteristics = isToken ? (IReadOnlyList<Characteristic>?)[Characteristic.Other("token")] : null,
           Controller = ControllerFilter.You,
         },
       };
@@ -303,7 +303,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         {
           CardTypes = ["creature"],
           Subtypes = [subtype],
-          Characteristics = isToken ? (IReadOnlyList<string>?)["token"] : null,
+          Characteristics = isToken ? (IReadOnlyList<Characteristic>?)[Characteristic.Other("token")] : null,
           Controller = ControllerFilter.You,
         },
       };
@@ -374,7 +374,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         CardTypes = ["creature"],
         Colors = [colorCode],
         Controller = controller,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -386,7 +386,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
       {
         CardTypes = ["artifact", "creature"],
         Controller = controller,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -410,7 +410,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         {
           CardTypes = ["creature"],
           Controller = controller,
-          Characteristics = chars,
+          Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
         };
       }
     }
@@ -426,7 +426,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
       {
         CardTypes = ["creature"],
         Controller = controller,
-        Characteristics = chars,
+        Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -441,7 +441,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
       {
         CardTypes = ["creature"],
         Controller = controller,
-        Characteristics = chars,
+        Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -462,7 +462,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
           CardTypes = ["creature"],
           Subtypes = [subtype1, subtype2],
           Controller = controller,
-          Characteristics = characteristics,
+          Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
         };
       }
     }
@@ -481,7 +481,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         CardTypes = ["creature"],
         Subtypes = [subtype],
         Controller = controller,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -492,7 +492,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
       {
         CardTypes = ["creature"],
         Controller = controller,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 
@@ -507,7 +507,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         CardTypes = isOther ? (IReadOnlyList<string>?)["creature"] : null,
         Subtypes = [subtype],
         Controller = controller,
-        Characteristics = characteristics,
+        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
 

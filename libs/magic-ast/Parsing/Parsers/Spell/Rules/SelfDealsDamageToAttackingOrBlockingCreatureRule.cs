@@ -10,7 +10,7 @@ using MagicAST.AST.References;
 /// "[CardName] deals N damage to target attacking or blocking creature."
 /// — spell analogue of the activated <c>SelfDealsDamageToAttackingOrBlockingCreatureEffectRule</c>.
 /// The source is the spell itself (named; encoded as <see cref="ObjectReference.Self()"/>);
-/// the target is a creature filtered by Characteristics = ["attacking or blocking"].
+/// the target is a creature filtered by Characteristics = [Characteristic.Other("attacking or blocking")].
 /// Covers clean single-line instants/sorceries such as Divine Arrow and Cosmium Blast.
 /// </summary>
 [SpellRule]
@@ -62,7 +62,7 @@ public sealed class SelfDealsDamageToAttackingOrBlockingCreatureRule : ISpellRul
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = ["attacking or blocking"],
+          Characteristics = [Characteristic.Other("attacking or blocking")],
         },
       },
     };

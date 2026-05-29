@@ -109,7 +109,7 @@ public sealed class SpellCastConditionRule : ITriggerConditionRule
     var filter = new ObjectFilter
     {
       CardTypes = cardTypes,
-      Characteristics = characteristics.Count > 0 ? characteristics : null,
+      Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
       Colors = colors.Count > 0 ? colors : null,
       IsMulticolored = isMulticolored,
       Controller = controller,

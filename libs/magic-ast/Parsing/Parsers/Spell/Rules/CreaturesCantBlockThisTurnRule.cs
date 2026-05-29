@@ -11,7 +11,7 @@ using MagicAST.AST.References;
 ///   <item>
 ///     "Creatures without flying can't block this turn." (Falter, Cosmotronic Wave) —
 ///     emits a <see cref="CantBlockEffect"/> whose <see cref="CantBlockEffect.Target"/>
-///     references all creatures with <c>Characteristics = ["withoutFlying"]</c>.
+///     references all creatures with <c>Characteristics = [Characteristic.Other("withoutFlying")]</c>.
 ///   </item>
 ///   <item>
 ///     "Creatures can't block this turn." — emits a bare <see cref="CantBlockEffect"/>
@@ -55,7 +55,7 @@ public sealed class CreaturesCantBlockThisTurnRule : ISpellRule
           Filter = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = ["without" + char.ToUpperInvariant(keyword[0]) + keyword[1..]],
+            Characteristics = [Characteristic.FromLabel("without" + char.ToUpperInvariant(keyword[0]) + keyword[1..])],
           },
         },
         Duration = new UntilEndOfTurnDuration(),

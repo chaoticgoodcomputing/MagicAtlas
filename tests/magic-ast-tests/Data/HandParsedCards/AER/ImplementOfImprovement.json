@@ -31,7 +31,7 @@
               "CostType": "sacrifice",
               "Filter": {
                 "CardTypes": ["artifact"],
-                "Characteristics": ["this permanent"]
+                "Characteristics": [{"CharacteristicType": "other", "Description": "this permanent"}]
               },
               "Quantity": {
                 "QuantityType": "literal",

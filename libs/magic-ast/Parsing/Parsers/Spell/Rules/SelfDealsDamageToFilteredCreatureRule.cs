@@ -55,7 +55,7 @@ public sealed class SelfDealsDamageToFilteredCreatureRule : ISpellRule
         Filter = new ObjectFilter
         {
           CardTypes = [m.Groups["type"].Value.ToLowerInvariant()],
-          Characteristics = [m.Groups["chars"].Value.Trim()],
+          Characteristics = [Characteristic.FromLabel(m.Groups["chars"].Value.Trim())],
         },
       },
     };

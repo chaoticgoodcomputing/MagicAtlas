@@ -35,7 +35,7 @@ public sealed class FearKeyword : IKeyword
           CanBeBlockedBy = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = ["artifact", "black"],
+            Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("black")],
           },
         }],
       },
@@ -53,7 +53,7 @@ public sealed class FearKeyword : IKeyword
         CanBeBlockedBy = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = ["artifact", "black"],
+          Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("black")],
         },
       }],
       Reminder = reminder,

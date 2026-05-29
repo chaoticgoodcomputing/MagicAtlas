@@ -58,7 +58,7 @@ public sealed class WithKeywordAnthemModifyPTRule : IStaticRule
             {
               CardTypes = ["creature"],
               Controller = ControllerFilter.You,
-              Characteristics = ["other", kw],
+              Characteristics = [Characteristic.Other("other"), Characteristic.FromLabel(kw)],
             },
           },
           PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),

@@ -41,8 +41,8 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    "other",
-                    "tapped"
+                    {"CharacteristicType": "other", "Description": "other"},
+                    {"CharacteristicType": "other", "Description": "tapped"}
                   ]
                 }
               },

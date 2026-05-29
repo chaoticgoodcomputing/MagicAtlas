@@ -39,7 +39,7 @@ public sealed class FlyingKeyword : IKeyword
           CanBeBlockedBy = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = ["flying", "reach"],
+            Characteristics = [Characteristic.Keyword(KeywordAbility.Flying), Characteristic.Keyword(KeywordAbility.Reach)],
           },
         }],
       },
@@ -57,7 +57,7 @@ public sealed class FlyingKeyword : IKeyword
         CanBeBlockedBy = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = ["flying", "reach"],
+          Characteristics = [Characteristic.Keyword(KeywordAbility.Flying), Characteristic.Keyword(KeywordAbility.Reach)],
         },
       }],
       Reminder = reminder,

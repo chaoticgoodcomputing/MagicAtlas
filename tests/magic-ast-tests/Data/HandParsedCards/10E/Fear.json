@@ -60,8 +60,8 @@
                         "creature"
                       ],
                       "Characteristics": [
-                        "artifact",
-                        "black"
+                        {"CharacteristicType": "other", "Description": "artifact"},
+                        {"CharacteristicType": "other", "Description": "black"}
                       ]
                     },
                     "IsOptional": false

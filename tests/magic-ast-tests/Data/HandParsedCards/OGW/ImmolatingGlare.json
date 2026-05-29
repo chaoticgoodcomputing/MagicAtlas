@@ -27,7 +27,7 @@
                 "Kind": "Target",
                 "Filter": {
                   "CardTypes": ["creature"],
-                  "Characteristics": ["attacking"]
+                  "Characteristics": [{"CharacteristicType": "other", "Description": "attacking"}]
                 }
               }
             }

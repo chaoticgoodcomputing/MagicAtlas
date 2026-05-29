@@ -35,7 +35,7 @@ public sealed class ChangeTargetRule : ISpellRule
         Filter = new()
         {
           CardTypes = ["spell"],
-          Characteristics = ["single target"],
+          Characteristics = [Characteristic.Other("single target")],
         },
       },
     };

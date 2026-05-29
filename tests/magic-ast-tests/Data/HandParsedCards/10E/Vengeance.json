@@ -27,7 +27,7 @@
                 "Kind": "Target",
                 "Filter": {
                   "CardTypes": ["creature"],
-                  "Characteristics": ["tapped"]
+                  "Characteristics": [{"CharacteristicType": "other", "Description": "tapped"}]
                 }
               }
             }

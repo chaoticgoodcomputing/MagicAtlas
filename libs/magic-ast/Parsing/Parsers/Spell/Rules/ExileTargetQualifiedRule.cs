@@ -50,7 +50,7 @@ public sealed class ExileTargetQualifiedRule : ISpellRule
           Filter = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = [state.Groups["state"].Value.ToLowerInvariant()],
+            Characteristics = [Characteristic.FromLabel(state.Groups["state"].Value.ToLowerInvariant())],
           },
         },
       };

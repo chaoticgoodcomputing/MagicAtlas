@@ -49,7 +49,7 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    "with a +1/+1 counter"
+                    {"CharacteristicType": "other", "Description": "with a +1/+1 counter"}
                   ]
                 }
               },

@@ -165,7 +165,7 @@ public sealed class CantBeBlockedRule : IStaticRule
               BlockedByFilter = new ObjectFilter
               {
                 CardTypes = ["creature"],
-                Characteristics = ["with power less than this creature's power"],
+                Characteristics = [Characteristic.Other("with power less than this creature's power")],
               },
             },
           ],

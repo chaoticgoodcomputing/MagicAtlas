@@ -69,7 +69,7 @@
                       "Filter": {
                         "CardTypes": ["card"],
                         "Zone": "Graveyard",
-                        "Characteristics": ["in any number of target players' graveyards"]
+                        "Characteristics": [{"CharacteristicType": "other", "Description": "in any number of target players' graveyards"}]
                       }
                     }
                   }

@@ -42,7 +42,7 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  "shadow"
+                  {"CharacteristicType": "keyword", "Keyword": "Shadow"}
                 ]
               }
             }

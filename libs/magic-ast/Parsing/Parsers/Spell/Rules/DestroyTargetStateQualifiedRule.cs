@@ -51,7 +51,7 @@ public sealed class DestroyTargetStateQualifiedRule : ISpellRule
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = [state],
+          Characteristics = [Characteristic.FromLabel(state)],
         },
       },
     };

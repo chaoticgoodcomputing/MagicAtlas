@@ -20,7 +20,7 @@ public sealed class BecomesCrewedConditionRule : ITriggerConditionRule
     ObjectFilter? filter = null;
     if (lower.Contains("this vehicle"))
     {
-      filter = new ObjectFilter { Characteristics = ["this Vehicle"] };
+      filter = new ObjectFilter { Characteristics = [Characteristic.Other("this Vehicle")] };
     }
 
     return new TriggerCondition
