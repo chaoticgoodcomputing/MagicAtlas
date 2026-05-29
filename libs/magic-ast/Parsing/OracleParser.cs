@@ -62,10 +62,13 @@ public sealed class OracleParser
       abilities.AddRange(clauseAbilities);
       diagnostics.AddRange(clauseDiagnostics);
 
-      // Count parsed vs failed abilities
+      // Count parsed vs failed abilities. An ability is a failure if it IS an
+      // UnparsedAbility OR contains any nested IUnparsed node (e.g. an
+      // UnparsedEffect): a buried parse failure must not let the ability — or the
+      // card — report as fully parsed (ADR 0001 goal a).
       foreach (var ability in clauseAbilities)
       {
-        if (ability is UnparsedAbility)
+        if (ResidualWalker.CollectUnparsed(ability).Count > 0)
         {
           failedCount++;
         }

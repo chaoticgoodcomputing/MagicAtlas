@@ -1,6 +1,8 @@
 using Flowthru.Step;
 using MagicAST;
+using MagicAST.AST;
 using MagicAST.AST.Abilities;
+using MagicAST.Analysis;
 using MagicAST.Parsing;
 using MagicAtlas.Ast.Tests.Data._02_Intermediate.Schemas;
 using MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
@@ -56,10 +58,13 @@ public static class ParseCorpusStep
     var result = parser.Parse(oracleText);
     var abilities = result.Output.Abilities;
     var totalAbilities = abilities.Count;
-    var parsedAbilities = abilities.Count(a => a is not UnparsedAbility);
+    // An ability counts as parsed only if it contains NO unparsed node at any
+    // depth: a nested UnparsedEffect is still a parse failure (ADR 0001 goal a),
+    // so an ability hiding one no longer passes as fully parsed.
+    var parsedAbilities = abilities.Count(a => ResidualWalker.CollectUnparsed(a).Count == 0);
 
-    var unparsed = abilities.OfType<UnparsedAbility>().ToList();
-    var lines = AttributeLines(oracleText, unparsed);
+    var unparsedNodes = ResidualWalker.CollectUnparsed(result.Output);
+    var lines = AttributeLines(oracleText, unparsedNodes);
 
     return new ParseRecord
     {
@@ -109,7 +114,7 @@ public static class ParseCorpusStep
   /// </remarks>
   private static IReadOnlyList<LineOutcome> AttributeLines(
     string oracleText,
-    IReadOnlyList<UnparsedAbility> unparsed
+    IReadOnlyList<IUnparsed> unparsed
   )
   {
     var outcomes = new List<LineOutcome>();
@@ -131,13 +136,18 @@ public static class ParseCorpusStep
       var patterns = new List<string>();
       var diagnostics = new List<LineDiagnostic>();
 
-      foreach (var ua in unparsed)
+      foreach (var node in unparsed)
       {
-        var spanStart = ua.SourceSpan.Start;
-        var spanEnd = ua.SourceSpan.Start + ua.SourceSpan.Length;
+        var spanStart = node.SourceSpan.Start;
+        var spanEnd = node.SourceSpan.Start + node.SourceSpan.Length;
         // Half-open overlap: the span touches this line iff it starts before the
         // line ends AND ends after the line starts.
-        if (spanStart < end && spanEnd > start)
+        if (spanStart >= end || spanEnd <= start)
+        {
+          continue;
+        }
+
+        if (node is UnparsedAbility ua && ua.Diagnostics.Count > 0)
         {
           foreach (var d in ua.Diagnostics)
           {
@@ -152,6 +162,23 @@ public static class ParseCorpusStep
               }
             );
           }
+        }
+        else
+        {
+          // Nested failures (UnparsedEffect) and any IUnparsed without diagnostics:
+          // synthesize a coarse pattern from the node type. The lexical-template
+          // clusterer breaks these into buildable families by oracle text — the
+          // pattern is only the "where it fails" annotation.
+          var pattern = node.GetType().Name;
+          patterns.Add(pattern);
+          diagnostics.Add(
+            new LineDiagnostic
+            {
+              Pattern = pattern,
+              LastAttemptedRule = null,
+              FailurePosition = node.SourceSpan.Start,
+            }
+          );
         }
       }
 

@@ -33,6 +33,77 @@ public static class ResidualWalker
     return new AstDebt(residuals, unparsed);
   }
 
+  /// <summary>
+  /// Collects every <see cref="IUnparsed"/> node reachable from <paramref name="root"/>,
+  /// at any depth — for propagating parse failures (e.g. a nested
+  /// <c>UnparsedEffect</c>) back to the oracle lines they cover so those lines
+  /// fail triage rather than silently passing inside a classified ability.
+  /// </summary>
+  public static IReadOnlyList<IUnparsed> CollectUnparsed(object? root)
+  {
+    var found = new List<IUnparsed>();
+    CollectWalk(root, found);
+    return found;
+  }
+
+  private static void CollectWalk(object? node, List<IUnparsed> found)
+  {
+    if (node is null)
+    {
+      return;
+    }
+
+    if (node is IUnparsed unparsed)
+    {
+      found.Add(unparsed);
+    }
+
+    foreach (var prop in PropsOf(node.GetType()))
+    {
+      object? value;
+      try
+      {
+        value = prop.GetValue(node);
+      }
+      catch
+      {
+        continue;
+      }
+
+      if (value is not null)
+      {
+        CollectDescend(value, found);
+      }
+    }
+  }
+
+  private static void CollectDescend(object value, List<IUnparsed> found)
+  {
+    if (value is string)
+    {
+      return;
+    }
+
+    if (value is IEnumerable sequence)
+    {
+      foreach (var item in sequence)
+      {
+        if (item is not null)
+        {
+          CollectDescend(item, found);
+        }
+      }
+
+      return;
+    }
+
+    var type = value.GetType();
+    if (type.Assembly == _astAssembly && type is { IsEnum: false, IsValueType: false })
+    {
+      CollectWalk(value, found);
+    }
+  }
+
   private static void Walk(
     object? node,
     Dictionary<string, int> residuals,

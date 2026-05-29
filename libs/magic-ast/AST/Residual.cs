@@ -33,7 +33,15 @@ public interface IResidual { }
 /// marker is that signal.
 /// </para>
 /// </summary>
-public interface IUnparsed { }
+public interface IUnparsed
+{
+  /// <summary>
+  /// Location of the unparsed node in the original oracle text — used to
+  /// attribute the failure back to the oracle line(s) it covers so they fail
+  /// triage, however deep the node sits.
+  /// </summary>
+  TextSpan SourceSpan { get; }
+}
 
 /// <summary>
 /// Marks a string-valued property that carries free text inside an otherwise

@@ -154,7 +154,9 @@ public sealed record CardParseMetrics
   public required int ParsedAbilities { get; init; }
 
   /// <summary>
-  /// Number of abilities that fell back to UnparsedAbility.
+  /// Number of abilities that did not fully parse — an <c>UnparsedAbility</c> or
+  /// any ability carrying a nested <c>IUnparsed</c> node (e.g. an
+  /// <c>UnparsedEffect</c>). Rule 0001 goal (a): buried failures count as failures.
   /// </summary>
   public required int FailedAbilities { get; init; }
 
