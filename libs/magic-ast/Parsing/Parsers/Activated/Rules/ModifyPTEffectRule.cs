@@ -83,6 +83,30 @@ public sealed class ModifyPTEffectRule : IActivatedEffectRule
       };
     }
 
+    // Shape D: "Creatures you control get <mod>/<mod> until end of turn" — team pump.
+    // CR 613.4c: "Layer 7c: Effects and counters that modify power and/or toughness (but don't
+    // set power and/or toughness to a specific number or value) are applied."
+    // Subject is each creature the controller controls; no targeting is involved.
+    var teamEotMatch = Regex.Match(
+      trimmed,
+      $@"^Creatures\s+you\s+control\s+get\s+{pGroup}/{tGroup}\s+until\s+end\s+of\s+turn$",
+      RegexOptions.IgnoreCase
+    );
+    if (teamEotMatch.Success)
+    {
+      return new ModifyPTEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Each,
+          Filter = new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You },
+        },
+        PowerModifier = ActivatedRuleHelpers.ParseSignedModifier(teamEotMatch.Groups["p"].Value),
+        ToughnessModifier = ActivatedRuleHelpers.ParseSignedModifier(teamEotMatch.Groups["t"].Value),
+        Duration = new UntilEndOfTurnDuration(),
+      };
+    }
+
     return null;
   }
 }
