@@ -47,6 +47,16 @@ public sealed class TapEffectRule : IActivatedEffectRule
         count = LiteralQuantity.Of(n);
       }
     }
+    else if (restLower.StartsWith("enchanted "))
+    {
+      // "Tap enchanted <type>" — CR 701.26a: tap the permanent this Aura is attached to.
+      // The attached object is referenced as EnchantedOrEquipped (no target keyword; not a
+      // targeted ability — the Aura is already attached at activation time).
+      return new TapEffect
+      {
+        Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+      };
+    }
     else if (!restLower.StartsWith("target"))
     {
       // We can't recognize what's between "tap" and "target" — bail.
