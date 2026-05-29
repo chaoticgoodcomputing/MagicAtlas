@@ -1,0 +1,95 @@
+{
+  "Input": {
+    "Name": "Brittle Effigy",
+    "ManaCost": "{1}",
+    "TypeLine": "Artifact",
+    "OracleText": "{4}, {T}, Exile this artifact: Exile target creature.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "d492418e-fce9-4333-85e7-004a06546b3c",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Brittle Effigy",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "{4}, {T}, Exile this artifact: Exile target creature.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 4
+                }
+              ]
+            },
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "exile",
+              "Filter": {
+                "CardTypes": ["artifact"],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "this permanent"
+                  }
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "FromZone": "Battlefield"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              },
+              "IsOptional": false
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
