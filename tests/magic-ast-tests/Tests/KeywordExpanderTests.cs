@@ -36,8 +36,8 @@ public class KeywordExpanderTests
 
       var evasion = (EvasionEffect)staticAbility.Effects[0];
       Assert.That(evasion.CanBeBlockedBy, Is.Not.Null);
-      Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item(Characteristic.Keyword(KeywordAbility.Flying)));
-      Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item(Characteristic.Keyword(KeywordAbility.Reach)));
+      Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item(Characteristic.HasKeyword(KeywordAbility.Flying)));
+      Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item(Characteristic.HasKeyword(KeywordAbility.Reach)));
   }
 
   [Test]

@@ -18,6 +18,7 @@ public sealed record LoseAbilityEffect : Effect, IOptionalEffect, IDurativeEffec
   /// <summary>
   /// The ability text that is lost, or "all abilities"
   /// </summary>
+  [FreeTextField]
   public required string AbilityText { get; init; }
 
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>

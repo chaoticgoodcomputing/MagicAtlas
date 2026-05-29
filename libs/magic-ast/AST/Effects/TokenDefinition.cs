@@ -53,6 +53,7 @@ public sealed record TokenDefinition
   /// <summary>
   /// Raw ability text if abilities aren't fully parsed.
   /// </summary>
+  [FreeTextField]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? AbilityText { get; init; }
 

@@ -1,5 +1,6 @@
 namespace MagicAST;
 
+using System.Linq;
 using System.Text.Json.Serialization;
 using MagicAST.AST;
 using MagicAST.Diagnostics;
@@ -75,7 +76,20 @@ public sealed record ParseMetrics
   public required double DurationMs { get; init; }
 
   /// <summary>
+  /// Residual-debt tally for this parse (ADR 0001 forcing-function): free-text
+  /// residuals reachable in the AST, keyed by kind — an <c>IResidual</c> node's
+  /// type name, or <c>Type.Field</c> for a <c>[FreeTextField]</c>. Empty when the
+  /// AST carries no residual debt. Distinct from <see cref="FailedAbilities"/>,
+  /// which counts total ability-level parse failures; residuals are the
+  /// not-yet-structured debt hiding inside otherwise-parsed ASTs.
+  /// </summary>
+  public required IReadOnlyDictionary<string, int> ResidualCounts { get; init; }
+
+  /// <summary>
   /// Percentage of abilities successfully parsed.
   /// </summary>
   public double SuccessRate => TotalAbilities == 0 ? 0 : (double)ParsedAbilities / TotalAbilities;
+
+  /// <summary>Total residual occurrences across all kinds.</summary>
+  public int ResidualTotal => ResidualCounts.Values.Sum();
 }

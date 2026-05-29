@@ -1,7 +1,9 @@
 namespace MagicAST.Parsing;
 
 using System.Diagnostics;
+using System.Linq;
 using MagicAST.AST;
+using MagicAST.Analysis;
 using MagicAST.Diagnostics;
 
 /// <summary>
@@ -82,6 +84,9 @@ public sealed class CardParser
         FailedAbilities = oracleResult.Metrics.FailedAbilities,
         DurationMs = stopwatch.Elapsed.TotalMilliseconds,
         FaceCount = faces?.Count ?? 0,
+        // Walk the whole output (main oracle + every face) so residual debt is
+        // counted card-wide in one pass.
+        ResidualCounts = ResidualWalker.Count(output),
       },
     };
   }
@@ -162,4 +167,13 @@ public sealed record CardParseMetrics
   /// Number of faces parsed (0 for single-faced cards).
   /// </summary>
   public required int FaceCount { get; init; }
+
+  /// <summary>
+  /// Card-wide residual-debt tally (ADR 0001), counted across the main oracle
+  /// and every face. Keyed by kind; see <see cref="ParseMetrics.ResidualCounts"/>.
+  /// </summary>
+  public required IReadOnlyDictionary<string, int> ResidualCounts { get; init; }
+
+  /// <summary>Total residual occurrences across all kinds.</summary>
+  public int ResidualTotal => ResidualCounts.Values.Sum();
 }

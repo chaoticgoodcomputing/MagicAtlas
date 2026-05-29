@@ -35,6 +35,30 @@ public partial record ParseRecord
 
   /// <summary>Per-line outcomes, in oracle-text order. Empty if the card has no oracle text.</summary>
   public required IReadOnlyList<LineOutcome> Lines { get; init; }
+
+  /// <summary>
+  /// Residual-debt tally for this card's parse (ADR 0001 forcing-function): the
+  /// not-yet-structured free-text residuals reachable in the AST, keyed by kind.
+  /// Empty when the card carries no residual debt. Distinct from the per-line
+  /// <c>Diagnostics</c>, which track total parse failures; residuals hide inside
+  /// otherwise-parsed ASTs and would otherwise be invisible to triage.
+  /// </summary>
+  public required IReadOnlyList<ResidualKindCount> Residuals { get; init; }
+}
+
+/// <summary>
+/// One residual-debt kind and its occurrence count — an <c>IResidual</c> node's
+/// type name (e.g. <c>OtherCharacteristic</c>) or a <c>[FreeTextField]</c> keyed
+/// as <c>Type.Field</c> (e.g. <c>SpellAbility.Instructions</c>). See ADR 0001.
+/// </summary>
+[FlowthruSchema]
+public partial record ResidualKindCount
+{
+  /// <summary>Residual kind: <c>IResidual</c> type name, or <c>Type.Field</c> for a free-text field.</summary>
+  public required string Kind { get; init; }
+
+  /// <summary>Occurrence count for this kind in the scope (one card, or corpus-wide when aggregated).</summary>
+  public required int Count { get; init; }
 }
 
 /// <summary>

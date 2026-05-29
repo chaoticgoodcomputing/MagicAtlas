@@ -35,7 +35,7 @@ public sealed class ShadowKeyword : IKeyword
           CanBeBlockedBy = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics = [Characteristic.Keyword(KeywordAbility.Shadow)],
+            Characteristics = [Characteristic.HasKeyword(KeywordAbility.Shadow)],
           },
         }],
       },
@@ -53,7 +53,7 @@ public sealed class ShadowKeyword : IKeyword
         CanBeBlockedBy = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = [Characteristic.Keyword(KeywordAbility.Shadow)],
+          Characteristics = [Characteristic.HasKeyword(KeywordAbility.Shadow)],
         },
       }],
       Reminder = reminder,

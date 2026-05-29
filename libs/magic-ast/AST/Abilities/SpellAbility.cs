@@ -22,6 +22,7 @@ public sealed record SpellAbility : Ability
   /// <summary>
   /// Optional instructions that modify how the spell can be cast or resolved.
   /// </summary>
+  [FreeTextField]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? Instructions { get; init; }
 }

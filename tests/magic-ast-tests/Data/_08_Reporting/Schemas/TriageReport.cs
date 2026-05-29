@@ -1,5 +1,6 @@
 using Flowthru.Data.Schema;
 using MagicAST;
+using MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
 
 namespace MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
 
@@ -135,6 +136,19 @@ public partial record GlobalMetrics
   public required CoverageStat AbilityCoverage { get; init; }
   public required int DistinctUnresolvedPatterns { get; init; }
   public required CoverageStat HandParsedCoverage { get; init; }
+
+  /// <summary>
+  /// Corpus-wide residual debt (ADR 0001 forcing-function): not-yet-structured
+  /// free-text residuals across all parsed ASTs, by kind, descending. A visible,
+  /// trending number so the typed residual arms (<c>OtherCharacteristic</c>,
+  /// <c>OtherHistoryPredicate</c>, …) and free-text fields don't quietly become
+  /// junk drawers. Should trend DOWN as follow-up batches carve residuals into
+  /// structured variants.
+  /// </summary>
+  public required IReadOnlyList<ResidualKindCount> ResidualDebt { get; init; }
+
+  /// <summary>Total residual occurrences across all kinds, corpus-wide.</summary>
+  public required int TotalResidualDebt { get; init; }
 }
 
 /// <summary>A passing-out-of-total ratio plus its percent form.</summary>

@@ -35,6 +35,7 @@ public sealed record TriggeredAbility : Ability
   /// <summary>
   /// Optional instructions or restrictions on the triggered ability.
   /// </summary>
+  [FreeTextField]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? Instructions { get; init; }
 

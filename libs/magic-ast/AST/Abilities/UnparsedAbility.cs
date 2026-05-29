@@ -9,7 +9,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// Always contains the raw text and diagnostics explaining the failure.
 /// </summary>
 [OracleAbility("unparsed")]
-public sealed record UnparsedAbility : Ability
+public sealed record UnparsedAbility : Ability, IUnparsed
 {
   [JsonIgnore]
   public override AbilityKind AbilityKind => AbilityKind.Unparsed;

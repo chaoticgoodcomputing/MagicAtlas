@@ -154,7 +154,7 @@ public sealed class ModifyPTAndGainKeywordControlledSpellRule : ISpellRule, IMul
             CanBeBlockedBy = new ObjectFilter
             {
               CardTypes = ["creature"],
-              Characteristics = [Characteristic.Keyword(KeywordAbility.Flying), Characteristic.Keyword(KeywordAbility.Reach)],
+              Characteristics = [Characteristic.HasKeyword(KeywordAbility.Flying), Characteristic.HasKeyword(KeywordAbility.Reach)],
             },
           },
         ],

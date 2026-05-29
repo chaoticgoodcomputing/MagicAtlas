@@ -11,7 +11,7 @@ using MagicAST.AST.Effects.Traits;
 /// An effect that couldn't be parsed.
 /// </summary>
 [OracleEffect("unparsed")]
-public sealed record UnparsedEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+public sealed record UnparsedEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect, IUnparsed
 {
   /// <summary>
   /// Location of this unparsed effect in the original oracle text.

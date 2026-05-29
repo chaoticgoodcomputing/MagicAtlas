@@ -73,6 +73,15 @@ public static class AggregateTriageReportStep
       var totalAbilities = all.Sum(r => r.TotalAbilities);
       var parsedAbilities = all.Sum(r => r.ParsedAbilities);
 
+      // Corpus-wide residual debt (ADR 0001), aggregated by kind, descending.
+      var residualDebt = all.SelectMany(r => r.Residuals)
+        .GroupBy(rc => rc.Kind, StringComparer.Ordinal)
+        .Select(g => new ResidualKindCount { Kind = g.Key, Count = g.Sum(x => x.Count) })
+        .OrderByDescending(rc => rc.Count)
+        .ThenBy(rc => rc.Kind, StringComparer.Ordinal)
+        .ToList();
+      var totalResidualDebt = residualDebt.Sum(rc => rc.Count);
+
       // (pattern, rule) -> line ids (using identity of (cardId, lineIndex))
       var keyToLineIds = new Dictionary<GapKey, HashSet<(string, int)>>();
       // (pattern, rule) -> card ids
@@ -302,6 +311,8 @@ public static class AggregateTriageReportStep
           AbilityCoverage = StatOf(parsedAbilities, totalAbilities),
           DistinctUnresolvedPatterns = distinctPatterns,
           HandParsedCoverage = ratchet,
+          ResidualDebt = residualDebt,
+          TotalResidualDebt = totalResidualDebt,
         },
         TopYieldClusters = topYieldClusters,
         TopGaps = topGaps,

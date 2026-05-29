@@ -37,6 +37,7 @@ public sealed record DealtDamageByPredicate : HistoryPredicate
   /// Free-text timeframe descriptor — "this turn", "since your last turn",
   /// "this combat", etc. Structured timeframes can be added later.
   /// </summary>
+  [FreeTextField]
   public required string Timeframe { get; init; }
 }
 
@@ -55,6 +56,7 @@ public sealed record CrewedPredicate : HistoryPredicate
   /// <summary>
   /// Free-text timeframe descriptor.
   /// </summary>
+  [FreeTextField]
   public required string Timeframe { get; init; }
 }
 
@@ -64,7 +66,7 @@ public sealed record CrewedPredicate : HistoryPredicate
 /// prefer a structured concrete predicate when the shape recurs.
 /// </summary>
 [HistoryPredicateKind("other")]
-public sealed record OtherHistoryPredicate : HistoryPredicate
+public sealed record OtherHistoryPredicate : HistoryPredicate, IResidual
 {
   /// <summary>
   /// The literal predicate phrase from the oracle text.

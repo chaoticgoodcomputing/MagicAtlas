@@ -3,6 +3,7 @@ namespace MagicAST.Parsing;
 using System.Diagnostics;
 using MagicAST.AST;
 using MagicAST.AST.Abilities;
+using MagicAST.Analysis;
 using MagicAST.Diagnostics;
 using MagicAST.Parsing.Tokens;
 
@@ -42,6 +43,7 @@ public sealed class OracleParser
           ParsedAbilities = 0,
           FailedAbilities = 0,
           DurationMs = stopwatch.Elapsed.TotalMilliseconds,
+          ResidualCounts = new Dictionary<string, int>(),
         },
       };
     }
@@ -79,9 +81,11 @@ public sealed class OracleParser
     // Determine overall status
     var status = DetermineStatus(parsedCount, failedCount);
 
+    var output = new CardOracle { RawText = oracleText, Abilities = abilities };
+
     return new ParseResult
     {
-      Output = new CardOracle { RawText = oracleText, Abilities = abilities },
+      Output = output,
       Status = status,
       Diagnostics = diagnostics,
       Metrics = new ParseMetrics
@@ -90,6 +94,7 @@ public sealed class OracleParser
         ParsedAbilities = parsedCount,
         FailedAbilities = failedCount,
         DurationMs = stopwatch.Elapsed.TotalMilliseconds,
+        ResidualCounts = ResidualWalker.Count(output),
       },
     };
   }

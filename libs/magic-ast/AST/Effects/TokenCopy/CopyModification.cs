@@ -55,5 +55,6 @@ public sealed record AbilityAdder : CopyModification
   /// <summary>
   /// The ability text gained, e.g. "flying", "haste".
   /// </summary>
+  [FreeTextField]
   public required string AbilityText { get; init; }
 }

@@ -183,7 +183,7 @@ internal static class TriggeredRuleHelpers
         CanBeBlockedBy = new MagicAST.AST.References.ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = [Characteristic.Keyword(KeywordAbility.Flying), Characteristic.Keyword(KeywordAbility.Reach)],
+          Characteristics = [Characteristic.HasKeyword(KeywordAbility.Flying), Characteristic.HasKeyword(KeywordAbility.Reach)],
         },
       },
       "vigilance" => new MagicAST.AST.Effects.Keyword.VigilanceEffect(),

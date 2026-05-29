@@ -48,6 +48,7 @@ public static class ParseCorpusStep
         TotalAbilities = 0,
         ParsedAbilities = 0,
         Lines = new List<LineOutcome>(),
+        Residuals = new List<ResidualKindCount>(),
       };
     }
 
@@ -68,6 +69,9 @@ public static class ParseCorpusStep
       TotalAbilities = totalAbilities,
       ParsedAbilities = parsedAbilities,
       Lines = lines,
+      Residuals = result
+        .Metrics.ResidualCounts.Select(kv => new ResidualKindCount { Kind = kv.Key, Count = kv.Value })
+        .ToList(),
     };
   }
 

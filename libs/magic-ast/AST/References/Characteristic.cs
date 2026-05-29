@@ -41,8 +41,8 @@ public abstract record Characteristic
       _ => new OtherCharacteristic { Description = label },
     };
 
-  /// <summary>A keyword-ability constraint. Terse construction at parser sites.</summary>
-  public static KeywordCharacteristic Keyword(KeywordAbility keyword) => new() { Keyword = keyword };
+  /// <summary>A keyword-ability constraint ("has [keyword]"). Terse construction at parser sites.</summary>
+  public static KeywordCharacteristic HasKeyword(KeywordAbility keyword) => new() { Keyword = keyword };
 
   /// <summary>The typed residual for a not-yet-structured characteristic phrase.</summary>
   public static OtherCharacteristic Other(string description) => new() { Description = description };
@@ -67,7 +67,7 @@ public sealed record KeywordCharacteristic : Characteristic
 /// when the shape recurs.
 /// </summary>
 [CharacteristicKind("other")]
-public sealed record OtherCharacteristic : Characteristic
+public sealed record OtherCharacteristic : Characteristic, IResidual
 {
   /// <summary>The literal characteristic phrase from the oracle text.</summary>
   public required string Description { get; init; }
