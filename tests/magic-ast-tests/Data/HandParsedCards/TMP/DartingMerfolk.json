@@ -1,0 +1,89 @@
+{
+  "Input": {
+    "Name": "Darting Merfolk",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Creature — Merfolk",
+    "OracleText": "{U}: Return this creature to its owner's hand.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "438e15f7-59bb-4047-af1f-ef92cc1866b8",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Darting Merfolk",
+    "TypeLine": {
+      "Raw": "Creature — Merfolk",
+      "Types": ["Creature"],
+      "Subtypes": ["Merfolk"]
+    },
+    "Oracle": {
+      "RawText": "{U}: Return this creature to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": ["U"]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
