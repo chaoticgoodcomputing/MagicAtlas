@@ -12,6 +12,17 @@ using MagicAST.AST.Effects.Resource;
 [ActivatedEffectRule(Priority = 1000)]
 public sealed class AddManaEffectRule : IActivatedEffectRule
 {
+  // SCALING / SEQUENTIAL / RESTRICTED mana clauses this rule does NOT model.
+  // The Mana scalar is a mana EXPRESSION (symbols + "or"/commas), not prose; left
+  // unguarded the trailing clause was silently swallowed into Mana with no unparsed
+  // node and no residual — false coverage that inflates triage directYield. Match →
+  // return null so the line falls to UnparsedEffect and surfaces as an honest,
+  // pickable family (scaling-mana "for each X" / restricted-mana "Spend only to Y").
+  private static readonly Regex UnmodeledManaClause = new(
+    @"\bfor\s+each\b|\bfor\s+every\b|,?\s*then\s+add\b|\bspend\s+this\s+mana\s+only\b|\buntil\s+end\s+of\s+turn\b",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
   public Effect? TryMatch(string effectText)
   {
     // Normalize whitespace
@@ -54,8 +65,15 @@ public sealed class AddManaEffectRule : IActivatedEffectRule
       };
     }
 
-    // The mana text should be a sequence of mana symbols like "{G}" or "{C}{C}{C}".
+    // The mana text should be a sequence of mana symbols like "{G}" or "{C}{C}{C}",
+    // optionally a colour CHOICE ("{R} or {G}", "{W}, {B}, or {G}").
     if (string.IsNullOrWhiteSpace(manaText) || !manaText.Contains('{'))
+    {
+      return null;
+    }
+
+    // Bail on scaling / sequential / restricted mana (see UnmodeledManaClause).
+    if (UnmodeledManaClause.IsMatch(manaText))
     {
       return null;
     }
