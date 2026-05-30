@@ -89,7 +89,7 @@ public sealed class GainControlTriggeredRule : ITriggeredRule
       filter = filter with { Controller = ControllerFilter.Opponent };
     }
 
-    Duration? duration = hasUntilEndOfTurn ? new UntilEndOfTurnDuration() : null;
+    Duration? duration = hasUntilEndOfTurn ? UntilTimeDuration.EndOfTurn : null;
 
     effect = new GainControlEffect
     {

@@ -17,7 +17,7 @@ public sealed record TriggerCondition
   /// <summary>
   /// The event that causes this to trigger.
   /// </summary>
-  public required TriggerEvent Event { get; init; }
+  public required TriggerOccurrence Event { get; init; }
 
   /// <summary>
   /// Optional filter for objects involved in the trigger.
@@ -152,27 +152,9 @@ public enum TriggerEvent
   /// <summary>A spell or ability targets something</summary>
   BecomesTarget,
 
-  // Phase/step triggers
-  /// <summary>Beginning of upkeep</summary>
-  BeginningOfUpkeep,
-
-  /// <summary>Beginning of draw step</summary>
-  BeginningOfDrawStep,
-
-  /// <summary>Beginning of precombat main phase (first main phase)</summary>
-  BeginningOfPreCombatMainPhase,
-
-  /// <summary>Beginning of postcombat main phase (second main phase)</summary>
-  BeginningOfPostCombatMainPhase,
-
-  /// <summary>Beginning of combat</summary>
-  BeginningOfCombat,
-
-  /// <summary>Beginning of end step</summary>
-  BeginningOfEndStep,
-
-  /// <summary>End of turn</summary>
-  EndOfTurn,
+  // Phase/step triggers — the clock points moved to GameTime (ADR 0002); a
+  // time-trigger is now TriggerCondition.Event = TimeOccurrence(GameTime{...}),
+  // e.g. "at the beginning of your upkeep" → { Part: Upkeep, Edge: Beginning, Whose: You }.
 
   // State change triggers
   /// <summary>A permanent becomes tapped</summary>

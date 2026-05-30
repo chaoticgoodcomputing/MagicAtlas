@@ -33,9 +33,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfEndStep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "InterveningIf": {
@@ -51,8 +52,7 @@
               },
               "Player": {
                 "Kind": "You"
-              },
-              "IsOptional": false
+              }
             }
           ],
           "AbilityWord": "Void"
@@ -75,8 +75,7 @@
             ]
           }
         ],
-        "ManaValue": 5,
-        "IsVariable": false
+        "ManaValue": 5
       },
       {
         "Kind": "colors",

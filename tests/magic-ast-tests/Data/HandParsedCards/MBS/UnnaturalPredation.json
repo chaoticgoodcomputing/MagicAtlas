@@ -46,7 +46,11 @@
                 "Value": 1
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             },
             {
@@ -64,7 +68,11 @@
                 ]
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ]

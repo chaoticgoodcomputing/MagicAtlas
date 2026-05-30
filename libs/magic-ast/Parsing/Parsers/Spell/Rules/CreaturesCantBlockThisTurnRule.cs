@@ -58,7 +58,7 @@ public sealed class CreaturesCantBlockThisTurnRule : ISpellRule
             Characteristics = [Characteristic.FromLabel("without" + char.ToUpperInvariant(keyword[0]) + keyword[1..])],
           },
         },
-        Duration = new UntilEndOfTurnDuration(),
+        Duration = UntilTimeDuration.EndOfTurn,
       };
       return true;
     }
@@ -76,7 +76,7 @@ public sealed class CreaturesCantBlockThisTurnRule : ISpellRule
             CardTypes = ["creature"],
           },
         },
-        Duration = new UntilEndOfTurnDuration(),
+        Duration = UntilTimeDuration.EndOfTurn,
       };
       return true;
     }

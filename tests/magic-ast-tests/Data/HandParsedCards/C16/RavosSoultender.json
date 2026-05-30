@@ -35,7 +35,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Flying",
           "Effects": [
             {
               "EffectType": "evasion",
@@ -44,12 +43,19 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Flying"
         },
         {
           "Kind": "static",
@@ -64,7 +70,10 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "other"
+                    }
                   ]
                 }
               },
@@ -83,9 +92,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfUpkeep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "Effects": [
@@ -105,16 +115,16 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Partner",
-          "Reminder": {
-            "Text": "(You can have two commanders if both have partner.)"
-          },
           "Effects": [
             {
               "EffectType": "partner",
               "PartnerType": "Partner"
             }
-          ]
+          ],
+          "KeywordSource": "Partner",
+          "Reminder": {
+            "Text": "(You can have two commanders if both have partner.)"
+          }
         }
       ]
     },
@@ -145,8 +155,8 @@
       {
         "Kind": "colors",
         "Colors": [
-          "W",
-          "B"
+          "B",
+          "W"
         ]
       },
       {
@@ -160,13 +170,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

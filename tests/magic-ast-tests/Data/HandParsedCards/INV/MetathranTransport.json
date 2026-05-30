@@ -6,9 +6,15 @@
     "OracleText": "Flying\nThis creature can't be blocked by blue creatures.\n{U}: Target creature becomes blue until end of turn.",
     "Power": "1",
     "Toughness": "3",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Flying"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Flying"
+    ],
     "Id": "4fa9048d-1599-44a5-b4b2-45382c5b238d",
     "Layout": "normal"
   },
@@ -16,8 +22,12 @@
     "Name": "Metathran Transport",
     "TypeLine": {
       "Raw": "Creature — Metathran",
-      "Types": ["Creature"],
-      "Subtypes": ["Metathran"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Metathran"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nThis creature can't be blocked by blue creatures.\n{U}: Target creature becomes blue until end of turn.",
@@ -29,10 +39,18 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
-                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
@@ -44,8 +62,12 @@
             {
               "EffectType": "cantBeBlocked",
               "BlockedByFilter": {
-                "CardTypes": ["creature"],
-                "Colors": ["U"]
+                "CardTypes": [
+                  "creature"
+                ],
+                "Colors": [
+                  "U"
+                ]
               }
             }
           ]
@@ -58,7 +80,9 @@
               "Symbols": [
                 {
                   "Kind": "colored",
-                  "Colors": ["U"]
+                  "Colors": [
+                    "U"
+                  ]
                 }
               ]
             }
@@ -69,12 +93,20 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
-              "Colors": ["U"],
+              "Colors": [
+                "U"
+              ],
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ],
@@ -93,11 +125,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -105,11 +141,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

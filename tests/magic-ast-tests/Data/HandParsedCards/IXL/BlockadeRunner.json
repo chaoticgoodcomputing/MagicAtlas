@@ -6,8 +6,12 @@
     "OracleText": "{U}: This creature can't be blocked this turn.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "59e483df-b58a-401e-85bc-0afda4bf7cac",
     "Layout": "normal"
@@ -16,8 +20,12 @@
     "Name": "Blockade Runner",
     "TypeLine": {
       "Raw": "Creature — Merfolk",
-      "Types": ["Creature"],
-      "Subtypes": ["Merfolk"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Merfolk"
+      ]
     },
     "Oracle": {
       "RawText": "{U}: This creature can't be blocked this turn.",
@@ -28,7 +36,12 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["U"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
               ]
             }
           ],
@@ -39,7 +52,11 @@
                 "Kind": "Self"
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ],
@@ -52,23 +69,43 @@
         "Kind": "manaCost",
         "Raw": "{3}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

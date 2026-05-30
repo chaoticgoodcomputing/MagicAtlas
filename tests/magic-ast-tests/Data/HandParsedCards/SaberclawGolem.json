@@ -7,14 +7,21 @@
     "Power": "4",
     "Toughness": "2",
     "Colors": [],
-    "ColorIdentity": ["R"]
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Saberclaw Golem",
     "TypeLine": {
       "Raw": "Artifact Creature — Golem",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Golem"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Golem"
+      ]
     },
     "Oracle": {
       "RawText": "{R}: This creature gains first strike until end of turn.",
@@ -27,7 +34,9 @@
               "Symbols": [
                 {
                   "Kind": "colored",
-                  "Colors": ["R"]
+                  "Colors": [
+                    "R"
+                  ]
                 }
               ]
             }
@@ -49,7 +58,11 @@
                 ]
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               },
               "IsOptional": false
             }
@@ -76,7 +89,9 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

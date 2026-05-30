@@ -68,9 +68,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfEndStep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "InterveningIf": {
@@ -132,13 +133,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

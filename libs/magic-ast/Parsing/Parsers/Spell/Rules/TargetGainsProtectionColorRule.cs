@@ -70,7 +70,7 @@ public sealed class TargetGainsProtectionColorRule : ISpellRule
           },
         ],
       },
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
     return true;
   }

@@ -64,7 +64,7 @@ public sealed class ChangeColorEffectRule : IActivatedEffectRule
         Filter = new ObjectFilter { CardTypes = ["creature"] },
       },
       Colors = [colorCode],
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
   }
 }

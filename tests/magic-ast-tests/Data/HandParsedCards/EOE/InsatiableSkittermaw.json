@@ -38,8 +38,7 @@
                   "creature"
                 ]
               },
-              "MinimumBlockers": 2,
-              "IsOptional": false
+              "MinimumBlockers": 2
             }
           ],
           "KeywordSource": "Menace",
@@ -51,9 +50,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfEndStep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "InterveningIf": {
@@ -70,8 +70,7 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
-              },
-              "IsOptional": false
+              }
             }
           ],
           "AbilityWord": "Void"
@@ -94,8 +93,7 @@
             ]
           }
         ],
-        "ManaValue": 3,
-        "IsVariable": false
+        "ManaValue": 3
       },
       {
         "Kind": "colors",

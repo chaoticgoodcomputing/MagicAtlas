@@ -74,7 +74,7 @@ public sealed class ModifyPTAndGainKeywordControlledSpellRule : ISpellRule, IMul
     var toughness = int.Parse(m.Groups["t"].Value);
     var keywordsText = m.Groups["kws"].Value;
 
-    var duration = new UntilEndOfTurnDuration();
+    var duration = UntilTimeDuration.EndOfTurn;
     var targetCreatureYouControl = new ObjectReference
     {
       Kind = ObjectReferenceKind.Target,

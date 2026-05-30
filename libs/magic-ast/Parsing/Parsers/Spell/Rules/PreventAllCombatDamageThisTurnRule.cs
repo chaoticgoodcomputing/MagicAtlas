@@ -28,7 +28,7 @@ public sealed class PreventAllCombatDamageThisTurnRule : ISpellRule
     {
       All = true,
       CombatOnly = true,
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
     return true;
   }

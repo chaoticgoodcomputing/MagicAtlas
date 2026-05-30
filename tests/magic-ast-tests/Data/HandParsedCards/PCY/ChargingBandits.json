@@ -6,15 +6,24 @@
     "OracleText": "Whenever this creature attacks, it gets +2/+0 until end of turn.",
     "Power": "3",
     "Toughness": "3",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Charging Bandits",
     "TypeLine": {
       "Raw": "Creature — Human Rogue",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Rogue"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Rogue"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever this creature attacks, it gets +2/+0 until end of turn.",
@@ -25,7 +34,9 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -43,7 +54,11 @@
                 "Value": 0
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ]
@@ -55,18 +70,30 @@
         "Kind": "manaCost",
         "Raw": "{4}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

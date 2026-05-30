@@ -40,7 +40,7 @@ public sealed class PreventDamageThisTurnRule : ISpellRule
         Target = ObjectReference.Target(
           new ObjectFilter { CardTypes = [m.Groups["type"].Value.ToLowerInvariant()] }
         ),
-        Duration = new UntilEndOfTurnDuration(),
+        Duration = UntilTimeDuration.EndOfTurn,
       };
       return true;
     }
@@ -54,7 +54,7 @@ public sealed class PreventDamageThisTurnRule : ISpellRule
       {
         Amount = amount,
         Target = new ObjectReference { Kind = ObjectReferenceKind.AnyTarget },
-        Duration = new UntilEndOfTurnDuration(),
+        Duration = UntilTimeDuration.EndOfTurn,
       };
       return true;
     }

@@ -6,15 +6,24 @@
     "OracleText": "Landfall — Whenever a land you control enters, this creature gets +2/+2 until end of turn.",
     "Power": "0",
     "Toughness": "1",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Akoum Hellhound",
     "TypeLine": {
       "Raw": "Creature — Elemental Dog",
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental", "Dog"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental",
+        "Dog"
+      ]
     },
     "Oracle": {
       "RawText": "Landfall — Whenever a land you control enters, this creature gets +2/+2 until end of turn.",
@@ -26,14 +35,18 @@
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"],
+              "CardTypes": [
+                "land"
+              ],
               "Controller": "You"
             }
           },
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "PowerModifier": {
                 "QuantityType": "literal",
                 "Value": 2
@@ -43,7 +56,11 @@
                 "Value": 2
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ]
@@ -55,12 +72,27 @@
         "Kind": "manaCost",
         "Raw": "{R}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 1
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
       {
         "Kind": "creatureStats",
         "Power": {

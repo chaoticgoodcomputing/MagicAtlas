@@ -50,10 +50,22 @@ public sealed class SacrificeAtEndStepSpellRule : ISpellRule
       return false;
     }
 
-    effect = new SacrificeEffect
+    effect = new MagicAST.AST.Effects.Core.CreateDelayedTriggerEffect
     {
-      Target = ObjectReference.It(),
-      Duration = new AtBeginningOfNextEndStepDuration(),
+      DelayedTrigger = new MagicAST.AST.Abilities.DelayedTriggeredAbility
+      {
+        Trigger = new MagicAST.AST.Triggers.TriggerCondition
+        {
+          Timing = MagicAST.AST.Triggers.TriggerTiming.At,
+          Event = new MagicAST.AST.References.GameTime
+          {
+            Part = MagicAST.AST.References.TurnPart.End,
+            Edge = MagicAST.AST.References.TimeBoundary.Beginning,
+            When = MagicAST.AST.References.TimeRelation.Next,
+          },
+        },
+        Effects = [new SacrificeEffect { Target = ObjectReference.It() }],
+      },
     };
     return true;
   }

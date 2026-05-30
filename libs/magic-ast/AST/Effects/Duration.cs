@@ -2,6 +2,7 @@ namespace MagicAST.AST.Effects;
 
 using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.References;
 using MagicAST.Serialization;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
@@ -11,18 +12,6 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 [PolymorphicBase("DurationType")]
 [JsonConverter(typeof(PolymorphicReflectionConverter<Duration>))]
 public abstract record Duration;
-
-/// <summary>
-/// "until end of turn"
-/// </summary>
-[OracleDuration("untilEndOfTurn")]
-public sealed record UntilEndOfTurnDuration : Duration;
-
-/// <summary>
-/// "until your next turn"
-/// </summary>
-[OracleDuration("untilYourNextTurn")]
-public sealed record UntilYourNextTurnDuration : Duration;
 
 /// <summary>
 /// "as long as [condition]"
@@ -50,39 +39,29 @@ public sealed record UntilLeavesBattlefieldDuration : Duration
 }
 
 /// <summary>
-/// "until end of combat"
+/// "until [a clock point]" — the single canonical representation of a continuous
+/// effect's expiry at a point on the turn timeline (ADR 0002): "until end of turn"
+/// → { Part: Turn, Edge: End }, "until end of combat" → { Part: Combat, Edge: End },
+/// "until your next turn" → { Part: Turn, Edge: Beginning, When: Next, Whose: You }.
+/// There is no flat per-point variant — every clock-bounded duration is a
+/// <see cref="GameTime"/>. (The former "at the beginning of the next …" durations
+/// were never durations: they are delayed triggered abilities, CR 603.7, now in
+/// <see cref="MagicAST.AST.Abilities.DelayedTriggeredAbility"/>.)
 /// </summary>
-[OracleDuration("untilEndOfCombat")]
-public sealed record UntilEndOfCombatDuration : Duration;
+[OracleDuration("untilTime")]
+public sealed record UntilTimeDuration : Duration
+{
+  public required GameTime Until { get; init; }
 
-/// <summary>
-/// "at the beginning of the next end step" - delayed trigger for effects like exile this creature at end step
-/// </summary>
-[OracleDuration("atBeginningOfNextEndStep")]
-public sealed record AtBeginningOfNextEndStepDuration : Duration;
+  /// <summary>"until end of turn" — the most common clock-bounded duration.</summary>
+  public static UntilTimeDuration EndOfTurn =>
+    new() { Until = new GameTime { Part = TurnPart.Turn, Edge = TimeBoundary.End } };
 
-/// <summary>
-/// "at the beginning of the next turn's upkeep" — delayed draw shape (e.g. Jolt, Ray of Erasure).
-/// Rule 313.1: upkeep step is the first step of the beginning phase.
-/// </summary>
-[OracleDuration("atBeginningOfNextUpkeep")]
-public sealed record AtBeginningOfNextUpkeepDuration : Duration;
+  /// <summary>"until end of combat".</summary>
+  public static UntilTimeDuration EndOfCombat =>
+    new() { Until = new GameTime { Part = TurnPart.Combat, Edge = TimeBoundary.End } };
 
-/// <summary>
-/// "at end of combat" — delayed removal timing (e.g. Phantom creature counter-removal pattern).
-/// The effect is scheduled to occur at the end of combat step (Rule 511 — End of Combat Step).
-/// Distinct from "until end of combat" (<see cref="UntilEndOfCombatDuration"/>), which marks
-/// a continuous effect's expiry point; this marks a one-shot event's scheduled trigger time.
-/// </summary>
-[OracleDuration("atEndOfCombat")]
-public sealed record AtEndOfCombatDuration : Duration;
-
-/// <summary>
-/// "at the beginning of the next cleanup step" — delayed sacrifice trigger for
-/// the cast-as-flash-with-consequence pattern (Armor of Thorns, Rule 702.8e).
-/// Rule 514.1: the cleanup step is the final step of the ending phase. MAST
-/// records only that the consequence fires at that step boundary; enforcement
-/// is engine territory.
-/// </summary>
-[OracleDuration("atBeginningOfNextCleanupStep")]
-public sealed record AtBeginningOfNextCleanupStepDuration : Duration;
+  /// <summary>"until your next turn" — the beginning of the controller's next turn.</summary>
+  public static UntilTimeDuration YourNextTurn =>
+    new() { Until = new GameTime { Part = TurnPart.Turn, Edge = TimeBoundary.Beginning, When = TimeRelation.Next, Whose = ControllerFilter.You } };
+}

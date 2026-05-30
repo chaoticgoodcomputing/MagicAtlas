@@ -640,12 +640,8 @@ public static class MermaidEmitter
         int id;
         switch (duration)
         {
-            case UntilEndOfTurnDuration:
-                id = ctx.EmitNode("UntilEndOfTurn");
-                ctx.EmitEdge(parentId, id);
-                break;
-            case UntilYourNextTurnDuration:
-                id = ctx.EmitNode("UntilYourNextTurn");
+            case UntilTimeDuration ut:
+                id = ctx.EmitNode($"Until<br/>{ut.Until.Part} {ut.Until.Edge}");
                 ctx.EmitEdge(parentId, id);
                 break;
             case AsLongAsDuration al:
@@ -659,14 +655,6 @@ public static class MermaidEmitter
             case UntilLeavesBattlefieldDuration ulb:
                 var obj = ulb.Object != null ? $"<br/>{Truncate(ulb.Object, 30)}" : "";
                 id = ctx.EmitNode($"UntilLeavesField{obj}");
-                ctx.EmitEdge(parentId, id);
-                break;
-            case UntilEndOfCombatDuration:
-                id = ctx.EmitNode("UntilEndOfCombat");
-                ctx.EmitEdge(parentId, id);
-                break;
-            case AtBeginningOfNextEndStepDuration:
-                id = ctx.EmitNode("AtBeginningOfNextEndStep");
                 ctx.EmitEdge(parentId, id);
                 break;
             default:

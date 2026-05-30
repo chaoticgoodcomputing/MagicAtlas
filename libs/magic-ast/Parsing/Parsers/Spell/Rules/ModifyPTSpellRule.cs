@@ -67,7 +67,7 @@ public sealed class ModifyPTSpellRule : ISpellRule
         },
         PowerModifier = LiteralQuantity.Of(power),
         ToughnessModifier = LiteralQuantity.Of(toughness),
-        Duration = new UntilEndOfTurnDuration(),
+        Duration = UntilTimeDuration.EndOfTurn,
       };
       return true;
     }
@@ -86,7 +86,7 @@ public sealed class ModifyPTSpellRule : ISpellRule
         },
         PowerModifier = new VariableQuantity { Name = varName },
         ToughnessModifier = LiteralQuantity.Of(toughness),
-        Duration = new UntilEndOfTurnDuration(),
+        Duration = UntilTimeDuration.EndOfTurn,
       };
       return true;
     }
@@ -101,7 +101,7 @@ public sealed class ModifyPTSpellRule : ISpellRule
         Target = new ObjectReference { Kind = ObjectReferenceKind.It },
         PowerModifier = LiteralQuantity.Of(power),
         ToughnessModifier = LiteralQuantity.Of(toughness),
-        Duration = new UntilEndOfTurnDuration(),
+        Duration = UntilTimeDuration.EndOfTurn,
       };
       return true;
     }

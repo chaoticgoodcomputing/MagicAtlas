@@ -41,17 +41,28 @@
           },
           "Effects": [
             {
-              "EffectType": "removeCounters",
-              "Target": {
-                "Kind": "It"
-              },
-              "CounterType": "+1/+1",
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Duration": {
-                "DurationType": "atEndOfCombat"
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "At",
+                  "Event": {
+                    "Part": "Combat",
+                    "Edge": "End"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "removeCounters",
+                    "Target": {
+                      "Kind": "It"
+                    },
+                    "CounterType": "+1/+1",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -68,8 +79,7 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2
-              },
-              "IsOptional": false
+              }
             }
           ],
           "When": "asThisEnters"
@@ -116,13 +126,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "0",
-          "Value": 0
+          "Value": 0,
+          "Raw": "0"
         }
       }
     ]

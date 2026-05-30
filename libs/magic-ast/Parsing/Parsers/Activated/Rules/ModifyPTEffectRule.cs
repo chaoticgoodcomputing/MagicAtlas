@@ -40,7 +40,7 @@ public sealed class ModifyPTEffectRule : IActivatedEffectRule
         },
         PowerModifier = ActivatedRuleHelpers.ParseSignedModifier(eotMatch.Groups["p"].Value),
         ToughnessModifier = ActivatedRuleHelpers.ParseSignedModifier(eotMatch.Groups["t"].Value),
-        Duration = new UntilEndOfTurnDuration(),
+        Duration = UntilTimeDuration.EndOfTurn,
       };
     }
 
@@ -79,7 +79,7 @@ public sealed class ModifyPTEffectRule : IActivatedEffectRule
         Target = ObjectReference.Self(),
         PowerModifier = ActivatedRuleHelpers.ParseSignedModifier(selfEotMatch.Groups["p"].Value),
         ToughnessModifier = ActivatedRuleHelpers.ParseSignedModifier(selfEotMatch.Groups["t"].Value),
-        Duration = new UntilEndOfTurnDuration(),
+        Duration = UntilTimeDuration.EndOfTurn,
       };
     }
 
@@ -103,7 +103,7 @@ public sealed class ModifyPTEffectRule : IActivatedEffectRule
         },
         PowerModifier = ActivatedRuleHelpers.ParseSignedModifier(teamEotMatch.Groups["p"].Value),
         ToughnessModifier = ActivatedRuleHelpers.ParseSignedModifier(teamEotMatch.Groups["t"].Value),
-        Duration = new UntilEndOfTurnDuration(),
+        Duration = UntilTimeDuration.EndOfTurn,
       };
     }
 

@@ -62,7 +62,7 @@ public sealed class ModifyPTTriggeredRule : ITriggeredRule
     MagicAST.AST.Effects.Duration? duration = null;
     if (lower.Contains("until end of turn"))
     {
-      duration = new UntilEndOfTurnDuration();
+      duration = UntilTimeDuration.EndOfTurn;
     }
 
     effect = new ModifyPTEffect

@@ -4,14 +4,24 @@
     "ManaCost": "{1}{R}{W}{B}",
     "TypeLine": "Enchantment",
     "OracleText": "Whenever a creature you control attacks, it gets +2/+2 until end of turn.",
-    "Colors": ["B", "R", "W"],
-    "ColorIdentity": ["B", "R", "W"]
+    "Colors": [
+      "B",
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "R",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Fervent Charge",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever a creature you control attacks, it gets +2/+2 until end of turn.",
@@ -22,7 +32,9 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "Controller": "You"
             }
           },
@@ -41,7 +53,11 @@
                 "Value": 2
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ]
@@ -53,15 +69,47 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}{W}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 4
       },
-      { "Kind": "colors", "Colors": ["B", "R", "W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["B", "R", "W"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "R",
+          "W"
+        ]
+      }
     ]
   }
 }

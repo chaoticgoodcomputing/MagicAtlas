@@ -32,8 +32,7 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "reach",
-              "IsOptional": false
+              "EffectType": "reach"
             }
           ],
           "KeywordSource": "Reach"
@@ -42,9 +41,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfEndStep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "InterveningIf": {
@@ -61,8 +61,7 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
-              },
-              "IsOptional": false
+              }
             }
           ],
           "AbilityWord": "Void"
@@ -85,8 +84,7 @@
             ]
           }
         ],
-        "ManaValue": 5,
-        "IsVariable": false
+        "ManaValue": 5
       },
       {
         "Kind": "colors",

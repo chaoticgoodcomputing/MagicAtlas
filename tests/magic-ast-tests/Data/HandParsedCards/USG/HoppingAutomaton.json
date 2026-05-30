@@ -14,8 +14,13 @@
     "Name": "Hopping Automaton",
     "TypeLine": {
       "Raw": "Artifact Creature — Construct",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Construct"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Construct"
+      ]
     },
     "Oracle": {
       "RawText": "{0}: This creature gets -1/-1 and gains flying until end of turn.",
@@ -52,7 +57,11 @@
                     "Value": -1
                   },
                   "Duration": {
-                    "DurationType": "untilEndOfTurn"
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
                   },
                   "IsOptional": false
                 },
@@ -68,17 +77,29 @@
                       {
                         "EffectType": "evasion",
                         "CanBeBlockedBy": {
-                          "CardTypes": ["creature"],
+                          "CardTypes": [
+                            "creature"
+                          ],
                           "Characteristics": [
-                            {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                            {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Flying"
+                            },
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Reach"
+                            }
                           ]
                         }
                       }
                     ]
                   },
                   "Duration": {
-                    "DurationType": "untilEndOfTurn"
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
                   },
                   "IsOptional": false
                 }

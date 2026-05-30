@@ -6,14 +6,20 @@
     "OracleText": "At the beginning of each player's draw step, each player draws a card.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Rites of Flourishing",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "At the beginning of each player's draw step, each player draws a card.",
@@ -22,8 +28,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfDrawStep",
-            "Filter": null
+            "Event": {
+              "Part": "Draw",
+              "Edge": "Beginning"
+            }
           },
           "Effects": [
             {
@@ -34,8 +42,7 @@
               },
               "Player": {
                 "Kind": "EachPlayer"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -46,18 +53,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

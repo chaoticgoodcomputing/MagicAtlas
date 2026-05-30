@@ -6,15 +6,23 @@
     "OracleText": "Target creature attacks this turn if able.\nSplice onto Arcane {R} (As you cast an Arcane spell, you may reveal this card from your hand and pay its splice cost. If you do, add this card's effects to that spell.)",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Into the Fray",
     "TypeLine": {
       "Raw": "Instant — Arcane",
-      "Types": ["Instant"],
-      "Subtypes": ["Arcane"]
+      "Types": [
+        "Instant"
+      ],
+      "Subtypes": [
+        "Arcane"
+      ]
     },
     "Oracle": {
       "RawText": "Target creature attacks this turn if able.\nSplice onto Arcane {R} (As you cast an Arcane spell, you may reveal this card from your hand and pay its splice cost. If you do, add this card's effects to that spell.)",
@@ -27,11 +35,17 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ]
@@ -48,7 +62,9 @@
                 "Symbols": [
                   {
                     "Kind": "colored",
-                    "Colors": ["R"]
+                    "Colors": [
+                      "R"
+                    ]
                   }
                 ]
               }
@@ -65,17 +81,26 @@
         "Kind": "manaCost",
         "Raw": "{R}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

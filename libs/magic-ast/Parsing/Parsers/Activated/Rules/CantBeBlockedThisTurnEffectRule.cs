@@ -39,7 +39,7 @@ public sealed class CantBeBlockedThisTurnEffectRule : IActivatedEffectRule
     return new CantBeBlockedEffect
     {
       Target = ObjectReference.Self(),
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
   }
 }

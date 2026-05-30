@@ -46,7 +46,11 @@
                 "Value": 2
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             },
             {
@@ -58,7 +62,10 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "another"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "another"
+                    }
                   ]
                 }
               },
@@ -71,7 +78,11 @@
                 "Value": 0
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ]

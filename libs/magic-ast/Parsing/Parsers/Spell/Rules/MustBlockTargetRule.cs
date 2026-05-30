@@ -28,7 +28,7 @@ public sealed class MustBlockTargetRule : ISpellRule
       Target = ObjectReference.Target(
         new ObjectFilter { CardTypes = [m.Groups["type"].Value.ToLowerInvariant()] }
       ),
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
     return true;
   }

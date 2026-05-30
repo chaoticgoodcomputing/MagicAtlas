@@ -6,15 +6,23 @@
     "OracleText": "Landfall — Whenever a land you control enters, this creature gets +1/+1 until end of turn.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Snapping Gnarlid",
     "TypeLine": {
       "Raw": "Creature — Beast",
-      "Types": ["Creature"],
-      "Subtypes": ["Beast"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Beast"
+      ]
     },
     "Oracle": {
       "RawText": "Landfall — Whenever a land you control enters, this creature gets +1/+1 until end of turn.",
@@ -26,14 +34,18 @@
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"],
+              "CardTypes": [
+                "land"
+              ],
               "Controller": "You"
             }
           },
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "PowerModifier": {
                 "QuantityType": "literal",
                 "Value": 1
@@ -43,7 +55,11 @@
                 "Value": 1
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ]
@@ -55,13 +71,31 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
       {
         "Kind": "creatureStats",
         "Power": {

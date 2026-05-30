@@ -80,17 +80,31 @@ public sealed class RemoveCountersTriggeredRule : ITriggeredRule
       return false;
     }
 
-    // Timing qualifier: "at end of combat" schedules the removal at Rule 511.
-    Duration? duration = null;
+    // "at end of combat" is a delayed trigger (CR 603.7), not a duration — the
+    // removal fires at the end-of-combat step. "until end of turn" is a genuine
+    // continuous-effect duration. (ADR 0002/0004.)
     if (Regex.IsMatch(lower, @"\bat\s+end\s+of\s+combat\b"))
     {
-      duration = new AtEndOfCombatDuration();
-    }
-    else if (lower.Contains("until end of turn"))
-    {
-      duration = new UntilEndOfTurnDuration();
+      effect = new MagicAST.AST.Effects.Core.CreateDelayedTriggerEffect
+      {
+        DelayedTrigger = new MagicAST.AST.Abilities.DelayedTriggeredAbility
+        {
+          Trigger = new MagicAST.AST.Triggers.TriggerCondition
+          {
+            Timing = MagicAST.AST.Triggers.TriggerTiming.At,
+            Event = new MagicAST.AST.References.GameTime
+            {
+              Part = MagicAST.AST.References.TurnPart.Combat,
+              Edge = MagicAST.AST.References.TimeBoundary.End,
+            },
+          },
+          Effects = [new RemoveCountersEffect { Target = target, CounterType = counterType, Count = LiteralQuantity.Of(count) }],
+        },
+      };
+      return true;
     }
 
+    Duration? duration = lower.Contains("until end of turn") ? UntilTimeDuration.EndOfTurn : null;
     effect = new RemoveCountersEffect
     {
       Target = target,

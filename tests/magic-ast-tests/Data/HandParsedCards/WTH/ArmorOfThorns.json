@@ -6,30 +6,40 @@
     "OracleText": "Enchant creature\nYou may cast this spell as though it had flash. If you cast it any time a sorcery couldn't have been cast, the controller of the permanent it becomes sacrifices it at the beginning of the next cleanup step.\nEnchanted creature gets +2/+2.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Armor of Thorns",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nYou may cast this spell as though it had flash. If you cast it any time a sorcery couldn't have been cast, the controller of the permanent it becomes sacrifices it at the beginning of the next cleanup step.\nEnchanted creature gets +2/+2.",
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Enchant",
           "Effects": [
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Enchant"
         },
         {
           "Kind": "static",
@@ -38,17 +48,28 @@
               "EffectType": "timingModification",
               "Modification": "Grant",
               "Timing": "Instant",
-              "IsOptional": true,
               "Consequence": {
-                "EffectType": "sacrifice",
-                "Target": {
-                  "Kind": "Self"
-                },
-                "Duration": {
-                  "DurationType": "atBeginningOfNextCleanupStep"
-                },
-                "IsOptional": false
-              }
+                "EffectType": "createDelayedTrigger",
+                "DelayedTrigger": {
+                  "Trigger": {
+                    "Timing": "At",
+                    "Event": {
+                      "Part": "Cleanup",
+                      "Edge": "Beginning",
+                      "When": "Next"
+                    }
+                  },
+                  "Effects": [
+                    {
+                      "EffectType": "sacrifice",
+                      "Target": {
+                        "Kind": "Self"
+                      }
+                    }
+                  ]
+                }
+              },
+              "IsOptional": true
             }
           ]
         },
@@ -78,18 +99,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

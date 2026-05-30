@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Sanctum of Stone Fangs",
     "ManaCost": "{1}{B}",
-    "TypeLine": "Legendary Enchantment \u2014 Shrine",
+    "TypeLine": "Legendary Enchantment — Shrine",
     "OracleText": "At the beginning of your first main phase, each opponent loses X life and you gain X life, where X is the number of Shrines you control.",
     "Power": null,
     "Toughness": null,
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Sanctum of Stone Fangs",
     "TypeLine": {
-      "Raw": "Legendary Enchantment \u2014 Shrine",
+      "Raw": "Legendary Enchantment — Shrine",
       "Supertypes": [
         "Legendary"
       ],
@@ -34,9 +34,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfPreCombatMainPhase",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "PrecombatMain",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "Effects": [

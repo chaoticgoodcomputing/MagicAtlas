@@ -48,11 +48,17 @@ public sealed class DrawCardsAtNextUpkeepRule : ISpellRule
       _ => int.TryParse(rawCount, out var n) ? n : 1,
     };
 
-    effect = new DrawCardsEffect
+    effect = new MagicAST.AST.Effects.Core.CreateDelayedTriggerEffect
     {
-      Count = LiteralQuantity.Of(count),
-      Player = ObjectReference.You(),
-      Duration = new AtBeginningOfNextUpkeepDuration(),
+      DelayedTrigger = new MagicAST.AST.Abilities.DelayedTriggeredAbility
+      {
+        Trigger = new MagicAST.AST.Triggers.TriggerCondition
+        {
+          Timing = MagicAST.AST.Triggers.TriggerTiming.At,
+          Event = new GameTime { Part = TurnPart.Upkeep, Edge = TimeBoundary.Beginning, When = TimeRelation.Next },
+        },
+        Effects = [new DrawCardsEffect { Count = LiteralQuantity.Of(count), Player = ObjectReference.You() }],
+      },
     };
     return true;
   }

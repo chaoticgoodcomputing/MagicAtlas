@@ -73,7 +73,7 @@ public sealed class MassAnthemSpellRule : ISpellRule
       },
       PowerModifier = LiteralQuantity.Of(power),
       ToughnessModifier = LiteralQuantity.Of(toughness),
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
     return true;
   }

@@ -6,8 +6,14 @@
     "OracleText": "{T}: Prevent the next 1 damage that would be dealt to any target this turn.\n{T}: This creature deals 1 damage to any target.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["U", "W"],
-    "ColorIdentity": ["U", "W"],
+    "Colors": [
+      "U",
+      "W"
+    ],
+    "ColorIdentity": [
+      "U",
+      "W"
+    ],
     "Keywords": [],
     "Id": "07a262d7-6d0c-43d0-89b6-9f46a1a9eb69",
     "Layout": "normal"
@@ -16,8 +22,14 @@
     "Name": "Samite Archer",
     "TypeLine": {
       "Raw": "Creature — Human Cleric Archer",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Cleric", "Archer"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric",
+        "Archer"
+      ]
     },
     "Oracle": {
       "RawText": "{T}: Prevent the next 1 damage that would be dealt to any target this turn.\n{T}: This creature deals 1 damage to any target.",
@@ -40,7 +52,11 @@
                 "Kind": "AnyTarget"
               },
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ],
@@ -77,19 +93,38 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U", "W"]
+        "Colors": [
+          "U",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "W"]
+        "ColorIdentity": [
+          "U",
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

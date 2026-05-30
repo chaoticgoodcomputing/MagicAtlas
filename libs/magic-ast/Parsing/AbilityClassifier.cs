@@ -153,6 +153,23 @@ public sealed class AbilityClassifier
       };
     }
 
+    // A "When/Whenever … this turn, …" whose *trigger condition* (the text before
+    // the comma) is bounded to "this turn" is not a printed triggered ability — it
+    // is a spell that, on resolution, creates a delayed triggered ability (CR 603.7),
+    // e.g. Glimpse of Nature. Route it to the spell parser (which builds a
+    // createDelayedTrigger). The pre-comma scope distinguishes it from a printed
+    // trigger whose *effect* merely mentions "this turn" (e.g. "When ~ enters,
+    // target creature can't block this turn"). ADR 0002/0004.
+    if (StartsWithTriggerTiming(tokens) && TriggerConditionMentionsThisTurn(clause.RawText))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Check for triggered ability: When/Whenever/At — either at clause start,
     // or after an ability-word prefix ("Landfall — Whenever ..."). Ability words
     // (Rule 207.2c) have no rules meaning; peeling the prefix before the
@@ -1132,6 +1149,19 @@ public sealed class AbilityClassifier
 
     var first = tokens[0].Kind;
     return first == OracleToken.When || first == OracleToken.Whenever || first == OracleToken.At;
+  }
+
+  /// <summary>
+  /// True when the trigger condition — the text before the first comma — is bounded
+  /// to "this turn", the signature of a delayed triggered ability created by a
+  /// resolving spell (CR 603.7) rather than a printed trigger. Scoped pre-comma so a
+  /// printed trigger whose *effect* says "this turn" is not misread.
+  /// </summary>
+  private static bool TriggerConditionMentionsThisTurn(string raw)
+  {
+    var comma = raw.IndexOf(',');
+    var condition = comma >= 0 ? raw[..comma] : raw;
+    return condition.Contains("this turn", StringComparison.OrdinalIgnoreCase);
   }
 
   /// <summary>

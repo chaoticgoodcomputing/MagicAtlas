@@ -32,7 +32,7 @@ public sealed class ModifyPTConjunctionRule : ISpellRule
     var p2 = int.Parse(m.Groups["p2"].Value);
     var t2 = int.Parse(m.Groups["t2"].Value);
 
-    var duration = new UntilEndOfTurnDuration();
+    var duration = UntilTimeDuration.EndOfTurn;
     var effects = new List<Effect>
     {
       new ModifyPTEffect

@@ -31,10 +31,7 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfUpkeep",
-            "Filter": {
-              "Controller": "You"
-            }
+            "Event": { "Part": "Upkeep", "Edge": "Beginning", "Whose": "You" }
           },
           "Effects": [
             {

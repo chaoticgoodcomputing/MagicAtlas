@@ -39,8 +39,7 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 5
-              },
-              "IsOptional": false
+              }
             }
           ],
           "When": "asThisEnters"
@@ -49,9 +48,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfUpkeep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "Effects": [
@@ -110,13 +110,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "9",
-          "Value": 9
+          "Value": 9,
+          "Raw": "9"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "9",
-          "Value": 9
+          "Value": 9,
+          "Raw": "9"
         }
       }
     ]

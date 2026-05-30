@@ -64,7 +64,7 @@ public sealed class GetsPTAndGainsKeywordEffectRule : IActivatedEffectRule
       return null;
     }
 
-    var eot = new UntilEndOfTurnDuration();
+    var eot = UntilTimeDuration.EndOfTurn;
 
     var modifyPT = new ModifyPTEffect
     {

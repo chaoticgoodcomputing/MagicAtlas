@@ -38,7 +38,7 @@ public sealed class TargetCantBeBlockedThisTurnRule : ISpellRule
           CardTypes = ["creature"],
         },
       },
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
     return true;
   }

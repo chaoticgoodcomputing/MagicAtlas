@@ -40,11 +40,11 @@ public sealed class GainAbilityEffectRule : IActivatedEffectRule
         Duration? selfDuration = null;
         if (lower.Contains("until end of turn"))
         {
-          selfDuration = new UntilEndOfTurnDuration();
+          selfDuration = UntilTimeDuration.EndOfTurn;
         }
         else if (lower.Contains("until your next turn"))
         {
-          selfDuration = new UntilYourNextTurnDuration();
+          selfDuration = UntilTimeDuration.YourNextTurn;
         }
         return new GainAbilityEffect
         {
@@ -81,7 +81,7 @@ public sealed class GainAbilityEffectRule : IActivatedEffectRule
             Filter = targetFilter,
           },
           GainedAbility = targetAbility,
-          Duration = new UntilEndOfTurnDuration(),
+          Duration = UntilTimeDuration.EndOfTurn,
         };
       }
     }
@@ -107,11 +107,11 @@ public sealed class GainAbilityEffectRule : IActivatedEffectRule
     Duration? duration = null;
     if (lower.Contains("until end of turn"))
     {
-      duration = new UntilEndOfTurnDuration();
+      duration = UntilTimeDuration.EndOfTurn;
     }
     else if (lower.Contains("until your next turn"))
     {
-      duration = new UntilYourNextTurnDuration();
+      duration = UntilTimeDuration.YourNextTurn;
     }
 
     return new GainAbilityEffect

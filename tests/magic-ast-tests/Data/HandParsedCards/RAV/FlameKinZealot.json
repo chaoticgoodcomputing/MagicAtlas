@@ -6,15 +6,26 @@
     "OracleText": "When this creature enters, creatures you control get +1/+1 and gain haste until end of turn.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["R", "W"],
-    "ColorIdentity": ["R", "W"]
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Flame-Kin Zealot",
     "TypeLine": {
       "Raw": "Creature — Elemental Warrior",
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental", "Warrior"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, creatures you control get +1/+1 and gain haste until end of turn.",
@@ -25,7 +36,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -38,7 +51,9 @@
                   "Target": {
                     "Kind": "Each",
                     "Filter": {
-                      "CardTypes": ["creature"],
+                      "CardTypes": [
+                        "creature"
+                      ],
                       "Controller": "You"
                     }
                   },
@@ -51,7 +66,11 @@
                     "Value": 1
                   },
                   "Duration": {
-                    "DurationType": "untilEndOfTurn"
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
                   }
                 },
                 {
@@ -59,7 +78,9 @@
                   "Target": {
                     "Kind": "Each",
                     "Filter": {
-                      "CardTypes": ["creature"],
+                      "CardTypes": [
+                        "creature"
+                      ],
                       "Controller": "You"
                     }
                   },
@@ -74,7 +95,11 @@
                     ]
                   },
                   "Duration": {
-                    "DurationType": "untilEndOfTurn"
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
                   }
                 }
               ]
@@ -88,19 +113,38 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["R", "W"]
+        "Colors": [
+          "R",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R", "W"]
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

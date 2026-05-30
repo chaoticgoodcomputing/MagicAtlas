@@ -67,7 +67,7 @@ public sealed class ThreatenRule : ISpellRule, IMultiSpellRule
       return false;
     }
 
-    var duration = new UntilEndOfTurnDuration();
+    var duration = UntilTimeDuration.EndOfTurn;
     var targetCreature = new ObjectReference
     {
       Kind = ObjectReferenceKind.Target,

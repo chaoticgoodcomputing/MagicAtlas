@@ -33,9 +33,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfUpkeep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "Effects": [
@@ -55,9 +56,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfDrawStep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "Draw",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "InterveningIf": {

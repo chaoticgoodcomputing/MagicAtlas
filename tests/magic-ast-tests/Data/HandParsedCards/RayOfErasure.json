@@ -6,9 +6,15 @@
     "OracleText": "Target player mills a card.\nDraw a card at the beginning of the next turn's upkeep.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Mill"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Mill"
+    ],
     "Id": "5a09fc0b-7b9c-4283-8336-f2607f5ffaf5",
     "Layout": "normal"
   },
@@ -16,7 +22,9 @@
     "Name": "Ray of Erasure",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Target player mills a card.\nDraw a card at the beginning of the next turn's upkeep.",
@@ -33,7 +41,9 @@
               "Player": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["player"]
+                  "CardTypes": [
+                    "player"
+                  ]
                 }
               }
             }
@@ -43,16 +53,28 @@
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "drawCards",
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Player": {
-                "Kind": "You"
-              },
-              "Duration": {
-                "DurationType": "atBeginningOfNextUpkeep"
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "At",
+                  "Event": {
+                    "Part": "Upkeep",
+                    "Edge": "Beginning",
+                    "When": "Next"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "drawCards",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -64,17 +86,26 @@
         "Kind": "manaCost",
         "Raw": "{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

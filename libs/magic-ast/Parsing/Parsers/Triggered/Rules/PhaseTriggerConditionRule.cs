@@ -24,54 +24,55 @@ public sealed class PhaseTriggerConditionRule : ITriggerConditionRule
       return null;
     }
 
-    TriggerEvent? evt = null;
+    // Map the phase/step word to the clock point (ADR 0002 — GameTime, not an enum member).
+    TurnPart? part = null;
     if (lower.Contains("upkeep"))
     {
-      evt = TriggerEvent.BeginningOfUpkeep;
+      part = TurnPart.Upkeep;
     }
     else if (lower.Contains("first main phase") || lower.Contains("precombat main phase"))
     {
-      evt = TriggerEvent.BeginningOfPreCombatMainPhase;
+      part = TurnPart.PrecombatMain;
     }
     else if (lower.Contains("postcombat main phase") || lower.Contains("second main phase"))
     {
-      evt = TriggerEvent.BeginningOfPostCombatMainPhase;
+      part = TurnPart.PostcombatMain;
     }
     else if (lower.Contains("draw step"))
     {
-      evt = TriggerEvent.BeginningOfDrawStep;
+      part = TurnPart.Draw;
     }
     else if (lower.Contains("end step"))
     {
-      evt = TriggerEvent.BeginningOfEndStep;
+      part = TurnPart.End;
     }
     else if (lower.Contains("combat"))
     {
-      evt = TriggerEvent.BeginningOfCombat;
+      part = TurnPart.Combat;
     }
 
-    if (evt is null)
+    if (part is null)
     {
       return null;
     }
 
-    // Possessive cue determines the filter's controller axis. "your" → You,
-    // "each opponent's" → Opponent, "each player's" → no filter (universal).
-    ObjectFilter? filter = null;
+    // Possessive cue lands on the clock point's Whose axis (ADR 0002 — "your upkeep"
+    // is a property of the time, not a Filter.Controller). "your" → You,
+    // "each opponent's" → Opponent, "each player's" → unqualified.
+    ControllerFilter? whose = null;
     if (lower.Contains("your"))
     {
-      filter = new ObjectFilter { Controller = ControllerFilter.You };
+      whose = ControllerFilter.You;
     }
     else if (lower.Contains("each opponent"))
     {
-      filter = new ObjectFilter { Controller = ControllerFilter.Opponent };
+      whose = ControllerFilter.Opponent;
     }
 
     return new TriggerCondition
     {
       Timing = timing,
-      Event = evt.Value,
-      Filter = filter,
+      Event = new GameTime { Part = part.Value, Edge = TimeBoundary.Beginning, Whose = whose },
     };
   }
 }

@@ -87,7 +87,10 @@
               "Kind": "triggered",
               "Trigger": {
                 "Timing": "At",
-                "Event": "BeginningOfUpkeep"
+                "Event": {
+                  "Part": "Upkeep",
+                  "Edge": "Beginning"
+                }
               },
               "InterveningIf": {
                 "ConditionType": "other",
@@ -98,8 +101,7 @@
                   "EffectType": "transform",
                   "Target": {
                     "Kind": "Self"
-                  },
-                  "IsOptional": false
+                  }
                 }
               ]
             }
@@ -127,8 +129,7 @@
                 ]
               }
             ],
-            "ManaValue": 3,
-            "IsVariable": false
+            "ManaValue": 3
           },
           {
             "Kind": "colors",
@@ -169,8 +170,7 @@
               "Kind": "static",
               "Effects": [
                 {
-                  "EffectType": "trample",
-                  "IsOptional": false
+                  "EffectType": "trample"
                 }
               ],
               "KeywordSource": "Trample"
@@ -179,7 +179,10 @@
               "Kind": "triggered",
               "Trigger": {
                 "Timing": "At",
-                "Event": "BeginningOfUpkeep"
+                "Event": {
+                  "Part": "Upkeep",
+                  "Edge": "Beginning"
+                }
               },
               "InterveningIf": {
                 "ConditionType": "other",
@@ -190,8 +193,7 @@
                   "EffectType": "transform",
                   "Target": {
                     "Kind": "Self"
-                  },
-                  "IsOptional": false
+                  }
                 }
               ]
             }

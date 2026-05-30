@@ -53,7 +53,7 @@ public sealed class CantBlockThisTurnTriggeredRule : ITriggeredRule
         Filter = filter,
       },
       IsOptional = false,
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
     return true;
   }

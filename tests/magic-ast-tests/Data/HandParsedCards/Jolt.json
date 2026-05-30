@@ -6,8 +6,12 @@
     "OracleText": "You may tap or untap target artifact, creature, or land.\nDraw a card at the beginning of the next turn's upkeep.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Id": "3e0c085a-e17d-4003-bb58-f97555365fcf",
     "Layout": "normal"
   },
@@ -15,7 +19,9 @@
     "Name": "Jolt",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "You may tap or untap target artifact, creature, or land.\nDraw a card at the beginning of the next turn's upkeep.",
@@ -28,7 +34,11 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact", "creature", "land"]
+                  "CardTypes": [
+                    "artifact",
+                    "creature",
+                    "land"
+                  ]
                 }
               },
               "IsOptional": true
@@ -39,16 +49,28 @@
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "drawCards",
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Player": {
-                "Kind": "You"
-              },
-              "Duration": {
-                "DurationType": "atBeginningOfNextUpkeep"
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "At",
+                  "Event": {
+                    "Part": "Upkeep",
+                    "Edge": "Beginning",
+                    "When": "Next"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "drawCards",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -60,18 +82,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

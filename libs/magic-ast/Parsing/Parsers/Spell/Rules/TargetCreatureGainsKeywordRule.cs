@@ -71,7 +71,7 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
         Filter = new ObjectFilter { CardTypes = [targetNoun] },
       },
       GainedAbility = ability,
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
     return true;
   }

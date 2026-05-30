@@ -35,7 +35,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Menace",
           "Effects": [
             {
               "EffectType": "evasion",
@@ -46,15 +45,17 @@
               },
               "MinimumBlockers": 2
             }
-          ]
+          ],
+          "KeywordSource": "Menace"
         },
         {
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfUpkeep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "Effects": [
@@ -124,13 +125,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

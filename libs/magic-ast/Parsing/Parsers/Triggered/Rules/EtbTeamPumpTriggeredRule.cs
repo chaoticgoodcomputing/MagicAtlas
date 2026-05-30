@@ -55,7 +55,7 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
     var ptOnly = _ptOnlyPattern.Match(trimmed);
     if (ptOnly.Success)
     {
-      effect = BuildModifyPT(ptOnly, duration: new UntilEndOfTurnDuration());
+      effect = BuildModifyPT(ptOnly, duration: UntilTimeDuration.EndOfTurn);
       return true;
     }
 
@@ -69,7 +69,7 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
     var power = int.Parse(ptGain.Groups["p"].Value);
     var toughness = int.Parse(ptGain.Groups["t"].Value);
     var keywordsText = ptGain.Groups["kws"].Value;
-    var duration = new UntilEndOfTurnDuration();
+    var duration = UntilTimeDuration.EndOfTurn;
 
     var creaturesYouControl = new ObjectReference
     {
@@ -120,7 +120,7 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
     return true;
   }
 
-  private static ModifyPTEffect BuildModifyPT(Match m, UntilEndOfTurnDuration duration)
+  private static ModifyPTEffect BuildModifyPT(Match m, Duration duration)
   {
     var power = int.Parse(m.Groups["p"].Value);
     var toughness = int.Parse(m.Groups["t"].Value);

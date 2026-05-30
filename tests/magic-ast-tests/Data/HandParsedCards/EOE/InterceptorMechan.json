@@ -49,8 +49,7 @@
                     "Keyword": "Reach"
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ],
           "KeywordSource": "Flying"
@@ -77,8 +76,7 @@
                     "artifact"
                   ]
                 }
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -86,9 +84,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfEndStep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "InterveningIf": {
@@ -105,8 +104,7 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
-              },
-              "IsOptional": false
+              }
             }
           ],
           "AbilityWord": "Void"
@@ -135,8 +133,7 @@
             ]
           }
         ],
-        "ManaValue": 4,
-        "IsVariable": false
+        "ManaValue": 4
       },
       {
         "Kind": "colors",

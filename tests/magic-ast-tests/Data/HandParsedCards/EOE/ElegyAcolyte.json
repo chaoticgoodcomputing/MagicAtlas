@@ -32,8 +32,7 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "lifelink",
-              "IsOptional": false
+              "EffectType": "lifelink"
             }
           ],
           "KeywordSource": "Lifelink"
@@ -64,9 +63,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfEndStep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "InterveningIf": {
@@ -92,10 +92,8 @@
                 ],
                 "Subtypes": [
                   "Robot"
-                ],
-                "IsCopy": false
-              },
-              "IsOptional": false
+                ]
+              }
             }
           ],
           "AbilityWord": "Void"
@@ -124,8 +122,7 @@
             ]
           }
         ],
-        "ManaValue": 4,
-        "IsVariable": false
+        "ManaValue": 4
       },
       {
         "Kind": "colors",

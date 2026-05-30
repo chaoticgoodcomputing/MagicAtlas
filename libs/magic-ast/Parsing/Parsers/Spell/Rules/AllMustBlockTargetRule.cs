@@ -29,7 +29,7 @@ public sealed class AllMustBlockTargetRule : ISpellRule
       BlockTarget = ObjectReference.Target(
         new ObjectFilter { CardTypes = ["creature"] }
       ),
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
     return true;
   }

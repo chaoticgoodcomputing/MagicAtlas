@@ -52,7 +52,7 @@ public sealed class CreaturesTargetPlayerGainKeywordRule : ISpellRule
         },
       },
       GainedAbility = gainedAbility,
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
     return true;
   }

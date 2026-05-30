@@ -31,9 +31,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfUpkeep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "Effects": [
@@ -103,13 +104,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "5",
-          "Value": 5
+          "Value": 5,
+          "Raw": "5"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         }
       }
     ]

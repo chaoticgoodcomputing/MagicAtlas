@@ -6,14 +6,22 @@
     "OracleText": "At the beginning of your upkeep, surveil 1.\n{2}{B}{G}, {T}, Sacrifice this artifact: Return target creature or Vehicle card from your graveyard to the battlefield. Activate only as a sorcery.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B", "G"],
-    "ColorIdentity": ["B", "G"]
+    "Colors": [
+      "B",
+      "G"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
   },
   "Output": {
     "Name": "Broodheart Engine",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "At the beginning of your upkeep, surveil 1.\n{2}{B}{G}, {T}, Sacrifice this artifact: Return target creature or Vehicle card from your graveyard to the battlefield. Activate only as a sorcery.",
@@ -22,9 +30,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfUpkeep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "Effects": [
@@ -43,9 +52,22 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 },
-                { "Kind": "colored", "Colors": ["B"] },
-                { "Kind": "colored", "Colors": ["G"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
               ]
             },
             {
@@ -54,8 +76,15 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["artifact"],
-                "Characteristics": [{"CharacteristicType": "other", "Description": "this permanent"}]
+                "CardTypes": [
+                  "artifact"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "this permanent"
+                  }
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -69,14 +98,20 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "Zone": "Graveyard",
-                  "Characteristics": [{"CharacteristicType": "other", "Description": "creature or Vehicle card"}]
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "creature or Vehicle card"
+                    }
+                  ],
+                  "Zone": "Graveyard"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ]
         }
       ]
     },
@@ -85,18 +120,34 @@
         "Kind": "manaCost",
         "Raw": "{B}{G}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "G"]
+        "Colors": [
+          "B",
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "G"]
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
       }
     ]
   }

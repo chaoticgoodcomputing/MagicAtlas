@@ -41,10 +41,22 @@ public sealed class CastAsFlashWithConsequenceRule : IStaticRule
           Modification = TimingModificationType.Grant,
           Timing = TimingWindow.Instant,
           IsOptional = true,
-          Consequence = new MagicAST.AST.Effects.ZoneChange.SacrificeEffect
+          Consequence = new MagicAST.AST.Effects.Core.CreateDelayedTriggerEffect
           {
-            Target = ObjectReference.Self(),
-            Duration = new AtBeginningOfNextCleanupStepDuration(),
+            DelayedTrigger = new MagicAST.AST.Abilities.DelayedTriggeredAbility
+            {
+              Trigger = new MagicAST.AST.Triggers.TriggerCondition
+              {
+                Timing = MagicAST.AST.Triggers.TriggerTiming.At,
+                Event = new MagicAST.AST.References.GameTime
+                {
+                  Part = MagicAST.AST.References.TurnPart.Cleanup,
+                  Edge = MagicAST.AST.References.TimeBoundary.Beginning,
+                  When = MagicAST.AST.References.TimeRelation.Next,
+                },
+              },
+              Effects = [new MagicAST.AST.Effects.ZoneChange.SacrificeEffect { Target = ObjectReference.Self() }],
+            },
           },
         }],
       },

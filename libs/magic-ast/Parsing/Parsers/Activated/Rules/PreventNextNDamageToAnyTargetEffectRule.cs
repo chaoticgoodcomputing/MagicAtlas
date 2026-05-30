@@ -56,7 +56,7 @@ public sealed class PreventNextNDamageToAnyTargetEffectRule : IActivatedEffectRu
     {
       Amount = LiteralQuantity.Of(amount),
       Target = new ObjectReference { Kind = ObjectReferenceKind.AnyTarget },
-      Duration = new UntilEndOfTurnDuration(),
+      Duration = UntilTimeDuration.EndOfTurn,
     };
   }
 }

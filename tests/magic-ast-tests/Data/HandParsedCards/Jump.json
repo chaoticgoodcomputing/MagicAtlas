@@ -48,8 +48,14 @@
                         "creature"
                       ],
                       "Characteristics": [
-                        {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                        {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Flying"
+                        },
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Reach"
+                        }
                       ]
                     },
                     "IsOptional": false
@@ -58,7 +64,11 @@
               },
               "IsOptional": false,
               "Duration": {
-                "DurationType": "untilEndOfTurn"
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ]

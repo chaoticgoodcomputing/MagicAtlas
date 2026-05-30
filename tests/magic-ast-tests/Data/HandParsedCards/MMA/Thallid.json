@@ -31,9 +31,10 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfUpkeep",
-            "Filter": {
-              "Controller": "You"
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
             }
           },
           "Effects": [
@@ -83,13 +84,10 @@
                 ],
                 "Subtypes": [
                   "Saproling"
-                ],
-                "IsCopy": false
-              },
-              "IsOptional": false
+                ]
+              }
             }
-          ],
-          "IsManaAbility": false
+          ]
         }
       ]
     },
@@ -123,13 +121,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]
