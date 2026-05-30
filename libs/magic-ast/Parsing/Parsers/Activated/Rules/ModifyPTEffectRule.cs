@@ -61,7 +61,7 @@ public sealed class ModifyPTEffectRule : IActivatedEffectRule
         },
         PowerModifier = ActivatedRuleHelpers.ParseSignedModifier(asLongAsMatch.Groups["p"].Value),
         ToughnessModifier = ActivatedRuleHelpers.ParseSignedModifier(asLongAsMatch.Groups["t"].Value),
-        Duration = new AsLongAsDuration { Condition = asLongAsMatch.Groups["cond"].Value.Trim() },
+        Duration = new AsLongAsDuration { Condition = MagicAST.Parsing.ConditionParser.Parse(asLongAsMatch.Groups["cond"].Value.Trim()) },
       };
     }
 

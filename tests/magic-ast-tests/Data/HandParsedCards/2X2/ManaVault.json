@@ -61,6 +61,7 @@
             }
           },
           "InterveningIf": {
+            "ConditionType": "other",
             "Text": "this artifact is tapped"
           },
           "Effects": [

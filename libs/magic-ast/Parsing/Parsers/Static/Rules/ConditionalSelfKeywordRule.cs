@@ -32,7 +32,7 @@ public sealed class ConditionalSelfKeywordRule : IStaticRule
     [
       keywordAbility with
       {
-        Condition = new MagicAST.AST.Abilities.Condition { Text = conditionText },
+        Condition = MagicAST.Parsing.ConditionParser.Parse(conditionText),
       },
     ];
   }

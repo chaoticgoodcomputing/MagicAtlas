@@ -86,7 +86,7 @@ public sealed class AsLongAsPTAndKeywordGrantRule : IStaticRule
     // One duration instance shared by reference across both effects — they are gated
     // by the same condition (Rule 611.2 — a single continuous effect's set of
     // characteristics may include several modifications under one timestamp/condition).
-    var duration = new AsLongAsDuration { Condition = condition };
+    var duration = new AsLongAsDuration { Condition = MagicAST.Parsing.ConditionParser.Parse(condition) };
 
     return
     [

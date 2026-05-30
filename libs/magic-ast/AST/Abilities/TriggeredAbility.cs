@@ -61,17 +61,3 @@ public enum TriggeredAbilityRestriction
   /// <summary>"Do this only if [condition]" - see interveningIf for the condition</summary>
   Conditional,
 }
-
-/// <summary>
-/// Represents a condition that must be true.
-/// Used for intervening if clauses and other conditional checks.
-/// </summary>
-public sealed record Condition
-{
-  /// <summary>
-  /// The raw text of the condition.
-  /// </summary>
-  public required string Text { get; init; }
-
-  // TODO: Add structured condition representation as parsing matures
-}

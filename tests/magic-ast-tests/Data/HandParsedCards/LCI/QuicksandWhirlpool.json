@@ -36,6 +36,7 @@
             }
           ],
           "Condition": {
+            "ConditionType": "other",
             "Text": "if it targets a tapped creature"
           }
         },

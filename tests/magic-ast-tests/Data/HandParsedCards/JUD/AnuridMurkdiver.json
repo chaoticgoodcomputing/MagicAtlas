@@ -36,7 +36,11 @@
               },
               "Duration": {
                 "DurationType": "asLongAs",
-                "Condition": "there are seven or more cards in your graveyard"
+                "Condition": {
+                  "ConditionType": "count",
+                  "Filter": { "CardTypes": ["card"], "Zone": "Graveyard", "Controller": "You" },
+                  "Count": { "Operator": "GreaterThanOrEqual", "Value": 7 }
+                }
               }
             },
             {
@@ -44,7 +48,11 @@
               "IsOptional": false,
               "Duration": {
                 "DurationType": "asLongAs",
-                "Condition": "there are seven or more cards in your graveyard"
+                "Condition": {
+                  "ConditionType": "count",
+                  "Filter": { "CardTypes": ["card"], "Zone": "Graveyard", "Controller": "You" },
+                  "Count": { "Operator": "GreaterThanOrEqual", "Value": 7 }
+                }
               }
             }
           ]

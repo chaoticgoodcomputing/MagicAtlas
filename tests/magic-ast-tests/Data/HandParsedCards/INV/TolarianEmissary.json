@@ -64,8 +64,14 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
@@ -83,6 +89,7 @@
             }
           },
           "InterveningIf": {
+            "ConditionType": "other",
             "Text": "it was kicked"
           },
           "Effects": [

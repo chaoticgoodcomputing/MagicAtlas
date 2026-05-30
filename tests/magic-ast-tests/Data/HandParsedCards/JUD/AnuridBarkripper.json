@@ -6,15 +6,24 @@
     "OracleText": "Threshold — This creature gets +2/+2 as long as there are seven or more cards in your graveyard.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Anurid Barkripper",
     "TypeLine": {
       "Raw": "Creature — Frog Beast",
-      "Types": ["Creature"],
-      "Subtypes": ["Frog", "Beast"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Frog",
+        "Beast"
+      ]
     },
     "Oracle": {
       "RawText": "Threshold — This creature gets +2/+2 as long as there are seven or more cards in your graveyard.",
@@ -25,7 +34,9 @@
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "PowerModifier": {
                 "QuantityType": "literal",
                 "Value": 2
@@ -36,7 +47,20 @@
               },
               "Duration": {
                 "DurationType": "asLongAs",
-                "Condition": "there are seven or more cards in your graveyard"
+                "Condition": {
+                  "ConditionType": "count",
+                  "Filter": {
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "Controller": "You",
+                    "Zone": "Graveyard"
+                  },
+                  "Count": {
+                    "Operator": "GreaterThanOrEqual",
+                    "Value": 7
+                  }
+                }
               }
             }
           ]
@@ -48,18 +72,49 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

@@ -36,6 +36,7 @@
             }
           ],
           "Condition": {
+            "ConditionType": "other",
             "Text": "during your turn"
           }
         },

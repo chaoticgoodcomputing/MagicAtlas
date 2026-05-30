@@ -6,15 +6,24 @@
     "OracleText": "Vigilance\nWhenever this creature attacks while saddled, it gets +2/+2 until end of turn.\nSaddle 1 (Tap any number of other creatures you control with total power 1 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
     "Power": "4",
     "Toughness": "4",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Alacrian Jaguar",
     "TypeLine": {
       "Raw": "Creature — Cat Mount",
-      "Types": ["Creature"],
-      "Subtypes": ["Cat", "Mount"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat",
+        "Mount"
+      ]
     },
     "Oracle": {
       "RawText": "Vigilance\nWhenever this creature attacks while saddled, it gets +2/+2 until end of turn.\nSaddle 1 (Tap any number of other creatures you control with total power 1 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
@@ -34,10 +43,13 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "InterveningIf": {
+            "ConditionType": "other",
             "Text": "this permanent is saddled"
           },
           "Effects": [
@@ -80,18 +92,30 @@
         "Kind": "manaCost",
         "Raw": "{4}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

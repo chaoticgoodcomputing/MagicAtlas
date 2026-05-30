@@ -1,6 +1,7 @@
 namespace MagicAST.AST.Effects;
 
 using System.Text.Json.Serialization;
+using MagicAST.AST.Abilities;
 using MagicAST.Serialization;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
@@ -29,7 +30,7 @@ public sealed record UntilYourNextTurnDuration : Duration;
 [OracleDuration("asLongAs")]
 public sealed record AsLongAsDuration : Duration
 {
-  public required string Condition { get; init; }
+  public required Condition Condition { get; init; }
 }
 
 /// <summary>

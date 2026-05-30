@@ -35,7 +35,7 @@ public sealed class ConditionalSpellCostReductionRule : IStaticRule
         {
           Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount),
         }],
-        Condition = new MagicAST.AST.Abilities.Condition { Text = conditionText },
+        Condition = MagicAST.Parsing.ConditionParser.Parse(conditionText),
       },
     ];
   }

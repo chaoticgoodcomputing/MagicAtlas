@@ -38,7 +38,7 @@ public sealed class EntersTappedRule : IStaticRule
       // The "unless [condition]" clause names when the permanent enters UNtapped;
       // it gates the as-enters tap and so lives on StaticAbility.Condition.
       Condition? entryCondition = conditionGroup.Success
-        ? new Condition { Text = conditionGroup.Value.Trim() }
+        ? MagicAST.Parsing.ConditionParser.Parse(conditionGroup.Value.Trim())
         : null;
 
       return
@@ -73,7 +73,7 @@ public sealed class EntersTappedRule : IStaticRule
           {
             Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
           }],
-          Condition = new Condition { Text = conditionText },
+          Condition = MagicAST.Parsing.ConditionParser.Parse(conditionText),
         },
       ];
     }

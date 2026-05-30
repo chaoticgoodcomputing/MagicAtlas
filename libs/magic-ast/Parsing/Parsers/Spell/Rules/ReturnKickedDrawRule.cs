@@ -113,7 +113,7 @@ public sealed class ReturnKickedDrawRule : ISpellRule, IMultiSpellRule
     {
       Count = LiteralQuantity.Of(drawCount),
       Player = ObjectReference.You(),
-      Condition = new Condition { Text = "this spell was kicked" },
+      Condition = MagicAST.Parsing.ConditionParser.Parse("this spell was kicked"),
     };
 
     effects = [returnEffect, drawEffect];

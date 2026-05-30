@@ -36,7 +36,7 @@ public sealed record CostReductionEffect : Effect, IOptionalEffect, IDurativeEff
   /// Optional condition for when the reduction applies.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public string? Condition { get; init; }
+  public Condition? Condition { get; init; }
 
   /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
   public bool IsOptional { get; init; }

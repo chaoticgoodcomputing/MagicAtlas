@@ -6,15 +6,24 @@
     "OracleText": "Deathtouch\nWhenever this creature attacks while saddled, it gets +0/+3 until end of turn.\nSaddle 2 (Tap any number of other creatures you control with total power 2 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Venomsac Lagac",
     "TypeLine": {
       "Raw": "Creature — Lizard Mount",
-      "Types": ["Creature"],
-      "Subtypes": ["Lizard", "Mount"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Lizard",
+        "Mount"
+      ]
     },
     "Oracle": {
       "RawText": "Deathtouch\nWhenever this creature attacks while saddled, it gets +0/+3 until end of turn.\nSaddle 2 (Tap any number of other creatures you control with total power 2 or more: This Mount becomes saddled until end of turn. Saddle only as a sorcery.)",
@@ -34,10 +43,13 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "InterveningIf": {
+            "ConditionType": "other",
             "Text": "this permanent is saddled"
           },
           "Effects": [
@@ -80,18 +92,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

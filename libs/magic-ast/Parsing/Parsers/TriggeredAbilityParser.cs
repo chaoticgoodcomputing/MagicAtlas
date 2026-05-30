@@ -134,7 +134,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     );
     if (trailingIfMatch.Success)
     {
-      interveningIf = new Condition { Text = trailingIfMatch.Groups["cond"].Value.Trim() };
+      interveningIf = MagicAST.Parsing.ConditionParser.Parse(trailingIfMatch.Groups["cond"].Value.Trim());
       triggerPart = trailingIfMatch.Groups["head"].Value.Trim();
     }
 
@@ -157,7 +157,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         // Normalise bare adjective "saddled" → "this permanent is saddled".
         // Other "while [adj]" forms are preserved as-is.
         var normalised = condText == "saddled" ? "this permanent is saddled" : condText;
-        interveningIf = new Condition { Text = normalised };
+        interveningIf = MagicAST.Parsing.ConditionParser.Parse(normalised);
         triggerPart = whileCondMatch.Groups["head"].Value.Trim();
       }
     }
@@ -181,7 +181,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       );
       if (leadingIfMatch.Success)
       {
-        interveningIf = new Condition { Text = leadingIfMatch.Groups["cond"].Value.Trim() };
+        interveningIf = MagicAST.Parsing.ConditionParser.Parse(leadingIfMatch.Groups["cond"].Value.Trim());
         effectPart = leadingIfMatch.Groups["rest"].Value.Trim();
       }
     }

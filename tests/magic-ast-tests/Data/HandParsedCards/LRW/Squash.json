@@ -6,14 +6,20 @@
     "OracleText": "This spell costs {3} less to cast if you control a Giant.\nSquash deals 6 damage to target creature or planeswalker.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Squash",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "This spell costs {3} less to cast if you control a Giant.\nSquash deals 6 damage to target creature or planeswalker.",
@@ -30,7 +36,17 @@
             }
           ],
           "Condition": {
-            "Text": "if you control a Giant"
+            "ConditionType": "count",
+            "Filter": {
+              "Subtypes": [
+                "Giant"
+              ],
+              "Controller": "You"
+            },
+            "Count": {
+              "Operator": "GreaterThanOrEqual",
+              "Value": 1
+            }
           }
         },
         {
@@ -48,7 +64,10 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature", "planeswalker"]
+                  "CardTypes": [
+                    "creature",
+                    "planeswalker"
+                  ]
                 }
               }
             }
@@ -61,18 +80,30 @@
         "Kind": "manaCost",
         "Raw": "{4}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

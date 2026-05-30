@@ -38,13 +38,20 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
           ],
           "Condition": {
+            "ConditionType": "other",
             "Text": "During your turn"
           }
         }

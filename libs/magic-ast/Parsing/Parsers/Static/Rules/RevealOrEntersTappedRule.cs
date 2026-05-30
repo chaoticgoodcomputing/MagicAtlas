@@ -56,7 +56,7 @@ public sealed class RevealOrEntersTappedRule : IStaticRule
         {
           Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
         }],
-        Condition = new Condition { Text = $"you {revealText}" },
+        Condition = new OtherCondition { Text = $"you {revealText}" },
       },
     ];
   }

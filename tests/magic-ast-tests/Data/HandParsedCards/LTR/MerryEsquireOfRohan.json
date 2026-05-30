@@ -62,7 +62,10 @@
               },
               "Duration": {
                 "DurationType": "asLongAs",
-                "Condition": "it's equipped"
+                "Condition": {
+                  "ConditionType": "other",
+                  "Text": "it's equipped"
+                }
               }
             }
           ]
@@ -78,7 +81,10 @@
               ],
               "Controller": "You",
               "Characteristics": [
-                {"CharacteristicType": "other", "Description": "another"}
+                {
+                  "CharacteristicType": "other",
+                  "Description": "another"
+                }
               ]
             }
           },

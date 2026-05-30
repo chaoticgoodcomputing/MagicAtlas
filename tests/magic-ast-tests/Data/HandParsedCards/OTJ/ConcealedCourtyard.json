@@ -35,7 +35,17 @@
           ],
           "When": "asThisEnters",
           "Condition": {
-            "Text": "you control two or fewer other lands"
+            "ConditionType": "count",
+            "Filter": {
+              "CardTypes": [
+                "land"
+              ],
+              "Controller": "You"
+            },
+            "Count": {
+              "Operator": "LessThanOrEqual",
+              "Value": 2
+            }
           }
         },
         {

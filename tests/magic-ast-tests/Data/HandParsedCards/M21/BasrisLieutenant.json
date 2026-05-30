@@ -96,6 +96,7 @@
             }
           },
           "InterveningIf": {
+            "ConditionType": "other",
             "Text": "it had a +1/+1 counter on it"
           },
           "Effects": [

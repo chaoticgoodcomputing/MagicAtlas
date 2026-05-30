@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Barrin, Tolarian Archmage",
     "ManaCost": "{1}{U}{U}",
-    "TypeLine": "Legendary Creature \u2014 Human Wizard",
+    "TypeLine": "Legendary Creature — Human Wizard",
     "OracleText": "When Barrin enters, return up to one other target creature or planeswalker to its owner's hand.\nAt the beginning of your end step, if a permanent was put into your hand from the battlefield this turn, draw a card.",
     "Power": "2",
     "Toughness": "2",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Barrin, Tolarian Archmage",
     "TypeLine": {
-      "Raw": "Legendary Creature \u2014 Human Wizard",
+      "Raw": "Legendary Creature — Human Wizard",
       "Supertypes": [
         "Legendary"
       ],
@@ -53,7 +53,10 @@
                     "planeswalker"
                   ],
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "other"
+                    }
                   ]
                 }
               },
@@ -71,6 +74,7 @@
             }
           },
           "InterveningIf": {
+            "ConditionType": "other",
             "Text": "a permanent was put into your hand from the battlefield this turn"
           },
           "Effects": [

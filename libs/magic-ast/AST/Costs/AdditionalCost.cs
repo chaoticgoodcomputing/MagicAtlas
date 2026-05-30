@@ -1,6 +1,7 @@
 namespace MagicAST.AST.Costs;
 
 using System.Text.Json.Serialization;
+using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 
@@ -48,7 +49,7 @@ public sealed record AlternativeCost
     /// Condition that must be met to use this alternative cost.
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? Condition { get; init; }
+    public Condition? Condition { get; init; }
 
     /// <summary>
     /// Location in source text.
@@ -78,7 +79,7 @@ public sealed record CostReduction
     /// Condition for the reduction.
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? Condition { get; init; }
+    public Condition? Condition { get; init; }
 
     /// <summary>
     /// Location in source text.

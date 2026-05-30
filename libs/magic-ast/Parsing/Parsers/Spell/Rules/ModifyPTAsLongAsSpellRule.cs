@@ -53,7 +53,7 @@ public sealed class ModifyPTAsLongAsSpellRule : ISpellRule
       },
       PowerModifier = LiteralQuantity.Of(power),
       ToughnessModifier = LiteralQuantity.Of(toughness),
-      Duration = new AsLongAsDuration { Condition = condition },
+      Duration = new AsLongAsDuration { Condition = MagicAST.Parsing.ConditionParser.Parse(condition) },
     };
     return true;
   }

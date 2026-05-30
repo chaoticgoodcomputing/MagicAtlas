@@ -51,10 +51,7 @@ public sealed class KickerConditionalEntersWithCountersRule : IStaticRule
           CounterType = counterType,
           IsOptional = false,
         }],
-        Condition = new MagicAST.AST.Abilities.Condition
-        {
-          Text = "this creature was kicked",
-        },
+        Condition = MagicAST.Parsing.ConditionParser.Parse("this creature was kicked"),
       },
     ];
   }

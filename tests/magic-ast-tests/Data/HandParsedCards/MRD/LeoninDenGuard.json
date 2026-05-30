@@ -45,7 +45,10 @@
               },
               "Duration": {
                 "DurationType": "asLongAs",
-                "Condition": "this creature is equipped"
+                "Condition": {
+                  "ConditionType": "other",
+                  "Text": "this creature is equipped"
+                }
               }
             }
           ]

@@ -61,6 +61,7 @@
             }
           },
           "InterveningIf": {
+            "ConditionType": "other",
             "Text": "it was kicked"
           },
           "Effects": [

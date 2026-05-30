@@ -6,14 +6,20 @@
     "OracleText": "Kicker {2} (You may pay an additional {2} as you cast this spell.)\nReturn target nonland permanent to its owner's hand. If this spell was kicked, draw a card.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Kicked Bounce",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Kicker {2} (You may pay an additional {2} as you cast this spell.)\nReturn target nonland permanent to its owner's hand. If this spell was kicked, draw a card.",
@@ -44,8 +50,15 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["permanent"],
-                  "Characteristics": [{"CharacteristicType": "other", "Description": "nonland"}]
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "nonland"
+                    }
+                  ]
                 }
               }
             },
@@ -59,6 +72,7 @@
                 "Kind": "You"
               },
               "Condition": {
+                "ConditionType": "other",
                 "Text": "this spell was kicked"
               }
             }
@@ -71,13 +85,31 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}",
         "Symbols": [
-          {"Kind": "generic", "GenericAmount": 1},
-          {"Kind": "colored", "Colors": ["U"]}
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      {"Kind": "colors", "Colors": ["U"]},
-      {"Kind": "colorIdentity", "ColorIdentity": ["U"]}
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
     ]
   }
 }

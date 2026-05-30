@@ -40,6 +40,7 @@
             }
           ],
           "Condition": {
+            "ConditionType": "other",
             "Text": "During your turn"
           }
         }

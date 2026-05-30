@@ -89,7 +89,7 @@ public sealed class AsLongAsStaticGrantRule : IStaticRule
     {
       var soulbondCond = soulbondLeadingMatch.Groups["cond"].Value.Trim();
       var soulbondKw = soulbondLeadingMatch.Groups["kw"].Value.Trim();
-      var soulbondDuration = new AsLongAsDuration { Condition = soulbondCond };
+      var soulbondDuration = new AsLongAsDuration { Condition = MagicAST.Parsing.ConditionParser.Parse(soulbondCond) };
       var soulbondGrantedAbility = StaticRuleHelpers.MapKeywordToStaticAbility(soulbondKw);
       if (soulbondGrantedAbility != null)
       {
@@ -133,7 +133,7 @@ public sealed class AsLongAsStaticGrantRule : IStaticRule
     {
       var leadingCond = leadingMatch.Groups["cond"].Value.Trim();
       var effectText = leadingMatch.Groups["effect"].Value.Trim();
-      var leadingDuration = new AsLongAsDuration { Condition = leadingCond };
+      var leadingDuration = new AsLongAsDuration { Condition = MagicAST.Parsing.ConditionParser.Parse(leadingCond) };
 
       // Leading sub-parser C: "it/this creature gets +N/+M and can't block" (compound).
       // Tried before sub-parser A so the "and can't block" suffix doesn't break the
@@ -226,7 +226,7 @@ public sealed class AsLongAsStaticGrantRule : IStaticRule
 
     var remainingText = suffixMatch.Groups["main"].Value.Trim();
     var conditionText = suffixMatch.Groups["cond"].Value.Trim();
-    var duration = new AsLongAsDuration { Condition = conditionText };
+    var duration = new AsLongAsDuration { Condition = MagicAST.Parsing.ConditionParser.Parse(conditionText) };
 
     // Strip any ability-word prefix ("Threshold — ", "Metalcraft — ", etc.)
     // from remainingText. The classifier has already captured the word into

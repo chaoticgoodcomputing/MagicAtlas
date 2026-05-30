@@ -60,8 +60,14 @@
                         "creature"
                       ],
                       "Characteristics": [
-                        {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                        {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Flying"
+                        },
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Reach"
+                        }
                       ]
                     }
                   }
@@ -69,7 +75,10 @@
               },
               "Duration": {
                 "DurationType": "asLongAs",
-                "Condition": "you have the city's blessing"
+                "Condition": {
+                  "ConditionType": "other",
+                  "Text": "you have the city's blessing"
+                }
               },
               "IsOptional": false
             }

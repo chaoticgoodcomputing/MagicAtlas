@@ -30,7 +30,9 @@
             }
           ],
           "Condition": {
-            "Text": "if you control a Wizard"
+            "ConditionType": "count",
+            "Filter": { "Subtypes": ["Wizard"], "Controller": "You" },
+            "Count": { "Operator": "GreaterThanOrEqual", "Value": 1 }
           }
         },
         {

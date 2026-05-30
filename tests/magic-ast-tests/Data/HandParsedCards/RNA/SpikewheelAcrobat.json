@@ -73,6 +73,7 @@
             }
           ],
           "Condition": {
+            "ConditionType": "other",
             "Text": "an opponent lost life this turn"
           },
           "When": "asThisEnters"

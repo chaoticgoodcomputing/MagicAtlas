@@ -45,7 +45,10 @@
               },
               "Duration": {
                 "DurationType": "asLongAs",
-                "Condition": "it's untapped"
+                "Condition": {
+                  "ConditionType": "other",
+                  "Text": "it's untapped"
+                }
               }
             }
           ]

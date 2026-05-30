@@ -649,7 +649,7 @@ public static class MermaidEmitter
                 ctx.EmitEdge(parentId, id);
                 break;
             case AsLongAsDuration al:
-                id = ctx.EmitNode($"AsLongAs<br/>{Truncate(al.Condition, 30)}");
+                id = ctx.EmitNode($"AsLongAs<br/>{Truncate(al.Condition is MagicAST.AST.Abilities.OtherCondition alOc ? alOc.Text : al.Condition.GetType().Name, 30)}");
                 ctx.EmitEdge(parentId, id);
                 break;
             case PermanentDuration:

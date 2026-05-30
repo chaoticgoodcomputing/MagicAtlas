@@ -6,14 +6,20 @@
     "OracleText": "This spell costs {1} less to cast if you control a Pirate.\nCounter target spell unless its controller pays {4}.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Lookout's Dispersal",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "This spell costs {1} less to cast if you control a Pirate.\nCounter target spell unless its controller pays {4}.",
@@ -30,7 +36,17 @@
             }
           ],
           "Condition": {
-            "Text": "if you control a Pirate"
+            "ConditionType": "count",
+            "Filter": {
+              "Subtypes": [
+                "Pirate"
+              ],
+              "Controller": "You"
+            },
+            "Count": {
+              "Operator": "GreaterThanOrEqual",
+              "Value": 1
+            }
           }
         },
         {
@@ -41,7 +57,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["spell"]
+                  "CardTypes": [
+                    "spell"
+                  ]
                 }
               },
               "UnlessClause": {
@@ -51,7 +69,10 @@
                 "Cost": {
                   "CostType": "mana",
                   "Symbols": [
-                    { "Kind": "generic", "GenericAmount": 4 }
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 4
+                    }
                   ]
                 }
               }
@@ -65,18 +86,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

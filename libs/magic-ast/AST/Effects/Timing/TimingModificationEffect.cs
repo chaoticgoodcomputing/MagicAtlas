@@ -49,7 +49,7 @@ public sealed record TimingModificationEffect : Effect, IOptionalEffect, IDurati
   /// e.g., "as long as The Wandering Emperor entered this turn"
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public string? Condition { get; init; }
+  public Condition? Condition { get; init; }
 
   /// <summary>
   /// Consequence if the modified timing is used.

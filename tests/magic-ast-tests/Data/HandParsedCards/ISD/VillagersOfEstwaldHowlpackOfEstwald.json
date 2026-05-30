@@ -90,6 +90,7 @@
                 "Event": "BeginningOfUpkeep"
               },
               "InterveningIf": {
+                "ConditionType": "other",
                 "Text": "a player cast two or more spells last turn"
               },
               "Effects": [
@@ -181,6 +182,7 @@
                 "Event": "BeginningOfUpkeep"
               },
               "InterveningIf": {
+                "ConditionType": "other",
                 "Text": "no spells were cast last turn"
               },
               "Effects": [

@@ -6,15 +6,24 @@
     "OracleText": "Threshold — This creature gets +7/+7 as long as there are seven or more cards in your graveyard.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Krosan Beast",
     "TypeLine": {
       "Raw": "Creature — Squirrel Beast",
-      "Types": ["Creature"],
-      "Subtypes": ["Squirrel", "Beast"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Squirrel",
+        "Beast"
+      ]
     },
     "Oracle": {
       "RawText": "Threshold — This creature gets +7/+7 as long as there are seven or more cards in your graveyard.",
@@ -25,7 +34,9 @@
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "PowerModifier": {
                 "QuantityType": "literal",
                 "Value": 7
@@ -36,7 +47,20 @@
               },
               "Duration": {
                 "DurationType": "asLongAs",
-                "Condition": "there are seven or more cards in your graveyard"
+                "Condition": {
+                  "ConditionType": "count",
+                  "Filter": {
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "Controller": "You",
+                    "Zone": "Graveyard"
+                  },
+                  "Count": {
+                    "Operator": "GreaterThanOrEqual",
+                    "Value": 7
+                  }
+                }
               }
             }
           ]
@@ -48,17 +72,43 @@
         "Kind": "manaCost",
         "Raw": "{3}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 4
       },
-      { "Kind": "colors", "Colors": ["G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

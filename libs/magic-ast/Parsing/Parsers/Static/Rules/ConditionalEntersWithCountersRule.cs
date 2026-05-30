@@ -58,10 +58,7 @@ public sealed class ConditionalEntersWithCountersRule : IStaticRule
           CounterType = counterType,
           IsOptional = false,
         }],
-        Condition = new MagicAST.AST.Abilities.Condition
-        {
-          Text = conditionText,
-        },
+        Condition = MagicAST.Parsing.ConditionParser.Parse(conditionText),
       },
     ];
   }

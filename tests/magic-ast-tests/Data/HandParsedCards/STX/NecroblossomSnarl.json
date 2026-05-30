@@ -35,6 +35,7 @@
           ],
           "When": "asThisEnters",
           "Condition": {
+            "ConditionType": "other",
             "Text": "you reveal a Swamp or Forest card from your hand"
           }
         },
