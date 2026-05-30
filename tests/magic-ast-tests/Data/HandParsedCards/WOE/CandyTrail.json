@@ -6,14 +6,20 @@
     "OracleText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nCreate a Food token. If this spell was bargained, create two Food tokens instead.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Candy Trail",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Bargain (You may sacrifice an artifact, enchantment, or token as you cast this spell.)\nCreate a Food token. If this spell was bargained, create two Food tokens instead.",
@@ -23,8 +29,8 @@
           "KeywordSource": "Bargain",
           "Effects": [
             {
-              "EffectType": "bargain",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Bargain"
             }
           ],
           "Reminder": {
@@ -60,19 +66,31 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

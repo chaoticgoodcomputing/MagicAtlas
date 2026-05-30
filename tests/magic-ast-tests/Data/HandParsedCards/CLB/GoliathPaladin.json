@@ -6,15 +6,24 @@
     "OracleText": "Vigilance\nWhen this creature enters, you take the initiative.",
     "Power": "3",
     "Toughness": "6",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Goliath Paladin",
     "TypeLine": {
       "Raw": "Creature — Giant Knight",
-      "Types": ["Creature"],
-      "Subtypes": ["Giant", "Knight"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Giant",
+        "Knight"
+      ]
     },
     "Oracle": {
       "RawText": "Vigilance\nWhen this creature enters, you take the initiative.",
@@ -24,7 +33,8 @@
           "KeywordSource": "Vigilance",
           "Effects": [
             {
-              "EffectType": "vigilance"
+              "EffectType": "keywordAbility",
+              "Keyword": "Vigilance"
             }
           ]
         },
@@ -34,12 +44,15 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
             {
-              "EffectType": "takeInitiative"
+              "EffectType": "keywordAbility",
+              "Keyword": "TakeInitiative"
             }
           ]
         }
@@ -50,18 +63,30 @@
         "Kind": "manaCost",
         "Raw": "{4}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

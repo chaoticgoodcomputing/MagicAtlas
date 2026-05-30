@@ -264,14 +264,14 @@ internal static class ActivatedRuleHelpers
     return keyword switch
     {
       "lifelink" => new StaticAbility { KeywordSource = "Lifelink", Effects = [new LifelinkEffect()] },
-      "haste" => new StaticAbility { KeywordSource = "Haste", Effects = [new HasteEffect()] },
-      "trample" => new StaticAbility { KeywordSource = "Trample", Effects = [new TrampleEffect()] },
-      "vigilance" => new StaticAbility { KeywordSource = "Vigilance", Effects = [new VigilanceEffect()] },
-      "reach" => new StaticAbility { KeywordSource = "Reach", Effects = [new ReachEffect()] },
-      "indestructible" => new StaticAbility { KeywordSource = "Indestructible", Effects = [new IndestructibleEffect()] },
-      "deathtouch" => new StaticAbility { KeywordSource = "Deathtouch", Effects = [new DeathtouchEffect()] },
-      "hexproof" => new StaticAbility { KeywordSource = "Hexproof", Effects = [new HexproofEffect()] },
-      "shroud" => new StaticAbility { KeywordSource = "Shroud", Effects = [new ShroudEffect()] },
+      "haste" => new StaticAbility { KeywordSource = "Haste", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }] },
+      "trample" => new StaticAbility { KeywordSource = "Trample", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }] },
+      "vigilance" => new StaticAbility { KeywordSource = "Vigilance", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }] },
+      "reach" => new StaticAbility { KeywordSource = "Reach", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }] },
+      "indestructible" => new StaticAbility { KeywordSource = "Indestructible", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }] },
+      "deathtouch" => new StaticAbility { KeywordSource = "Deathtouch", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }] },
+      "hexproof" => new StaticAbility { KeywordSource = "Hexproof", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }] },
+      "shroud" => new StaticAbility { KeywordSource = "Shroud", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }] },
       "flying" => new StaticAbility
       {
         KeywordSource = "Flying",

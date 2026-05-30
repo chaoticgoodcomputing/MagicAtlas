@@ -29,7 +29,7 @@ public sealed class SoulbondKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Soulbond",
-        Effects = [new SoulbondEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Soulbond }],
       },
     };
 
@@ -40,7 +40,7 @@ public sealed class SoulbondKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Soulbond",
-      Effects = [new SoulbondEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Soulbond }],
       Reminder = reminder,
     }
   );

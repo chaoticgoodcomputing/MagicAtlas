@@ -31,7 +31,7 @@ public sealed class JumpStartKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Jump-start",
-        Effects = [new JumpStartEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.JumpStart }],
       },
     };
 
@@ -42,7 +42,7 @@ public sealed class JumpStartKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Jump-start",
-      Effects = [new JumpStartEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.JumpStart }],
       Reminder = reminder,
     }
   );

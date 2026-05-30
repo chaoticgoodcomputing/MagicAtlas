@@ -35,7 +35,7 @@ public sealed class AscendKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Ascend",
-        Effects = [new AscendEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Ascend }],
       },
     };
 
@@ -46,7 +46,7 @@ public sealed class AscendKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Ascend",
-      Effects = [new AscendEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Ascend }],
       Reminder = reminder,
     }
   );

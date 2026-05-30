@@ -6,15 +6,24 @@
     "OracleText": "Horsemanship (This creature can't be blocked except by creatures with horsemanship.)\nThis creature can't block.",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Yellow Scarves General",
     "TypeLine": {
       "Raw": "Creature — Human Soldier",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Soldier"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "Horsemanship (This creature can't be blocked except by creatures with horsemanship.)\nThis creature can't block.",
@@ -27,7 +36,8 @@
           },
           "Effects": [
             {
-              "EffectType": "horsemanship"
+              "EffectType": "keywordAbility",
+              "Keyword": "Horsemanship"
             }
           ]
         },
@@ -53,18 +63,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

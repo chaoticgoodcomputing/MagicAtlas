@@ -29,7 +29,7 @@ public sealed class ReboundKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Rebound",
-        Effects = [new ReboundEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Rebound }],
       },
     };
 
@@ -40,7 +40,7 @@ public sealed class ReboundKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Rebound",
-      Effects = [new ReboundEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Rebound }],
       Reminder = reminder,
     }
   );

@@ -31,7 +31,7 @@ public sealed class EnlistKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Enlist",
-        Effects = [new EnlistEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Enlist }],
       },
     };
 
@@ -42,7 +42,7 @@ public sealed class EnlistKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Enlist",
-      Effects = [new EnlistEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Enlist }],
       Reminder = reminder,
     }
   );

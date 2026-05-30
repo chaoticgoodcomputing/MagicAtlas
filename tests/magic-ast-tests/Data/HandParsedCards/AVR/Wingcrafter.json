@@ -36,8 +36,8 @@
           },
           "Effects": [
             {
-              "EffectType": "soulbond",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Soulbond"
             }
           ]
         },

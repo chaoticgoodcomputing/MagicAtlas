@@ -32,7 +32,8 @@
           "KeywordSource": "Defender",
           "Effects": [
             {
-              "EffectType": "defender"
+              "EffectType": "keywordAbility",
+              "Keyword": "Defender"
             }
           ]
         }

@@ -27,7 +27,7 @@ public sealed class VigilanceKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Vigilance",
-        Effects = [new VigilanceEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }],
       },
     };
 
@@ -38,7 +38,7 @@ public sealed class VigilanceKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Vigilance",
-      Effects = [new VigilanceEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }],
       Reminder = reminder,
     }
   );

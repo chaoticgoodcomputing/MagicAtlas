@@ -6,15 +6,24 @@
     "OracleText": "Skulk (This creature can't be blocked by creatures with greater power.)\nLifelink (Damage dealt by this creature also causes you to gain that much life.)",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Vampire Cutthroat",
     "TypeLine": {
       "Raw": "Creature — Vampire Rogue",
-      "Types": ["Creature"],
-      "Subtypes": ["Vampire", "Rogue"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire",
+        "Rogue"
+      ]
     },
     "Oracle": {
       "RawText": "Skulk (This creature can't be blocked by creatures with greater power.)\nLifelink (Damage dealt by this creature also causes you to gain that much life.)",
@@ -27,7 +36,8 @@
           },
           "Effects": [
             {
-              "EffectType": "skulk"
+              "EffectType": "keywordAbility",
+              "Keyword": "Skulk"
             }
           ]
         },
@@ -52,18 +62,24 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

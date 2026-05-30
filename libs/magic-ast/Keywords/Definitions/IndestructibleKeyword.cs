@@ -28,7 +28,7 @@ public sealed class IndestructibleKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Indestructible",
-        Effects = [new IndestructibleEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }],
       },
     };
 
@@ -39,7 +39,7 @@ public sealed class IndestructibleKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Indestructible",
-      Effects = [new IndestructibleEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }],
       Reminder = reminder,
     }
   );

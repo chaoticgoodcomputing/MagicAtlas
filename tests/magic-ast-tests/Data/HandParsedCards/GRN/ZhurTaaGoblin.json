@@ -35,7 +35,8 @@
           "KeywordSource": "Riot",
           "Effects": [
             {
-              "EffectType": "riot"
+              "EffectType": "keywordAbility",
+              "Keyword": "Riot"
             }
           ],
           "Reminder": {

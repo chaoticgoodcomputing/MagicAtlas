@@ -32,8 +32,8 @@
           "KeywordSource": "Devoid",
           "Effects": [
             {
-              "EffectType": "devoid",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Devoid"
             }
           ]
         },
@@ -42,8 +42,8 @@
           "KeywordSource": "Deathtouch",
           "Effects": [
             {
-              "EffectType": "deathtouch",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Deathtouch"
             }
           ]
         },
@@ -52,8 +52,8 @@
           "KeywordSource": "Ingest",
           "Effects": [
             {
-              "EffectType": "ingest",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Ingest"
             }
           ]
         },

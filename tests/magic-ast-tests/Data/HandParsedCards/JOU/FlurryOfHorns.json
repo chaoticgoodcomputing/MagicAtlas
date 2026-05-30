@@ -6,14 +6,20 @@
     "OracleText": "Create two 2/3 red Minotaur creature tokens with haste.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Flurry of Horns",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Create two 2/3 red Minotaur creature tokens with haste.",
@@ -30,16 +36,23 @@
               "Token": {
                 "Power": "2",
                 "Toughness": "3",
-                "Colors": ["R"],
-                "Types": ["creature"],
-                "Subtypes": ["Minotaur"],
+                "Colors": [
+                  "R"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Minotaur"
+                ],
                 "Abilities": [
                   {
                     "Kind": "static",
                     "KeywordSource": "Haste",
                     "Effects": [
                       {
-                        "EffectType": "haste"
+                        "EffectType": "keywordAbility",
+                        "Keyword": "Haste"
                       }
                     ]
                   }
@@ -57,19 +70,36 @@
         "Kind": "manaCost",
         "Raw": "{3}{R}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

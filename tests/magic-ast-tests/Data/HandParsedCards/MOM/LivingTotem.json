@@ -33,7 +33,8 @@
           "KeywordSource": "Convoke",
           "Effects": [
             {
-              "EffectType": "convoke"
+              "EffectType": "keywordAbility",
+              "Keyword": "Convoke"
             }
           ]
         },
@@ -58,7 +59,10 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "another"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "another"
+                    }
                   ]
                 }
               },

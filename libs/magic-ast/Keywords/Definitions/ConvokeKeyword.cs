@@ -29,7 +29,7 @@ public sealed class ConvokeKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Convoke",
-      Effects = [new ConvokeEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Convoke }],
       Reminder = reminder,
     }
   );

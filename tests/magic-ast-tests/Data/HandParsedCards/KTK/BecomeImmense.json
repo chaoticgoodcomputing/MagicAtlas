@@ -29,7 +29,8 @@
           "KeywordSource": "Delve",
           "Effects": [
             {
-              "EffectType": "delve"
+              "EffectType": "keywordAbility",
+              "Keyword": "Delve"
             }
           ]
         },

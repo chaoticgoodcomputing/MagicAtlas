@@ -29,7 +29,7 @@ public sealed class ProvokeKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Provoke",
-        Effects = [new ProvokeEffect { IsOptional = false }],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Provoke }],
       },
     };
 
@@ -40,7 +40,7 @@ public sealed class ProvokeKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Provoke",
-      Effects = [new ProvokeEffect { IsOptional = false }],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Provoke }],
       Reminder = reminder,
     }
   );

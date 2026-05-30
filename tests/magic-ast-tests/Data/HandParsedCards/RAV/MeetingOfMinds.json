@@ -29,7 +29,8 @@
           "KeywordSource": "Convoke",
           "Effects": [
             {
-              "EffectType": "convoke"
+              "EffectType": "keywordAbility",
+              "Keyword": "Convoke"
             }
           ]
         },

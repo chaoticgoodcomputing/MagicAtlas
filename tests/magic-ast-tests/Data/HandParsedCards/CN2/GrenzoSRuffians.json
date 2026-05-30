@@ -35,7 +35,8 @@
           },
           "Effects": [
             {
-              "EffectType": "melee"
+              "EffectType": "keywordAbility",
+              "Keyword": "Melee"
             }
           ]
         },
@@ -62,7 +63,10 @@
                 "Kind": "EachOpponent",
                 "Filter": {
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "other"
+                    }
                   ]
                 }
               },

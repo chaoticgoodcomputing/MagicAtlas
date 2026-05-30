@@ -6,15 +6,25 @@
     "OracleText": "Reach\nWhenever you cast an artifact spell, surveil 1.",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["U", "G"],
-    "ColorIdentity": ["U", "G"]
+    "Colors": [
+      "U",
+      "G"
+    ],
+    "ColorIdentity": [
+      "U",
+      "G"
+    ]
   },
   "Output": {
     "Name": "Vilespawn Spider",
     "TypeLine": {
       "Raw": "Creature — Spider",
-      "Types": ["Creature"],
-      "Subtypes": ["Spider"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spider"
+      ]
     },
     "Oracle": {
       "RawText": "Reach\nWhenever you cast an artifact spell, surveil 1.",
@@ -24,7 +34,8 @@
           "KeywordSource": "Reach",
           "Effects": [
             {
-              "EffectType": "reach"
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
             }
           ]
         },
@@ -34,8 +45,15 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell"],
-              "Characteristics": [{"CharacteristicType": "other", "Description": "artifact"}],
+              "CardTypes": [
+                "spell"
+              ],
+              "Characteristics": [
+                {
+                  "CharacteristicType": "other",
+                  "Description": "artifact"
+                }
+              ],
               "Controller": "You"
             }
           },
@@ -56,18 +74,34 @@
         "Kind": "manaCost",
         "Raw": "{U}{G}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["U", "G"]
+        "Colors": [
+          "U",
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "G"]
+        "ColorIdentity": [
+          "U",
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

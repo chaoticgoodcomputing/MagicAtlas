@@ -34,7 +34,7 @@ public sealed class BandingKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Banding",
-      Effects = [new BandingEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Banding }],
       Reminder = reminder,
     }
   );

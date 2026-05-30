@@ -28,7 +28,7 @@ public sealed class DelveKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Delve",
-        Effects = [new DelveEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Delve }],
       },
     };
 
@@ -39,7 +39,7 @@ public sealed class DelveKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Delve",
-      Effects = [new DelveEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Delve }],
       Reminder = reminder,
     }
   );

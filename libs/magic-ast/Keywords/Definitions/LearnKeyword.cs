@@ -31,7 +31,7 @@ public sealed class LearnKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Learn",
-        Effects = [new LearnEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Learn }],
       },
     };
 
@@ -42,7 +42,7 @@ public sealed class LearnKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Learn",
-      Effects = [new LearnEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Learn }],
       Reminder = reminder,
     }
   );

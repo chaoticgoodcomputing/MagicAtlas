@@ -29,7 +29,7 @@ public sealed class FuseKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Fuse",
-        Effects = [new FuseEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Fuse }],
       },
     };
 
@@ -40,7 +40,7 @@ public sealed class FuseKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Fuse",
-      Effects = [new FuseEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Fuse }],
       Reminder = reminder,
     }
   );

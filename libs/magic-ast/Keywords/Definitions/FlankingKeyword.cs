@@ -29,7 +29,7 @@ public sealed class FlankingKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Flanking",
-        Effects = [new FlankingEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Flanking }],
       },
     };
 
@@ -40,7 +40,7 @@ public sealed class FlankingKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Flanking",
-      Effects = [new FlankingEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Flanking }],
       Reminder = reminder,
     }
   );

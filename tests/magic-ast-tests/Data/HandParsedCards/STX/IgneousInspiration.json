@@ -6,14 +6,20 @@
     "OracleText": "Igneous Inspiration deals 3 damage to any target.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Igneous Inspiration",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Igneous Inspiration deals 3 damage to any target.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)",
@@ -23,12 +29,16 @@
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Source": { "Kind": "Self" },
+              "Source": {
+                "Kind": "Self"
+              },
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 3
               },
-              "Target": { "Kind": "AnyTarget" },
+              "Target": {
+                "Kind": "AnyTarget"
+              },
               "IsOptional": false
             }
           ]
@@ -38,8 +48,8 @@
           "KeywordSource": "Learn",
           "Effects": [
             {
-              "EffectType": "learn",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Learn"
             }
           ],
           "Reminder": {
@@ -53,18 +63,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

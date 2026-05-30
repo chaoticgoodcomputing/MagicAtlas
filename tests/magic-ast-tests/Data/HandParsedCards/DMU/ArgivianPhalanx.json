@@ -36,7 +36,8 @@
           },
           "Effects": [
             {
-              "EffectType": "enlist"
+              "EffectType": "keywordAbility",
+              "Keyword": "Enlist"
             }
           ]
         }

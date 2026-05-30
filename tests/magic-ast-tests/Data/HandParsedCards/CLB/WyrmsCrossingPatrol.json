@@ -36,7 +36,8 @@
           },
           "Effects": [
             {
-              "EffectType": "myriad"
+              "EffectType": "keywordAbility",
+              "Keyword": "Myriad"
             }
           ]
         }

@@ -31,7 +31,7 @@ public sealed class UndyingKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Undying",
-        Effects = [new UndyingEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Undying }],
       },
     };
 
@@ -42,7 +42,7 @@ public sealed class UndyingKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Undying",
-      Effects = [new UndyingEffect { IsOptional = false }],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Undying }],
       Reminder = reminder,
     }
   );

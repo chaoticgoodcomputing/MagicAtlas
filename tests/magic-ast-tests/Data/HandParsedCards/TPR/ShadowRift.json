@@ -42,8 +42,8 @@
                 "KeywordSource": "Shadow",
                 "Effects": [
                   {
-                    "EffectType": "shadow",
-                    "IsOptional": false
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Shadow"
                   }
                 ]
               },

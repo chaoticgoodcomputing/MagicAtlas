@@ -36,8 +36,8 @@
                 "KeywordSource": "Deathtouch",
                 "Effects": [
                   {
-                    "EffectType": "deathtouch",
-                    "IsOptional": false
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Deathtouch"
                   }
                 ]
               },

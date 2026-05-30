@@ -31,7 +31,7 @@ public sealed class ForMirrodinKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "For Mirrodin",
-        Effects = [new ForMirrodinEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.ForMirrodin }],
       },
     };
 
@@ -43,7 +43,7 @@ public sealed class ForMirrodinKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "For Mirrodin",
-      Effects = [new ForMirrodinEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.ForMirrodin }],
       Reminder = reminder,
     }
   );

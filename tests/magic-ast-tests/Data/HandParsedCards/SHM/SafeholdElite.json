@@ -35,8 +35,8 @@
           "KeywordSource": "Persist",
           "Effects": [
             {
-              "EffectType": "persist",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Persist"
             }
           ]
         }

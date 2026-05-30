@@ -29,7 +29,8 @@
           "KeywordSource": "Cascade",
           "Effects": [
             {
-              "EffectType": "cascade"
+              "EffectType": "keywordAbility",
+              "Keyword": "Cascade"
             }
           ]
         }

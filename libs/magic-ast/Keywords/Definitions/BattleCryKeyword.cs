@@ -30,7 +30,7 @@ public sealed class BattleCryKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Battle cry",
-        Effects = [new BattleCryEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.BattleCry }],
       },
     };
 
@@ -42,7 +42,7 @@ public sealed class BattleCryKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Battle cry",
-      Effects = [new BattleCryEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.BattleCry }],
       Reminder = reminder,
     }
   );

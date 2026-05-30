@@ -32,7 +32,7 @@ public sealed class DefenderKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Defender",
-      Effects = [new DefenderEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Defender }],
       Reminder = reminder,
     }
   );

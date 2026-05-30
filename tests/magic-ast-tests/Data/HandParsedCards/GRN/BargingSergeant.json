@@ -33,7 +33,8 @@
           "KeywordSource": "Haste",
           "Effects": [
             {
-              "EffectType": "haste"
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
             }
           ]
         },
@@ -45,7 +46,8 @@
           },
           "Effects": [
             {
-              "EffectType": "mentor"
+              "EffectType": "keywordAbility",
+              "Keyword": "Mentor"
             }
           ]
         }

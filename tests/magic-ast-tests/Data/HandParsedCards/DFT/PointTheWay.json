@@ -29,7 +29,8 @@
           "KeywordSource": "Start your engines",
           "Effects": [
             {
-              "EffectType": "startYourEngines"
+              "EffectType": "keywordAbility",
+              "Keyword": "StartYourEngines"
             }
           ]
         },

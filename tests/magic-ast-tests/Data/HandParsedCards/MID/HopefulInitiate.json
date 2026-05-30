@@ -32,8 +32,8 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "training",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Training"
             }
           ],
           "KeywordSource": "Training",

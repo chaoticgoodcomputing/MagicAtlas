@@ -6,15 +6,24 @@
     "OracleText": "Trample\nWhen this creature enters, you take the initiative.",
     "Power": "5",
     "Toughness": "4",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Avenging Hunter",
     "TypeLine": {
       "Raw": "Creature — Dragon Ranger",
-      "Types": ["Creature"],
-      "Subtypes": ["Dragon", "Ranger"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dragon",
+        "Ranger"
+      ]
     },
     "Oracle": {
       "RawText": "Trample\nWhen this creature enters, you take the initiative.",
@@ -24,7 +33,8 @@
           "KeywordSource": "Trample",
           "Effects": [
             {
-              "EffectType": "trample"
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
             }
           ]
         },
@@ -34,12 +44,15 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
             {
-              "EffectType": "takeInitiative"
+              "EffectType": "keywordAbility",
+              "Keyword": "TakeInitiative"
             }
           ]
         }
@@ -50,18 +63,30 @@
         "Kind": "manaCost",
         "Raw": "{4}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

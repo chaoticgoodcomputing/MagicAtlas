@@ -19,7 +19,7 @@ public sealed class TakeInitiativeRule : ITriggeredRule
     {
       return false;
     }
-    effect = new TakeInitiativeEffect();
+    effect = new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.TakeInitiative };
     return true;
   }
 }

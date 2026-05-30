@@ -2,8 +2,12 @@
   "Input": {
     "Name": "Adventurous Eater // Have a Bite",
     "TypeLine": "Creature — Human Warlock // Sorcery",
-    "ColorIdentity": ["B"],
-    "Keywords": ["Prepared"],
+    "ColorIdentity": [
+      "B"
+    ],
+    "Keywords": [
+      "Prepared"
+    ],
     "Layout": "prepare",
     "CardFaces": [
       {
@@ -13,7 +17,9 @@
         "OracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
         "Power": "3",
         "Toughness": "2",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Name": "Have a Bite",
@@ -22,7 +28,9 @@
         "OracleText": "Put a +1/+1 counter on target creature. You gain 1 life.",
         "Power": null,
         "Toughness": null,
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       }
     ]
   },
@@ -30,8 +38,15 @@
     "Name": "Adventurous Eater // Have a Bite",
     "TypeLine": {
       "Raw": "Creature — Human Warlock // Sorcery",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Warlock", "//", "Sorcery"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Warlock",
+        "//",
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "",
@@ -56,8 +71,13 @@
         "Name": "Adventurous Eater",
         "TypeLine": {
           "Raw": "Creature — Human Warlock",
-          "Types": ["Creature"],
-          "Subtypes": ["Human", "Warlock"]
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Human",
+            "Warlock"
+          ]
         },
         "Oracle": {
           "RawText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
@@ -66,8 +86,8 @@
               "Kind": "static",
               "Effects": [
                 {
-                  "EffectType": "prepared",
-                  "IsOptional": false
+                  "EffectType": "keywordAbility",
+                  "Keyword": "Prepared"
                 }
               ],
               "KeywordSource": "Prepared"
@@ -79,20 +99,38 @@
             "Kind": "manaCost",
             "Raw": "{2}{B}",
             "Symbols": [
-              { "Kind": "generic", "GenericAmount": 2 },
-              { "Kind": "colored", "Colors": ["B"] }
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "B"
+                ]
+              }
             ],
             "ManaValue": 3,
             "IsVariable": false
           },
           {
             "Kind": "colors",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           },
           {
             "Kind": "creatureStats",
-            "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
-            "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+            "Power": {
+              "ValueType": "fixed",
+              "Raw": "3",
+              "Value": 3
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Raw": "2",
+              "Value": 2
+            }
           }
         ]
       },
@@ -100,7 +138,9 @@
         "Name": "Have a Bite",
         "TypeLine": {
           "Raw": "Sorcery",
-          "Types": ["Sorcery"]
+          "Types": [
+            "Sorcery"
+          ]
         },
         "Oracle": {
           "RawText": "Put a +1/+1 counter on target creature. You gain 1 life.",
@@ -113,7 +153,9 @@
                   "Target": {
                     "Kind": "Target",
                     "Filter": {
-                      "CardTypes": ["creature"]
+                      "CardTypes": [
+                        "creature"
+                      ]
                     }
                   },
                   "CounterType": "+1/+1",
@@ -141,14 +183,21 @@
             "Kind": "manaCost",
             "Raw": "{B}",
             "Symbols": [
-              { "Kind": "colored", "Colors": ["B"] }
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "B"
+                ]
+              }
             ],
             "ManaValue": 1,
             "IsVariable": false
           },
           {
             "Kind": "colors",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ]
       }

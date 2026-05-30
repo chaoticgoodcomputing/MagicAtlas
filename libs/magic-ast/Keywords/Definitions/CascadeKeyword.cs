@@ -35,7 +35,7 @@ public sealed class CascadeKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Cascade",
-      Effects = [new CascadeEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Cascade }],
       Reminder = reminder,
     }
   );

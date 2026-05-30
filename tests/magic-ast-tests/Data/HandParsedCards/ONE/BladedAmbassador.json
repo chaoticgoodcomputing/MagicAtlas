@@ -81,8 +81,8 @@
                 "KeywordSource": "Indestructible",
                 "Effects": [
                   {
-                    "EffectType": "indestructible",
-                    "IsOptional": false
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Indestructible"
                   }
                 ]
               },

@@ -33,7 +33,8 @@
           "KeywordSource": "Vigilance",
           "Effects": [
             {
-              "EffectType": "vigilance"
+              "EffectType": "keywordAbility",
+              "Keyword": "Vigilance"
             }
           ]
         },
@@ -53,7 +54,10 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "other"
+                    }
                   ]
                 }
               },
@@ -62,7 +66,8 @@
                 "KeywordSource": "Vigilance",
                 "Effects": [
                   {
-                    "EffectType": "vigilance"
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Vigilance"
                   }
                 ]
               },

@@ -34,7 +34,8 @@
           "KeywordSource": "Prowess",
           "Effects": [
             {
-              "EffectType": "prowess"
+              "EffectType": "keywordAbility",
+              "Keyword": "Prowess"
             }
           ]
         }

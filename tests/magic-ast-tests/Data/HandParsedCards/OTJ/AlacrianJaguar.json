@@ -33,7 +33,8 @@
           "KeywordSource": "Vigilance",
           "Effects": [
             {
-              "EffectType": "vigilance"
+              "EffectType": "keywordAbility",
+              "Keyword": "Vigilance"
             }
           ]
         },

@@ -28,7 +28,7 @@ public sealed class UnleashKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Unleash",
-        Effects = [new UnleashEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Unleash }],
       },
     };
 
@@ -39,7 +39,7 @@ public sealed class UnleashKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Unleash",
-      Effects = [new UnleashEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Unleash }],
       Reminder = reminder,
     }
   );

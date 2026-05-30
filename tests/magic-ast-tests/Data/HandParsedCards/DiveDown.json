@@ -64,7 +64,8 @@
                 "KeywordSource": "Hexproof",
                 "Effects": [
                   {
-                    "EffectType": "hexproof"
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Hexproof"
                   }
                 ]
               },

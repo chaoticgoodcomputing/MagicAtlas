@@ -35,7 +35,7 @@ public sealed class StormKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Storm",
-        Effects = [new StormEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Storm }],
       },
     };
 
@@ -46,7 +46,7 @@ public sealed class StormKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Storm",
-      Effects = [new StormEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Storm }],
       Reminder = reminder,
     }
   );

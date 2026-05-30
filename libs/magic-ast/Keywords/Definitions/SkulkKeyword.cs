@@ -28,7 +28,7 @@ public sealed class SkulkKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Skulk",
-        Effects = [new SkulkEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Skulk }],
       },
     };
 
@@ -39,7 +39,7 @@ public sealed class SkulkKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Skulk",
-      Effects = [new SkulkEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Skulk }],
       Reminder = reminder,
     }
   );

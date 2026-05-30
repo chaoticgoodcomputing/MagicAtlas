@@ -28,7 +28,7 @@ public sealed class RetraceKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Retrace",
-        Effects = [new RetraceEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Retrace }],
       },
     };
 
@@ -39,7 +39,7 @@ public sealed class RetraceKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Retrace",
-      Effects = [new RetraceEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Retrace }],
       Reminder = reminder,
     }
   );

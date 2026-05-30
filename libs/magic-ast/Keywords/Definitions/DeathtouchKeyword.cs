@@ -31,7 +31,7 @@ public sealed class DeathtouchKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Deathtouch",
-      Effects = [new DeathtouchEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }],
       Reminder = reminder,
     }
   );

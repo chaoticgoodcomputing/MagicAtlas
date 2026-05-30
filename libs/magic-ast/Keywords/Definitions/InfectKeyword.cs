@@ -27,7 +27,7 @@ public sealed class InfectKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Infect",
-      Effects = [new InfectEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Infect }],
       Reminder = reminder,
     }
   );

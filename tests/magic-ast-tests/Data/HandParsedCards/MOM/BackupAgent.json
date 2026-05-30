@@ -47,7 +47,8 @@
           "KeywordSource": "Reach",
           "Effects": [
             {
-              "EffectType": "reach"
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
             }
           ]
         }

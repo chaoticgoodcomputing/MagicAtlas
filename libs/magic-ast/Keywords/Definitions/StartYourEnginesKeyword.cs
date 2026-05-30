@@ -35,7 +35,7 @@ public sealed class StartYourEnginesKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Start your engines",
-        Effects = [new StartYourEnginesEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.StartYourEngines }],
       },
     };
 
@@ -48,7 +48,7 @@ public sealed class StartYourEnginesKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Start your engines",
-      Effects = [new StartYourEnginesEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.StartYourEngines }],
       Reminder = reminder,
     }
   );

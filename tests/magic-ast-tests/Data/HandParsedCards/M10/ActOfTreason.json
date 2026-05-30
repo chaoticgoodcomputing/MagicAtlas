@@ -61,7 +61,8 @@
                 "KeywordSource": "Haste",
                 "Effects": [
                   {
-                    "EffectType": "haste"
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Haste"
                   }
                 ]
               },

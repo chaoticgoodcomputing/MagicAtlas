@@ -90,7 +90,8 @@ public class KeywordExpanderTests
       var staticAbility = (StaticAbility)ability;
 
       Assert.That(staticAbility.KeywordSource, Is.EqualTo("Vigilance"));
-      Assert.That(staticAbility.Effects[0], Is.InstanceOf<VigilanceEffect>());
+      var kae = (MagicAST.AST.Effects.Keyword.KeywordAbilityEffect)staticAbility.Effects[0];
+      Assert.That(kae.Keyword, Is.EqualTo(MagicAST.AST.References.KeywordAbility.Vigilance));
   }
 
   [Test]

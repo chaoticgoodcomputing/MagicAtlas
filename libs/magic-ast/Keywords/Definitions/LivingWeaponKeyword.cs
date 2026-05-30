@@ -31,7 +31,7 @@ public sealed class LivingWeaponKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Living weapon",
-        Effects = [new LivingWeaponEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.LivingWeapon }],
       },
     };
 
@@ -43,7 +43,7 @@ public sealed class LivingWeaponKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Living weapon",
-      Effects = [new LivingWeaponEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.LivingWeapon }],
       Reminder = reminder,
     }
   );

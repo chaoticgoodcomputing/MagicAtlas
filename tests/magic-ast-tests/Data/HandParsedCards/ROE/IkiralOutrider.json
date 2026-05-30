@@ -60,7 +60,8 @@
                   "KeywordSource": "Vigilance",
                   "Effects": [
                     {
-                      "EffectType": "vigilance"
+                      "EffectType": "keywordAbility",
+                      "Keyword": "Vigilance"
                     }
                   ]
                 }
@@ -84,7 +85,8 @@
                   "KeywordSource": "Vigilance",
                   "Effects": [
                     {
-                      "EffectType": "vigilance"
+                      "EffectType": "keywordAbility",
+                      "Keyword": "Vigilance"
                     }
                   ]
                 }

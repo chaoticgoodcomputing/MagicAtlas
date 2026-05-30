@@ -6,14 +6,24 @@
     "OracleText": "Destroy target artifact.\n//\nDeal 2 damage to target enchantment or creature.\nFuse (You may cast one or both halves of this card from your hand.)",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R", "W"],
-    "ColorIdentity": ["R", "W"]
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Wear // Tear",
     "TypeLine": {
       "Raw": "Instant // Instant",
-      "Types": ["Instant", "//", "Instant"]
+      "Types": [
+        "Instant",
+        "//",
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy target artifact.\n//\nDeal 2 damage to target enchantment or creature.\nFuse (You may cast one or both halves of this card from your hand.)",
@@ -26,7 +36,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact"]
+                  "CardTypes": [
+                    "artifact"
+                  ]
                 }
               },
               "CantBeRegenerated": false,
@@ -83,8 +95,8 @@
           "KeywordSource": "Fuse",
           "Effects": [
             {
-              "EffectType": "fuse",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Fuse"
             }
           ],
           "Reminder": {
@@ -98,20 +110,39 @@
         "Kind": "manaCost",
         "Raw": "{1}{R} // {W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["R", "W"]
+        "Colors": [
+          "R",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "R"]
+        "ColorIdentity": [
+          "W",
+          "R"
+        ]
       }
     ]
   }

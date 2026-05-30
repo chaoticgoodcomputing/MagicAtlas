@@ -152,12 +152,12 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
       "haste" => new StaticAbility
       {
         KeywordSource = "Haste",
-        Effects = [new HasteEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
       },
       "trample" => new StaticAbility
       {
         KeywordSource = "Trample",
-        Effects = [new TrampleEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }],
       },
       "flying" => new StaticAbility
       {
@@ -199,7 +199,7 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
       "reach" => new StaticAbility
       {
         KeywordSource = "Reach",
-        Effects = [new ReachEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }],
       },
       "lifelink" => new StaticAbility
       {
@@ -209,12 +209,12 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
       "vigilance" => new StaticAbility
       {
         KeywordSource = "Vigilance",
-        Effects = [new VigilanceEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }],
       },
       "deathtouch" => new StaticAbility
       {
         KeywordSource = "Deathtouch",
-        Effects = [new AST.Effects.Keyword.DeathtouchEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }],
       },
       "menace" => new StaticAbility
       {
@@ -231,17 +231,17 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
       "indestructible" => new StaticAbility
       {
         KeywordSource = "Indestructible",
-        Effects = [new IndestructibleEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }],
       },
       "hexproof" => new StaticAbility
       {
         KeywordSource = "Hexproof",
-        Effects = [new HexproofEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }],
       },
       "shroud" => new StaticAbility
       {
         KeywordSource = "Shroud",
-        Effects = [new ShroudEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }],
       },
       _ => null,
     };

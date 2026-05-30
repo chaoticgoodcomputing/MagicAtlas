@@ -29,7 +29,7 @@ public sealed class ExtortKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Extort",
-      Effects = [new ExtortEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Extort }],
       Reminder = reminder,
     }
   );

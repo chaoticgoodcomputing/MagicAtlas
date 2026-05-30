@@ -102,17 +102,17 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
       "haste" => new StaticAbility
       {
         KeywordSource = "Haste",
-        Effects = [new HasteEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
       },
       "vigilance" => new StaticAbility
       {
         KeywordSource = "Vigilance",
-        Effects = [new VigilanceEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }],
       },
       "trample" => new StaticAbility
       {
         KeywordSource = "Trample",
-        Effects = [new TrampleEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }],
       },
       "lifelink" => new StaticAbility
       {
@@ -122,7 +122,7 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
       "deathtouch" => new StaticAbility
       {
         KeywordSource = "Deathtouch",
-        Effects = [new DeathtouchEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }],
       },
       "first strike" => new StaticAbility
       {
@@ -137,17 +137,17 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
       "hexproof" => new StaticAbility
       {
         KeywordSource = "Hexproof",
-        Effects = [new HexproofEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }],
       },
       "reach" => new StaticAbility
       {
         KeywordSource = "Reach",
-        Effects = [new ReachEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }],
       },
       "indestructible" => new StaticAbility
       {
         KeywordSource = "Indestructible",
-        Effects = [new IndestructibleEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }],
       },
       "menace" => new StaticAbility
       {
@@ -164,22 +164,22 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
       "defender" => new StaticAbility
       {
         KeywordSource = "Defender",
-        Effects = [new DefenderEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Defender }],
       },
       "shroud" => new StaticAbility
       {
         KeywordSource = "Shroud",
-        Effects = [new ShroudEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }],
       },
       "shadow" => new StaticAbility
       {
         KeywordSource = "Shadow",
-        Effects = [new ShadowEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shadow }],
       },
       "undying" => new StaticAbility
       {
         KeywordSource = "Undying",
-        Effects = [new UndyingEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Undying }],
       },
       _ => null,
     };

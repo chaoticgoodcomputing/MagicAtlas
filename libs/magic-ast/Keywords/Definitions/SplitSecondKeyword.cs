@@ -30,7 +30,7 @@ public sealed class SplitSecondKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Split second",
-        Effects = [new SplitSecondEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.SplitSecond }],
       },
     };
 
@@ -42,7 +42,7 @@ public sealed class SplitSecondKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Split second",
-      Effects = [new SplitSecondEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.SplitSecond }],
       Reminder = reminder,
     }
   );

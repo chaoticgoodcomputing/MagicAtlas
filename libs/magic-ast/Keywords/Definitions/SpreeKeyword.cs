@@ -30,7 +30,7 @@ public sealed class SpreeKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Spree",
-        Effects = [new SpreeEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Spree }],
       },
     };
 
@@ -41,7 +41,7 @@ public sealed class SpreeKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Spree",
-      Effects = [new SpreeEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Spree }],
       Reminder = reminder,
     }
   );

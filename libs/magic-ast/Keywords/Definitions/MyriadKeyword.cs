@@ -30,7 +30,7 @@ public sealed class MyriadKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Myriad",
-        Effects = [new MyriadEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Myriad }],
       },
     };
 
@@ -41,7 +41,7 @@ public sealed class MyriadKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Myriad",
-      Effects = [new MyriadEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Myriad }],
       Reminder = reminder,
     }
   );

@@ -32,7 +32,8 @@
           "KeywordSource": "Haste",
           "Effects": [
             {
-              "EffectType": "haste"
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
             }
           ]
         },
@@ -44,8 +45,8 @@
           },
           "Effects": [
             {
-              "EffectType": "undying",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Undying"
             }
           ]
         }

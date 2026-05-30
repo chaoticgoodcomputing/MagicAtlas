@@ -6,15 +6,23 @@
     "OracleText": "Flying\nShroud (This creature can't be the target of spells or abilities.)\nYou may look at the top card of your library any time.",
     "Power": "5",
     "Toughness": "5",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Sphinx of Jwar Isle",
     "TypeLine": {
       "Raw": "Creature — Sphinx",
-      "Types": ["Creature"],
-      "Subtypes": ["Sphinx"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Sphinx"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nShroud (This creature can't be the target of spells or abilities.)\nYou may look at the top card of your library any time.",
@@ -26,8 +34,19 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
-                "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
               },
               "IsOptional": false
             }
@@ -38,7 +57,8 @@
           "KeywordSource": "Shroud",
           "Effects": [
             {
-              "EffectType": "shroud"
+              "EffectType": "keywordAbility",
+              "Keyword": "Shroud"
             }
           ]
         },
@@ -64,22 +84,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 6
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

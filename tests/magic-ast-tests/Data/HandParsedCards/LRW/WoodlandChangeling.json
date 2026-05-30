@@ -33,7 +33,8 @@
           "KeywordSource": "Changeling",
           "Effects": [
             {
-              "EffectType": "changeling"
+              "EffectType": "keywordAbility",
+              "Keyword": "Changeling"
             }
           ]
         }

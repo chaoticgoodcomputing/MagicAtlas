@@ -42,8 +42,8 @@
                 "KeywordSource": "Undying",
                 "Effects": [
                   {
-                    "EffectType": "undying",
-                    "IsOptional": false
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Undying"
                   }
                 ]
               },

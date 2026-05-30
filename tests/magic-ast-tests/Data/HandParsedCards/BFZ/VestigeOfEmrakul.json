@@ -32,7 +32,8 @@
           "KeywordSource": "Devoid",
           "Effects": [
             {
-              "EffectType": "devoid"
+              "EffectType": "keywordAbility",
+              "Keyword": "Devoid"
             }
           ]
         },
@@ -41,7 +42,8 @@
           "KeywordSource": "Trample",
           "Effects": [
             {
-              "EffectType": "trample"
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
             }
           ]
         }

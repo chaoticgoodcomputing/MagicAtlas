@@ -33,7 +33,8 @@
           "KeywordSource": "Trample",
           "Effects": [
             {
-              "EffectType": "trample"
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
             }
           ]
         },

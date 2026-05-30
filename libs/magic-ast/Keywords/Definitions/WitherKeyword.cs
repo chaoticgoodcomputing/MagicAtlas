@@ -27,7 +27,7 @@ public sealed class WitherKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Wither",
-      Effects = [new WitherEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Wither }],
       Reminder = reminder,
     }
   );

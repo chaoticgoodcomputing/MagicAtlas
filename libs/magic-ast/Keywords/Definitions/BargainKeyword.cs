@@ -30,7 +30,7 @@ public sealed class BargainKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Bargain",
-        Effects = [new BargainEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Bargain }],
       },
     };
 
@@ -41,7 +41,7 @@ public sealed class BargainKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Bargain",
-      Effects = [new BargainEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Bargain }],
       Reminder = reminder,
     }
   );

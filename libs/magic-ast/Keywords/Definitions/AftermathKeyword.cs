@@ -34,7 +34,7 @@ public sealed class AftermathKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Aftermath",
-        Effects = [new AftermathEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Aftermath }],
       },
     };
 
@@ -45,7 +45,7 @@ public sealed class AftermathKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Aftermath",
-      Effects = [new AftermathEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Aftermath }],
       Reminder = reminder,
     }
   );

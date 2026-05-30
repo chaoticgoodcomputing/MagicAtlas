@@ -49,8 +49,8 @@
           "KeywordSource": "Exalted",
           "Effects": [
             {
-              "EffectType": "exalted",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Exalted"
             }
           ]
         }

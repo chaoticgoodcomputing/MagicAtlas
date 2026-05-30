@@ -280,17 +280,17 @@ internal static class StaticRuleHelpers
       "indestructible" => new StaticAbility
       {
         KeywordSource = "Indestructible",
-        Effects = [new MagicAST.AST.Effects.Keyword.IndestructibleEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }],
       },
       "vigilance" => new StaticAbility
       {
         KeywordSource = "Vigilance",
-        Effects = [new MagicAST.AST.Effects.Keyword.VigilanceEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }],
       },
       "haste" => new StaticAbility
       {
         KeywordSource = "Haste",
-        Effects = [new MagicAST.AST.Effects.Keyword.HasteEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
       },
       "lifelink" => new StaticAbility
       {
@@ -300,22 +300,22 @@ internal static class StaticRuleHelpers
       "reach" => new StaticAbility
       {
         KeywordSource = "Reach",
-        Effects = [new MagicAST.AST.Effects.Keyword.ReachEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }],
       },
       "trample" => new StaticAbility
       {
         KeywordSource = "Trample",
-        Effects = [new MagicAST.AST.Effects.Keyword.TrampleEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }],
       },
       "defender" => new StaticAbility
       {
         KeywordSource = "Defender",
-        Effects = [new MagicAST.AST.Effects.Keyword.DefenderEffect { IsOptional = false }],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Defender }],
       },
       "deathtouch" => new StaticAbility
       {
         KeywordSource = "Deathtouch",
-        Effects = [new MagicAST.AST.Effects.Keyword.DeathtouchEffect { IsOptional = false }],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }],
       },
       // Menace: this creature can't be blocked except by two or more creatures.
       // Rule 702.111. EvasionEffect with MinimumBlockers=2; CanBeBlockedBy carries
@@ -364,14 +364,14 @@ internal static class StaticRuleHelpers
       "myriad" => new StaticAbility
       {
         KeywordSource = "Myriad",
-        Effects = [new MagicAST.AST.Effects.Keyword.MyriadEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Myriad }],
       },
       // Melee: triggered keyword. MAST records keyword presence; the per-opponent
       // attack counting and P/T buff are engine territory. Rule 702.121.
       "melee" => new StaticAbility
       {
         KeywordSource = "Melee",
-        Effects = [new MagicAST.AST.Effects.Keyword.MeleeEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Melee }],
       },
       // Hexproof (Rule 702.11): this permanent can't be the target of spells or
       // abilities opponents control. MAST records the keyword's presence; the
@@ -379,7 +379,7 @@ internal static class StaticRuleHelpers
       "hexproof" => new StaticAbility
       {
         KeywordSource = "Hexproof",
-        Effects = [new MagicAST.AST.Effects.Keyword.HexproofEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }],
       },
       // Fear: can't be blocked except by artifact creatures and/or black creatures.
       // Rule 702.36. Mirrors Intimidate (702.13) but with a fixed black-color predicate
@@ -404,7 +404,7 @@ internal static class StaticRuleHelpers
       "shroud" => new StaticAbility
       {
         KeywordSource = "Shroud",
-        Effects = [new MagicAST.AST.Effects.Keyword.ShroudEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }],
       },
       // Daybound (Rule 702.145b). Found on front faces of day/night DFCs. MAST
       // records the keyword's presence and phase; the day/night transformation
@@ -433,7 +433,7 @@ internal static class StaticRuleHelpers
       "phasing" => new StaticAbility
       {
         KeywordSource = "Phasing",
-        Effects = [new MagicAST.AST.Effects.Keyword.PhasingEffect { IsOptional = false }],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Phasing }],
       },
       // Provoke (Rule 702.39): a triggered keyword ability. Whenever this creature attacks,
       // the controller may have a target creature the defending player controls untap and block
@@ -442,7 +442,7 @@ internal static class StaticRuleHelpers
       "provoke" => new StaticAbility
       {
         KeywordSource = "Provoke",
-        Effects = [new MagicAST.AST.Effects.Keyword.ProvokeEffect { IsOptional = false }],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Provoke }],
       },
       // Cipher (Rule 702.99): exile this spell card encoded on a creature you control;
       // whenever that creature deals combat damage to a player, cast a copy for free.
@@ -450,7 +450,7 @@ internal static class StaticRuleHelpers
       "cipher" => new StaticAbility
       {
         KeywordSource = "Cipher",
-        Effects = [new MagicAST.AST.Effects.Keyword.CipherEffect { IsOptional = false }],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Cipher }],
       },
       // Haunt (Rule 702.55): when this creature dies, exile it haunting target creature.
       // MAST records the keyword's presence; the exile-on-death and haunt-trigger mechanics
@@ -458,7 +458,7 @@ internal static class StaticRuleHelpers
       "haunt" => new StaticAbility
       {
         KeywordSource = "Haunt",
-        Effects = [new MagicAST.AST.Effects.Keyword.HauntEffect { IsOptional = false }],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haunt }],
       },
       _ => null,
     };

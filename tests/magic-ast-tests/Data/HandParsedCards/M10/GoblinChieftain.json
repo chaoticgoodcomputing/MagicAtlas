@@ -32,8 +32,8 @@
           "KeywordSource": "Haste",
           "Effects": [
             {
-              "EffectType": "haste",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
             }
           ]
         },
@@ -53,7 +53,10 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "other"
+                    }
                   ]
                 }
               },
@@ -87,8 +90,8 @@
                 "KeywordSource": "Haste",
                 "Effects": [
                   {
-                    "EffectType": "haste",
-                    "IsOptional": false
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Haste"
                   }
                 ]
               },

@@ -28,7 +28,7 @@ public sealed class PhasingKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Phasing",
-        Effects = [new PhasingEffect { IsOptional = false }],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Phasing }],
       },
     };
 
@@ -39,7 +39,7 @@ public sealed class PhasingKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Phasing",
-      Effects = [new PhasingEffect { IsOptional = false }],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Phasing }],
       Reminder = reminder,
     }
   );

@@ -29,7 +29,7 @@ public sealed class ConspireKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Conspire",
-        Effects = [new ConspireEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Conspire }],
       },
     };
 
@@ -40,7 +40,7 @@ public sealed class ConspireKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Conspire",
-      Effects = [new ConspireEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Conspire }],
       Reminder = reminder,
     }
   );

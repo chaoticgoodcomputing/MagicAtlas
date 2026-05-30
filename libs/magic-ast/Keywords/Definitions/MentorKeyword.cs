@@ -30,7 +30,7 @@ public sealed class MentorKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Mentor",
-        Effects = [new MentorEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Mentor }],
       },
     };
 
@@ -41,7 +41,7 @@ public sealed class MentorKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Mentor",
-      Effects = [new MentorEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Mentor }],
       Reminder = reminder,
     }
   );

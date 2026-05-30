@@ -30,7 +30,7 @@ public sealed class CipherKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Cipher",
-        Effects = [new CipherEffect { IsOptional = false }],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Cipher }],
       },
     };
 
@@ -41,7 +41,7 @@ public sealed class CipherKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Cipher",
-      Effects = [new CipherEffect { IsOptional = false }],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Cipher }],
       Reminder = reminder,
     }
   );

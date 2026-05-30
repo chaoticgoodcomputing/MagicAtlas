@@ -126,7 +126,10 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "token"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "token"
+                    }
                   ],
                   "Controller": "You"
                 }
@@ -136,8 +139,8 @@
                 "KeywordSource": "Deathtouch",
                 "Effects": [
                   {
-                    "EffectType": "deathtouch",
-                    "IsOptional": false
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Deathtouch"
                   }
                 ]
               },

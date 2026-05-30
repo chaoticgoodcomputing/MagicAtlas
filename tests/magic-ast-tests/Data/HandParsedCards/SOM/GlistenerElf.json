@@ -35,8 +35,8 @@
           "KeywordSource": "Infect",
           "Effects": [
             {
-              "EffectType": "infect",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Infect"
             }
           ]
         }

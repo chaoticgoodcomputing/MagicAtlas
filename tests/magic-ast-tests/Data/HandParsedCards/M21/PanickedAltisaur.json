@@ -6,9 +6,15 @@
     "OracleText": "Reach\n{T}: This creature deals 2 damage to each opponent.",
     "Power": "4",
     "Toughness": "5",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
-    "Keywords": ["Reach"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Reach"
+    ],
     "Id": "ad371c97-a266-4a88-9d28-2e889a37ba00",
     "Layout": "normal"
   },
@@ -16,8 +22,12 @@
     "Name": "Panicked Altisaur",
     "TypeLine": {
       "Raw": "Creature — Dinosaur",
-      "Types": ["Creature"],
-      "Subtypes": ["Dinosaur"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dinosaur"
+      ]
     },
     "Oracle": {
       "RawText": "Reach\n{T}: This creature deals 2 damage to each opponent.",
@@ -27,7 +37,8 @@
           "KeywordSource": "Reach",
           "Effects": [
             {
-              "EffectType": "reach"
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
             }
           ]
         },
@@ -69,18 +80,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

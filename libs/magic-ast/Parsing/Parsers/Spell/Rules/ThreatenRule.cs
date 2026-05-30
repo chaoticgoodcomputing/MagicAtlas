@@ -97,7 +97,7 @@ public sealed class ThreatenRule : ISpellRule, IMultiSpellRule
         GainedAbility = new StaticAbility
         {
           KeywordSource = "Haste",
-          Effects = [new HasteEffect()],
+          Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
         },
         Duration = duration,
       },

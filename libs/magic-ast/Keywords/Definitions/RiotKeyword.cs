@@ -27,7 +27,7 @@ public sealed class RiotKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Riot",
-        Effects = [new RiotEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Riot }],
       },
     };
 
@@ -38,7 +38,7 @@ public sealed class RiotKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Riot",
-      Effects = [new RiotEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Riot }],
       Reminder = reminder,
     }
   );

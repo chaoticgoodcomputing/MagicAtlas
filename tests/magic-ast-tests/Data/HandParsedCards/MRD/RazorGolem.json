@@ -13,8 +13,13 @@
     "Name": "Razor Golem",
     "TypeLine": {
       "Raw": "Artifact Creature — Golem",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Golem"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Golem"
+      ]
     },
     "Oracle": {
       "RawText": "Affinity for Plains (This spell costs {1} less to cast for each Plains you control.)\nVigilance",
@@ -28,9 +33,14 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "PerObject": {
-                "Subtypes": ["Plains"],
+                "Subtypes": [
+                  "Plains"
+                ],
                 "Controller": "You"
               }
             }
@@ -40,7 +50,10 @@
           "Kind": "static",
           "KeywordSource": "Vigilance",
           "Effects": [
-            { "EffectType": "vigilance" }
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Vigilance"
+            }
           ]
         }
       ]
@@ -50,16 +63,33 @@
         "Kind": "manaCost",
         "Raw": "{6}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 6 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 6
+          }
         ],
         "ManaValue": 6
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
-        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
       }
     ]
   }

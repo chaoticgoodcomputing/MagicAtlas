@@ -32,7 +32,8 @@
           "KeywordSource": "Trample",
           "Effects": [
             {
-              "EffectType": "trample"
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
             }
           ]
         },
@@ -55,7 +56,10 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  {"CharacteristicType": "other", "Description": "another"}
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "another"
+                  }
                 ]
               },
               "Quantity": {

@@ -33,7 +33,8 @@
           "KeywordSource": "Banding",
           "Effects": [
             {
-              "EffectType": "banding"
+              "EffectType": "keywordAbility",
+              "Keyword": "Banding"
             }
           ]
         }

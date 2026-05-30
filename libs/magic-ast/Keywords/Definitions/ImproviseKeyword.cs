@@ -28,7 +28,7 @@ public sealed class ImproviseKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Improvise",
-        Effects = [new ImproviseEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Improvise }],
       },
     };
 
@@ -39,7 +39,7 @@ public sealed class ImproviseKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Improvise",
-      Effects = [new ImproviseEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Improvise }],
       Reminder = reminder,
     }
   );

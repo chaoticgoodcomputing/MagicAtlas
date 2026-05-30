@@ -29,7 +29,7 @@ public sealed class SunburstKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Sunburst",
-        Effects = [new SunburstEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Sunburst }],
       },
     };
 
@@ -40,7 +40,7 @@ public sealed class SunburstKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Sunburst",
-      Effects = [new SunburstEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Sunburst }],
       Reminder = reminder,
     }
   );

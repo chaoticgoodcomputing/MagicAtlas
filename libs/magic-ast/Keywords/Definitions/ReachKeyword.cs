@@ -27,7 +27,7 @@ public sealed class ReachKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Reach",
-      Effects = [new ReachEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }],
       Reminder = reminder,
     }
   );

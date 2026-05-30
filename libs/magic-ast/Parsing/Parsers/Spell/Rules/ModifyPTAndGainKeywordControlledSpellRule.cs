@@ -132,7 +132,7 @@ public sealed class ModifyPTAndGainKeywordControlledSpellRule : ISpellRule, IMul
       "trample" => new StaticAbility
       {
         KeywordSource = "Trample",
-        Effects = [new TrampleEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }],
       },
       "first strike" => new StaticAbility
       {
@@ -142,7 +142,7 @@ public sealed class ModifyPTAndGainKeywordControlledSpellRule : ISpellRule, IMul
       "reach" => new StaticAbility
       {
         KeywordSource = "Reach",
-        Effects = [new ReachEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }],
       },
       "flying" => new StaticAbility
       {
@@ -167,12 +167,12 @@ public sealed class ModifyPTAndGainKeywordControlledSpellRule : ISpellRule, IMul
       "haste" => new StaticAbility
       {
         KeywordSource = "Haste",
-        Effects = [new HasteEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
       },
       "deathtouch" => new StaticAbility
       {
         KeywordSource = "Deathtouch",
-        Effects = [new DeathtouchEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }],
       },
       "lifelink" => new StaticAbility
       {
@@ -182,7 +182,7 @@ public sealed class ModifyPTAndGainKeywordControlledSpellRule : ISpellRule, IMul
       "vigilance" => new StaticAbility
       {
         KeywordSource = "Vigilance",
-        Effects = [new VigilanceEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }],
       },
       "menace" => new StaticAbility
       {
@@ -199,17 +199,17 @@ public sealed class ModifyPTAndGainKeywordControlledSpellRule : ISpellRule, IMul
       "indestructible" => new StaticAbility
       {
         KeywordSource = "Indestructible",
-        Effects = [new IndestructibleEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }],
       },
       "hexproof" => new StaticAbility
       {
         KeywordSource = "Hexproof",
-        Effects = [new HexproofEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }],
       },
       "shroud" => new StaticAbility
       {
         KeywordSource = "Shroud",
-        Effects = [new ShroudEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }],
       },
       _ => null,
     };

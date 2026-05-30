@@ -6,15 +6,24 @@
     "OracleText": "Reach\nWhen Silhana Wayfinder enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Silhana Wayfinder",
     "TypeLine": {
       "Raw": "Creature — Elf Scout",
-      "Types": ["Creature"],
-      "Subtypes": ["Elf", "Scout"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Scout"
+      ]
     },
     "Oracle": {
       "RawText": "Reach\nWhen Silhana Wayfinder enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
@@ -24,7 +33,8 @@
           "KeywordSource": "Reach",
           "Effects": [
             {
-              "EffectType": "reach"
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
             }
           ]
         },
@@ -34,7 +44,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -54,18 +66,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

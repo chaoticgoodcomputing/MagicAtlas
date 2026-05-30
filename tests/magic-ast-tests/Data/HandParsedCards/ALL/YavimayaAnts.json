@@ -32,7 +32,8 @@
           "KeywordSource": "Trample",
           "Effects": [
             {
-              "EffectType": "trample"
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
             }
           ]
         },
@@ -41,7 +42,8 @@
           "KeywordSource": "haste",
           "Effects": [
             {
-              "EffectType": "haste"
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
             }
           ]
         },

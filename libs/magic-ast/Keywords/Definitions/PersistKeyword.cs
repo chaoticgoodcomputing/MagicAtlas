@@ -28,7 +28,7 @@ public sealed class PersistKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Persist",
-      Effects = [new PersistEffect { IsOptional = false }],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Persist }],
       Reminder = reminder,
     }
   );

@@ -36,7 +36,8 @@
           },
           "Effects": [
             {
-              "EffectType": "evolve"
+              "EffectType": "keywordAbility",
+              "Keyword": "Evolve"
             }
           ]
         }

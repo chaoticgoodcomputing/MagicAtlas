@@ -32,7 +32,7 @@ public sealed class PreparedKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Prepared",
-        Effects = [new PreparedEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Prepared }],
       },
     };
 
@@ -46,7 +46,7 @@ public sealed class PreparedKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Prepared",
-      Effects = [new PreparedEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Prepared }],
       Reminder = reminder,
     }
   );

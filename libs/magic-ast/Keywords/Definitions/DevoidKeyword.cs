@@ -30,7 +30,7 @@ public sealed class DevoidKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Devoid",
-      Effects = [new DevoidEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Devoid }],
       Reminder = reminder,
     }
   );

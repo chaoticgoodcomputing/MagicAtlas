@@ -6,15 +6,24 @@
     "OracleText": "Haunt (When this creature dies, exile it haunting target creature.)\nWhen this creature enters or the creature it haunts dies, destroy target enchantment.",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Absolver Thrull",
     "TypeLine": {
       "Raw": "Creature — Thrull Cleric",
-      "Types": ["Creature"],
-      "Subtypes": ["Thrull", "Cleric"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Thrull",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "Haunt (When this creature dies, exile it haunting target creature.)\nWhen this creature enters or the creature it haunts dies, destroy target enchantment.",
@@ -24,8 +33,8 @@
           "KeywordSource": "Haunt",
           "Effects": [
             {
-              "EffectType": "haunt",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Haunt"
             }
           ]
         },
@@ -35,7 +44,9 @@
             "Timing": "When",
             "Event": "EntersOrHauntedCreatureDies",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -44,7 +55,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["enchantment"]
+                  "CardTypes": [
+                    "enchantment"
+                  ]
                 }
               },
               "IsOptional": false
@@ -58,18 +71,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

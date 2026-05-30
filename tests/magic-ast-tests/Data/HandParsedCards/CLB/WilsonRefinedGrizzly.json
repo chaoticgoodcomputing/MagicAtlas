@@ -44,7 +44,8 @@
           "KeywordSource": "Vigilance",
           "Effects": [
             {
-              "EffectType": "vigilance"
+              "EffectType": "keywordAbility",
+              "Keyword": "Vigilance"
             }
           ]
         },
@@ -53,7 +54,8 @@
           "KeywordSource": "Reach",
           "Effects": [
             {
-              "EffectType": "reach"
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
             }
           ]
         },
@@ -62,7 +64,8 @@
           "KeywordSource": "Trample",
           "Effects": [
             {
-              "EffectType": "trample"
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
             }
           ]
         },

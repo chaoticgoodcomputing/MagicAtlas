@@ -33,7 +33,7 @@ public sealed class TrampleKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Trample",
-      Effects = [new TrampleEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }],
       Reminder = reminder,
     }
   );

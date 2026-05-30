@@ -28,7 +28,7 @@ public sealed class HorsemanshipKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Horsemanship",
-        Effects = [new HorsemanshipEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Horsemanship }],
       },
     };
 
@@ -39,7 +39,7 @@ public sealed class HorsemanshipKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Horsemanship",
-      Effects = [new HorsemanshipEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Horsemanship }],
       Reminder = reminder,
     }
   );

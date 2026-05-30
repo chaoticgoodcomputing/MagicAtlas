@@ -31,7 +31,7 @@ public sealed class UmbraArmorKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Totem armor",
-      Effects = [new TotemArmorEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.TotemArmor }],
       Reminder = reminder,
     }
   );

@@ -483,23 +483,8 @@ public static class MermaidEmitter
                 ctx.EmitEdge(parentId, id);
                 break;
 
-            case ReachEffect:
-                id = ctx.EmitNode("ReachEffect");
-                ctx.EmitEdge(parentId, id);
-                break;
-
-            case VigilanceEffect:
-                id = ctx.EmitNode("VigilanceEffect");
-                ctx.EmitEdge(parentId, id);
-                break;
-
-            case TrampleEffect:
-                id = ctx.EmitNode("TrampleEffect");
-                ctx.EmitEdge(parentId, id);
-                break;
-
-            case HasteEffect:
-                id = ctx.EmitNode("HasteEffect");
+            case MagicAST.AST.Effects.Keyword.KeywordAbilityEffect kae:
+                id = ctx.EmitNode($"Keyword<br/>{kae.Keyword}");
                 ctx.EmitEdge(parentId, id);
                 break;
 

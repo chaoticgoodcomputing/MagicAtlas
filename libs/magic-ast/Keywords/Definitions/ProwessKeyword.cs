@@ -27,7 +27,7 @@ public sealed class ProwessKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Prowess",
-      Effects = [new ProwessEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Prowess }],
       Reminder = reminder,
     }
   );

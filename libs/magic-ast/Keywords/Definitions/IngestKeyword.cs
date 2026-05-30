@@ -29,7 +29,7 @@ public sealed class IngestKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Ingest",
-        Effects = [new IngestEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Ingest }],
       },
     };
 
@@ -40,7 +40,7 @@ public sealed class IngestKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Ingest",
-      Effects = [new IngestEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Ingest }],
       Reminder = reminder,
     }
   );

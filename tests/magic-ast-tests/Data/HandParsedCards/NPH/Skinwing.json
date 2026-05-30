@@ -13,8 +13,12 @@
     "Name": "Skinwing",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Living weapon (When this Equipment enters, create a 0/0 black Phyrexian Germ creature token, then attach this to it.)\nEquipped creature gets +2/+2 and has flying.\nEquip {6}",
@@ -24,7 +28,8 @@
           "KeywordSource": "Living weapon",
           "Effects": [
             {
-              "EffectType": "livingWeapon"
+              "EffectType": "keywordAbility",
+              "Keyword": "LivingWeapon"
             }
           ]
         },
@@ -36,13 +41,23 @@
               "Effects": [
                 {
                   "EffectType": "modifyPT",
-                  "Target": { "Kind": "EnchantedOrEquipped" },
-                  "PowerModifier": { "QuantityType": "literal", "Value": 2 },
-                  "ToughnessModifier": { "QuantityType": "literal", "Value": 2 }
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  }
                 },
                 {
                   "EffectType": "gainAbility",
-                  "Target": { "Kind": "EnchantedOrEquipped" },
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
                   "GainedAbility": {
                     "Kind": "static",
                     "KeywordSource": "Flying",
@@ -50,8 +65,19 @@
                       {
                         "EffectType": "evasion",
                         "CanBeBlockedBy": {
-                          "CardTypes": ["creature"],
-                          "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
+                          "CardTypes": [
+                            "creature"
+                          ],
+                          "Characteristics": [
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Flying"
+                            },
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Reach"
+                            }
+                          ]
                         }
                       }
                     ]
@@ -70,7 +96,10 @@
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
-                  { "Kind": "generic", "GenericAmount": 6 }
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 6
+                  }
                 ]
               }
             }
@@ -83,7 +112,10 @@
         "Kind": "manaCost",
         "Raw": "{4}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          }
         ],
         "ManaValue": 4
       },

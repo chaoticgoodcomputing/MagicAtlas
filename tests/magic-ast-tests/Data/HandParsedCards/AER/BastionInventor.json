@@ -6,15 +6,24 @@
     "OracleText": "Improvise (Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)\nHexproof (This creature can't be the target of spells or abilities your opponents control.)",
     "Power": "4",
     "Toughness": "4",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Bastion Inventor",
     "TypeLine": {
       "Raw": "Creature — Vedalken Artificer",
-      "Types": ["Creature"],
-      "Subtypes": ["Vedalken", "Artificer"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vedalken",
+        "Artificer"
+      ]
     },
     "Oracle": {
       "RawText": "Improvise (Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)\nHexproof (This creature can't be the target of spells or abilities your opponents control.)",
@@ -23,8 +32,8 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "improvise",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Improvise"
             }
           ],
           "KeywordSource": "Improvise",
@@ -36,8 +45,8 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "hexproof",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Hexproof"
             }
           ],
           "KeywordSource": "Hexproof",
@@ -58,7 +67,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 6,
@@ -66,11 +77,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

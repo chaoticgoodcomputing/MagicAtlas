@@ -36,7 +36,8 @@
           },
           "Effects": [
             {
-              "EffectType": "flanking"
+              "EffectType": "keywordAbility",
+              "Keyword": "Flanking"
             }
           ]
         }

@@ -17,8 +17,14 @@
     "Name": "Rabbit Battery",
     "TypeLine": {
       "Raw": "Artifact Creature — Equipment Rabbit",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Equipment", "Rabbit"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Equipment",
+        "Rabbit"
+      ]
     },
     "Oracle": {
       "RawText": "Haste\nEquipped creature gets +1/+1 and has haste.\nReconfigure {R} ({R}: Attach to target creature you control; or unattach from a creature. Reconfigure only as a sorcery. While attached, this isn't a creature.)",
@@ -28,8 +34,8 @@
           "KeywordSource": "Haste",
           "Effects": [
             {
-              "EffectType": "haste",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
             }
           ]
         },
@@ -65,8 +71,8 @@
                     "KeywordSource": "Haste",
                     "Effects": [
                       {
-                        "EffectType": "haste",
-                        "IsOptional": false
+                        "EffectType": "keywordAbility",
+                        "Keyword": "Haste"
                       }
                     ]
                   },
@@ -90,7 +96,9 @@
                 "Symbols": [
                   {
                     "Kind": "colored",
-                    "Colors": ["R"]
+                    "Colors": [
+                      "R"
+                    ]
                   }
                 ]
               }
@@ -106,18 +114,24 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

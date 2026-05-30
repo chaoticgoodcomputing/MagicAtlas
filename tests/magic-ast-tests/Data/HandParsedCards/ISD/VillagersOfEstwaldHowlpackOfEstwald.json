@@ -170,7 +170,8 @@
               "Kind": "static",
               "Effects": [
                 {
-                  "EffectType": "trample"
+                  "EffectType": "keywordAbility",
+                  "Keyword": "Trample"
                 }
               ],
               "KeywordSource": "Trample"

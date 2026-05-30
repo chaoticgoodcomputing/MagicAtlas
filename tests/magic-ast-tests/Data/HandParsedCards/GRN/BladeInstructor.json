@@ -36,7 +36,8 @@
           },
           "Effects": [
             {
-              "EffectType": "mentor"
+              "EffectType": "keywordAbility",
+              "Keyword": "Mentor"
             }
           ]
         }

@@ -6,15 +6,24 @@
     "OracleText": "Reach\nConstellation — Whenever an enchantment you control enters, you gain 2 life.",
     "Power": "1",
     "Toughness": "4",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Nexus Wardens",
     "TypeLine": {
       "Raw": "Creature — Satyr Archer",
-      "Types": ["Creature"],
-      "Subtypes": ["Satyr", "Archer"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Satyr",
+        "Archer"
+      ]
     },
     "Oracle": {
       "RawText": "Reach\nConstellation — Whenever an enchantment you control enters, you gain 2 life.",
@@ -24,7 +33,8 @@
           "KeywordSource": "Reach",
           "Effects": [
             {
-              "EffectType": "reach"
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
             }
           ]
         },
@@ -35,7 +45,9 @@
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["enchantment"],
+              "CardTypes": [
+                "enchantment"
+              ],
               "Controller": "You"
             }
           },
@@ -59,17 +71,43 @@
         "Kind": "manaCost",
         "Raw": "{2}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
       }
     ]
   }

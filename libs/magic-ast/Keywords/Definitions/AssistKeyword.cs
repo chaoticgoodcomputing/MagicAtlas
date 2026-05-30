@@ -34,7 +34,7 @@ public sealed class AssistKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Assist",
-      Effects = [new AssistEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Assist }],
       Reminder = reminder,
     }
   );

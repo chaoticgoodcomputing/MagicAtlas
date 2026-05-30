@@ -34,8 +34,8 @@
           "KeywordSource": "Wither",
           "Effects": [
             {
-              "EffectType": "wither",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Wither"
             }
           ]
         }

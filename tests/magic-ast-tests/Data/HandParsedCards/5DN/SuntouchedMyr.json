@@ -29,8 +29,8 @@
           "KeywordSource": "Sunburst",
           "Effects": [
             {
-              "EffectType": "sunburst",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Sunburst"
             }
           ]
         }

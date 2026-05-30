@@ -32,7 +32,8 @@
           "KeywordSource": "Trample",
           "Effects": [
             {
-              "EffectType": "trample"
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
             }
           ],
           "Reminder": {
@@ -52,7 +53,10 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "other"
+                    }
                   ]
                 }
               },
@@ -61,7 +65,8 @@
                 "KeywordSource": "Trample",
                 "Effects": [
                   {
-                    "EffectType": "trample"
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Trample"
                   }
                 ]
               },
@@ -75,8 +80,15 @@
             {
               "EffectType": "cantBeBlocked",
               "BlockedByFilter": {
-                "CardTypes": ["creature"],
-                "Characteristics": [{"CharacteristicType": "other", "Description": "with power less than this creature's power"}]
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "with power less than this creature's power"
+                  }
+                ]
               }
             }
           ]

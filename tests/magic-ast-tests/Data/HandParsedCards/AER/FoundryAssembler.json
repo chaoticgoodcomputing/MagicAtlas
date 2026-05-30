@@ -13,8 +13,13 @@
     "Name": "Foundry Assembler",
     "TypeLine": {
       "Raw": "Artifact Creature — Assembly-Worker",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Assembly-Worker"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Assembly-Worker"
+      ]
     },
     "Oracle": {
       "RawText": "Improvise (Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)",
@@ -23,8 +28,8 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "improvise",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Improvise"
             }
           ],
           "KeywordSource": "Improvise",

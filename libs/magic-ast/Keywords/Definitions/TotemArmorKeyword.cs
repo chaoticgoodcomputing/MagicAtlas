@@ -37,7 +37,7 @@ public sealed class TotemArmorKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Totem armor",
-        Effects = [new TotemArmorEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.TotemArmor }],
       },
     };
 
@@ -49,7 +49,7 @@ public sealed class TotemArmorKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Totem armor",
-      Effects = [new TotemArmorEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.TotemArmor }],
       Reminder = reminder,
     }
   );

@@ -30,7 +30,7 @@ public sealed class DoctorsCompanionKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Doctor's companion",
-        Effects = [new DoctorsCompanionEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.DoctorsCompanion }],
       },
     };
 
@@ -42,7 +42,7 @@ public sealed class DoctorsCompanionKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Doctor's companion",
-      Effects = [new DoctorsCompanionEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.DoctorsCompanion }],
       Reminder = reminder,
     }
   );

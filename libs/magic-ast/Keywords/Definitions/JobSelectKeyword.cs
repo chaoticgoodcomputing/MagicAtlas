@@ -33,7 +33,7 @@ public sealed class JobSelectKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Job select",
-        Effects = [new JobSelectEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.JobSelect }],
       },
     };
 
@@ -45,7 +45,7 @@ public sealed class JobSelectKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Job select",
-      Effects = [new JobSelectEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.JobSelect }],
       Reminder = reminder,
     }
   );

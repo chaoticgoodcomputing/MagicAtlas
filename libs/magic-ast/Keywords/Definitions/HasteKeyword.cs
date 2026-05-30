@@ -27,7 +27,7 @@ public sealed class HasteKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = keyword.ToStringValue(),
-      Effects = [new HasteEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
       Reminder = reminder,
     }
   );

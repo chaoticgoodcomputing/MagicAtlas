@@ -30,7 +30,7 @@ public sealed class EvolveKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Evolve",
-        Effects = [new EvolveEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Evolve }],
       },
     };
 
@@ -41,7 +41,7 @@ public sealed class EvolveKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Evolve",
-      Effects = [new EvolveEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Evolve }],
       Reminder = reminder,
     }
   );

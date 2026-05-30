@@ -29,7 +29,7 @@ public sealed class TrainingKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Training",
-        Effects = [new TrainingEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Training }],
       },
     };
 
@@ -40,7 +40,7 @@ public sealed class TrainingKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Training",
-      Effects = [new TrainingEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Training }],
       Reminder = reminder,
     }
   );

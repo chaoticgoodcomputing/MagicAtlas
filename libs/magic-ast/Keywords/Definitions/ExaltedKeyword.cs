@@ -28,7 +28,7 @@ public sealed class ExaltedKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Exalted",
-      Effects = [new ExaltedEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Exalted }],
       Reminder = reminder,
     }
   );

@@ -6,16 +6,31 @@
     "OracleText": "Flash\nFlying, trample\nIncrement (Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["G", "U"],
-    "ColorIdentity": ["G", "U"],
-    "Keywords": ["Flying", "Trample", "Flash", "Increment"]
+    "Colors": [
+      "G",
+      "U"
+    ],
+    "ColorIdentity": [
+      "G",
+      "U"
+    ],
+    "Keywords": [
+      "Flying",
+      "Trample",
+      "Flash",
+      "Increment"
+    ]
   },
   "Output": {
     "Name": "Cuboid Colony",
     "TypeLine": {
       "Raw": "Creature — Insect",
-      "Types": ["Creature"],
-      "Subtypes": ["Insect"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Insect"
+      ]
     },
     "Oracle": {
       "RawText": "Flash\nFlying, trample\nIncrement (Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)",
@@ -38,8 +53,19 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
-                "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
               }
             }
           ]
@@ -49,7 +75,8 @@
           "KeywordSource": "Trample",
           "Effects": [
             {
-              "EffectType": "trample"
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
             }
           ]
         },
@@ -74,22 +101,32 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["G", "U"]
+        "Colors": [
+          "G",
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G", "U"]
+        "ColorIdentity": [
+          "G",
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

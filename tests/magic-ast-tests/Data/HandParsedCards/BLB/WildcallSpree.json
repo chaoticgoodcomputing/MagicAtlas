@@ -6,14 +6,20 @@
     "OracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Create a 1/1 green Squirrel creature token.\n+ {2} — Create X 1/1 green Squirrel creature tokens.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Wildcall",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Spree (Choose one or more additional costs.)\n+ {1} — Create a 1/1 green Squirrel creature token.\n+ {2} — Create X 1/1 green Squirrel creature tokens.",
@@ -23,8 +29,8 @@
           "KeywordSource": "Spree",
           "Effects": [
             {
-              "EffectType": "spree",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Spree"
             }
           ],
           "Reminder": {
@@ -82,19 +88,35 @@
         "Kind": "manaCost",
         "Raw": "{X}{G}{G}",
         "Symbols": [
-          { "Kind": "variable" },
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "IsVariable": true
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

@@ -6,15 +6,23 @@
     "OracleText": "Enchant creature\nEnchanted creature gets +3/+3.\nWhenever the enchanted creature attacks, untap all lands you control.\nTotem armor (If enchanted creature would be destroyed, instead remove all damage from it and destroy this Aura.)",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Bear Umbra",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nEnchanted creature gets +3/+3.\nWhenever the enchanted creature attacks, untap all lands you control.\nTotem armor (If enchanted creature would be destroyed, instead remove all damage from it and destroy this Aura.)",
@@ -26,7 +34,9 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
           ]
@@ -57,8 +67,15 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"],
-              "Characteristics": [{"CharacteristicType": "other", "Description": "enchanted"}]
+              "CardTypes": [
+                "creature"
+              ],
+              "Characteristics": [
+                {
+                  "CharacteristicType": "other",
+                  "Description": "enchanted"
+                }
+              ]
             }
           },
           "Effects": [
@@ -67,7 +84,9 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["land"],
+                  "CardTypes": [
+                    "land"
+                  ],
                   "Controller": "You"
                 }
               }
@@ -79,7 +98,8 @@
           "KeywordSource": "Totem armor",
           "Effects": [
             {
-              "EffectType": "totemArmor"
+              "EffectType": "keywordAbility",
+              "Keyword": "TotemArmor"
             }
           ]
         }
@@ -90,19 +110,36 @@
         "Kind": "manaCost",
         "Raw": "{2}{G}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

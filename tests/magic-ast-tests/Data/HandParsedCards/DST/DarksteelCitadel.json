@@ -26,7 +26,8 @@
           "KeywordSource": "Indestructible",
           "Effects": [
             {
-              "EffectType": "indestructible"
+              "EffectType": "keywordAbility",
+              "Keyword": "Indestructible"
             }
           ]
         },

@@ -30,7 +30,7 @@ public sealed class MeleeKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Melee",
-        Effects = [new MeleeEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Melee }],
       },
     };
 
@@ -41,7 +41,7 @@ public sealed class MeleeKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Melee",
-      Effects = [new MeleeEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Melee }],
       Reminder = reminder,
     }
   );

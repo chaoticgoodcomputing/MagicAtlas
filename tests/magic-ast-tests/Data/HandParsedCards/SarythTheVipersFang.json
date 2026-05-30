@@ -44,8 +44,14 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"},
-                    {"CharacteristicType": "other", "Description": "tapped"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "other"
+                    },
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "tapped"
+                    }
                   ]
                 }
               },
@@ -54,8 +60,8 @@
                 "KeywordSource": "Deathtouch",
                 "Effects": [
                   {
-                    "EffectType": "deathtouch",
-                    "IsOptional": false
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Deathtouch"
                   }
                 ]
               },
@@ -76,8 +82,14 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"},
-                    {"CharacteristicType": "other", "Description": "untapped"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "other"
+                    },
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "untapped"
+                    }
                   ]
                 }
               },
@@ -86,7 +98,8 @@
                 "KeywordSource": "Hexproof",
                 "Effects": [
                   {
-                    "EffectType": "hexproof"
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Hexproof"
                   }
                 ]
               },
@@ -121,7 +134,10 @@
                     "land"
                   ],
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "another"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "another"
+                    }
                   ],
                   "Controller": "You"
                 }

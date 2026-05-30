@@ -28,7 +28,7 @@ public sealed class DethroneKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Dethrone",
-        Effects = [new DethroneEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Dethrone }],
       },
     };
 
@@ -39,7 +39,7 @@ public sealed class DethroneKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Dethrone",
-      Effects = [new DethroneEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Dethrone }],
       Reminder = reminder,
     }
   );

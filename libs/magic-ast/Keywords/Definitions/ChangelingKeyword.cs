@@ -32,7 +32,7 @@ public sealed class ChangelingKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Changeling",
-      Effects = [new ChangelingEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Changeling }],
       Reminder = reminder,
     }
   );

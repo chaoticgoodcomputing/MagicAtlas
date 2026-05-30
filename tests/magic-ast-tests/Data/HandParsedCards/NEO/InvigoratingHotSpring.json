@@ -63,8 +63,8 @@
                 "Kind": "static",
                 "Effects": [
                   {
-                    "EffectType": "haste",
-                    "IsOptional": false
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Haste"
                   }
                 ],
                 "KeywordSource": "Haste"

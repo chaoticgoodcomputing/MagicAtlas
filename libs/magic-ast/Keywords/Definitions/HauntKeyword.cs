@@ -28,7 +28,7 @@ public sealed class HauntKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Haunt",
-        Effects = [new HauntEffect { IsOptional = false }],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haunt }],
       },
     };
 
@@ -39,7 +39,7 @@ public sealed class HauntKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Haunt",
-      Effects = [new HauntEffect { IsOptional = false }],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haunt }],
       Reminder = reminder,
     }
   );

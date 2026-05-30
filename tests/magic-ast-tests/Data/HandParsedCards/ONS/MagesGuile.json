@@ -42,8 +42,8 @@
                 "KeywordSource": "Shroud",
                 "Effects": [
                   {
-                    "EffectType": "shroud",
-                    "IsOptional": false
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Shroud"
                   }
                 ]
               },

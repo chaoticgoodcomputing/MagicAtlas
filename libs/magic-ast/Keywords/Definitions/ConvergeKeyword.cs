@@ -28,7 +28,7 @@ public sealed class ConvergeKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = "Converge",
-        Effects = [new ConvergeEffect()],
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Converge }],
       },
     };
 
@@ -39,7 +39,7 @@ public sealed class ConvergeKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Converge",
-      Effects = [new ConvergeEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Converge }],
       Reminder = reminder,
     }
   );

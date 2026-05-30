@@ -6,15 +6,23 @@
     "OracleText": "Assist (Another player can pay up to {7} of this spell's cost.)\nTrample",
     "Power": "7",
     "Toughness": "5",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Charging Binox",
     "TypeLine": {
       "Raw": "Creature — Beast",
-      "Types": ["Creature"],
-      "Subtypes": ["Beast"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Beast"
+      ]
     },
     "Oracle": {
       "RawText": "Assist (Another player can pay up to {7} of this spell's cost.)\nTrample",
@@ -24,7 +32,8 @@
           "KeywordSource": "Assist",
           "Effects": [
             {
-              "EffectType": "assist"
+              "EffectType": "keywordAbility",
+              "Keyword": "Assist"
             }
           ],
           "Reminder": {
@@ -36,7 +45,8 @@
           "KeywordSource": "Trample",
           "Effects": [
             {
-              "EffectType": "trample"
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
             }
           ]
         }
@@ -47,18 +57,30 @@
         "Kind": "manaCost",
         "Raw": "{7}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 7 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 7
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 8
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

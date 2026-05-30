@@ -26,7 +26,7 @@ public sealed class ShroudKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Shroud",
-      Effects = [new ShroudEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }],
       Reminder = reminder,
     }
   );

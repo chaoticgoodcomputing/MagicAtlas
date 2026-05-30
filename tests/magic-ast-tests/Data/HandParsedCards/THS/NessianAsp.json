@@ -6,9 +6,16 @@
     "OracleText": "Reach\n{6}{G}: Monstrosity 4. (If this creature isn't monstrous, put four +1/+1 counters on it and it becomes monstrous.)",
     "Power": "4",
     "Toughness": "5",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
-    "Keywords": ["Reach", "Monstrosity"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Reach",
+      "Monstrosity"
+    ],
     "Id": "bf6eae62-5a42-42e9-ba65-84500cdff95a",
     "Layout": "normal"
   },
@@ -16,8 +23,12 @@
     "Name": "Nessian Asp",
     "TypeLine": {
       "Raw": "Creature — Snake",
-      "Types": ["Creature"],
-      "Subtypes": ["Snake"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Snake"
+      ]
     },
     "Oracle": {
       "RawText": "Reach\n{6}{G}: Monstrosity 4. (If this creature isn't monstrous, put four +1/+1 counters on it and it becomes monstrous.)",
@@ -27,7 +38,8 @@
           "KeywordSource": "Reach",
           "Effects": [
             {
-              "EffectType": "reach"
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
             }
           ]
         },
@@ -43,7 +55,9 @@
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["G"]
+                  "Colors": [
+                    "G"
+                  ]
                 }
               ]
             }
@@ -70,18 +84,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

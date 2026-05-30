@@ -41,8 +41,14 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"},
-                    {"CharacteristicType": "other", "Description": "tapped"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "other"
+                    },
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "tapped"
+                    }
                   ]
                 }
               },
@@ -51,7 +57,8 @@
                 "KeywordSource": "Indestructible",
                 "Effects": [
                   {
-                    "EffectType": "indestructible"
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Indestructible"
                   }
                 ]
               },

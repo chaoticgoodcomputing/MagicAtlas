@@ -33,7 +33,8 @@
           "KeywordSource": "Hexproof",
           "Effects": [
             {
-              "EffectType": "hexproof"
+              "EffectType": "keywordAbility",
+              "Keyword": "Hexproof"
             }
           ],
           "Reminder": {
@@ -45,7 +46,8 @@
           "KeywordSource": "Dethrone",
           "Effects": [
             {
-              "EffectType": "dethrone"
+              "EffectType": "keywordAbility",
+              "Keyword": "Dethrone"
             }
           ],
           "Reminder": {

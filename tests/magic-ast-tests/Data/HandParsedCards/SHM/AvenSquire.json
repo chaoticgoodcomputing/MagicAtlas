@@ -40,8 +40,14 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
@@ -52,8 +58,8 @@
           "KeywordSource": "Exalted",
           "Effects": [
             {
-              "EffectType": "exalted",
-              "IsOptional": false
+              "EffectType": "keywordAbility",
+              "Keyword": "Exalted"
             }
           ]
         }

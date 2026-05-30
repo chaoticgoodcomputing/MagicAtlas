@@ -26,7 +26,7 @@ public sealed class HexproofKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = "Hexproof",
-      Effects = [new HexproofEffect()],
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }],
       Reminder = reminder,
     }
   );
