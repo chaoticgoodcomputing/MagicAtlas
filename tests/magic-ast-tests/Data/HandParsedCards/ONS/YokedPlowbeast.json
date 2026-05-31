@@ -28,22 +28,44 @@
       "RawText": "Cycling {2} ({2}, Discard this card: Draw a card.)",
       "Abilities": [
         {
-          "Kind": "static",
+          "Kind": "activated",
           "KeywordSource": "Cycling",
-          "Effects": [
+          "Costs": [
             {
-              "EffectType": "cycling",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 2
-                  }
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
+              ]
+            },
+            {
+              "CostType": "discard",
+              "Filter": {
+                "CardTypes": [
+                  "card"
                 ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
               }
             }
-          ]
+          ],
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "IsManaAbility": false
         }
       ]
     },

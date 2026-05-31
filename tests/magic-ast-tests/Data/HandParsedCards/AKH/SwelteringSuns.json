@@ -48,22 +48,44 @@
           ]
         },
         {
-          "Kind": "static",
+          "Kind": "activated",
           "KeywordSource": "Cycling",
-          "Effects": [
+          "Costs": [
             {
-              "EffectType": "cycling",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 3
-                  }
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                }
+              ]
+            },
+            {
+              "CostType": "discard",
+              "Filter": {
+                "CardTypes": [
+                  "card"
                 ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
               }
             }
-          ]
+          ],
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "IsManaAbility": false
         }
       ]
     },
