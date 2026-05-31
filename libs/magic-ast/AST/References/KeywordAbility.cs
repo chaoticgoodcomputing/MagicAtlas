@@ -530,13 +530,13 @@ public enum KeywordAbility
   Wither,
 
   /// <summary>
-  /// Affinity (CR 702.40). Parameterized — the "for &lt;type&gt;" parameter is
+  /// Affinity (CR 702.41). Parameterized — the "for &lt;type&gt;" parameter is
   /// carried by the expanded effect, not this identity.
   /// </summary>
   Affinity,
 
   /// <summary>
-  /// Champion (CR 702.71). Parameterized — the championed type is carried by
+  /// Champion (CR 702.72). Parameterized — the championed type is carried by
   /// <c>ChampionEffect</c>, not this identity.
   /// </summary>
   Champion,
