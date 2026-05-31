@@ -27,7 +27,7 @@
               "Target": { "Kind": "Self" },
               "PowerModifier": {
                 "QuantityType": "count",
-                "CountOf": "artifact you control"
+                "CountOf": { "CardTypes": ["artifact"], "Controller": "You" }
               },
               "ToughnessModifier": {
                 "QuantityType": "literal",

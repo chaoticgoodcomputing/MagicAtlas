@@ -37,7 +37,7 @@
               "Characteristic": "Power",
               "Value": {
                 "QuantityType": "count",
-                "CountOf": "lands you control"
+                "CountOf": { "CardTypes": ["land"], "Controller": "You" }
               }
             }
           ]

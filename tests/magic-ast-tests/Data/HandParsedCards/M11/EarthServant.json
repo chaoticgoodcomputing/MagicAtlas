@@ -31,7 +31,7 @@
               },
               "ToughnessModifier": {
                 "QuantityType": "count",
-                "CountOf": "Mountain you control"
+                "CountOf": { "Subtypes": ["Mountain"], "Controller": "You" }
               }
             }
           ]

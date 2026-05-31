@@ -63,7 +63,7 @@
               "Characteristic": "Power",
               "Value": {
                 "QuantityType": "count",
-                "CountOf": "artifacts you control"
+                "CountOf": { "CardTypes": ["artifact"], "Controller": "You" }
               }
             }
           ]

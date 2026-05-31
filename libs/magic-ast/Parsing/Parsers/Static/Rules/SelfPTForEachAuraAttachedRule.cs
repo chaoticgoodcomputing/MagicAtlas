@@ -49,6 +49,13 @@ public sealed class SelfPTForEachAuraAttachedRule : IStaticRule
 
     var filterPhrase = match.Groups["filter"].Value.Trim();
 
+    var powerModifier = BuildModifier(power, filterPhrase);
+    var toughnessModifier = BuildModifier(toughness, filterPhrase);
+    if (powerModifier is null || toughnessModifier is null)
+    {
+      return null;
+    }
+
     return
     [
       new StaticAbility
@@ -56,8 +63,8 @@ public sealed class SelfPTForEachAuraAttachedRule : IStaticRule
         Effects = [new ModifyPTEffect
         {
           Target = ObjectReference.Self(),
-          PowerModifier = BuildModifier(power, filterPhrase),
-          ToughnessModifier = BuildModifier(toughness, filterPhrase),
+          PowerModifier = powerModifier,
+          ToughnessModifier = toughnessModifier,
         }],
       },
     ];
@@ -68,14 +75,19 @@ public sealed class SelfPTForEachAuraAttachedRule : IStaticRule
   /// ±1 increment is a bare <see cref="CountQuantity"/> over the filter; a
   /// larger magnitude wraps the count in a "multiply" <see cref="CalculatedQuantity"/>.
   /// </summary>
-  private static Quantity BuildModifier(int increment, string filterPhrase)
+  private static Quantity? BuildModifier(int increment, string filterPhrase)
   {
     if (increment == 0)
     {
       return LiteralQuantity.Of(0);
     }
 
-    var count = new CountQuantity { CountOf = filterPhrase };
+    var filter = StaticRuleHelpers.BuildObjectCountFilter(filterPhrase);
+    if (filter is null)
+    {
+      return null;
+    }
+    var count = new CountQuantity { CountOf = filter };
     if (Math.Abs(increment) == 1)
     {
       return count;

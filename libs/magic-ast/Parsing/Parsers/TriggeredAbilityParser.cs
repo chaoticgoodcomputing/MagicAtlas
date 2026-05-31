@@ -1042,17 +1042,22 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return null;
     }
 
-    var countOf = match.Groups["count"].Value.Trim();
+    var filter = MagicAST.Parsing.Parsers.Static.StaticRuleHelpers.BuildObjectCountFilter(
+      match.Groups["count"].Value.Trim());
+    if (filter is null)
+    {
+      return null;
+    }
     return new List<Effect>
     {
       new LoseLifeEffect
       {
-        Amount = new CountQuantity { CountOf = countOf },
+        Amount = new CountQuantity { CountOf = filter },
         Player = new ObjectReference { Kind = ObjectReferenceKind.EachOpponent },
       },
       new GainLifeEffect
       {
-        Amount = new CountQuantity { CountOf = countOf },
+        Amount = new CountQuantity { CountOf = filter },
         Player = ObjectReference.You(),
       },
     };

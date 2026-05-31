@@ -55,12 +55,14 @@
                 "Kind": "Self"
               },
               "PowerModifier": {
-                "QuantityType": "count",
-                "CountOf": "oil counter on it"
+                "QuantityType": "counterCount",
+                "CounterType": "oil",
+                "On": { "Kind": "Self" }
               },
               "ToughnessModifier": {
-                "QuantityType": "count",
-                "CountOf": "oil counter on it"
+                "QuantityType": "counterCount",
+                "CounterType": "oil",
+                "On": { "Kind": "Self" }
               }
             }
           ]

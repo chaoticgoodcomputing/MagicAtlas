@@ -27,7 +27,7 @@
               "Target": { "Kind": "Self" },
               "PowerModifier": {
                 "QuantityType": "count",
-                "CountOf": "legendary creature you control"
+                "CountOf": { "CardTypes": ["creature"], "Supertypes": ["Legendary"], "Controller": "You" }
               },
               "ToughnessModifier": {
                 "QuantityType": "literal",

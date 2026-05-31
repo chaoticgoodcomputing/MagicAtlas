@@ -464,6 +464,111 @@ internal static class StaticRuleHelpers
     };
   }
 
+  /// <summary>
+  /// Parses an object-count phrase — the noun phrase that follows "for each" or
+  /// "the number of" — into a structured <see cref="ObjectFilter"/>. Handles the
+  /// two shapes in the count corpus:
+  /// <list type="bullet">
+  /// <item>"&lt;type/subtype&gt; you control" — e.g. "lands you control",
+  ///   "legendary creature you control", "Mountain you control".</item>
+  /// <item>"&lt;subtype&gt; [and &lt;subtype&gt;] attached to it" — e.g.
+  ///   "Aura attached to it", "Aura and Equipment attached to it".</item>
+  /// </list>
+  /// The leading noun(s) are classified supertype → card type → subtype, mirroring
+  /// <see cref="BuildTypeSpellFilter"/>. Plurals are singularized for matching and
+  /// emit the canonical singular type/subtype. Returns <see langword="null"/> for a
+  /// phrase that does not match either shape (honest fallback).
+  /// </summary>
+  internal static ObjectFilter? BuildObjectCountFilter(string phrase)
+  {
+    var text = phrase.Trim().TrimEnd('.');
+
+    // "<nouns> attached to it" — relational count (Strong Back, Kor Spiritdancer).
+    var attachedMatch = Regex.Match(
+      text,
+      @"^(?<nouns>.+?)\s+attached\s+to\s+it$",
+      RegexOptions.IgnoreCase
+    );
+    if (attachedMatch.Success)
+    {
+      var subtypes = SplitConjunctiveNouns(attachedMatch.Groups["nouns"].Value)
+        .Select(Capitalize)
+        .ToList();
+      if (subtypes.Count == 0)
+      {
+        return null;
+      }
+      return new ObjectFilter
+      {
+        Subtypes = subtypes,
+        AttachedTo = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+      };
+    }
+
+    // "<nouns> you control" — board count.
+    var controlMatch = Regex.Match(
+      text,
+      @"^(?<nouns>.+?)\s+you\s+control$",
+      RegexOptions.IgnoreCase
+    );
+    if (controlMatch.Success)
+    {
+      var filter = ClassifyTypeNounPhrase(controlMatch.Groups["nouns"].Value);
+      return filter is null
+        ? null
+        : filter with { Controller = ControllerFilter.You };
+    }
+
+    return null;
+  }
+
+  // Splits "Aura and Equipment" into ["Aura", "Equipment"]; a single noun yields
+  // a one-element list.
+  private static IReadOnlyList<string> SplitConjunctiveNouns(string nouns) =>
+    Regex.Split(nouns.Trim(), @"\s*,?\s+and\s+|\s*,\s*", RegexOptions.IgnoreCase)
+      .Select(n => n.Trim())
+      .Where(n => n.Length > 0)
+      .ToList();
+
+  /// <summary>
+  /// Maps a type noun phrase like "lands", "legendary creature", "Mountain" onto
+  /// an <see cref="ObjectFilter"/>. Leading words are treated as supertypes when
+  /// recognised (e.g. "legendary"); the head noun is classified card type →
+  /// subtype. Returns null when the head noun is empty.
+  /// </summary>
+  private static ObjectFilter? ClassifyTypeNounPhrase(string phrase)
+  {
+    var words = phrase.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+    if (words.Length == 0)
+    {
+      return null;
+    }
+
+    var supertypes = new List<string>();
+    var i = 0;
+    while (i < words.Length - 1 && _spellFilterSupertypes.Contains(words[i]))
+    {
+      supertypes.Add(Capitalize(words[i]));
+      i++;
+    }
+
+    var head = Singularize(words[i]);
+    var filter = _spellFilterCardTypes.Contains(head)
+      ? new ObjectFilter { CardTypes = [head.ToLowerInvariant()] }
+      : new ObjectFilter { Subtypes = [Capitalize(head)] };
+
+    if (supertypes.Count > 0)
+    {
+      filter = filter with { Supertypes = supertypes };
+    }
+    return filter;
+  }
+
+  // Strips a trailing plural "s" so "lands"/"artifacts"/"Shrines" classify on
+  // their singular type/subtype. Conservative: only a simple trailing "s".
+  private static string Singularize(string noun) =>
+    noun.Length > 1 && noun.EndsWith('s') ? noun[..^1] : noun;
+
   // Color-name → single-letter code map (WUBRG order, all five colours).
   private static readonly IReadOnlyDictionary<string, string> _colorNameToCode =
     new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)

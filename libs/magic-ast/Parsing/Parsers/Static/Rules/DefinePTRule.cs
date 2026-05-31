@@ -27,7 +27,11 @@ public sealed class DefinePTRule : IStaticRule
     var bothMatch = _definePTBothPattern.Match(clause.RawText);
     if (bothMatch.Success)
     {
-      var filter = bothMatch.Groups["filter"].Value.Trim();
+      var filter = StaticRuleHelpers.BuildObjectCountFilter(bothMatch.Groups["filter"].Value.Trim());
+      if (filter is null)
+      {
+        return null;
+      }
       return
       [
         new StaticAbility
@@ -46,7 +50,11 @@ public sealed class DefinePTRule : IStaticRule
     if (singleMatch.Success)
     {
       var which = singleMatch.Groups["which"].Value.ToLowerInvariant();
-      var filter = singleMatch.Groups["filter"].Value.Trim();
+      var filter = StaticRuleHelpers.BuildObjectCountFilter(singleMatch.Groups["filter"].Value.Trim());
+      if (filter is null)
+      {
+        return null;
+      }
       var characteristic = which == "power"
         ? PTCharacteristic.Power
         : PTCharacteristic.Toughness;

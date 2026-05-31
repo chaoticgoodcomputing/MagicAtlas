@@ -57,17 +57,26 @@ public sealed class SelfPTForEachRule : IStaticRule
     }
 
     // The oracle fragment after "for each" and before the period is the
-    // filter description; captured verbatim in CountOf.
+    // count noun phrase. It is EITHER a counter count ("oil counter on it",
+    // CR-no-object → CounterCountQuantity) or an object count ("legendary
+    // creature you control" → CountQuantity over an ObjectFilter).
     var filterPhrase = match.Groups["filter"].Value.Trim();
-    var countOf = filterPhrase;
+
+    MagicAST.AST.Quantities.Quantity? countQuantity = BuildCountQuantity(filterPhrase);
+    if (countQuantity is null)
+    {
+      // Phrase did not classify into a structured count — defer to fallback
+      // rather than emit a stringly-typed count (no free-text counts).
+      return null;
+    }
 
     MagicAST.AST.Quantities.Quantity powerModifier = power == 0
       ? MagicAST.AST.Quantities.LiteralQuantity.Of(0)
-      : new MagicAST.AST.Quantities.CountQuantity { CountOf = countOf };
+      : countQuantity;
 
     MagicAST.AST.Quantities.Quantity toughnessModifier = toughness == 0
       ? MagicAST.AST.Quantities.LiteralQuantity.Of(0)
-      : new MagicAST.AST.Quantities.CountQuantity { CountOf = countOf };
+      : countQuantity;
 
     return
     [
@@ -81,5 +90,32 @@ public sealed class SelfPTForEachRule : IStaticRule
         }],
       },
     ];
+  }
+
+  // "<counterType> counter on it" — counts of counters, which an ObjectFilter
+  // cannot express (a counter is not an object); these become a
+  // CounterCountQuantity over Self. Everything else is an object count and is
+  // delegated to the shared ObjectFilter phrase parser.
+  private static readonly Regex _counterOnItFilter = new(
+    @"^(?<type>\S+)\s+counter\s+on\s+it$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  private static MagicAST.AST.Quantities.Quantity? BuildCountQuantity(string phrase)
+  {
+    var counterMatch = _counterOnItFilter.Match(phrase);
+    if (counterMatch.Success)
+    {
+      return new MagicAST.AST.Quantities.CounterCountQuantity
+      {
+        CounterType = counterMatch.Groups["type"].Value.ToLowerInvariant(),
+        On = ObjectReference.Self(),
+      };
+    }
+
+    var filter = StaticRuleHelpers.BuildObjectCountFilter(phrase);
+    return filter is null
+      ? null
+      : new MagicAST.AST.Quantities.CountQuantity { CountOf = filter };
   }
 }
