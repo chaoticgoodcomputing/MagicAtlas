@@ -23,12 +23,12 @@ public sealed class ChooseABackgroundKeyword : IKeyword
   public KeywordDefinition? Definition => null;
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from choose in Token.EqualTo(OracleToken.Choose)
     from a in Keyword("a")
     from background in Keyword("Background")
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Choose a Background",
       Effects = [new PartnerEffect { PartnerType = PartnerType.ChooseABackground }],

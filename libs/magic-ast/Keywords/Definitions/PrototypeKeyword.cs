@@ -38,7 +38,7 @@ public sealed class PrototypeKeyword : IKeyword
     Token.EqualTo(OracleToken.Number).Select(t => t.ToStringValue());
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Prototype")
     from cost in ManaCostSymbols
     from _ in EmDash
@@ -46,7 +46,7 @@ public sealed class PrototypeKeyword : IKeyword
     from __ in Slash
     from toughness in Number
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Prototype",
       Effects = [new PrototypeEffect

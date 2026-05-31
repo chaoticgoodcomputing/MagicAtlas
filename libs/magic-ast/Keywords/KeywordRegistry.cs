@@ -48,7 +48,7 @@ public static class KeywordRegistry
   /// wrap. Each combinator is wrapped in <c>.Try()</c> so first-success-wins backtracks
   /// cleanly between candidates. <c>OracleParsers.AnyKeyword</c> delegates to this.
   /// </summary>
-  public static TokenListParser<OracleToken, StaticAbility> RegisteredAnyKeyword { get; } =
+  public static TokenListParser<OracleToken, Ability> RegisteredAnyKeyword { get; } =
     BuildAnyKeyword();
 
   /// <summary>
@@ -56,12 +56,12 @@ public static class KeywordRegistry
   /// registry's keyword-list combinator. <c>OracleParsers.KeywordList</c> delegates to
   /// this.
   /// </summary>
-  public static TokenListParser<OracleToken, IReadOnlyList<StaticAbility>> RegisteredKeywordList { get; } =
+  public static TokenListParser<OracleToken, IReadOnlyList<Ability>> RegisteredKeywordList { get; } =
     RegisteredAnyKeyword
       .ManyDelimitedBy(Token.EqualTo(OracleToken.Comma))
-      .Select(arr => (IReadOnlyList<StaticAbility>)arr);
+      .Select(arr => (IReadOnlyList<Ability>)arr);
 
-  private static TokenListParser<OracleToken, StaticAbility> BuildAnyKeyword()
+  private static TokenListParser<OracleToken, Ability> BuildAnyKeyword()
   {
     var simple = FoldTier(KeywordTier.Simple);
     var parameterized = FoldTier(KeywordTier.Parameterized);
@@ -84,7 +84,7 @@ public static class KeywordRegistry
   /// each candidate wrapped in <c>.Try()</c> for clean backtracking. Returns null when
   /// the tier has no migrated keywords (so the caller can elide it).
   /// </summary>
-  private static TokenListParser<OracleToken, StaticAbility>? FoldTier(KeywordTier tier)
+  private static TokenListParser<OracleToken, Ability>? FoldTier(KeywordTier tier)
   {
     var combinators = _keywords
       .Where(k => k.Tier == tier)
@@ -109,6 +109,6 @@ public static class KeywordRegistry
   /// an empty registry, so <see cref="RegisteredKeywordList"/> stays type-valid even
   /// before any keyword migrates.
   /// </summary>
-  private static TokenListParser<OracleToken, StaticAbility> AlwaysFail() =>
-    input => TokenListParserResult.Empty<OracleToken, StaticAbility>(input, "no registered keywords");
+  private static TokenListParser<OracleToken, Ability> AlwaysFail() =>
+    input => TokenListParserResult.Empty<OracleToken, Ability>(input, "no registered keywords");
 }

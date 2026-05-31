@@ -33,10 +33,10 @@ public sealed class RetraceKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from kw in Keyword("Retrace")
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Retrace",
       Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Retrace }],

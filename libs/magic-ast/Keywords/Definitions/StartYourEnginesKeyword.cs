@@ -40,12 +40,12 @@ public sealed class StartYourEnginesKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from start in Keyword("Start")
     from your in Token.EqualTo(OracleToken.Your)
     from engines in Keyword("engines")
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Start your engines",
       Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.StartYourEngines }],

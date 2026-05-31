@@ -42,11 +42,11 @@ public sealed class PlotKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Plot")
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Plot",
       Effects = [new PlotEffect { Cost = cost }],

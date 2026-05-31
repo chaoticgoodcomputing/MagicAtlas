@@ -23,11 +23,11 @@ public sealed class SoulshiftKeyword : IKeyword
   public KeywordDefinition? Definition => null;
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Soulshift")
     from value in Token.EqualTo(OracleToken.Number)
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Soulshift",
       Effects = [new SoulshiftEffect { Value = int.Parse(value.ToStringValue()) }],

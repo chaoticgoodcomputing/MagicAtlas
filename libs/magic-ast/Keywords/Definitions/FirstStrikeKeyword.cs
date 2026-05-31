@@ -49,11 +49,11 @@ public sealed class FirstStrikeKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from first in Keyword("First")
     from strike in Keyword("Strike").Or(Keyword("strike"))
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "First strike",
       Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.First }],

@@ -25,11 +25,11 @@ public sealed class EternalizeKeyword : IKeyword
   public KeywordDefinition? Definition => null;
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Eternalize")
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Eternalize",
       Effects = [new EternalizeEffect

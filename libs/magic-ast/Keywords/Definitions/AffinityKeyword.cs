@@ -49,13 +49,13 @@ public sealed class AffinityKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Affinity")
     from forKw in Keyword("for")
     from typeWords in Token.EqualTo(OracleToken.Word).AtLeastOnce()
     from reminder in OptionalReminder
     let parameter = string.Join(" ", typeWords.Select(t => t.ToStringValue()))
-    select (StaticAbility)new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = $"Affinity for {parameter}",
       Effects = [new CostReductionEffect

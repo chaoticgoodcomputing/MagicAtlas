@@ -37,13 +37,13 @@ public sealed class ProtectionKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Protection")
     from from_ in Keyword("from")
     from first in _protectionQuality!
     from rest in _additionalProtectionQuality.Try().Many()
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Protection",
       Effects = [new ProtectionEffect { From = new[] { first }.Concat(rest).ToArray() }],

@@ -32,11 +32,11 @@ public sealed class DoubleStrikeKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from double_ in Keyword("Double")
     from strike in Keyword("Strike").Or(Keyword("strike"))
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Double strike",
       Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both }],

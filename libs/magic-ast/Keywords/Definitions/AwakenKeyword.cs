@@ -35,13 +35,13 @@ public sealed class AwakenKeyword : IKeyword
   public KeywordDefinition? Definition => null;
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Awaken")
     from n in AwakenNumber
     from dash in EmDash
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Awaken",
       Effects = [new AwakenEffect

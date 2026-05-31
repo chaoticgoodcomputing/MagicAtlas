@@ -26,11 +26,11 @@ public sealed class WebSlingingKeyword : IKeyword
   public KeywordDefinition? Definition => null;
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Web-slinging")
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Web-slinging",
       Effects = [new WebSlingingEffect

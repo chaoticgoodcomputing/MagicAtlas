@@ -47,11 +47,11 @@ public sealed class BackupKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Backup")
     from value in Token.EqualTo(OracleToken.Number)
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Backup",
       Effects = [new BackupEffect { Value = int.Parse(value.ToStringValue()) }],

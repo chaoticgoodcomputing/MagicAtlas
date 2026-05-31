@@ -39,12 +39,12 @@ public sealed class TypecyclingKeyword : IKeyword
   // "Basic landcycling {cost}" — two-word form; searches for a basic land card.
   // Must be tried before the bare/catch-all branches because its first token
   // ("Basic") does not end in "cycling".
-  private static readonly TokenListParser<OracleToken, StaticAbility> _basicLandcycling = (
+  private static readonly TokenListParser<OracleToken, Ability> _basicLandcycling = (
     from basic in Keyword("Basic")
     from landcycling in Keyword("landcycling")
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Basic landcycling",
       Effects = [new TypecyclingEffect
@@ -59,11 +59,11 @@ public sealed class TypecyclingKeyword : IKeyword
   // Bare "Landcycling {cost}" — searches for any land card (Type = "Land").
   // Handled explicitly so the single-word catch-all does not yield the literal
   // type "Landcycling".
-  private static readonly TokenListParser<OracleToken, StaticAbility> _bareLandcycling = (
+  private static readonly TokenListParser<OracleToken, Ability> _bareLandcycling = (
     from landcycling in Keyword("Landcycling")
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Landcycling",
       Effects = [new TypecyclingEffect
@@ -76,7 +76,7 @@ public sealed class TypecyclingKeyword : IKeyword
   );
 
   // Single-word "[Type]cycling {cost}" catch-all — Forestcycling, Swampcycling, etc.
-  private static readonly TokenListParser<OracleToken, StaticAbility> _singleWordTypecycling = (
+  private static readonly TokenListParser<OracleToken, Ability> _singleWordTypecycling = (
     from kwToken in Token
       .EqualTo(OracleToken.Word)
       .Try()
@@ -90,7 +90,7 @@ public sealed class TypecyclingKeyword : IKeyword
     from reminder in OptionalReminder
     let kwText = kwToken.ToStringValue()
     let landType = kwText[..^"cycling".Length]
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = kwText,
       Effects = [new TypecyclingEffect
@@ -103,7 +103,7 @@ public sealed class TypecyclingKeyword : IKeyword
   );
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } =
+  public TokenListParser<OracleToken, Ability> Combinator { get; } =
     _basicLandcycling.Try()
       .Or(_bareLandcycling.Try())
       .Or(_singleWordTypecycling.Try());

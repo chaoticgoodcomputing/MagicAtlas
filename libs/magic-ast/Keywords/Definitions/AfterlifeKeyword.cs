@@ -44,11 +44,11 @@ public sealed class AfterlifeKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Afterlife")
     from value in Token.EqualTo(OracleToken.Number)
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Afterlife",
       Effects = [new AfterlifeEffect { Value = int.Parse(value.ToStringValue()) }],

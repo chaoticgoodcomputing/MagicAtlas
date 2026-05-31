@@ -40,13 +40,13 @@ public sealed class SpliceKeyword : IKeyword
     .Select(t => t.ToStringValue());
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Splice")
     from onto in Keyword("onto")
     from subtype in SubtypeWord
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Splice",
       Effects = [new SpliceEffect

@@ -25,7 +25,7 @@ public static class OracleParsers
   /// Parses any keyword ability (simple or parameterized), backed solely by the
   /// reflection-discovered registry chain.
   /// </summary>
-  public static TokenListParser<OracleToken, StaticAbility> AnyKeyword =>
+  public static TokenListParser<OracleToken, Ability> AnyKeyword =>
     KeywordRegistry.RegisteredAnyKeyword;
 
   /// <summary>
@@ -34,6 +34,6 @@ public static class OracleParsers
   /// <c>OracleParsers.KeywordList(tokens)</c> from
   /// <see cref="MagicAST.Parsing.Parsers.StaticAbilityParser"/>.
   /// </summary>
-  public static TokenListParser<OracleToken, IReadOnlyList<StaticAbility>> KeywordList =>
+  public static TokenListParser<OracleToken, IReadOnlyList<Ability>> KeywordList =>
     KeywordRegistry.RegisteredKeywordList;
 }

@@ -55,7 +55,7 @@ public sealed class EscapeKeyword : IKeyword
     .IgnoreThen(Token.EqualTo(OracleToken.Period));
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Escape")
     from emDash in Token.EqualTo(OracleToken.EmDash)
     from cost in ManaCostSymbols
@@ -64,7 +64,7 @@ public sealed class EscapeKeyword : IKeyword
     from count in ExileCount
     from tail in ExileClauseTail
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Escape",
       Effects = [new EscapeEffect { Cost = cost, CardsToExile = count }],

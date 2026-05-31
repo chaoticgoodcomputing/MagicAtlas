@@ -37,7 +37,7 @@ public interface IKeyword
   /// The oracle-text recognizer — the same combinator that previously lived as a static
   /// field on <c>OracleParsers</c>. Folded into the registry's keyword Or-chain.
   /// </summary>
-  TokenListParser<OracleToken, StaticAbility> Combinator { get; }
+  TokenListParser<OracleToken, Ability> Combinator { get; }
 
   /// <summary>
   /// Which Or-chain this keyword's combinator belongs to. Mirrors the legacy split

@@ -47,12 +47,12 @@ public sealed class PartnerWithKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from partner in Keyword("Partner")
     from with_ in Keyword("with")
     from nameWords in Token.EqualTo(OracleToken.Word).AtLeastOnce()
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Partner with",
       Effects = [new PartnerEffect

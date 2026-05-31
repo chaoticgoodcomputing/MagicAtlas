@@ -39,13 +39,13 @@ public sealed class SuspendKeyword : IKeyword
     Token.EqualTo(OracleToken.EmDash);
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Suspend")
     from n in NumberLiteral
     from dash in Dash
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Suspend",
       Effects = [new SuspendEffect

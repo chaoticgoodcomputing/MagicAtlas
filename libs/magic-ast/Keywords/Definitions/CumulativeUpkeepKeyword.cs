@@ -42,12 +42,12 @@ public sealed class CumulativeUpkeepKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from cumulative in Keyword("Cumulative")
     from upkeep in Keyword("upkeep")
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Cumulative upkeep",
       Effects = [new CumulativeUpkeepEffect

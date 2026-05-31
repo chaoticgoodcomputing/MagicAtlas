@@ -41,11 +41,11 @@ public sealed class VanishingKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Vanishing")
     from value in Token.EqualTo(OracleToken.Number)
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Vanishing",
       Effects = [new VanishingEffect { Value = int.Parse(value.ToStringValue()) }],

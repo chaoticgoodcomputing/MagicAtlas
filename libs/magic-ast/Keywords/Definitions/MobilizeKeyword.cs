@@ -42,11 +42,11 @@ public sealed class MobilizeKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Mobilize")
     from value in Token.EqualTo(OracleToken.Number)
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Mobilize",
       Effects = [new MobilizeEffect

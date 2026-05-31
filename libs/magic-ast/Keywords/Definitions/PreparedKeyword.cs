@@ -37,13 +37,13 @@ public sealed class PreparedKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from this_ in Token.EqualTo(OracleToken.This)
     from creature in Keyword("creature")
     from enters in Keyword("enters")
     from prepared in Keyword("prepared")
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Prepared",
       Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Prepared }],

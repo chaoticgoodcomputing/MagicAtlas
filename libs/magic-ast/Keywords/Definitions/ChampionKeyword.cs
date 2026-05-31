@@ -40,7 +40,7 @@ public sealed class ChampionKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from kw in Keyword("Champion")
     from article in Token.EqualTo(OracleToken.Word)
                          .Where(t => t.ToStringValue().Equals("a", StringComparison.OrdinalIgnoreCase)
@@ -48,7 +48,7 @@ public sealed class ChampionKeyword : IKeyword
     from typeWords in Token.EqualTo(OracleToken.Word).AtLeastOnce()
     from reminder in OptionalReminder
     let creatureType = string.Join(" ", typeWords.Select(t => t.ToStringValue()))
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = $"Champion a {creatureType}",
       Effects = [MagicAST.AST.Effects.Core.EffectWrap.Optional(new ChampionEffect { CreatureType = creatureType}, false)],

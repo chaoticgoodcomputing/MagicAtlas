@@ -33,10 +33,10 @@ public sealed class NightboundKeyword : IKeyword
     };
 
   /// <inheritdoc/>
-  public TokenListParser<OracleToken, StaticAbility> Combinator { get; } = (
+  public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from kw in Keyword("Nightbound")
     from reminder in OptionalReminder
-    select new StaticAbility
+    select (Ability)new StaticAbility
     {
       KeywordSource = "Nightbound",
       Effects = [new DayNightEffect { Phase = DayNightPhase.Nightbound }],
