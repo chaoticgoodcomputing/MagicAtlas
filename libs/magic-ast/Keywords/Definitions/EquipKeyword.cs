@@ -37,7 +37,7 @@ public sealed class EquipKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new ActivatedAbility
     {
-      KeywordSource = "Equip",
+      KeywordSource = KeywordAbility.Equip,
       Costs = [cost],
       Effects =
       [

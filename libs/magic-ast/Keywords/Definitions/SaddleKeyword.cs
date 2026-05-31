@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -33,7 +34,7 @@ public sealed class SaddleKeyword : IKeyword
       ParameterType = KeywordParameterType.Number,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Saddle",
+        KeywordSource = KeywordAbility.Saddle,
         Effects = [new SaddleEffect
         {
           Value = ParseSaddleValue(parameter),
@@ -48,7 +49,7 @@ public sealed class SaddleKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Saddle",
+      KeywordSource = KeywordAbility.Saddle,
       Effects = [new SaddleEffect { Value = int.Parse(value.ToStringValue()) }],
       Reminder = reminder,
     }

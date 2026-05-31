@@ -58,7 +58,7 @@ public sealed class TargetGainsProtectionColorRule : ISpellRule
       },
       GainedAbility = new StaticAbility
       {
-        KeywordSource = "Protection",
+        KeywordSource = KeywordAbility.Protection,
         Effects =
         [
           new ProtectionEffect

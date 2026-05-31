@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects.Keyword;
@@ -33,7 +34,7 @@ public sealed class SpectacleKeyword : IKeyword
       ParameterType = KeywordParameterType.ManaCost,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Spectacle",
+        KeywordSource = KeywordAbility.Spectacle,
         Effects = [new SpectacleEffect
         {
           Cost = ParseManaCost(parameter),
@@ -48,7 +49,7 @@ public sealed class SpectacleKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Spectacle",
+      KeywordSource = KeywordAbility.Spectacle,
       Effects = [new SpectacleEffect
       {
         Cost = cost,

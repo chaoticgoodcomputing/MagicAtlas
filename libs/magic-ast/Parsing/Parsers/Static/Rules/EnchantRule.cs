@@ -41,7 +41,7 @@ public sealed class EnchantRule : IStaticRule
     [
       new StaticAbility
       {
-        KeywordSource = "Enchant",
+        KeywordSource = KeywordAbility.Enchant,
         Effects = [new MagicAST.AST.Effects.Combat.EnchantRestrictionEffect
         {
           LegalTargets = filter,

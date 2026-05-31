@@ -33,7 +33,7 @@ public sealed class FlyingKeyword : IKeyword
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility
       {
-        KeywordSource = "Flying",
+        KeywordSource = KeywordAbility.Flying,
         Effects = [new EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter
@@ -51,7 +51,7 @@ public sealed class FlyingKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Flying",
+      KeywordSource = KeywordAbility.Flying,
       Effects = [new EvasionEffect
       {
         CanBeBlockedBy = new ObjectFilter

@@ -33,7 +33,7 @@ public sealed class FlashbackKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Flashback",
+      KeywordSource = KeywordAbility.Flashback,
       Effects = [new AlternativeCastEffect
       {
         FromZone = Zone.Graveyard,

@@ -21,7 +21,7 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Affinity for artifacts",
+          "KeywordSource": "Affinity",
           "Reminder": {
             "Text": "(This spell costs {1} less to cast for each artifact you control.)"
           },

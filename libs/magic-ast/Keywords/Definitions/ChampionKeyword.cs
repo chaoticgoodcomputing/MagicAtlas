@@ -2,6 +2,7 @@ namespace MagicAST.Keywords.Definitions;
 
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.References;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using Superpower.Parsers;
@@ -31,7 +32,7 @@ public sealed class ChampionKeyword : IKeyword
       ParameterType = KeywordParameterType.CardType,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = $"Champion a {parameter?.Trim() ?? "creature"}",
+        KeywordSource = KeywordAbility.Champion,
         Effects = [new ChampionEffect
         {
           CreatureType = parameter?.Trim() ?? "creature",
@@ -50,7 +51,7 @@ public sealed class ChampionKeyword : IKeyword
     let creatureType = string.Join(" ", typeWords.Select(t => t.ToStringValue()))
     select (Ability)new StaticAbility
     {
-      KeywordSource = $"Champion a {creatureType}",
+      KeywordSource = KeywordAbility.Champion,
       Effects = [MagicAST.AST.Effects.Core.EffectWrap.Optional(new ChampionEffect { CreatureType = creatureType}, false)],
       Reminder = reminder,
     }

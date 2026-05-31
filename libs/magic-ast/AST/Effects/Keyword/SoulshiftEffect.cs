@@ -1,5 +1,6 @@
 namespace MagicAST.AST.Effects.Keyword;
 
+using MagicAST.AST.References;
 using System.Text.Json.Serialization;
 using MagicAST.AST.Effects.Traits;
 using MagicAST.Serialization.DiscriminatorAttributes;
@@ -20,7 +21,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// is fixed at oracle-print time, not derived at runtime.
 ///
 /// <para>
-/// The containing <c>StaticAbility</c> records <c>KeywordSource = "Soulshift"</c>
+/// The containing <c>StaticAbility</c> records <c>KeywordSource = KeywordAbility.Soulshift</c>
 /// so the keyword's identity survives normalization.
 /// </para>
 /// </remarks>

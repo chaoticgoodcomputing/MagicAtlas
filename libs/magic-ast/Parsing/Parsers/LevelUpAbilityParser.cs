@@ -1,5 +1,6 @@
 namespace MagicAST.Parsing.Parsers;
 
+using MagicAST.AST.References;
 using MagicAST;
 using MagicAST.AST.Abilities;
 
@@ -89,7 +90,7 @@ public sealed class LevelUpAbilityParser : IAbilityParser
       Effects = [],
       IsManaAbility = false,
       AbilityWord = classification.AbilityWord,
-      KeywordSource = "Level up",
+      KeywordSource = KeywordAbility.LevelUp,
     };
   }
 

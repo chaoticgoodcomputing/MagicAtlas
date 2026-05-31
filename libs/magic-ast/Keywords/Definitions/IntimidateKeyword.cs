@@ -30,7 +30,7 @@ public sealed class IntimidateKeyword : IKeyword
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility
       {
-        KeywordSource = "Intimidate",
+        KeywordSource = KeywordAbility.Intimidate,
         Effects = [new EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter
@@ -48,7 +48,7 @@ public sealed class IntimidateKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Intimidate",
+      KeywordSource = KeywordAbility.Intimidate,
       Effects = [new EvasionEffect
       {
         CanBeBlockedBy = new ObjectFilter

@@ -51,7 +51,7 @@ public sealed class ReconfigureKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new ActivatedAbility
     {
-      KeywordSource = "Reconfigure",
+      KeywordSource = KeywordAbility.Reconfigure,
       Costs = [cost],
       Effects =
       [

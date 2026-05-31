@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects.Keyword;
@@ -32,7 +33,7 @@ public sealed class WarpKeyword : IKeyword
       ParameterType = KeywordParameterType.ManaCost,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Warp",
+        KeywordSource = KeywordAbility.Warp,
         Effects = [new WarpEffect
         {
           Cost = ParseManaCost(parameter),
@@ -47,7 +48,7 @@ public sealed class WarpKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Warp",
+      KeywordSource = KeywordAbility.Warp,
       Effects = [new WarpEffect
       {
         Cost = cost,

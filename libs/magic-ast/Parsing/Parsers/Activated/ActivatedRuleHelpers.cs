@@ -263,18 +263,18 @@ internal static class ActivatedRuleHelpers
     // Single-word keywords use their dedicated effect type.
     return keyword switch
     {
-      "lifelink" => new StaticAbility { KeywordSource = "Lifelink", Effects = [new LifelinkEffect()] },
-      "haste" => new StaticAbility { KeywordSource = "Haste", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }] },
-      "trample" => new StaticAbility { KeywordSource = "Trample", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }] },
-      "vigilance" => new StaticAbility { KeywordSource = "Vigilance", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }] },
-      "reach" => new StaticAbility { KeywordSource = "Reach", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }] },
-      "indestructible" => new StaticAbility { KeywordSource = "Indestructible", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }] },
-      "deathtouch" => new StaticAbility { KeywordSource = "Deathtouch", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }] },
-      "hexproof" => new StaticAbility { KeywordSource = "Hexproof", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }] },
-      "shroud" => new StaticAbility { KeywordSource = "Shroud", Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }] },
+      "lifelink" => new StaticAbility { KeywordSource = KeywordAbility.Lifelink, Effects = [new LifelinkEffect()] },
+      "haste" => new StaticAbility { KeywordSource = KeywordAbility.Haste, Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }] },
+      "trample" => new StaticAbility { KeywordSource = KeywordAbility.Trample, Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }] },
+      "vigilance" => new StaticAbility { KeywordSource = KeywordAbility.Vigilance, Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }] },
+      "reach" => new StaticAbility { KeywordSource = KeywordAbility.Reach, Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }] },
+      "indestructible" => new StaticAbility { KeywordSource = KeywordAbility.Indestructible, Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }] },
+      "deathtouch" => new StaticAbility { KeywordSource = KeywordAbility.Deathtouch, Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }] },
+      "hexproof" => new StaticAbility { KeywordSource = KeywordAbility.Hexproof, Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }] },
+      "shroud" => new StaticAbility { KeywordSource = KeywordAbility.Shroud, Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }] },
       "flying" => new StaticAbility
       {
-        KeywordSource = "Flying",
+        KeywordSource = KeywordAbility.Flying,
         Effects =
         [
           new EvasionEffect
@@ -289,7 +289,7 @@ internal static class ActivatedRuleHelpers
       },
       "menace" => new StaticAbility
       {
-        KeywordSource = "Menace",
+        KeywordSource = KeywordAbility.Menace,
         Effects =
         [
           new EvasionEffect
@@ -301,12 +301,12 @@ internal static class ActivatedRuleHelpers
       },
       "first strike" => new StaticAbility
       {
-        KeywordSource = "First strike",
+        KeywordSource = KeywordAbility.FirstStrike,
         Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.First }],
       },
       "double strike" => new StaticAbility
       {
-        KeywordSource = "Double strike",
+        KeywordSource = KeywordAbility.DoubleStrike,
         Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both }],
       },
       _ => null,

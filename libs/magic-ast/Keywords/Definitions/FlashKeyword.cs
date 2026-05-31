@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Timing;
 using MagicAST.Parsing.Tokens;
@@ -26,7 +27,7 @@ public sealed class FlashKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Flash",
+      KeywordSource = KeywordAbility.Flash,
       Effects = [new TimingModificationEffect
       {
         Modification = TimingModificationType.Grant,

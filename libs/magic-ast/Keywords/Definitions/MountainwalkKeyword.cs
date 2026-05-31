@@ -33,7 +33,7 @@ public sealed class MountainwalkKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Mountainwalk",
+      KeywordSource = KeywordAbility.Mountainwalk,
       Effects = [new EvasionEffect
       {
         UnblockableCondition = new EvasionCondition

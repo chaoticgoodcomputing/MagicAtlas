@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -38,7 +39,7 @@ public sealed class BackupKeyword : IKeyword
       ParameterType = KeywordParameterType.Number,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Backup",
+        KeywordSource = KeywordAbility.Backup,
         Effects = [new BackupEffect
         {
           Value = ParseIntValue("Backup", parameter),
@@ -53,7 +54,7 @@ public sealed class BackupKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Backup",
+      KeywordSource = KeywordAbility.Backup,
       Effects = [new BackupEffect { Value = int.Parse(value.ToStringValue()) }],
       Reminder = reminder,
     }

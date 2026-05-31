@@ -49,7 +49,7 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Islandcycling",
+          "KeywordSource": "Landcycling",
           "Effects": [
             {
               "EffectType": "typecycling",

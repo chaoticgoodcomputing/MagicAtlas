@@ -1,5 +1,6 @@
 namespace MagicAST.Parsing;
 
+using MagicAST.AST.References;
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
 using MagicAST.Parsing.Tokens;
@@ -215,7 +216,7 @@ public sealed class AbilityClassifier
 
       // Exception: "Choose a Background" is a named partner-variant keyword
       // (Rule 702.124g, descriptive). Route it to the static keyword parser
-      // so it lands as a StaticAbility with KeywordSource="Choose a Background"
+      // so it lands as a StaticAbility with KeywordSource = KeywordAbility.ChooseABackground
       // rather than as an unparsable modal selection.
       if (trimmed.StartsWith("Choose a Background", StringComparison.OrdinalIgnoreCase))
       {

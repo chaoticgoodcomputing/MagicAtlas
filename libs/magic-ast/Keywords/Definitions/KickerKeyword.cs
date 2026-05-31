@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.CardFlow;
 using MagicAST.Parsing.Tokens;
@@ -39,7 +40,7 @@ public sealed class KickerKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Kicker",
+      KeywordSource = KeywordAbility.Kicker,
       Effects = [new AdditionalCastCostEffect
       {
         Cost = cost,

@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Quantities;
@@ -33,7 +34,7 @@ public sealed class CrewKeyword : IKeyword
       ParameterType = KeywordParameterType.Number,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Crew",
+        KeywordSource = KeywordAbility.Crew,
         Effects = [new CrewEffect
         {
           Power = new LiteralQuantity { Value = ParseCrewPower(parameter) },
@@ -48,7 +49,7 @@ public sealed class CrewKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Crew",
+      KeywordSource = KeywordAbility.Crew,
       Effects = [new CrewEffect
       {
         Power = new LiteralQuantity { Value = int.Parse(n.ToStringValue()) },

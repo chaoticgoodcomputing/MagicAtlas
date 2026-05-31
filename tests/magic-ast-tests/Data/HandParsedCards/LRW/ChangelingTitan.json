@@ -39,7 +39,7 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Champion a creature",
+          "KeywordSource": "Champion",
           "Effects": [
             {
               "EffectType": "champion",

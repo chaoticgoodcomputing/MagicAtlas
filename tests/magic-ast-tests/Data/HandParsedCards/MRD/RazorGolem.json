@@ -26,7 +26,7 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Affinity for Plains",
+          "KeywordSource": "Affinity",
           "Reminder": {
             "Text": "(This spell costs {1} less to cast for each Plains you control.)"
           },

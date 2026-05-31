@@ -42,7 +42,7 @@ public sealed class CreateTokenRule : ISpellRule
     {
       "flying" => new StaticAbility
       {
-        KeywordSource = "Flying",
+        KeywordSource = KeywordAbility.Flying,
         Effects =
         [
           new EvasionEffect
@@ -57,7 +57,7 @@ public sealed class CreateTokenRule : ISpellRule
       },
       "haste" => new StaticAbility
       {
-        KeywordSource = "Haste",
+        KeywordSource = KeywordAbility.Haste,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
       },
       _ => null,

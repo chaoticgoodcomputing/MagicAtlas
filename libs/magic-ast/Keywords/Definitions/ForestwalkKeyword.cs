@@ -27,7 +27,7 @@ public sealed class ForestwalkKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Forestwalk",
+      KeywordSource = KeywordAbility.Forestwalk,
       Effects = [new EvasionEffect
       {
         UnblockableCondition = new EvasionCondition

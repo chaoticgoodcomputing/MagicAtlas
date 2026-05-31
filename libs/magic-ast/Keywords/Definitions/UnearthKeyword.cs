@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects.Keyword;
@@ -33,7 +34,7 @@ public sealed class UnearthKeyword : IKeyword
       ParameterType = KeywordParameterType.ManaCost,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Unearth",
+        KeywordSource = KeywordAbility.Unearth,
         Effects = [new UnearthEffect
         {
           Cost = ParseManaCost(parameter),
@@ -48,7 +49,7 @@ public sealed class UnearthKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Unearth",
+      KeywordSource = KeywordAbility.Unearth,
       Effects = [new UnearthEffect
       {
         Cost = cost,

@@ -199,7 +199,17 @@ internal static class TriggeredRuleHelpers
     {
       return null;
     }
-    var keywordSource = char.ToUpperInvariant(lower[0]) + lower[1..];
+    KeywordAbility? keywordSource = lower switch
+    {
+      "flying" => KeywordAbility.Flying,
+      "vigilance" => KeywordAbility.Vigilance,
+      "trample" => KeywordAbility.Trample,
+      "haste" => KeywordAbility.Haste,
+      "reach" => KeywordAbility.Reach,
+      "lifelink" => KeywordAbility.Lifelink,
+      "indestructible" => KeywordAbility.Indestructible,
+      _ => null,
+    };
     return new StaticAbility { Effects = [effect], KeywordSource = keywordSource };
   }
 

@@ -31,7 +31,7 @@ public class KeywordExpanderTests
       Assert.That(ability, Is.InstanceOf<StaticAbility>());
       var staticAbility = (StaticAbility)ability;
 
-      Assert.That(staticAbility.KeywordSource, Is.EqualTo("Flying"));
+      Assert.That(staticAbility.KeywordSource, Is.EqualTo(KeywordAbility.Flying));
       Assert.That(staticAbility.Effects[0], Is.InstanceOf<EvasionEffect>());
 
       var evasion = (EvasionEffect)staticAbility.Effects[0];
@@ -48,7 +48,7 @@ public class KeywordExpanderTests
       Assert.That(ability, Is.InstanceOf<StaticAbility>());
       var staticAbility = (StaticAbility)ability;
 
-      Assert.That(staticAbility.KeywordSource, Is.EqualTo("First strike"));
+      Assert.That(staticAbility.KeywordSource, Is.EqualTo(KeywordAbility.FirstStrike));
       Assert.That(staticAbility.Effects[0], Is.InstanceOf<CombatDamageTimingEffect>());
 
       var timing = (CombatDamageTimingEffect)staticAbility.Effects[0];
@@ -77,7 +77,7 @@ public class KeywordExpanderTests
       Assert.That(ability, Is.InstanceOf<StaticAbility>());
       var staticAbility = (StaticAbility)ability;
 
-      Assert.That(staticAbility.KeywordSource, Is.EqualTo("Lifelink"));
+      Assert.That(staticAbility.KeywordSource, Is.EqualTo(KeywordAbility.Lifelink));
       Assert.That(staticAbility.Effects[0], Is.InstanceOf<LifelinkEffect>());
   }
 
@@ -89,7 +89,7 @@ public class KeywordExpanderTests
       Assert.That(ability, Is.InstanceOf<StaticAbility>());
       var staticAbility = (StaticAbility)ability;
 
-      Assert.That(staticAbility.KeywordSource, Is.EqualTo("Vigilance"));
+      Assert.That(staticAbility.KeywordSource, Is.EqualTo(KeywordAbility.Vigilance));
       var kae = (MagicAST.AST.Effects.Keyword.KeywordAbilityEffect)staticAbility.Effects[0];
       Assert.That(kae.Keyword, Is.EqualTo(MagicAST.AST.References.KeywordAbility.Vigilance));
   }
@@ -102,7 +102,7 @@ public class KeywordExpanderTests
       Assert.That(ability, Is.InstanceOf<StaticAbility>());
       var staticAbility = (StaticAbility)ability;
 
-      Assert.That(staticAbility.KeywordSource, Is.EqualTo("Protection"));
+      Assert.That(staticAbility.KeywordSource, Is.EqualTo(KeywordAbility.Protection));
       Assert.That(staticAbility.Effects[0], Is.InstanceOf<ProtectionEffect>());
 
       var protection = (ProtectionEffect)staticAbility.Effects[0];

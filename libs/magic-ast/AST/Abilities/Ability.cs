@@ -1,6 +1,7 @@
 namespace MagicAST.AST.Abilities;
 
 using System.Text.Json.Serialization;
+using MagicAST.AST.References;
 using MagicAST.Serialization;
 
 /// <summary>
@@ -27,10 +28,10 @@ public abstract record Ability
   public string? AbilityWord { get; init; }
 
   /// <summary>
-  /// If this ability was expanded from a keyword, the keyword name.
+  /// If this ability was expanded from a keyword, the keyword's typed identity.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public string? KeywordSource { get; init; }
+  public KeywordAbility? KeywordSource { get; init; }
 
   /// <summary>
   /// Optional parenthetical reminder text associated with this ability.

@@ -62,7 +62,7 @@ public sealed class WardKeywordRule : IStaticRule
     [
       new MagicAST.AST.Abilities.TriggeredAbility
       {
-        KeywordSource = "Ward",
+        KeywordSource = KeywordAbility.Ward,
         Trigger = trigger,
         Effects = [counterSpell],
         Reminder = reminder,

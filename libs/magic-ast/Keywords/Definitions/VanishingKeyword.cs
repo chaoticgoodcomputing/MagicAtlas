@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -32,7 +33,7 @@ public sealed class VanishingKeyword : IKeyword
       ParameterType = KeywordParameterType.Number,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Vanishing",
+        KeywordSource = KeywordAbility.Vanishing,
         Effects = [new VanishingEffect
         {
           Value = ParseIntValue("Vanishing", parameter),
@@ -47,7 +48,7 @@ public sealed class VanishingKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Vanishing",
+      KeywordSource = KeywordAbility.Vanishing,
       Effects = [new VanishingEffect { Value = int.Parse(value.ToStringValue()) }],
       Reminder = reminder,
     }

@@ -60,7 +60,7 @@ public sealed class AfterlifeKeyword : IKeyword
   private static Ability BuildAbility(int value, Parenthetical? reminder) =>
     new TriggeredAbility
     {
-      KeywordSource = "Afterlife",
+      KeywordSource = KeywordAbility.Afterlife,
       Trigger = new TriggerCondition
       {
         Timing = TriggerTiming.When,
@@ -83,7 +83,7 @@ public sealed class AfterlifeKeyword : IKeyword
             [
               new StaticAbility
               {
-                KeywordSource = "Flying",
+                KeywordSource = KeywordAbility.Flying,
                 Effects =
                 [
                   new EvasionEffect

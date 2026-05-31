@@ -53,7 +53,7 @@ public sealed class EchoKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new TriggeredAbility
     {
-      KeywordSource = "Echo",
+      KeywordSource = KeywordAbility.Echo,
       Trigger = new TriggerCondition
       {
         Timing = TriggerTiming.At,

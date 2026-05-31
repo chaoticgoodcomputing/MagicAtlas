@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -48,7 +49,7 @@ public sealed class PrototypeKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Prototype",
+      KeywordSource = KeywordAbility.Prototype,
       Effects = [new PrototypeEffect
       {
         Cost = cost,

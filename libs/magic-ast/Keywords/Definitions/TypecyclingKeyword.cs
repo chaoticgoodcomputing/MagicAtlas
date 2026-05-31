@@ -3,6 +3,7 @@ namespace MagicAST.Keywords.Definitions;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.References;
 using MagicAST.Parsing;
 using MagicAST.Parsing.Tokens;
 using Superpower;
@@ -46,7 +47,7 @@ public sealed class TypecyclingKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Basic landcycling",
+      KeywordSource = KeywordAbility.Landcycling,
       Effects = [new TypecyclingEffect
       {
         Type = "Basic land",
@@ -65,7 +66,7 @@ public sealed class TypecyclingKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Landcycling",
+      KeywordSource = KeywordAbility.Landcycling,
       Effects = [new TypecyclingEffect
       {
         Type = "Land",
@@ -92,7 +93,7 @@ public sealed class TypecyclingKeyword : IKeyword
     let landType = kwText[..^"cycling".Length]
     select (Ability)new StaticAbility
     {
-      KeywordSource = kwText,
+      KeywordSource = KeywordAbility.Landcycling,
       Effects = [new TypecyclingEffect
       {
         Type = char.ToUpperInvariant(landType[0]) + landType[1..],

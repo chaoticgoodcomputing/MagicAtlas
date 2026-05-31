@@ -29,7 +29,7 @@ public sealed class IslandwalkKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Islandwalk",
+      KeywordSource = KeywordAbility.Islandwalk,
       Effects = [new EvasionEffect
       {
         UnblockableCondition = new EvasionCondition

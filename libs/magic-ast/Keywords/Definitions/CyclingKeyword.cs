@@ -42,7 +42,7 @@ public sealed class CyclingKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new ActivatedAbility
     {
-      KeywordSource = "Cycling",
+      KeywordSource = KeywordAbility.Cycling,
       Costs =
       [
         cost,

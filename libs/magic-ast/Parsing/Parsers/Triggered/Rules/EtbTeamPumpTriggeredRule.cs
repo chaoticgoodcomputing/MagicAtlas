@@ -150,17 +150,17 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
     {
       "haste" => new StaticAbility
       {
-        KeywordSource = "Haste",
+        KeywordSource = KeywordAbility.Haste,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
       },
       "trample" => new StaticAbility
       {
-        KeywordSource = "Trample",
+        KeywordSource = KeywordAbility.Trample,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }],
       },
       "flying" => new StaticAbility
       {
-        KeywordSource = "Flying",
+        KeywordSource = KeywordAbility.Flying,
         Effects =
         [
           new EvasionEffect
@@ -175,7 +175,7 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
       },
       "first strike" => new StaticAbility
       {
-        KeywordSource = "First strike",
+        KeywordSource = KeywordAbility.FirstStrike,
         Effects =
         [
           new AST.Effects.Combat.CombatDamageTimingEffect
@@ -186,7 +186,7 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
       },
       "double strike" => new StaticAbility
       {
-        KeywordSource = "Double strike",
+        KeywordSource = KeywordAbility.DoubleStrike,
         Effects =
         [
           new AST.Effects.Combat.CombatDamageTimingEffect
@@ -197,27 +197,27 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
       },
       "reach" => new StaticAbility
       {
-        KeywordSource = "Reach",
+        KeywordSource = KeywordAbility.Reach,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }],
       },
       "lifelink" => new StaticAbility
       {
-        KeywordSource = "Lifelink",
+        KeywordSource = KeywordAbility.Lifelink,
         Effects = [new AST.Effects.Damage.LifelinkEffect()],
       },
       "vigilance" => new StaticAbility
       {
-        KeywordSource = "Vigilance",
+        KeywordSource = KeywordAbility.Vigilance,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }],
       },
       "deathtouch" => new StaticAbility
       {
-        KeywordSource = "Deathtouch",
+        KeywordSource = KeywordAbility.Deathtouch,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }],
       },
       "menace" => new StaticAbility
       {
-        KeywordSource = "Menace",
+        KeywordSource = KeywordAbility.Menace,
         Effects =
         [
           new EvasionEffect
@@ -229,17 +229,17 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
       },
       "indestructible" => new StaticAbility
       {
-        KeywordSource = "Indestructible",
+        KeywordSource = KeywordAbility.Indestructible,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }],
       },
       "hexproof" => new StaticAbility
       {
-        KeywordSource = "Hexproof",
+        KeywordSource = KeywordAbility.Hexproof,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }],
       },
       "shroud" => new StaticAbility
       {
-        KeywordSource = "Shroud",
+        KeywordSource = KeywordAbility.Shroud,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }],
       },
       _ => null,

@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -36,7 +37,7 @@ public sealed class ToxicKeyword : IKeyword
       ParameterType = KeywordParameterType.Number,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Toxic",
+        KeywordSource = KeywordAbility.Toxic,
         Effects = [new ToxicEffect
         {
           Value = ParseIntValue("Toxic", parameter),
@@ -51,7 +52,7 @@ public sealed class ToxicKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Toxic",
+      KeywordSource = KeywordAbility.Toxic,
       Effects = [new ToxicEffect { Value = int.Parse(value.ToStringValue()) }],
       Reminder = reminder,
     }

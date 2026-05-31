@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -30,7 +31,7 @@ public sealed class FadingKeyword : IKeyword
       ParameterType = KeywordParameterType.Number,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Fading",
+        KeywordSource = KeywordAbility.Fading,
         Effects = [new FadingEffect
         {
           Value = ParseIntValue("Fading", parameter),
@@ -45,7 +46,7 @@ public sealed class FadingKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Fading",
+      KeywordSource = KeywordAbility.Fading,
       Effects = [new FadingEffect { Value = int.Parse(value.ToStringValue()) }],
       Reminder = reminder,
     }
