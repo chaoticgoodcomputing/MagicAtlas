@@ -70,6 +70,17 @@ public sealed record ObjectFilter
   public IReadOnlyList<string>? Subtypes { get; init; }
 
   /// <summary>
+  /// Subtypes EXCLUDED by a "non-[subtype]" qualifier — e.g. "non-Human creature"
+  /// → <c>CardTypes=["creature"]</c> + <c>ExcludedSubtypes=["Human"]</c> (Mutate's
+  /// "target non-Human creature you own"). Parallel negation axis to
+  /// <see cref="Subtypes"/>, mirroring <see cref="ExcludedCardTypes"/> over
+  /// <see cref="CardTypes"/>: a filter matches only objects with none of these
+  /// subtypes.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? ExcludedSubtypes { get; init; }
+
+  /// <summary>
   /// Supertypes to match: Legendary, Basic, Snow, etc.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -120,6 +131,25 @@ public sealed record ObjectFilter
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ControllerFilter? Controller { get; init; }
+
+  /// <summary>
+  /// Who OWNS the objects (CR 108.3) — distinct from <see cref="Controller"/>
+  /// (CR 109.4). "a creature you own", Mutate's "target non-Human creature you own".
+  /// An object's owner is the player who started the game with it in their deck;
+  /// control can differ. Parallel axis to <see cref="Controller"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ControllerFilter? Owner { get; init; }
+
+  /// <summary>
+  /// "another" — the filter excludes the source object of the ability (CR 109.5).
+  /// Champion's "another creature", Soulbond's "another … creature you control".
+  /// Distinct from <see cref="ObjectReferenceKind.Another"/> on a reference: this is
+  /// the filter-level exclusion, so a filtered set ("another creature you control")
+  /// honestly omits self.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? ExcludeSelf { get; init; }
 
   /// <summary>
   /// Additional characteristic constraints beyond the structured axes above —

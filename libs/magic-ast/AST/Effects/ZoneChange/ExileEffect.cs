@@ -21,4 +21,24 @@ public sealed record ExileEffect : ContinuousEffect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public CounterPlacement? WithCounters { get; init; }
+
+  /// <summary>
+  /// "exile [this] haunting [target]" — Haunt (CR 702.55): when this creature dies
+  /// (or this card is put into a graveyard from the battlefield), it is exiled
+  /// haunting a creature, and a linked ability triggers when the haunted creature
+  /// dies. Parallel to <see cref="WithCounters"/>: the exile gains this structure only
+  /// when the card prints the haunt link. Referenced elsewhere via
+  /// <see cref="ObjectReferenceKind.Haunted"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? HauntsTarget { get; init; }
+
+  /// <summary>
+  /// "exile [this spell] encoded on [a creature]" — Cipher (CR 702.99): "you may exile
+  /// this card encoded on a creature you control", and that creature's combat damage
+  /// lets you cast a copy. Referenced elsewhere via
+  /// <see cref="ObjectReferenceKind.Encoded"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? EncodedOn { get; init; }
 }

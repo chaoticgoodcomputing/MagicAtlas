@@ -2,6 +2,7 @@ namespace MagicAST.Keywords.Definitions;
 
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.References;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using Superpower.Parsers;
@@ -51,7 +52,7 @@ public sealed class SpliceKeyword : IKeyword
       KeywordSource = "Splice",
       Effects = [new SpliceEffect
       {
-        Subtype = subtype,
+        Onto = new ObjectFilter { Subtypes = [subtype] },
         Cost = cost,
       }],
       Reminder = reminder,

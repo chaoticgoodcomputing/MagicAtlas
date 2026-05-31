@@ -118,4 +118,10 @@ public enum ObjectReferenceKind
 
   /// <summary>"[X] or [Y]" — a chooser-selected reference among <see cref="ObjectReference.Options"/> alternatives ("that player or a planeswalker that player controls"). Exactly one option is chosen at resolution.</summary>
   Choice,
+
+  /// <summary>"the creature this card haunts" — the object a Haunt card was exiled haunting (CR 702.55). A linked-ability reference (ADR 0004 reference-not-resolution), not a threaded binding. Paired with <see cref="Effects.ZoneChange.ExileEffect.HauntsTarget"/> on the production side.</summary>
+  Haunted,
+
+  /// <summary>"the encoded creature" — the creature a ciphered spell is encoded on (CR 702.99); its combat damage triggers casting a copy. Paired with <see cref="Effects.ZoneChange.ExileEffect.EncodedOn"/> on the production side.</summary>
+  Encoded,
 }

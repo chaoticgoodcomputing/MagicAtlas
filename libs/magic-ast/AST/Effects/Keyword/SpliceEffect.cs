@@ -30,10 +30,13 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 public sealed record SpliceEffect : Effect
 {
   /// <summary>
-  /// The spell subtype a spell must share for this card to be spliced onto it
-  /// (e.g. "Arcane"). Printed verbatim after "Splice onto".
+  /// The spell this card may be spliced onto, as a filter — "Splice onto Arcane"
+  /// → <c>Onto = { Subtypes: ["Arcane"] }</c>. Reshaped from the former bare
+  /// <c>Subtype</c> string to the shared <see cref="MagicAST.AST.References.ObjectFilter"/>
+  /// primitive (ADR 0003), so "spells of subtype X" clusters with every other subtype
+  /// filter rather than hiding in a splice-only string.
   /// </summary>
-  public required string Subtype { get; init; }
+  public required MagicAST.AST.References.ObjectFilter Onto { get; init; }
 
   /// <summary>
   /// The cost paid to splice this card onto a spell. Every printed splice cost is

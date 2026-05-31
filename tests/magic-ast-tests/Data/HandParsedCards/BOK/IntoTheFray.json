@@ -56,7 +56,9 @@
           "Effects": [
             {
               "EffectType": "splice",
-              "Subtype": "Arcane",
+              "Onto": {
+                "Subtypes": ["Arcane"]
+              },
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
