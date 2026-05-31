@@ -31,17 +31,48 @@
       "RawText": "Mentor (Whenever this creature attacks, put a +1/+1 counter on target attacking creature with lesser power.)",
       "Abilities": [
         {
-          "Kind": "static",
+          "Kind": "triggered",
           "KeywordSource": "Mentor",
-          "Reminder": {
-            "Text": "(Whenever this creature attacks, put a +1/+1 counter on target attacking creature with lesser power.)"
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
           },
           "Effects": [
             {
-              "EffectType": "keywordAbility",
-              "Keyword": "Mentor"
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "attacking"
+                    },
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "with power less than this creature's power"
+                    }
+                  ]
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
-          ]
+          ],
+          "Reminder": {
+            "Text": "(Whenever this creature attacks, put a +1/+1 counter on target attacking creature with lesser power.)"
+          }
         }
       ]
     },
