@@ -6,10 +6,10 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// "You may pay an additional [cost] [any number of times] as you cast this spell" — the
-/// shared permission a CR-static additional-cost keyword grants: Kicker (CR 702.32),
-/// Multikicker (702.33), Buyback (702.27), Entwine (702.42), Escalate (702.121), and the
-/// repeatable copy/token keywords Squad (702.158) / Replicate / Conspire (702.79's cost
-/// half).
+/// shared permission a CR-static additional-cost keyword grants: Kicker (CR 702.33),
+/// Multikicker (702.33c), Buyback (702.27), Entwine (702.42), Escalate (702.120), and the
+/// repeatable copy/token keywords Squad / Replicate / Conspire (the cost half). (CR numbers
+/// verified against rules-structure.json — 702.32 is Fading, 702.121 is Melee.)
 ///
 /// <para>
 /// These keywords are static abilities per their CR, so the keyword combinator emits a
