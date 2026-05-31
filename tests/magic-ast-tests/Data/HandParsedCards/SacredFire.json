@@ -51,7 +51,8 @@
           "KeywordSource": "Flashback",
           "Effects": [
             {
-              "EffectType": "flashback",
+              "EffectType": "alternativeCast",
+              "FromZone": "Graveyard",
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
