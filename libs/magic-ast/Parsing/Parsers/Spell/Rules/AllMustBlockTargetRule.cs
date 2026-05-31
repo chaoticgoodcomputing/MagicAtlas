@@ -26,7 +26,7 @@ public sealed class AllMustBlockTargetRule : ISpellRule
     }
     effect = new AllMustBlockEffect
     {
-      BlockTarget = ObjectReference.Target(
+      Target = ObjectReference.Target(
         new ObjectFilter { CardTypes = ["creature"] }
       ),
       Duration = UntilTimeDuration.EndOfTurn,

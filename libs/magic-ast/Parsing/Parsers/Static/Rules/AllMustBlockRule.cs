@@ -35,7 +35,7 @@ public sealed class AllMustBlockRule : IStaticRule
     [
       new StaticAbility
       {
-        Effects = [new AllMustBlockEffect { BlockTarget = blockTarget }],
+        Effects = [new AllMustBlockEffect { Target = blockTarget }],
       },
     ];
   }

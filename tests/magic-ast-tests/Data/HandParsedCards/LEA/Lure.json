@@ -36,7 +36,7 @@
           "Effects": [
             {
               "EffectType": "allMustBlock",
-              "BlockTarget": {
+              "Target": {
                 "Kind": "EnchantedOrEquipped"
               }
             }
