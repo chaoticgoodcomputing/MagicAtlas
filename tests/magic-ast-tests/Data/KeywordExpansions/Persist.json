@@ -1,0 +1,39 @@
+{
+  "Keyword": "Persist",
+  "Expected": {
+    "Kind": "triggered",
+    "Trigger": {
+      "Timing": "When",
+      "Event": "Dies",
+      "Filter": {
+        "CardTypes": [
+          "permanent"
+        ]
+      }
+    },
+    "InterveningIf": {
+      "ConditionType": "other",
+      "Text": "it had no -1/-1 counters on it"
+    },
+    "Effects": [
+      {
+        "EffectType": "returnToBattlefield",
+        "Target": {
+          "Kind": "Self"
+        },
+        "Tapped": false,
+        "UnderControl": {
+          "Kind": "Owner"
+        },
+        "WithCounters": {
+          "CounterType": "-1/-1",
+          "Count": {
+            "QuantityType": "literal",
+            "Value": 1
+          }
+        }
+      }
+    ],
+    "KeywordSource": "Persist"
+  }
+}
