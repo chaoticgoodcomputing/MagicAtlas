@@ -64,28 +64,37 @@
           ]
         },
         {
-          "Kind": "static",
+          "Kind": "activated",
           "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": ["W"]
+                }
+              ]
+            }
+          ],
           "Effects": [
             {
-              "EffectType": "equip",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 1
-                  },
-                  {
-                    "Kind": "colored",
-                    "Colors": [
-                      "W"
-                    ]
-                  }
-                ]
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
               }
             }
-          ]
+          ],
+          "Restrictions": ["OnlyAsSorcery"],
+          "IsManaAbility": false
         }
       ]
     },
