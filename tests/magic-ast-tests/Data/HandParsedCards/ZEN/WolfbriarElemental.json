@@ -69,8 +69,8 @@
             {
               "EffectType": "createToken",
               "Count": {
-                "QuantityType": "literal",
-                "Value": 1
+                "QuantityType": "kickedCount",
+                "Keyword": "Kicker"
               },
               "Token": {
                 "Power": "2",

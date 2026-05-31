@@ -64,8 +64,8 @@
             }
           ],
           "Condition": {
-            "ConditionType": "other",
-            "Text": "this creature was kicked"
+            "ConditionType": "kicked",
+            "Keyword": "Kicker"
           },
           "When": "asThisEnters"
         },

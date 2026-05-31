@@ -64,8 +64,8 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "it was kicked"
+            "ConditionType": "kicked",
+            "Keyword": "Kicker"
           },
           "Effects": [
             {

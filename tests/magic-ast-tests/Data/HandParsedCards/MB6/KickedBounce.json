@@ -75,8 +75,8 @@
                 "Kind": "You"
               },
               "Condition": {
-                "ConditionType": "other",
-                "Text": "this spell was kicked"
+                "ConditionType": "kicked",
+                "Keyword": "Kicker"
               }
             }
           ]

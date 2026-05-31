@@ -37,6 +37,16 @@ public static class ConditionParser
     @"^there\s+(?:are|is)\s+(?<quant>a|an|\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer))?\s+(?<noun>.+?)\s+in\s+(?<zone>your\s+graveyard|your\s+hand|your\s+library|a\s+graveyard|exile)$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+  /// <summary>
+  /// "it was kicked", "this spell/creature/permanent was kicked" — the kicked-state
+  /// predicate (CR 702.33d). The consumer half of the kicker duality (ADR 0004):
+  /// structured to <see cref="KickedCondition"/> keyed on <see cref="KeywordAbility.Kicker"/>
+  /// (a multikicker cost is a kicker cost, CR 702.33c), not left as a free-text residual.
+  /// </summary>
+  private static readonly Regex WasKicked = new(
+    @"^(?:it|this\s+(?:spell|creature|permanent|card))\s+was\s+kicked$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
   /// <summary>Parse a condition phrase; never throws — unrecognised phrases become a residual.</summary>
   public static Condition Parse(string phrase)
   {
@@ -60,6 +70,11 @@ public static class ConditionParser
           : null,
       };
       return new CountCondition { Filter = filter, Count = Quant(tm.Groups["quant"].Value, tm.Groups["dir"].Value) };
+    }
+
+    if (WasKicked.IsMatch(body))
+    {
+      return new KickedCondition { Keyword = KeywordAbility.Kicker };
     }
 
     return new OtherCondition { Text = verbatim };

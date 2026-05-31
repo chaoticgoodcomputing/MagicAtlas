@@ -4,6 +4,7 @@ using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.TokenCopy;
 using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
 
 /// <summary>
 /// "create [article] [P/T] [colors] [subtypes] creature token [with ...]" — Rule 111.
@@ -31,6 +32,14 @@ public sealed class CreateTokenRule : ITriggeredRule
 
   private static readonly System.Text.RegularExpressions.Regex _bloodTokenPattern =
     new(@"^create a Blood token\.?$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+  // "... for each time it was kicked" (Wolfbriar Elemental) — the token count is the
+  // kicked-state quantity (CR 702.33d/f), not the article count. Reference-not-resolution
+  // (ADR 0004): a KickedCountQuantity keyed on KeywordAbility.Kicker, the consumer half of
+  // the multikicker producer on the same card.
+  private static readonly System.Text.RegularExpressions.Regex _forEachTimeKicked =
+    new(@"for\s+each\s+time\s+(?:it|this\s+\w+)\s+was\s+kicked",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
   public bool TryMatch(string text, out Effect? effect)
   {
@@ -126,8 +135,12 @@ public sealed class CreateTokenRule : ITriggeredRule
 
     var tokenTypes = TriggeredRuleHelpers.ParseTokenTypes(createText);
 
+    Quantity tokenCount = _forEachTimeKicked.IsMatch(createText)
+      ? new KickedCountQuantity { Keyword = KeywordAbility.Kicker }
+      : LiteralQuantity.Of(count);
+
     effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new CreateTokenEffect {
-      Count = LiteralQuantity.Of(count),
+      Count = tokenCount,
       Token = new TokenDefinition
       {
         Power = powerToughness.Value.Power,
