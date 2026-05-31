@@ -2,20 +2,33 @@ namespace MagicAST.Keywords.Definitions;
 
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
-using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects.Modification;
+using MagicAST.AST.References;
 using MagicAST.Parsing;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
-/// Reconfigure [cost]: Attach to target creature you control; or unattach
-/// from a creature. Reconfigure only as a sorcery. While attached, this
-/// isn't a creature.
-/// Rule 702.173. Scope: mana-cost parameter (all known printings).
-/// The attach/unattach mechanics, sorcery-speed restriction, and
-/// creature-status switching are engine territory — MAST records the
-/// keyword's presence and cost only, mirroring the EquipEffect pattern.
+/// Reconfigure [cost]: two activated abilities per CR 702.151a.
+///
+/// <para>
+/// CR 702.151a (verbatim): "Reconfigure represents two activated abilities.
+/// Reconfigure [cost] means "[Cost]: Attach this permanent to another target
+/// creature you control. Activate only as a sorcery" and "[Cost]: Unattach
+/// this permanent. Activate only if this permanent is attached to a creature
+/// and only as a sorcery."
+/// </para>
+///
+/// <para>
+/// Oracle-text parsing is handled by
+/// <see cref="MagicAST.Parsing.Parsers.Static.ReconfigureStaticRule"/> (priority 1001),
+/// which returns both activated abilities as a list. This keyword file keeps
+/// the combinator live as a fallback but no longer uses the deleted
+/// <c>ReconfigureEffect</c> opaque marker. The <see cref="Definition"/> is null
+/// because <see cref="IKeywordExpander.Expand"/> can only return a single
+/// <see cref="Ability"/> and Reconfigure decomposes into two.
+/// </para>
 /// </summary>
 [Keyword]
 public sealed class ReconfigureKeyword : IKeyword
@@ -24,36 +37,39 @@ public sealed class ReconfigureKeyword : IKeyword
   public KeywordTier Tier => KeywordTier.Parameterized;
 
   /// <inheritdoc/>
-  public KeywordDefinition Definition { get; } =
-    new()
-    {
-      Name = "Reconfigure",
-      RuleReference = "702.173",
-      Category = KeywordCategory.Static,
-      HasParameter = true,
-      ParameterType = KeywordParameterType.ManaCost,
-      CreateExpansion = parameter => new StaticAbility
-      {
-        KeywordSource = "Reconfigure",
-        Effects = [new ReconfigureEffect
-        {
-          Cost = ParseManaCost(parameter),
-        }],
-      },
-    };
+  /// <remarks>
+  /// Null: the keyword expander returns a single Ability, but Reconfigure
+  /// decomposes into two ActivatedAbility nodes (CR 702.151a). The oracle-text
+  /// parser handles the two-ability output via ReconfigureStaticRule.
+  /// </remarks>
+  public KeywordDefinition? Definition => null;
 
   /// <inheritdoc/>
   public TokenListParser<OracleToken, Ability> Combinator { get; } = (
     from keyword in Keyword("Reconfigure")
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select (Ability)new StaticAbility
+    select (Ability)new ActivatedAbility
     {
       KeywordSource = "Reconfigure",
-      Effects = [new ReconfigureEffect
-      {
-        Cost = cost,
-      }],
+      Costs = [cost],
+      Effects =
+      [
+        new AttachEffect
+        {
+          Target = new ObjectReference
+          {
+            Kind = ObjectReferenceKind.Target,
+            Filter = new ObjectFilter
+            {
+              CardTypes = ["creature"],
+              Controller = ControllerFilter.You,
+            },
+          },
+        },
+      ],
+      Restrictions = [ActivationRestriction.OnlyAsSorcery],
+      IsManaAbility = false,
       Reminder = reminder,
     }
   );
