@@ -60,7 +60,14 @@ public sealed class PhaseTriggerConditionRule : ITriggerConditionRule
     // is a property of the time, not a Filter.Controller). "your" → You,
     // "each opponent's" → Opponent, "each player's" → unqualified.
     ControllerFilter? whose = null;
-    if (lower.Contains("your"))
+    if (lower.Contains("enchanted player"))
+    {
+      // "enchanted player's upkeep" on a player-enchanting Aura — the clock
+      // point belongs to the enchanted player (CR 702.5, player Aura), not the
+      // ability's own controller. Parallels the EnchantedPlayer controller axis.
+      whose = ControllerFilter.EnchantedPlayer;
+    }
+    else if (lower.Contains("your"))
     {
       whose = ControllerFilter.You;
     }

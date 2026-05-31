@@ -67,8 +67,16 @@ public sealed class EnchantRule : IStaticRule
       d = d[..^" an opponent controls".Length].Trim();
     }
 
+    // "Enchant player" (CR 702.5) — a player is not an object/card type
+    // (CR 109 vs CR 102), so the legal-target descriptor lands on the
+    // EntityType axis rather than CardTypes.
+    if (d == "player")
+    {
+      return new ObjectFilter { EntityType = "player", Controller = controller };
+    }
+
     // Simple-noun shape: "creature", "land", "permanent", "artifact", "enchantment".
-    var simpleTypes = new[] { "creature", "land", "permanent", "artifact", "enchantment", "planeswalker", "player" };
+    var simpleTypes = new[] { "creature", "land", "permanent", "artifact", "enchantment", "planeswalker" };
     if (simpleTypes.Contains(d))
     {
       return new ObjectFilter { CardTypes = [d], Controller = controller };

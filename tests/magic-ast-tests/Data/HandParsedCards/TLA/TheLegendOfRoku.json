@@ -47,8 +47,7 @@
                   {
                     "EffectType": "addMana",
                     "Mana": "",
-                    "AnyColor": true,
-                    "Amount": { "QuantityType": "literal", "Value": 1 }
+                    "AnyColor": true
                   }
                 ]
               }
