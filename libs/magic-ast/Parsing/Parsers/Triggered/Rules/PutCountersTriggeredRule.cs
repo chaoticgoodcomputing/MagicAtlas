@@ -7,7 +7,18 @@ using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 
 /// <summary>
-/// "put a +1/+1 counter on this creature" / "put a -1/-1 counter on target creature".
+/// "put a +1/+1 counter on this creature" / "put a -1/-1 counter on target creature" /
+/// "that player gets N [type] counters" (poison/energy/etc. given to a player on combat
+/// damage — Fynn, the Fangbearer; Blighted Agent; etc.).
+///
+/// <para>
+/// CR 122.1: "A counter is a marker placed on an object or player that modifies its
+/// characteristics and/or interacts with a rule or effect." Poison counters are placed
+/// on players; the "gets" verb in oracle text means the player receives those counters.
+/// Distinct from "put a counter on [permanent]" only in subject (player vs. permanent)
+/// and verb ("gets" vs. "put … on"). MAST models both as <c>putCounters</c> effect —
+/// the counter placement is the same action regardless of verb.
+/// </para>
 /// </summary>
 [TriggeredRule]
 public sealed class PutCountersTriggeredRule : ITriggeredRule
@@ -16,6 +27,43 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
   {
     effect = null;
     var lower = text.ToLowerInvariant();
+
+    // "that player gets N [type] counters" — poison/energy counter given to the player
+    // who was dealt combat damage (Fynn, the Fangbearer; Blighted Agent family).
+    // Rule 122.1: counters on players modify their game state (poison, energy, etc.).
+    // CR 702.58a (Infect/Poison): a player with ten or more poison counters loses.
+    var getsCountersMatch = Regex.Match(
+      text,
+      @"^that\s+player\s+gets?\s+(?<count>\w+)\s+(?<type>[\w\-]+)\s+counters?\.?$",
+      RegexOptions.IgnoreCase
+    );
+    if (getsCountersMatch.Success)
+    {
+      var getsCountRaw = getsCountersMatch.Groups["count"].Value.ToLowerInvariant();
+      int getsCount = getsCountRaw switch
+      {
+        "a" or "an" or "one" => 1,
+        "two" => 2,
+        "three" => 3,
+        "four" => 4,
+        "five" => 5,
+        "six" => 6,
+        "seven" => 7,
+        "eight" => 8,
+        "nine" => 9,
+        "ten" => 10,
+        _ => int.TryParse(getsCountRaw, out var n) ? n : 1,
+      };
+      var getsCounterType = getsCountersMatch.Groups["type"].Value.ToLowerInvariant();
+      effect = new PutCountersEffect
+      {
+        Target = new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
+        CounterType = getsCounterType,
+        Count = LiteralQuantity.Of(getsCount),
+      };
+      return true;
+    }
+
     if (!lower.Contains("put") || !lower.Contains("counter"))
     {
       return false;
