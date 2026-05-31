@@ -31,21 +31,18 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 public sealed record AdditionalCastCostEffect : Effect
 {
   /// <summary>
-  /// The additional cost paid as you cast this spell. A <see cref="ManaCost"/>, or a
+  /// The additional cost this keyword grants permission to pay as you cast the spell,
+  /// carrying its own <see cref="AdditionalCost.IsOptional"/> ("you may pay") and
+  /// <see cref="AdditionalCost.Repeatable"/> ("any number of times") flags. This is the
+  /// SAME <see cref="AdditionalCost"/> value type carried by the card-level
+  /// <c>AdditionalCostsAttribute</c> for generic prose costs — ADR 0003's "share the
+  /// value type, keep the wrappers": the keyword wrapper retains keyword identity via
+  /// <c>KeywordSource</c>, and "additional cost to cast" clusters as a projection over
+  /// both wrappers. The cost itself is a <see cref="ManaCost"/>, or a
   /// <see cref="CompositeCost"/> bundling mana with a non-mana cost (Conspire's "tap two
-  /// untapped creatures you control that share a color with it").
+  /// untapped creatures you control that share a color with it"). The synthesized cost
+  /// omits <see cref="AdditionalCost.SourceSpan"/> (identity rides on this ability's
+  /// <c>KeywordSource</c>, not on a text frontier).
   /// </summary>
-  public required Cost Cost { get; init; }
-
-  /// <summary>
-  /// "you may pay" — the additional cost is optional (Kicker, Multikicker, Buyback,
-  /// Squad, Replicate). False for a mandatory additional cost.
-  /// </summary>
-  public bool IsOptional { get; init; }
-
-  /// <summary>
-  /// "any number of times" — the additional cost may be paid repeatedly (Multikicker,
-  /// Squad, Replicate). False when it may be paid at most once (Kicker, Buyback).
-  /// </summary>
-  public bool Repeatable { get; init; }
+  public required AdditionalCost AdditionalCost { get; init; }
 }

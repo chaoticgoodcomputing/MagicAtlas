@@ -30,17 +30,19 @@
           "Effects": [
             {
               "EffectType": "additionalCastCost",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 1
-                  }
-                ]
-              },
-              "IsOptional": true,
-              "Repeatable": true
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 1
+                    }
+                  ]
+                },
+                "IsOptional": true,
+                "Repeatable": true
+              }
             }
           ],
           "KeywordSource": "Escalate",

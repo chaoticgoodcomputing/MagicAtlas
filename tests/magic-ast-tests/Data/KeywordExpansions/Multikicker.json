@@ -7,23 +7,25 @@
     "Effects": [
       {
         "EffectType": "additionalCastCost",
-        "Cost": {
-          "CostType": "mana",
-          "Symbols": [
-            {
-              "Kind": "generic",
-              "GenericAmount": 1
-            },
-            {
-              "Kind": "colored",
-              "Colors": [
-                "R"
-              ]
-            }
-          ]
-        },
-        "IsOptional": true,
-        "Repeatable": true
+        "AdditionalCost": {
+          "Cost": {
+            "CostType": "mana",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "R"
+                ]
+              }
+            ]
+          },
+          "IsOptional": true,
+          "Repeatable": true
+        }
       }
     ]
   }

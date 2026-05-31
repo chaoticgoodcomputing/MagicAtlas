@@ -7,16 +7,18 @@
     "Effects": [
       {
         "EffectType": "additionalCastCost",
-        "Cost": {
-          "CostType": "mana",
-          "Symbols": [
-            {
-              "Kind": "generic",
-              "GenericAmount": 2
-            }
-          ]
-        },
-        "IsOptional": true
+        "AdditionalCost": {
+          "Cost": {
+            "CostType": "mana",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              }
+            ]
+          },
+          "IsOptional": true
+        }
       }
     ]
   }

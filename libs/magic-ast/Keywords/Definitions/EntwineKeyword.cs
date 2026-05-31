@@ -2,6 +2,7 @@ namespace MagicAST.Keywords.Definitions;
 
 using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.Costs;
 using MagicAST.AST.Effects.CardFlow;
 using MagicAST.Parsing.Tokens;
 using Superpower;
@@ -43,9 +44,12 @@ public sealed class EntwineKeyword : IKeyword
       KeywordSource = KeywordAbility.Entwine,
       Effects = [new AdditionalCastCostEffect
       {
-        Cost = cost,
-        IsOptional = true,
-        Repeatable = false,
+        AdditionalCost = new AdditionalCost
+        {
+          Cost = cost,
+          IsOptional = true,
+          Repeatable = false,
+        },
       }],
       Reminder = reminder,
     }

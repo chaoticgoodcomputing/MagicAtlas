@@ -23,6 +23,13 @@ public sealed record AdditionalCost
     public bool IsOptional { get; init; }
 
     /// <summary>
+    /// "any number of times" — the additional cost may be paid repeatedly
+    /// (Multikicker, Squad, Replicate, Escalate). False when it may be paid at most
+    /// once (Kicker, Buyback, Entwine) or exactly once (a mandatory prose cost).
+    /// </summary>
+    public bool Repeatable { get; init; }
+
+    /// <summary>
     /// Alternative to the additional cost, if any.
     /// e.g., "reveal a Dinosaur card from your hand or pay {1}"
     /// </summary>
@@ -30,9 +37,13 @@ public sealed record AdditionalCost
     public Cost? Alternative { get; init; }
 
     /// <summary>
-    /// Location in source text.
+    /// Location in source text — the frontier span for a cost parsed from prose
+    /// ("As an additional cost to cast this spell, ..."). Omitted (null) on a cost
+    /// synthesized from a keyword expansion (Kicker/Multikicker/Entwine/Escalate),
+    /// whose identity rides on the enclosing ability's <c>KeywordSource</c> instead.
     /// </summary>
-    public required TextSpan SourceSpan { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public TextSpan? SourceSpan { get; init; }
 }
 
 /// <summary>

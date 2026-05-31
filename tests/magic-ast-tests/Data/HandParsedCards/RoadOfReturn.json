@@ -59,7 +59,10 @@
                       "Kind": "Designated",
                       "Filter": {
                         "Characteristics": [
-                          {"CharacteristicType": "other", "Description": "your commander"}
+                          {
+                            "CharacteristicType": "other",
+                            "Description": "your commander"
+                          }
                         ],
                         "Zone": "CommandZone"
                       }
@@ -77,17 +80,19 @@
           "Effects": [
             {
               "EffectType": "additionalCastCost",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 2
-                  }
-                ]
-              },
-              "IsOptional": true,
-              "Repeatable": false
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    }
+                  ]
+                },
+                "IsOptional": true,
+                "Repeatable": false
+              }
             }
           ]
         }
