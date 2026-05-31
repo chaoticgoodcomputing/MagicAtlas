@@ -16,12 +16,6 @@ public sealed record ExileEffect : ContinuousEffect
   public required ObjectReference Target { get; init; }
 
   /// <summary>
-  /// "until [condition]" for temporary exile
-  /// </summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public string? ReturnCondition { get; init; }
-
-  /// <summary>
   /// "exile [target] with [N] [type] counters on it" — counters placed on
   /// the card as part of the exile action (suspend-like patterns).
   /// </summary>

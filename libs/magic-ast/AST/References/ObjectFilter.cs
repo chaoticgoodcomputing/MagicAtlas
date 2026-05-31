@@ -24,6 +24,46 @@ public sealed record ObjectFilter
   public IReadOnlyList<string>? CardTypes { get; init; }
 
   /// <summary>
+  /// Card types EXCLUDED by a "non-[type]" qualifier — e.g. "a nonland card"
+  /// → <c>CardTypes=["card"]</c> + <c>ExcludedCardTypes=["land"]</c>. Parallel
+  /// negation axis to <see cref="CardTypes"/>: a filter matches only objects that
+  /// have none of these types. Distinct from <see cref="IsToken"/> (a token/nontoken
+  /// predicate, not a card type) per CR 110.4 / 111.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? ExcludedCardTypes { get; init; }
+
+  /// <summary>
+  /// Token predicate: <c>true</c> matches only tokens, <c>false</c> only
+  /// nontoken objects ("nontoken creature", CR 111). Null when the oracle text
+  /// does not qualify token-ness. Not a card type (CR 111.1: a token is not a
+  /// card), so it is a separate boolean axis rather than a <see cref="CardTypes"/>
+  /// or <see cref="ExcludedCardTypes"/> entry.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsToken { get; init; }
+
+  /// <summary>
+  /// The kind of game entity this filter selects when it is not a card/permanent
+  /// object — e.g. "player" in "Enchant player" (CR 702.5) or in a target
+  /// restriction. Distinct from <see cref="CardTypes"/> (which categorizes
+  /// objects); a player is not an object (CR 109 vs CR 102).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public string? EntityType { get; init; }
+
+  /// <summary>
+  /// Restricts to cards exiled by a linked exile ability (CR 406.6) — "cards
+  /// exiled with [object]". The reference identifies the object whose exile
+  /// ability produced the cards (Azula: <c>{Kind:"Self"}</c>). This is a
+  /// reference, not a runtime binding (ADR 0004 "reference not resolution"): it
+  /// names the linking object, not a threaded variable. Used together with
+  /// <c>Zone=Exile</c>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? ExiledWith { get; init; }
+
+  /// <summary>
   /// Subtypes to match: Human, Equipment, Aura, etc.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -199,6 +239,15 @@ public enum ControllerFilter
   /// controller (You) or any opponent (Opponent).
   /// </summary>
   Target,
+
+  /// <summary>
+  /// Objects controlled by the player enchanted by this Aura — "a planeswalker
+  /// that player controls" on a player-enchanting Aura (Curse of the Pierced
+  /// Heart). Parallels <see cref="ObjectReferenceKind.EnchantedOrEquipped"/> on
+  /// the controller axis: the enchanted player (CR 702.5, player Aura) rather than
+  /// the ability's own controller.
+  /// </summary>
+  EnchantedPlayer,
 }
 
 /// <summary>
