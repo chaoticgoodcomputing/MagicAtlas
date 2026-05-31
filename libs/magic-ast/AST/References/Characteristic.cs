@@ -38,6 +38,14 @@ public abstract record Characteristic
       "flying" or "with flying" => new KeywordCharacteristic { Keyword = KeywordAbility.Flying },
       "reach" => new KeywordCharacteristic { Keyword = KeywordAbility.Reach },
       "shadow" => new KeywordCharacteristic { Keyword = KeywordAbility.Shadow },
+      "deathtouch" => new KeywordCharacteristic { Keyword = KeywordAbility.Deathtouch },
+      "trample" => new KeywordCharacteristic { Keyword = KeywordAbility.Trample },
+      "haste" => new KeywordCharacteristic { Keyword = KeywordAbility.Haste },
+      "vigilance" => new KeywordCharacteristic { Keyword = KeywordAbility.Vigilance },
+      "indestructible" => new KeywordCharacteristic { Keyword = KeywordAbility.Indestructible },
+      "infect" => new KeywordCharacteristic { Keyword = KeywordAbility.Infect },
+      "hexproof" => new KeywordCharacteristic { Keyword = KeywordAbility.Hexproof },
+      "shroud" => new KeywordCharacteristic { Keyword = KeywordAbility.Shroud },
       _ => new OtherCharacteristic { Description = label },
     };
 
