@@ -29,6 +29,16 @@ public sealed record ObjectReference
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Quantity? Quantity { get; init; }
 
+  /// <summary>
+  /// The alternatives of a <see cref="ObjectReferenceKind.Choice"/> reference —
+  /// "that player or a planeswalker that player controls" (Curse of the Pierced
+  /// Heart). The chooser selects exactly one of these references at resolution.
+  /// Null for every non-Choice kind. The "or" is a single chosen reference, so it
+  /// is modeled as one Choice reference rather than two separate targets.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<ObjectReference>? Options { get; init; }
+
   // Factory methods
   public static ObjectReference Self() => new() { Kind = ObjectReferenceKind.Self };
 
@@ -105,4 +115,7 @@ public enum ObjectReferenceKind
 
   /// <summary>"both creatures" in a Soulbond paired-grant context (Rule 702.95). Refers to both the creature carrying the soulbond ability and its current pair partner. Only meaningful while the two creatures are paired.</summary>
   BothPaired,
+
+  /// <summary>"[X] or [Y]" — a chooser-selected reference among <see cref="ObjectReference.Options"/> alternatives ("that player or a planeswalker that player controls"). Exactly one option is chosen at resolution.</summary>
+  Choice,
 }

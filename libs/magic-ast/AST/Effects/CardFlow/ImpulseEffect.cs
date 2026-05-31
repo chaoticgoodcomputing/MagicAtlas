@@ -55,4 +55,12 @@ public enum ImpulseRestDestination
 
   /// <summary>The unchosen cards go to the bottom of the library in any order (Impulse, Anticipate).</summary>
   BottomOfLibrary,
+
+  /// <summary>
+  /// The cards remain in exile and stay playable for a stated window — "exile the
+  /// top N cards … you may play those cards until [time]" (The Legend of Roku I).
+  /// Here all N cards are exiled (none kept in hand) and the <see cref="Effect"/>'s
+  /// inherited <see cref="ContinuousEffect.Duration"/> bounds the play window.
+  /// </summary>
+  RemainExiled,
 }

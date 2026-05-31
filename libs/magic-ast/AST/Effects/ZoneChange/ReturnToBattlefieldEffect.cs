@@ -19,4 +19,12 @@ public sealed record ReturnToBattlefieldEffect : Effect
 
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectReference? UnderControl { get; init; }
+
+  /// <summary>
+  /// "return it to the battlefield transformed" — the permanent re-enters
+  /// transformed, i.e. with its back face up (CR 712; The Legend of Roku final
+  /// chapter, a transforming Saga). Null/false when it returns with its front face up.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? Transformed { get; init; }
 }
