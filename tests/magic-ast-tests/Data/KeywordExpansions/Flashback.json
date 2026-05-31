@@ -1,0 +1,29 @@
+{
+  "Keyword": "Flashback",
+  "Parameter": "{3}{R}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Flashback",
+    "Effects": [
+      {
+        "EffectType": "alternativeCast",
+        "FromZone": "Graveyard",
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "generic",
+              "GenericAmount": 3
+            },
+            {
+              "Kind": "colored",
+              "Colors": [
+                "R"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

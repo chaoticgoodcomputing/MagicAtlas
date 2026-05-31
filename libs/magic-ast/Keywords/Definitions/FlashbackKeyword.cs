@@ -1,15 +1,19 @@
 namespace MagicAST.Keywords.Definitions;
 
 using MagicAST.AST.Abilities;
-using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects.CardFlow;
+using MagicAST.AST.References;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
-/// Flashback {cost}: You may cast this card from your graveyard for its flashback cost.
-/// Then exile it. Rule 702.34. MAST records the keyword and the flashback cost;
-/// cast-from-graveyard-then-exile machinery is engine territory.
+/// Flashback {cost} (CR 702.34): "Flashback [cost]" means "You may cast this card
+/// from your graveyard by paying [cost] rather than paying its mana cost." It is a
+/// static ability, so the combinator emits a <see cref="StaticAbility"/> carrying the
+/// shared <see cref="AlternativeCastEffect"/> primitive (<c>FromZone = Graveyard</c>,
+/// <c>Cost = </c> the flashback mana cost). The post-cast "then exile it" is engine
+/// territory (ADR 0003/0004 describe-not-execute) and is not modeled.
 /// Combinator-only keyword — no <see cref="KeywordDefinition"/> exists in the legacy
 /// <c>KeywordDefinitions</c> registry.
 /// </summary>
@@ -30,8 +34,9 @@ public sealed class FlashbackKeyword : IKeyword
     select (Ability)new StaticAbility
     {
       KeywordSource = "Flashback",
-      Effects = [new FlashbackEffect
+      Effects = [new AlternativeCastEffect
       {
+        FromZone = Zone.Graveyard,
         Cost = cost,
       }],
       Reminder = reminder,
