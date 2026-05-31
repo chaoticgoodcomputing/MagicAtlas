@@ -27,4 +27,13 @@ public sealed record ReturnToBattlefieldEffect : Effect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public bool? Transformed { get; init; }
+
+  /// <summary>
+  /// "return it to the battlefield with a +1/+1 counter on it" — counters placed
+  /// on the permanent as part of the return action (Undying, Persist). Parallel to
+  /// <see cref="ExileEffect.WithCounters"/>: the zone-change carries an attached
+  /// counter-placement clause. CR 702.93 (Undying), CR 702.78 (Persist).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public CounterPlacement? WithCounters { get; init; }
 }

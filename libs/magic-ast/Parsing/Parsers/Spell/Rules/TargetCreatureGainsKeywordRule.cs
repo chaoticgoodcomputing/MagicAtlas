@@ -7,7 +7,10 @@ using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Damage;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Modification;
+using MagicAST.AST.Effects.ZoneChange;
+using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.AST.Triggers;
 
 /// <summary>
 /// Recognises the pure keyword-grant shape (no P/T modification):
@@ -81,7 +84,7 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
   // Mirrors the mapping in ModifyPTAndGainKeywordSpellRule.BuildKeywordAbility;
   // kept local so each rule is self-contained and independently evolvable.
   // -------------------------------------------------------------------------
-  private static StaticAbility? MapKeywordToStaticAbility(string keyword) =>
+  private static Ability? MapKeywordToStaticAbility(string keyword) =>
     keyword switch
     {
       "flying" => new StaticAbility
@@ -176,10 +179,32 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
         KeywordSource = "Shadow",
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shadow }],
       },
-      "undying" => new StaticAbility
+      // Undying (CR 702.93): decomposed triggered ability — when this creature dies,
+      // if it had no +1/+1 counters on it, return it to the battlefield under its
+      // owner's control with a +1/+1 counter on it. See UndyingKeyword.cs.
+      "undying" => new TriggeredAbility
       {
         KeywordSource = "Undying",
-        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Undying }],
+        Trigger = new TriggerCondition
+        {
+          Timing = TriggerTiming.When,
+          Event = TriggerEvent.Dies,
+          Filter = new ObjectFilter { CardTypes = ["creature"] },
+        },
+        InterveningIf = new OtherCondition { Text = "it had no +1/+1 counters on it" },
+        Effects =
+        [
+          new ReturnToBattlefieldEffect
+          {
+            Target = ObjectReference.It(),
+            UnderControl = new ObjectReference { Kind = ObjectReferenceKind.Owner },
+            WithCounters = new CounterPlacement
+            {
+              CounterType = "+1/+1",
+              Count = LiteralQuantity.Of(1),
+            },
+          },
+        ],
       },
       _ => null,
     };
