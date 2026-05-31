@@ -17,8 +17,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// </para>
 ///
 /// <para>
-/// Mana-cost-parameterized keyword; mirrors
-/// <see cref="MadnessEffect"/>, and the Kicker/Echo/Bestow family.
+/// Mana-cost-parameterized keyword; mirrors the Kicker/Echo/Bestow family.
 /// <see cref="Cost"/> is typed as the polymorphic <see cref="Cost"/> base to
 /// mirror the existing mana-cost keyword pattern.
 /// </para>
