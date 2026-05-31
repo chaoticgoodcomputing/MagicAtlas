@@ -134,17 +134,14 @@ public sealed class ClauseSplitter
         continue;
       }
 
-      // Kicker (Rule 702.33a): "Kicker [cost]" means "You may pay an additional
-      // [cost] as you cast this spell." It is an optional additional cost on the
-      // spell, not an oracle ability — AttributeExtractor surfaces it as an
-      // AdditionalCostsAttribute{IsOptional:true} on the card. Skipping here
-      // prevents a spurious UnparsedAbility for the keyword line. The separate
-      // "if this spell was kicked, ..." line (Rule 702.33e / 607) is NOT skipped;
-      // it remains an ordinary linked ability and parses on its own.
-      if (IsKickerPrefix(paragraphText))
-      {
-        continue;
-      }
+      // Kicker (CR 702.33) is NOT skipped here. It is a static ability whose
+      // keyword combinator (KickerKeyword) decomposes the line into a
+      // StaticAbility{KeywordSource:"Kicker", AdditionalCastCostEffect} via the
+      // Static-classified KeywordListRule path. The line must therefore reach
+      // ClauseSplitter's normal paragraph processing — not be dropped — so the
+      // keyword ability surfaces in Oracle.Abilities. The separate
+      // "if this spell was kicked, ..." line (CR 702.33e / 607) is an ordinary
+      // linked ability and parses on its own.
 
       // Mana-symbol reminder lines (e.g. "({R/W} can be paid with either {R} or {W}.)") are
       // cosmetic oracle annotations that gloss the card's hybrid or Phyrexian mana cost.
@@ -277,16 +274,6 @@ public sealed class ClauseSplitter
   /// </summary>
   private static bool IsAdditionalCostPrefix(string text) =>
     text.StartsWith("As an additional cost to cast this spell,", StringComparison.OrdinalIgnoreCase);
-
-  /// <summary>
-  /// Recognises single-cost Kicker lines ("Kicker [cost] (reminder)", Rule 702.33a).
-  /// Kicker is an optional additional cost on the spell, surfaced by AttributeExtractor
-  /// as an AdditionalCostsAttribute{IsOptional:true}; it is not an oracle ability.
-  /// Multikicker (Rule 702.33c) is deferred and is excluded because it starts with
-  /// "Multikicker", not "Kicker ".
-  /// </summary>
-  private static bool IsKickerPrefix(string text) =>
-    text.StartsWith("Kicker {", StringComparison.Ordinal);
 
   /// <summary>
   /// Recognises standalone mana-symbol reminder lines added to cards with hybrid,

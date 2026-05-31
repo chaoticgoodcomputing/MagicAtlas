@@ -31,6 +31,31 @@
       "Abilities": [
         {
           "Kind": "static",
+          "KeywordSource": "Kicker",
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 1
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "W"
+                    ]
+                  }
+                ]
+              },
+              "IsOptional": true
+            }
+          ]
+        },
+        {
+          "Kind": "static",
           "KeywordSource": "Flying",
           "Effects": [
             {
@@ -127,30 +152,6 @@
           "Raw": "2",
           "Value": 2
         }
-      },
-      {
-        "Kind": "additionalCosts",
-        "Costs": [
-          {
-            "Cost": {
-              "CostType": "mana",
-              "Symbols": [
-                {
-                  "Kind": "generic",
-                  "GenericAmount": 1
-                },
-                {
-                  "Kind": "colored",
-                  "Colors": [
-                    "W"
-                  ]
-                }
-              ]
-            },
-            "IsOptional": true,
-            "SourceSpan": { "Start": 0, "Length": 0 }
-          }
-        ]
       }
     ]
   }
