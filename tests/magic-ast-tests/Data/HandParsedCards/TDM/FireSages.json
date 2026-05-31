@@ -32,15 +32,22 @@
       "RawText": "Firebending 1 (Whenever this creature attacks, add {R}. This mana lasts until end of combat.)\n{1}{R}{R}: Put a +1/+1 counter on this creature.",
       "Abilities": [
         {
-          "Kind": "static",
+          "Kind": "triggered",
           "KeywordSource": "Firebending",
           "Reminder": {
             "Text": "(Whenever this creature attacks, add {R}. This mana lasts until end of combat.)"
           },
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
           "Effects": [
             {
-              "EffectType": "firebending",
-              "Value": 1
+              "EffectType": "addMana",
+              "Mana": "{R}"
             }
           ]
         },
