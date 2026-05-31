@@ -30,14 +30,43 @@
       "RawText": "Bushido 1 (Whenever this creature blocks or becomes blocked, it gets +1/+1 until end of turn.)",
       "Abilities": [
         {
-          "Kind": "static",
+          "Kind": "triggered",
           "KeywordSource": "Bushido",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BlocksOrBecomesBlocked",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
           "Effects": [
             {
-              "EffectType": "bushido",
-              "Value": 1
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "It"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
             }
-          ]
+          ],
+          "Reminder": {
+            "Text": "(Whenever this creature blocks or becomes blocked, it gets +1/+1 until end of turn.)"
+          }
         }
       ]
     },
