@@ -29,7 +29,7 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "escalate",
+              "EffectType": "additionalCastCost",
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
@@ -38,7 +38,9 @@
                     "GenericAmount": 1
                   }
                 ]
-              }
+              },
+              "IsOptional": true,
+              "Repeatable": true
             }
           ],
           "KeywordSource": "Escalate",
