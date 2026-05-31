@@ -104,6 +104,9 @@ public enum ObjectReferenceKind
   /// <summary>"that player" - the player who triggered an ability or was mentioned earlier</summary>
   ThatPlayer,
 
+  /// <summary>"that creature" / "the blocking creature" — the creature named by the trigger condition (e.g. Flanking's "becomes blocked by a creature without flanking" → the blocking creature). Creature analogue of <see cref="ThatPlayer"/>; refers back to the object the trigger's Filter identified, not the ability's own source (which is <see cref="Self"/>/<see cref="It"/>).</summary>
+  ThatCreature,
+
   /// <summary>"each other player" - all players except the controller</summary>
   EachOtherPlayer,
 
