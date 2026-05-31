@@ -51,11 +51,12 @@ public sealed partial class AttributeExtractor
     // is the descriptive shape, not absent-attribute.
     attributes.Add(new ColorsAttribute { Colors = input.Colors ?? [] });
 
-    // Color identity (computed from mana cost + mana symbols in rules text).
-    // Always WUBRG-ordered per CR convention; fixtures must match. Empty list
-    // for colorless cards, same doctrine as Colors above.
-    var colorIdentity = ComputeColorIdentity(input);
-    attributes.Add(new ColorIdentityAttribute { ColorIdentity = colorIdentity });
+    // Color identity is DERIVED, not echoed from source data (CR 903.4): it is a
+    // computed property, not anything printed on the card. CardParser computes it
+    // via ColorIdentityDeriver over the fully-assembled AST (main + every face,
+    // per CR 903.4d) and inserts the ColorIdentityAttribute immediately after this
+    // ColorsAttribute. It is intentionally NOT emitted here, where the parsed
+    // abilities (and faces) aren't yet in scope to walk.
 
     // Creature stats (power/toughness)
     if (!string.IsNullOrWhiteSpace(input.Power) && !string.IsNullOrWhiteSpace(input.Toughness))
@@ -279,86 +280,6 @@ public sealed partial class AttributeExtractor
     };
 
     return new AlternativeCostsAttribute { Costs = [cost] };
-  }
-
-  /// <summary>
-  /// Computes color identity from the card's mana cost and oracle text.
-  /// Color identity includes all colored mana symbols anywhere on the card.
-  /// </summary>
-  private List<string> ComputeColorIdentity(CardInputDTO input)
-  {
-    // Color identity is authoritatively supplied by the source data (Scryfall),
-    // which already applies the Comprehensive Rules edge cases the parser cannot
-    // safely re-derive from oracle text: CR 903.4c ("Reminder text is ignored when
-    // determining a card's color identity" — e.g. a keyword's mana-adding reminder
-    // like Firebending's "(...add {R}{R}...)" does NOT add red), the documented
-    // Extort ruling (the {W/B} in Extort's reminder text DOES count), color
-    // indicators, and the combined identity of both faces of a double-faced card.
-    // Prefer it verbatim (WUBRG-ordered); fall back to symbol scanning only when
-    // the source omits it.
-    if (input.ColorIdentity is { Count: > 0 })
-    {
-      return OrderColors(new HashSet<string>(input.ColorIdentity));
-    }
-
-    var colors = new HashSet<string>();
-
-    // Add colors from mana cost
-    if (!string.IsNullOrWhiteSpace(input.ManaCost))
-    {
-      AddManaSymbolColors(input.ManaCost, colors);
-    }
-
-    // Add colors from oracle text (mana symbols in abilities)
-    if (!string.IsNullOrWhiteSpace(input.OracleText))
-    {
-      AddManaSymbolColors(input.OracleText, colors);
-    }
-
-    // Return in WUBRG order
-    return OrderColors(colors);
-  }
-
-  [GeneratedRegex(@"\{([^}]+)\}")]
-  private static partial Regex ManaSymbolRegex();
-
-  /// <summary>
-  /// Extracts colors from mana symbols in a string.
-  /// </summary>
-  private static void AddManaSymbolColors(string text, HashSet<string> colors)
-  {
-    var matches = ManaSymbolRegex().Matches(text);
-    foreach (Match match in matches)
-    {
-      var content = match.Groups[1].Value.ToUpperInvariant();
-
-      // Check each character for color letters
-      foreach (var c in content)
-      {
-        var colorCode = c switch
-        {
-          'W' => "W",
-          'U' => "U",
-          'B' => "B",
-          'R' => "R",
-          'G' => "G",
-          _ => null,
-        };
-        if (colorCode != null)
-        {
-          colors.Add(colorCode);
-        }
-      }
-    }
-  }
-
-  /// <summary>
-  /// Orders colors in WUBRG order.
-  /// </summary>
-  private static List<string> OrderColors(HashSet<string> colors)
-  {
-    var order = new[] { "W", "U", "B", "R", "G" };
-    return order.Where(colors.Contains).ToList();
   }
 
   /// <summary>
