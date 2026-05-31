@@ -39,7 +39,7 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "haste",
+          "KeywordSource": "Haste",
           "Effects": [
             {
               "EffectType": "keywordAbility",

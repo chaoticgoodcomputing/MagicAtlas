@@ -26,7 +26,7 @@ public sealed class HasteKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = keyword.ToStringValue(),
+      KeywordSource = "Haste",
       Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
       Reminder = reminder,
     }

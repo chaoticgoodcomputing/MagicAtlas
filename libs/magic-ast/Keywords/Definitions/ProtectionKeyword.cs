@@ -81,10 +81,20 @@ public sealed class ProtectionKeyword : IKeyword
         return new ProtectionQuality { Kind = ProtectionQualityKind.Everything };
       }
 
-      // Colors: red, blue, white, black, green
+      // Colors: red, blue, white, black, green — stored as WUBRG single-letter codes
       if (normalized is "red" or "blue" or "white" or "black" or "green" or "colorless")
       {
-        return new ProtectionQuality { Kind = ProtectionQualityKind.Color, Value = normalized };
+        var code = normalized switch
+        {
+          "white" => "W",
+          "blue" => "U",
+          "black" => "B",
+          "red" => "R",
+          "green" => "G",
+          "colorless" => "C",
+          _ => normalized,
+        };
+        return new ProtectionQuality { Kind = ProtectionQualityKind.Color, Value = code };
       }
 
       // Card types: creatures, artifacts, enchantments, instants, sorceries
@@ -154,10 +164,19 @@ public sealed class ProtectionKeyword : IKeyword
       return new ProtectionQuality { Kind = ProtectionQualityKind.Everything };
     }
 
-    // Check for colors
+    // Check for colors — stored as WUBRG single-letter codes
     if (normalized is "white" or "blue" or "black" or "red" or "green")
     {
-      return new ProtectionQuality { Kind = ProtectionQualityKind.Color, Value = normalized };
+      var code = normalized switch
+      {
+        "white" => "W",
+        "blue" => "U",
+        "black" => "B",
+        "red" => "R",
+        "green" => "G",
+        _ => normalized,
+      };
+      return new ProtectionQuality { Kind = ProtectionQualityKind.Color, Value = code };
     }
 
     // Check for color characteristics
