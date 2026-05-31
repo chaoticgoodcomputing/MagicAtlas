@@ -1,7 +1,12 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST;
 using MagicAST.AST.Abilities;
-using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects;
+using MagicAST.AST.Effects.Resource;
+using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
+using MagicAST.AST.Triggers;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using Superpower.Parsers;
@@ -9,13 +14,15 @@ using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
 /// Afflict N: Whenever this creature becomes blocked, defending player loses N life.
-/// Rule 702.130. Integer-parameterized keyword marker.
 ///
-/// <para>
-/// The <see cref="Definition"/> is the verbatim former <c>KeywordDefinitions.Afflict</c>
-/// (including its inlined <c>ParseIntValue</c> guard); the <see cref="Combinator"/> is
-/// the verbatim former <c>OracleParsers.Afflict</c>.
-/// </para>
+/// CR 702.130 (verbatim): "Afflict is a triggered ability. 'Afflict N' means
+/// 'Whenever this creature becomes blocked, defending player loses N life.'"
+///
+/// MAST shape (ADR 0003 decomposition): TriggeredAbility{ KeywordSource:"Afflict",
+///   Trigger:{ Timing:"Whenever", Event:"BecomesBlocked",
+///             Filter:{CardTypes:["creature"]} },
+///   Effects:[ LoseLifeEffect{ Player:{Kind:DefendingPlayer},
+///                             Amount:LiteralQuantity(N) } ] }.
 /// </summary>
 [Keyword]
 public sealed class AfflictKeyword : IKeyword
@@ -32,14 +39,7 @@ public sealed class AfflictKeyword : IKeyword
       Category = KeywordCategory.Triggered,
       HasParameter = true,
       ParameterType = KeywordParameterType.Number,
-      CreateExpansion = parameter => new StaticAbility
-      {
-        KeywordSource = "Afflict",
-        Effects = [new AfflictEffect
-        {
-          Value = ParseIntValue("Afflict", parameter),
-        }],
-      },
+      CreateExpansion = parameter => BuildAbility(ParseIntValue("Afflict", parameter), null),
     };
 
   /// <inheritdoc/>
@@ -47,13 +47,33 @@ public sealed class AfflictKeyword : IKeyword
     from keyword in Keyword("Afflict")
     from value in Token.EqualTo(OracleToken.Number)
     from reminder in OptionalReminder
-    select (Ability)new StaticAbility
+    select BuildAbility(int.Parse(value.ToStringValue()), reminder)
+  );
+
+  /// <summary>
+  /// Builds the decomposed triggered ability for "Afflict N": whenever this
+  /// creature becomes blocked, defending player loses N life.
+  /// </summary>
+  private static Ability BuildAbility(int value, Parenthetical? reminder) =>
+    new TriggeredAbility
     {
       KeywordSource = "Afflict",
-      Effects = [new AfflictEffect { Value = int.Parse(value.ToStringValue()) }],
+      Trigger = new TriggerCondition
+      {
+        Timing = TriggerTiming.Whenever,
+        Event = TriggerEvent.BecomesBlocked,
+        Filter = new ObjectFilter { CardTypes = ["creature"] },
+      },
+      Effects =
+      [
+        new LoseLifeEffect
+        {
+          Amount = LiteralQuantity.Of(value),
+          Player = new ObjectReference { Kind = ObjectReferenceKind.DefendingPlayer },
+        },
+      ],
       Reminder = reminder,
-    }
-  );
+    };
 
   /// <summary>
   /// Integer-parameter guard, inlined from the former <c>KeywordDefinitions.ParseIntValue</c>.

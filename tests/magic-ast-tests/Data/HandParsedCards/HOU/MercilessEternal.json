@@ -29,14 +29,29 @@
       "RawText": "Afflict 2 (Whenever this creature becomes blocked, defending player loses 2 life.)\n{2}{B}, Discard a card: This creature gets +2/+2 until end of turn.",
       "Abilities": [
         {
-          "Kind": "static",
+          "Kind": "triggered",
+          "KeywordSource": "Afflict",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesBlocked",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
           "Effects": [
             {
-              "EffectType": "afflict",
-              "Value": 2
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "DefendingPlayer"
+              }
             }
           ],
-          "KeywordSource": "Afflict",
           "Reminder": {
             "Text": "(Whenever this creature becomes blocked, defending player loses 2 life.)"
           }
