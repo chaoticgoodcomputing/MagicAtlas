@@ -1,0 +1,21 @@
+{
+  "Keyword": "Convoke",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Convoke",
+    "Effects": [
+      {
+        "EffectType": "alternativePayment",
+        "Method": "TapObject",
+        "Pays": "Generic",
+        "Source": {
+          "CardTypes": [
+            "creature"
+          ],
+          "Controller": "You"
+        },
+        "ColorMustMatchMana": true
+      }
+    ]
+  }
+}
