@@ -1,0 +1,38 @@
+{
+  "Keyword": "Undying",
+  "Expected": {
+    "Kind": "triggered",
+    "KeywordSource": "Undying",
+    "Trigger": {
+      "Timing": "When",
+      "Event": "Dies",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ]
+      }
+    },
+    "InterveningIf": {
+      "ConditionType": "other",
+      "Text": "it had no +1/+1 counters on it"
+    },
+    "Effects": [
+      {
+        "EffectType": "returnToBattlefield",
+        "Target": {
+          "Kind": "It"
+        },
+        "UnderControl": {
+          "Kind": "Owner"
+        },
+        "WithCounters": {
+          "CounterType": "+1/+1",
+          "Count": {
+            "QuantityType": "literal",
+            "Value": 1
+          }
+        }
+      }
+    ]
+  }
+}

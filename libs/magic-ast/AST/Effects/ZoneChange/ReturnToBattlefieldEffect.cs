@@ -30,8 +30,8 @@ public sealed record ReturnToBattlefieldEffect : Effect
 
   /// <summary>
   /// "return it to the battlefield with [N] [type] counters on it" — counters placed
-  /// on the permanent as part of the return action (Persist/Undying-style patterns).
-  /// Parallel to <see cref="ExileEffect.WithCounters"/>: the return gains this
+  /// on the permanent as part of the return action (Persist CR 702.79 / Undying CR
+  /// 702.93). Parallel to <see cref="ExileEffect.WithCounters"/>: the return gains this
   /// structure only when the card prints the counter modifier.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

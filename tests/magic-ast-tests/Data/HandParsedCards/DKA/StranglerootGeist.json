@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Strangleroot Geist",
     "ManaCost": "{G}{G}",
-    "TypeLine": "Creature — Spirit",
+    "TypeLine": "Creature \u2014 Spirit",
     "OracleText": "Haste\nUndying (When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)",
     "Power": "2",
     "Toughness": "1",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Strangleroot Geist",
     "TypeLine": {
-      "Raw": "Creature — Spirit",
+      "Raw": "Creature \u2014 Spirit",
       "Types": [
         "Creature"
       ],
@@ -38,17 +38,42 @@
           ]
         },
         {
-          "Kind": "static",
+          "Kind": "triggered",
           "KeywordSource": "Undying",
-          "Reminder": {
-            "Text": "(When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)"
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "it had no +1/+1 counters on it"
           },
           "Effects": [
             {
-              "EffectType": "keywordAbility",
-              "Keyword": "Undying"
+              "EffectType": "returnToBattlefield",
+              "Target": {
+                "Kind": "It"
+              },
+              "UnderControl": {
+                "Kind": "Owner"
+              },
+              "WithCounters": {
+                "CounterType": "+1/+1",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                }
+              }
             }
-          ]
+          ],
+          "Reminder": {
+            "Text": "(When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)"
+          }
         }
       ]
     },
