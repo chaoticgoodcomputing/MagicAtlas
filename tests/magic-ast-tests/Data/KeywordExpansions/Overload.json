@@ -1,0 +1,28 @@
+{
+  "Keyword": "Overload",
+  "Parameter": "{2}{R}",
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "overload",
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "generic",
+              "GenericAmount": 2
+            },
+            {
+              "Kind": "colored",
+              "Colors": [
+                "R"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "KeywordSource": "Overload"
+  }
+}

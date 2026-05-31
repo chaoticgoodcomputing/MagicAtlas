@@ -1,0 +1,14 @@
+{
+  "Keyword": "Banding",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Banding"
+      }
+    ],
+    "KeywordSource": "Banding"
+  }
+}

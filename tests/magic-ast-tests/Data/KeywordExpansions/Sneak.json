@@ -1,0 +1,22 @@
+{
+  "Keyword": "Sneak",
+  "Parameter": "{2}",
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "sneak",
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "generic",
+              "GenericAmount": 2
+            }
+          ]
+        }
+      }
+    ],
+    "KeywordSource": "Sneak"
+  }
+}

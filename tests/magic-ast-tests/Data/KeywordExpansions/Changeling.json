@@ -1,0 +1,14 @@
+{
+  "Keyword": "Changeling",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Changeling"
+      }
+    ],
+    "KeywordSource": "Changeling"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "Keyword": "Equip",
+  "Parameter": "{2}",
+  "Expected": {
+    "Kind": "activated",
+    "Costs": [
+      {
+        "CostType": "mana",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ]
+      }
+    ],
+    "Effects": [
+      {
+        "EffectType": "attach",
+        "Target": {
+          "Kind": "Target",
+          "Filter": {
+            "CardTypes": [
+              "creature"
+            ],
+            "Controller": "You"
+          }
+        }
+      }
+    ],
+    "Restrictions": [
+      "OnlyAsSorcery"
+    ],
+    "IsManaAbility": false,
+    "KeywordSource": "Equip"
+  }
+}

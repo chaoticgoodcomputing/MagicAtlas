@@ -1,0 +1,14 @@
+{
+  "Keyword": "Indestructible",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Indestructible"
+      }
+    ],
+    "KeywordSource": "Indestructible"
+  }
+}

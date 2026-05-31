@@ -1,0 +1,14 @@
+{
+  "Keyword": "Infect",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Infect"
+      }
+    ],
+    "KeywordSource": "Infect"
+  }
+}

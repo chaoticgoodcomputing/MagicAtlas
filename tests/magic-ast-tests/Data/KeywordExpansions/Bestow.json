@@ -1,0 +1,18 @@
+{
+  "Keyword": "Bestow",
+  "Parameter": "{2}{W}",
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "enchantRestriction",
+        "LegalTargets": {
+          "CardTypes": [
+            "creature"
+          ]
+        }
+      }
+    ],
+    "KeywordSource": "Bestow"
+  }
+}

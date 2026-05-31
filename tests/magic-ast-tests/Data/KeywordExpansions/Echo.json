@@ -1,0 +1,45 @@
+{
+  "Keyword": "Echo",
+  "Parameter": "{2}",
+  "Expected": {
+    "Kind": "triggered",
+    "Trigger": {
+      "Timing": "At",
+      "Event": {
+        "Part": "Upkeep",
+        "Edge": "Beginning",
+        "Whose": "You"
+      }
+    },
+    "InterveningIf": {
+      "ConditionType": "other",
+      "Text": "this permanent came under your control since the beginning of your last upkeep"
+    },
+    "Effects": [
+      {
+        "EffectType": "preventable",
+        "Inner": {
+          "EffectType": "sacrifice",
+          "Target": {
+            "Kind": "Self"
+          }
+        },
+        "Unless": {
+          "Player": {
+            "Kind": "Controller"
+          },
+          "Cost": {
+            "CostType": "mana",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "KeywordSource": "Echo"
+  }
+}

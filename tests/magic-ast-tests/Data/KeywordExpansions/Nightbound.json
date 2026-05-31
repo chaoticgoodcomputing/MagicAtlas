@@ -1,0 +1,14 @@
+{
+  "Keyword": "Nightbound",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "dayNight",
+        "Phase": "Nightbound"
+      }
+    ],
+    "KeywordSource": "Nightbound"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "Keyword": "Devoid",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Devoid"
+      }
+    ],
+    "KeywordSource": "Devoid"
+  }
+}

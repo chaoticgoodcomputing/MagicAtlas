@@ -1,0 +1,14 @@
+{
+  "Keyword": "Hexproof",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Hexproof"
+      }
+    ],
+    "KeywordSource": "Hexproof"
+  }
+}

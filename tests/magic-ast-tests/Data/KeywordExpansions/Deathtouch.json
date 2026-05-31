@@ -1,0 +1,14 @@
+{
+  "Keyword": "Deathtouch",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Deathtouch"
+      }
+    ],
+    "KeywordSource": "Deathtouch"
+  }
+}

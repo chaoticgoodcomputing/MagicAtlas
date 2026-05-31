@@ -1,0 +1,21 @@
+{
+  "Keyword": "Mountainwalk",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "evasion",
+        "UnblockableCondition": {
+          "ConditionType": "DefendingPlayerControls",
+          "PermanentFilter": {
+            "Subtypes": [
+              "Mountain"
+            ]
+          }
+        }
+      }
+    ],
+    "KeywordSource": "Mountainwalk"
+  }
+}

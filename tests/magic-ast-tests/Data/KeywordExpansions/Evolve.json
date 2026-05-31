@@ -1,0 +1,14 @@
+{
+  "Keyword": "Evolve",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Evolve"
+      }
+    ],
+    "KeywordSource": "Evolve"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "Keyword": "Choose a Background",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "partner",
+        "PartnerType": "ChooseABackground"
+      }
+    ],
+    "KeywordSource": "Choose a Background"
+  }
+}

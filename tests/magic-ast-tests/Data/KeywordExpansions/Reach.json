@@ -1,0 +1,14 @@
+{
+  "Keyword": "Reach",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Reach"
+      }
+    ],
+    "KeywordSource": "Reach"
+  }
+}

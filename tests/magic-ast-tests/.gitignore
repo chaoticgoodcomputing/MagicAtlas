@@ -17,6 +17,10 @@ Data/**
 !Data/HandParsedCards/**/*
 !Data/MalformedParsedCards/**/*
 
+# Keyword-expansion golds (ADR-0003 "sans examples" harness) — agent-facing source
+# of truth, one per keyword.
+!Data/KeywordExpansions/**/*
+
 # Allow all schema and catalog .cs files
 !Data/**/*.cs
 

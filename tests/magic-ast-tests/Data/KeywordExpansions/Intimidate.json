@@ -1,0 +1,28 @@
+{
+  "Keyword": "Intimidate",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "evasion",
+        "CanBeBlockedBy": {
+          "CardTypes": [
+            "creature"
+          ],
+          "Characteristics": [
+            {
+              "CharacteristicType": "other",
+              "Description": "artifact"
+            },
+            {
+              "CharacteristicType": "other",
+              "Description": "shares a color"
+            }
+          ]
+        }
+      }
+    ],
+    "KeywordSource": "Intimidate"
+  }
+}

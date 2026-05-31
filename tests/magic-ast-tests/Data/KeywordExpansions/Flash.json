@@ -1,0 +1,15 @@
+{
+  "Keyword": "Flash",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "timingModification",
+        "Modification": "Grant",
+        "Timing": "Instant"
+      }
+    ],
+    "KeywordSource": "Flash"
+  }
+}

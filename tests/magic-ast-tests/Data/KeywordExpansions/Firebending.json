@@ -1,0 +1,24 @@
+{
+  "Keyword": "Firebending",
+  "Parameter": "2",
+  "Expected": {
+    "Kind": "triggered",
+    "Trigger": {
+      "Timing": "Whenever",
+      "Event": "Attacks",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ]
+      }
+    },
+    "Effects": [
+      {
+        "EffectType": "addMana",
+        "Mana": "{R}{R}",
+        "AnyColor": false
+      }
+    ],
+    "KeywordSource": "Firebending"
+  }
+}

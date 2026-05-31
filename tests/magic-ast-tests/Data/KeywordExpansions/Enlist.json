@@ -1,0 +1,14 @@
+{
+  "Keyword": "Enlist",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Enlist"
+      }
+    ],
+    "KeywordSource": "Enlist"
+  }
+}

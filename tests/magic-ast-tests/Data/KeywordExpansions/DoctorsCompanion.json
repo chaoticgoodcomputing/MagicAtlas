@@ -1,0 +1,14 @@
+{
+  "Keyword": "Doctor\u0027s companion",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "DoctorsCompanion"
+      }
+    ],
+    "KeywordSource": "Doctor\u0027s companion"
+  }
+}
