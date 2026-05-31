@@ -70,22 +70,33 @@
           "AbilityWord": "Void"
         },
         {
-          "Kind": "static",
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 4
+                }
+              ]
+            }
+          ],
           "Effects": [
             {
-              "EffectType": "equip",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 4
-                  }
-                ]
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
               }
             }
           ],
-          "KeywordSource": "Equip",
+          "Restrictions": ["OnlyAsSorcery"],
+          "IsManaAbility": false,
           "Reminder": {
             "Text": "({4}: Attach to target creature you control. Equip only as a sorcery.)"
           }
