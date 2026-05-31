@@ -201,24 +201,65 @@ so the parser surface is consolidated.
 | Megamorph | 702.37 | morph + enters w/ +1/+1 counter when turned up for megamorph cost |
 | Disguise | 702.168 | morph + ward {2} while face down |
 
-### Misc / HITL review (special structures; may keep bespoke node or need a new primitive)
-Haunt (702.55, exile-link), Mutate (merge), Soulbond (pairing), Hideaway, Prototype
-(alt cost + alt characteristics), Awaken (kicker + animate land), Backup (ETB grant +
-counters), Splice (cross-references), Harmonize, Mobilize, WebSlinging, Prepared,
-Job Select, Start Your Engines, Spree, Bargain, For Mirrodin (Living-Weapon variant),
-Totem/Umbra Armor (totem armor = `PreventableEffect`-ish replacement). Triage each
-against the cluster-value test before assigning a batch; escalate genuine
-trait-boundary cases.
+### HITL design decisions — RESOLVED (2026-05-31, via Plan-agent rules studies)
+
+All seven front-loaded design decisions are resolved. **Net new AST: 3 leaf effects +
+a Splice reshape + additive enum/field axes. No new `[PolymorphicBase]`, no new trait
+interface.** Shapes ratified:
+
+- **Convoke/Improvise/Delve/Assist** → new `AlternativePaymentEffect` (static)
+  `{Method: TapObject|Exile|DelegatePayment, Pays: Generic|Colored, Source: ObjectFilter?,
+  ColorMustMatchMana: bool}`. **CRITICAL:** CR 702.51b/66b/126b say these are NOT
+  additional/alternative costs — model as an Effect on the static ability, never route
+  to a cost slot.
+- **Emerge** → `AlternativeCost{CompositeCost[<mana>, SacrificeCost]}`; MV-reduction = engine.
+- **Morph/Megamorph/Disguise** → Bestow shape: card-level `AlternativeCost{3}` +
+  `StaticAbility{KeywordSource, Effects:[DefinePTEffect(2/2) (+KeywordAbilityEffect Ward
+  for Disguise)]}`. Megamorph's turn-up +1/+1 counter = engine (gated on the CR-708
+  special action MAST doesn't model); distinguished by `KeywordSource`. (Rejected both
+  the FaceDownCast mega-struct and the turn-up-ability node.)
+- **Prototype** → `AlternativeCost{prototype cost}` + `DefinePTEffect`; color DERIVED
+  (not stored — falls out of the prototype mana cost via ColorIdentityDeriver).
+- **Mutate** → `AlternativeCost{mutate cost}` + targeting node; merge = engine (CR 730,
+  not 725). Needs `ObjectFilter.Owner` + excluded-subtypes axes.
+- **Awaken** → composition, no new node: `AlternativeCost` + `SpellAbility{putCounters,
+  DefinePT(0/0), ChangeSubtype(+Elemental), grant Haste}`. (Fixes current marker's
+  dropped haste.)
+- **Haunt/Champion/Cipher/Soulbond** → ADR-0004 reference-not-resolution covers all;
+  decompose to triggered + exile/pair + reference. Additive: `ObjectReferenceKind.
+  {Haunted,Encoded}`, `ExileEffect.{HauntsTarget,EncodedOn}` (parallel to `WithCounters`),
+  `ObjectFilter.ExcludeSelf` (Champion "another"). Soulbond gets new leaf `PairEffect`
+  (`BothPaired` reference already exists as its consumer side). Delete `ChampionEffect`.
+- **Splice** → reshape opaque marker to `SpliceEffect{Onto: ObjectFilter, Cost}`;
+  text-graft = engine (this card's effects already in its AST).
+- **Modular** → NO new node: `putCounters{Count: CounterCountQuantity(Self)}`.
+- **Graft** → new `MoveCountersEffect{From,To,CounterType,Count}` (move = cluster axis;
+  + restore the dropped intervening-if "if this has a +1/+1 counter").
+
+### Misc / quick-triage set (not HITL — AFK once eyeballed)
+Hideaway, Backup, Harmonize, Mobilize, WebSlinging, Prepared, Job Select, Start Your
+Engines, Spree, Bargain, For Mirrodin (Living-Weapon variant), Totem/Umbra Armor
+(`PreventableEffect`-shaped damage replacement). Triage against the cluster-value test
+when their batch comes up.
 
 ---
 
 ## Batch sequence
-0. Expansion-gold harness + author all 160 golds (lock Buckets A & B; Bucket C golds
+0. **Expansion-gold harness** + author all 160 golds (lock Buckets A & B; Bucket C golds
    are the failing specs).
-1–12. Decompose Bucket C by family (above), one keyword per worker, judge novel-shape
-   branches, NUnit-gate per merge group. Each keyword owns its own `*Keyword.cs` (+ any
-   new rule file) — disjoint, so they parallelize; the deleted `*Effect` records are
-   each owned by one worker.
+0.5. **Primitives foundation** (lands BEFORE the keyword batches — these are shared,
+   hot-file additions; bundle them so `ObjectFilter` isn't edited piecemeal, per the
+   ADR-0003 round's "reference-machinery foundation" lesson):
+   - New leaf effects: `AlternativePaymentEffect`, `PairEffect`, `MoveCountersEffect`.
+   - Reshape `SpliceEffect` → `{Onto: ObjectFilter, Cost}`.
+   - `ObjectReferenceKind.{Haunted, Encoded}`; `ExileEffect.{HauntsTarget, EncodedOn}`.
+   - `ObjectFilter.{Owner, ExcludedSubtypes, ExcludeSelf}` (one ObjectFilter edit, all axes).
+   - NO new `[PolymorphicBase]` / trait interface (confirmed by the design studies).
+1–12. Decompose Bucket C by family (above), one keyword per worker, consuming the
+   foundation primitives. Judge novel-shape branches; NUnit-gate per merge group. Each
+   keyword owns its own `*Keyword.cs` — disjoint, so they parallelize; the deleted
+   `*Effect` records are each owned by one worker. **AFK after batch 0.5** (the HITL
+   decisions are resolved above).
 
 ## Progress
 - [ ] Batch 0 — harness + 160 golds
