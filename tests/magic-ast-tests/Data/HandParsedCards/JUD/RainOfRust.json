@@ -73,7 +73,7 @@
           "KeywordSource": "Entwine",
           "Effects": [
             {
-              "EffectType": "entwine",
+              "EffectType": "additionalCastCost",
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
@@ -88,7 +88,9 @@
                     ]
                   }
                 ]
-              }
+              },
+              "IsOptional": true,
+              "Repeatable": false
             }
           ]
         }
