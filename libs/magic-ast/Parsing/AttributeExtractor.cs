@@ -175,18 +175,6 @@ public sealed partial class AttributeExtractor
   )]
   private static partial Regex AdditionalSacrificePrefix();
 
-  // Single-cost Kicker (Rule 702.33a): "Kicker [cost] (reminder)" means "You may pay
-  // an additional [cost] as you cast this spell." Captures the kicker mana cost.
-  // Anchored on "Kicker " then one-or-more brace-delimited mana symbols, so the
-  // deferred "Multikicker [cost]" (Rule 702.33c) does not match (it starts with
-  // "Multikicker"). A "Kicker [cost] and/or [cost]" multi-cost printing (Rule 702.33b)
-  // is also out of scope; this captures only the single contiguous cost run.
-  [GeneratedRegex(
-    @"^Kicker\s+(?<cost>(?:\{[^}]+\})+)(?:\s|$)",
-    RegexOptions.None
-  )]
-  private static partial Regex KickerPrefix();
-
   /// <summary>
   /// Scans oracle text for "As an additional cost to cast this spell, sacrifice a [type]."
   /// prefix lines and returns an AdditionalCostsAttribute when found, or null when absent.
@@ -220,25 +208,10 @@ public sealed partial class AttributeExtractor
       return new AdditionalCostsAttribute { Costs = [sacrificeCost] };
     }
 
-    // Kicker (Rule 702.33a): an optional additional cost paid as you cast the spell.
-    // "Kicker [cost]" decomposes into AdditionalCost{Cost, IsOptional:true} — the keyword
-    // no longer surfaces as an oracle ability (ADR 0003). The keyword line itself carries
-    // no meaningful source offset for the cost host, so the span is collapsed to (0, 0).
-    // The linked "if this spell was kicked, ..." resolution (Rule 702.33e / 607) is a
-    // separate ability and is not modeled here.
-    var kickerMatch = KickerPrefix().Match(firstLine);
-    if (kickerMatch.Success)
-    {
-      var parsed = _manaCostParser.Parse(kickerMatch.Groups["cost"].Value);
-      var kickerCost = new AdditionalCost
-      {
-        Cost = new ManaCost { Symbols = parsed.Symbols },
-        IsOptional = true,
-        SourceSpan = new TextSpan(0, 0),
-      };
-
-      return new AdditionalCostsAttribute { Costs = [kickerCost] };
-    }
+    // Kicker (CR 702.33) is NOT extracted here. It is a static ability — its combinator
+    // (KickerKeyword) emits a StaticAbility{KeywordSource:"Kicker", AdditionalCastCostEffect}
+    // into Oracle.Abilities, carrying the keyword identity the anonymous
+    // AdditionalCostsAttribute would lose. Surfacing it here too would double-count the cost.
 
     return null;
   }

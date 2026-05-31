@@ -29,6 +29,31 @@
       "RawText": "Kicker {4}{G} (You may pay an additional {4}{G} as you cast this spell.)\nWhen this creature enters, if it was kicked, you gain 10 life.",
       "Abilities": [
         {
+          "Kind": "static",
+          "KeywordSource": "Kicker",
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 4
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "G"
+                    ]
+                  }
+                ]
+              },
+              "IsOptional": true
+            }
+          ]
+        },
+        {
           "Kind": "triggered",
           "Trigger": {
             "Timing": "When",
@@ -100,30 +125,6 @@
           "Raw": "3",
           "Value": 3
         }
-      },
-      {
-        "Kind": "additionalCosts",
-        "Costs": [
-          {
-            "Cost": {
-              "CostType": "mana",
-              "Symbols": [
-                {
-                  "Kind": "generic",
-                  "GenericAmount": 4
-                },
-                {
-                  "Kind": "colored",
-                  "Colors": [
-                    "G"
-                  ]
-                }
-              ]
-            },
-            "IsOptional": true,
-            "SourceSpan": { "Start": 0, "Length": 0 }
-          }
-        ]
       }
     ]
   }
