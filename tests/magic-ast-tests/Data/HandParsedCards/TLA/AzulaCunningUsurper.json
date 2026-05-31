@@ -1,0 +1,169 @@
+{
+  "Input": {
+    "Name": "Azula, Cunning Usurper",
+    "ManaCost": "{2}{U}{B}{B}",
+    "TypeLine": "Legendary Creature — Human Noble Rogue",
+    "OracleText": "Firebending 2 (Whenever this creature attacks, add {R}{R}. This mana lasts until end of combat.)\nWhen Azula enters, target opponent exiles a nontoken creature they control, then they exile a nonland card from their graveyard.\nDuring your turn, you may cast cards exiled with Azula and you may cast them as though they had flash. Mana of any type can be spent to cast those spells.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "B",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Azula, Cunning Usurper",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Noble Rogue",
+      "Types": [
+        "Creature"
+      ],
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Subtypes": [
+        "Human",
+        "Noble",
+        "Rogue"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Firebending 2 (Whenever this creature attacks, add {R}{R}. This mana lasts until end of combat.)\nWhen Azula enters, target opponent exiles a nontoken creature they control, then they exile a nonland card from their graveyard.\nDuring your turn, you may cast cards exiled with Azula and you may cast them as though they had flash. Mana of any type can be spent to cast those spells.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Firebending",
+          "Reminder": {
+            "Text": "(Whenever this creature attacks, add {R}{R}. This mana lasts until end of combat.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "firebending",
+              "Value": 2
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters"
+          },
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "Opponent",
+                  "IsToken": false
+                }
+              }
+            },
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Designated",
+                "Filter": {
+                  "CardTypes": [
+                    "card"
+                  ],
+                  "Zone": "Graveyard",
+                  "Controller": "Opponent",
+                  "ExcludedCardTypes": [
+                    "land"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "mayPlayFromExile",
+              "Cards": {
+                "Zone": "Exile",
+                "ExiledWith": {
+                  "Kind": "Self"
+                }
+              },
+              "Actions": [
+                "CastSpells"
+              ],
+              "WhoseTurn": "You",
+              "AsThoughFlash": true,
+              "ManaSpend": "anyType"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}

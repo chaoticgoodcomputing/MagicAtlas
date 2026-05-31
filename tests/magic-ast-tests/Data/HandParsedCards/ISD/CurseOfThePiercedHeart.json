@@ -1,0 +1,72 @@
+{
+  "Input": {
+    "Name": "Curse of the Pierced Heart",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Enchantment — Aura Curse",
+    "OracleText": "Enchant player\nAt the beginning of enchanted player's upkeep, this Aura deals 1 damage to that player or a planeswalker that player controls.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Curse of the Pierced Heart",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura Curse",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura", "Curse"]
+    },
+    "Oracle": {
+      "RawText": "Enchant player\nAt the beginning of enchanted player's upkeep, this Aura deals 1 damage to that player or a planeswalker that player controls.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": { "EntityType": "player" }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": "BeginningOfUpkeep",
+            "Whose": { "Kind": "EnchantedOrEquipped" }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Target": {
+                "Kind": "Choice",
+                "Options": [
+                  { "Kind": "EnchantedOrEquipped" },
+                  {
+                    "Kind": "Target",
+                    "Filter": { "CardTypes": ["planeswalker"], "Controller": "EnchantedPlayer" }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["R"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["R"] }
+    ]
+  }
+}

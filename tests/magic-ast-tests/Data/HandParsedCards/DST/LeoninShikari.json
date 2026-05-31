@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "Leonin Shikari",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Cat Soldier",
+    "OracleText": "You may activate equip abilities any time you could cast an instant.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Leonin Shikari",
+    "TypeLine": {
+      "Raw": "Creature — Cat Soldier",
+      "Types": ["Creature"],
+      "Subtypes": ["Cat", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "You may activate equip abilities any time you could cast an instant.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "timingModification",
+              "Modification": "Grant",
+              "Timing": "Instant",
+              "AppliesTo": {
+                "Kind": "activatedAbility",
+                "Keyword": "Equip",
+                "Controller": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["W"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
