@@ -1,0 +1,29 @@
+{
+  "Keyword": "Madness",
+  "Parameter": "{1}{R}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Madness",
+    "Effects": [
+      {
+        "EffectType": "alternativeCast",
+        "FromZone": "Exile",
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "generic",
+              "GenericAmount": 1
+            },
+            {
+              "Kind": "colored",
+              "Colors": [
+                "R"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
