@@ -32,7 +32,7 @@
           "KeywordSource": "Multikicker",
           "Effects": [
             {
-              "EffectType": "multikicker",
+              "EffectType": "additionalCastCost",
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
@@ -43,7 +43,9 @@
                     ]
                   }
                 ]
-              }
+              },
+              "IsOptional": true,
+              "Repeatable": true
             }
           ],
           "Reminder": {
