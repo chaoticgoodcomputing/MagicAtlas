@@ -1,0 +1,33 @@
+{
+  "Keyword": "Spectacle",
+  "Parameter": "{1}{B}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Spectacle",
+    "Effects": [
+      {
+        "EffectType": "alternativeCast",
+        "FromZone": "Hand",
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "generic",
+              "GenericAmount": 1
+            },
+            {
+              "Kind": "colored",
+              "Colors": [
+                "B"
+              ]
+            }
+          ]
+        },
+        "Condition": {
+          "ConditionType": "other",
+          "Text": "an opponent lost life this turn"
+        }
+      }
+    ]
+  }
+}

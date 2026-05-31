@@ -32,7 +32,8 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "spectacle",
+              "EffectType": "alternativeCast",
+              "FromZone": "Hand",
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
@@ -47,6 +48,10 @@
                     ]
                   }
                 ]
+              },
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "an opponent lost life this turn"
               }
             }
           ],
