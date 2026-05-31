@@ -33,7 +33,8 @@
           "KeywordSource": "Freerunning",
           "Effects": [
             {
-              "EffectType": "freerunning",
+              "EffectType": "alternativeCast",
+              "FromZone": "Hand",
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
@@ -48,6 +49,10 @@
                     ]
                   }
                 ]
+              },
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "a player was dealt combat damage this turn by a creature that, at the time it dealt that damage, was an Assassin creature or a commander under your control"
               }
             }
           ],
