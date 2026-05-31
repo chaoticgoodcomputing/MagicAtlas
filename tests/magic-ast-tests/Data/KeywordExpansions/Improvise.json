@@ -1,0 +1,18 @@
+{
+  "Keyword": "Improvise",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Improvise",
+    "Effects": [
+      {
+        "EffectType": "alternativePayment",
+        "Method": "TapObject",
+        "Pays": "Generic",
+        "Source": {
+          "CardTypes": ["artifact"],
+          "Controller": "You"
+        }
+      }
+    ]
+  }
+}

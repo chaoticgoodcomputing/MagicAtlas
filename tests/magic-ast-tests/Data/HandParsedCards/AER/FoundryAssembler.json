@@ -26,13 +26,18 @@
       "Abilities": [
         {
           "Kind": "static",
+          "KeywordSource": "Improvise",
           "Effects": [
             {
-              "EffectType": "keywordAbility",
-              "Keyword": "Improvise"
+              "EffectType": "alternativePayment",
+              "Method": "TapObject",
+              "Pays": "Generic",
+              "Source": {
+                "CardTypes": ["artifact"],
+                "Controller": "You"
+              }
             }
           ],
-          "KeywordSource": "Improvise",
           "Reminder": {
             "Text": "(Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)"
           }

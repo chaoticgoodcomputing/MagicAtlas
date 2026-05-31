@@ -2,19 +2,48 @@ namespace MagicAST.Keywords.Definitions;
 
 using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
-using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects.Resource;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
-/// Improvise: Each artifact you tap after you're done activating mana abilities pays
-/// for {1}. Rule 702.126. A parameterless cost-modifier keyword — MAST records the
-/// keyword's presence; the per-artifact cost-reduction mechanic is engine territory.
+/// Improvise: for each generic mana in this spell's total cost, you may tap an
+/// untapped artifact you control rather than pay that mana.
+///
+/// <para>
+/// CR 702.126a: "Improvise is a static ability that functions while the spell with
+/// improvise is on the stack. 'Improvise' means 'For each generic mana in this
+/// spell's total cost, you may tap an untapped artifact you control rather than pay
+/// that mana.'"
+/// </para>
+/// <para>
+/// CR 702.126b: "The improvise ability isn't an additional or alternative cost and
+/// applies only after the total cost of the spell with improvise is determined."
+/// </para>
+/// <para>
+/// MAST models the payment substitution as an <see cref="AlternativePaymentEffect"/>
+/// on the static ability (per ADR 0003 keyword-decomposition shape): tap artifacts
+/// you control to pay generic mana. "Untapped" is a game-state precondition
+/// (engine territory), not a filter axis.
+/// </para>
 /// </summary>
 [Keyword]
 public sealed class ImproviseKeyword : IKeyword
 {
+  private static readonly ObjectFilter _artifactsYouControl = new()
+  {
+    CardTypes = ["artifact"],
+    Controller = ControllerFilter.You,
+  };
+
+  private static readonly AlternativePaymentEffect _paymentEffect = new()
+  {
+    Method = AlternativePaymentMethod.TapObject,
+    Pays = AlternativePaymentKind.Generic,
+    Source = _artifactsYouControl,
+  };
+
   /// <inheritdoc/>
   public KeywordTier Tier => KeywordTier.Simple;
 
@@ -29,7 +58,7 @@ public sealed class ImproviseKeyword : IKeyword
       CreateExpansion = _ => new StaticAbility
       {
         KeywordSource = KeywordAbility.Improvise,
-        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Improvise }],
+        Effects = [_paymentEffect],
       },
     };
 
@@ -40,7 +69,19 @@ public sealed class ImproviseKeyword : IKeyword
     select (Ability)new StaticAbility
     {
       KeywordSource = KeywordAbility.Improvise,
-      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Improvise }],
+      Effects =
+      [
+        new AlternativePaymentEffect
+        {
+          Method = AlternativePaymentMethod.TapObject,
+          Pays = AlternativePaymentKind.Generic,
+          Source = new ObjectFilter
+          {
+            CardTypes = ["artifact"],
+            Controller = ControllerFilter.You,
+          },
+        },
+      ],
       Reminder = reminder,
     }
   );
