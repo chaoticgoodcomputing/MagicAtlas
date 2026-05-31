@@ -100,6 +100,16 @@ public enum TriggerEvent
   /// <summary>A creature becomes blocked</summary>
   BecomesBlocked,
 
+  /// <summary>
+  /// A creature blocks or becomes blocked (combined trigger — Rule 702.45 Bushido).
+  /// "Whenever this creature blocks or becomes blocked" fires both when the creature
+  /// is declared as a blocker (Rule 509) AND when the creature is blocked by a blocker
+  /// (the attacking creature's perspective). Distinct from <see cref="AttacksOrBlocks"/>
+  /// (which covers the attacker or blocker declaring phase) and from the two individual
+  /// events <see cref="Blocks"/> and <see cref="BecomesBlocked"/>.
+  /// </summary>
+  BlocksOrBecomesBlocked,
+
   /// <summary>A creature deals combat damage</summary>
   DealsCombatDamage,
 
