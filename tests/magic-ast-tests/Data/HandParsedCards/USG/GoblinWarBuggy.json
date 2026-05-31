@@ -38,25 +38,48 @@
           ]
         },
         {
-          "Kind": "static",
+          "Kind": "triggered",
           "KeywordSource": "Echo",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "this permanent came under your control since the beginning of your last upkeep"
+          },
           "Effects": [
             {
-              "EffectType": "echo",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 1
-                  },
-                  {
-                    "Kind": "colored",
-                    "Colors": [
-                      "R"
-                    ]
-                  }
-                ]
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "sacrifice",
+                "Target": {
+                  "Kind": "Self"
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "Controller"
+                },
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 1
+                    },
+                    {
+                      "Kind": "colored",
+                      "Colors": [
+                        "R"
+                      ]
+                    }
+                  ]
+                }
               }
             }
           ]
