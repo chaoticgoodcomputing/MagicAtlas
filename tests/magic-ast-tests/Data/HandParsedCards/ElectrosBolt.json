@@ -44,7 +44,8 @@
           "KeywordSource": "Mayhem",
           "Effects": [
             {
-              "EffectType": "mayhem",
+              "EffectType": "alternativeCast",
+              "FromZone": "Graveyard",
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
@@ -57,6 +58,10 @@
                     "Colors": ["R"]
                   }
                 ]
+              },
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "you discarded this card this turn"
               }
             }
           ],

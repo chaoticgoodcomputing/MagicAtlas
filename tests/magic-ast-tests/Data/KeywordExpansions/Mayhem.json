@@ -1,0 +1,33 @@
+{
+  "Keyword": "Mayhem",
+  "Parameter": "{1}{R}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Mayhem",
+    "Effects": [
+      {
+        "EffectType": "alternativeCast",
+        "FromZone": "Graveyard",
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "generic",
+              "GenericAmount": 1
+            },
+            {
+              "Kind": "colored",
+              "Colors": [
+                "R"
+              ]
+            }
+          ]
+        },
+        "Condition": {
+          "ConditionType": "other",
+          "Text": "you discarded this card this turn"
+        }
+      }
+    ]
+  }
+}
