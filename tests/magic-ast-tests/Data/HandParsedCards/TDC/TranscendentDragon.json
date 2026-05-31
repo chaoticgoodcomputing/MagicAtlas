@@ -66,9 +66,15 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "When",
-            "Event": "Enters"
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
           },
           "InterveningIf": {
+            "ConditionType": "other",
             "Text": "you cast it"
           },
           "Effects": [

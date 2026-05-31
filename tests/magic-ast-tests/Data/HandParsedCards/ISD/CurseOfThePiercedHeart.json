@@ -33,8 +33,11 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": "BeginningOfUpkeep",
-            "Whose": { "Kind": "EnchantedOrEquipped" }
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "EnchantedPlayer"
+            }
           },
           "Effects": [
             {

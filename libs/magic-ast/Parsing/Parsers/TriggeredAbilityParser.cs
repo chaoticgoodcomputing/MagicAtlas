@@ -13,6 +13,7 @@ using MagicAST.AST.Effects.Counter;
 using MagicAST.AST.Effects.Damage;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Resource;
+using MagicAST.AST.Effects.Timing;
 using MagicAST.AST.Effects.TokenCopy;
 using MagicAST.AST.Effects.ZoneChange;
 using MagicAST.AST.Quantities;
@@ -577,6 +578,18 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   {
     var trimmed = effectText.Trim().TrimEnd('.').Trim();
 
+    var opponentExileThenExile = TryParseOpponentExileCreatureThenExileGraveyardCard(trimmed);
+    if (opponentExileThenExile is not null)
+    {
+      return opponentExileThenExile;
+    }
+
+    var counterExileCast = TryParseCounterExileThenCastWithoutPaying(trimmed);
+    if (counterExileCast is not null)
+    {
+      return counterExileCast;
+    }
+
     var loseGainLifeWhereX = TryParseLoseAndGainLifeWhereX(trimmed);
     if (loseGainLifeWhereX is not null)
     {
@@ -757,6 +770,120 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       new CompositeEffect
       {
         Effects = creates,
+      },
+    };
+  }
+
+  /// <summary>
+  /// Bundled one-shot counter-exile-recast composite (Transcendent Dragon):
+  /// "counter target spell. If that spell is countered this way, exile it instead
+  /// of putting it into its owner's graveyard, then you may cast it without paying
+  /// its mana cost." Returns the gold's flat two-element list:
+  /// <list type="number">
+  ///   <item>a <c>counterSpell</c> with <c>ExileInsteadOfGraveyard:true</c> — the
+  ///   counter and its zone-change replacement are a single sentence whose follow-up
+  ///   references the exiled card, so the "exile instead" rides on the counter
+  ///   (CR 406.6 linked-exile setup);</item>
+  ///   <item>an <c>optional</c> wrapping <c>castWithoutPaying{Target:It}</c> — "then
+  ///   you may cast it".</item>
+  /// </list>
+  /// Both effects sit inside one triggered ability — the recast is bundled in the
+  /// resolving ability with no priority window (ADR 0004 "topology, not annotation").
+  /// The "If that spell is countered this way" framing is engine bookkeeping
+  /// (the replacement only applies when the counter resolved), not a separate
+  /// condition node. CR 701.5 (counter); CR 117.7 ("you may").
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseCounterExileThenCastWithoutPaying(string effectText)
+  {
+    var match = Regex.Match(
+      effectText,
+      @"^counter\s+target\s+spell\.\s+If\s+that\s+spell\s+is\s+countered\s+this\s+way,\s*exile\s+it\s+instead\s+of\s+putting\s+it\s+into\s+its\s+owner's\s+graveyard,\s*then\s+you\s+may\s+cast\s+it\s+without\s+paying\s+its\s+mana\s+cost$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    return new List<Effect>
+    {
+      new CounterSpellEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter { CardTypes = ["spell"] },
+        },
+        ExileInsteadOfGraveyard = true,
+      },
+      new OptionalEffect
+      {
+        Inner = new CastWithoutPayingEffect
+        {
+          Target = new ObjectReference { Kind = ObjectReferenceKind.It },
+        },
+      },
+    };
+  }
+
+  /// <summary>
+  /// CR 406.6 linked-exile setup composite: "target opponent exiles a nontoken
+  /// creature they control, then they exile a nonland card from their graveyard."
+  /// (Azula, Cunning Usurper). The targeted opponent performs two exiles; the
+  /// "they" back-references that same opponent. Returns the gold's flat two-element
+  /// [exile, exile] list.
+  ///
+  /// <para>
+  /// Both exiles are choices made by the opponent rather than the ability's
+  /// controller, so neither carries the "exile target" surface of
+  /// <see cref="Triggered.Rules.ExileTargetTriggeredRule"/>. The creature is a
+  /// targeted reference ("target opponent ... a nontoken creature they control");
+  /// the graveyard card is a Designated reference (the opponent picks one of their
+  /// own nonland cards, no "target" keyword). The "exiled with Azula" linkage is
+  /// recovered by the separate static permission, not threaded here (ADR 0004
+  /// reference-not-resolution). Rule 701.13 (exile); Rule 111 (token); CR 406.6.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseOpponentExileCreatureThenExileGraveyardCard(string effectText)
+  {
+    var match = Regex.Match(
+      effectText,
+      @"^target\s+opponent\s+exiles\s+a\s+nontoken\s+creature\s+they\s+control,\s*then\s+they\s+exile\s+a\s+nonland\s+card\s+from\s+their\s+graveyard$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    return new List<Effect>
+    {
+      new ExileEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Controller = ControllerFilter.Opponent,
+            IsToken = false,
+          },
+        },
+      },
+      new ExileEffect
+      {
+        Target = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Designated,
+          Filter = new ObjectFilter
+          {
+            CardTypes = ["card"],
+            Zone = Zone.Graveyard,
+            Controller = ControllerFilter.Opponent,
+            ExcludedCardTypes = ["land"],
+          },
+        },
       },
     };
   }
