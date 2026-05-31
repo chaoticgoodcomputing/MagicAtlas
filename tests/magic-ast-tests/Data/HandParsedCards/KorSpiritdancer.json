@@ -41,7 +41,7 @@
                 "Expression": "+2 for each Aura attached to it",
                 "BaseQuantity": {
                   "QuantityType": "count",
-                  "CountOf": "Aura attached to it"
+                  "CountOf": { "Subtypes": ["Aura"], "AttachedTo": { "Kind": "EnchantedOrEquipped" } }
                 },
                 "Operation": "multiply"
               },
@@ -50,7 +50,7 @@
                 "Expression": "+2 for each Aura attached to it",
                 "BaseQuantity": {
                   "QuantityType": "count",
-                  "CountOf": "Aura attached to it"
+                  "CountOf": { "Subtypes": ["Aura"], "AttachedTo": { "Kind": "EnchantedOrEquipped" } }
                 },
                 "Operation": "multiply"
               }

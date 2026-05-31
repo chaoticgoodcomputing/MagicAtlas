@@ -40,14 +40,20 @@ public sealed class EnchantedPTForEachRule : IStaticRule
     }
 
     var filterPhrase = match.Groups["filter"].Value.Trim();
+    var filter = StaticRuleHelpers.BuildObjectCountFilter(filterPhrase);
+    if (filter is null)
+    {
+      return null;
+    }
+    var countQuantity = new MagicAST.AST.Quantities.CountQuantity { CountOf = filter };
 
     MagicAST.AST.Quantities.Quantity powerModifier = power == 0
       ? MagicAST.AST.Quantities.LiteralQuantity.Of(0)
-      : new MagicAST.AST.Quantities.CountQuantity { CountOf = filterPhrase };
+      : countQuantity;
 
     MagicAST.AST.Quantities.Quantity toughnessModifier = toughness == 0
       ? MagicAST.AST.Quantities.LiteralQuantity.Of(0)
-      : new MagicAST.AST.Quantities.CountQuantity { CountOf = filterPhrase };
+      : countQuantity;
 
     return
     [

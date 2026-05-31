@@ -29,11 +29,11 @@
               },
               "PowerModifier": {
                 "QuantityType": "count",
-                "CountOf": "creature you control"
+                "CountOf": { "CardTypes": ["creature"], "Controller": "You" }
               },
               "ToughnessModifier": {
                 "QuantityType": "count",
-                "CountOf": "creature you control"
+                "CountOf": { "CardTypes": ["creature"], "Controller": "You" }
               }
             }
           ]

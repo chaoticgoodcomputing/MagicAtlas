@@ -1,6 +1,7 @@
 namespace MagicAST.AST.Quantities;
 
 using System.Text.Json.Serialization;
+using MagicAST.AST.References;
 using MagicAST.Serialization;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
@@ -83,21 +84,47 @@ public enum DerivedKind
 
 /// <summary>
 /// A quantity that counts objects matching a filter.
-/// e.g., "the number of creatures you control"
+/// e.g., "the number of creatures you control".
+///
+/// <para>
+/// <see cref="CountOf"/> is a structured <see cref="ObjectFilter"/> rather than
+/// a verbatim phrase: counting "lands you control" or "Aura and Equipment
+/// attached to it" is the same object-selection semantics the rest of the AST
+/// expresses through <see cref="ObjectFilter"/> (card types, subtypes,
+/// supertypes, controller, the <see cref="ObjectFilter.AttachedTo"/> relational
+/// axis). Counting <i>counters</i> — a number that is not a count of objects —
+/// is a distinct shape carried by <see cref="CounterCountQuantity"/>.
+/// </para>
 /// </summary>
 [OracleQuantity("count")]
 public sealed record CountQuantity : Quantity
 {
   /// <summary>
-  /// What to count.
+  /// The class of objects being counted.
   /// </summary>
-  public required string CountOf { get; init; }
+  public required ObjectFilter CountOf { get; init; }
+}
+
+/// <summary>
+/// A quantity that counts <b>counters</b> of a named kind on an object —
+/// "for each oil counter on it" (Serum-Core Chimera). Distinct from
+/// <see cref="CountQuantity"/>: a counter is not an object, so an
+/// <see cref="ObjectFilter"/> cannot express "how many oil counters are on this
+/// permanent". The kind of counter (<see cref="CounterType"/>) and the object
+/// bearing them (<see cref="On"/>) are the two axes.
+/// </summary>
+[OracleQuantity("counterCount")]
+public sealed record CounterCountQuantity : Quantity
+{
+  /// <summary>
+  /// The counter kind being counted, e.g. "oil", "+1/+1", "charge".
+  /// </summary>
+  public required string CounterType { get; init; }
 
   /// <summary>
-  /// Optional filter text.
+  /// The object whose counters are counted — "on it" is <c>{Kind:"Self"}</c>.
   /// </summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public string? Filter { get; init; }
+  public required ObjectReference On { get; init; }
 }
 
 /// <summary>
@@ -120,15 +147,32 @@ public sealed record UpToQuantity : Quantity
 
 /// <summary>
 /// A quantity derived from a calculation or expression.
-/// e.g., "half X rounded down", "twice that many"
+/// e.g., "half X rounded down", "twice that many", "+2 for each Aura attached".
+///
+/// <para>
+/// A calculated quantity carries EITHER a structured <see cref="Operand"/>
+/// (a simple "multiply the base count by N") OR a free-text
+/// <see cref="Expression"/> for shapes not yet structured. Exactly one is
+/// expected; both are optional so each authoring site can use whichever fits.
+/// </para>
 /// </summary>
 [OracleQuantity("calculated")]
 public sealed record CalculatedQuantity : Quantity
 {
   /// <summary>
-  /// The expression describing the calculation.
+  /// Free-text description of the calculation, for shapes not expressed by the
+  /// structured <see cref="Operand"/>. Optional.
   /// </summary>
-  public required string Expression { get; init; }
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public string? Expression { get; init; }
+
+  /// <summary>
+  /// The structured scalar operand for a simple arithmetic operation —
+  /// e.g. <c>Operation="multiply", Operand=2</c> for "+2 for each …".
+  /// Optional; mutually exclusive with <see cref="Expression"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? Operand { get; init; }
 
   /// <summary>
   /// The base quantity being modified (optional).

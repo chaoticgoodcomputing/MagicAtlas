@@ -45,7 +45,7 @@
               "EffectType": "loseLife",
               "Amount": {
                 "QuantityType": "count",
-                "CountOf": "Shrines you control"
+                "CountOf": { "Subtypes": ["Shrine"], "Controller": "You" }
               },
               "Player": {
                 "Kind": "EachOpponent"
@@ -55,7 +55,7 @@
               "EffectType": "gainLife",
               "Amount": {
                 "QuantityType": "count",
-                "CountOf": "Shrines you control"
+                "CountOf": { "Subtypes": ["Shrine"], "Controller": "You" }
               },
               "Player": {
                 "Kind": "You"
