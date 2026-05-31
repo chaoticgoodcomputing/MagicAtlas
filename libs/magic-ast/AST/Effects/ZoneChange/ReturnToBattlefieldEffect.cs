@@ -27,4 +27,13 @@ public sealed record ReturnToBattlefieldEffect : Effect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public bool? Transformed { get; init; }
+
+  /// <summary>
+  /// "return it to the battlefield with [N] [type] counters on it" — counters placed
+  /// on the permanent as part of the return action (Persist/Undying-style patterns).
+  /// Parallel to <see cref="ExileEffect.WithCounters"/>: the return gains this
+  /// structure only when the card prints the counter modifier.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public CounterPlacement? WithCounters { get; init; }
 }
