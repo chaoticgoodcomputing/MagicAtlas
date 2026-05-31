@@ -108,7 +108,7 @@ public class KeywordExpanderTests
       var protection = (ProtectionEffect)staticAbility.Effects[0];
       Assert.That(protection.From, Has.Count.EqualTo(1));
       Assert.That(protection.From[0].Kind, Is.EqualTo(ProtectionQualityKind.Color));
-      Assert.That(protection.From[0].Value, Is.EqualTo("red"));
+      Assert.That(protection.From[0].Value, Is.EqualTo("R"));
   }
 
   [Test]
