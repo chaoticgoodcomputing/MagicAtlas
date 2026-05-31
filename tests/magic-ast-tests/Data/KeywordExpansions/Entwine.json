@@ -1,0 +1,24 @@
+{
+  "Keyword": "Entwine",
+  "Parameter": "{2}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Entwine",
+    "Effects": [
+      {
+        "EffectType": "additionalCastCost",
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "generic",
+              "GenericAmount": 2
+            }
+          ]
+        },
+        "IsOptional": true,
+        "Repeatable": false
+      }
+    ]
+  }
+}
