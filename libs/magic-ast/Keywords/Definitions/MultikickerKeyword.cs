@@ -1,18 +1,26 @@
 namespace MagicAST.Keywords.Definitions;
 
 using MagicAST.AST.Abilities;
-using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects.CardFlow;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
-/// Multikicker {cost}: You may pay an additional {cost} any number of times as you
-/// cast this spell.
-/// Rule 702.33c. A Kicker variant where the additional cost may be paid any number
-/// of times rather than at most once. MAST records the keyword and the multikicker
-/// cost; the "for each time it was kicked" scaling on conditional effects is inferred
-/// from the rules (descriptive-not-engine doctrine).
+/// Multikicker {cost}: You may pay an additional {cost} any number of times as you cast
+/// this spell.
+///
+/// <para>
+/// CR 702.33c: "Multikicker is a variant of the kicker ability. 'Multikicker [cost]'
+/// means 'You may pay an additional [cost] any number of times as you cast this spell.'
+/// A multikicker cost is a kicker cost."
+/// </para>
+///
+/// <para>
+/// Emits a <c>StaticAbility</c> carrying an <see cref="AdditionalCastCostEffect"/> with
+/// <c>IsOptional:true</c> ("you may pay") and <c>Repeatable:true</c> ("any number of
+/// times"), sharing the same primitive as Kicker, Buyback, Replicate, etc.
+/// </para>
 /// </summary>
 [Keyword]
 public sealed class MultikickerKeyword : IKeyword
@@ -31,10 +39,15 @@ public sealed class MultikickerKeyword : IKeyword
     select (Ability)new StaticAbility
     {
       KeywordSource = "Multikicker",
-      Effects = [new MultikickerEffect
-      {
-        Cost = cost,
-      }],
+      Effects =
+      [
+        new AdditionalCastCostEffect
+        {
+          Cost = cost,
+          IsOptional = true,
+          Repeatable = true,
+        },
+      ],
       Reminder = reminder,
     }
   );
