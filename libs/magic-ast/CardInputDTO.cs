@@ -63,8 +63,18 @@ public sealed record CardInputDTO
   public IReadOnlyList<string>? Colors { get; init; }
 
   /// <summary>
-  /// The card's color identity (for Commander format).
-  /// Includes all colors in mana cost and rules text.
+  /// The card's color indicator (CR 204) — the colored dot beside the type line that
+  /// defines color for cards with no mana cost or whose color differs from their cost.
+  /// Not present in mana cost or rules text, so it is the only source of those colors
+  /// for color-identity derivation (CR 903.4). Example: ["R"] for a Kobold.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? ColorIndicator { get; init; }
+
+  /// <summary>
+  /// The card's color identity (for Commander format) as supplied by the source data.
+  /// NOTE: the parser DERIVES color identity itself (see ColorIdentityDeriver) and does
+  /// not consume this; it is retained only as the source-of-truth reference value.
   /// Example: ["G"] or ["W", "U", "B"]
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -147,4 +157,11 @@ public sealed record CardFaceDTO
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? Colors { get; init; }
+
+  /// <summary>
+  /// The face's color indicator (CR 204) — included in color-identity derivation,
+  /// across both faces (CR 903.4d).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? ColorIndicator { get; init; }
 }

@@ -46,6 +46,9 @@ public partial record MastRawScryfallCard
   [SerializedLabel("color_identity")]
   public List<string>? ColorIdentity { get; init; }
 
+  [SerializedLabel("color_indicator")]
+  public List<string>? ColorIndicator { get; init; }
+
   [SerializedLabel("keywords")]
   public List<string>? Keywords { get; init; }
 
@@ -98,4 +101,7 @@ public partial record MastRawScryfallCardFace
 
   [SerializedLabel("colors")]
   public List<string>? Colors { get; init; }
+
+  [SerializedLabel("color_indicator")]
+  public List<string>? ColorIndicator { get; init; }
 }

@@ -44,6 +44,8 @@ public static partial class ColorIdentityDeriver
 
     CollectFromCost(input.ManaCost, colors);
     CollectFromRulesText(input.OracleText, colors);
+    CollectFromLandTypes(input.TypeLine, colors);
+    CollectFromColorIndicator(input.ColorIndicator, colors);
 
     if (input.CardFaces is not null)
     {
@@ -51,8 +53,17 @@ public static partial class ColorIdentityDeriver
       {
         CollectFromCost(face.ManaCost, colors);
         CollectFromRulesText(face.OracleText, colors);
+        CollectFromLandTypes(face.TypeLine, colors);
+        CollectFromColorIndicator(face.ColorIndicator, colors);
       }
     }
+
+    // NOTE: reminder text is uniformly ignored (CR 903.4c) — there is no per-keyword
+    // exception. Extort's reminder "{W/B}" does NOT contribute color identity (Syndic
+    // of Tithes is [W], not [W,B]); Scryfall's [W,B] is a legacy Gatecrash-era ruling
+    // that predates the 903.4c clarification. This is a deliberate, CR-authoritative
+    // divergence from the source database — the parser deriving the more-correct value
+    // is exactly the point of deriving rather than echoing.
 
     return Wubrg.Where(colors.Contains).ToList();
   }
@@ -74,6 +85,60 @@ public static partial class ColorIdentityDeriver
     {
       var withoutReminder = ReminderTextPattern().Replace(oracleText, string.Empty);
       CollectManaSymbolColors(withoutReminder, colors);
+    }
+  }
+
+  // Color indicator (CR 204): the colored dot beside the type line. Scryfall supplies
+  // it as already-normalized W/U/B/R/G codes; it contributes directly to color identity
+  // (CR 903.4) and is the ONLY source for cards colored without a mana symbol (Kobolds,
+  // many DFC backs). See the CR 903.4 Civilized Scholar / Homicidal Brute example.
+  private static void CollectFromColorIndicator(IReadOnlyList<string>? indicator, HashSet<string> colors)
+  {
+    if (indicator is null)
+    {
+      return;
+    }
+
+    foreach (var code in indicator)
+    {
+      if (code is "W" or "U" or "B" or "R" or "G")
+      {
+        colors.Add(code);
+      }
+    }
+  }
+
+  // Basic land types grant intrinsic mana abilities (CR 305.6) producing colored
+  // mana; those colors are part of color identity (CR 903.5d ties a basic-land-type
+  // card's legality to "each color of mana it could produce"). The "({T}: Add …)"
+  // reminder that spells the ability out is ignored (903.4c) — the color comes from
+  // the TYPE, not the reminder. Sacred Foundry ("Land — Mountain Plains") → [R,W].
+  private static void CollectFromLandTypes(string? typeLine, HashSet<string> colors)
+  {
+    if (string.IsNullOrEmpty(typeLine))
+    {
+      return;
+    }
+
+    if (typeLine.Contains("Plains", StringComparison.Ordinal))
+    {
+      colors.Add("W");
+    }
+    if (typeLine.Contains("Island", StringComparison.Ordinal))
+    {
+      colors.Add("U");
+    }
+    if (typeLine.Contains("Swamp", StringComparison.Ordinal))
+    {
+      colors.Add("B");
+    }
+    if (typeLine.Contains("Mountain", StringComparison.Ordinal))
+    {
+      colors.Add("R");
+    }
+    if (typeLine.Contains("Forest", StringComparison.Ordinal))
+    {
+      colors.Add("G");
     }
   }
 

@@ -69,6 +69,7 @@ public static class ProjectToCardInputStep
       Toughness = card.Toughness,
       Loyalty = card.Loyalty,
       Colors = card.Colors?.AsReadOnly(),
+      ColorIndicator = card.ColorIndicator?.AsReadOnly(),
       ColorIdentity = card.ColorIdentity?.AsReadOnly(),
       Keywords = card.Keywords?.AsReadOnly(),
       Layout = card.Layout,
@@ -86,5 +87,6 @@ public static class ProjectToCardInputStep
       Toughness = face.Toughness,
       Loyalty = face.Loyalty,
       Colors = face.Colors?.AsReadOnly(),
+      ColorIndicator = face.ColorIndicator?.AsReadOnly(),
     };
 }
