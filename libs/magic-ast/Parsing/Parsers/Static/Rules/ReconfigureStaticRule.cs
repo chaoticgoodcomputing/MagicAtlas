@@ -75,7 +75,7 @@ public sealed class ReconfigureStaticRule : IStaticRule
     //  Activate only as a sorcery."
     var attachAbility = new ActivatedAbility
     {
-      KeywordSource = "Reconfigure",
+      KeywordSource = KeywordAbility.Reconfigure,
       Costs = [cost],
       Effects =
       [
@@ -103,7 +103,7 @@ public sealed class ReconfigureStaticRule : IStaticRule
     // has no existing structured node and is omitted (no free-text, per contract).
     var unattachAbility = new ActivatedAbility
     {
-      KeywordSource = "Reconfigure",
+      KeywordSource = KeywordAbility.Reconfigure,
       Costs = [cost],
       Effects = [new UnattachEffect()],
       Restrictions = [ActivationRestriction.OnlyAsSorcery],

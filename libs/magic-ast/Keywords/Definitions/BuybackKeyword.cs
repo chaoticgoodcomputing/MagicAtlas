@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects.Keyword;
@@ -39,7 +40,7 @@ public sealed class BuybackKeyword : IKeyword
       ParameterType = KeywordParameterType.ManaCost,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Buyback",
+        KeywordSource = KeywordAbility.Buyback,
         Effects = [new BuybackEffect
         {
           BuybackCost = ParseManaCost(parameter),
@@ -54,7 +55,7 @@ public sealed class BuybackKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Buyback",
+      KeywordSource = KeywordAbility.Buyback,
       Effects = [new BuybackEffect { BuybackCost = cost }],
       Reminder = reminder,
     }

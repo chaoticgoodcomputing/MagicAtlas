@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects.Keyword;
@@ -33,7 +34,7 @@ public sealed class CumulativeUpkeepKeyword : IKeyword
       ParameterType = KeywordParameterType.ManaCost,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Cumulative upkeep",
+        KeywordSource = KeywordAbility.CumulativeUpkeep,
         Effects = [new CumulativeUpkeepEffect
         {
           Cost = ParseManaCost(parameter),
@@ -49,7 +50,7 @@ public sealed class CumulativeUpkeepKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Cumulative upkeep",
+      KeywordSource = KeywordAbility.CumulativeUpkeep,
       Effects = [new CumulativeUpkeepEffect
       {
         Cost = cost,

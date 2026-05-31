@@ -37,7 +37,7 @@
           "Effects": [
             {
               "EffectType": "keywordAbility",
-              "Keyword": "BattleCry"
+              "Keyword": "Battle cry"
             }
           ]
         },
@@ -47,7 +47,7 @@
           "Effects": [
             {
               "EffectType": "keywordAbility",
-              "Keyword": "BattleCry"
+              "Keyword": "Battle cry"
             }
           ]
         }

@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.Parsing.Tokens;
@@ -43,7 +44,7 @@ public sealed class FirstStrikeKeyword : IKeyword
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility
       {
-        KeywordSource = "First strike",
+        KeywordSource = KeywordAbility.FirstStrike,
         Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.First }],
       },
     };
@@ -55,7 +56,7 @@ public sealed class FirstStrikeKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "First strike",
+      KeywordSource = KeywordAbility.FirstStrike,
       Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.First }],
       Reminder = reminder,
     }

@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -28,7 +29,7 @@ public sealed class ConvokeKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Convoke",
+      KeywordSource = KeywordAbility.Convoke,
       Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Convoke }],
       Reminder = reminder,
     }

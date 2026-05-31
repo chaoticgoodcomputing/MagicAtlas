@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -27,7 +28,7 @@ public sealed class DayboundKeyword : IKeyword
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility
       {
-        KeywordSource = "Daybound",
+        KeywordSource = KeywordAbility.Daybound,
         Effects = [new DayNightEffect { Phase = DayNightPhase.Daybound }],
       },
     };
@@ -38,7 +39,7 @@ public sealed class DayboundKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Daybound",
+      KeywordSource = KeywordAbility.Daybound,
       Effects = [new DayNightEffect { Phase = DayNightPhase.Daybound }],
       Reminder = reminder,
     }

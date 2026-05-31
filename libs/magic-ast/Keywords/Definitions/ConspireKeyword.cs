@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -28,7 +29,7 @@ public sealed class ConspireKeyword : IKeyword
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility
       {
-        KeywordSource = "Conspire",
+        KeywordSource = KeywordAbility.Conspire,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Conspire }],
       },
     };
@@ -39,7 +40,7 @@ public sealed class ConspireKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Conspire",
+      KeywordSource = KeywordAbility.Conspire,
       Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Conspire }],
       Reminder = reminder,
     }

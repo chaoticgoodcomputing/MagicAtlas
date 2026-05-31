@@ -8,14 +8,20 @@ using System.Text.Json.Serialization;
 /// casing-proof and exhaustively matchable.
 ///
 /// <para>
-/// Seeded with the keyword abilities currently structured by
-/// <see cref="KeywordCharacteristic"/> (the evasion-relevant keywords that
-/// appear inside <see cref="ObjectFilter.Characteristics"/>). It grows as
-/// further keyword-as-string sites are subsumed — notably the planned
-/// migration of <c>Ability.KeywordSource</c>. Only parameterless keyword
-/// abilities belong here; parameterized keywords (Protection from …, Enchant …,
-/// landcycling) carry their parameter separately and are added when that
-/// migration lands.
+/// This is the typed target of <c>Ability.KeywordSource</c> (ADR 0001): every
+/// keyword-as-string a producer emits maps to a member here. Members whose
+/// default serialization (the member name verbatim) differs from the exact
+/// printed string carry <see cref="JsonStringEnumMemberNameAttribute"/> so the
+/// serialized JSON round-trips unchanged (e.g. <c>BattleCry</c> ⇄
+/// <c>"Battle cry"</c>).
+/// </para>
+///
+/// <para>
+/// Parameterized keywords carry their parameter separately (in the expanded
+/// effect / reminder), so only their bare identity appears here:
+/// <c>Affinity</c> (the "for &lt;type&gt;" lives in the effect),
+/// <c>Champion</c> (the championed type lives in <c>ChampionEffect</c>),
+/// <c>Landcycling</c> (the land type lives in <c>TypecyclingEffect.Type</c>).
 /// </para>
 /// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -30,8 +36,17 @@ public enum KeywordAbility
   /// <summary>Shadow (CR 702.28).</summary>
   Shadow,
 
+  /// <summary>Afflict (CR 702).</summary>
+  Afflict,
+
+  /// <summary>Afterlife (CR 702).</summary>
+  Afterlife,
+
   /// <summary>Aftermath (CR 702).</summary>
   Aftermath,
+
+  /// <summary>Amplify (CR 702).</summary>
+  Amplify,
 
   /// <summary>Ascend (CR 702).</summary>
   Ascend,
@@ -39,20 +54,46 @@ public enum KeywordAbility
   /// <summary>Assist (CR 702).</summary>
   Assist,
 
+  /// <summary>Awaken (CR 702).</summary>
+  Awaken,
+
+  /// <summary>Backup (CR 702).</summary>
+  Backup,
+
   /// <summary>Banding (CR 702).</summary>
   Banding,
 
   /// <summary>Bargain (CR 702).</summary>
   Bargain,
 
-  /// <summary>BattleCry (CR 702).</summary>
+  /// <summary>Battle cry (CR 702).</summary>
+  [JsonStringEnumMemberName("Battle cry")]
   BattleCry,
+
+  /// <summary>Bestow (CR 702).</summary>
+  Bestow,
+
+  /// <summary>Blitz (CR 702).</summary>
+  Blitz,
+
+  /// <summary>Bloodthirst (CR 702).</summary>
+  Bloodthirst,
+
+  /// <summary>Bushido (CR 702).</summary>
+  Bushido,
+
+  /// <summary>Buyback (CR 702).</summary>
+  Buyback,
 
   /// <summary>Cascade (CR 702).</summary>
   Cascade,
 
   /// <summary>Changeling (CR 702).</summary>
   Changeling,
+
+  /// <summary>Choose a Background (CR 702).</summary>
+  [JsonStringEnumMemberName("Choose a Background")]
+  ChooseABackground,
 
   /// <summary>Cipher (CR 702).</summary>
   Cipher,
@@ -65,6 +106,22 @@ public enum KeywordAbility
 
   /// <summary>Convoke (CR 702).</summary>
   Convoke,
+
+  /// <summary>Crew (CR 702).</summary>
+  Crew,
+
+  /// <summary>Cumulative upkeep (CR 702).</summary>
+  [JsonStringEnumMemberName("Cumulative upkeep")]
+  CumulativeUpkeep,
+
+  /// <summary>Cycling (CR 702).</summary>
+  Cycling,
+
+  /// <summary>Dash (CR 702).</summary>
+  Dash,
+
+  /// <summary>Daybound (CR 702).</summary>
+  Daybound,
 
   /// <summary>Deathtouch (CR 702).</summary>
   Deathtouch,
@@ -81,14 +138,58 @@ public enum KeywordAbility
   /// <summary>Devoid (CR 702).</summary>
   Devoid,
 
-  /// <summary>DoctorsCompanion (CR 702).</summary>
+  /// <summary>Devour (CR 702).</summary>
+  Devour,
+
+  /// <summary>Disguise (CR 702).</summary>
+  Disguise,
+
+  /// <summary>Doctor's companion (CR 702).</summary>
+  [JsonStringEnumMemberName("Doctor's companion")]
   DoctorsCompanion,
+
+  /// <summary>Double strike (CR 702).</summary>
+  [JsonStringEnumMemberName("Double strike")]
+  DoubleStrike,
+
+  /// <summary>Dredge (CR 702).</summary>
+  Dredge,
+
+  /// <summary>Echo (CR 702).</summary>
+  Echo,
+
+  /// <summary>Embalm (CR 702).</summary>
+  Embalm,
+
+  /// <summary>Emerge (CR 702).</summary>
+  Emerge,
+
+  /// <summary>Enchant (CR 702.5).</summary>
+  Enchant,
+
+  /// <summary>Encore (CR 702).</summary>
+  Encore,
 
   /// <summary>Enlist (CR 702).</summary>
   Enlist,
 
+  /// <summary>Entwine (CR 702).</summary>
+  Entwine,
+
   /// <summary>Equip (CR 702.6) — the activated ability that attaches an Equipment to a creature. The keyword identity a reference filter matches on (e.g. Strong Back's "Equip abilities you activate") per ADR 0003.</summary>
   Equip,
+
+  /// <summary>Escalate (CR 702).</summary>
+  Escalate,
+
+  /// <summary>Escape (CR 702).</summary>
+  Escape,
+
+  /// <summary>Eternalize (CR 702).</summary>
+  Eternalize,
+
+  /// <summary>Evoke (CR 702).</summary>
+  Evoke,
 
   /// <summary>Evolve (CR 702).</summary>
   Evolve,
@@ -102,14 +203,52 @@ public enum KeywordAbility
   /// <summary>Extort (CR 702).</summary>
   Extort,
 
+  /// <summary>Fabricate (CR 702).</summary>
+  Fabricate,
+
+  /// <summary>Fading (CR 702).</summary>
+  Fading,
+
+  /// <summary>Fear (CR 702).</summary>
+  Fear,
+
+  /// <summary>Firebending (CR 702.189).</summary>
+  Firebending,
+
+  /// <summary>First strike (CR 702).</summary>
+  [JsonStringEnumMemberName("First strike")]
+  FirstStrike,
+
   /// <summary>Flanking (CR 702).</summary>
   Flanking,
 
-  /// <summary>ForMirrodin (CR 702).</summary>
+  /// <summary>Flash (CR 702).</summary>
+  Flash,
+
+  /// <summary>Flashback (CR 702).</summary>
+  Flashback,
+
+  /// <summary>For Mirrodin! (CR 702).</summary>
+  [JsonStringEnumMemberName("For Mirrodin")]
   ForMirrodin,
+
+  /// <summary>Forestwalk (CR 702.14).</summary>
+  Forestwalk,
+
+  /// <summary>Foretell (CR 702).</summary>
+  Foretell,
+
+  /// <summary>Freerunning (CR 702).</summary>
+  Freerunning,
 
   /// <summary>Fuse (CR 702).</summary>
   Fuse,
+
+  /// <summary>Graft (CR 702).</summary>
+  Graft,
+
+  /// <summary>Harmonize (CR 702).</summary>
+  Harmonize,
 
   /// <summary>Haste (CR 702).</summary>
   Haste,
@@ -120,11 +259,17 @@ public enum KeywordAbility
   /// <summary>Hexproof (CR 702).</summary>
   Hexproof,
 
+  /// <summary>Hideaway (CR 702).</summary>
+  Hideaway,
+
   /// <summary>Horsemanship (CR 702).</summary>
   Horsemanship,
 
   /// <summary>Improvise (CR 702).</summary>
   Improvise,
+
+  /// <summary>Increment (CR 702).</summary>
+  Increment,
 
   /// <summary>Indestructible (CR 702).</summary>
   Indestructible,
@@ -135,26 +280,100 @@ public enum KeywordAbility
   /// <summary>Ingest (CR 702).</summary>
   Ingest,
 
-  /// <summary>JobSelect (CR 702).</summary>
+  /// <summary>Intimidate (CR 702).</summary>
+  Intimidate,
+
+  /// <summary>Islandwalk (CR 702.14).</summary>
+  Islandwalk,
+
+  /// <summary>Job select (CR 702).</summary>
+  [JsonStringEnumMemberName("Job select")]
   JobSelect,
 
-  /// <summary>JumpStart (CR 702).</summary>
+  /// <summary>Jump-start (CR 702).</summary>
+  [JsonStringEnumMemberName("Jump-start")]
   JumpStart,
+
+  /// <summary>Kicker (CR 702.33).</summary>
+  Kicker,
 
   /// <summary>Learn (CR 702).</summary>
   Learn,
 
-  /// <summary>LivingWeapon (CR 702).</summary>
+  /// <summary>Level up (CR 702.87).</summary>
+  [JsonStringEnumMemberName("Level up")]
+  LevelUp,
+
+  /// <summary>Lifelink (CR 702).</summary>
+  Lifelink,
+
+  /// <summary>Living weapon (CR 702).</summary>
+  [JsonStringEnumMemberName("Living weapon")]
   LivingWeapon,
+
+  /// <summary>Madness (CR 702).</summary>
+  Madness,
+
+  /// <summary>Mayhem (CR 702).</summary>
+  Mayhem,
+
+  /// <summary>Megamorph (CR 702).</summary>
+  Megamorph,
 
   /// <summary>Melee (CR 702).</summary>
   Melee,
 
+  /// <summary>Menace (CR 702).</summary>
+  Menace,
+
   /// <summary>Mentor (CR 702).</summary>
   Mentor,
 
+  /// <summary>Miracle (CR 702).</summary>
+  Miracle,
+
+  /// <summary>Mobilize (CR 702).</summary>
+  Mobilize,
+
+  /// <summary>Modular (CR 702).</summary>
+  Modular,
+
+  /// <summary>Morph (CR 702).</summary>
+  Morph,
+
+  /// <summary>Mountainwalk (CR 702.14).</summary>
+  Mountainwalk,
+
+  /// <summary>Multikicker (CR 702.33).</summary>
+  Multikicker,
+
+  /// <summary>Mutate (CR 702).</summary>
+  Mutate,
+
   /// <summary>Myriad (CR 702).</summary>
   Myriad,
+
+  /// <summary>Nightbound (CR 702).</summary>
+  Nightbound,
+
+  /// <summary>Ninjutsu (CR 702).</summary>
+  Ninjutsu,
+
+  /// <summary>Offspring (CR 702).</summary>
+  Offspring,
+
+  /// <summary>Outlast (CR 702).</summary>
+  Outlast,
+
+  /// <summary>Overload (CR 702).</summary>
+  Overload,
+
+  /// <summary>Partner (CR 702.124).</summary>
+  Partner,
+
+  /// <summary>Partner with (CR 702.124).</summary>
+  [JsonStringEnumMemberName("Partner with")]
+  PartnerWith,
 
   /// <summary>Persist (CR 702).</summary>
   Persist,
@@ -162,8 +381,20 @@ public enum KeywordAbility
   /// <summary>Phasing (CR 702).</summary>
   Phasing,
 
+  /// <summary>Plainswalk (CR 702.14).</summary>
+  Plainswalk,
+
+  /// <summary>Plot (CR 702).</summary>
+  Plot,
+
   /// <summary>Prepared (CR 702).</summary>
   Prepared,
+
+  /// <summary>Protection (CR 702.16).</summary>
+  Protection,
+
+  /// <summary>Prototype (CR 702).</summary>
+  Prototype,
 
   /// <summary>Provoke (CR 702).</summary>
   Provoke,
@@ -174,11 +405,29 @@ public enum KeywordAbility
   /// <summary>Rebound (CR 702).</summary>
   Rebound,
 
+  /// <summary>Reconfigure (CR 702).</summary>
+  Reconfigure,
+
+  /// <summary>Recover (CR 702).</summary>
+  Recover,
+
+  /// <summary>Renown (CR 702).</summary>
+  Renown,
+
+  /// <summary>Replicate (CR 702).</summary>
+  Replicate,
+
   /// <summary>Retrace (CR 702).</summary>
   Retrace,
 
   /// <summary>Riot (CR 702).</summary>
   Riot,
+
+  /// <summary>Saddle (CR 702).</summary>
+  Saddle,
+
+  /// <summary>Scavenge (CR 702).</summary>
+  Scavenge,
 
   /// <summary>Shroud (CR 702).</summary>
   Shroud,
@@ -186,16 +435,33 @@ public enum KeywordAbility
   /// <summary>Skulk (CR 702).</summary>
   Skulk,
 
+  /// <summary>Sneak (CR 702).</summary>
+  Sneak,
+
   /// <summary>Soulbond (CR 702).</summary>
   Soulbond,
 
-  /// <summary>SplitSecond (CR 702).</summary>
+  /// <summary>Soulshift (CR 702).</summary>
+  Soulshift,
+
+  /// <summary>Spectacle (CR 702).</summary>
+  Spectacle,
+
+  /// <summary>Splice (CR 702).</summary>
+  Splice,
+
+  /// <summary>Split second (CR 702).</summary>
+  [JsonStringEnumMemberName("Split second")]
   SplitSecond,
 
   /// <summary>Spree (CR 702).</summary>
   Spree,
 
-  /// <summary>StartYourEngines (CR 702).</summary>
+  /// <summary>Squad (CR 702).</summary>
+  Squad,
+
+  /// <summary>Start your engines! (CR 702).</summary>
+  [JsonStringEnumMemberName("Start your engines")]
   StartYourEngines,
 
   /// <summary>Storm (CR 702).</summary>
@@ -204,11 +470,24 @@ public enum KeywordAbility
   /// <summary>Sunburst (CR 702).</summary>
   Sunburst,
 
+  /// <summary>Surge (CR 702).</summary>
+  Surge,
+
+  /// <summary>Suspend (CR 702).</summary>
+  Suspend,
+
+  /// <summary>Swampwalk (CR 702.14).</summary>
+  Swampwalk,
+
   /// <summary>TakeInitiative (CR 702).</summary>
   TakeInitiative,
 
-  /// <summary>TotemArmor (CR 702).</summary>
+  /// <summary>Totem armor (CR 702).</summary>
+  [JsonStringEnumMemberName("Totem armor")]
   TotemArmor,
+
+  /// <summary>Toxic (CR 702).</summary>
+  Toxic,
 
   /// <summary>Training (CR 702).</summary>
   Training,
@@ -216,15 +495,57 @@ public enum KeywordAbility
   /// <summary>Trample (CR 702).</summary>
   Trample,
 
+  /// <summary>Transmute (CR 702).</summary>
+  Transmute,
+
+  /// <summary>Tribute (CR 702).</summary>
+  Tribute,
+
   /// <summary>Undying (CR 702).</summary>
   Undying,
+
+  /// <summary>Unearth (CR 702).</summary>
+  Unearth,
 
   /// <summary>Unleash (CR 702).</summary>
   Unleash,
 
+  /// <summary>Vanishing (CR 702).</summary>
+  Vanishing,
+
   /// <summary>Vigilance (CR 702).</summary>
   Vigilance,
 
+  /// <summary>Ward (CR 702.21).</summary>
+  Ward,
+
+  /// <summary>Warp (CR 702).</summary>
+  Warp,
+
+  /// <summary>Web-slinging (CR 702).</summary>
+  [JsonStringEnumMemberName("Web-slinging")]
+  WebSlinging,
+
   /// <summary>Wither (CR 702).</summary>
   Wither,
+
+  /// <summary>
+  /// Affinity (CR 702.40). Parameterized — the "for &lt;type&gt;" parameter is
+  /// carried by the expanded effect, not this identity.
+  /// </summary>
+  Affinity,
+
+  /// <summary>
+  /// Champion (CR 702.71). Parameterized — the championed type is carried by
+  /// <c>ChampionEffect</c>, not this identity.
+  /// </summary>
+  Champion,
+
+  /// <summary>
+  /// Landcycling (CR 702.29). Parameterized — the searched land type is carried
+  /// by <c>TypecyclingEffect.Type</c>, not this identity. Single-word land-type
+  /// cycling variants (Forestcycling, Swampcycling, …) and "Basic landcycling"
+  /// all collapse to this identity.
+  /// </summary>
+  Landcycling,
 }

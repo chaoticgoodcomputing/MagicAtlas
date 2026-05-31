@@ -45,7 +45,7 @@ public sealed class MentorKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new TriggeredAbility
     {
-      KeywordSource = "Mentor",
+      KeywordSource = KeywordAbility.Mentor,
       Trigger = new TriggerCondition
       {
         Timing = TriggerTiming.Whenever,

@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -27,7 +28,7 @@ public sealed class HauntKeyword : IKeyword
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility
       {
-        KeywordSource = "Haunt",
+        KeywordSource = KeywordAbility.Haunt,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haunt }],
       },
     };
@@ -38,7 +39,7 @@ public sealed class HauntKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Haunt",
+      KeywordSource = KeywordAbility.Haunt,
       Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haunt }],
       Reminder = reminder,
     }

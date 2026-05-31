@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -31,7 +32,7 @@ public sealed class BlitzKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Blitz",
+      KeywordSource = KeywordAbility.Blitz,
       Effects = [new BlitzEffect
       {
         Cost = cost,

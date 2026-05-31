@@ -39,7 +39,7 @@ public sealed class AffinityKeyword : IKeyword
       ParameterType = KeywordParameterType.CardType,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = $"Affinity for {parameter?.Trim()}",
+        KeywordSource = KeywordAbility.Affinity,
         Effects = [new CostReductionEffect
         {
           Amount = LiteralQuantity.Of(1),
@@ -57,7 +57,7 @@ public sealed class AffinityKeyword : IKeyword
     let parameter = string.Join(" ", typeWords.Select(t => t.ToStringValue()))
     select (Ability)new StaticAbility
     {
-      KeywordSource = $"Affinity for {parameter}",
+      KeywordSource = KeywordAbility.Affinity,
       Effects = [new CostReductionEffect
       {
         Amount = LiteralQuantity.Of(1),

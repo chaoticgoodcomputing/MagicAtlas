@@ -6,7 +6,7 @@
     "Effects": [
       {
         "EffectType": "keywordAbility",
-        "Keyword": "SplitSecond"
+        "Keyword": "Split second"
       }
     ],
     "KeywordSource": "Split second"

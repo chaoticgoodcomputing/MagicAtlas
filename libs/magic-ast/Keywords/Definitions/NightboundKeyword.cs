@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -27,7 +28,7 @@ public sealed class NightboundKeyword : IKeyword
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility
       {
-        KeywordSource = "Nightbound",
+        KeywordSource = KeywordAbility.Nightbound,
         Effects = [new DayNightEffect { Phase = DayNightPhase.Nightbound }],
       },
     };
@@ -38,7 +39,7 @@ public sealed class NightboundKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Nightbound",
+      KeywordSource = KeywordAbility.Nightbound,
       Effects = [new DayNightEffect { Phase = DayNightPhase.Nightbound }],
       Reminder = reminder,
     }

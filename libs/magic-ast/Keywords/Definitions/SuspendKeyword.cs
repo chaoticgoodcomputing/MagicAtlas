@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Quantities;
@@ -47,7 +48,7 @@ public sealed class SuspendKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Suspend",
+      KeywordSource = KeywordAbility.Suspend,
       Effects = [new SuspendEffect
       {
         N = n,

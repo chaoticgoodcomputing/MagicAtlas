@@ -31,7 +31,7 @@ public sealed class ProtectionKeyword : IKeyword
       ParameterType = KeywordParameterType.Quality,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Protection",
+        KeywordSource = KeywordAbility.Protection,
         Effects = [new ProtectionEffect { From = ParseProtectionQualities(parameter) }],
       },
     };
@@ -45,7 +45,7 @@ public sealed class ProtectionKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Protection",
+      KeywordSource = KeywordAbility.Protection,
       Effects = [new ProtectionEffect { From = new[] { first }.Concat(rest).ToArray() }],
       Reminder = reminder,
     }

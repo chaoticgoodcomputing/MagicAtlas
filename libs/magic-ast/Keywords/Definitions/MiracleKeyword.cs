@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -33,7 +34,7 @@ public sealed class MiracleKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Miracle",
+      KeywordSource = KeywordAbility.Miracle,
       Effects = [new MiracleEffect
       {
         Cost = cost,

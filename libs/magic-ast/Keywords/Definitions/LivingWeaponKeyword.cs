@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -30,7 +31,7 @@ public sealed class LivingWeaponKeyword : IKeyword
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility
       {
-        KeywordSource = "Living weapon",
+        KeywordSource = KeywordAbility.LivingWeapon,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.LivingWeapon }],
       },
     };
@@ -42,7 +43,7 @@ public sealed class LivingWeaponKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Living weapon",
+      KeywordSource = KeywordAbility.LivingWeapon,
       Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.LivingWeapon }],
       Reminder = reminder,
     }

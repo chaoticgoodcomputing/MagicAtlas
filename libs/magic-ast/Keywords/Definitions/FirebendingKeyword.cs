@@ -65,7 +65,7 @@ public sealed class FirebendingKeyword : IKeyword
   private static Ability BuildAbility(int value, Parenthetical? reminder) =>
     new TriggeredAbility
     {
-      KeywordSource = "Firebending",
+      KeywordSource = KeywordAbility.Firebending,
       Trigger = new TriggerCondition
       {
         Timing = TriggerTiming.Whenever,

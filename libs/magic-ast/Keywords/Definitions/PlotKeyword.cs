@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects.Keyword;
@@ -33,7 +34,7 @@ public sealed class PlotKeyword : IKeyword
       ParameterType = KeywordParameterType.ManaCost,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Plot",
+        KeywordSource = KeywordAbility.Plot,
         Effects = [new PlotEffect
         {
           Cost = ParseManaCost(parameter),
@@ -48,7 +49,7 @@ public sealed class PlotKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Plot",
+      KeywordSource = KeywordAbility.Plot,
       Effects = [new PlotEffect { Cost = cost }],
       Reminder = reminder,
     }

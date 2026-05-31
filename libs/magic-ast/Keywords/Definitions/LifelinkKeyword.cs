@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Damage;
 using MagicAST.Parsing.Tokens;
@@ -26,7 +27,7 @@ public sealed class LifelinkKeyword : IKeyword
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility
       {
-        KeywordSource = "Lifelink",
+        KeywordSource = KeywordAbility.Lifelink,
         Effects = [new LifelinkEffect()],
       },
     };
@@ -37,7 +38,7 @@ public sealed class LifelinkKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Lifelink",
+      KeywordSource = KeywordAbility.Lifelink,
       Effects = [new LifelinkEffect()],
       Reminder = reminder,
     }

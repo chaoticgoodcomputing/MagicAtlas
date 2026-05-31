@@ -49,7 +49,7 @@ public sealed class SpliceKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Splice",
+      KeywordSource = KeywordAbility.Splice,
       Effects = [new SpliceEffect
       {
         Onto = new ObjectFilter { Subtypes = [subtype] },

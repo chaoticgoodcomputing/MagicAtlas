@@ -41,7 +41,7 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Basic landcycling",
+          "KeywordSource": "Landcycling",
           "Effects": [
             {
               "EffectType": "typecycling",

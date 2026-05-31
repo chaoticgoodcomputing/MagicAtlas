@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -30,7 +31,7 @@ public sealed class BloodthirstKeyword : IKeyword
       ParameterType = KeywordParameterType.Number,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Bloodthirst",
+        KeywordSource = KeywordAbility.Bloodthirst,
         Effects = [new BloodthirstEffect
         {
           Value = ParseIntValue("Bloodthirst", parameter),
@@ -45,7 +46,7 @@ public sealed class BloodthirstKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Bloodthirst",
+      KeywordSource = KeywordAbility.Bloodthirst,
       Effects = [new BloodthirstEffect { Value = int.Parse(value.ToStringValue()) }],
       Reminder = reminder,
     }

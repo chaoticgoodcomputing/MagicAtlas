@@ -49,7 +49,7 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Mountaincycling",
+          "KeywordSource": "Landcycling",
           "Effects": [
             {
               "EffectType": "typecycling",

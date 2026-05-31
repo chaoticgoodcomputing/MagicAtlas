@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Quantities;
@@ -33,7 +34,7 @@ public sealed class MobilizeKeyword : IKeyword
       ParameterType = KeywordParameterType.Number,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Mobilize",
+        KeywordSource = KeywordAbility.Mobilize,
         Effects = [new MobilizeEffect
         {
           Amount = new LiteralQuantity { Value = ParseIntValue("Mobilize", parameter) },
@@ -48,7 +49,7 @@ public sealed class MobilizeKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Mobilize",
+      KeywordSource = KeywordAbility.Mobilize,
       Effects = [new MobilizeEffect
       {
         Amount = new LiteralQuantity { Value = int.Parse(value.ToStringValue()) },

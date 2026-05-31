@@ -6,7 +6,7 @@
     "Effects": [
       {
         "EffectType": "keywordAbility",
-        "Keyword": "DoctorsCompanion"
+        "Keyword": "Doctor's companion"
       }
     ],
     "KeywordSource": "Doctor\u0027s companion"

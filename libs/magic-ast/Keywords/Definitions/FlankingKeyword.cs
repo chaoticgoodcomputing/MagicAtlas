@@ -67,7 +67,7 @@ public sealed class FlankingKeyword : IKeyword
   private static Ability BuildAbility(Parenthetical? reminder) =>
     new TriggeredAbility
     {
-      KeywordSource = "Flanking",
+      KeywordSource = KeywordAbility.Flanking,
       Trigger = new TriggerCondition
       {
         Timing = TriggerTiming.Whenever,

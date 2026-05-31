@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -31,7 +32,7 @@ public sealed class GraftKeyword : IKeyword
       ParameterType = KeywordParameterType.Number,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Graft",
+        KeywordSource = KeywordAbility.Graft,
         Effects = [new GraftEffect
         {
           Value = ParseIntValue("Graft", parameter),
@@ -46,7 +47,7 @@ public sealed class GraftKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Graft",
+      KeywordSource = KeywordAbility.Graft,
       Effects = [new GraftEffect { Value = int.Parse(value.ToStringValue()) }],
       Reminder = reminder,
     }

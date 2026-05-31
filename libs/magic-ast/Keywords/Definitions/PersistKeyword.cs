@@ -44,7 +44,7 @@ public sealed class PersistKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new TriggeredAbility
     {
-      KeywordSource = "Persist",
+      KeywordSource = KeywordAbility.Persist,
       Trigger = new TriggerCondition
       {
         Timing = TriggerTiming.When,

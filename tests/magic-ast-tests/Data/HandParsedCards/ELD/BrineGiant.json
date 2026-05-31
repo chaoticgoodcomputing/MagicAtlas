@@ -21,7 +21,7 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Affinity for enchantments",
+          "KeywordSource": "Affinity",
           "Reminder": {
             "Text": "(This spell costs {1} less to cast for each enchantment you control.)"
           },

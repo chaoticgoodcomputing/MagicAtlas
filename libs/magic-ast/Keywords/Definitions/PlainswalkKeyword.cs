@@ -27,7 +27,7 @@ public sealed class PlainswalkKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Plainswalk",
+      KeywordSource = KeywordAbility.Plainswalk,
       Effects = [new EvasionEffect
       {
         UnblockableCondition = new EvasionCondition

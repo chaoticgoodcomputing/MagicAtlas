@@ -21,7 +21,7 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Affinity for Forests",
+          "KeywordSource": "Affinity",
           "Reminder": {
             "Text": "(This spell costs {1} less to cast for each Forest you control.)"
           },

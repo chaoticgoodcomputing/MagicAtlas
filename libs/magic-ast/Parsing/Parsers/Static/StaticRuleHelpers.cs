@@ -251,7 +251,7 @@ internal static class StaticRuleHelpers
     {
       "first strike" => new StaticAbility
       {
-        KeywordSource = "First strike",
+        KeywordSource = KeywordAbility.FirstStrike,
         Effects = [new MagicAST.AST.Effects.Combat.CombatDamageTimingEffect
         {
           Timing = MagicAST.AST.Effects.Combat.CombatDamageTiming.First,
@@ -259,7 +259,7 @@ internal static class StaticRuleHelpers
       },
       "double strike" => new StaticAbility
       {
-        KeywordSource = "Double strike",
+        KeywordSource = KeywordAbility.DoubleStrike,
         Effects = [new MagicAST.AST.Effects.Combat.CombatDamageTimingEffect
         {
           Timing = MagicAST.AST.Effects.Combat.CombatDamageTiming.Both,
@@ -267,7 +267,7 @@ internal static class StaticRuleHelpers
       },
       "flying" => new StaticAbility
       {
-        KeywordSource = "Flying",
+        KeywordSource = KeywordAbility.Flying,
         Effects = [new MagicAST.AST.Effects.Keyword.EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter
@@ -279,42 +279,42 @@ internal static class StaticRuleHelpers
       },
       "indestructible" => new StaticAbility
       {
-        KeywordSource = "Indestructible",
+        KeywordSource = KeywordAbility.Indestructible,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }],
       },
       "vigilance" => new StaticAbility
       {
-        KeywordSource = "Vigilance",
+        KeywordSource = KeywordAbility.Vigilance,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }],
       },
       "haste" => new StaticAbility
       {
-        KeywordSource = "Haste",
+        KeywordSource = KeywordAbility.Haste,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
       },
       "lifelink" => new StaticAbility
       {
-        KeywordSource = "Lifelink",
+        KeywordSource = KeywordAbility.Lifelink,
         Effects = [new MagicAST.AST.Effects.Damage.LifelinkEffect()],
       },
       "reach" => new StaticAbility
       {
-        KeywordSource = "Reach",
+        KeywordSource = KeywordAbility.Reach,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }],
       },
       "trample" => new StaticAbility
       {
-        KeywordSource = "Trample",
+        KeywordSource = KeywordAbility.Trample,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }],
       },
       "defender" => new StaticAbility
       {
-        KeywordSource = "Defender",
+        KeywordSource = KeywordAbility.Defender,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Defender }],
       },
       "deathtouch" => new StaticAbility
       {
-        KeywordSource = "Deathtouch",
+        KeywordSource = KeywordAbility.Deathtouch,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }],
       },
       // Menace: this creature can't be blocked except by two or more creatures.
@@ -322,7 +322,7 @@ internal static class StaticRuleHelpers
       // the creature-typed filter (any two-or-more creatures qualify as blockers).
       "menace" => new StaticAbility
       {
-        KeywordSource = "Menace",
+        KeywordSource = KeywordAbility.Menace,
         Effects = [new MagicAST.AST.Effects.Keyword.EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter { CardTypes = ["creature"] },
@@ -334,7 +334,7 @@ internal static class StaticRuleHelpers
       // EvasionEffect with CanBeBlockedBy restricted to the "shadow" characteristic.
       "shadow" => new StaticAbility
       {
-        KeywordSource = "Shadow",
+        KeywordSource = KeywordAbility.Shadow,
         Effects = [new MagicAST.AST.Effects.Keyword.EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter
@@ -349,7 +349,7 @@ internal static class StaticRuleHelpers
       // predicate instead of the fixed black-color predicate.
       "intimidate" => new StaticAbility
       {
-        KeywordSource = "Intimidate",
+        KeywordSource = KeywordAbility.Intimidate,
         Effects = [new MagicAST.AST.Effects.Keyword.EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter
@@ -363,14 +363,14 @@ internal static class StaticRuleHelpers
       // copy-creation and delayed-exile semantics are engine territory. Rule 702.116.
       "myriad" => new StaticAbility
       {
-        KeywordSource = "Myriad",
+        KeywordSource = KeywordAbility.Myriad,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Myriad }],
       },
       // Melee: triggered keyword. MAST records keyword presence; the per-opponent
       // attack counting and P/T buff are engine territory. Rule 702.121.
       "melee" => new StaticAbility
       {
-        KeywordSource = "Melee",
+        KeywordSource = KeywordAbility.Melee,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Melee }],
       },
       // Hexproof (Rule 702.11): this permanent can't be the target of spells or
@@ -378,7 +378,7 @@ internal static class StaticRuleHelpers
       // targeting restriction is engine territory.
       "hexproof" => new StaticAbility
       {
-        KeywordSource = "Hexproof",
+        KeywordSource = KeywordAbility.Hexproof,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }],
       },
       // Fear: can't be blocked except by artifact creatures and/or black creatures.
@@ -387,7 +387,7 @@ internal static class StaticRuleHelpers
       // Characteristics: ["artifact", "black"].
       "fear" => new StaticAbility
       {
-        KeywordSource = "Fear",
+        KeywordSource = KeywordAbility.Fear,
         Effects = [new MagicAST.AST.Effects.Keyword.EvasionEffect
         {
           CanBeBlockedBy = new ObjectFilter
@@ -403,7 +403,7 @@ internal static class StaticRuleHelpers
       // MAST records the keyword's presence; the targeting restriction is engine territory.
       "shroud" => new StaticAbility
       {
-        KeywordSource = "Shroud",
+        KeywordSource = KeywordAbility.Shroud,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }],
       },
       // Daybound (Rule 702.145b). Found on front faces of day/night DFCs. MAST
@@ -411,7 +411,7 @@ internal static class StaticRuleHelpers
       // rules (Rule 731) are engine territory.
       "daybound" => new StaticAbility
       {
-        KeywordSource = "Daybound",
+        KeywordSource = KeywordAbility.Daybound,
         Effects = [new MagicAST.AST.Effects.Keyword.DayNightEffect
         {
           Phase = MagicAST.AST.Effects.Keyword.DayNightPhase.Daybound,
@@ -422,7 +422,7 @@ internal static class StaticRuleHelpers
       // rules (Rule 731) are engine territory.
       "nightbound" => new StaticAbility
       {
-        KeywordSource = "Nightbound",
+        KeywordSource = KeywordAbility.Nightbound,
         Effects = [new MagicAST.AST.Effects.Keyword.DayNightEffect
         {
           Phase = MagicAST.AST.Effects.Keyword.DayNightPhase.Nightbound,
@@ -432,7 +432,7 @@ internal static class StaticRuleHelpers
       // untap step. MAST records the keyword's presence; phase bookkeeping is engine territory.
       "phasing" => new StaticAbility
       {
-        KeywordSource = "Phasing",
+        KeywordSource = KeywordAbility.Phasing,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Phasing }],
       },
       // Provoke (Rule 702.39): a triggered keyword ability. Whenever this creature attacks,
@@ -441,7 +441,7 @@ internal static class StaticRuleHelpers
       // mechanics are engine territory.
       "provoke" => new StaticAbility
       {
-        KeywordSource = "Provoke",
+        KeywordSource = KeywordAbility.Provoke,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Provoke }],
       },
       // Cipher (Rule 702.99): exile this spell card encoded on a creature you control;
@@ -449,7 +449,7 @@ internal static class StaticRuleHelpers
       // MAST records the keyword's presence; the encoding and free-cast mechanics are engine territory.
       "cipher" => new StaticAbility
       {
-        KeywordSource = "Cipher",
+        KeywordSource = KeywordAbility.Cipher,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Cipher }],
       },
       // Haunt (Rule 702.55): when this creature dies, exile it haunting target creature.
@@ -457,7 +457,7 @@ internal static class StaticRuleHelpers
       // are engine territory.
       "haunt" => new StaticAbility
       {
-        KeywordSource = "Haunt",
+        KeywordSource = KeywordAbility.Haunt,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haunt }],
       },
       _ => null,

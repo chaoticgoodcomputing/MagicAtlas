@@ -89,7 +89,7 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
     {
       "flying" => new StaticAbility
       {
-        KeywordSource = "Flying",
+        KeywordSource = KeywordAbility.Flying,
         Effects =
         [
           new EvasionEffect
@@ -104,57 +104,57 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
       },
       "haste" => new StaticAbility
       {
-        KeywordSource = "Haste",
+        KeywordSource = KeywordAbility.Haste,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
       },
       "vigilance" => new StaticAbility
       {
-        KeywordSource = "Vigilance",
+        KeywordSource = KeywordAbility.Vigilance,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }],
       },
       "trample" => new StaticAbility
       {
-        KeywordSource = "Trample",
+        KeywordSource = KeywordAbility.Trample,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }],
       },
       "lifelink" => new StaticAbility
       {
-        KeywordSource = "Lifelink",
+        KeywordSource = KeywordAbility.Lifelink,
         Effects = [new LifelinkEffect()],
       },
       "deathtouch" => new StaticAbility
       {
-        KeywordSource = "Deathtouch",
+        KeywordSource = KeywordAbility.Deathtouch,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }],
       },
       "first strike" => new StaticAbility
       {
-        KeywordSource = "First strike",
+        KeywordSource = KeywordAbility.FirstStrike,
         Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.First }],
       },
       "double strike" => new StaticAbility
       {
-        KeywordSource = "Double strike",
+        KeywordSource = KeywordAbility.DoubleStrike,
         Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both }],
       },
       "hexproof" => new StaticAbility
       {
-        KeywordSource = "Hexproof",
+        KeywordSource = KeywordAbility.Hexproof,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }],
       },
       "reach" => new StaticAbility
       {
-        KeywordSource = "Reach",
+        KeywordSource = KeywordAbility.Reach,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }],
       },
       "indestructible" => new StaticAbility
       {
-        KeywordSource = "Indestructible",
+        KeywordSource = KeywordAbility.Indestructible,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }],
       },
       "menace" => new StaticAbility
       {
-        KeywordSource = "Menace",
+        KeywordSource = KeywordAbility.Menace,
         Effects =
         [
           new EvasionEffect
@@ -166,17 +166,17 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
       },
       "defender" => new StaticAbility
       {
-        KeywordSource = "Defender",
+        KeywordSource = KeywordAbility.Defender,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Defender }],
       },
       "shroud" => new StaticAbility
       {
-        KeywordSource = "Shroud",
+        KeywordSource = KeywordAbility.Shroud,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }],
       },
       "shadow" => new StaticAbility
       {
-        KeywordSource = "Shadow",
+        KeywordSource = KeywordAbility.Shadow,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shadow }],
       },
       // Undying (CR 702.93): decomposed triggered ability — when this creature dies,
@@ -184,7 +184,7 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
       // owner's control with a +1/+1 counter on it. See UndyingKeyword.cs.
       "undying" => new TriggeredAbility
       {
-        KeywordSource = "Undying",
+        KeywordSource = KeywordAbility.Undying,
         Trigger = new TriggerCondition
         {
           Timing = TriggerTiming.When,

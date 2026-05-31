@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -33,7 +34,7 @@ public sealed class PartnerKeyword : IKeyword
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility
       {
-        KeywordSource = "Partner",
+        KeywordSource = KeywordAbility.Partner,
         Effects = [new PartnerEffect
         {
           PartnerType = PartnerType.Partner,
@@ -47,7 +48,7 @@ public sealed class PartnerKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Partner",
+      KeywordSource = KeywordAbility.Partner,
       Effects = [new PartnerEffect
       {
         PartnerType = PartnerType.Partner,

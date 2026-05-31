@@ -55,7 +55,7 @@ public sealed class BushidoKeyword : IKeyword
   private static Ability BuildAbility(int value, Parenthetical? reminder) =>
     new TriggeredAbility
     {
-      KeywordSource = "Bushido",
+      KeywordSource = KeywordAbility.Bushido,
       Trigger = new TriggerCondition
       {
         Timing = TriggerTiming.Whenever,

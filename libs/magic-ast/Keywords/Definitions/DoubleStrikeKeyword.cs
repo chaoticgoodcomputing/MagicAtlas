@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.Parsing.Tokens;
@@ -26,7 +27,7 @@ public sealed class DoubleStrikeKeyword : IKeyword
       HasParameter = false,
       CreateExpansion = _ => new StaticAbility
       {
-        KeywordSource = "Double strike",
+        KeywordSource = KeywordAbility.DoubleStrike,
         Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both }],
       },
     };
@@ -38,7 +39,7 @@ public sealed class DoubleStrikeKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Double strike",
+      KeywordSource = KeywordAbility.DoubleStrike,
       Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both }],
       Reminder = reminder,
     }

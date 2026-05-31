@@ -42,7 +42,7 @@ public sealed class BestowKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Bestow",
+      KeywordSource = KeywordAbility.Bestow,
       Effects = [new EnchantRestrictionEffect
       {
         LegalTargets = new ObjectFilter { CardTypes = ["creature"] },

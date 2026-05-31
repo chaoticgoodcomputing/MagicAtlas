@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects.Keyword;
@@ -34,7 +35,7 @@ public sealed class MegamorphKeyword : IKeyword
       ParameterType = KeywordParameterType.ManaCost,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Megamorph",
+        KeywordSource = KeywordAbility.Megamorph,
         Effects = [new MegamorphEffect
         {
           Cost = ParseManaCost(parameter),
@@ -49,7 +50,7 @@ public sealed class MegamorphKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Megamorph",
+      KeywordSource = KeywordAbility.Megamorph,
       Effects = [new MegamorphEffect
       {
         Cost = cost,

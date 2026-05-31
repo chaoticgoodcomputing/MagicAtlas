@@ -61,7 +61,7 @@ public sealed class UndyingKeyword : IKeyword
   private static Ability BuildAbility(Parenthetical? reminder) =>
     new TriggeredAbility
     {
-      KeywordSource = "Undying",
+      KeywordSource = KeywordAbility.Undying,
       Trigger = new TriggerCondition
       {
         Timing = TriggerTiming.When,

@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Quantities;
@@ -43,7 +44,7 @@ public sealed class AwakenKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Awaken",
+      KeywordSource = KeywordAbility.Awaken,
       Effects = [new AwakenEffect
       {
         N = n,

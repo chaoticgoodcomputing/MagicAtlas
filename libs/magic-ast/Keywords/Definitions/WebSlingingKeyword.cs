@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.Parsing.Tokens;
@@ -32,7 +33,7 @@ public sealed class WebSlingingKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Web-slinging",
+      KeywordSource = KeywordAbility.WebSlinging,
       Effects = [new WebSlingingEffect
       {
         Cost = cost,

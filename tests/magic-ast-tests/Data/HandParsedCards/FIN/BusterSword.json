@@ -33,7 +33,7 @@
           "Effects": [
             {
               "EffectType": "keywordAbility",
-              "Keyword": "JobSelect"
+              "Keyword": "Job select"
             }
           ],
           "Reminder": {

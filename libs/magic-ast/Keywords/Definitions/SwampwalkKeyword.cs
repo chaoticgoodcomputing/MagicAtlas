@@ -33,7 +33,7 @@ public sealed class SwampwalkKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Swampwalk",
+      KeywordSource = KeywordAbility.Swampwalk,
       Effects = [new EvasionEffect
       {
         UnblockableCondition = new EvasionCondition

@@ -57,7 +57,7 @@ public sealed class AfflictKeyword : IKeyword
   private static Ability BuildAbility(int value, Parenthetical? reminder) =>
     new TriggeredAbility
     {
-      KeywordSource = "Afflict",
+      KeywordSource = KeywordAbility.Afflict,
       Trigger = new TriggerCondition
       {
         Timing = TriggerTiming.Whenever,

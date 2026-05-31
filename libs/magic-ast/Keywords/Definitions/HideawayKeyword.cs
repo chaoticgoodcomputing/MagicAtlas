@@ -1,5 +1,6 @@
 namespace MagicAST.Keywords.Definitions;
 
+using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Quantities;
@@ -32,7 +33,7 @@ public sealed class HideawayKeyword : IKeyword
       ParameterType = KeywordParameterType.Number,
       CreateExpansion = parameter => new StaticAbility
       {
-        KeywordSource = "Hideaway",
+        KeywordSource = KeywordAbility.Hideaway,
         Effects = [new HideawayEffect
         {
           Amount = new LiteralQuantity { Value = ParseIntValue("Hideaway", parameter) },
@@ -47,7 +48,7 @@ public sealed class HideawayKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = "Hideaway",
+      KeywordSource = KeywordAbility.Hideaway,
       Effects = [new HideawayEffect
       {
         Amount = new LiteralQuantity { Value = int.Parse(value.ToStringValue()) },
