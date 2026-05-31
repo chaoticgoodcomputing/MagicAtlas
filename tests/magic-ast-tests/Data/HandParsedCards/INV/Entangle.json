@@ -29,7 +29,7 @@
           "Effects": [
             {
               "EffectType": "allMustBlock",
-              "BlockTarget": {
+              "Target": {
                 "Kind": "Target",
                 "Filter": {
                   "CardTypes": [

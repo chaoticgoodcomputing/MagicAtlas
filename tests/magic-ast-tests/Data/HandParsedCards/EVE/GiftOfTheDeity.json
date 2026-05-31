@@ -28,7 +28,7 @@
         },
         {
           "Kind": "static",
-          "Condition": { "Text": "enchanted creature is black" },
+          "Condition": { "ConditionType": "other", "Text": "enchanted creature is black" },
           "Effects": [
             {
               "EffectType": "modifyPT",
@@ -49,7 +49,7 @@
         },
         {
           "Kind": "static",
-          "Condition": { "Text": "enchanted creature is green" },
+          "Condition": { "ConditionType": "other", "Text": "enchanted creature is green" },
           "Effects": [
             {
               "EffectType": "modifyPT",

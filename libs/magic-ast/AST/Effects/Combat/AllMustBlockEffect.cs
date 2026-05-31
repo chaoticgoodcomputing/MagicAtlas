@@ -59,5 +59,5 @@ public sealed record AllMustBlockEffect : ContinuousEffect
   /// <c>EnchantedOrEquipped</c> for Aura shape;
   /// <c>Target/creature</c> for the spell ("target creature") shape.
   /// </summary>
-  public required ObjectReference BlockTarget { get; init; }
+  public required ObjectReference Target { get; init; }
 }
