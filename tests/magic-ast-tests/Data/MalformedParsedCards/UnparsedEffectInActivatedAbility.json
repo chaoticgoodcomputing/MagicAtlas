@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Broken Blademaster",
     "ManaCost": "{3}{R}{R}",
-    "TypeLine": "Creature \u2014 Human Warrior",
+    "TypeLine": "Creature — Human Warrior",
     "OracleText": "{T}: $$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
     "Power": "4",
     "Toughness": "2",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Broken Blademaster",
     "TypeLine": {
-      "Raw": "Creature \u2014 Human Warrior",
+      "Raw": "Creature — Human Warrior",
       "Types": [
         "Creature"
       ],
@@ -42,8 +42,7 @@
                 "Start": 4,
                 "Length": 36
               },
-              "RawText": "$$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
-              "IsOptional": false
+              "RawText": "$$$ %%% ^^^ &&& *** ~~~ !!! ??? ///"
             }
           ],
           "IsManaAbility": false
