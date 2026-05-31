@@ -46,7 +46,8 @@
           "KeywordSource": "Madness",
           "Effects": [
             {
-              "EffectType": "madness",
+              "EffectType": "alternativeCast",
+              "FromZone": "Exile",
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [

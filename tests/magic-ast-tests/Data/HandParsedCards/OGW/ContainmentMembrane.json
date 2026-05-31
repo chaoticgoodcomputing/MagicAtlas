@@ -32,7 +32,8 @@
           "KeywordSource": "Surge",
           "Effects": [
             {
-              "EffectType": "surge",
+              "EffectType": "alternativeCast",
+              "FromZone": "Hand",
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
@@ -45,6 +46,10 @@
                     "IsSnow": false
                   }
                 ]
+              },
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "you or one of your teammates has cast another spell this turn"
               }
             }
           ],
