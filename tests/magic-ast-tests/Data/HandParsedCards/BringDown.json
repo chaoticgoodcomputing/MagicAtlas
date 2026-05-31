@@ -29,8 +29,9 @@
           "KeywordSource": "Assist",
           "Effects": [
             {
-              "EffectType": "keywordAbility",
-              "Keyword": "Assist"
+              "EffectType": "alternativePayment",
+              "Method": "DelegatePayment",
+              "Pays": "Generic"
             }
           ],
           "Reminder": {

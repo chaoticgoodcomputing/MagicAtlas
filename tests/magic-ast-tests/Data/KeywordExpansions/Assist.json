@@ -1,0 +1,14 @@
+{
+  "Keyword": "Assist",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Assist",
+    "Effects": [
+      {
+        "EffectType": "alternativePayment",
+        "Method": "DelegatePayment",
+        "Pays": "Generic"
+      }
+    ]
+  }
+}

@@ -2,16 +2,25 @@ namespace MagicAST.Keywords.Definitions;
 
 using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
-using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects.Resource;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
-/// Assist (Rule 702.132). A cooperative-format keyword from Battlebond: another
-/// player may pay up to a specified amount of the spell's generic mana cost. The
-/// cap amount is printed only in reminder text — the oracle keyword is the bare
-/// word "Assist" with no parameters. MAST records keyword presence only.
+/// Assist (CR 702.132a): "Assist is a static ability that modifies the rules of paying
+/// for the spell with assist (see rules 601.2g-h). If the total cost to cast a spell with
+/// assist includes a generic mana component, before you activate mana abilities while
+/// casting it, you may choose another player. That player has a chance to activate mana
+/// abilities... the player you chose may pay for any amount of the generic mana in the
+/// spell's total cost."
+///
+/// <para>
+/// Decomposed to <see cref="AlternativePaymentEffect"/> with
+/// <see cref="AlternativePaymentMethod.DelegatePayment"/> (another player pays) and
+/// <see cref="AlternativePaymentKind.Generic"/> (generic mana only). Source is null
+/// because payment is delegated to a player, not drawn from objects.
+/// </para>
 ///
 /// <para>
 /// Combinator-only keyword — no <c>KeywordDefinitions.Assist</c> legacy entry exists;
@@ -35,7 +44,14 @@ public sealed class AssistKeyword : IKeyword
     select (Ability)new StaticAbility
     {
       KeywordSource = KeywordAbility.Assist,
-      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Assist }],
+      Effects =
+      [
+        new AlternativePaymentEffect
+        {
+          Method = AlternativePaymentMethod.DelegatePayment,
+          Pays = AlternativePaymentKind.Generic,
+        },
+      ],
       Reminder = reminder,
     }
   );
