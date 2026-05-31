@@ -1,0 +1,29 @@
+{
+  "Keyword": "Afflict",
+  "Parameter": "1",
+  "Expected": {
+    "Kind": "triggered",
+    "KeywordSource": "Afflict",
+    "Trigger": {
+      "Timing": "Whenever",
+      "Event": "BecomesBlocked",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ]
+      }
+    },
+    "Effects": [
+      {
+        "EffectType": "loseLife",
+        "Amount": {
+          "QuantityType": "literal",
+          "Value": 1
+        },
+        "Player": {
+          "Kind": "DefendingPlayer"
+        }
+      }
+    ]
+  }
+}
