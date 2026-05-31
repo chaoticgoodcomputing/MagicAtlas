@@ -33,20 +33,10 @@
           "KeywordSource": "Bestow",
           "Effects": [
             {
-              "EffectType": "bestow",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 4
-                  },
-                  {
-                    "Kind": "colored",
-                    "Colors": [
-                      "G"
-                    ]
-                  }
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
                 ]
               }
             }
@@ -115,6 +105,32 @@
           "Raw": "1",
           "Value": 1
         }
+      },
+      {
+        "Kind": "alternativeCosts",
+        "Costs": [
+          {
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 4
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
+              ]
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 0
+            }
+          }
+        ]
       }
     ]
   }
