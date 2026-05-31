@@ -91,6 +91,17 @@ public sealed partial class AttributeExtractor
       attributes.Add(additionalCostsAttr);
     }
 
+    // Bestow's alternative casting cost (CR 702.103a: "you pay [cost] rather than
+    // its mana cost" — an alternative cost). The keyword's static ability (the
+    // becomes-Aura / enchant-creature mode) is emitted separately by
+    // BestowKeyword's combinator into Oracle.Abilities; here we surface only the
+    // cost on the card as an AlternativeCostsAttribute.
+    var alternativeCostsAttr = TryExtractBestowCost(input.OracleText);
+    if (alternativeCostsAttr is not null)
+    {
+      attributes.Add(alternativeCostsAttr);
+    }
+
     return attributes;
   }
 
@@ -196,6 +207,47 @@ public sealed partial class AttributeExtractor
     };
 
     return new AdditionalCostsAttribute { Costs = [cost] };
+  }
+
+  // "Bestow {cost}" — the keyword line is always the card's first paragraph.
+  [GeneratedRegex(
+    @"^Bestow\s+(?<cost>(?:\{[^}]+\})+)",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex BestowPrefix();
+
+  /// <summary>
+  /// Scans oracle text for a "Bestow {cost}" line and returns an
+  /// <see cref="AlternativeCostsAttribute"/> carrying the bestow casting cost, or
+  /// null when absent. CR 702.103a: "you pay [cost] rather than its mana cost" —
+  /// the bestow cost is an alternative cost, so it is hosted on the card's cost
+  /// attributes rather than in an oracle ability. The SourceSpan is zero-width
+  /// (Start 0, Length 0): the cost is synthesised from the keyword expansion and
+  /// carries no meaningful source offset.
+  /// </summary>
+  private AlternativeCostsAttribute? TryExtractBestowCost(string? oracleText)
+  {
+    if (string.IsNullOrWhiteSpace(oracleText))
+    {
+      return null;
+    }
+
+    var firstLine = oracleText.Split('\n')[0].Trim();
+    var match = BestowPrefix().Match(firstLine);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var parsed = _manaCostParser.Parse(match.Groups["cost"].Value);
+
+    var cost = new AlternativeCost
+    {
+      Cost = new ManaCost { Symbols = parsed.Symbols },
+      SourceSpan = new TextSpan(0, 0),
+    };
+
+    return new AlternativeCostsAttribute { Costs = [cost] };
   }
 
   /// <summary>

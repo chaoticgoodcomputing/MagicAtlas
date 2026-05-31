@@ -1,20 +1,29 @@
 namespace MagicAST.Keywords.Definitions;
 
 using MagicAST.AST.Abilities;
-using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects.Combat;
+using MagicAST.AST.References;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
-/// Bestow {cost}: If you cast this card for its bestow cost, it's an Aura spell
-/// with enchant creature. It becomes a creature again if it's not attached.
-/// Rule 702.103. MAST records the keyword and the bestow cost; the alternative-cast,
-/// Aura-mode, and unattach semantics are engine territory.
+/// Bestow (Rule 702.103a): "Bestow represents a static ability that functions in
+/// any zone from which you could play the card it's on. \"Bestow [cost]\" means
+/// \"As you cast this spell, you may choose to cast it bestowed. If you do, you pay
+/// [cost] rather than its mana cost.\" Casting a spell using its bestow ability
+/// follows the rules for paying alternative costs." Rule 702.103b: a spell cast
+/// bestowed "becomes an Aura enchantment and gains enchant creature."
 ///
 /// <para>
-/// Combinator-only: no <see cref="KeywordDefinition"/> exists in the legacy
-/// <c>KeywordDefinitions.cs</c>. <see cref="Definition"/> returns <c>null</c>.
+/// Bestow decomposes across two surfaces. The bestow <em>cost</em> is an
+/// alternative casting cost — it lives on the card's
+/// <see cref="MagicAST.AST.AlternativeCostsAttribute"/> (emitted by
+/// <c>AttributeExtractor</c>), not in an effect. This static ability carries only
+/// the becomes-Aura / gains-enchant-creature <em>mode</em> (702.103b), expressed
+/// with the shared <see cref="EnchantRestrictionEffect"/> enchant-creature
+/// primitive. The alternative-cast resolution, Aura-mode toggle, and unattach
+/// rules are engine territory (descriptive-not-executive doctrine).
 /// </para>
 /// </summary>
 [Keyword]
@@ -34,9 +43,9 @@ public sealed class BestowKeyword : IKeyword
     select (Ability)new StaticAbility
     {
       KeywordSource = "Bestow",
-      Effects = [new BestowEffect
+      Effects = [new EnchantRestrictionEffect
       {
-        Cost = cost,
+        LegalTargets = new ObjectFilter { CardTypes = ["creature"] },
       }],
       Reminder = reminder,
     }
