@@ -75,7 +75,7 @@
                 "Kind": "You"
               },
               "Condition": {
-                "ConditionType": "kicked",
+                "ConditionType": "keywordCostPaid",
                 "Keyword": "Kicker"
               }
             }

@@ -39,9 +39,11 @@ public static class ConditionParser
 
   /// <summary>
   /// "it was kicked", "this spell/creature/permanent was kicked" — the kicked-state
-  /// predicate (CR 702.33d). The consumer half of the kicker duality (ADR 0004):
-  /// structured to <see cref="KickedCondition"/> keyed on <see cref="KeywordAbility.Kicker"/>
-  /// (a multikicker cost is a kicker cost, CR 702.33c), not left as a free-text residual.
+  /// predicate (CR 702.33d). The consumer half of the keyword cost-paid duality (ADR 0004):
+  /// structured to <see cref="KeywordCostPaidCondition"/> keyed on
+  /// <see cref="KeywordAbility.Kicker"/> (a multikicker cost is a kicker cost, CR 702.33c),
+  /// not left as a free-text residual. Evoke/Dash/Blitz reuse the same node keyed on their
+  /// own keyword.
   /// </summary>
   private static readonly Regex WasKicked = new(
     @"^(?:it|this\s+(?:spell|creature|permanent|card))\s+was\s+kicked$",
@@ -74,7 +76,7 @@ public static class ConditionParser
 
     if (WasKicked.IsMatch(body))
     {
-      return new KickedCondition { Keyword = KeywordAbility.Kicker };
+      return new KeywordCostPaidCondition { Keyword = KeywordAbility.Kicker };
     }
 
     return new OtherCondition { Text = verbatim };

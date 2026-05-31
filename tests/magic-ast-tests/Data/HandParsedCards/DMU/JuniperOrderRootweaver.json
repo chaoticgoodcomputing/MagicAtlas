@@ -64,7 +64,7 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "kicked",
+            "ConditionType": "keywordCostPaid",
             "Keyword": "Kicker"
           },
           "Effects": [

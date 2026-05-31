@@ -69,7 +69,7 @@
             {
               "EffectType": "createToken",
               "Count": {
-                "QuantityType": "kickedCount",
+                "QuantityType": "keywordCostPaidCount",
                 "Keyword": "Kicker"
               },
               "Token": {

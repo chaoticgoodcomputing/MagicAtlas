@@ -64,7 +64,7 @@
             }
           ],
           "Condition": {
-            "ConditionType": "kicked",
+            "ConditionType": "keywordCostPaid",
             "Keyword": "Kicker"
           },
           "When": "asThisEnters"

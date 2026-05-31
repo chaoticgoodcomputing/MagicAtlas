@@ -50,22 +50,24 @@ public sealed record CountCondition : Condition
 }
 
 /// <summary>
-/// "if it was kicked" — true when the spell/permanent was kicked, i.e. its controller
-/// declared the intention to pay a kicker-family additional cost as it was cast
-/// (CR 702.33d; a multikicker cost is a kicker cost, CR 702.33c). The consumer half of
-/// the kicker production/reference duality (ADR 0003/0004): reference-not-resolution —
-/// keyed on the producing keyword's typed <see cref="KeywordAbility"/> identity (the
-/// linked ability of CR 702.33e), NOT a pre-resolved boolean threaded from the cost
-/// ability. The matching <see cref="StaticAbility.KeywordSource"/>/<c>AdditionalCastCostEffect</c>
-/// producer rides on the same card. Quantity sibling: <see cref="KickedCountQuantity"/>.
+/// "if its [keyword] cost was paid" — true when the additional/alternative cost a keyword
+/// grants was paid as the spell was cast: Kicker/Multikicker ("if it was kicked", CR
+/// 702.33d; a multikicker cost is a kicker cost, 702.33c), Evoke ("if its evoke cost was
+/// paid", 702.74a), Dash (702.109a), Blitz (702.152a). The consumer half of the keyword
+/// production/reference duality (ADR 0003/0004): reference-not-resolution — keyed on the
+/// producing keyword's typed <see cref="KeywordAbility"/> identity (a linked ability, e.g.
+/// CR 702.33e), NOT a pre-resolved boolean threaded from the cost ability. The matching
+/// producer (<see cref="StaticAbility.KeywordSource"/> + its <c>AlternativeCastEffect</c> /
+/// <c>AdditionalCastCostEffect</c>) rides on the same card. Count sibling:
+/// <see cref="MagicAST.AST.Quantities.KeywordCostPaidCountQuantity"/>.
 /// </summary>
-[ConditionKind("kicked")]
-public sealed record KickedCondition : Condition
+[ConditionKind("keywordCostPaid")]
+public sealed record KeywordCostPaidCondition : Condition
 {
   /// <summary>
-  /// The kicker-family keyword whose additional cost being paid makes this true. Always
-  /// <see cref="KeywordAbility.Kicker"/> for the kicker/multikicker family — a multikicker
-  /// cost is a kicker cost (CR 702.33c), so "it was kicked" references the Kicker ability.
+  /// The keyword whose additional/alternative cost being paid makes this true — Kicker
+  /// (a multikicker cost is a kicker cost, CR 702.33c, so "kicked" keys on Kicker), Evoke,
+  /// Dash, Blitz, etc.
   /// </summary>
   public required KeywordAbility Keyword { get; init; }
 }

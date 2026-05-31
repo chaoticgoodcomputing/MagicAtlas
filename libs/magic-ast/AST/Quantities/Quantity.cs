@@ -128,28 +128,28 @@ public sealed record CounterCountQuantity : Quantity
 }
 
 /// <summary>
-/// A quantity equal to the number of times a spell was "kicked" — the count of times the
-/// additional cost granted by a kicker-family keyword was paid as the spell was cast.
-/// "Create a 2/2 green Wolf creature token for each time it was kicked" (Wolfbriar
-/// Elemental). CR 702.33d defines the kicked state; CR 702.33c folds a multikicker cost
-/// into a kicker cost, so the count is keyed on <see cref="KeywordAbility.Kicker"/>.
+/// A quantity equal to the number of times a keyword's repeatable additional cost was paid
+/// as the spell was cast — "for each time it was kicked" (Wolfbriar Elemental, keyed on
+/// Kicker: CR 702.33d defines the kicked state and 702.33c folds a multikicker cost into a
+/// kicker cost). The count sibling of <see cref="MagicAST.AST.Abilities.KeywordCostPaidCondition"/>
+/// (the boolean was-it-paid): this carries the times-paid for a repeatable keyword
+/// (Kicker/Multikicker, and prospectively Squad/Replicate).
 ///
 /// <para>
-/// Reference-not-resolution (ADR 0004), the quantity sibling of
-/// <see cref="MagicAST.AST.Abilities.KickedCondition"/>: keyed on the producing keyword's
-/// typed <see cref="KeywordAbility"/> identity (the linked ability of CR 702.33e), NOT a
+/// Reference-not-resolution (ADR 0004): keyed on the producing keyword's typed
+/// <see cref="KeywordAbility"/> identity (a linked ability, e.g. CR 702.33e), NOT a
 /// variable threaded from the <c>AdditionalCastCostEffect</c> producer. Distinct from
 /// <see cref="CounterCountQuantity"/> (counters on an object) and <see cref="CountQuantity"/>
-/// (objects matching a filter): "times kicked" is neither a counter nor an object count.
+/// (objects matching a filter): a times-paid count is neither a counter nor an object count.
 /// </para>
 /// </summary>
-[OracleQuantity("kickedCount")]
-public sealed record KickedCountQuantity : Quantity
+[OracleQuantity("keywordCostPaidCount")]
+public sealed record KeywordCostPaidCountQuantity : Quantity
 {
   /// <summary>
-  /// The kicker-family keyword whose times-paid this quantity equals. Always
-  /// <see cref="KeywordAbility.Kicker"/> — a multikicker cost is a kicker cost
-  /// (CR 702.33c), so "for each time it was kicked" references the Kicker ability.
+  /// The keyword whose times-paid this quantity equals — Kicker (a multikicker cost is a
+  /// kicker cost, CR 702.33c, so "for each time it was kicked" references Kicker), and
+  /// prospectively other repeatable additional-cost keywords (Squad, Replicate).
   /// </summary>
   public required KeywordAbility Keyword { get; init; }
 }
