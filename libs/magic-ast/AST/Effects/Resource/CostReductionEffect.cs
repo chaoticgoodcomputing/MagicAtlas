@@ -20,6 +20,15 @@ public sealed record CostReductionEffect : Effect
   public required Quantity Amount { get; init; }
 
   /// <summary>
+  /// The class of <i>other</i> abilities/spells whose cost this reduces — Strong
+  /// Back's "Equip abilities you activate … cost {3} less" and "Aura spells you
+  /// cast … cost {3} less" (ADR 0003 follow-up 1). Null for the self-only case
+  /// ("this spell costs {X} less to cast"), which remains the default.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public AbilityReference? AppliesTo { get; init; }
+
+  /// <summary>
   /// What the reduction scales with (e.g., "noncombat damage dealt to your opponents this turn").
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

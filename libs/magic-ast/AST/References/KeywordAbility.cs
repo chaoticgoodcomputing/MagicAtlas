@@ -87,6 +87,9 @@ public enum KeywordAbility
   /// <summary>Enlist (CR 702).</summary>
   Enlist,
 
+  /// <summary>Equip (CR 702.6) — the activated ability that attaches an Equipment to a creature. The keyword identity a reference filter matches on (e.g. Strong Back's "Equip abilities you activate") per ADR 0003.</summary>
+  Equip,
+
   /// <summary>Evolve (CR 702).</summary>
   Evolve,
 

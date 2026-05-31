@@ -136,6 +136,15 @@ public sealed record ObjectFilter
   public HistoryPredicate? History { get; init; }
 
   /// <summary>
+  /// Relational axis: the object must be attached to the referenced object —
+  /// Strong Back's "each Aura and Equipment attached to it" (ADR 0003 follow-up
+  /// 3, replacing the stringly-typed fake KorSpiritdancer used). The referent is
+  /// an <see cref="ObjectReference"/> (e.g. <c>EnchantedOrEquipped</c>, "it").
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? AttachedTo { get; init; }
+
+  /// <summary>
   /// Location in source text. Only present for unparsed or partially-parsed nodes.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
