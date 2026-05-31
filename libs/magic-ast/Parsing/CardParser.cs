@@ -61,18 +61,6 @@ public sealed class CardParser
       faces = faceList;
     }
 
-    // Color identity is DERIVED (CR 903.4), not echoed from source data: it is a
-    // computed property — the colors of the mana symbols in the card's mana cost
-    // and rules text, across every face (CR 903.4d) — not anything printed on the
-    // card. We walk the fully-assembled AST (mana-cost attribute + parsed abilities
-    // + faces); reminder text is excluded for free (its mana never becomes a
-    // ManaSymbol node — CR 903.4c). Inserted right after the ColorsAttribute so the
-    // [..., colors, colorIdentity, ...] attribute order the fixtures assert holds.
-    var colorIdentity = ColorIdentityDeriver.Derive(
-      new object?[] { attributes, oracleResult.Output, faces }
-    );
-    attributes = InsertColorIdentityAfterColors(attributes, colorIdentity);
-
     stopwatch.Stop();
 
     var output = new CardOutputAST
@@ -101,31 +89,6 @@ public sealed class CardParser
         ResidualCounts = ResidualWalker.Count(output),
       },
     };
-  }
-
-  /// <summary>
-  /// Places the derived <see cref="ColorIdentityAttribute"/> immediately after the
-  /// <see cref="ColorsAttribute"/>, preserving the canonical attribute order that
-  /// hand-parsed fixtures assert. Falls back to appending if no colors attribute
-  /// is present (it always is — emitted unconditionally by AttributeExtractor).
-  /// </summary>
-  private static IReadOnlyList<CardAttribute> InsertColorIdentityAfterColors(
-    IReadOnlyList<CardAttribute> attributes,
-    List<string> colorIdentity
-  )
-  {
-    var list = attributes.ToList();
-    var identity = new ColorIdentityAttribute { ColorIdentity = colorIdentity };
-    var colorsIndex = list.FindIndex(a => a is ColorsAttribute);
-    if (colorsIndex >= 0)
-    {
-      list.Insert(colorsIndex + 1, identity);
-    }
-    else
-    {
-      list.Add(identity);
-    }
-    return list;
   }
 
   /// <summary>

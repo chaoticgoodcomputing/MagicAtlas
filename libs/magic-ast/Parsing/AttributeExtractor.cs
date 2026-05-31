@@ -52,11 +52,13 @@ public sealed partial class AttributeExtractor
     attributes.Add(new ColorsAttribute { Colors = input.Colors ?? [] });
 
     // Color identity is DERIVED, not echoed from source data (CR 903.4): it is a
-    // computed property, not anything printed on the card. CardParser computes it
-    // via ColorIdentityDeriver over the fully-assembled AST (main + every face,
-    // per CR 903.4d) and inserts the ColorIdentityAttribute immediately after this
-    // ColorsAttribute. It is intentionally NOT emitted here, where the parsed
-    // abilities (and faces) aren't yet in scope to walk.
+    // computed property — the colors of mana symbols printed in the card's mana
+    // cost and rules text, across every face (CR 903.4d), reminder text ignored
+    // (CR 903.4c) — not anything supplied by the source database. Derived from the
+    // PRINTED text (not the decomposed AST) so a keyword's definitional mana
+    // (Firebending's reminder-only {R}) is excluded while its printed cost symbols
+    // (Cycling {U}) still count. Always WUBRG-ordered; empty for colorless cards.
+    attributes.Add(new ColorIdentityAttribute { ColorIdentity = ColorIdentityDeriver.Derive(input) });
 
     // Creature stats (power/toughness)
     if (!string.IsNullOrWhiteSpace(input.Power) && !string.IsNullOrWhiteSpace(input.Toughness))
