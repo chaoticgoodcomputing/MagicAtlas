@@ -1,0 +1,22 @@
+{
+  "Keyword": "Delve",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Delve",
+    "Effects": [
+      {
+        "EffectType": "alternativePayment",
+        "Method": "Exile",
+        "Pays": "Generic",
+        "Source": {
+          "CardTypes": [
+            "card"
+          ],
+          "Controller": "You",
+          "Zone": "Graveyard"
+        }
+      }
+    ]
+  }
+}

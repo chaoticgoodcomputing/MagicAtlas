@@ -29,10 +29,21 @@
           "KeywordSource": "Delve",
           "Effects": [
             {
-              "EffectType": "keywordAbility",
-              "Keyword": "Delve"
+              "EffectType": "alternativePayment",
+              "Method": "Exile",
+              "Pays": "Generic",
+              "Source": {
+                "CardTypes": [
+                  "card"
+                ],
+                "Controller": "You",
+                "Zone": "Graveyard"
+              }
             }
-          ]
+          ],
+          "Reminder": {
+            "Text": "(Each card you exile from your graveyard while casting this spell pays for {1}.)"
+          }
         },
         {
           "Kind": "spell",
