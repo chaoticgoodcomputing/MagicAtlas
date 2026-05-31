@@ -38,11 +38,14 @@ public sealed record TimingModificationEffect : Effect
   public string? WhoseTurn { get; init; }
 
   /// <summary>
-  /// If this grants timing to other abilities (like Leonin Shikari granting instant-speed equip),
-  /// this filter describes which abilities are affected.
+  /// If this grants timing to other abilities (Leonin Shikari granting
+  /// instant-speed equip), this reference describes which abilities/spells are
+  /// affected — keyed on the surviving keyword identity (ADR 0003). Shares the
+  /// <see cref="AbilityReference"/> value type with
+  /// <see cref="MagicAST.AST.Effects.Resource.CostReductionEffect.AppliesTo"/>.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public ObjectFilter? AppliesTo { get; init; }
+  public AbilityReference? AppliesTo { get; init; }
 
   /// <summary>
   /// Condition that must be met for the timing modification.
