@@ -29,24 +29,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Kicker",
-          "Effects": [
-            {
-              "EffectType": "kicker",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 3
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "Kind": "static",
           "Effects": [
             {
               "EffectType": "putCounters",
@@ -118,6 +100,24 @@
           "Raw": "1",
           "Value": 1
         }
+      },
+      {
+        "Kind": "additionalCosts",
+        "Costs": [
+          {
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                }
+              ]
+            },
+            "IsOptional": true,
+            "SourceSpan": { "Start": 0, "Length": 0 }
+          }
+        ]
       }
     ]
   }
