@@ -29,12 +29,65 @@
       "RawText": "Afterlife 2 (When this creature dies, create two 1/1 white and black Spirit creature tokens with flying.)",
       "Abilities": [
         {
-          "Kind": "static",
+          "Kind": "triggered",
           "KeywordSource": "Afterlife",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
           "Effects": [
             {
-              "EffectType": "afterlife",
-              "Value": 2
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": [
+                  "W",
+                  "B"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Spirit"
+                ],
+                "Abilities": [
+                  {
+                    "Kind": "static",
+                    "KeywordSource": "Flying",
+                    "Effects": [
+                      {
+                        "EffectType": "evasion",
+                        "CanBeBlockedBy": {
+                          "CardTypes": [
+                            "creature"
+                          ],
+                          "Characteristics": [
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Flying"
+                            },
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Reach"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "IsCopy": false
+              }
             }
           ],
           "Reminder": {
