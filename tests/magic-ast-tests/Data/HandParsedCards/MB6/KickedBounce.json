@@ -25,24 +25,6 @@
       "RawText": "Kicker {2} (You may pay an additional {2} as you cast this spell.)\nReturn target nonland permanent to its owner's hand. If this spell was kicked, draw a card.",
       "Abilities": [
         {
-          "Kind": "static",
-          "KeywordSource": "Kicker",
-          "Effects": [
-            {
-              "EffectType": "kicker",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 2
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
           "Kind": "spell",
           "Effects": [
             {
@@ -108,6 +90,24 @@
         "Kind": "colorIdentity",
         "ColorIdentity": [
           "U"
+        ]
+      },
+      {
+        "Kind": "additionalCosts",
+        "Costs": [
+          {
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
+              ]
+            },
+            "IsOptional": true,
+            "SourceSpan": { "Start": 0, "Length": 0 }
+          }
         ]
       }
     ]

@@ -161,13 +161,25 @@ public sealed partial class AttributeExtractor
   )]
   private static partial Regex AdditionalSacrificePrefix();
 
+  // Single-cost Kicker (Rule 702.33a): "Kicker [cost] (reminder)" means "You may pay
+  // an additional [cost] as you cast this spell." Captures the kicker mana cost.
+  // Anchored on "Kicker " then one-or-more brace-delimited mana symbols, so the
+  // deferred "Multikicker [cost]" (Rule 702.33c) does not match (it starts with
+  // "Multikicker"). A "Kicker [cost] and/or [cost]" multi-cost printing (Rule 702.33b)
+  // is also out of scope; this captures only the single contiguous cost run.
+  [GeneratedRegex(
+    @"^Kicker\s+(?<cost>(?:\{[^}]+\})+)(?:\s|$)",
+    RegexOptions.None
+  )]
+  private static partial Regex KickerPrefix();
+
   /// <summary>
   /// Scans oracle text for "As an additional cost to cast this spell, sacrifice a [type]."
   /// prefix lines and returns an AdditionalCostsAttribute when found, or null when absent.
   /// Handles the sacrifice-a-permanent family; other cost shapes (discard, pay life) are
   /// not yet recognised here and are left unparsed until a future batch extends this method.
   /// </summary>
-  private static AdditionalCostsAttribute? TryExtractAdditionalCosts(string? oracleText)
+  private AdditionalCostsAttribute? TryExtractAdditionalCosts(string? oracleText)
   {
     if (string.IsNullOrWhiteSpace(oracleText))
     {
@@ -176,26 +188,45 @@ public sealed partial class AttributeExtractor
 
     // Oracle text is newline-separated; additional-cost lines are always the first line.
     var firstLine = oracleText.Split('\n')[0].Trim();
-    var match = AdditionalSacrificePrefix().Match(firstLine);
-    if (!match.Success)
+
+    var sacrificeMatch = AdditionalSacrificePrefix().Match(firstLine);
+    if (sacrificeMatch.Success)
     {
-      return null;
+      var cardType = sacrificeMatch.Groups["type"].Value.ToLowerInvariant();
+      var sacrificeCost = new AdditionalCost
+      {
+        Cost = new SacrificeCost
+        {
+          Filter = new ObjectFilter { CardTypes = [cardType] },
+          Quantity = LiteralQuantity.Of(1),
+        },
+        SourceSpan = new TextSpan(0, firstLine.Length),
+      };
+
+      return new AdditionalCostsAttribute { Costs = [sacrificeCost] };
     }
 
-    var cardType = match.Groups["type"].Value.ToLowerInvariant();
-    var sourceSpan = new TextSpan(0, firstLine.Length);
-
-    var cost = new AdditionalCost
+    // Kicker (Rule 702.33a): an optional additional cost paid as you cast the spell.
+    // "Kicker [cost]" decomposes into AdditionalCost{Cost, IsOptional:true} — the keyword
+    // no longer surfaces as an oracle ability (ADR 0003). The keyword line itself carries
+    // no meaningful source offset for the cost host, so the span is collapsed to (0, 0).
+    // The linked "if this spell was kicked, ..." resolution (Rule 702.33e / 607) is a
+    // separate ability and is not modeled here.
+    var kickerMatch = KickerPrefix().Match(firstLine);
+    if (kickerMatch.Success)
     {
-      Cost = new SacrificeCost
+      var parsed = _manaCostParser.Parse(kickerMatch.Groups["cost"].Value);
+      var kickerCost = new AdditionalCost
       {
-        Filter = new ObjectFilter { CardTypes = [cardType] },
-        Quantity = LiteralQuantity.Of(1),
-      },
-      SourceSpan = sourceSpan,
-    };
+        Cost = new ManaCost { Symbols = parsed.Symbols },
+        IsOptional = true,
+        SourceSpan = new TextSpan(0, 0),
+      };
 
-    return new AdditionalCostsAttribute { Costs = [cost] };
+      return new AdditionalCostsAttribute { Costs = [kickerCost] };
+    }
+
+    return null;
   }
 
   /// <summary>
