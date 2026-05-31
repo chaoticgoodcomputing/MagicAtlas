@@ -101,7 +101,9 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": []
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

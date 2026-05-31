@@ -59,7 +59,9 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": []
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "layout",

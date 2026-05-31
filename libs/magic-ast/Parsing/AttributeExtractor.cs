@@ -287,6 +287,20 @@ public sealed partial class AttributeExtractor
   /// </summary>
   private List<string> ComputeColorIdentity(CardInputDTO input)
   {
+    // Color identity is authoritatively supplied by the source data (Scryfall),
+    // which already applies the Comprehensive Rules edge cases the parser cannot
+    // safely re-derive from oracle text: CR 903.4c ("Reminder text is ignored when
+    // determining a card's color identity" — e.g. a keyword's mana-adding reminder
+    // like Firebending's "(...add {R}{R}...)" does NOT add red), the documented
+    // Extort ruling (the {W/B} in Extort's reminder text DOES count), color
+    // indicators, and the combined identity of both faces of a double-faced card.
+    // Prefer it verbatim (WUBRG-ordered); fall back to symbol scanning only when
+    // the source omits it.
+    if (input.ColorIdentity is { Count: > 0 })
+    {
+      return OrderColors(new HashSet<string>(input.ColorIdentity));
+    }
+
     var colors = new HashSet<string>();
 
     // Add colors from mana cost

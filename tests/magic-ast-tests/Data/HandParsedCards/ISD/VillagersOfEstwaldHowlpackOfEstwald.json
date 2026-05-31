@@ -60,7 +60,9 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": []
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "layout",
