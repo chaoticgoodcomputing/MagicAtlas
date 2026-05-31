@@ -6,14 +6,20 @@
     "OracleText": "If this card is in your opening hand, you may begin the game with it on the battlefield.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Leyline of the Void",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "If this card is in your opening hand, you may begin the game with it on the battlefield.",
@@ -22,8 +28,10 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "openingHand",
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "openingHand"
+              }
             }
           ]
         }
@@ -34,20 +42,37 @@
         "Kind": "manaCost",
         "Raw": "{2}{B}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 4,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

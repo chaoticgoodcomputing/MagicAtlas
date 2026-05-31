@@ -14,7 +14,9 @@
     "Name": "Grim Monolith",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "This artifact doesn't untap during your untap step.\n{T}: Add {C}{C}{C}.\n{4}: Untap this artifact.",
@@ -24,8 +26,7 @@
           "Effects": [
             {
               "EffectType": "doesntUntap",
-              "WhoseUntapStep": "your",
-              "IsOptional": false
+              "WhoseUntapStep": "your"
             }
           ]
         },
@@ -40,8 +41,7 @@
             {
               "EffectType": "addMana",
               "Mana": "{C}{C}{C}",
-              "AnyColor": false,
-              "IsOptional": false
+              "AnyColor": false
             }
           ],
           "IsManaAbility": true
@@ -64,8 +64,7 @@
               "EffectType": "untap",
               "Target": {
                 "Kind": "Self"
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false
@@ -77,7 +76,10 @@
         "Kind": "manaCost",
         "Raw": "{2}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false

@@ -37,8 +37,7 @@
                   "creature"
                 ],
                 "Controller": "You"
-              },
-              "IsOptional": false
+              }
             }
           ],
           "KeywordSource": "Enchant"

@@ -6,14 +6,20 @@
     "OracleText": "You may tap or untap target artifact, creature, or land.\nDraw a card.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Twitch",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "You may tap or untap target artifact, creature, or land.\nDraw a card.",
@@ -22,14 +28,20 @@
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "tapOrUntap",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": ["artifact", "creature", "land"]
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "tapOrUntap",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "artifact",
+                      "creature",
+                      "land"
+                    ]
+                  }
                 }
-              },
-              "IsOptional": true
+              }
             }
           ]
         },
@@ -55,18 +67,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

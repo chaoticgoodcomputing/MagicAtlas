@@ -21,6 +21,6 @@ public sealed class InvestigateEffectRule : IActivatedEffectRule
       return null;
     }
 
-    return new InvestigateEffect { IsOptional = false };
+    return MagicAST.AST.Effects.Core.EffectWrap.Optional(new InvestigateEffect {}, false);
   }
 }

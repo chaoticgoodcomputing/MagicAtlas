@@ -81,11 +81,14 @@
           },
           "Effects": [
             {
-              "EffectType": "counterSpell",
-              "Target": {
-                "Kind": "It"
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": {
+                  "Kind": "It"
+                }
               },
-              "UnlessClause": {
+              "Unless": {
                 "Player": {
                   "Kind": "ThatPlayer"
                 },

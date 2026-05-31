@@ -51,8 +51,7 @@
                 "QuantityType": "literal",
                 "Value": 3
               },
-              "CounterType": "+1/+1",
-              "IsOptional": false
+              "CounterType": "+1/+1"
             }
           ],
           "When": "asThisEnters"

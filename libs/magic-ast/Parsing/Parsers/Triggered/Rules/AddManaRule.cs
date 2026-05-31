@@ -31,14 +31,14 @@ public sealed class AddManaRule : ITriggeredRule
     var manaText = t[4..].Trim();
     if (Regex.IsMatch(manaText, @"^one\s+mana\s+of\s+any\s+color$", RegexOptions.IgnoreCase))
     {
-      effect = new AddManaEffect { Mana = string.Empty, AnyColor = true, IsOptional = isOptional };
+      effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new AddManaEffect { Mana = string.Empty, AnyColor = true}, isOptional);
       return true;
     }
     if (string.IsNullOrWhiteSpace(manaText) || !manaText.Contains('{'))
     {
       return false;
     }
-    effect = new AddManaEffect { Mana = manaText, AnyColor = false, IsOptional = isOptional };
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new AddManaEffect { Mana = manaText, AnyColor = false}, isOptional);
     return true;
   }
 }

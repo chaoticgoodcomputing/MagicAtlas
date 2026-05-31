@@ -40,17 +40,19 @@
           },
           "Effects": [
             {
-              "EffectType": "returnToHand",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "creature",
-                    "artifact"
-                  ]
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "returnToHand",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature",
+                      "artifact"
+                    ]
+                  }
                 }
-              },
-              "IsOptional": true
+              }
             }
           ]
         }

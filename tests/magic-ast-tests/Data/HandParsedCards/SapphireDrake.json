@@ -38,8 +38,14 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
@@ -58,7 +64,10 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "with a +1/+1 counter"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "with a +1/+1 counter"
+                    }
                   ]
                 }
               },
@@ -73,14 +82,19 @@
                         "creature"
                       ],
                       "Characteristics": [
-                        {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                        {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Flying"
+                        },
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Reach"
+                        }
                       ]
                     }
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

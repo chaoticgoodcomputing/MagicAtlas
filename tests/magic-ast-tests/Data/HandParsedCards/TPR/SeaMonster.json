@@ -32,7 +32,6 @@
           "Effects": [
             {
               "EffectType": "cantAttack",
-              "IsOptional": false,
               "UnlessDefendingControls": {
                 "ConditionType": "DefendingPlayerControls",
                 "PermanentFilter": {

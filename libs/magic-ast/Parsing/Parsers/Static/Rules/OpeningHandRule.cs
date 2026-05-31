@@ -26,10 +26,7 @@ public sealed class OpeningHandRule : IStaticRule
     [
       new StaticAbility
       {
-        Effects = [new MagicAST.AST.Effects.Timing.OpeningHandEffect
-        {
-          IsOptional = true,
-        }],
+        Effects = [new MagicAST.AST.Effects.Core.OptionalEffect { Inner = new MagicAST.AST.Effects.Timing.OpeningHandEffect {} }],
       },
     ];
   }

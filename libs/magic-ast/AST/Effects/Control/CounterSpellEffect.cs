@@ -11,7 +11,7 @@ using MagicAST.AST.Effects.Traits;
 /// "counter [target spell/ability]"
 /// </summary>
 [OracleEffect("counterSpell")]
-public sealed record CounterSpellEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+public sealed record CounterSpellEffect : Effect
 {
   public required ObjectReference Target { get; init; }
 
@@ -20,23 +20,4 @@ public sealed record CounterSpellEffect : Effect, IOptionalEffect, IDurativeEffe
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? UnlessCost { get; init; }
-
-  /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
-  public bool IsOptional { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing to perform this one. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDo { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing NOT to perform this one. Rule 117.7. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDoNot { get; init; }
-
-  /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Duration? Duration { get; init; }
-
-  /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public UnlessClause? UnlessClause { get; init; }
 }

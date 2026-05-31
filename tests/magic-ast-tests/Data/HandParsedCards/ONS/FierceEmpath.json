@@ -40,23 +40,25 @@
           },
           "Effects": [
             {
-              "EffectType": "searchLibrary",
-              "Filter": {
-                "CardTypes": [
-                  "creature"
-                ],
-                "ManaValueComparison": {
-                  "Operator": "GreaterThanOrEqual",
-                  "Value": 6
-                }
-              },
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Destination": "Hand",
-              "Revealed": true,
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "searchLibrary",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "ManaValueComparison": {
+                    "Operator": "GreaterThanOrEqual",
+                    "Value": 6
+                  }
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Destination": "Hand",
+                "Revealed": true
+              }
             }
           ]
         }

@@ -83,11 +83,8 @@ public sealed class CounterSpellRule : ISpellRule
         Cost = new ManaCost { Symbols = [.. parsed.Symbols] },
       };
     }
-    effect = new CounterSpellEffect
-    {
-      Target = new ObjectReference { Kind = ObjectReferenceKind.Target, Filter = filter },
-      UnlessClause = unless,
-    };
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Preventable(new CounterSpellEffect {
+      Target = new ObjectReference { Kind = ObjectReferenceKind.Target, Filter = filter }}, unless);
     return true;
   }
 }

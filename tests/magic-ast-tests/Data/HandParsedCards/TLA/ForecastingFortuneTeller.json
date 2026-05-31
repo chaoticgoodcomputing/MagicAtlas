@@ -58,8 +58,7 @@
                 "AbilityText": [
                   "{2}, Sacrifice this artifact: Draw a card."
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ],
           "Reminder": {

@@ -51,15 +51,12 @@ public sealed class WardKeywordRule : IStaticRule
       Filter = new ObjectFilter { Controller = ControllerFilter.Opponent },
     };
 
-    var counterSpell = new MagicAST.AST.Effects.Control.CounterSpellEffect
-    {
-      Target = new ObjectReference { Kind = ObjectReferenceKind.It },
-      UnlessClause = new MagicAST.AST.Effects.UnlessClause
+    var counterSpell = new MagicAST.AST.Effects.Core.PreventableEffect { Inner = new MagicAST.AST.Effects.Control.CounterSpellEffect {
+      Target = new ObjectReference { Kind = ObjectReferenceKind.It }}, Unless = new MagicAST.AST.Effects.UnlessClause
       {
         Player = new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
         Cost = wardCost,
-      },
-    };
+      } };
 
     return
     [

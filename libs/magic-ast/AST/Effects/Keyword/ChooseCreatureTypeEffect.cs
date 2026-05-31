@@ -31,7 +31,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// creature-type-selection decision.</para>
 /// </summary>
 [OracleEffect("chooseCreatureType")]
-public sealed record ChooseCreatureTypeEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+public sealed record ChooseCreatureTypeEffect : Effect
 {
   /// <summary>
   /// Optional restriction on the creature-type choice (e.g. "choose a creature
@@ -41,23 +41,4 @@ public sealed record ChooseCreatureTypeEffect : Effect, IOptionalEffect, IDurati
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Restriction { get; init; }
-
-  /// <summary>Whether this effect carries a "you may" prefix in oracle text. (IOptionalEffect)</summary>
-  public bool IsOptional { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing to perform this one. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDo { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing NOT to perform this one. Rule 117.7. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDoNot { get; init; }
-
-  /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Duration? Duration { get; init; }
-
-  /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public UnlessClause? UnlessClause { get; init; }
 }

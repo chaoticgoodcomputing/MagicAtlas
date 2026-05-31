@@ -53,8 +53,7 @@
               "Player": {
                 "Kind": "EachOpponent"
               },
-              "Random": false,
-              "IsOptional": false
+              "Random": false
             }
           ]
         },
@@ -66,8 +65,7 @@
               "Power": {
                 "QuantityType": "literal",
                 "Value": 2
-              },
-              "IsOptional": false
+              }
             }
           ],
           "KeywordSource": "Crew",

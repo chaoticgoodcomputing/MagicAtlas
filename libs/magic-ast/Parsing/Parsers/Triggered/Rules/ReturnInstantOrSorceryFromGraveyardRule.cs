@@ -47,7 +47,6 @@ public sealed class ReturnInstantOrSorceryFromGraveyardRule : ITriggeredRule
           Controller = ControllerFilter.You,
         },
       },
-      IsOptional = false,
     };
     return true;
   }

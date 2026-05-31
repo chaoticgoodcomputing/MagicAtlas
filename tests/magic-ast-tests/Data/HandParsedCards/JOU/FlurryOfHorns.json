@@ -58,8 +58,7 @@
                   }
                 ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

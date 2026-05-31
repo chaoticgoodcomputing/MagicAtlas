@@ -6,15 +6,24 @@
     "OracleText": "When Spirited Companion enters or dies, draw a card.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Spirited Companion",
     "TypeLine": {
       "Raw": "Creature — Dog Spirit",
-      "Types": ["Creature"],
-      "Subtypes": ["Dog", "Spirit"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dog",
+        "Spirit"
+      ]
     },
     "Oracle": {
       "RawText": "When Spirited Companion enters or dies, draw a card.",
@@ -25,7 +34,9 @@
             "Timing": "When",
             "Event": "EntersOrDies",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -37,8 +48,7 @@
               },
               "Player": {
                 "Kind": "You"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -49,24 +59,44 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

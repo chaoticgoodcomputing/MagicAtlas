@@ -38,7 +38,10 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "token"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "token"
+                    }
                   ],
                   "Controller": "You"
                 }
@@ -54,15 +57,19 @@
                         "creature"
                       ],
                       "Characteristics": [
-                        {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                        {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Flying"
+                        },
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Reach"
+                        }
                       ]
-                    },
-                    "IsOptional": false
+                    }
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -97,7 +104,10 @@
               "CostType": "sacrifice",
               "Filter": {
                 "Characteristics": [
-                  {"CharacteristicType": "other", "Description": "token"}
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "token"
+                  }
                 ]
               },
               "Quantity": {
@@ -126,8 +136,7 @@
                   "Beast"
                 ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ],
           "Restrictions": [

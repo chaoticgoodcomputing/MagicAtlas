@@ -51,7 +51,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// </para>
 /// </remarks>
 [OracleEffect("allMustBlock")]
-public sealed record AllMustBlockEffect : Effect, IDurativeEffect
+public sealed record AllMustBlockEffect : ContinuousEffect
 {
   /// <summary>
   /// The creature that all able blockers must block.
@@ -60,8 +60,4 @@ public sealed record AllMustBlockEffect : Effect, IDurativeEffect
   /// <c>Target/creature</c> for the spell ("target creature") shape.
   /// </summary>
   public required ObjectReference BlockTarget { get; init; }
-
-  /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Duration? Duration { get; init; }
 }

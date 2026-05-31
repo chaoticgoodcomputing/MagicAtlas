@@ -67,7 +67,6 @@ public sealed class SearchLibraryToTopRule : ISpellRule
       Count = LiteralQuantity.Of(1),
       Destination = SearchDestination.TopOfLibrary,
       Revealed = false,
-      IsOptional = false,
     };
     return true;
   }

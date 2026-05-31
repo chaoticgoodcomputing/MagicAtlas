@@ -38,8 +38,7 @@
                     "GenericAmount": 4
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ],
           "Reminder": {

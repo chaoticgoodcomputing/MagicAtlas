@@ -60,15 +60,12 @@ public sealed class SacrificeSelfUnlessPayRule : ITriggeredRule
       return false;
     }
 
-    effect = new SacrificeEffect
-    {
-      Target = ObjectReference.Self(),
-      UnlessClause = new UnlessClause
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Preventable(new SacrificeEffect {
+      Target = ObjectReference.Self()}, new UnlessClause
       {
         Player = ObjectReference.You(),
         Cost = manaCost,
-      },
-    };
+      });
     return true;
   }
 }

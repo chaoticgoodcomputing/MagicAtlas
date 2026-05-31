@@ -48,22 +48,19 @@
               "EffectType": "cantAttack",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
-              },
-              "IsOptional": false
+              }
             },
             {
               "EffectType": "cantBlock",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
-              },
-              "IsOptional": false
+              }
             },
             {
               "EffectType": "cantActivateAbilities",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

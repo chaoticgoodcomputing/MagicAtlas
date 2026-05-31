@@ -35,7 +35,6 @@ public sealed class ChampionKeyword : IKeyword
         Effects = [new ChampionEffect
         {
           CreatureType = parameter?.Trim() ?? "creature",
-          IsOptional = false,
         }],
       },
     };
@@ -52,7 +51,7 @@ public sealed class ChampionKeyword : IKeyword
     select new StaticAbility
     {
       KeywordSource = $"Champion a {creatureType}",
-      Effects = [new ChampionEffect { CreatureType = creatureType, IsOptional = false }],
+      Effects = [MagicAST.AST.Effects.Core.EffectWrap.Optional(new ChampionEffect { CreatureType = creatureType}, false)],
       Reminder = reminder,
     }
   );

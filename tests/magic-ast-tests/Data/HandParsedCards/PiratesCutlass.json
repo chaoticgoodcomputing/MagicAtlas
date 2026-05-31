@@ -13,8 +13,12 @@
     "Name": "Pirate's Cutlass",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "When this Equipment enters, attach it to target Pirate you control.\nEquipped creature gets +2/+1.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
@@ -25,7 +29,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["equipment"]
+              "CardTypes": [
+                "equipment"
+              ]
             }
           },
           "Effects": [
@@ -34,11 +40,12 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "Subtypes": ["Pirate"],
+                  "Subtypes": [
+                    "Pirate"
+                  ],
                   "Controller": "You"
                 }
-              },
-              "IsOptional": false
+              }
             }
           ]
         },

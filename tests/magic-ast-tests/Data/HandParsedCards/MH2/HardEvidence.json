@@ -49,8 +49,7 @@
                   "Crab"
                 ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -58,8 +57,7 @@
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "investigate",
-              "IsOptional": false
+              "EffectType": "investigate"
             }
           ]
         }

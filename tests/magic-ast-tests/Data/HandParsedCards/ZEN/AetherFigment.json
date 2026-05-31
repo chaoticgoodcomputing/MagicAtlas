@@ -57,8 +57,7 @@
                 "QuantityType": "literal",
                 "Value": 2
               },
-              "CounterType": "+1/+1",
-              "IsOptional": false
+              "CounterType": "+1/+1"
             }
           ],
           "Condition": {
@@ -71,8 +70,7 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "cantBeBlocked",
-              "IsOptional": false
+              "EffectType": "cantBeBlocked"
             }
           ]
         }

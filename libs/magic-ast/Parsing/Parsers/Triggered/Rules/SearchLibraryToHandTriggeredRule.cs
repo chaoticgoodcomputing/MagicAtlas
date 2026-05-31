@@ -122,14 +122,11 @@ public sealed class SearchLibraryToHandTriggeredRule : ITriggeredRule
       };
     }
 
-    effect = new SearchLibraryEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new SearchLibraryEffect {
       Filter = filter,
       Count = LiteralQuantity.Of(1),
       Destination = SearchDestination.Hand,
-      Revealed = true,
-      IsOptional = isOptional,
-    };
+      Revealed = true}, isOptional);
     return true;
   }
 

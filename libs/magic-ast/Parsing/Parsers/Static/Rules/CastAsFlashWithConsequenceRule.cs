@@ -36,11 +36,9 @@ public sealed class CastAsFlashWithConsequenceRule : IStaticRule
     [
       new StaticAbility
       {
-        Effects = [new TimingModificationEffect
-        {
+        Effects = [MagicAST.AST.Effects.Core.EffectWrap.Optional(new TimingModificationEffect {
           Modification = TimingModificationType.Grant,
           Timing = TimingWindow.Instant,
-          IsOptional = true,
           Consequence = new MagicAST.AST.Effects.Core.CreateDelayedTriggerEffect
           {
             DelayedTrigger = new MagicAST.AST.Abilities.DelayedTriggeredAbility
@@ -57,8 +55,7 @@ public sealed class CastAsFlashWithConsequenceRule : IStaticRule
               },
               Effects = [new MagicAST.AST.Effects.ZoneChange.SacrificeEffect { Target = ObjectReference.Self() }],
             },
-          },
-        }],
+          }}, true)],
       },
     ];
   }

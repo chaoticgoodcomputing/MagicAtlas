@@ -7,13 +7,17 @@
     "Power": null,
     "Toughness": null,
     "Colors": [],
-    "ColorIdentity": ["W"]
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Implement of Improvement",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "{W}, Sacrifice this artifact: You gain 2 life.\nWhen this artifact is put into a graveyard from the battlefield, draw a card.",
@@ -24,14 +28,26 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["W"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                }
               ]
             },
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["artifact"],
-                "Characteristics": [{"CharacteristicType": "other", "Description": "this permanent"}]
+                "CardTypes": [
+                  "artifact"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "this permanent"
+                  }
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -59,7 +75,9 @@
             "Timing": "When",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["artifact"]
+              "CardTypes": [
+                "artifact"
+              ]
             }
           },
           "Effects": [
@@ -71,8 +89,7 @@
               },
               "Player": {
                 "Kind": "You"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -83,7 +100,10 @@
         "Kind": "manaCost",
         "Raw": "{1}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          }
         ],
         "ManaValue": 1
       },
@@ -93,7 +113,9 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

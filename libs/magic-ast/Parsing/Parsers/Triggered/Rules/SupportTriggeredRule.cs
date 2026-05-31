@@ -68,7 +68,6 @@ public sealed class SupportTriggeredRule : ITriggeredRule
       },
       CounterType = "+1/+1",
       Count = LiteralQuantity.Of(1),
-      IsOptional = false,
     };
     return true;
   }

@@ -32,8 +32,7 @@
                 "QuantityType": "literal",
                 "Value": 3
               },
-              "CounterType": "charge",
-              "IsOptional": false
+              "CounterType": "charge"
             }
           ],
           "When": "asThisEnters"
@@ -67,8 +66,7 @@
                     "creature"
                   ]
                 }
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false

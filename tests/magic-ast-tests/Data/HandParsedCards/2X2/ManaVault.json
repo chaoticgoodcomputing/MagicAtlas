@@ -41,11 +41,13 @@
           },
           "Effects": [
             {
-              "EffectType": "untap",
-              "Target": {
-                "Kind": "Self"
-              },
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "untap",
+                "Target": {
+                  "Kind": "Self"
+                }
+              }
             }
           ],
           "Instructions": [

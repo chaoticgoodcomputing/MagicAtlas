@@ -40,8 +40,7 @@
                 "QuantityType": "literal",
                 "Value": 2
               },
-              "CounterType": "charge",
-              "IsOptional": false
+              "CounterType": "charge"
             }
           ],
           "When": "asThisEnters"

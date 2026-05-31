@@ -749,7 +749,6 @@ public sealed class TriggeredAbilityParser : IAbilityParser
           Subtypes = [subtype],
           IsCopy = false,
         },
-        IsOptional = false,
       });
     }
 
@@ -758,7 +757,6 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       new CompositeEffect
       {
         Effects = creates,
-        IsOptional = false,
       },
     };
   }
@@ -895,7 +893,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     var you = ObjectReference.You();
     return new List<Effect>
     {
-      new DrawCardsEffect { Count = LiteralQuantity.Of(drawCount), Player = you, IsOptional = false },
+      new DrawCardsEffect { Count = LiteralQuantity.Of(drawCount), Player = you},
       new LoseLifeEffect { Amount = LiteralQuantity.Of(lifeCount), Player = you },
     };
   }

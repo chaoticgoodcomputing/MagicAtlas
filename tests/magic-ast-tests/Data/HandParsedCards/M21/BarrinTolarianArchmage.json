@@ -44,23 +44,25 @@
           },
           "Effects": [
             {
-              "EffectType": "returnToHand",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "creature",
-                    "planeswalker"
-                  ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "other"
-                    }
-                  ]
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "returnToHand",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature",
+                      "planeswalker"
+                    ],
+                    "Characteristics": [
+                      {
+                        "CharacteristicType": "other",
+                        "Description": "other"
+                      }
+                    ]
+                  }
                 }
-              },
-              "IsOptional": true
+              }
             }
           ]
         },

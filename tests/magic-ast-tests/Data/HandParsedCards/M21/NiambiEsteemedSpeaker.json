@@ -57,20 +57,25 @@
           },
           "Effects": [
             {
-              "EffectType": "returnToHand",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "creature"
-                  ],
-                  "Controller": "You",
-                  "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "another"}
-                  ]
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "returnToHand",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Controller": "You",
+                    "Characteristics": [
+                      {
+                        "CharacteristicType": "other",
+                        "Description": "another"
+                      }
+                    ]
+                  }
                 }
               },
-              "IsOptional": true,
               "IfYouDo": {
                 "EffectType": "gainLife",
                 "Amount": {

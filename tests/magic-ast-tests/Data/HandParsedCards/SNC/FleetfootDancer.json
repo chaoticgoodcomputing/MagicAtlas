@@ -43,8 +43,7 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "lifelink",
-              "IsOptional": false
+              "EffectType": "lifelink"
             }
           ],
           "KeywordSource": "Lifelink"
@@ -61,8 +60,7 @@
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "CounterType": "shield",
-              "IsOptional": false
+              "CounterType": "shield"
             }
           ],
           "When": "asThisEnters"

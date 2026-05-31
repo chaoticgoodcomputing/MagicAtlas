@@ -90,18 +90,15 @@
                     "Value": 1
                   },
                   "Destination": "Battlefield",
-                  "Revealed": false,
-                  "IsOptional": false
+                  "Revealed": false
                 },
                 {
                   "EffectType": "shuffle",
                   "Player": {
                     "Kind": "You"
-                  },
-                  "IsOptional": false
+                  }
                 }
-              ],
-              "IsOptional": false
+              ]
             }
           ],
           "IsManaAbility": false

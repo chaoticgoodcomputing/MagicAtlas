@@ -6,15 +6,23 @@
     "OracleText": "Multikicker {G} (You may pay an additional {G} any number of times as you cast this spell.)\nWhen this creature enters, create a 2/2 green Wolf creature token for each time it was kicked.",
     "Power": "4",
     "Toughness": "4",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Wolfbriar Elemental",
     "TypeLine": {
       "Raw": "Creature — Elemental",
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental"
+      ]
     },
     "Oracle": {
       "RawText": "Multikicker {G} (You may pay an additional {G} any number of times as you cast this spell.)\nWhen this creature enters, create a 2/2 green Wolf creature token for each time it was kicked.",
@@ -30,11 +38,12 @@
                 "Symbols": [
                   {
                     "Kind": "colored",
-                    "Colors": ["G"]
+                    "Colors": [
+                      "G"
+                    ]
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ],
           "Reminder": {
@@ -47,7 +56,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -60,12 +71,17 @@
               "Token": {
                 "Power": "2",
                 "Toughness": "2",
-                "Colors": ["G"],
-                "Types": ["creature"],
-                "Subtypes": ["Wolf"],
+                "Colors": [
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Wolf"
+                ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -76,19 +92,50 @@
         "Kind": "manaCost",
         "Raw": "{2}{G}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 4,
         "IsVariable": false
       },
-      { "Kind": "colors", "Colors": ["G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 4, "Raw": "4" },
-        "Toughness": { "ValueType": "fixed", "Value": 4, "Raw": "4" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
       }
     ]
   }

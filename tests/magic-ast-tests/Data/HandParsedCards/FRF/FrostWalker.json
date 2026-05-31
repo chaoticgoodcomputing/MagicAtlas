@@ -43,8 +43,7 @@
               "EffectType": "sacrifice",
               "Target": {
                 "Kind": "It"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

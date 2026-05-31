@@ -46,14 +46,11 @@ public sealed class ReturnEnchantedOnDeathTriggeredRule : ITriggeredRule
       return false;
     }
 
-    effect = new ReturnToBattlefieldEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new ReturnToBattlefieldEffect {
       // "that card" — pronoun back-reference to the enchanted creature (now in graveyard).
       Target = ObjectReference.It(),
       // "under your control" — the controller of this Aura gains control of the returned creature.
-      UnderControl = ObjectReference.You(),
-      IsOptional = match.Groups["opt"].Success,
-    };
+      UnderControl = ObjectReference.You()}, match.Groups["opt"].Success);
     return true;
   }
 }

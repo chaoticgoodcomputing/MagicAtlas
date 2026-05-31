@@ -104,13 +104,12 @@ public sealed class RemoveCountersTriggeredRule : ITriggeredRule
       return true;
     }
 
-    Duration? duration = lower.Contains("until end of turn") ? UntilTimeDuration.EndOfTurn : null;
+    // Removing counters is a one-shot action (CR 608) — it carries no duration.
     effect = new RemoveCountersEffect
     {
       Target = target,
       CounterType = counterType,
       Count = LiteralQuantity.Of(count),
-      Duration = duration,
     };
     return true;
   }

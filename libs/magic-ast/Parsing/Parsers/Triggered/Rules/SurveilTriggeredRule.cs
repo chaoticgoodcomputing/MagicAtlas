@@ -37,7 +37,7 @@ public sealed class SurveilTriggeredRule : ITriggeredRule
     if (optional.Success)
     {
       var count = int.Parse(optional.Groups[1].Value);
-      effect = new SurveilEffect { Count = LiteralQuantity.Of(count), IsOptional = true };
+      effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new SurveilEffect { Count = LiteralQuantity.Of(count)}, true);
       return true;
     }
 

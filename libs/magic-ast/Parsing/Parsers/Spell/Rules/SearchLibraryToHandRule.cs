@@ -68,7 +68,6 @@ public sealed class SearchLibraryToHandRule : ISpellRule
       Count = LiteralQuantity.Of(1),
       Destination = SearchDestination.Hand,
       Revealed = false,
-      IsOptional = false,
     };
     return true;
   }

@@ -37,8 +37,7 @@
               "OriginalEventOccurs": false,
               "Modifier": {
                 "Type": "double"
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -60,8 +59,7 @@
               "OriginalEventOccurs": false,
               "Modifier": {
                 "Type": "double"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

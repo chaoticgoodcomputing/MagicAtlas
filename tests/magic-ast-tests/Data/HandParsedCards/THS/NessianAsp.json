@@ -65,8 +65,7 @@
           "Effects": [
             {
               "EffectType": "monstrosity",
-              "Value": 4,
-              "IsOptional": false
+              "Value": 4
             }
           ],
           "IsManaAbility": false

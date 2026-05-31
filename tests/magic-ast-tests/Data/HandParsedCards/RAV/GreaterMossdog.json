@@ -37,8 +37,7 @@
           "Effects": [
             {
               "EffectType": "dredge",
-              "Value": 3,
-              "IsOptional": false
+              "Value": 3
             }
           ]
         }

@@ -67,8 +67,7 @@
                 "Start": 189,
                 "Length": 40
               },
-              "RawText": "Destroy target artifact or enchantment.",
-              "IsOptional": false
+              "RawText": "Destroy target artifact or enchantment."
             }
           ],
           "IsManaAbility": false

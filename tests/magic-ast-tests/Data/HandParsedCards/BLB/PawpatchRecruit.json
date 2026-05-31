@@ -87,8 +87,7 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

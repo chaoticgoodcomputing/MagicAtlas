@@ -54,7 +54,6 @@ public sealed class AbilityWordConditionalEntersWithCountersRule : IStaticRule
           Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
           Count = count,
           CounterType = counterType,
-          IsOptional = false,
         }],
         Condition = MagicAST.Parsing.ConditionParser.Parse(conditionText),
       },

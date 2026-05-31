@@ -6,14 +6,20 @@
     "OracleText": "Open Fire deals 3 damage to any target.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Open Fire",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Open Fire deals 3 damage to any target.",
@@ -23,13 +29,16 @@
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Source": { "Kind": "Self" },
+              "Source": {
+                "Kind": "Self"
+              },
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 3
               },
-              "Target": { "Kind": "AnyTarget" },
-              "IsOptional": false
+              "Target": {
+                "Kind": "AnyTarget"
+              }
             }
           ]
         }
@@ -40,18 +49,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

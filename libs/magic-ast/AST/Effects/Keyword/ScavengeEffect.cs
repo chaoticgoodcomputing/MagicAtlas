@@ -13,30 +13,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// semantics are conventionally inferred from the rules.
 /// </summary>
 [OracleEffect("scavenge")]
-public sealed record ScavengeEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+public sealed record ScavengeEffect : Effect
 {
   /// <summary>
   /// The cost paid to scavenge this card. Always a <see cref="ManaCost"/> in printed
   /// oracle text (e.g. "{6}{B}", "{5}{G}", "{0}").
   /// </summary>
   public required Cost Cost { get; init; }
-
-  /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
-  public bool IsOptional { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing to perform this one. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDo { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing NOT to perform this one. Rule 117.7. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDoNot { get; init; }
-
-  /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Duration? Duration { get; init; }
-
-  /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public UnlessClause? UnlessClause { get; init; }
 }

@@ -40,21 +40,23 @@
           },
           "Effects": [
             {
-              "EffectType": "searchLibrary",
-              "Filter": {
-                "Name": "Sorin, Vampire Lord"
-              },
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Sources": [
-                "Library",
-                "Graveyard"
-              ],
-              "Destination": "Hand",
-              "Revealed": true,
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "searchLibrary",
+                "Filter": {
+                  "Name": "Sorin, Vampire Lord"
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Sources": [
+                  "Library",
+                  "Graveyard"
+                ],
+                "Destination": "Hand",
+                "Revealed": true
+              }
             }
           ]
         }

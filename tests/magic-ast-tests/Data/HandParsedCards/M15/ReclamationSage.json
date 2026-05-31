@@ -41,17 +41,19 @@
           },
           "Effects": [
             {
-              "EffectType": "destroy",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "artifact",
-                    "enchantment"
-                  ]
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "destroy",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "artifact",
+                      "enchantment"
+                    ]
+                  }
                 }
-              },
-              "IsOptional": true
+              }
             }
           ]
         }

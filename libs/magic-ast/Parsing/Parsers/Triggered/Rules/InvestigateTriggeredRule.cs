@@ -26,7 +26,7 @@ public sealed class InvestigateTriggeredRule : ITriggeredRule
     {
       return false;
     }
-    effect = new InvestigateEffect { IsOptional = false };
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new InvestigateEffect {}, false);
     return true;
   }
 }

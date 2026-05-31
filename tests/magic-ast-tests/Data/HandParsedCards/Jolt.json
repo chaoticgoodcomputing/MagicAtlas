@@ -30,18 +30,20 @@
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "tapOrUntap",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "artifact",
-                    "creature",
-                    "land"
-                  ]
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "tapOrUntap",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "artifact",
+                      "creature",
+                      "land"
+                    ]
+                  }
                 }
-              },
-              "IsOptional": true
+              }
             }
           ]
         },

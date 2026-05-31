@@ -49,13 +49,9 @@ public sealed class DrawCardsTriggeredRule : ITriggeredRule
       }
     }
 
-    effect = new DrawCardsEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Preventable(MagicAST.AST.Effects.Core.EffectWrap.Optional(new DrawCardsEffect {
       Count = LiteralQuantity.Of(count),
-      Player = ObjectReference.You(),
-      IsOptional = isOptional,
-      UnlessClause = unless,
-    };
+      Player = ObjectReference.You()}, isOptional), unless);
     return true;
   }
 }

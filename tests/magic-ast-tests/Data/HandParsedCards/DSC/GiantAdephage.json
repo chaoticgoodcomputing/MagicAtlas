@@ -58,8 +58,7 @@
               "EffectType": "copy",
               "Target": {
                 "Kind": "Self"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

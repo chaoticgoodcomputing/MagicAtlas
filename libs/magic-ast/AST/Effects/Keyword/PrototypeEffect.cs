@@ -30,7 +30,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// </para>
 /// </summary>
 [OracleEffect("prototype")]
-public sealed record PrototypeEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+public sealed record PrototypeEffect : Effect
 {
   /// <summary>
   /// The alternative prototype cost paid to cast the card in its smaller form.
@@ -44,23 +44,4 @@ public sealed record PrototypeEffect : Effect, IOptionalEffect, IDurativeEffect,
 
   /// <summary>The prototype toughness printed after the slash (e.g. "Prototype {1}{B} — 1/1" → "1").</summary>
   public required string Toughness { get; init; }
-
-  /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
-  public bool IsOptional { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing to perform this one. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDo { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing NOT to perform this one. Rule 117.7. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDoNot { get; init; }
-
-  /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Duration? Duration { get; init; }
-
-  /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public UnlessClause? UnlessClause { get; init; }
 }

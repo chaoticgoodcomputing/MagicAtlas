@@ -39,8 +39,7 @@
                   "creature"
                 ]
               },
-              "MinimumBlockers": 2,
-              "IsOptional": false
+              "MinimumBlockers": 2
             }
           ]
         },
@@ -50,8 +49,7 @@
           "Effects": [
             {
               "EffectType": "fabricate",
-              "Value": 1,
-              "IsOptional": false
+              "Value": 1
             }
           ]
         }

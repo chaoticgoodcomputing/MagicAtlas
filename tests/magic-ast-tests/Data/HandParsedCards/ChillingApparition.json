@@ -76,8 +76,7 @@
               "Player": {
                 "Kind": "ThatPlayer"
               },
-              "Random": false,
-              "IsOptional": false
+              "Random": false
             }
           ]
         }

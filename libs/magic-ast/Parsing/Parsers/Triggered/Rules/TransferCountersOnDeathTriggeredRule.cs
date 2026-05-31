@@ -51,8 +51,7 @@ public sealed class TransferCountersOnDeathTriggeredRule : ITriggeredRule
 
     var isOptional = match.Groups["opt"].Success;
 
-    effect = new PutCountersEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new PutCountersEffect {
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
@@ -74,9 +73,7 @@ public sealed class TransferCountersOnDeathTriggeredRule : ITriggeredRule
       {
         DerivedFrom = DerivedKind.Other,
         Source = "its",
-      },
-      IsOptional = isOptional,
-    };
+      }}, isOptional);
     return true;
   }
 }

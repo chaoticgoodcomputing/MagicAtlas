@@ -36,7 +36,6 @@ public sealed class ExileTargetCreatureEffectRule : IActivatedEffectRule
           CardTypes = ["creature"],
         },
       },
-      IsOptional = false,
     };
   }
 }

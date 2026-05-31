@@ -51,7 +51,6 @@
                   ]
                 }
               },
-              "IsOptional": false,
               "Duration": {
                 "DurationType": "untilTime",
                 "Until": {

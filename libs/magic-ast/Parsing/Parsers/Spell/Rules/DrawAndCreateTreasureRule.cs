@@ -68,7 +68,6 @@ public sealed class DrawAndCreateTreasureRule : ISpellRule, IMultiSpellRule
       {
         Count = tokenCount,
         Token = TokenDefinition.Treasure(),
-        IsOptional = false,
       },
     };
     return true;

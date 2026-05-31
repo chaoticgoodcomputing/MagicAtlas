@@ -41,8 +41,7 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "blockAdditional",
-              "IsOptional": false
+              "EffectType": "blockAdditional"
             }
           ]
         }

@@ -61,15 +61,13 @@ public sealed class TapAndFreezeBackReferenceTriggeredRule : ITriggeredRule
     {
       Effects = new List<Effect>
       {
-        new TapEffect { Target = ObjectReference.It(), IsOptional = false },
+        MagicAST.AST.Effects.Core.EffectWrap.Optional(new TapEffect { Target = ObjectReference.It()}, false),
         new DoesntUntapEffect
         {
           Target = ObjectReference.It(),
           WhoseUntapStep = "its controller's next",
-          IsOptional = false,
         },
       },
-      IsOptional = false,
     };
     return true;
   }

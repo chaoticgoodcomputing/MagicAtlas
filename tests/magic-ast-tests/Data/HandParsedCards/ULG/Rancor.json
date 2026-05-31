@@ -46,7 +46,6 @@
           "Effects": [
             {
               "EffectType": "composite",
-              "IsOptional": false,
               "Effects": [
                 {
                   "EffectType": "modifyPT",
@@ -60,8 +59,7 @@
                   "ToughnessModifier": {
                     "QuantityType": "literal",
                     "Value": 0
-                  },
-                  "IsOptional": false
+                  }
                 },
                 {
                   "EffectType": "gainAbility",
@@ -77,8 +75,7 @@
                         "Keyword": "Trample"
                       }
                     ]
-                  },
-                  "IsOptional": false
+                  }
                 }
               ]
             }
@@ -100,8 +97,7 @@
               "EffectType": "returnToHand",
               "Target": {
                 "Kind": "It"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

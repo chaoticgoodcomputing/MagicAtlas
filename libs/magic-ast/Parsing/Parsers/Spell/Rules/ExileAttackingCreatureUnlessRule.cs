@@ -24,8 +24,7 @@ public sealed class ExileAttackingCreatureUnlessRule : ISpellRule
     {
       return false;
     }
-    effect = new ExileEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Preventable(new ExileEffect {
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
@@ -34,13 +33,11 @@ public sealed class ExileAttackingCreatureUnlessRule : ISpellRule
           CardTypes = ["creature"],
           Characteristics = [Characteristic.Other("attacking")],
         },
-      },
-      UnlessClause = new UnlessClause
+      }}, new UnlessClause
       {
         Player = new ObjectReference { Kind = ObjectReferenceKind.Controller },
         Cost = new ManaCost { Symbols = [new ManaSymbol { Kind = ManaSymbolKind.Variable }] },
-      },
-    };
+      });
     return true;
   }
 }

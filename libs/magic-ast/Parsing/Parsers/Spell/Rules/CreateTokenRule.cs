@@ -100,7 +100,6 @@ public sealed class CreateTokenRule : ISpellRule
       {
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Food(),
-        IsOptional = false,
       };
       return true;
     }
@@ -112,7 +111,6 @@ public sealed class CreateTokenRule : ISpellRule
       {
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Treasure(),
-        IsOptional = false,
       };
       return true;
     }
@@ -124,7 +122,6 @@ public sealed class CreateTokenRule : ISpellRule
       {
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Clue(),
-        IsOptional = false,
       };
       return true;
     }
@@ -136,7 +133,6 @@ public sealed class CreateTokenRule : ISpellRule
       {
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Blood(),
-        IsOptional = false,
       };
       return true;
     }
@@ -191,7 +187,6 @@ public sealed class CreateTokenRule : ISpellRule
         Abilities = grantedAbilities,
         IsCopy = false,
       },
-      IsOptional = false,
     };
     return true;
   }

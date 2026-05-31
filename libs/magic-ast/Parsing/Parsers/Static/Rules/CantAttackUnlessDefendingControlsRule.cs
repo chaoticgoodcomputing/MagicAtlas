@@ -33,7 +33,6 @@ public sealed class CantAttackUnlessDefendingControlsRule : IStaticRule
         [
           new MagicAST.AST.Effects.Combat.CantAttackEffect
           {
-            IsOptional = false,
             UnlessDefendingControls = new EvasionCondition
             {
               ConditionType = EvasionConditionType.DefendingPlayerControls,

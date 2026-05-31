@@ -84,15 +84,12 @@ public sealed class AttachTriggeredRule : ITriggeredRule
       };
     }
 
-    effect = new AttachEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new AttachEffect {
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
         Filter = filter,
-      },
-      IsOptional = isOptional,
-    };
+      }}, isOptional);
     return true;
   }
 }

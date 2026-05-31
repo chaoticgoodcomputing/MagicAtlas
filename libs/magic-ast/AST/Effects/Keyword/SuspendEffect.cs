@@ -21,7 +21,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// and <see cref="Cost"/> are both null.
 /// </summary>
 [OracleEffect("suspend")]
-public sealed record SuspendEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+public sealed record SuspendEffect : Effect
 {
   /// <summary>
   /// "Suspend N—[cost]" — the number of time counters placed when the card
@@ -36,23 +36,4 @@ public sealed record SuspendEffect : Effect, IOptionalEffect, IDurativeEffect, I
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Cost? Cost { get; init; }
-
-  /// <summary>Whether this effect carries a "You may" prefix in oracle text. (IOptionalEffect)</summary>
-  public bool IsOptional { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing to perform this one. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDo { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing NOT to perform this one. Rule 117.7. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDoNot { get; init; }
-
-  /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Duration? Duration { get; init; }
-
-  /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public UnlessClause? UnlessClause { get; init; }
 }

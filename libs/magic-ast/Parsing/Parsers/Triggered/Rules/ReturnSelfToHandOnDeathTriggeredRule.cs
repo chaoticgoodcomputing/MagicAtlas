@@ -38,12 +38,9 @@ public sealed class ReturnSelfToHandOnDeathTriggeredRule : ITriggeredRule
 
     var isOptional = match.Groups["opt"].Success;
 
-    effect = new ReturnToHandEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new ReturnToHandEffect {
       // "it" = pronoun back-reference to the triggering object (this Aura/artifact/etc.)
-      Target = ObjectReference.It(),
-      IsOptional = isOptional,
-    };
+      Target = ObjectReference.It()}, isOptional);
     return true;
   }
 }

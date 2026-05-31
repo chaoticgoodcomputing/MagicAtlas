@@ -6,14 +6,20 @@
     "OracleText": "Search your library for a card, then shuffle and put that card on top. You lose 2 life.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Vampiric Tutor",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Search your library for a card, then shuffle and put that card on top. You lose 2 life.",
@@ -24,15 +30,16 @@
             {
               "EffectType": "searchLibrary",
               "Filter": {
-                "CardTypes": ["card"]
+                "CardTypes": [
+                  "card"
+                ]
               },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
               },
               "Destination": "TopOfLibrary",
-              "Revealed": false,
-              "IsOptional": false
+              "Revealed": false
             },
             {
               "EffectType": "loseLife",
@@ -53,17 +60,26 @@
         "Kind": "manaCost",
         "Raw": "{B}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

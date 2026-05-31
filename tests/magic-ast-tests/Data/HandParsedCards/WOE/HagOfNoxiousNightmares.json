@@ -48,8 +48,7 @@
               },
               "Player": {
                 "Kind": "EachOpponent"
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -78,12 +77,10 @@
                         "creature"
                       ]
                     },
-                    "MinimumBlockers": 2,
-                    "IsOptional": false
+                    "MinimumBlockers": 2
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

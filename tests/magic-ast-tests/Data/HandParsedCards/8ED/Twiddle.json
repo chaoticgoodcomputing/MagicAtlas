@@ -6,14 +6,20 @@
     "OracleText": "You may tap or untap target artifact, creature, or land.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Twiddle",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "You may tap or untap target artifact, creature, or land.",
@@ -22,14 +28,20 @@
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "tapOrUntap",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": ["artifact", "creature", "land"]
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "tapOrUntap",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "artifact",
+                      "creature",
+                      "land"
+                    ]
+                  }
                 }
-              },
-              "IsOptional": true
+              }
             }
           ]
         }
@@ -40,17 +52,26 @@
         "Kind": "manaCost",
         "Raw": "{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

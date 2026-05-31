@@ -45,14 +45,11 @@ public sealed class SearchBasicLandTriggeredRule : ITriggeredRule
     bool revealed = dest.StartsWith("into your hand", StringComparison.OrdinalIgnoreCase);
     var destination = revealed ? SearchDestination.Hand : SearchDestination.BattlefieldTapped;
 
-    effect = new SearchLibraryEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new SearchLibraryEffect {
       Filter = _basicLandFilter,
       Count = LiteralQuantity.Of(1),
       Destination = destination,
-      Revealed = revealed,
-      IsOptional = true,
-    };
+      Revealed = revealed}, true);
     return true;
   }
 }

@@ -53,8 +53,7 @@
               "Target": {
                 "Kind": "EnchantedOrEquipped"
               },
-              "WhoseUntapStep": "its controller's",
-              "IsOptional": false
+              "WhoseUntapStep": "its controller's"
             }
           ]
         }

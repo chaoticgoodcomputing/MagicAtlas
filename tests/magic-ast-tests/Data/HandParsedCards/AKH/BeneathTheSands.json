@@ -42,8 +42,7 @@
                 "Value": 1
               },
               "Destination": "BattlefieldTapped",
-              "Revealed": false,
-              "IsOptional": false
+              "Revealed": false
             }
           ]
         },

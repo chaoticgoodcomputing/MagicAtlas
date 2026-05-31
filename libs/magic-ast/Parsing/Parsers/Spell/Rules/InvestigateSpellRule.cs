@@ -20,7 +20,7 @@ public sealed class InvestigateSpellRule : ISpellRule
     {
       return false;
     }
-    effect = new InvestigateEffect { IsOptional = false };
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new InvestigateEffect {}, false);
     return true;
   }
 }

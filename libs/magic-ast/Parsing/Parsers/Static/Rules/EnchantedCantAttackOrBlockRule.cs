@@ -35,9 +35,9 @@ public sealed class EnchantedCantAttackOrBlockRule : IStaticRule
         {
           Effects =
           [
-            new MagicAST.AST.Effects.Combat.CantAttackEffect              { Target = target, IsOptional = false },
-            new MagicAST.AST.Effects.Combat.CantBlockEffect               { Target = target, IsOptional = false },
-            new MagicAST.AST.Effects.Timing.CantActivateAbilitiesEffect   { Target = target, IsOptional = false },
+            new MagicAST.AST.Effects.Combat.CantAttackEffect { Target = target},
+            new MagicAST.AST.Effects.Combat.CantBlockEffect { Target = target},
+            new MagicAST.AST.Effects.Timing.CantActivateAbilitiesEffect { Target = target},
           ],
         },
       ];
@@ -52,8 +52,8 @@ public sealed class EnchantedCantAttackOrBlockRule : IStaticRule
         {
           Effects =
           [
-            new MagicAST.AST.Effects.Combat.CantAttackEffect { Target = target, IsOptional = false },
-            new MagicAST.AST.Effects.Combat.CantBlockEffect  { Target = target, IsOptional = false },
+            new MagicAST.AST.Effects.Combat.CantAttackEffect { Target = target},
+            new MagicAST.AST.Effects.Combat.CantBlockEffect { Target = target},
           ],
         },
       ];
@@ -70,7 +70,7 @@ public sealed class EnchantedCantAttackOrBlockRule : IStaticRule
         {
           Effects =
           [
-            new MagicAST.AST.Effects.Combat.CantAttackEffect { Target = target, IsOptional = false },
+            new MagicAST.AST.Effects.Combat.CantAttackEffect { Target = target},
           ],
         },
       ];

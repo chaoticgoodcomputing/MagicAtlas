@@ -72,7 +72,6 @@
                 "QuantityType": "literal",
                 "Value": 0
               },
-              "IsOptional": false,
               "Duration": {
                 "DurationType": "untilTime",
                 "Until": {

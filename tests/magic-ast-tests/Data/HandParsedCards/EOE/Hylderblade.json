@@ -42,8 +42,7 @@
               "ToughnessModifier": {
                 "QuantityType": "literal",
                 "Value": 1
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -83,8 +82,7 @@
                     "GenericAmount": 4
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ],
           "KeywordSource": "Equip",

@@ -6,15 +6,24 @@
     "OracleText": "{1}: Exile target card from a graveyard.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Withered Wretch",
     "TypeLine": {
       "Raw": "Creature — Zombie Cleric",
-      "Types": ["Creature"],
-      "Subtypes": ["Zombie", "Cleric"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "{1}: Exile target card from a graveyard.",
@@ -38,11 +47,12 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["card"],
+                  "CardTypes": [
+                    "card"
+                  ],
                   "Zone": "Graveyard"
                 }
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false
@@ -56,22 +66,30 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

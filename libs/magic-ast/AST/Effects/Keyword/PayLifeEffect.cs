@@ -27,7 +27,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// but the descriptive shapes differ.</para>
 /// </summary>
 [OracleEffect("payLife")]
-public sealed record PayLifeEffect : Effect, IOptionalEffect, IDurativeEffect, IPreventableEffect
+public sealed record PayLifeEffect : Effect
 {
   /// <summary>
   /// The amount of life the controller may pay. Typically a
@@ -36,23 +36,4 @@ public sealed record PayLifeEffect : Effect, IOptionalEffect, IDurativeEffect, I
   /// future variants (e.g. an X-cost printing).
   /// </summary>
   public required Quantity Amount { get; init; }
-
-  /// <summary>Whether this effect carries a "you may" prefix in oracle text. (IOptionalEffect)</summary>
-  public bool IsOptional { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing to pay. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDo { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing NOT to pay. Rule 117.7. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDoNot { get; init; }
-
-  /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Duration? Duration { get; init; }
-
-  /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public UnlessClause? UnlessClause { get; init; }
 }

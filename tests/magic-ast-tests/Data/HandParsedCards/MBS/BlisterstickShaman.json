@@ -6,15 +6,24 @@
     "OracleText": "When this creature enters, it deals 1 damage to any target.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Blisterstick Shaman",
     "TypeLine": {
       "Raw": "Creature — Goblin Shaman",
-      "Types": ["Creature"],
-      "Subtypes": ["Goblin", "Shaman"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin",
+        "Shaman"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, it deals 1 damage to any target.",
@@ -25,19 +34,24 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Source": { "Kind": "It" },
+              "Source": {
+                "Kind": "It"
+              },
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "Target": { "Kind": "AnyTarget" },
-              "IsOptional": false
+              "Target": {
+                "Kind": "AnyTarget"
+              }
             }
           ]
         }
@@ -48,18 +62,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

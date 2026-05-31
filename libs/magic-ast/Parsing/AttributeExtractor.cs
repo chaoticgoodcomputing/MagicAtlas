@@ -192,7 +192,6 @@ public sealed partial class AttributeExtractor
         Filter = new ObjectFilter { CardTypes = [cardType] },
         Quantity = LiteralQuantity.Of(1),
       },
-      IsOptional = false,
       SourceSpan = sourceSpan,
     };
 

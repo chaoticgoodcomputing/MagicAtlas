@@ -13,7 +13,9 @@
     "Name": "Decanter of Endless Water",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "You have no maximum hand size.\n{T}: Add one mana of any color.",
@@ -22,15 +24,16 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "noMaxHandSize",
-              "IsOptional": false
+              "EffectType": "noMaxHandSize"
             }
           ]
         },
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {

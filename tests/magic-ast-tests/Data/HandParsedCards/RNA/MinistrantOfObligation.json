@@ -34,8 +34,7 @@
           "Effects": [
             {
               "EffectType": "afterlife",
-              "Value": 2,
-              "IsOptional": false
+              "Value": 2
             }
           ],
           "Reminder": {

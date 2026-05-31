@@ -6,14 +6,20 @@
     "OracleText": "Counter target noncreature spell unless its controller pays {2}.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Spell Pierce",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Counter target noncreature spell unless its controller pays {2}.",
@@ -22,22 +28,35 @@
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "counterSpell",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": ["spell"],
-                  "Characteristics": [{"CharacteristicType": "other", "Description": "noncreature"}]
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "spell"
+                    ],
+                    "Characteristics": [
+                      {
+                        "CharacteristicType": "other",
+                        "Description": "noncreature"
+                      }
+                    ]
+                  }
                 }
               },
-              "UnlessClause": {
+              "Unless": {
                 "Player": {
                   "Kind": "Controller"
                 },
                 "Cost": {
                   "CostType": "mana",
                   "Symbols": [
-                    { "Kind": "generic", "GenericAmount": 2 }
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    }
                   ]
                 }
               }
@@ -51,18 +70,27 @@
         "Kind": "manaCost",
         "Raw": "{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 1,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

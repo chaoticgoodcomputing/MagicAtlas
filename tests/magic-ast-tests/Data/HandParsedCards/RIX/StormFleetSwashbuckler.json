@@ -65,8 +65,7 @@
                   "ConditionType": "other",
                   "Text": "you have the city's blessing"
                 }
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

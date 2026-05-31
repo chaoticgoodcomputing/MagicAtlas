@@ -36,8 +36,7 @@
                 "QuantityType": "literal",
                 "Value": 4
               },
-              "CounterType": "+1/+1",
-              "IsOptional": false
+              "CounterType": "+1/+1"
             }
           ],
           "When": "asThisEnters"
@@ -68,8 +67,7 @@
                   }
                 ],
                 "KeywordSource": "Haste"
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -104,8 +102,7 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false

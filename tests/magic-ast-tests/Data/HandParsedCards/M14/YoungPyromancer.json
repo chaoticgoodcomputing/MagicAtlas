@@ -38,8 +38,14 @@
                 "spell"
               ],
               "Characteristics": [
-                {"CharacteristicType": "other", "Description": "instant"},
-                {"CharacteristicType": "other", "Description": "sorcery"}
+                {
+                  "CharacteristicType": "other",
+                  "Description": "instant"
+                },
+                {
+                  "CharacteristicType": "other",
+                  "Description": "sorcery"
+                }
               ],
               "Controller": "You"
             }
@@ -64,8 +70,7 @@
                   "Elemental"
                 ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

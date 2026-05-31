@@ -3,7 +3,7 @@
     "Name": "Read the Tides",
     "ManaCost": "{5}{U}",
     "TypeLine": "Sorcery",
-    "OracleText": "Choose one \u2014\n\u2022 Draw three cards.\n\u2022 Return up to two target creatures to their owners' hands.",
+    "OracleText": "Choose one —\n• Draw three cards.\n• Return up to two target creatures to their owners' hands.",
     "Power": null,
     "Toughness": null,
     "Colors": [
@@ -22,7 +22,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Choose one \u2014\n\u2022 Draw three cards.\n\u2022 Return up to two target creatures to their owners' hands.",
+      "RawText": "Choose one —\n• Draw three cards.\n• Return up to two target creatures to their owners' hands.",
       "Abilities": [
         {
           "Kind": "modal",
@@ -53,16 +53,18 @@
                 "Kind": "spell",
                 "Effects": [
                   {
-                    "EffectType": "returnToHand",
-                    "Target": {
-                      "Kind": "Target",
-                      "Filter": {
-                        "CardTypes": [
-                          "creature"
-                        ]
+                    "EffectType": "optional",
+                    "Inner": {
+                      "EffectType": "returnToHand",
+                      "Target": {
+                        "Kind": "Target",
+                        "Filter": {
+                          "CardTypes": [
+                            "creature"
+                          ]
+                        }
                       }
-                    },
-                    "IsOptional": true
+                    }
                   }
                 ]
               }

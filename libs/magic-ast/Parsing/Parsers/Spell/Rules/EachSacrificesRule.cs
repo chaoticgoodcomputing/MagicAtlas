@@ -83,7 +83,6 @@ public sealed class EachSacrificesRule : ISpellRule
         Filter = new ObjectFilter { CardTypes = [cardType] },
       },
       Count = count,
-      IsOptional = false,
     };
     return true;
   }

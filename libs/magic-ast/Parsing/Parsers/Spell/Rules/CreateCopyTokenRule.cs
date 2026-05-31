@@ -56,7 +56,6 @@ public sealed class CreateCopyTokenRule : ISpellRule
           Controller = hasController ? ControllerFilter.You : null,
         },
       },
-      IsOptional = false,
     };
     return true;
   }

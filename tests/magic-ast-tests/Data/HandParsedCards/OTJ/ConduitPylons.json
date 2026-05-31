@@ -13,8 +13,12 @@
     "Name": "Conduit Pylons",
     "TypeLine": {
       "Raw": "Land — Desert",
-      "Types": ["Land"],
-      "Subtypes": ["Desert"]
+      "Types": [
+        "Land"
+      ],
+      "Subtypes": [
+        "Desert"
+      ]
     },
     "Oracle": {
       "RawText": "When this land enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\n{T}: Add {C}.\n{1}, {T}: Add one mana of any color.",
@@ -25,7 +29,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"]
+              "CardTypes": [
+                "land"
+              ]
             }
           },
           "Effects": [
@@ -34,8 +40,7 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
-              },
-              "IsOptional": false
+              }
             }
           ],
           "Reminder": {
@@ -45,7 +50,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -61,10 +68,15 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 1 }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
               ]
             },
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {

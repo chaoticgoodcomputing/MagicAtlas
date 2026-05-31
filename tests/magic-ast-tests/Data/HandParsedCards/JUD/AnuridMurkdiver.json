@@ -6,15 +6,24 @@
     "OracleText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +2/+2 and can't block.",
     "Power": "3",
     "Toughness": "3",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Anurid Murkdiver",
     "TypeLine": {
       "Raw": "Creature — Frog Beast",
-      "Types": ["Creature"],
-      "Subtypes": ["Frog", "Beast"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Frog",
+        "Beast"
+      ]
     },
     "Oracle": {
       "RawText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +2/+2 and can't block.",
@@ -25,7 +34,9 @@
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "PowerModifier": {
                 "QuantityType": "literal",
                 "Value": 2
@@ -38,20 +49,37 @@
                 "DurationType": "asLongAs",
                 "Condition": {
                   "ConditionType": "count",
-                  "Filter": { "CardTypes": ["card"], "Zone": "Graveyard", "Controller": "You" },
-                  "Count": { "Operator": "GreaterThanOrEqual", "Value": 7 }
+                  "Filter": {
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "Zone": "Graveyard",
+                    "Controller": "You"
+                  },
+                  "Count": {
+                    "Operator": "GreaterThanOrEqual",
+                    "Value": 7
+                  }
                 }
               }
             },
             {
               "EffectType": "cantBlock",
-              "IsOptional": false,
               "Duration": {
                 "DurationType": "asLongAs",
                 "Condition": {
                   "ConditionType": "count",
-                  "Filter": { "CardTypes": ["card"], "Zone": "Graveyard", "Controller": "You" },
-                  "Count": { "Operator": "GreaterThanOrEqual", "Value": 7 }
+                  "Filter": {
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "Zone": "Graveyard",
+                    "Controller": "You"
+                  },
+                  "Count": {
+                    "Operator": "GreaterThanOrEqual",
+                    "Value": 7
+                  }
                 }
               }
             }
@@ -64,17 +92,43 @@
         "Kind": "manaCost",
         "Raw": "{4}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 5
       },
-      { "Kind": "colors", "Colors": ["B"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
-        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

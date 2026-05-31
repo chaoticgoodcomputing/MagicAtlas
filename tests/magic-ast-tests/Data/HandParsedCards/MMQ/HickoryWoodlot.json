@@ -40,8 +40,7 @@
                 "QuantityType": "literal",
                 "Value": 2
               },
-              "CounterType": "depletion",
-              "IsOptional": false
+              "CounterType": "depletion"
             }
           ],
           "When": "asThisEnters"
@@ -68,8 +67,7 @@
             {
               "EffectType": "addMana",
               "Mana": "{G}{G}. If there are no depletion counters on this land, sacrifice it",
-              "AnyColor": false,
-              "IsOptional": false
+              "AnyColor": false
             }
           ],
           "IsManaAbility": true

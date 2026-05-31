@@ -6,14 +6,20 @@
     "OracleText": "Target opponent sacrifices a creature.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Diabolic Edict",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Target opponent sacrifices a creature.",
@@ -25,10 +31,17 @@
               "EffectType": "sacrifice",
               "Target": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["opponent"] }
+                "Filter": {
+                  "CardTypes": [
+                    "opponent"
+                  ]
+                }
               },
-              "Filter": { "CardTypes": ["creature"] },
-              "IsOptional": false
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ]
+              }
             }
           ]
         }
@@ -39,18 +52,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

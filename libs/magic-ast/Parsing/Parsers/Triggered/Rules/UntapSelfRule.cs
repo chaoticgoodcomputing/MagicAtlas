@@ -20,7 +20,7 @@ public sealed class UntapSelfRule : ITriggeredRule
       return false;
     }
     var isOptional = Regex.IsMatch(lower, @"you\s+may\s+pay\s+\{[^}]+\}", RegexOptions.IgnoreCase);
-    effect = new UntapEffect { Target = ObjectReference.Self(), IsOptional = isOptional };
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new UntapEffect { Target = ObjectReference.Self()}, isOptional);
     return true;
   }
 }

@@ -4,14 +4,20 @@
     "ManaCost": "{X}{W}",
     "TypeLine": "Instant",
     "OracleText": "Exile target attacking creature unless its controller pays {X}.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Excise",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Exile target attacking creature unless its controller pays {X}.",
@@ -20,20 +26,34 @@
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "exile",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": ["creature"],
-                  "Characteristics": [{"CharacteristicType": "other", "Description": "attacking"}]
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "exile",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Characteristics": [
+                      {
+                        "CharacteristicType": "other",
+                        "Description": "attacking"
+                      }
+                    ]
+                  }
                 }
               },
-              "UnlessClause": {
-                "Player": { "Kind": "Controller" },
+              "Unless": {
+                "Player": {
+                  "Kind": "Controller"
+                },
                 "Cost": {
                   "CostType": "mana",
                   "Symbols": [
-                    { "Kind": "variable" }
+                    {
+                      "Kind": "variable"
+                    }
                   ]
                 }
               }
@@ -47,18 +67,29 @@
         "Kind": "manaCost",
         "Raw": "{X}{W}",
         "Symbols": [
-          { "Kind": "variable" },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "IsVariable": true
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

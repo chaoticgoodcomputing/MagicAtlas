@@ -68,7 +68,6 @@ public sealed class CreateTokenEffectRule : IActivatedEffectRule
         {
           Count = MagicAST.AST.Quantities.LiteralQuantity.Of(pCount),
           Token = tokenFactory,
-          IsOptional = false,
         };
       }
     }
@@ -110,7 +109,6 @@ public sealed class CreateTokenEffectRule : IActivatedEffectRule
         Subtypes = [ctSubtype],
         IsCopy = false,
       },
-      IsOptional = false,
     };
   }
 }

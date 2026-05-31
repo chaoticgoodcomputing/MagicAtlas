@@ -41,7 +41,6 @@
           "Effects": [
             {
               "EffectType": "composite",
-              "IsOptional": false,
               "Effects": [
                 {
                   "EffectType": "modifyPT",
@@ -62,8 +61,7 @@
                       "Part": "Turn",
                       "Edge": "End"
                     }
-                  },
-                  "IsOptional": false
+                  }
                 },
                 {
                   "EffectType": "gainAbility",
@@ -100,8 +98,7 @@
                       "Part": "Turn",
                       "Edge": "End"
                     }
-                  },
-                  "IsOptional": false
+                  }
                 }
               ]
             }

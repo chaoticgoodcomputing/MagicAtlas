@@ -49,7 +49,6 @@ public sealed class EachPlayerDrawsTriggeredRule : ITriggeredRule
     {
       Count = LiteralQuantity.Of(count),
       Player = new ObjectReference { Kind = kind },
-      IsOptional = false,
     };
     return true;
   }

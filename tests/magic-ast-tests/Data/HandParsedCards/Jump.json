@@ -57,12 +57,10 @@
                           "Keyword": "Reach"
                         }
                       ]
-                    },
-                    "IsOptional": false
+                    }
                   }
                 ]
               },
-              "IsOptional": false,
               "Duration": {
                 "DurationType": "untilTime",
                 "Until": {

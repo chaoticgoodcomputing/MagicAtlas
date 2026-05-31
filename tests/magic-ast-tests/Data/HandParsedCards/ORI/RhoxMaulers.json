@@ -44,8 +44,7 @@
           "Effects": [
             {
               "EffectType": "renown",
-              "Value": 2,
-              "IsOptional": false
+              "Value": 2
             }
           ]
         }

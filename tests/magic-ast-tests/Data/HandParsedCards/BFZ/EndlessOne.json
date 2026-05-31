@@ -36,8 +36,7 @@
                 "QuantityType": "variable",
                 "Name": "X"
               },
-              "CounterType": "+1/+1",
-              "IsOptional": false
+              "CounterType": "+1/+1"
             }
           ],
           "When": "asThisEnters"

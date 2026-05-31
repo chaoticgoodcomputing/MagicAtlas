@@ -33,8 +33,7 @@
           "Effects": [
             {
               "EffectType": "bloodthirst",
-              "Value": 3,
-              "IsOptional": false
+              "Value": 3
             }
           ]
         },

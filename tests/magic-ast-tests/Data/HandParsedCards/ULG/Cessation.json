@@ -48,8 +48,7 @@
               "EffectType": "cantAttack",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -69,8 +68,7 @@
               "EffectType": "returnToHand",
               "Target": {
                 "Kind": "It"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

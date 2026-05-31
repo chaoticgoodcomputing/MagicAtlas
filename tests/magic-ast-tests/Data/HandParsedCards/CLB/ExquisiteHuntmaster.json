@@ -62,8 +62,7 @@
                   "Warrior"
                 ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         },

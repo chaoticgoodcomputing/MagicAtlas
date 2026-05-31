@@ -13,18 +13,10 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// rewrite is engine territory, not a descriptive axis of the card.
 /// </summary>
 [OracleEffect("overload")]
-public sealed record OverloadEffect : Effect, IDurativeEffect, IPreventableEffect
+public sealed record OverloadEffect : Effect
 {
   /// <summary>
   /// The alternative cost that may be paid to cast this spell with overload.
   /// </summary>
   public required Cost Cost { get; init; }
-
-  /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Duration? Duration { get; init; }
-
-  /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public UnlessClause? UnlessClause { get; init; }
 }

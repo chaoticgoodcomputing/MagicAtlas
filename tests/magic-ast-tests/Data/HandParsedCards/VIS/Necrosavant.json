@@ -6,15 +6,23 @@
     "OracleText": "Flying\nSacrifice a creature: Regenerate this creature.",
     "Power": "5",
     "Toughness": "5",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Necrosavant",
     "TypeLine": {
       "Raw": "Creature — Zombie",
-      "Types": ["Creature"],
-      "Subtypes": ["Zombie"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nSacrifice a creature: Regenerate this creature.",
@@ -25,10 +33,20 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
-                "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
-              },
-              "IsOptional": false
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
             }
           ],
           "KeywordSource": "Flying"
@@ -39,7 +57,9 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -64,25 +84,50 @@
         "Kind": "manaCost",
         "Raw": "{3}{B}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 5,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
-        "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
       }
     ]
   }

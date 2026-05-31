@@ -46,7 +46,6 @@ public sealed class TransformTriggeredRule : ITriggeredRule
     effect = new TransformEffect
     {
       Target = ObjectReference.Self(),
-      IsOptional = false,
     };
     return true;
   }

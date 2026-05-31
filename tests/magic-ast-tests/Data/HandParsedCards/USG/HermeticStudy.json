@@ -68,13 +68,11 @@
                     },
                     "Target": {
                       "Kind": "AnyTarget"
-                    },
-                    "IsOptional": false
+                    }
                   }
                 ],
                 "IsManaAbility": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

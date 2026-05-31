@@ -47,8 +47,7 @@
                     "Keyword": "Reach"
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -66,8 +65,10 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "lookAtTopCardAnyTime",
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "lookAtTopCardAnyTime"
+              }
             }
           ]
         }

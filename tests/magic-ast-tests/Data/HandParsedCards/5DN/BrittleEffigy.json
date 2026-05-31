@@ -16,7 +16,9 @@
     "Name": "Brittle Effigy",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "{4}, {T}, Exile this artifact: Exile target creature.",
@@ -39,7 +41,9 @@
             {
               "CostType": "exile",
               "Filter": {
-                "CardTypes": ["artifact"],
+                "CardTypes": [
+                  "artifact"
+                ],
                 "Characteristics": [
                   {
                     "CharacteristicType": "other",
@@ -60,10 +64,11 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false

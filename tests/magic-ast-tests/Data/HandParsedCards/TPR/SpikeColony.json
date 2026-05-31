@@ -39,8 +39,7 @@
                 "QuantityType": "literal",
                 "Value": 4
               },
-              "CounterType": "+1/+1",
-              "IsOptional": false
+              "CounterType": "+1/+1"
             }
           ],
           "When": "asThisEnters"
@@ -84,8 +83,7 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false

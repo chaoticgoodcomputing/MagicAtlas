@@ -30,16 +30,6 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// </para>
 /// </summary>
 [OracleEffect("openingHand")]
-public sealed record OpeningHandEffect : Effect, IOptionalEffect
+public sealed record OpeningHandEffect : Effect
 {
-  /// <summary>Whether this effect carries a "you may" prefix in oracle text. (IOptionalEffect)</summary>
-  public bool IsOptional { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing to perform this one. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDo { get; init; }
-
-  /// <summary>Optional follow-up effect contingent on the controller choosing NOT to perform this one. Rule 117.7. (IOptionalEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Effect? IfYouDoNot { get; init; }
 }

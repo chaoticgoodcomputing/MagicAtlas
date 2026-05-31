@@ -43,8 +43,7 @@
           "Effects": [
             {
               "EffectType": "champion",
-              "CreatureType": "creature",
-              "IsOptional": false
+              "CreatureType": "creature"
             }
           ]
         }

@@ -23,20 +23,12 @@ using MagicAST.AST.Effects.Traits;
 /// </para>
 /// </summary>
 [OracleEffect("costIncrease")]
-public sealed record CostIncreaseEffect : Effect, IDurativeEffect, IPreventableEffect
+public sealed record CostIncreaseEffect : Effect
 {
   /// <summary>
   /// The amount of the increase.
   /// </summary>
   public required Quantity Amount { get; init; }
-
-  /// <summary>Duration clause attached to this effect, if any. (IDurativeEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public Duration? Duration { get; init; }
-
-  /// <summary>"Unless [player] pays [cost]" preventable clause, if any. (IPreventableEffect)</summary>
-  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-  public UnlessClause? UnlessClause { get; init; }
 
   /// <summary>
   /// The object that affected spells must target for the increase to apply.

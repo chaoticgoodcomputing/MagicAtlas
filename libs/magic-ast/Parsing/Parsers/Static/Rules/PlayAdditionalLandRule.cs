@@ -25,10 +25,7 @@ public sealed class PlayAdditionalLandRule : IStaticRule
     [
       new StaticAbility
       {
-        Effects = [new MagicAST.AST.Effects.Keyword.PlayAdditionalLandEffect
-        {
-          IsOptional = true,
-        }],
+        Effects = [new MagicAST.AST.Effects.Core.OptionalEffect { Inner = new MagicAST.AST.Effects.Keyword.PlayAdditionalLandEffect {} }],
       },
     ];
   }

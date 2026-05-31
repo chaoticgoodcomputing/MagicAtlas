@@ -67,9 +67,9 @@ public sealed class TapUntapTargetTriggeredRule : ITriggeredRule
 
     effect = verb switch
     {
-      "tap or untap" => new TapOrUntapEffect { Target = target, IsOptional = isOptional },
-      "untap" => new UntapEffect { Target = target, IsOptional = isOptional },
-      _ => new TapEffect { Target = target, IsOptional = isOptional },
+      "tap or untap" => MagicAST.AST.Effects.Core.EffectWrap.Optional(new TapOrUntapEffect { Target = target}, isOptional),
+      "untap" => MagicAST.AST.Effects.Core.EffectWrap.Optional(new UntapEffect { Target = target}, isOptional),
+      _ => MagicAST.AST.Effects.Core.EffectWrap.Optional(new TapEffect { Target = target}, isOptional),
     };
     return true;
   }

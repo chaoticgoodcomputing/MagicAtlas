@@ -45,7 +45,6 @@ public sealed class CreateCopyOnCombatDamageTriggeredRule : ITriggeredRule
     effect = new CopyEffect
     {
       Target = ObjectReference.Self(),
-      IsOptional = false,
     };
     return true;
   }

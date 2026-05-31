@@ -29,7 +29,15 @@ public sealed class ReturnToHandWithIfYouDoGainLifeRule : ITriggeredRule
     }
 
     var plain = new ReturnToHandRule();
-    if (!plain.TryMatch(split.Groups["ret"].Value.Trim(), out var inner) || inner is not ReturnToHandEffect returnEffect)
+    if (!plain.TryMatch(split.Groups["ret"].Value.Trim(), out var inner))
+    {
+      return false;
+    }
+    // The sub-rule's "you may return" now yields an OptionalEffect wrapper (ADR 0005);
+    // unwrap to the bare ReturnToHandEffect so we can re-wrap with the IfYouDo branch.
+    var returnEffect = inner as ReturnToHandEffect
+      ?? (inner as MagicAST.AST.Effects.Core.OptionalEffect)?.Inner as ReturnToHandEffect;
+    if (returnEffect is null)
     {
       return false;
     }
@@ -47,7 +55,7 @@ public sealed class ReturnToHandWithIfYouDoGainLifeRule : ITriggeredRule
       Player = ObjectReference.You(),
     };
 
-    effect = returnEffect with { IfYouDo = gainLife, IsOptional = true };
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(returnEffect, true, ifYouDo: gainLife);
     return true;
   }
 }

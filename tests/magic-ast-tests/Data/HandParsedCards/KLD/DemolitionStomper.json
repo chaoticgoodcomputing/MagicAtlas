@@ -13,8 +13,12 @@
     "Name": "Demolition Stomper",
     "TypeLine": {
       "Raw": "Artifact — Vehicle",
-      "Types": ["Artifact"],
-      "Subtypes": ["Vehicle"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Vehicle"
+      ]
     },
     "Oracle": {
       "RawText": "This Vehicle can't be blocked by creatures with power 2 or less.\nCrew 5 (Tap any number of creatures you control with total power 5 or more: This Vehicle becomes an artifact creature until end of turn.)",
@@ -25,7 +29,9 @@
             {
               "EffectType": "cantBeBlocked",
               "BlockedByFilter": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "PowerComparison": {
                   "Operator": "LessThanOrEqual",
                   "Value": 2
@@ -43,8 +49,7 @@
               "Power": {
                 "QuantityType": "literal",
                 "Value": 5
-              },
-              "IsOptional": false
+              }
             }
           ],
           "Reminder": {
@@ -58,7 +63,10 @@
         "Kind": "manaCost",
         "Raw": "{6}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 6 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 6
+          }
         ],
         "ManaValue": 6
       },
@@ -72,8 +80,16 @@
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 10, "Raw": "10" },
-        "Toughness": { "ValueType": "fixed", "Value": 7, "Raw": "7" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 10,
+          "Raw": "10"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 7,
+          "Raw": "7"
+        }
       }
     ]
   }

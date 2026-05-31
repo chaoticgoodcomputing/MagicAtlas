@@ -44,7 +44,6 @@
           "Effects": [
             {
               "EffectType": "composite",
-              "IsOptional": false,
               "Effects": [
                 {
                   "EffectType": "modifyPT",
@@ -58,8 +57,7 @@
                   "ToughnessModifier": {
                     "QuantityType": "literal",
                     "Value": 1
-                  },
-                  "IsOptional": false
+                  }
                 },
                 {
                   "EffectType": "gainAbility",
@@ -75,8 +73,7 @@
                         "Keyword": "Haste"
                       }
                     ]
-                  },
-                  "IsOptional": false
+                  }
                 }
               ]
             }

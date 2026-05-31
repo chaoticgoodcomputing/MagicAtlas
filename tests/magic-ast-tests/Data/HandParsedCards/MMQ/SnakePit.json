@@ -42,26 +42,28 @@
           },
           "Effects": [
             {
-              "EffectType": "createToken",
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Token": {
-                "Power": "1",
-                "Toughness": "1",
-                "Colors": [
-                  "G"
-                ],
-                "Types": [
-                  "creature"
-                ],
-                "Subtypes": [
-                  "Snake"
-                ],
-                "IsCopy": false
-              },
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "createToken",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Token": {
+                  "Power": "1",
+                  "Toughness": "1",
+                  "Colors": [
+                    "G"
+                  ],
+                  "Types": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Snake"
+                  ],
+                  "IsCopy": false
+                }
+              }
             }
           ]
         }

@@ -13,8 +13,12 @@
     "Name": "Spellbook",
     "TypeLine": {
       "Raw": "Artifact — Book",
-      "Types": ["Artifact"],
-      "Subtypes": ["Book"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Book"
+      ]
     },
     "Oracle": {
       "RawText": "You have no maximum hand size.",
@@ -23,8 +27,7 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "noMaxHandSize",
-              "IsOptional": false
+              "EffectType": "noMaxHandSize"
             }
           ]
         }

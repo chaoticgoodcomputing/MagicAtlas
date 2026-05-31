@@ -48,7 +48,6 @@
           "Effects": [
             {
               "EffectType": "composite",
-              "IsOptional": false,
               "Effects": [
                 {
                   "EffectType": "modifyPT",
@@ -62,8 +61,7 @@
                   "ToughnessModifier": {
                     "QuantityType": "literal",
                     "Value": 2
-                  },
-                  "IsOptional": false
+                  }
                 },
                 {
                   "EffectType": "gainAbility",
@@ -79,8 +77,7 @@
                         "Keyword": "Trample"
                       }
                     ]
-                  },
-                  "IsOptional": false
+                  }
                 },
                 {
                   "EffectType": "gainAbility",
@@ -95,8 +92,7 @@
                         "EffectType": "lifelink"
                       }
                     ]
-                  },
-                  "IsOptional": false
+                  }
                 }
               ]
             }

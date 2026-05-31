@@ -57,8 +57,7 @@
                   "Elemental"
                 ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

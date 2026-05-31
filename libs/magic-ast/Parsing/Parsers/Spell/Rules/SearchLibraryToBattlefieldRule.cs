@@ -54,7 +54,6 @@ public sealed class SearchLibraryToBattlefieldRule : ISpellRule
       Count = count,
       Destination = SearchDestination.BattlefieldTapped,
       Revealed = false,
-      IsOptional = false,
     };
     return true;
   }

@@ -6,14 +6,20 @@
     "OracleText": "Create two 2/2 blue Drake creature tokens with flying.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Talrand's Invocation",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Create two 2/2 blue Drake creature tokens with flying.",
@@ -30,9 +36,15 @@
               "Token": {
                 "Power": "2",
                 "Toughness": "2",
-                "Colors": ["U"],
-                "Types": ["creature"],
-                "Subtypes": ["Drake"],
+                "Colors": [
+                  "U"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Drake"
+                ],
                 "Abilities": [
                   {
                     "Kind": "static",
@@ -41,16 +53,26 @@
                       {
                         "EffectType": "evasion",
                         "CanBeBlockedBy": {
-                          "CardTypes": ["creature"],
-                          "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
+                          "CardTypes": [
+                            "creature"
+                          ],
+                          "Characteristics": [
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Flying"
+                            },
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Reach"
+                            }
+                          ]
                         }
                       }
                     ]
                   }
                 ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -61,19 +83,36 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

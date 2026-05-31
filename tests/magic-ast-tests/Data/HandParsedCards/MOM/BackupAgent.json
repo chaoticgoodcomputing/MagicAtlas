@@ -37,8 +37,7 @@
           "Effects": [
             {
               "EffectType": "backup",
-              "Value": 1,
-              "IsOptional": false
+              "Value": 1
             }
           ]
         },

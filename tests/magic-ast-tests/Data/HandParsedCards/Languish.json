@@ -51,8 +51,7 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

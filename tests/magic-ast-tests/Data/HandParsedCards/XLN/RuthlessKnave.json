@@ -6,15 +6,24 @@
     "OracleText": "{2}{B}, Sacrifice a creature: Create two Treasure tokens. (They're artifacts with \"{T}, Sacrifice this artifact: Add one mana of any color.\")\nSacrifice three Treasures: Draw a card.",
     "Power": "3",
     "Toughness": "2",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Ruthless Knave",
     "TypeLine": {
       "Raw": "Creature — Orc Pirate",
-      "Types": ["Creature"],
-      "Subtypes": ["Orc", "Pirate"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Orc",
+        "Pirate"
+      ]
     },
     "Oracle": {
       "RawText": "{2}{B}, Sacrifice a creature: Create two Treasure tokens. (They're artifacts with \"{T}, Sacrifice this artifact: Add one mana of any color.\")\nSacrifice three Treasures: Draw a card.",
@@ -25,14 +34,24 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 },
-                { "Kind": "colored", "Colors": ["B"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                }
               ]
             },
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -48,14 +67,17 @@
                 "Value": 2
               },
               "Token": {
-                "Types": ["artifact"],
-                "Subtypes": ["Treasure"],
+                "Types": [
+                  "artifact"
+                ],
+                "Subtypes": [
+                  "Treasure"
+                ],
                 "IsCopy": false,
                 "AbilityText": [
                   "{T}, Sacrifice this artifact: Add one mana of any color."
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false
@@ -66,7 +88,9 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "Subtypes": ["Treasure"]
+                "Subtypes": [
+                  "Treasure"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -95,23 +119,43 @@
         "Kind": "manaCost",
         "Raw": "{2}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

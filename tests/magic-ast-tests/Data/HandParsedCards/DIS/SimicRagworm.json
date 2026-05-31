@@ -6,8 +6,13 @@
     "OracleText": "{U}: Untap this creature.",
     "Power": "3",
     "Toughness": "3",
-    "Colors": ["G"],
-    "ColorIdentity": ["G", "U"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G",
+      "U"
+    ],
     "Keywords": [],
     "Id": "fa1f4b84-dd5d-4f5f-808e-26ef9414b38a",
     "Layout": "normal"
@@ -16,8 +21,12 @@
     "Name": "Simic Ragworm",
     "TypeLine": {
       "Raw": "Creature — Worm",
-      "Types": ["Creature"],
-      "Subtypes": ["Worm"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Worm"
+      ]
     },
     "Oracle": {
       "RawText": "{U}: Untap this creature.",
@@ -30,7 +39,9 @@
               "Symbols": [
                 {
                   "Kind": "colored",
-                  "Colors": ["U"]
+                  "Colors": [
+                    "U"
+                  ]
                 }
               ]
             }
@@ -40,8 +51,7 @@
               "EffectType": "untap",
               "Target": {
                 "Kind": "Self"
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false
@@ -53,24 +63,45 @@
         "Kind": "manaCost",
         "Raw": "{3}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 4,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "G"]
+        "ColorIdentity": [
+          "U",
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
-        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

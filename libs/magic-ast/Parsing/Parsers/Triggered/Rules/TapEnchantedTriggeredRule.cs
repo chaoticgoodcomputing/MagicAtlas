@@ -31,7 +31,6 @@ public sealed class TapEnchantedTriggeredRule : ITriggeredRule
     effect = new TapEffect
     {
       Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
-      IsOptional = false,
     };
     return true;
   }

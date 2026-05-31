@@ -6,16 +6,29 @@
     "OracleText": "When this creature enters, create a 1/1 black and red Goblin creature token.",
     "Power": "1",
     "Toughness": "3",
-    "Colors": ["B", "R"],
-    "ColorIdentity": ["B", "R"]
+    "Colors": [
+      "B",
+      "R"
+    ],
+    "ColorIdentity": [
+      "B",
+      "R"
+    ]
   },
   "Output": {
     "Name": "Elder Auntie",
     "TypeLine": {
       "Raw": "Legendary Creature — Goblin Shaman",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Goblin", "Shaman"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin",
+        "Shaman"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, create a 1/1 black and red Goblin creature token.",
@@ -26,7 +39,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -39,12 +54,18 @@
               "Token": {
                 "Power": "1",
                 "Toughness": "1",
-                "Colors": ["B", "R"],
-                "Types": ["creature"],
-                "Subtypes": ["Goblin"],
+                "Colors": [
+                  "B",
+                  "R"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Goblin"
+                ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -55,25 +76,52 @@
         "Kind": "manaCost",
         "Raw": "{1}{B}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "R"]
+        "Colors": [
+          "B",
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "R"]
+        "ColorIdentity": [
+          "B",
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 1, "Raw": "1" },
-        "Toughness": { "ValueType": "fixed", "Value": 3, "Raw": "3" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
       }
     ]
   }

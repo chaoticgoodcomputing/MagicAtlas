@@ -56,8 +56,7 @@
               "ToughnessModifier": {
                 "QuantityType": "literal",
                 "Value": 3
-              },
-              "IsOptional": false
+              }
             }
           ]
         },

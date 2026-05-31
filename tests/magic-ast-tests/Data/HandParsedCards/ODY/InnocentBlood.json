@@ -6,14 +6,20 @@
     "OracleText": "Each player sacrifices a creature.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Innocent Blood",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Each player sacrifices a creature.",
@@ -25,9 +31,12 @@
               "EffectType": "sacrifice",
               "Target": {
                 "Kind": "EachPlayer",
-                "Filter": { "CardTypes": ["creature"] }
-              },
-              "IsOptional": false
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              }
             }
           ]
         }
@@ -38,17 +47,26 @@
         "Kind": "manaCost",
         "Raw": "{B}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

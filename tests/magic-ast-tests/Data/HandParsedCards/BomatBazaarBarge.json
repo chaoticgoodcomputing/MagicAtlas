@@ -48,8 +48,7 @@
               },
               "Player": {
                 "Kind": "You"
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -61,8 +60,7 @@
               "Power": {
                 "QuantityType": "literal",
                 "Value": 3
-              },
-              "IsOptional": false
+              }
             }
           ],
           "KeywordSource": "Crew",

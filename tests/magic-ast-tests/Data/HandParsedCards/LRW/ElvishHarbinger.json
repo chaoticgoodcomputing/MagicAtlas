@@ -41,19 +41,21 @@
           },
           "Effects": [
             {
-              "EffectType": "searchLibrary",
-              "Filter": {
-                "Subtypes": [
-                  "Elf"
-                ]
-              },
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Destination": "Hand",
-              "Revealed": true,
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "searchLibrary",
+                "Filter": {
+                  "Subtypes": [
+                    "Elf"
+                  ]
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Destination": "Hand",
+                "Revealed": true
+              }
             }
           ]
         }

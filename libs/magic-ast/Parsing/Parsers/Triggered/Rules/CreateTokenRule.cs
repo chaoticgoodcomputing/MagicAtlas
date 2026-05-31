@@ -56,12 +56,9 @@ public sealed class CreateTokenRule : ITriggeredRule
     // No P/T; reminder text describes the activated ability (engine territory, not modelled here).
     if (_foodTokenPattern.IsMatch(createText))
     {
-      effect = new CreateTokenEffect
-      {
+      effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new CreateTokenEffect {
         Count = LiteralQuantity.Of(1),
-        Token = TokenDefinition.Food(),
-        IsOptional = isOptional,
-      };
+        Token = TokenDefinition.Food()}, isOptional);
       return true;
     }
 
@@ -69,12 +66,9 @@ public sealed class CreateTokenRule : ITriggeredRule
     // "create a Treasure token[.]" — Rule 107.10b, Treasure subtype.
     if (_treasureTokenPattern.IsMatch(createText))
     {
-      effect = new CreateTokenEffect
-      {
+      effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new CreateTokenEffect {
         Count = LiteralQuantity.Of(1),
-        Token = TokenDefinition.Treasure(),
-        IsOptional = isOptional,
-      };
+        Token = TokenDefinition.Treasure()}, isOptional);
       return true;
     }
 
@@ -82,12 +76,9 @@ public sealed class CreateTokenRule : ITriggeredRule
     // "create a Clue token[.]" — Rule 107.10b, Clue subtype.
     if (_clueTokenPattern.IsMatch(createText))
     {
-      effect = new CreateTokenEffect
-      {
+      effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new CreateTokenEffect {
         Count = LiteralQuantity.Of(1),
-        Token = TokenDefinition.Clue(),
-        IsOptional = isOptional,
-      };
+        Token = TokenDefinition.Clue()}, isOptional);
       return true;
     }
 
@@ -95,12 +86,9 @@ public sealed class CreateTokenRule : ITriggeredRule
     // "create a Blood token[.]" — Rule 107.10b, Blood subtype.
     if (_bloodTokenPattern.IsMatch(createText))
     {
-      effect = new CreateTokenEffect
-      {
+      effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new CreateTokenEffect {
         Count = LiteralQuantity.Of(1),
-        Token = TokenDefinition.Blood(),
-        IsOptional = isOptional,
-      };
+        Token = TokenDefinition.Blood()}, isOptional);
       return true;
     }
 
@@ -138,8 +126,7 @@ public sealed class CreateTokenRule : ITriggeredRule
 
     var tokenTypes = TriggeredRuleHelpers.ParseTokenTypes(createText);
 
-    effect = new CreateTokenEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new CreateTokenEffect {
       Count = LiteralQuantity.Of(count),
       Token = new TokenDefinition
       {
@@ -149,9 +136,7 @@ public sealed class CreateTokenRule : ITriggeredRule
         Types = tokenTypes,
         Subtypes = subtypes,
         Abilities = tokenAbilities,
-      },
-      IsOptional = isOptional,
-    };
+      }}, isOptional);
     return true;
   }
 }

@@ -42,22 +42,24 @@
           },
           "Effects": [
             {
-              "EffectType": "searchLibrary",
-              "Filter": {
-                "Supertypes": [
-                  "Basic"
-                ],
-                "CardTypes": [
-                  "land"
-                ]
-              },
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Destination": "Hand",
-              "Revealed": true,
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "searchLibrary",
+                "Filter": {
+                  "Supertypes": [
+                    "Basic"
+                  ],
+                  "CardTypes": [
+                    "land"
+                  ]
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Destination": "Hand",
+                "Revealed": true
+              }
             }
           ]
         }

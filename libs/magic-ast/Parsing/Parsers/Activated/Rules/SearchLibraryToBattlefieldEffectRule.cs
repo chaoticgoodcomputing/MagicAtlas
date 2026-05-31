@@ -98,7 +98,6 @@ public sealed class SearchLibraryToBattlefieldEffectRule : IActivatedEffectRule
       Count = LiteralQuantity.Of(1),
       Destination = SearchDestination.Battlefield,
       Revealed = false,
-      IsOptional = false,
     };
 
     var shuffleEffect = new ShuffleEffect
@@ -109,7 +108,6 @@ public sealed class SearchLibraryToBattlefieldEffectRule : IActivatedEffectRule
     return new CompositeEffect
     {
       Effects = [searchEffect, shuffleEffect],
-      IsOptional = false,
     };
   }
 

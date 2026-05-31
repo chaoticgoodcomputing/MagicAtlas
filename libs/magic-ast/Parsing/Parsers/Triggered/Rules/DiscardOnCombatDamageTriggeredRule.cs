@@ -47,7 +47,6 @@ public sealed class DiscardOnCombatDamageTriggeredRule : ITriggeredRule
     {
       Count = LiteralQuantity.Of(count),
       Player = new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
-      IsOptional = false,
     };
     return true;
   }

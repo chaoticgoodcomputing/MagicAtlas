@@ -6,14 +6,20 @@
     "OracleText": "Lightning Strike deals 3 damage to any target.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Lightning Strike",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Lightning Strike deals 3 damage to any target.",
@@ -23,13 +29,16 @@
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Source": { "Kind": "Self" },
+              "Source": {
+                "Kind": "Self"
+              },
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 3
               },
-              "Target": { "Kind": "AnyTarget" },
-              "IsOptional": false
+              "Target": {
+                "Kind": "AnyTarget"
+              }
             }
           ]
         }
@@ -40,18 +49,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

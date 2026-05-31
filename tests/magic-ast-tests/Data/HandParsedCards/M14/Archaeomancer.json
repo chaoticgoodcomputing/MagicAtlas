@@ -52,8 +52,7 @@
                   "Zone": "Graveyard",
                   "Controller": "You"
                 }
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

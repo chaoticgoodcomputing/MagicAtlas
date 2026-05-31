@@ -40,12 +40,9 @@ public sealed class ReturnThisToHandTriggeredRule : ITriggeredRule
       return false;
     }
 
-    effect = new ReturnToHandEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new ReturnToHandEffect {
       // "this [type]" = self-reference to the card carrying this ability.
-      Target = ObjectReference.Self(),
-      IsOptional = match.Groups["opt"].Success,
-    };
+      Target = ObjectReference.Self()}, match.Groups["opt"].Success);
     return true;
   }
 }

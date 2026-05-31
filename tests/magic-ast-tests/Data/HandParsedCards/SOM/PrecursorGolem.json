@@ -13,8 +13,13 @@
     "Name": "Precursor Golem",
     "TypeLine": {
       "Raw": "Artifact Creature — Golem",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Golem"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Golem"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, create two 3/3 colorless Golem artifact creature tokens.\nWhenever a spell or ability targets only Precursor Golem, that player copies it for each other Golem they control. Each copy targets a different one of those Golems.",
@@ -25,7 +30,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -38,12 +45,18 @@
               "Token": {
                 "Power": "3",
                 "Toughness": "3",
-                "Colors": ["C"],
-                "Types": ["artifact", "creature"],
-                "Subtypes": ["Golem"],
+                "Colors": [
+                  "C"
+                ],
+                "Types": [
+                  "artifact",
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Golem"
+                ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -76,7 +89,10 @@
         "Kind": "manaCost",
         "Raw": "{5}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          }
         ],
         "ManaValue": 5
       },
@@ -90,8 +106,16 @@
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
-        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

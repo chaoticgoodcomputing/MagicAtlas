@@ -37,8 +37,7 @@ public sealed class ReturnSelfFromGraveyardTriggeredRule : ITriggeredRule
       return false;
     }
 
-    effect = new ReturnToHandEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new ReturnToHandEffect {
       // "this card" — self-reference; Zone = Graveyard encodes the source zone
       // stated in the oracle text ("from your graveyard").
       Target = new ObjectReference
@@ -48,9 +47,7 @@ public sealed class ReturnSelfFromGraveyardTriggeredRule : ITriggeredRule
         {
           Zone = Zone.Graveyard,
         },
-      },
-      IsOptional = true,
-    };
+      }}, true);
     return true;
   }
 }

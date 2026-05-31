@@ -46,12 +46,14 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "payLife",
-              "Amount": {
-                "QuantityType": "literal",
-                "Value": 2
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "payLife",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                }
               },
-              "IsOptional": true,
               "IfYouDoNot": {
                 "EffectType": "tap",
                 "Target": {

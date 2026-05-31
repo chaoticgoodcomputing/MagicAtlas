@@ -6,16 +6,29 @@
     "OracleText": "Whenever Radha attacks, you may add {R}{R}.\n{T}: Add {G}.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": [ "G", "R" ],
-    "ColorIdentity": [ "G", "R" ]
+    "Colors": [
+      "G",
+      "R"
+    ],
+    "ColorIdentity": [
+      "G",
+      "R"
+    ]
   },
   "Output": {
     "Name": "Radha, Heir to Keld",
     "TypeLine": {
       "Raw": "Legendary Creature — Elf Warrior",
-      "Supertypes": [ "Legendary" ],
-      "Types": [ "Creature" ],
-      "Subtypes": [ "Elf", "Warrior" ]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever Radha attacks, you may add {R}{R}.\n{T}: Add {G}.",
@@ -26,14 +39,18 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": [ "creature" ]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
             {
-              "EffectType": "addMana",
-              "Mana": "{R}{R}",
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "addMana",
+                "Mana": "{R}{R}"
+              }
             }
           ]
         },
@@ -61,22 +78,32 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": [ "R" ]
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": [ "G" ]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": [ "R", "G" ]
+        "Colors": [
+          "R",
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": [ "R", "G" ]
+        "ColorIdentity": [
+          "R",
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

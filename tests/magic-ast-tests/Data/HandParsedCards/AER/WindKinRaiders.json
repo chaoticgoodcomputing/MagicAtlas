@@ -60,8 +60,7 @@
                     "Keyword": "Reach"
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ],
           "KeywordSource": "Flying"

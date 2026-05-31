@@ -38,8 +38,7 @@
               },
               "Source": {
                 "Kind": "Self"
-              },
-              "IsOptional": false
+              }
             }
           ]
         },

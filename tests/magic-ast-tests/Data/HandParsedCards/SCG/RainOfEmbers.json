@@ -6,14 +6,20 @@
     "OracleText": "Rain of Embers deals 1 damage to each creature and each player.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Rain of Embers",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Rain of Embers deals 1 damage to each creature and each player.",
@@ -23,11 +29,12 @@
           "Effects": [
             {
               "EffectType": "composite",
-              "IsOptional": false,
               "Effects": [
                 {
                   "EffectType": "dealDamage",
-                  "Source": { "Kind": "Self" },
+                  "Source": {
+                    "Kind": "Self"
+                  },
                   "Amount": {
                     "QuantityType": "literal",
                     "Value": 1
@@ -35,20 +42,24 @@
                   "Target": {
                     "Kind": "Each",
                     "Filter": {
-                      "CardTypes": ["creature"]
+                      "CardTypes": [
+                        "creature"
+                      ]
                     }
-                  },
-                  "IsOptional": false
+                  }
                 },
                 {
                   "EffectType": "dealDamage",
-                  "Source": { "Kind": "Self" },
+                  "Source": {
+                    "Kind": "Self"
+                  },
                   "Amount": {
                     "QuantityType": "literal",
                     "Value": 1
                   },
-                  "Target": { "Kind": "EachPlayer" },
-                  "IsOptional": false
+                  "Target": {
+                    "Kind": "EachPlayer"
+                  }
                 }
               ]
             }
@@ -61,18 +72,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

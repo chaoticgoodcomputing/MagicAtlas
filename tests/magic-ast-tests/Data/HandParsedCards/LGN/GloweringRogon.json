@@ -6,15 +6,23 @@
     "OracleText": "Amplify 1 (As this creature enters, put a +1/+1 counter on it for each Beast card you reveal in your hand.)",
     "Power": "4",
     "Toughness": "4",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Glowering Rogon",
     "TypeLine": {
       "Raw": "Creature — Beast",
-      "Types": ["Creature"],
-      "Subtypes": ["Beast"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Beast"
+      ]
     },
     "Oracle": {
       "RawText": "Amplify 1 (As this creature enters, put a +1/+1 counter on it for each Beast card you reveal in your hand.)",
@@ -25,8 +33,7 @@
           "Effects": [
             {
               "EffectType": "amplify",
-              "Value": 1,
-              "IsOptional": false
+              "Value": 1
             }
           ],
           "Reminder": {
@@ -40,18 +47,30 @@
         "Kind": "manaCost",
         "Raw": "{5}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 6
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

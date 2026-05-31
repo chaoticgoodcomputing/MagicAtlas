@@ -35,16 +35,21 @@
           },
           "Effects": [
             {
-              "EffectType": "drawCards",
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "optional",
+                "Inner": {
+                  "EffectType": "drawCards",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
               },
-              "Player": {
-                "Kind": "You"
-              },
-              "IsOptional": true,
-              "UnlessClause": {
+              "Unless": {
                 "Player": {
                   "Kind": "ThatPlayer"
                 },

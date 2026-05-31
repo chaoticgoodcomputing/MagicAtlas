@@ -37,15 +37,17 @@
           },
           "Effects": [
             {
-              "EffectType": "gainLife",
-              "Amount": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Player": {
-                "Kind": "You"
-              },
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "gainLife",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              }
             }
           ]
         }

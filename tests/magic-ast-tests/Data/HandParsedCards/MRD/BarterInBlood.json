@@ -6,14 +6,20 @@
     "OracleText": "Each player sacrifices two creatures.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Barter in Blood",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Each player sacrifices two creatures.",
@@ -25,13 +31,16 @@
               "EffectType": "sacrifice",
               "Target": {
                 "Kind": "EachPlayer",
-                "Filter": { "CardTypes": ["creature"] }
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
               },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -42,19 +51,36 @@
         "Kind": "manaCost",
         "Raw": "{2}{B}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

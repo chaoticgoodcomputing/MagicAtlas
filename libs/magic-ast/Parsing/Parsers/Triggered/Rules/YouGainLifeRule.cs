@@ -42,12 +42,9 @@ public sealed class YouGainLifeRule : ITriggeredRule
       "ten" => 10,
       _ => int.Parse(raw),
     };
-    effect = new GainLifeEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new GainLifeEffect {
       Amount = LiteralQuantity.Of(amount),
-      Player = ObjectReference.You(),
-      IsOptional = isOptional,
-    };
+      Player = ObjectReference.You()}, isOptional);
     return true;
   }
 }

@@ -6,14 +6,20 @@
     "OracleText": "You may play an additional land on each of your turns.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Exploration",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "You may play an additional land on each of your turns.",
@@ -22,8 +28,10 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "playAdditionalLand",
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "playAdditionalLand"
+              }
             }
           ]
         }
@@ -40,18 +48,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

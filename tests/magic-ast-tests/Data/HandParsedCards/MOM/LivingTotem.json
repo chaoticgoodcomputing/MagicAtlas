@@ -51,27 +51,29 @@
           },
           "Effects": [
             {
-              "EffectType": "putCounters",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "creature"
-                  ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "another"
-                    }
-                  ]
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "putCounters",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Characteristics": [
+                      {
+                        "CharacteristicType": "other",
+                        "Description": "another"
+                      }
+                    ]
+                  }
+                },
+                "CounterType": "+1/+1",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
                 }
-              },
-              "CounterType": "+1/+1",
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "IsOptional": true
+              }
             }
           ]
         }

@@ -59,15 +59,12 @@ public sealed class DestroyTargetTriggeredRule : ITriggeredRule
       var cardTypes = SpellRuleHelpers.SplitTypeDisjunction(filterPhrase);
       if (cardTypes.Count >= 2)
       {
-        effect = new DestroyEffect
-        {
+        effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new DestroyEffect {
           Target = new ObjectReference
           {
             Kind = ObjectReferenceKind.Target,
             Filter = new ObjectFilter { CardTypes = cardTypes },
-          },
-          IsOptional = isOptional,
-        };
+          }}, isOptional);
         return true;
       }
     }
@@ -79,15 +76,12 @@ public sealed class DestroyTargetTriggeredRule : ITriggeredRule
       return false;
     }
 
-    effect = new DestroyEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new DestroyEffect {
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
         Filter = filter,
-      },
-      IsOptional = isOptional,
-    };
+      }}, isOptional);
     return true;
   }
 }

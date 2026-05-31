@@ -65,7 +65,6 @@
             },
             {
               "EffectType": "cantBlock",
-              "IsOptional": false,
               "Duration": {
                 "DurationType": "asLongAs",
                 "Condition": {

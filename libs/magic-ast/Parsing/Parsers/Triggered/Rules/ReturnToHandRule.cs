@@ -88,11 +88,8 @@ public sealed class ReturnToHandRule : ITriggeredRule
     // Rule 115.1 / 601.2c contrast: only the "target" keyword creates a target.
     var refKind = isTargeted ? ObjectReferenceKind.Target : ObjectReferenceKind.Any;
 
-    effect = new ReturnToHandEffect
-    {
-      Target = new ObjectReference { Kind = refKind, Filter = filter },
-      IsOptional = isOptional,
-    };
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new ReturnToHandEffect {
+      Target = new ObjectReference { Kind = refKind, Filter = filter }}, isOptional);
     return true;
   }
 }

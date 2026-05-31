@@ -40,8 +40,7 @@
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "CounterType": "oil",
-              "IsOptional": false
+              "CounterType": "oil"
             }
           ],
           "When": "asThisEnters"
@@ -86,7 +85,6 @@
                   }
                 ]
               },
-              "IsOptional": false,
               "Duration": {
                 "DurationType": "untilTime",
                 "Until": {

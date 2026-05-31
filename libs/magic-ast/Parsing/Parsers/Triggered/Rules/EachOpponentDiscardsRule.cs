@@ -33,7 +33,6 @@ public sealed class EachOpponentDiscardsRule : ITriggeredRule
     {
       Count = LiteralQuantity.Of(1),
       Player = new ObjectReference { Kind = ObjectReferenceKind.EachOpponent },
-      IsOptional = false,
     };
     return true;
   }

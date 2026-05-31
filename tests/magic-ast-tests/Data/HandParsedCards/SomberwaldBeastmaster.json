@@ -42,7 +42,6 @@
           "Effects": [
             {
               "EffectType": "composite",
-              "IsOptional": false,
               "Effects": [
                 {
                   "EffectType": "createToken",
@@ -63,8 +62,7 @@
                       "Wolf"
                     ],
                     "IsCopy": false
-                  },
-                  "IsOptional": false
+                  }
                 },
                 {
                   "EffectType": "createToken",
@@ -85,8 +83,7 @@
                       "Beast"
                     ],
                     "IsCopy": false
-                  },
-                  "IsOptional": false
+                  }
                 },
                 {
                   "EffectType": "createToken",
@@ -107,8 +104,7 @@
                       "Beast"
                     ],
                     "IsCopy": false
-                  },
-                  "IsOptional": false
+                  }
                 }
               ]
             }
@@ -143,8 +139,7 @@
                     "Keyword": "Deathtouch"
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

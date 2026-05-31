@@ -51,8 +51,7 @@
               },
               "Zone": "Library",
               "Location": "Top",
-              "PutBackInAnyOrder": true,
-              "IsOptional": false
+              "PutBackInAnyOrder": true
             }
           ]
         }

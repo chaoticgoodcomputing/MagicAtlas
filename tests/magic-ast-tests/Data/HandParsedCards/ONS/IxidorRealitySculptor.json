@@ -43,7 +43,10 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "face-down"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "face-down"
+                    }
                   ]
                 }
               },
@@ -84,8 +87,7 @@
                 "Start": 38,
                 "Length": 40
               },
-              "RawText": "Turn target face-down creature face up.",
-              "IsOptional": false
+              "RawText": "Turn target face-down creature face up."
             }
           ],
           "IsManaAbility": false

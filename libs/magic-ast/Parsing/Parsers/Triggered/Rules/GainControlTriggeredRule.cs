@@ -91,16 +91,13 @@ public sealed class GainControlTriggeredRule : ITriggeredRule
 
     Duration? duration = hasUntilEndOfTurn ? UntilTimeDuration.EndOfTurn : null;
 
-    effect = new GainControlEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new GainControlEffect {
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
         Filter = filter,
       },
-      IsOptional = isOptional,
-      Duration = duration,
-    };
+      Duration = duration}, isOptional);
     return true;
   }
 }

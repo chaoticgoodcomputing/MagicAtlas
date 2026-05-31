@@ -41,17 +41,19 @@
           },
           "Effects": [
             {
-              "EffectType": "conditionalPay",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 1
-                  }
-                ]
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 1
+                    }
+                  ]
+                }
               },
-              "IsOptional": true,
               "IfYouDo": {
                 "EffectType": "gainLife",
                 "Amount": {

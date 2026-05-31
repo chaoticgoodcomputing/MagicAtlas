@@ -35,8 +35,7 @@
                   ],
                   "Controller": "You"
                 }
-              },
-              "IsOptional": false
+              }
             }
           ]
         },

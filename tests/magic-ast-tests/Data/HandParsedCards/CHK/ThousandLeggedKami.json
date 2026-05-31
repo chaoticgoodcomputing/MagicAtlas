@@ -34,8 +34,7 @@
           "Effects": [
             {
               "EffectType": "soulshift",
-              "Value": 7,
-              "IsOptional": false
+              "Value": 7
             }
           ]
         }

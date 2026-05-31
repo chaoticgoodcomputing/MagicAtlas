@@ -41,8 +41,7 @@
                 "QuantityType": "literal",
                 "Value": 3
               },
-              "CounterType": "oil",
-              "IsOptional": false
+              "CounterType": "oil"
             }
           ],
           "When": "asThisEnters"

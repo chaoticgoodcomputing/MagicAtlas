@@ -45,31 +45,33 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "timingModification",
-              "Modification": "Grant",
-              "Timing": "Instant",
-              "Consequence": {
-                "EffectType": "createDelayedTrigger",
-                "DelayedTrigger": {
-                  "Trigger": {
-                    "Timing": "At",
-                    "Event": {
-                      "Part": "Cleanup",
-                      "Edge": "Beginning",
-                      "When": "Next"
-                    }
-                  },
-                  "Effects": [
-                    {
-                      "EffectType": "sacrifice",
-                      "Target": {
-                        "Kind": "Self"
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "timingModification",
+                "Modification": "Grant",
+                "Timing": "Instant",
+                "Consequence": {
+                  "EffectType": "createDelayedTrigger",
+                  "DelayedTrigger": {
+                    "Trigger": {
+                      "Timing": "At",
+                      "Event": {
+                        "Part": "Cleanup",
+                        "Edge": "Beginning",
+                        "When": "Next"
                       }
-                    }
-                  ]
+                    },
+                    "Effects": [
+                      {
+                        "EffectType": "sacrifice",
+                        "Target": {
+                          "Kind": "Self"
+                        }
+                      }
+                    ]
+                  }
                 }
-              },
-              "IsOptional": true
+              }
             }
           ]
         },

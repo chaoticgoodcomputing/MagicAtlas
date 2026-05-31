@@ -40,8 +40,14 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
@@ -59,8 +65,7 @@
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "CounterType": "-1/-1",
-              "IsOptional": false
+              "CounterType": "-1/-1"
             }
           ],
           "When": "asThisEnters"

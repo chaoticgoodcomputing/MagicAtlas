@@ -38,8 +38,14 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
@@ -50,8 +56,7 @@
           "Effects": [
             {
               "EffectType": "blockAdditional",
-              "IsUnlimited": true,
-              "IsOptional": false
+              "IsUnlimited": true
             }
           ]
         }

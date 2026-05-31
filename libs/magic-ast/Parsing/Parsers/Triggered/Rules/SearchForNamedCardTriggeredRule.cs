@@ -61,15 +61,12 @@ public sealed class SearchForNamedCardTriggeredRule : ITriggeredRule
 
     var sources = ParseSources(m.Groups["sources"].Value);
 
-    effect = new SearchLibraryEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new SearchLibraryEffect {
       Filter = new ObjectFilter { Name = name },
       Count = LiteralQuantity.Of(1),
       Sources = sources,
       Destination = SearchDestination.Hand,
-      Revealed = true,
-      IsOptional = isOptional,
-    };
+      Revealed = true}, isOptional);
     return true;
   }
 

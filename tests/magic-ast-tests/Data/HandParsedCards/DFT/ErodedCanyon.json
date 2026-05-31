@@ -61,8 +61,7 @@
               },
               "Target": {
                 "Kind": "Opponent"
-              },
-              "IsOptional": false
+              }
             }
           ]
         },

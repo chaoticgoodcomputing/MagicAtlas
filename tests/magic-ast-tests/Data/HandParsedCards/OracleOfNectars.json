@@ -54,8 +54,7 @@
               },
               "Player": {
                 "Kind": "You"
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false

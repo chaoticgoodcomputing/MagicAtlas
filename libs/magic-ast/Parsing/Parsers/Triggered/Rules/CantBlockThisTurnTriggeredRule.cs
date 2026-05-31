@@ -52,7 +52,6 @@ public sealed class CantBlockThisTurnTriggeredRule : ITriggeredRule
         Kind = ObjectReferenceKind.Target,
         Filter = filter,
       },
-      IsOptional = false,
       Duration = UntilTimeDuration.EndOfTurn,
     };
     return true;

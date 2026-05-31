@@ -115,7 +115,6 @@ public sealed class EtbTeamPumpTriggeredRule : ITriggeredRule
     effect = new CompositeEffect
     {
       Effects = compositeEffects,
-      IsOptional = false,
     };
     return true;
   }

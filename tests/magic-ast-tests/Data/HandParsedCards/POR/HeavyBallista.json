@@ -52,11 +52,13 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "attacking or blocking"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "attacking or blocking"
+                    }
                   ]
                 }
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false

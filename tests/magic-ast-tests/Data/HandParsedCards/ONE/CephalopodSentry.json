@@ -6,15 +6,27 @@
     "OracleText": "Flying\nCephalopod Sentry's power is equal to the number of artifacts you control.",
     "Power": "*",
     "Toughness": "5",
-    "Colors": ["U", "W"],
-    "ColorIdentity": ["U", "W"]
+    "Colors": [
+      "U",
+      "W"
+    ],
+    "ColorIdentity": [
+      "U",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Cephalopod Sentry",
     "TypeLine": {
       "Raw": "Artifact Creature — Phyrexian Squid",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Phyrexian", "Squid"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Squid"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nCephalopod Sentry's power is equal to the number of artifacts you control.",
@@ -25,10 +37,20 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
-                "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
-              },
-              "IsOptional": false
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
             }
           ],
           "KeywordSource": "Flying"
@@ -42,8 +64,7 @@
               "Value": {
                 "QuantityType": "count",
                 "CountOf": "artifacts you control"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -54,19 +75,38 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U", "W"]
+        "Colors": [
+          "U",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "W"]
+        "ColorIdentity": [
+          "U",
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

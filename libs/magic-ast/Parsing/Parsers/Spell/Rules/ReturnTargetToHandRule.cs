@@ -139,8 +139,7 @@ public sealed class ReturnTargetToHandRule : ISpellRule
 
     ControllerFilter? controller = youGroup.Contains("you control") ? ControllerFilter.You : null;
 
-    effect = new ReturnToHandEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new ReturnToHandEffect {
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
@@ -151,9 +150,7 @@ public sealed class ReturnTargetToHandRule : ISpellRule
           Characteristics = targetCharacteristics.Count > 0 ? targetCharacteristics.Select(Characteristic.FromLabel).ToList() : null,
           Controller = controller,
         },
-      },
-      IsOptional = isOptional,
-    };
+      }}, isOptional);
     return true;
   }
 
@@ -215,8 +212,7 @@ public sealed class ReturnTargetToHandRule : ISpellRule
 
     ControllerFilter? controller = targetText.Contains("you control") ? ControllerFilter.You : null;
 
-    effect = new ReturnToHandEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new ReturnToHandEffect {
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
@@ -226,9 +222,7 @@ public sealed class ReturnTargetToHandRule : ISpellRule
           Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
           Controller = controller,
         },
-      },
-      IsOptional = isOptional,
-    };
+      }}, isOptional);
     return true;
   }
 }

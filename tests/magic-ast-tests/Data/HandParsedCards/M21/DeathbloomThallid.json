@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Deathbloom Thallid",
     "ManaCost": "{2}{B}",
-    "TypeLine": "Creature \u2014 Fungus",
+    "TypeLine": "Creature — Fungus",
     "OracleText": "When this creature dies, create a 1/1 green Saproling creature token.",
     "Power": "3",
     "Toughness": "2",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Deathbloom Thallid",
     "TypeLine": {
-      "Raw": "Creature \u2014 Fungus",
+      "Raw": "Creature — Fungus",
       "Types": [
         "Creature"
       ],
@@ -58,8 +58,7 @@
                   "Saproling"
                 ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

@@ -26,7 +26,7 @@ public sealed class SkipUntapRule : IStaticRule
     [
       new StaticAbility
       {
-        Effects = [new MagicAST.AST.Effects.Timing.SkipUntapEffect { IsOptional = false }],
+        Effects = [new MagicAST.AST.Effects.Timing.SkipUntapEffect {}],
       },
     ];
   }

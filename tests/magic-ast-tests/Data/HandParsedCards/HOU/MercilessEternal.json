@@ -33,8 +33,7 @@
           "Effects": [
             {
               "EffectType": "afflict",
-              "Value": 2,
-              "IsOptional": false
+              "Value": 2
             }
           ],
           "KeywordSource": "Afflict",
@@ -87,7 +86,6 @@
                 "QuantityType": "literal",
                 "Value": 2
               },
-              "IsOptional": false,
               "Duration": {
                 "DurationType": "untilTime",
                 "Until": {

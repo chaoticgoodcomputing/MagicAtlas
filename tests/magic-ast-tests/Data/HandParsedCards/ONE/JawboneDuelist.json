@@ -38,8 +38,7 @@
           "Effects": [
             {
               "EffectType": "toxic",
-              "Value": 1,
-              "IsOptional": false
+              "Value": 1
             }
           ]
         }

@@ -6,15 +6,24 @@
     "OracleText": "When this creature enters, it deals 1 damage to any target.",
     "Power": "3",
     "Toughness": "3",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Skeleton Archer",
     "TypeLine": {
       "Raw": "Creature — Skeleton Archer",
-      "Types": ["Creature"],
-      "Subtypes": ["Skeleton", "Archer"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Skeleton",
+        "Archer"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, it deals 1 damage to any target.",
@@ -25,19 +34,24 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Source": { "Kind": "It" },
+              "Source": {
+                "Kind": "It"
+              },
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "Target": { "Kind": "AnyTarget" },
-              "IsOptional": false
+              "Target": {
+                "Kind": "AnyTarget"
+              }
             }
           ]
         }
@@ -48,18 +62,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

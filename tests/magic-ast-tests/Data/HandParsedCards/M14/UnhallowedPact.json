@@ -6,15 +6,23 @@
     "OracleText": "Enchant creature\nWhen enchanted creature dies, return that card to the battlefield under your control.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Unhallowed Pact",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nWhen enchanted creature dies, return that card to the battlefield under your control.",
@@ -26,7 +34,9 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
           ]
@@ -37,8 +47,15 @@
             "Timing": "When",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
-              "Characteristics": [{"CharacteristicType": "other", "Description": "enchanted"}]
+              "CardTypes": [
+                "creature"
+              ],
+              "Characteristics": [
+                {
+                  "CharacteristicType": "other",
+                  "Description": "enchanted"
+                }
+              ]
             }
           },
           "Effects": [
@@ -49,8 +66,7 @@
               },
               "UnderControl": {
                 "Kind": "You"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -61,18 +77,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

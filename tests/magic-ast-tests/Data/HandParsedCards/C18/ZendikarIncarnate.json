@@ -6,15 +6,25 @@
     "OracleText": "Zendikar Incarnate's power is equal to the number of lands you control.",
     "Power": "*",
     "Toughness": "4",
-    "Colors": ["G", "R"],
-    "ColorIdentity": ["G", "R"]
+    "Colors": [
+      "G",
+      "R"
+    ],
+    "ColorIdentity": [
+      "G",
+      "R"
+    ]
   },
   "Output": {
     "Name": "Zendikar Incarnate",
     "TypeLine": {
       "Raw": "Creature — Elemental",
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental"
+      ]
     },
     "Oracle": {
       "RawText": "Zendikar Incarnate's power is equal to the number of lands you control.",
@@ -28,8 +38,7 @@
               "Value": {
                 "QuantityType": "count",
                 "CountOf": "lands you control"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -40,19 +49,38 @@
         "Kind": "manaCost",
         "Raw": "{2}{R}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["G", "R"]
+        "Colors": [
+          "G",
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G", "R"]
+        "ColorIdentity": [
+          "G",
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

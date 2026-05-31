@@ -38,8 +38,7 @@
                     "GenericAmount": 1
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ],
           "KeywordSource": "Escalate",
@@ -79,7 +78,6 @@
                       ],
                       "KeywordSource": "Trample"
                     },
-                    "IsOptional": false,
                     "Duration": {
                       "DurationType": "untilTime",
                       "Until": {
@@ -111,8 +109,7 @@
                     },
                     "Source": {
                       "Kind": "Self"
-                    },
-                    "IsOptional": false
+                    }
                   }
                 ]
               }
@@ -138,8 +135,7 @@
                     },
                     "Source": {
                       "Kind": "Self"
-                    },
-                    "IsOptional": false
+                    }
                   }
                 ]
               }

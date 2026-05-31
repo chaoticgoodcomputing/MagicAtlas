@@ -44,8 +44,7 @@
                     "Forest"
                   ]
                 }
-              },
-              "IsOptional": false
+              }
             }
           ],
           "KeywordSource": "Forestwalk",
@@ -83,10 +82,8 @@
                     "Squirrel"
                   ],
                   "IsCopy": false
-                },
-                "IsOptional": false
-              },
-              "IsOptional": false
+                }
+              }
             }
           ]
         },
@@ -147,8 +144,7 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false

@@ -16,7 +16,9 @@
     "Name": "Vial of Dragonfire",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "{2}, {T}, Sacrifice this artifact: It deals 2 damage to target creature.",
@@ -39,8 +41,15 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["artifact"],
-                "Characteristics": [{"CharacteristicType": "other", "Description": "this permanent"}]
+                "CardTypes": [
+                  "artifact"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "this permanent"
+                  }
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -61,10 +70,11 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false

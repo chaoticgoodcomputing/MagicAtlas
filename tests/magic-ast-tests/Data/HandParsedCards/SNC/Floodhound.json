@@ -6,9 +6,15 @@
     "OracleText": "{3}, {T}: Investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
     "Power": "1",
     "Toughness": "2",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Investigate"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Investigate"
+    ],
     "Id": "a5b1ac05-bd87-4605-8443-0469276e1e3a",
     "Layout": "normal"
   },
@@ -16,8 +22,13 @@
     "Name": "Floodhound",
     "TypeLine": {
       "Raw": "Creature — Elemental Dog",
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental", "Dog"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental",
+        "Dog"
+      ]
     },
     "Oracle": {
       "RawText": "{3}, {T}: Investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
@@ -40,8 +51,7 @@
           ],
           "Effects": [
             {
-              "EffectType": "investigate",
-              "IsOptional": false
+              "EffectType": "investigate"
             }
           ],
           "IsManaAbility": false
@@ -53,12 +63,27 @@
         "Kind": "manaCost",
         "Raw": "{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 1
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
       {
         "Kind": "creatureStats",
         "Power": {

@@ -37,10 +37,7 @@ public sealed class LookAtTopCardAnyTimeRule : IStaticRule
     [
       new StaticAbility
       {
-        Effects = [new LookAtTopCardAnyTimeEffect
-        {
-          IsOptional = true,
-        }],
+        Effects = [new MagicAST.AST.Effects.Core.OptionalEffect { Inner = new LookAtTopCardAnyTimeEffect {} }],
       },
     ];
   }

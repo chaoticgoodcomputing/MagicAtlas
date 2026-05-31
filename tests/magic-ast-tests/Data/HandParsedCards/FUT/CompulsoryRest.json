@@ -48,15 +48,13 @@
               "EffectType": "cantAttack",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
-              },
-              "IsOptional": false
+              }
             },
             {
               "EffectType": "cantBlock",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -87,7 +85,10 @@
                         "creature"
                       ],
                       "Characteristics": [
-                        {"CharacteristicType": "other", "Description": "this permanent"}
+                        {
+                          "CharacteristicType": "other",
+                          "Description": "this permanent"
+                        }
                       ]
                     },
                     "Quantity": {
@@ -105,13 +106,11 @@
                     },
                     "Player": {
                       "Kind": "You"
-                    },
-                    "IsOptional": false
+                    }
                   }
                 ],
                 "IsManaAbility": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

@@ -34,14 +34,10 @@ public sealed class DiscardThenDrawSpellRule : ISpellRule
       Count = LiteralQuantity.Of(drawCount),
       Player = ObjectReference.You(),
     };
-    effect = new DiscardCardsEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new DiscardCardsEffect {
       Count = LiteralQuantity.Of(discardCount),
       Player = ObjectReference.You(),
-      Random = false,
-      IsOptional = true,
-      IfYouDo = draw,
-    };
+      Random = false}, true, ifYouDo: draw);
     return true;
   }
 }

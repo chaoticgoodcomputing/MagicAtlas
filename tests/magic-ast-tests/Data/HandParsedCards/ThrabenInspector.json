@@ -6,16 +6,27 @@
     "OracleText": "When this creature enters, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
     "Power": "1",
     "Toughness": "2",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Investigate"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Investigate"
+    ]
   },
   "Output": {
     "Name": "Thraben Inspector",
     "TypeLine": {
       "Raw": "Creature — Human Soldier",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Soldier"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")",
@@ -26,13 +37,14 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
             {
-              "EffectType": "investigate",
-              "IsOptional": false
+              "EffectType": "investigate"
             }
           ],
           "Reminder": {
@@ -46,12 +58,27 @@
         "Kind": "manaCost",
         "Raw": "{W}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 1
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
       {
         "Kind": "creatureStats",
         "Power": {

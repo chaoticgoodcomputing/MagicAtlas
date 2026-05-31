@@ -32,8 +32,7 @@
           "Effects": [
             {
               "EffectType": "tribute",
-              "Value": 3,
-              "IsOptional": false
+              "Value": 3
             }
           ],
           "KeywordSource": "Tribute",
@@ -65,8 +64,7 @@
               },
               "Player": {
                 "Kind": "You"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

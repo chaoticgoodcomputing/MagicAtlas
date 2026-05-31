@@ -31,15 +31,11 @@ public sealed class PainlandRule : IStaticRule
       new StaticAbility
       {
         When = StaticTimingKind.AsThisEnters,
-        Effects = [new MagicAST.AST.Effects.Keyword.PayLifeEffect
-        {
-          Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount),
-          IsOptional = true,
-          IfYouDoNot = new MagicAST.AST.Effects.Control.TapEffect
+        Effects = [MagicAST.AST.Effects.Core.EffectWrap.Optional(new MagicAST.AST.Effects.Keyword.PayLifeEffect {
+          Amount = MagicAST.AST.Quantities.LiteralQuantity.Of(amount)}, true, ifYouDoNot: new MagicAST.AST.Effects.Control.TapEffect
           {
             Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
-          },
-        }],
+          })],
       },
     ];
   }

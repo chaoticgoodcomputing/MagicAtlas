@@ -39,11 +39,14 @@
           },
           "Effects": [
             {
-              "EffectType": "sacrifice",
-              "Target": {
-                "Kind": "Self"
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "sacrifice",
+                "Target": {
+                  "Kind": "Self"
+                }
               },
-              "UnlessClause": {
+              "Unless": {
                 "Player": {
                   "Kind": "You"
                 },

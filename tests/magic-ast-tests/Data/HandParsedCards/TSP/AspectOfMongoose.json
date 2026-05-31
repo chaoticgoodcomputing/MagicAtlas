@@ -37,8 +37,7 @@
                 "CardTypes": [
                   "creature"
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -50,8 +49,7 @@
               "Target": {
                 "Kind": "EnchantedOrEquipped"
               },
-              "MaxBlockers": 1,
-              "IsOptional": false
+              "MaxBlockers": 1
             }
           ]
         },
@@ -81,8 +79,7 @@
                 "Start": 87,
                 "Length": 47
               },
-              "RawText": "Return Aspect of Mongoose to its owner's hand.",
-              "IsOptional": false
+              "RawText": "Return Aspect of Mongoose to its owner's hand."
             }
           ],
           "IsManaAbility": false

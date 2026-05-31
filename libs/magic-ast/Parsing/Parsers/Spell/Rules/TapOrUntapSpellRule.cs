@@ -44,15 +44,12 @@ public sealed class TapOrUntapSpellRule : ISpellRule
       return false;
     }
 
-    effect = new TapOrUntapEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new TapOrUntapEffect {
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
         Filter = new ObjectFilter { CardTypes = types },
-      },
-      IsOptional = isOptional,
-    };
+      }}, isOptional);
     return true;
   }
 }

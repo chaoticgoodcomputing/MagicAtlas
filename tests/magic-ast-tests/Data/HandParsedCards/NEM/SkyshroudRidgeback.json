@@ -36,8 +36,7 @@
           "Effects": [
             {
               "EffectType": "fading",
-              "Value": 2,
-              "IsOptional": false
+              "Value": 2
             }
           ]
         }

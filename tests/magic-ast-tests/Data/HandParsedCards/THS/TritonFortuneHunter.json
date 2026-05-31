@@ -6,15 +6,24 @@
     "OracleText": "Heroic — Whenever you cast a spell that targets this creature, draw a card.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Triton Fortune Hunter",
     "TypeLine": {
       "Raw": "Creature — Merfolk Soldier",
-      "Types": ["Creature"],
-      "Subtypes": ["Merfolk", "Soldier"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Merfolk",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "Heroic — Whenever you cast a spell that targets this creature, draw a card.",
@@ -26,9 +35,16 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell"],
+              "CardTypes": [
+                "spell"
+              ],
               "Controller": "You",
-              "Characteristics": [{"CharacteristicType": "other", "Description": "targeting this creature"}]
+              "Characteristics": [
+                {
+                  "CharacteristicType": "other",
+                  "Description": "targeting this creature"
+                }
+              ]
             }
           },
           "Effects": [
@@ -40,8 +56,7 @@
               },
               "Player": {
                 "Kind": "You"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -52,17 +67,43 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

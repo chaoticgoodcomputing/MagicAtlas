@@ -59,7 +59,6 @@ public sealed class EntersWithCountersRule : IStaticRule
           Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
           Count = count,
           CounterType = counterType,
-          IsOptional = false,
         }],
       },
     ];

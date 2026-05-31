@@ -54,14 +54,10 @@ public sealed class DiscardEachPlayerRule : ISpellRule
       };
     }
 
-    effect = new DiscardCardsEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new DiscardCardsEffect {
       Count = LiteralQuantity.Of(1),
       Player = new ObjectReference { Kind = ObjectReferenceKind.EachPlayer },
-      Random = false,
-      IsOptional = isOptional,
-      IfYouDoNot = ifYouDoNot,
-    };
+      Random = false}, isOptional, ifYouDoNot: ifYouDoNot);
     return true;
   }
 }

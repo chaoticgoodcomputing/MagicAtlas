@@ -31,8 +31,7 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "cantBlock",
-              "IsOptional": false
+              "EffectType": "cantBlock"
             }
           ]
         }

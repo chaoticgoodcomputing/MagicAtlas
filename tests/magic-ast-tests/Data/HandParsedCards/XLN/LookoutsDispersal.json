@@ -53,16 +53,19 @@
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "counterSpell",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "spell"
-                  ]
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "spell"
+                    ]
+                  }
                 }
               },
-              "UnlessClause": {
+              "Unless": {
                 "Player": {
                   "Kind": "Controller"
                 },

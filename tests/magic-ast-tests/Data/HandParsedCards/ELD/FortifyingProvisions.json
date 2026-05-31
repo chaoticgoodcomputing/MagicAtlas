@@ -78,8 +78,7 @@
                 "AbilityText": [
                   "{2}, {T}, Sacrifice this artifact: You gain 3 life."
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ],
           "Reminder": {

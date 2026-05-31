@@ -46,7 +46,10 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "other"
+                    }
                   ]
                 }
               },
@@ -57,8 +60,7 @@
               "ToughnessModifier": {
                 "QuantityType": "literal",
                 "Value": 1
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

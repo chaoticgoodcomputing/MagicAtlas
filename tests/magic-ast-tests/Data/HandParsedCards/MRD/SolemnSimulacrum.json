@@ -37,22 +37,24 @@
           },
           "Effects": [
             {
-              "EffectType": "searchLibrary",
-              "Filter": {
-                "Supertypes": [
-                  "Basic"
-                ],
-                "CardTypes": [
-                  "land"
-                ]
-              },
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Destination": "BattlefieldTapped",
-              "Revealed": false,
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "searchLibrary",
+                "Filter": {
+                  "Supertypes": [
+                    "Basic"
+                  ],
+                  "CardTypes": [
+                    "land"
+                  ]
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Destination": "BattlefieldTapped",
+                "Revealed": false
+              }
             }
           ]
         },
@@ -69,15 +71,17 @@
           },
           "Effects": [
             {
-              "EffectType": "drawCards",
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Player": {
-                "Kind": "You"
-              },
-              "IsOptional": true
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "drawCards",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              }
             }
           ]
         }

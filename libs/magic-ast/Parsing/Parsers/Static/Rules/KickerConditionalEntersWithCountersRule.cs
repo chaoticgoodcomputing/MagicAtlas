@@ -49,7 +49,6 @@ public sealed class KickerConditionalEntersWithCountersRule : IStaticRule
           Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
           Count = count,
           CounterType = counterType,
-          IsOptional = false,
         }],
         Condition = MagicAST.Parsing.ConditionParser.Parse("this creature was kicked"),
       },

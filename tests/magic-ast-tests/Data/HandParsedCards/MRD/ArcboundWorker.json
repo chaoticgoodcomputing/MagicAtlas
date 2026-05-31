@@ -33,8 +33,7 @@
           "Effects": [
             {
               "EffectType": "modular",
-              "Value": 1,
-              "IsOptional": false
+              "Value": 1
             }
           ]
         }

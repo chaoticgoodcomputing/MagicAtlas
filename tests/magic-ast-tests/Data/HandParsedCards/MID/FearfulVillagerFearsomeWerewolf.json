@@ -97,8 +97,7 @@
                       "creature"
                     ]
                   },
-                  "MinimumBlockers": 2,
-                  "IsOptional": false
+                  "MinimumBlockers": 2
                 }
               ],
               "KeywordSource": "Menace",
@@ -111,8 +110,7 @@
               "Effects": [
                 {
                   "EffectType": "dayNight",
-                  "Phase": "Daybound",
-                  "IsOptional": false
+                  "Phase": "Daybound"
                 }
               ],
               "KeywordSource": "Daybound",
@@ -186,8 +184,7 @@
                       "creature"
                     ]
                   },
-                  "MinimumBlockers": 2,
-                  "IsOptional": false
+                  "MinimumBlockers": 2
                 }
               ],
               "KeywordSource": "Menace",
@@ -200,8 +197,7 @@
               "Effects": [
                 {
                   "EffectType": "dayNight",
-                  "Phase": "Nightbound",
-                  "IsOptional": false
+                  "Phase": "Nightbound"
                 }
               ],
               "KeywordSource": "Nightbound",

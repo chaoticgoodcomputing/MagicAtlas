@@ -6,15 +6,25 @@
     "OracleText": "When this creature enters, create two 1/1 colorless Thopter artifact creature tokens with flying.\nTap two untapped artifacts you control: Target creature can't be blocked this turn.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Whirler Rogue",
     "TypeLine": {
       "Raw": "Creature — Human Rogue Artificer",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Rogue", "Artificer"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Rogue",
+        "Artificer"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, create two 1/1 colorless Thopter artifact creature tokens with flying.\nTap two untapped artifacts you control: Target creature can't be blocked this turn.",
@@ -25,7 +35,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -38,9 +50,16 @@
               "Token": {
                 "Power": "1",
                 "Toughness": "1",
-                "Colors": ["C"],
-                "Types": ["artifact", "creature"],
-                "Subtypes": ["Thopter"],
+                "Colors": [
+                  "C"
+                ],
+                "Types": [
+                  "artifact",
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Thopter"
+                ],
                 "Abilities": [
                   {
                     "Kind": "static",
@@ -49,16 +68,26 @@
                       {
                         "EffectType": "evasion",
                         "CanBeBlockedBy": {
-                          "CardTypes": ["creature"],
-                          "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
+                          "CardTypes": [
+                            "creature"
+                          ],
+                          "Characteristics": [
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Flying"
+                            },
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Reach"
+                            }
+                          ]
                         }
                       }
                     ]
                   }
                 ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         },
@@ -91,24 +120,49 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

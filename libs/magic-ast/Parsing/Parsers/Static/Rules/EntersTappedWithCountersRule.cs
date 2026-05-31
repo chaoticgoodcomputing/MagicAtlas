@@ -53,7 +53,6 @@ public sealed class EntersTappedWithCountersRule : IStaticRule
             Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
             Count = count,
             CounterType = counterType,
-            IsOptional = false,
           },
         ],
       },

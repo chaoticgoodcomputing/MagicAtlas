@@ -6,14 +6,20 @@
     "OracleText": "Counter target spell unless its controller pays {X}.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Clash of Wills",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Counter target spell unless its controller pays {X}.",
@@ -22,21 +28,28 @@
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "counterSpell",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": ["spell"]
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "spell"
+                    ]
+                  }
                 }
               },
-              "UnlessClause": {
+              "Unless": {
                 "Player": {
                   "Kind": "Controller"
                 },
                 "Cost": {
                   "CostType": "mana",
                   "Symbols": [
-                    { "Kind": "variable" }
+                    {
+                      "Kind": "variable"
+                    }
                   ]
                 }
               }
@@ -50,18 +63,29 @@
         "Kind": "manaCost",
         "Raw": "{X}{U}",
         "Symbols": [
-          { "Kind": "variable" },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "IsVariable": true
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

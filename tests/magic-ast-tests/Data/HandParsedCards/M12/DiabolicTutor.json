@@ -41,8 +41,7 @@
                 "Value": 1
               },
               "Destination": "Hand",
-              "Revealed": false,
-              "IsOptional": false
+              "Revealed": false
             }
           ]
         }

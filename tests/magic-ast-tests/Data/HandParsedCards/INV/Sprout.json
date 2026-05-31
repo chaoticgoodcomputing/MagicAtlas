@@ -46,8 +46,7 @@
                   "Saproling"
                 ],
                 "IsCopy": false
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

@@ -128,13 +128,10 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
       target = ObjectReference.Self();
     }
 
-    effect = new PutCountersEffect
-    {
+    effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new PutCountersEffect {
       Target = target,
       CounterType = counterType,
-      Count = LiteralQuantity.Of(count),
-      IsOptional = isOptional,
-    };
+      Count = LiteralQuantity.Of(count)}, isOptional);
     return true;
   }
 }

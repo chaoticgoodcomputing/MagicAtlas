@@ -66,7 +66,6 @@ public sealed class TargetSacrificesRule : ISpellRule
         Filter = new ObjectFilter { CardTypes = [isOpponent ? "opponent" : "player"] },
       },
       Filter = new ObjectFilter { CardTypes = [cardType] },
-      IsOptional = false,
     };
 
     return true;

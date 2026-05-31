@@ -60,8 +60,7 @@
                         "{2}, Sacrifice this artifact: Draw a card."
                       ],
                       "IsCopy": false
-                    },
-                    "IsOptional": false
+                    }
                   },
                   {
                     "EffectType": "createToken",
@@ -80,8 +79,7 @@
                         "{2}, {T}, Sacrifice this artifact: You gain 3 life."
                       ],
                       "IsCopy": false
-                    },
-                    "IsOptional": false
+                    }
                   },
                   {
                     "EffectType": "createToken",
@@ -100,13 +98,10 @@
                         "{T}, Sacrifice this artifact: Add one mana of any color."
                       ],
                       "IsCopy": false
-                    },
-                    "IsOptional": false
+                    }
                   }
-                ],
-                "IsOptional": false
-              },
-              "IsOptional": false
+                ]
+              }
             }
           ]
         }

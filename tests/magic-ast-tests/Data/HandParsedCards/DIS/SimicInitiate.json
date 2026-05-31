@@ -37,8 +37,7 @@
           "Effects": [
             {
               "EffectType": "graft",
-              "Value": 1,
-              "IsOptional": false
+              "Value": 1
             }
           ]
         }

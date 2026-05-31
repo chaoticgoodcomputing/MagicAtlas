@@ -60,15 +60,19 @@
                         "creature"
                       ],
                       "Characteristics": [
-                        {"CharacteristicType": "other", "Description": "artifact"},
-                        {"CharacteristicType": "other", "Description": "black"}
+                        {
+                          "CharacteristicType": "other",
+                          "Description": "artifact"
+                        },
+                        {
+                          "CharacteristicType": "other",
+                          "Description": "black"
+                        }
                       ]
-                    },
-                    "IsOptional": false
+                    }
                   }
                 ]
-              },
-              "IsOptional": false
+              }
             }
           ]
         }

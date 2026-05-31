@@ -7,13 +7,17 @@
     "Power": null,
     "Toughness": null,
     "Colors": [],
-    "ColorIdentity": ["U"]
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Implement of Examination",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "{U}, Sacrifice this artifact: Draw a card.\nWhen this artifact is put into a graveyard from the battlefield, draw a card.",
@@ -24,14 +28,26 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["U"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
               ]
             },
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["artifact"],
-                "Characteristics": [{"CharacteristicType": "other", "Description": "this permanent"}]
+                "CardTypes": [
+                  "artifact"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "this permanent"
+                  }
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -48,8 +64,7 @@
               },
               "Player": {
                 "Kind": "You"
-              },
-              "IsOptional": false
+              }
             }
           ],
           "IsManaAbility": false
@@ -60,7 +75,9 @@
             "Timing": "When",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["artifact"]
+              "CardTypes": [
+                "artifact"
+              ]
             }
           },
           "Effects": [
@@ -72,8 +89,7 @@
               },
               "Player": {
                 "Kind": "You"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -84,7 +100,10 @@
         "Kind": "manaCost",
         "Raw": "{3}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
         ],
         "ManaValue": 3
       },
@@ -94,7 +113,9 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

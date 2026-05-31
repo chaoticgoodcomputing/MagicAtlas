@@ -6,15 +6,23 @@
     "OracleText": "When this creature enters, each opponent draws a card.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Hunted Witness Alt",
     "TypeLine": {
       "Raw": "Creature — Human",
-      "Types": ["Creature"],
-      "Subtypes": ["Human"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, each opponent draws a card.",
@@ -25,7 +33,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -37,8 +47,7 @@
               },
               "Player": {
                 "Kind": "EachOpponent"
-              },
-              "IsOptional": false
+              }
             }
           ]
         }
@@ -49,17 +58,26 @@
         "Kind": "manaCost",
         "Raw": "{W}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",
