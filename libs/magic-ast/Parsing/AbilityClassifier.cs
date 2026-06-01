@@ -155,6 +155,30 @@ public sealed class AbilityClassifier
       };
     }
 
+    // Standalone Siege type-reminder line:
+    // "(As a Siege enters, choose an opponent to protect it. You and others can
+    //  attack it. When it's defeated, exile it, then cast it transformed.)"
+    // The whole clause tokenizes as a single ReminderText token (so it is not a
+    // parenthetical-wrapped activated ability — its inner text opens with "As",
+    // not "{cost}:"). Although the reminder body contains "When it's defeated",
+    // the clause does not start with a trigger-timing word, so StartsWithTriggerTiming
+    // (which checks tokens[0]) does not fire. Route it to the Static path so
+    // SiegeReminderStaticRule can emit a StaticAbility{ Effects: [SiegeEffect],
+    // Reminder } — a marker that preserves the no-game-function reminder text
+    // (CR 207.2) and structurally anchors the Siege mechanic (Rule 310). Mirrors
+    // the "Start your engines!" interception below: a raw-text prefix check that
+    // bypasses the heuristic. Without it the clause still defaults to Static at
+    // 0.50, but the explicit intercept records intent and keeps the routing stable.
+    if (IsSiegeReminderLine(clause.RawText))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.95,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // A "When/Whenever … this turn, …" whose *trigger condition* (the text before
     // the comma) is bounded to "this turn" is not a printed triggered ability — it
     // is a spell that, on resolution, creates a delayed triggered ability (CR 603.7),
@@ -887,6 +911,26 @@ public sealed class AbilityClassifier
       inner = inner[1..^1].Trim();
     }
     return Regex.IsMatch(inner, @"^\{[^}]+\}:", RegexOptions.None);
+  }
+
+  /// <summary>
+  /// True when the entire clause is the standalone Siege type-reminder line that
+  /// appears on every "Battle — Siege" front face (the March-of-the-Machine
+  /// Invasions): "(As a Siege enters, …)". It tokenizes as a single
+  /// <see cref="OracleToken.ReminderText"/> token; the inner text opens with
+  /// "As a Siege enters" and there is no host ability. CR 207.2 (italic
+  /// no-game-function text); Rule 310 (battles/sieges). Routed to the Static
+  /// path so <c>SiegeReminderStaticRule</c> emits a marker that preserves the
+  /// reminder rather than dropping it.
+  /// </summary>
+  private static bool IsSiegeReminderLine(string rawText)
+  {
+    var trimmed = rawText.Trim();
+    return Regex.IsMatch(
+      trimmed,
+      @"^\(As a Siege enters,",
+      RegexOptions.IgnoreCase
+    );
   }
 
   /// <summary>

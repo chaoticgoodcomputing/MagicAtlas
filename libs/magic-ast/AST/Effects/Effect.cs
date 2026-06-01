@@ -3,6 +3,7 @@ namespace MagicAST.AST.Effects;
 using System.Text.Json.Serialization;
 using MagicAST.AST.Costs;
 // Import all effect subdirectories
+using MagicAST.AST.Effects.Battle;
 using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Control;

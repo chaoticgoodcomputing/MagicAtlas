@@ -258,13 +258,18 @@ internal static class TriggeredRuleHelpers
         // Subtype self-reference: oracle text uses the subtype word when the
         // card's subtype is the most precise type reference available.
         // Rule 205.3 (Subtypes) — artifact subtypes include Equipment,
-        // Vehicle, Spacecraft; enchantment subtypes include Aura. Each is
-        // treated descriptively as a CardTypes singleton; MAST records the
-        // word the text used, not the resolved card-type hierarchy.
+        // Vehicle, Spacecraft; enchantment subtypes include Aura; battle
+        // subtypes include Siege (Rule 310, CR 207.2). Each is treated
+        // descriptively as a CardTypes singleton; MAST records the word the
+        // text used, not the resolved card-type hierarchy (i.e. "this Siege"
+        // stays "siege", not resolved up to "battle"). This single entry
+        // unblocks all 39 "When this Siege enters, [effect]" ETB triggers
+        // (the March-of-the-Machine Invasions); their effects already parse.
         "aura",
         "equipment",
         "vehicle",
         "spacecraft",
+        "siege",
       }
     )
     {
