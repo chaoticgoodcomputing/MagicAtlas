@@ -1,0 +1,156 @@
+{
+  "Input": {
+    "Name": "Deceptive Landscape",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "{T}: Add {C}.\n{T}, Sacrifice this land: Search your library for a basic Plains, Swamp, or Forest card, put it onto the battlefield tapped, then shuffle.\nCycling {W}{B}{G} ({W}{B}{G}, Discard this card: Draw a card.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": ["B", "G", "W"],
+    "Keywords": ["Cycling"],
+    "Id": "ba863744-929b-43f3-a773-342ba3437b18",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Deceptive Landscape",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": ["Land"]
+    },
+    "Oracle": {
+      "RawText": "{T}: Add {C}.\n{T}, Sacrifice this land: Search your library for a basic Plains, Swamp, or Forest card, put it onto the battlefield tapped, then shuffle.\nCycling {W}{B}{G} ({W}{B}{G}, Discard this card: Draw a card.)",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{C}"
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["land"],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "this permanent"
+                  }
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "searchLibrary",
+                  "Filter": {
+                    "Supertypes": ["Basic"],
+                    "CardTypes": ["land"],
+                    "Subtypes": ["Plains", "Swamp", "Forest"]
+                  },
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Destination": "BattlefieldTapped",
+                  "Revealed": false
+                },
+                {
+                  "EffectType": "shuffle",
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
+              ]
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Cycling",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": ["W"],
+                  "IsPhyrexian": false,
+                  "IsSnow": false
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": ["B"],
+                  "IsPhyrexian": false,
+                  "IsSnow": false
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": ["G"],
+                  "IsPhyrexian": false,
+                  "IsSnow": false
+                }
+              ]
+            },
+            {
+              "CostType": "discard",
+              "Filter": {
+                "CardTypes": ["card"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "G", "W"]
+      }
+    ]
+  }
+}
