@@ -1,0 +1,67 @@
+{
+  "Keyword": "Scavenge",
+  "Parameter": "{3}{G}",
+  "Expected": {
+    "Kind": "activated",
+    "KeywordSource": "Scavenge",
+    "Costs": [
+      {
+        "CostType": "mana",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ]
+      },
+      {
+        "CostType": "exile",
+        "Filter": {
+          "CardTypes": [
+            "card"
+          ],
+          "Characteristics": [
+            {
+              "CharacteristicType": "other",
+              "Description": "this card"
+            }
+          ]
+        },
+        "Quantity": {
+          "QuantityType": "literal",
+          "Value": 1
+        },
+        "FromZone": "Graveyard"
+      }
+    ],
+    "Effects": [
+      {
+        "EffectType": "putCounters",
+        "Target": {
+          "Kind": "Target",
+          "Filter": {
+            "CardTypes": [
+              "creature"
+            ]
+          }
+        },
+        "CounterType": "+1/+1",
+        "Count": {
+          "QuantityType": "derived",
+          "DerivedFrom": "Power",
+          "Source": "the card you exiled"
+        }
+      }
+    ],
+    "Restrictions": [
+      "OnlyAsSorcery"
+    ],
+    "IsManaAbility": false
+  }
+}
