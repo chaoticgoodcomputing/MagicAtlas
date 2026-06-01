@@ -483,6 +483,12 @@
           ]
         },
         {
+          "Type": "AnyNumberInDeckEffect",
+          "Discriminator": "anyNumberInDeck",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "AssignDamageAsUnblockedEffect",
           "Discriminator": "assignDamageAsUnblocked",
           "IsUnparsed": false,
@@ -1840,5 +1846,5 @@
       ]
     }
   ],
-  "SchemaHash": "c92a6d293898bc585cf7fe6915bcfe3690ac3fe2a5e4c06ff52325f6fa04f63d"
+  "SchemaHash": "af2a337eb9c3f5a715859cef85fb7780434dd32a778593d50d2c2320e44ae1c8"
 }

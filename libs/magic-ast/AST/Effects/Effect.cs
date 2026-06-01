@@ -9,6 +9,7 @@ using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Core;
 using MagicAST.AST.Effects.Counter;
 using MagicAST.AST.Effects.Damage;
+using MagicAST.AST.Effects.Format;
 using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.Effects.Replacement;
