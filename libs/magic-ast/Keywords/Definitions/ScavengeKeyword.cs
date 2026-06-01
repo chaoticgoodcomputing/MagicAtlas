@@ -1,19 +1,42 @@
 namespace MagicAST.Keywords.Definitions;
 
-using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
-using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Costs;
+using MagicAST.AST.Effects.Counter;
+using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
-/// Scavenge {cost}: "{Cost}, Exile this card from your graveyard: Put a number of +1/+1
-/// counters equal to this card's power on target creature. Scavenge only as a sorcery."
-/// Rule 702.97. An activated ability playable only from the graveyard. MAST records the
-/// keyword and its associated mana cost; the counter-placement and timing restriction are
-/// inferred from the rules. Combinator-only: no matching <c>KeywordDefinitions</c> entry
-/// exists in the legacy registry.
+/// Scavenge [cost]: An activated ability that functions only while the card with scavenge
+/// is in a graveyard.
+///
+/// <para>
+/// CR 702.97a (verbatim): "Scavenge is an activated ability that functions only while the
+/// card with scavenge is in a graveyard. 'Scavenge [cost]' means '[Cost], Exile this card
+/// from your graveyard: Put a number of +1/+1 counters equal to the power of the card you
+/// exiled on target creature. Activate only as a sorcery.'"
+/// </para>
+///
+/// <para>
+/// MAST models this as a fully decomposed <see cref="ActivatedAbility"/>:
+/// <list type="bullet">
+///   <item>
+///     Costs: the printed mana cost + an <see cref="ExileCost"/> (this card, from
+///     Graveyard, quantity 1).
+///   </item>
+///   <item>
+///     Effects: a <see cref="PutCountersEffect"/> placing +1/+1 counters on a target
+///     creature; the count is a <see cref="DerivedQuantity"/> keyed on
+///     <see cref="DerivedKind.Power"/> of "the card you exiled".
+///   </item>
+///   <item>
+///     Restrictions: <see cref="ActivationRestriction.OnlyAsSorcery"/>.
+///   </item>
+/// </list>
+/// </para>
 /// </summary>
 [Keyword]
 public sealed class ScavengeKeyword : IKeyword
@@ -29,13 +52,45 @@ public sealed class ScavengeKeyword : IKeyword
     from keyword in Keyword("Scavenge")
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select (Ability)new StaticAbility
+    select (Ability)new ActivatedAbility
     {
       KeywordSource = KeywordAbility.Scavenge,
-      Effects = [new ScavengeEffect
-      {
-        Cost = cost,
-      }],
+      Costs =
+      [
+        cost,
+        new ExileCost
+        {
+          Filter = new ObjectFilter
+          {
+            CardTypes = ["card"],
+            Characteristics = [Characteristic.Other("this card")],
+          },
+          Quantity = LiteralQuantity.Of(1),
+          FromZone = Zone.Graveyard,
+        },
+      ],
+      Effects =
+      [
+        new PutCountersEffect
+        {
+          Target = new ObjectReference
+          {
+            Kind = ObjectReferenceKind.Target,
+            Filter = new ObjectFilter
+            {
+              CardTypes = ["creature"],
+            },
+          },
+          CounterType = "+1/+1",
+          Count = new DerivedQuantity
+          {
+            DerivedFrom = DerivedKind.Power,
+            Source = "the card you exiled",
+          },
+        },
+      ],
+      Restrictions = [ActivationRestriction.OnlyAsSorcery],
+      IsManaAbility = false,
       Reminder = reminder,
     }
   );

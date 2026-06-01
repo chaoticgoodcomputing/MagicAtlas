@@ -20,20 +20,56 @@
       "RawText": "Scavenge {5}{G} ({5}{G}, Exile this card from your graveyard: Put a number of +1/+1 counters equal to this card's power on target creature. Scavenge only as a sorcery.)",
       "Abilities": [
         {
-          "Kind": "static",
+          "Kind": "activated",
           "KeywordSource": "Scavenge",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 5 },
+                { "Kind": "colored", "Colors": ["G"] }
+              ]
+            },
+            {
+              "CostType": "exile",
+              "Filter": {
+                "CardTypes": ["card"],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "this card"
+                  }
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "FromZone": "Graveyard"
+            }
+          ],
           "Effects": [
             {
-              "EffectType": "scavenge",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  { "Kind": "generic", "GenericAmount": 5 },
-                  { "Kind": "colored", "Colors": ["G"] }
-                ]
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "derived",
+                "DerivedFrom": "Power",
+                "Source": "the card you exiled"
               }
             }
-          ]
+          ],
+          "Restrictions": ["OnlyAsSorcery"],
+          "IsManaAbility": false,
+          "Reminder": {
+            "Text": "({5}{G}, Exile this card from your graveyard: Put a number of +1/+1 counters equal to this card's power on target creature. Scavenge only as a sorcery.)"
+          }
         }
       ]
     },
