@@ -1,0 +1,40 @@
+{
+  "Keyword": "Ingest",
+  "Expected": {
+    "Kind": "triggered",
+    "KeywordSource": "Ingest",
+    "Trigger": {
+      "Timing": "Whenever",
+      "Event": "DealsCombatDamageToPlayer",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ]
+      }
+    },
+    "Effects": [
+      {
+        "EffectType": "exile",
+        "Target": {
+          "Kind": "Designated",
+          "Filter": {
+            "CardTypes": [
+              "card"
+            ],
+            "Zone": "Library",
+            "Characteristics": [
+              {
+                "CharacteristicType": "other",
+                "Description": "top"
+              },
+              {
+                "CharacteristicType": "other",
+                "Description": "that player's"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
