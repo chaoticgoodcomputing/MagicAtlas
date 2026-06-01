@@ -49,6 +49,21 @@ public sealed class UntapEffectRule : IActivatedEffectRule
       }
     }
 
+    // Aura/Equipment form: "Untap enchanted <type>" or "Untap equipped <type>".
+    // CR 303.4m: "An ability of a permanent that refers to the 'enchanted [object or player]'
+    // refers to whatever object or player that permanent is attached to…"
+    // CR 701.26b: "To untap a permanent, rotate it back to the upright position from a sideways
+    // position. Only tapped permanents can be untapped."
+    // No "target" keyword — the Aura is already attached at activation time; not a targeted ability.
+    if (remainder.StartsWith("enchanted ", StringComparison.OrdinalIgnoreCase)
+      || remainder.StartsWith("equipped ", StringComparison.OrdinalIgnoreCase))
+    {
+      return new UntapEffect
+      {
+        Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+      };
+    }
+
     // "another target creature or land [you control]" — excludes the source
     // permanent ("another") and accepts creature or land (Rule 701.20 / 115.1).
     if (remainder.StartsWith("another target ", StringComparison.OrdinalIgnoreCase))
