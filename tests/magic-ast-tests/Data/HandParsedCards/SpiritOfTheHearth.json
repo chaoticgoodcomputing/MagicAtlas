@@ -1,0 +1,128 @@
+{
+  "Input": {
+    "Name": "Spirit of the Hearth",
+    "ManaCost": "{4}{W}{W}",
+    "TypeLine": "Creature — Cat Spirit",
+    "OracleText": "Flying\nYou have hexproof. (You can't be the target of spells or abilities your opponents control.)",
+    "Power": "4",
+    "Toughness": "5",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Spirit of the Hearth",
+    "TypeLine": {
+      "Raw": "Creature — Cat Spirit",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat",
+        "Spirit"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying\nYou have hexproof. (You can't be the target of spells or abilities your opponents control.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "You"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Hexproof",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Hexproof"
+                  }
+                ]
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(You can't be the target of spells or abilities your opponents control.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
