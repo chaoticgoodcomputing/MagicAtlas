@@ -483,6 +483,12 @@
           ]
         },
         {
+          "Type": "AssignDamageAsUnblockedEffect",
+          "Discriminator": "assignDamageAsUnblocked",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "AttachEffect",
           "Discriminator": "attach",
           "IsUnparsed": false,
@@ -577,16 +583,6 @@
           "Discriminator": "cantBlock",
           "IsUnparsed": false,
           "Fields": []
-        },
-        {
-          "Type": "CantCastMoreThanNSpellsEffect",
-          "Discriminator": "cantCastMoreThanNSpells",
-          "IsUnparsed": false,
-          "Fields": [
-            "MaxPerPeriod",
-            "Period",
-            "Player"
-          ]
         },
         {
           "Type": "CastWithoutPayingEffect",
@@ -1820,5 +1816,5 @@
       ]
     }
   ],
-  "SchemaHash": "f761a8a21fb1003a2146ad86c3d7d58f48dcbd51e4f0a4abf630f77b8c6142fa"
+  "SchemaHash": "3f4612c0c10db15fabf1546aded3d0c9d3ecf0e8a2443d337139b61f61e76f64"
 }
