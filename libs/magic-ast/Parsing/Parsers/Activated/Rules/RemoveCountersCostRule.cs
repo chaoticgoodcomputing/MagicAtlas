@@ -10,6 +10,11 @@ using MagicAST.AST.References;
 /// "Remove two charge counters from this permanent" (Rule 122). The counter type
 /// is a named counter; the source is <see cref="ObjectReference.Self()"/> since
 /// oracle text always reads "from this creature / permanent".
+///
+/// <para>Beyond the literal counts, scaling-mana costs (ADR 0009) also match
+/// "Remove X [type] counters from this [noun]" → <c>VariableQuantity.X</c>
+/// (CR 107.3) and "Remove any number of [type] counters from this [noun]" →
+/// <see cref="AnyAmountQuantity"/>.</para>
 /// </summary>
 [ActivatedCostRule(Priority = 996)]
 public sealed class RemoveCountersCostRule : IActivatedCostRule
@@ -17,10 +22,11 @@ public sealed class RemoveCountersCostRule : IActivatedCostRule
   public Cost? TryMatch(string costText)
   {
     var trimmed = costText.Trim();
-    // Pattern: "Remove <count> <type> counter(s) from this <noun>"
+    // Pattern: "Remove <count> <type> counter(s) from this <noun>", where
+    // <count> is a literal, "X", or "any number of".
     var m = Regex.Match(
       trimmed,
-      @"^Remove\s+(?<count>a|an|one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+(?<type>[\w\-/+]+)\s+counters?\s+from\s+this\s+\w+$",
+      @"^Remove\s+(?<count>a|an|one|two|three|four|five|six|seven|eight|nine|ten|\d+|X|any\s+number\s+of)\s+(?<type>[\w\-/+]+)\s+counters?\s+from\s+this\s+\w+$",
       RegexOptions.IgnoreCase
     );
     if (!m.Success)
@@ -29,7 +35,9 @@ public sealed class RemoveCountersCostRule : IActivatedCostRule
     }
 
     var rawCount = m.Groups["count"].Value.ToLowerInvariant();
-    var quantity = rawCount switch
+    // Collapse any internal whitespace in "any number of" for the switch.
+    var normalizedCount = Regex.Replace(rawCount, @"\s+", " ");
+    Quantity? quantity = normalizedCount switch
     {
       "a" or "an" or "one" => LiteralQuantity.Of(1),
       "two" => LiteralQuantity.Of(2),
@@ -41,7 +49,9 @@ public sealed class RemoveCountersCostRule : IActivatedCostRule
       "eight" => LiteralQuantity.Of(8),
       "nine" => LiteralQuantity.Of(9),
       "ten" => LiteralQuantity.Of(10),
-      _ => int.TryParse(rawCount, out var n) ? LiteralQuantity.Of(n) : null,
+      "x" => VariableQuantity.X,
+      "any number of" => new AnyAmountQuantity(),
+      _ => int.TryParse(normalizedCount, out var n) ? LiteralQuantity.Of(n) : null,
     };
     if (quantity is null)
     {

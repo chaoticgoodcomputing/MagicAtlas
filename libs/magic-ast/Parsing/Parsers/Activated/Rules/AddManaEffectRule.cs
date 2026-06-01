@@ -2,7 +2,10 @@ namespace MagicAST.Parsing.Parsers.Activated.Rules;
 
 using System.Text.RegularExpressions;
 using MagicAST.AST.Effects;
+using MagicAST.AST.Effects.Core;
 using MagicAST.AST.Effects.Resource;
+using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
 
 /// <summary>
 /// "Add {mana}" — e.g. "Add {G}", "Add {C}{C}{C}", "Add {W}{U}{B}{R}{G}". Also
@@ -98,6 +101,15 @@ public sealed class AddManaEffectRule : IActivatedEffectRule
       return null;
     }
 
+    // Counter-driven scaling mana (ADR 0009, shapes S1–S5). Parsed structurally
+    // here ahead of the UnmodeledManaClause bail; the bail stays as the backstop
+    // for genuinely-unmodeled shapes (spend-restriction, "until end of turn").
+    var scaling = TryParseScaling(manaText);
+    if (scaling is not null)
+    {
+      return scaling;
+    }
+
     // Bail on scaling / sequential / restricted mana (see UnmodeledManaClause).
     if (UnmodeledManaClause.IsMatch(manaText))
     {
@@ -105,5 +117,162 @@ public sealed class AddManaEffectRule : IActivatedEffectRule
     }
 
     return new AddManaEffect { Mana = manaText, AnyColor = false };
+  }
+
+  // ADR 0009: "for each [type] counter on this [noun]" — counters currently ON
+  // the object (S1, Gyre Sage / Everflowing Chalice).
+  private static readonly Regex ForEachCounterOn = new(
+    @"^(?<mana>(?:\{[^}]+\})+)\s+for\s+each\s+(?<type>[\w\-/+]+)\s+counter\s+on\s+this\s+\w+$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  // ADR 0009: "for each [type] counter removed this way" — the cost-linked count
+  // (S2, Hollow Trees / Fountain of Cho).
+  private static readonly Regex ForEachCounterRemovedThisWay = new(
+    @"^(?<mana>(?:\{[^}]+\})+)\s+for\s+each\s+(?<type>[\w\-/+]+)\s+counter\s+removed\s+this\s+way$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  // ADR 0009: "X mana in any combination of {W} and/or {U}" (or "…of colors")
+  // (S3, Calciform Pools / Crucible of the Spirit Dragon).
+  private static readonly Regex AnyCombination = new(
+    @"^X\s+mana\s+in\s+any\s+combination\s+of\s+(?<colors>.+)$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  // ADR 0009: "{B}, then add an additional {B} for each charge counter removed
+  // this way" (S4, the Mana Batteries) — a base unit then one-per-removed.
+  private static readonly Regex BaseThenAdditionalPerRemoved = new(
+    @"^(?<base>(?:\{[^}]+\})+),\s*then\s+add\s+an\s+additional\s+(?<each>(?:\{[^}]+\})+)\s+for\s+each\s+(?<type>[\w\-/+]+)\s+counter\s+removed\s+this\s+way$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  // ADR 0009: "an amount of {C} equal to X plus one" (S5, Kyren Toy).
+  private static readonly Regex AmountEqualToXPlusOne = new(
+    @"^an\s+amount\s+of\s+(?<mana>(?:\{[^}]+\})+)\s+equal\s+to\s+X\s+plus\s+one$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  /// <summary>
+  /// Parses the counter-driven scaling-mana shapes (ADR 0009 S1–S5) from the
+  /// post-"Add " mana text. Returns null for non-scaling text so the caller keeps
+  /// its existing flat-mana / bail behaviour. Every shape's enclosing ability is a
+  /// mana ability (CR 605.1a); the "removed this way" link is
+  /// reference-not-resolution (ADR 0004) — no variable threaded from the cost.
+  /// </summary>
+  private static Effect? TryParseScaling(string manaText)
+  {
+    // S1 — "{G} for each +1/+1 counter on this creature".
+    var onMatch = ForEachCounterOn.Match(manaText);
+    if (onMatch.Success)
+    {
+      return new AddManaEffect
+      {
+        Mana = onMatch.Groups["mana"].Value,
+        AnyColor = false,
+        Amount = new CounterCountQuantity
+        {
+          CounterType = onMatch.Groups["type"].Value.ToLowerInvariant(),
+          On = ObjectReference.Self(),
+        },
+      };
+    }
+
+    // S2 — "{G} for each storage counter removed this way".
+    var removedMatch = ForEachCounterRemovedThisWay.Match(manaText);
+    if (removedMatch.Success)
+    {
+      return new AddManaEffect
+      {
+        Mana = removedMatch.Groups["mana"].Value,
+        AnyColor = false,
+        Amount = new CountersRemovedThisWayQuantity
+        {
+          CounterType = removedMatch.Groups["type"].Value.ToLowerInvariant(),
+        },
+      };
+    }
+
+    // S3 — "X mana in any combination of {W} and/or {U}" / "…of colors".
+    var combMatch = AnyCombination.Match(manaText);
+    if (combMatch.Success)
+    {
+      var colors = ParseAnyCombinationColors(combMatch.Groups["colors"].Value);
+      if (colors is not null)
+      {
+        return new AddManaEffect
+        {
+          Mana = string.Empty,
+          AnyColor = false,
+          Amount = VariableQuantity.X,
+          AnyCombinationOf = colors,
+        };
+      }
+    }
+
+    // S4 — "{B}, then add an additional {B} for each charge counter removed this way".
+    var s4 = BaseThenAdditionalPerRemoved.Match(manaText);
+    if (s4.Success)
+    {
+      var counterType = s4.Groups["type"].Value.ToLowerInvariant();
+      return new CompositeEffect
+      {
+        Effects =
+        [
+          new AddManaEffect
+          {
+            Mana = s4.Groups["base"].Value,
+            AnyColor = false,
+            Amount = LiteralQuantity.Of(1),
+          },
+          new AddManaEffect
+          {
+            Mana = s4.Groups["each"].Value,
+            AnyColor = false,
+            Amount = new CountersRemovedThisWayQuantity { CounterType = counterType },
+          },
+        ],
+      };
+    }
+
+    // S5 — "an amount of {C} equal to X plus one".
+    var s5 = AmountEqualToXPlusOne.Match(manaText);
+    if (s5.Success)
+    {
+      return new AddManaEffect
+      {
+        Mana = s5.Groups["mana"].Value,
+        AnyColor = false,
+        Amount = new CalculatedQuantity
+        {
+          BaseQuantity = VariableQuantity.X,
+          Operation = "add",
+          Operand = 1,
+        },
+      };
+    }
+
+    return null;
+  }
+
+  /// <summary>
+  /// Parses the colour set of "in any combination of …": "{W} and/or {U}" →
+  /// ["W","U"]; "colors" → the five colours. Returns null if no colour symbols
+  /// are found so the caller can fall through.
+  /// </summary>
+  private static IReadOnlyList<string>? ParseAnyCombinationColors(string colorsText)
+  {
+    var trimmed = colorsText.Trim();
+    if (Regex.IsMatch(trimmed, @"^colors$", RegexOptions.IgnoreCase))
+    {
+      return ["W", "U", "B", "R", "G"];
+    }
+
+    var symbols = Regex.Matches(trimmed, @"\{(?<c>[WUBRG])\}");
+    if (symbols.Count == 0)
+    {
+      return null;
+    }
+    return symbols.Select(s => s.Groups["c"].Value.ToUpperInvariant()).ToList();
   }
 }

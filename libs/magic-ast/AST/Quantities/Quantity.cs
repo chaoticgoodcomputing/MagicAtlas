@@ -155,6 +155,45 @@ public sealed record KeywordCostPaidCountQuantity : Quantity
 }
 
 /// <summary>
+/// A quantity equal to the number of counters <b>removed this way</b> by the
+/// activation cost of the same ability — "Add {G} for each storage counter
+/// removed this way" (Hollow Trees), "add an additional {B} for each charge
+/// counter removed this way" (Black Mana Battery). The cost-linked sibling of
+/// <see cref="CounterCountQuantity"/> (counters currently <i>on</i> an object)
+/// and <see cref="KeywordCostPaidCountQuantity"/> (a keyword cost paid): a count
+/// of counters consumed by this ability's own <see cref="MagicAST.AST.Costs.RemoveCountersCost"/>.
+///
+/// <para>
+/// Reference-not-resolution (ADR 0004): "this way" names the
+/// <see cref="MagicAST.AST.Costs.RemoveCountersCost"/> on the <i>same</i> ability,
+/// it is NOT a variable threaded from the cost — MAST records the textual link,
+/// not the runtime value (counter mechanics are engine territory; CR 122.1 — "A
+/// counter is a marker placed on an object or player … Counters are not objects
+/// and have no characteristics"). The kind of counter removed is the one axis.
+/// </para>
+/// </summary>
+[OracleQuantity("countersRemovedThisWay")]
+public sealed record CountersRemovedThisWayQuantity : Quantity
+{
+  /// <summary>
+  /// The counter kind removed by the cost, e.g. "storage", "charge".
+  /// </summary>
+  public required string CounterType { get; init; }
+}
+
+/// <summary>
+/// The cost choice "Remove <b>any number of</b> [type] counters" — an unbounded
+/// player choice (Hollow Trees, the Mana Batteries). Per CR 107.3 — "Many objects
+/// use the letter X as a placeholder for a number that needs to be determined …
+/// the rest let their controller choose the value of X" — this is a free,
+/// upper-unbounded choice, distinct from <see cref="UpToQuantity"/> (a bounded
+/// "up to N") and <see cref="VariableQuantity"/> (a named X with a defined value).
+/// Field-less; reusable for any "any number of" text.
+/// </summary>
+[OracleQuantity("anyAmount")]
+public sealed record AnyAmountQuantity : Quantity;
+
+/// <summary>
 /// A quantity representing "up to N" choices.
 /// e.g., "discard up to two cards"
 /// </summary>

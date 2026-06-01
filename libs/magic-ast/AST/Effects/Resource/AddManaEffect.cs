@@ -57,4 +57,23 @@ public sealed record AddManaEffect : Effect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Quantity? Amount { get; init; }
+
+  /// <summary>
+  /// For "Add X mana <b>in any combination of</b> {W} and/or {U}" (Calciform
+  /// Pools) — the produced mana is <see cref="Amount"/> units (here
+  /// <c>VariableQuantity.X</c>), each freely chosen from this colour set:
+  /// <c>["W","U"]</c> for the restricted set, <c>["W","U","B","R","G"]</c> for
+  /// "…in any combination of colors". Per CR 106.4 — "When an effect instructs a
+  /// player to add mana, that mana goes into a player's mana pool" — the colours
+  /// are the produced mana, chosen at resolution.
+  ///
+  /// <para>Pairs with <see cref="Amount"/> (the count of units) and parallels the
+  /// <see cref="AnyColor"/> branch: the colour is the choice, so
+  /// <see cref="Mana"/> is <c>""</c> in this shape rather than free-texting the
+  /// "in any combination of …" phrase into the <see cref="Mana"/> scalar. Differs
+  /// from <see cref="AnyColor"/> in carrying a count and a possibly-restricted
+  /// colour set rather than a single mana of all five colours.</para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? AnyCombinationOf { get; init; }
 }

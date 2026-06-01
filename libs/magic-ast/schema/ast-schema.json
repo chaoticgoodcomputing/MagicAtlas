@@ -1690,6 +1690,12 @@
       "DiscriminatorKey": "QuantityType",
       "Types": [
         {
+          "Type": "AnyAmountQuantity",
+          "Discriminator": "anyAmount",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CalculatedQuantity",
           "Discriminator": "calculated",
           "IsUnparsed": false,
@@ -1710,6 +1716,14 @@
           "Fields": [
             "CounterType",
             "On"
+          ]
+        },
+        {
+          "Type": "CountersRemovedThisWayQuantity",
+          "Discriminator": "countersRemovedThisWay",
+          "IsUnparsed": false,
+          "Fields": [
+            "CounterType"
           ]
         },
         {
@@ -1826,5 +1840,5 @@
       ]
     }
   ],
-  "SchemaHash": "1e64db0f024ff84ba9136043e1107695ebcf13758753d0560fa3ecd6261fef3f"
+  "SchemaHash": "c92a6d293898bc585cf7fe6915bcfe3690ac3fe2a5e4c06ff52325f6fa04f63d"
 }
