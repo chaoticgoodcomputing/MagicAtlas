@@ -304,6 +304,18 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return multi;
     }
 
+    // Next, try the multi-effect rule path (mirrors IMultiSpellRule): a single
+    // ", then"-joined sentence that expands to a flat sibling list — e.g. Sensei's
+    // Divining Top's "Draw a card, then put this artifact on top of its owner's
+    // library." This runs BEFORE the single-effect loop so a greedy single-effect
+    // rule (e.g. DrawCardsEffectRule, which matches on any "draw") can't claim the
+    // sentence and silently drop the second clause.
+    var multiRuleEffects = TryParseMultiRuleEffects(effectPart);
+    if (multiRuleEffects is not null)
+    {
+      return multiRuleEffects;
+    }
+
     // Registry-first dispatch (Phase 5): try reflection-discovered effect rules in
     // priority order; first non-null wins. Shapes not yet extracted fall through to
     // the legacy chain below.
@@ -317,6 +329,32 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     }
 
     // No rule recognised the effect; signal fall-back to unparsed.
+    return null;
+  }
+
+  /// <summary>
+  /// Tries each discovered effect rule that also implements
+  /// <see cref="Activated.IMultiActivatedEffectRule"/> in priority order, returning
+  /// the first non-null flat effect list. Mirrors the spell parser's
+  /// <c>TryParseMultiSpellRuleEffects</c>: a single ", then"-joined sentence whose
+  /// two clauses are sibling effects is recognized whole by one rule rather than
+  /// split by the dispatcher (because not every ", then" is a join). Returns null
+  /// when no multi-rule fires.
+  /// </summary>
+  private List<Effect>? TryParseMultiRuleEffects(string effectPart)
+  {
+    var trimmed = effectPart.Trim().TrimEnd('.').Trim();
+    foreach (var entry in _effectRules)
+    {
+      if (entry.Rule is not Activated.IMultiActivatedEffectRule multiRule)
+      {
+        continue;
+      }
+      if (multiRule.TryMatchMulti(trimmed, out var effects) && effects is not null)
+      {
+        return effects.ToList();
+      }
+    }
     return null;
   }
 

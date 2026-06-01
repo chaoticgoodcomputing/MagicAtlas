@@ -1,0 +1,104 @@
+{
+  "Input": {
+    "Name": "Sensei's Divining Top",
+    "TypeLine": "Artifact",
+    "ManaCost": "{1}",
+    "OracleText": "{1}: Look at the top three cards of your library, then put them back in any order.\n{T}: Draw a card, then put this artifact on top of its owner's library.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Sensei's Divining Top",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{1}: Look at the top three cards of your library, then put them back in any order.\n{T}: Draw a card, then put this artifact on top of its owner's library.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "lookAtCards",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Zone": "Library",
+              "Location": "Top",
+              "PutBackInAnyOrder": true
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            },
+            {
+              "EffectType": "putOnTopOfLibrary",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
