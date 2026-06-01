@@ -48,12 +48,39 @@
           ]
         },
         {
-          "Kind": "static",
+          "Kind": "triggered",
           "KeywordSource": "Ingest",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
           "Effects": [
             {
-              "EffectType": "keywordAbility",
-              "Keyword": "Ingest"
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Designated",
+                "Filter": {
+                  "CardTypes": [
+                    "card"
+                  ],
+                  "Zone": "Library",
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "top"
+                    },
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "that player's"
+                    }
+                  ]
+                }
+              }
             }
           ]
         },
