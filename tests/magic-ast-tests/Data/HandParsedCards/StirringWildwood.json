@@ -1,0 +1,141 @@
+{
+  "Input": {
+    "Name": "Stirring Wildwood",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "This land enters tapped.\n{T}: Add {G} or {W}.\n{1}{G}{W}: Until end of turn, this land becomes a 3/4 green and white Elemental creature with reach. It's still a land.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": ["G", "W"]
+  },
+  "Output": {
+    "Name": "Stirring Wildwood",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": [
+        "Land"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This land enters tapped.\n{T}: Add {G} or {W}.\n{1}{G}{W}: Until end of turn, this land becomes a 3/4 green and white Elemental creature with reach. It's still a land.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "When": "asThisEnters"
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{G} or {W}",
+              "AnyColor": false,
+              "OfChosenColor": false
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "becomesCreature",
+              "Subject": {
+                "Kind": "Self"
+              },
+              "Power": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Toughness": {
+                "QuantityType": "literal",
+                "Value": 4
+              },
+              "Colors": [
+                "G",
+                "W"
+              ],
+              "CardTypes": [
+                "land",
+                "creature"
+              ],
+              "AddedSubtypes": [
+                "Elemental"
+              ],
+              "GainedAbilities": [
+                {
+                  "Kind": "static",
+                  "Effects": [
+                    {
+                      "EffectType": "keywordAbility",
+                      "Keyword": "Reach"
+                    }
+                  ],
+                  "KeywordSource": "Reach"
+                }
+              ],
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W",
+          "G"
+        ]
+      }
+    ]
+  }
+}
