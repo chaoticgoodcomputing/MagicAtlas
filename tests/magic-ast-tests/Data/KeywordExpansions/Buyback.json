@@ -1,0 +1,25 @@
+{
+  "Keyword": "Buyback",
+  "Parameter": "{3}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Buyback",
+    "Effects": [
+      {
+        "EffectType": "additionalCastCost",
+        "AdditionalCost": {
+          "Cost": {
+            "CostType": "mana",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 3
+              }
+            ]
+          },
+          "IsOptional": true
+        }
+      }
+    ]
+  }
+}

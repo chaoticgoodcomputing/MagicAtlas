@@ -27,23 +27,51 @@
         {
           "Kind": "static",
           "KeywordSource": "Buyback",
-          "Effects": [
-            {
-              "EffectType": "buyback",
-              "BuybackCost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 4
-                  }
-                ]
-              }
-            }
-          ],
           "Reminder": {
             "Text": "(You may pay an additional {4} as you cast this spell. If you do, put this card into your hand as it resolves.)"
-          }
+          },
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 4
+                    }
+                  ]
+                },
+                "IsOptional": true
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Buyback",
+          "Condition": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Buyback"
+          },
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "zoneChange",
+                "DestinationZone": "Graveyard",
+                "OriginZone": "Stack"
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "returnToHand",
+                "Target": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          ]
         },
         {
           "Kind": "spell",
