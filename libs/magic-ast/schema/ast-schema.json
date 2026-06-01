@@ -1193,6 +1193,12 @@
           ]
         },
         {
+          "Type": "OpenAttractionEffect",
+          "Discriminator": "openAttraction",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "OpeningHandEffect",
           "Discriminator": "openingHand",
           "IsUnparsed": false,
@@ -1804,5 +1810,5 @@
       ]
     }
   ],
-  "SchemaHash": "ae30355c64f5568904630fcb5099c92ca5edc0f9b10a56bcb2fcf6e2824a8bc4"
+  "SchemaHash": "b1ed37ccc8302982b8b8c2c53f2b86870be6b1a7721c86340393c50f9b5f98a4"
 }
