@@ -1,0 +1,125 @@
+{
+  "Input": {
+    "Name": "Rune of Protection: Red",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Enchantment",
+    "OracleText": "{W}: The next time a red source of your choice would deal damage to you this turn, prevent that damage.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": ["Cycling"],
+    "Id": "2916023b-cf67-443f-9ac7-f03313f9d3b7",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Rune of Protection: Red",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "{W}: The next time a red source of your choice would deal damage to you this turn, prevent that damage.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": ["W"]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "preventDamage",
+              "NextInstance": true,
+              "Source": {
+                "Kind": "Designated",
+                "Filter": {
+                  "Colors": ["R"]
+                }
+              },
+              "Target": {
+                "Kind": "You"
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Cycling",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
+              ]
+            },
+            {
+              "CostType": "discard",
+              "Filter": {
+                "CardTypes": ["card"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}

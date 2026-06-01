@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Circle of Protection: Red",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Enchantment",
+    "OracleText": "{1}: The next time a red source of your choice would deal damage to you this turn, prevent that damage.",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": [],
+    "Id": "d7920b6d-ff71-4802-9589-e1df0c58b9ff",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Circle of Protection: Red",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "{1}: The next time a red source of your choice would deal damage to you this turn, prevent that damage.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "preventDamage",
+              "NextInstance": true,
+              "Source": {
+                "Kind": "Designated",
+                "Filter": {
+                  "Colors": ["R"]
+                }
+              },
+              "Target": {
+                "Kind": "You"
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}
