@@ -29,14 +29,34 @@
       "RawText": "Training (Whenever this creature attacks with another creature with greater power, put a +1/+1 counter on this creature.)\n{2}{W}, Remove two +1/+1 counters from among creatures you control: Destroy target artifact or enchantment.",
       "Abilities": [
         {
-          "Kind": "static",
+          "Kind": "triggered",
+          "KeywordSource": "Training",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "this creature attacks with at least one other creature with greater power"
+          },
           "Effects": [
             {
-              "EffectType": "keywordAbility",
-              "Keyword": "Training"
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
           ],
-          "KeywordSource": "Training",
           "Reminder": {
             "Text": "(Whenever this creature attacks with another creature with greater power, put a +1/+1 counter on this creature.)"
           }
