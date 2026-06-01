@@ -37,7 +37,6 @@ public class GoldFixtureUnparsedTests
     "EOE/Hylderblade",
     "EOE/PlasmaBolt",
     "EOE/TragicTrajectory",
-    "JMP/ThrivingIsle",
     "LRW/WindbriskHeights",
     "MID/HopefulInitiate",
     "ONS/IxidorRealitySculptor",

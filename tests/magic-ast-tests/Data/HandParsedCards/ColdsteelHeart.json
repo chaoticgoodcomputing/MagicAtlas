@@ -1,26 +1,28 @@
 {
   "Input": {
-    "Name": "Thriving Isle",
-    "ManaCost": "",
-    "TypeLine": "Land",
-    "OracleText": "This land enters tapped. As it enters, choose a color other than blue.\n{T}: Add {U}.\n{T}: Add one mana of the chosen color.",
-    "Power": null,
-    "Toughness": null,
+    "Name": "Coldsteel Heart",
+    "ManaCost": "{2}",
+    "TypeLine": "Snow Artifact",
+    "OracleText": "This artifact enters tapped.\nAs this artifact enters, choose a color.\n{T}: Add one mana of the chosen color.",
     "Colors": [],
-    "ColorIdentity": [
-      "U"
-    ]
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "b2548ad2-3c62-4ed1-899c-1002b46cdd8f",
+    "Layout": "normal"
   },
   "Output": {
-    "Name": "Thriving Isle",
+    "Name": "Coldsteel Heart",
     "TypeLine": {
-      "Raw": "Land",
+      "Raw": "Snow Artifact",
+      "Supertypes": [
+        "Snow"
+      ],
       "Types": [
-        "Land"
+        "Artifact"
       ]
     },
     "Oracle": {
-      "RawText": "This land enters tapped. As it enters, choose a color other than blue.\n{T}: Add {U}.\n{T}: Add one mana of the chosen color.",
+      "RawText": "This artifact enters tapped.\nAs this artifact enters, choose a color.\n{T}: Add one mana of the chosen color.",
       "Abilities": [
         {
           "Kind": "static",
@@ -30,29 +32,18 @@
               "Target": {
                 "Kind": "Self"
               }
-            },
-            {
-              "EffectType": "chooseColor",
-              "Restriction": "other than blue"
             }
           ],
           "When": "asThisEnters"
         },
         {
-          "Kind": "activated",
-          "Costs": [
-            {
-              "CostType": "tap"
-            }
-          ],
+          "Kind": "static",
           "Effects": [
             {
-              "EffectType": "addMana",
-              "Mana": "{U}",
-              "AnyColor": false
+              "EffectType": "chooseColor"
             }
           ],
-          "IsManaAbility": true
+          "When": "asThisEnters"
         },
         {
           "Kind": "activated",
@@ -75,14 +66,24 @@
     },
     "Attributes": [
       {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
         "Kind": "colors",
         "Colors": []
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": [
-          "U"
-        ]
+        "ColorIdentity": []
       }
     ]
   }
