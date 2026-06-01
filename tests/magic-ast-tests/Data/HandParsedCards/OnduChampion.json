@@ -1,0 +1,133 @@
+{
+  "Input": {
+    "Name": "Ondu Champion",
+    "ManaCost": "{2}{R}{R}",
+    "TypeLine": "Creature — Minotaur Warrior Ally",
+    "OracleText": "Rally — Whenever this creature or another Ally you control enters, creatures you control gain trample until end of turn.",
+    "Power": "4",
+    "Toughness": "3",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Ondu Champion",
+    "TypeLine": {
+      "Raw": "Creature — Minotaur Warrior Ally",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Minotaur",
+        "Warrior",
+        "Ally"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Rally — Whenever this creature or another Ally you control enters, creatures you control gain trample until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "AbilityWord": "Rally",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Subtypes": [
+                "Ally"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Trample",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Trample"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
