@@ -9,7 +9,14 @@ using MagicAST.AST.References;
 /// "gains [keyword]" grants on a target. Supported shapes:
 /// - "This [type] gains [keyword] [until end of turn]" (Self)
 /// - "Target creature gains [keyword] until end of turn"
+/// - "Target [Subtype] gains [keyword] until end of turn" (subtype-filtered target,
+///   e.g. Olivia's Bloodsworn "Target Vampire gains haste until end of turn")
 /// - "Creatures you control gain [keyword]" (Each, creatures you control)
+///
+/// The grant is a continuous effect that modifies the target's characteristics for
+/// the stated duration (CR 611.1: "A continuous effect modifies characteristics of
+/// objects … for a fixed or indefinite period."). The granted keyword is itself a
+/// static ability (e.g. CR 702.10a: "Haste is a static ability.").
 /// </summary>
 [ActivatedEffectRule(Priority = 995)]
 public sealed class GainAbilityEffectRule : IActivatedEffectRule
@@ -81,6 +88,37 @@ public sealed class GainAbilityEffectRule : IActivatedEffectRule
             Filter = targetFilter,
           },
           GainedAbility = targetAbility,
+          Duration = UntilTimeDuration.EndOfTurn,
+        };
+      }
+    }
+
+    // Pattern: "Target [Subtype] gains [keyword] until end of turn" — the target is
+    // narrowed by a creature subtype rather than the bare "creature" card type
+    // (Olivia's Bloodsworn: "Target Vampire gains haste until end of turn"). Subtypes
+    // are capitalized in oracle text (CR 205.3), so the subtype token is captured by
+    // its leading capital and emitted on ObjectFilter.Subtypes — mirroring the
+    // "Destroy target Spirit" → Filter {Subtypes:["Spirit"]} convention. Placed after
+    // the "Target creature" branch so the literal card type still routes to CardTypes.
+    var targetSubtypeGainsMatch = Regex.Match(
+      effectText,
+      @"^Target\s+(?<subtype>[A-Z][a-z]+)\s+gains?\s+(?<kw>[a-z]+(?:\s+(?!until|for|as\b)[a-z]+)?)\s+until\s+end\s+of\s+turn$",
+      RegexOptions.None
+    );
+    if (targetSubtypeGainsMatch.Success)
+    {
+      var subtypeKeyword = targetSubtypeGainsMatch.Groups["kw"].Value.ToLowerInvariant().Trim();
+      var subtypeAbility = ActivatedRuleHelpers.BuildGrantedKeywordAbility(subtypeKeyword);
+      if (subtypeAbility is not null)
+      {
+        return new GainAbilityEffect
+        {
+          Target = new ObjectReference
+          {
+            Kind = ObjectReferenceKind.Target,
+            Filter = new ObjectFilter { Subtypes = [targetSubtypeGainsMatch.Groups["subtype"].Value] },
+          },
+          GainedAbility = subtypeAbility,
           Duration = UntilTimeDuration.EndOfTurn,
         };
       }
