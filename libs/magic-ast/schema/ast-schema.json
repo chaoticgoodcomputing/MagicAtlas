@@ -1458,6 +1458,12 @@
           ]
         },
         {
+          "Type": "SiegeEffect",
+          "Discriminator": "siege",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "SkipUntapEffect",
           "Discriminator": "skipUntap",
           "IsUnparsed": false,
@@ -1847,5 +1853,5 @@
       ]
     }
   ],
-  "SchemaHash": "6ca2bb5b3ebe07986b695787d366cf90dbf3a1eb45aaa721d822a5552c6119b7"
+  "SchemaHash": "5aebe45cf34851b56744e3ad587a7224780687b6ecce0b52c93cdafcfa813173"
 }
