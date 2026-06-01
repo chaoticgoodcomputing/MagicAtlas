@@ -1193,12 +1193,6 @@
           ]
         },
         {
-          "Type": "OpenAttractionEffect",
-          "Discriminator": "openAttraction",
-          "IsUnparsed": false,
-          "Fields": []
-        },
-        {
           "Type": "OpeningHandEffect",
           "Discriminator": "openingHand",
           "IsUnparsed": false,
@@ -1376,6 +1370,12 @@
           "Fields": [
             "Target"
           ]
+        },
+        {
+          "Type": "RingTemptsEffect",
+          "Discriminator": "ringTemptsYou",
+          "IsUnparsed": false,
+          "Fields": []
         },
         {
           "Type": "SacrificeEffect",
@@ -1804,5 +1804,5 @@
       ]
     }
   ],
-  "SchemaHash": "7fd72d472195575da20a2cb063aac9a4be4986562b53270e1abb74b037134019"
+  "SchemaHash": "ae30355c64f5568904630fcb5099c92ca5edc0f9b10a56bcb2fcf6e2824a8bc4"
 }
