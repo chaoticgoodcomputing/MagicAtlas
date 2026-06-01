@@ -461,6 +461,7 @@
           "Discriminator": "alternativeCast",
           "IsUnparsed": false,
           "Fields": [
+            "Cost",
             "FromZone"
           ]
         },
@@ -1832,6 +1833,12 @@
           ]
         },
         {
+          "Type": "MillEvent",
+          "Discriminator": "mill",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "TokenCreationEvent",
           "Discriminator": "tokenCreation",
           "IsUnparsed": false,
@@ -1852,5 +1859,5 @@
       ]
     }
   ],
-  "SchemaHash": "8cd223264e3c16b69434af58527aff9942c3167df4d4f437b68a54b4e1c8743f"
+  "SchemaHash": "01b7458ccdad138fa2c0a5c149c66f75721a8a1808375cd43010f91d4e13158d"
 }
