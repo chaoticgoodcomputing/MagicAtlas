@@ -2,20 +2,34 @@ namespace MagicAST.Keywords.Definitions;
 
 using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
-using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects.Counter;
+using MagicAST.AST.Quantities;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using Superpower.Parsers;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
-/// Modular N: This permanent enters with N +1/+1 counters on it. When it is put
-/// into a graveyard from the battlefield, you may put a +1/+1 counter on target
-/// artifact creature for each +1/+1 counter on this permanent.
-/// Rule 702.43. MAST records the keyword and its integer value; the counter
-/// placement, death trigger, and optional transfer are engine territory.
-/// Explicitly named in BushidoEffect.cs as a future peer in the
-/// integer-parameterized keyword family.
+/// Modular N: two abilities per CR 702.43a.
+///
+/// <para>
+/// CR 702.43a (verbatim): "Modular represents both a static ability and a triggered
+/// ability. 'Modular N' means 'This permanent enters with N +1/+1 counters on it'
+/// and 'When this permanent is put into a graveyard from the battlefield, you may put
+/// a +1/+1 counter on target artifact creature for each +1/+1 counter on this
+/// permanent.'"
+/// </para>
+///
+/// <para>
+/// Oracle-text parsing is handled by
+/// <see cref="MagicAST.Parsing.Parsers.Static.ModularStaticRule"/> (priority 1001),
+/// which returns both abilities as a list. This keyword file keeps the combinator live
+/// as a fallback but no longer uses the deleted <c>ModularEffect</c> opaque marker: it
+/// emits only the PRIMARY enters-with-counters static ability ("This permanent enters
+/// with N +1/+1 counters on it"). The <see cref="Definition"/> is null because
+/// <see cref="IKeywordExpander.Expand"/> can only return a single <see cref="Ability"/>
+/// and Modular decomposes into two.
+/// </para>
 /// </summary>
 [Keyword]
 public sealed class ModularKeyword : IKeyword
@@ -24,23 +38,12 @@ public sealed class ModularKeyword : IKeyword
   public KeywordTier Tier => KeywordTier.Parameterized;
 
   /// <inheritdoc/>
-  public KeywordDefinition Definition { get; } =
-    new()
-    {
-      Name = "Modular",
-      RuleReference = "702.43",
-      Category = KeywordCategory.Static,
-      HasParameter = true,
-      ParameterType = KeywordParameterType.Number,
-      CreateExpansion = parameter => new StaticAbility
-      {
-        KeywordSource = KeywordAbility.Modular,
-        Effects = [new ModularEffect
-        {
-          Value = ParseIntValue("Modular", parameter),
-        }],
-      },
-    };
+  /// <remarks>
+  /// Null: the keyword expander returns a single Ability, but Modular decomposes into
+  /// two abilities (CR 702.43a). The oracle-text parser handles the full two-ability
+  /// output via ModularStaticRule.
+  /// </remarks>
+  public KeywordDefinition? Definition => null;
 
   /// <inheritdoc/>
   public TokenListParser<OracleToken, Ability> Combinator { get; } = (
@@ -50,29 +53,17 @@ public sealed class ModularKeyword : IKeyword
     select (Ability)new StaticAbility
     {
       KeywordSource = KeywordAbility.Modular,
-      Effects = [new ModularEffect { Value = int.Parse(value.ToStringValue()) }],
+      When = StaticTimingKind.AsThisEnters,
       Reminder = reminder,
+      Effects =
+      [
+        new PutCountersEffect
+        {
+          Target = ObjectReference.Self(),
+          CounterType = "+1/+1",
+          Count = LiteralQuantity.Of(int.Parse(value.ToStringValue())),
+        },
+      ],
     }
   );
-
-  /// <summary>
-  /// Integer-parameter guard, inlined from the former <c>KeywordDefinitions.ParseIntValue</c>.
-  /// </summary>
-  private static int ParseIntValue(string keywordName, string? parameter)
-  {
-    if (string.IsNullOrWhiteSpace(parameter))
-    {
-      throw new ArgumentException($"{keywordName} requires a numeric parameter.", nameof(parameter));
-    }
-
-    if (!int.TryParse(parameter.Trim(), out var value))
-    {
-      throw new ArgumentException(
-        $"{keywordName} parameter must be an integer, got '{parameter}'.",
-        nameof(parameter)
-      );
-    }
-
-    return value;
-  }
 }

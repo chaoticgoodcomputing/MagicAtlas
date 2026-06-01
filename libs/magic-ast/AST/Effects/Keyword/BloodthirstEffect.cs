@@ -12,8 +12,8 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// counter-placement on entry are engine territory.
 ///
 /// <para>
-/// Integer-parameterized keyword; mirrors the BushidoEffect and ModularEffect
-/// shape — <see cref="Value"/> is the bloodthirst number lifted from the
+/// Integer-parameterized keyword; mirrors the BushidoEffect shape —
+/// <see cref="Value"/> is the bloodthirst number lifted from the
 /// printed oracle text.
 /// </para>
 /// </summary>

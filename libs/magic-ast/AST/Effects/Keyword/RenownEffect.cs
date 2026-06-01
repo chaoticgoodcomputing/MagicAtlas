@@ -12,9 +12,8 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// designation, and counter-placement are engine territory.
 ///
 /// <para>
-/// Integer-parameterized keyword; mirrors the BushidoEffect and ModularEffect
-/// shape — <see cref="Value"/> is the renown number lifted from the printed
-/// oracle text.
+/// Integer-parameterized keyword; mirrors the BushidoEffect shape —
+/// <see cref="Value"/> is the renown number lifted from the printed oracle text.
 /// </para>
 /// </summary>
 [OracleEffect("renown")]

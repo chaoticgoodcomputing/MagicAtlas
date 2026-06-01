@@ -15,9 +15,8 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// <para>
 /// The creature type associated with the amplify trigger is defined by the
 /// card's type line and is not encoded as a field — MAST captures the N
-/// multiplier only, mirroring how <see cref="BushidoEffect"/> and
-/// <see cref="ModularEffect"/> omit flavour-coupling details that the rules
-/// engine derives from context.
+/// multiplier only, mirroring how <see cref="BushidoEffect"/> omits
+/// flavour-coupling details that the rules engine derives from context.
 /// </para>
 ///
 /// <para>

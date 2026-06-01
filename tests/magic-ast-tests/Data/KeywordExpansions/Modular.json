@@ -1,0 +1,22 @@
+{
+  "Keyword": "Modular",
+  "Parameter": "1",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Modular",
+    "When": "asThisEnters",
+    "Effects": [
+      {
+        "EffectType": "putCounters",
+        "Target": {
+          "Kind": "Self"
+        },
+        "CounterType": "+1/+1",
+        "Count": {
+          "QuantityType": "literal",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
