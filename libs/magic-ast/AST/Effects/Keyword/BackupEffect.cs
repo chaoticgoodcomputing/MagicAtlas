@@ -14,7 +14,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// per the descriptive-not-engine doctrine.
 ///
 /// <para>
-/// Integer-parameterized keyword; mirrors the BushidoEffect and SoulshiftEffect
+/// Integer-parameterized keyword; mirrors the BushidoEffect
 /// shape — <see cref="Value"/> is the backup number lifted from the printed
 /// oracle text.
 /// </para>

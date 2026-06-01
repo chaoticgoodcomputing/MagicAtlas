@@ -29,12 +29,40 @@
       "RawText": "Soulshift 3 (When this creature dies, you may return target Spirit card with mana value 3 or less from your graveyard to your hand.)",
       "Abilities": [
         {
-          "Kind": "static",
+          "Kind": "triggered",
           "KeywordSource": "Soulshift",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "permanent"
+              ]
+            }
+          },
           "Effects": [
             {
-              "EffectType": "soulshift",
-              "Value": 3
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "returnToHand",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "Subtypes": [
+                      "Spirit"
+                    ],
+                    "Owner": "You",
+                    "Zone": "Graveyard",
+                    "ManaValueComparison": {
+                      "Operator": "LessThanOrEqual",
+                      "Value": 3
+                    }
+                  }
+                }
+              }
             }
           ]
         }

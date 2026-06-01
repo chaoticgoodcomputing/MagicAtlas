@@ -13,7 +13,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// death trigger, and optional transfer are engine territory.
 ///
 /// <para>
-/// Integer-parameterized keyword; mirrors the BushidoEffect and SoulshiftEffect
+/// Integer-parameterized keyword; mirrors the BushidoEffect
 /// shape — <see cref="Value"/> is the modular number lifted from the printed
 /// oracle text. Referenced explicitly in BushidoEffect.cs remarks as a future
 /// peer in the integer-parameterized keyword family.
