@@ -1,0 +1,29 @@
+{
+  "Keyword": "Dash",
+  "Parameter": "{1}{R}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Dash",
+    "Effects": [
+      {
+        "EffectType": "alternativeCast",
+        "FromZone": "Hand",
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "generic",
+              "GenericAmount": 1
+            },
+            {
+              "Kind": "colored",
+              "Colors": [
+                "R"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
