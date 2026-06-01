@@ -1,0 +1,151 @@
+{
+  "Input": {
+    "Name": "Azorius Keyrune",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "{T}: Add {W} or {U}.\n{W}{U}: This artifact becomes a 2/2 white and blue Bird artifact creature with flying until end of turn.",
+    "Colors": [],
+    "ColorIdentity": ["U", "W"],
+    "Keywords": [],
+    "Id": "a8755662-b329-4c5b-8bf7-c9e1702e5979",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Azorius Keyrune",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: Add {W} or {U}.\n{W}{U}: This artifact becomes a 2/2 white and blue Bird artifact creature with flying until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{W} or {U}",
+              "AnyColor": false
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "becomesCreature",
+              "Subject": {
+                "Kind": "Self"
+              },
+              "Power": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Toughness": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Colors": [
+                "W",
+                "U"
+              ],
+              "CardTypes": [
+                "artifact",
+                "creature"
+              ],
+              "AddedSubtypes": [
+                "Bird"
+              ],
+              "GainedAbilities": [
+                {
+                  "Kind": "static",
+                  "KeywordSource": "Flying",
+                  "Effects": [
+                    {
+                      "EffectType": "evasion",
+                      "CanBeBlockedBy": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "Characteristics": [
+                          {
+                            "CharacteristicType": "keyword",
+                            "Keyword": "Flying"
+                          },
+                          {
+                            "CharacteristicType": "keyword",
+                            "Keyword": "Reach"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ],
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W",
+          "U"
+        ]
+      }
+    ]
+  }
+}
