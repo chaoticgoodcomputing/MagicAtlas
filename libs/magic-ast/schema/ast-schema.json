@@ -483,12 +483,6 @@
           ]
         },
         {
-          "Type": "AnyNumberInDeckEffect",
-          "Discriminator": "anyNumberInDeck",
-          "IsUnparsed": false,
-          "Fields": []
-        },
-        {
           "Type": "AssignDamageAsUnblockedEffect",
           "Discriminator": "assignDamageAsUnblocked",
           "IsUnparsed": false,
@@ -806,7 +800,8 @@
           "Fields": [
             "Count",
             "Player",
-            "Random"
+            "Random",
+            "RevealHand"
           ]
         },
         {
@@ -1846,5 +1841,5 @@
       ]
     }
   ],
-  "SchemaHash": "af2a337eb9c3f5a715859cef85fb7780434dd32a778593d50d2c2320e44ae1c8"
+  "SchemaHash": "a4c604e34b70cc3671029de7d82154ad96e99f032b06d8d03cf3a04e65524988"
 }

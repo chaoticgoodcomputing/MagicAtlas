@@ -1,0 +1,73 @@
+{
+  "Input": {
+    "Name": "Thought Erasure",
+    "ManaCost": "{U}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Target opponent reveals their hand. You choose a nonland card from it. That player discards that card.\nSurveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B", "U"],
+    "ColorIdentity": ["B", "U"]
+  },
+  "Output": {
+    "Name": "Thought Erasure",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Target opponent reveals their hand. You choose a nonland card from it. That player discards that card.\nSurveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "discardCards",
+              "Count": { "QuantityType": "literal", "Value": 1 },
+              "Player": {
+                "Kind": "Target",
+                "Filter": { "CardTypes": ["opponent"] }
+              },
+              "Filter": {
+                "CardTypes": ["card"],
+                "ExcludedCardTypes": ["land"]
+              },
+              "Chooser": { "Kind": "You" },
+              "RevealHand": true,
+              "Random": false
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "surveil",
+              "Count": { "QuantityType": "literal", "Value": 1 }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}{B}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U", "B"]
+      }
+    ]
+  }
+}
