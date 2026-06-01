@@ -34,13 +34,11 @@ using MagicAST.Parsing;
 ///
 /// <para>
 /// The "each share a color with it" predicate on the tapped creatures is a relational
-/// color filter (the creature shares a color with the spell being cast). No such
-/// relational-color axis exists on <see cref="ObjectFilter"/> — its <c>Colors</c> axis
-/// records absolute colors, not a "shares a color with" relation — so the refinement is
-/// omitted per the descriptive-not-engine / no-free-text / no-new-axis contract; the
-/// filter models only "creatures you control" with <c>Quantity 2</c>. The trigger's "you
-/// may choose new targets for the copy" clause is engine territory and is likewise omitted
-/// (copy once, no <c>Count</c>).
+/// color filter (the creature shares a color with the spell being cast), modeled via
+/// <see cref="ObjectFilter.SharesColorWith"/> keyed on <c>{Kind: Self}</c> (the conspire
+/// spell). "Untapped" is creature-state derived from the rules and stays engine. The
+/// trigger's "you may choose new targets for the copy" clause is engine territory and is
+/// omitted (copy once, no <c>Count</c>).
 /// </para>
 /// </summary>
 [StaticRule(Priority = 1001)]
@@ -72,8 +70,8 @@ public sealed class ConspireStaticRule : IStaticRule
     // Ability 1 (CR 702.78a, first clause): the optional additional-cost static ability.
     // "As an additional cost to cast this spell, you may tap two untapped creatures you
     // control that each share a color with it." The share-a-color relational predicate is
-    // omitted (no ObjectFilter axis; see type-level remarks). The reminder text rides on
-    // the primary ability (matching the combinator path).
+    // modeled via ObjectFilter.SharesColorWith keyed on Self (the spell). The reminder text
+    // rides on the primary ability (matching the combinator path).
     var costAbility = new StaticAbility
     {
       KeywordSource = KeywordAbility.Conspire,
@@ -90,6 +88,7 @@ public sealed class ConspireStaticRule : IStaticRule
               {
                 CardTypes = ["creature"],
                 Controller = ControllerFilter.You,
+                SharesColorWith = ObjectReference.Self(),
               },
               Quantity = LiteralQuantity.Of(2),
             },

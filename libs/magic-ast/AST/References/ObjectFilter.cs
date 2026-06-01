@@ -96,6 +96,18 @@ public sealed record ObjectFilter
   public IReadOnlyList<string>? Colors { get; init; }
 
   /// <summary>
+  /// Relational color axis: filters to objects that share a color with a referenced
+  /// object. Conspire's "two untapped creatures you control that each share a color with
+  /// it" (CR 702.78a), where the reference is the spell with conspire
+  /// (<c>{Kind: Self}</c>). Distinct from <see cref="Colors"/> (absolute "has any of these
+  /// literal colors"): the colors to match are those of the referenced object, resolved by
+  /// a consumer, not card-text literals. Parallels the relational <see cref="AttachedTo"/>
+  /// and <see cref="ExiledWith"/> axes (an <see cref="ObjectReference"/>-valued predicate).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? SharesColorWith { get; init; }
+
+  /// <summary>
   /// Filters to colorless objects (those with no colors at all). Rule 105.1.
   /// Mutually exclusive with <see cref="Colors"/> in practice (a card cannot
   /// be both colorless and have a color).

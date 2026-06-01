@@ -25,9 +25,10 @@ using static MagicAST.Keywords.Definitions.KeywordCombinators;
 /// <see cref="MagicAST.Parsing.Parsers.Static.ConspireStaticRule"/> (priority 1001), which
 /// returns both abilities as a list. This keyword file keeps the combinator live as a
 /// fallback: it emits only the PRIMARY additional-cost static ability ("As an additional
-/// cost to cast this spell, you may tap two untapped creatures you control"). The
-/// "each share a color with it" relational predicate has no <c>ObjectFilter</c> axis and is
-/// omitted (no-free-text, no-new-axis). The <see cref="Definition"/> is null because
+/// cost to cast this spell, you may tap two untapped creatures you control that each share a
+/// color with it"). The "each share a color with it" relational predicate is modeled via
+/// <see cref="ObjectFilter.SharesColorWith"/> keyed on <c>{Kind: Self}</c> (the spell). The
+/// <see cref="Definition"/> is null because
 /// <see cref="IKeywordExpander.Expand"/> can only return a single <see cref="Ability"/> and
 /// Conspire decomposes into two.
 /// </para>
@@ -66,6 +67,7 @@ public sealed class ConspireKeyword : IKeyword
               {
                 CardTypes = ["creature"],
                 Controller = ControllerFilter.You,
+                SharesColorWith = ObjectReference.Self(),
               },
               Quantity = LiteralQuantity.Of(2),
             },

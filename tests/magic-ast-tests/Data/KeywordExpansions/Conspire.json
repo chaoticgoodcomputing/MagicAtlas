@@ -13,7 +13,10 @@
               "CardTypes": [
                 "creature"
               ],
-              "Controller": "You"
+              "Controller": "You",
+              "SharesColorWith": {
+                "Kind": "Self"
+              }
             },
             "Quantity": {
               "QuantityType": "literal",
