@@ -76,6 +76,7 @@ public sealed class AbilityClassifier
       "Unleash",
       "Radiance",
       "Rally",
+      "Avoidance",
       // Static/conditional ability words
       "Kinship",
       "Domain",
