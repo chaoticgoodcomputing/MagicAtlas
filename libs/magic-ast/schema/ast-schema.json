@@ -1833,6 +1833,12 @@
           ]
         },
         {
+          "Type": "MillEvent",
+          "Discriminator": "mill",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "TokenCreationEvent",
           "Discriminator": "tokenCreation",
           "IsUnparsed": false,
@@ -1853,5 +1859,5 @@
       ]
     }
   ],
-  "SchemaHash": "5aebe45cf34851b56744e3ad587a7224780687b6ecce0b52c93cdafcfa813173"
+  "SchemaHash": "01b7458ccdad138fa2c0a5c149c66f75721a8a1808375cd43010f91d4e13158d"
 }
