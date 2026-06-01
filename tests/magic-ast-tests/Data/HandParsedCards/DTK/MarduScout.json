@@ -36,7 +36,8 @@
           },
           "Effects": [
             {
-              "EffectType": "dash",
+              "EffectType": "alternativeCast",
+              "FromZone": "Hand",
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
@@ -51,6 +52,66 @@
                     ]
                   }
                 ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Dash",
+          "Condition": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Dash"
+          },
+          "Effects": [
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "At",
+                  "Event": {
+                    "Part": "End",
+                    "Edge": "Beginning",
+                    "When": "Next"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "returnToHand",
+                    "Target": {
+                      "Kind": "Self"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Dash",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Haste",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Haste"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "keywordCostPaid",
+                  "Keyword": "Dash"
+                }
               }
             }
           ]
