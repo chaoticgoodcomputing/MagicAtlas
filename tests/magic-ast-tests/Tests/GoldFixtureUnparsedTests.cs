@@ -31,7 +31,6 @@ public class GoldFixtureUnparsedTests
     // listed — they had zero structured content to preserve.
     "BLB/WildcallSpree",
     "DGM/WearTear",
-    "DIS/EnigmaEidolon",
     "EOE/ChoraleoftheVoid",
     "EOE/ElegyAcolyte",
     "EOE/Hylderblade",

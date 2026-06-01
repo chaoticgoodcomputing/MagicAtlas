@@ -67,12 +67,19 @@
           ],
           "Effects": [
             {
-              "EffectType": "unparsed",
-              "SourceSpan": {
-                "Start": 29,
-                "Length": 33
+              "EffectType": "mill",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 3
               },
-              "RawText": "Target player mills three cards."
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
+              }
             }
           ],
           "IsManaAbility": false
@@ -123,7 +130,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -141,13 +149,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]
