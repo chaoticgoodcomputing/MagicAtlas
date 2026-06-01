@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Seasoned Buttoneer",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Creature — Vedalken Employee",
+    "OracleText": "When this creature enters, open an Attraction. (Put the top card of your Attraction deck onto the battlefield.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Seasoned Buttoneer",
+    "TypeLine": {
+      "Raw": "Creature — Vedalken Employee",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vedalken",
+        "Employee"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, open an Attraction. (Put the top card of your Attraction deck onto the battlefield.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "openAttraction"
+            }
+          ],
+          "Reminder": {
+            "Text": "Put the top card of your Attraction deck onto the battlefield."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
