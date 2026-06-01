@@ -1,0 +1,201 @@
+{
+  "Input": {
+    "Name": "Mistform Stalker",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Creature — Illusion",
+    "OracleText": "{1}: This creature becomes the creature type of your choice until end of turn.\n{2}{U}{U}: This creature gets +2/+2 and gains flying until end of turn.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Mistform Stalker",
+    "TypeLine": {
+      "Raw": "Creature — Illusion",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Illusion"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{1}: This creature becomes the creature type of your choice until end of turn.\n{2}{U}{U}: This creature gets +2/+2 and gains flying until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "changeSubtype",
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              },
+              "Target": {
+                "Kind": "Self"
+              },
+              "ChosenSubtype": "CreatureType"
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "modifyPT",
+                  "Target": {
+                    "Kind": "Self"
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "Duration": {
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
+                  }
+                },
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "Self"
+                  },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "KeywordSource": "Flying",
+                    "Effects": [
+                      {
+                        "EffectType": "evasion",
+                        "CanBeBlockedBy": {
+                          "CardTypes": [
+                            "creature"
+                          ],
+                          "Characteristics": [
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Flying"
+                            },
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Reach"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  "Duration": {
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
