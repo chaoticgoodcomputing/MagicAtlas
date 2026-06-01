@@ -43,6 +43,7 @@ Step 0   Pre-flight: confirm execute mode + worktree base + refresh triage.
 Step 1   Pick N families from triage. A family = (pattern, lastAttemptedRule) cluster
          with 1-3 fixtures sharing one parser failure point. Respect hot-file caps.
 Step 2   Brief each family inline → docs/judgments/briefing-{date}.md (rules facts).
+Step 2.5 Assignment matrix (family | model | anticipated updates) → run the collision pre-check.
 Step 3   Dispatch N combined agents in parallel (worktree isolation), one per family.
 Step 4   Judge novel-shape branches (per policy). HALT on any FAIL.
 Step 5   Merge by file-affinity order. NUnit gate after each merge group.
@@ -79,13 +80,29 @@ Write one batch briefing to `docs/judgments/briefing-{YYYY-MM-DD}.md` (suffix `-
 
 If a family's mechanic isn't in `glossary.json` at all (and is genuinely MTG-domain, not vernacular), don't dispatch — swap the family or escalate to the human.
 
+### Step 2.5 — Assignment matrix (pre-dispatch checkpoint)
+
+Before spawning anything, write an **assignment matrix** as the header table of the briefing doc — one row per family, three columns:
+
+| Family | Model | Anticipated updates |
+|---|---|---|
+| `{id} — short name (cluster it closes)` | `opus` / `sonnet` + one-word why (novel-shape vs mechanical) | new node? which existing rule(s) extended? which **shared** AST primitive touched (`ObjectFilter`, `Duration`, an effect node, `AbilityClassifier.cs`)? |
+
+This turns the dispatch reasoning — which until now lived only in the orchestrator's head — into a reviewable artifact *before* N agents run. It exists to force three checks while they're still cheap:
+
+1. **Collision pre-check (the main payoff).** Read down the *Anticipated updates* column for two families that would write the **same file** — a shared AST node (`AddManaEffect`, `PreventDamageEffect`, `ObjectFilter`, `Duration`, …) or `AbilityClassifier.cs`. New one-file-per-rule surfaces never collide; **shared-file writes do.** If two rows target one file, serialize them or re-scope one **now** — this is the cheap, pre-dispatch version of the Steps 5-6 joint-regression catch.
+2. **Model commitment.** The *Model* column is the single source for Step 3's per-spawn `model:` override — decided once, with rationale visible, not ad hoc at spawn time.
+3. **Judge scope.** A row whose *Anticipated updates* names a new node, new effect-trait, replacement effect, chosen-variable, or architectural change is a novel-shape row → it will be judged in Step 4. Mark those rows so the judge dispatch is pre-scoped.
+
+**The *Anticipated updates* column is a hypothesis, not a contract.** It's your best read from the Step-1 recon + GLOSSARY + a source-tree grep, used to find collisions and size the batch — agents still own their final AST shape. When reality diverges (a "mechanical" family turns out to need a new node; a "no new node" family adds one), that's signal for the *next* matrix, not a deviation to police, and **never** hand the matrix to the workers as a spec. (Corollary from the field: a card reading `OtherUnparsedClusters: 0` is only *necessary*, not sufficient, for "its non-target lines are faithfully parsed" — a greedy rule can yield a clean-looking but lossy parse. Treat the *Anticipated updates* of a multi-ability exemplar with that caution.)
+
 ### Step 3 — Dispatch combined agents
 
 Spawn N agents in parallel, **one per family**, via `Agent` with **`subagent_type: "mast-worker"`** — the checked-in `.claude/agents/mast-worker.md` definition carries `isolation: worktree` (so isolation is the *default*, not a per-call param you can forget) plus the standing worker contract: the isolation self-check, path hygiene (never `cd`; relative paths only for Read/Write/Edit; `git -C "$WORKTREE_ROOT"` only for git), execute-don't-plan, the gold-AST authoring rules, targeted-test discipline, the trigger≠effect rule, never-touch-GLOSSARY, and no-self-merge. **Override the model per spawn** (`model: "opus"` for novel-shape/doctrinal-edge families; `model: "sonnet"` for mechanical ones) since the agent def leaves model inherited. Each agent does the full slice: new AST type if needed → gold fixture(s) → parser surface → targeted test green → commit. **Family contract:** prefer ONE consolidated parser surface, but **the goal is a green card — if closing it takes a paired condition+effect rule, or a second rule, that's fine; do what the card needs.** The contract is a guard against *misclassification*, not a hard cap: only bail with a sub-pattern breakdown when the family is genuinely heterogeneous (its cards fail for *different* reasons, demanding several unrelated `TryParse` shapes). A bail refines the triage taxonomy; it is not failure — but neither is adding a second rule to finish a coherent family.
 
 Because the standing contract lives in `mast-worker.md`, **each dispatch prompt only needs the family-SPECIFIC payload** (self-contained — the agent shares no conversational context with you):
 
-- **Base sha + branch name.** State the exact base sha the worktree must show (so its `WRONG BASE` check is meaningful) and the `mast-tdd/<slug>` branch to create. (Belt-and-suspenders: the worker re-verifies isolation itself, and Step 0's canary verifies it before the batch — but a wrong base sha is the one thing only you know.)
+- **Base sha + branch name.** State the exact base sha the worktree must show (so its `WRONG BASE` check is meaningful) and the branch to create: **`mast-tdd/<YYYY-MM-DD>-<slug>`**, where the date is the dispatch date. The date prefix makes batch age visible at a glance — `git branch --list 'mast-tdd/*'` (which sorts by refname) surfaces severely out-of-date leftovers immediately. **The separator is a hyphen, NOT a slash, deliberately:** `clean-worktrees.sh` reaps via `git for-each-ref 'refs/heads/mast-tdd/*'`, and `for-each-ref`'s `*` does *not* cross a `/` — a `mast-tdd/<date>/<slug>` branch would be invisible to the reaper and silently accumulate (the worktree-pool-bloat failure mode). Keep the whole `<date>-<slug>` as one path component. (Belt-and-suspenders: the worker re-verifies isolation itself, and Step 0's canary verifies it before the batch — but a wrong base sha is the one thing only you know.)
 - **Hand the card data in-prompt — do NOT make the agent look it up.** Paste the chosen exemplar(s)' `Input` DTO **verbatim from `triage-report.json`**: `Name`, `ManaCost`, `TypeLine`, `OracleText`, `Power`, `Toughness`, `Colors`, `ColorIdentity` (for DFCs, the `CardFaces` block). The agent writes the fixture's `Input` straight from this. (The agent def already bans network/Scryfall and points at the local `oracle-cards.json` for alternates — but if you handed it a clean DTO it shouldn't need one. Reaching for Scryfall is a sign the DTO wasn't handed over, or *your* curated value was wrong; copy from triage, don't retype from memory.)
 - **The CR rule(s): number + verbatim text**, pulled by you from `rules-structure.json` in Step 2. The worker cites only these.
 - **Fixture path(s)**, family identity (`pattern`, `lastAttemptedRule`), and the briefing path.
@@ -124,6 +141,8 @@ nx run mast:worktree-clean # reap this batch's worktrees + merged agent branches
 ```
 
 **Reap worktrees every batch.** `nx run mast:worktree-clean` removes the batch's isolated worktrees (Claude only auto-removes *clean* ones; ours have commits) and deletes the now-**merged** `mast-tdd/*` + `worktree-agent-*` branches. Skipping this is how the pool reached 318 worktrees and forced the in-place-checkout fallback. For a **discarded** batch (branches unmerged), run `bash tools/clean-worktrees.sh --force` to also drop the unmerged branches.
+
+**Sweep stale leftovers.** The reaper only drops *merged* branches (absent `--force`), so an unmerged branch abandoned by a prior batch lingers. The `<YYYY-MM-DD>` prefix makes these obvious — `git branch --list 'mast-tdd/*'` lists them date-first. When a `mast-tdd/<old-date>-*` branch is several batches stale, confirm it's abandoned (`git log -1` + `git merge-base --is-ancestor` to check it isn't merged), then drop it with `git branch -D`. Don't let undated/severely-stale branches accumulate — they're the slow path back to pool bloat.
 
 If a batch has an intra-batch second wave that depends on new AST types, regenerate + commit GLOSSARY.md *between* waves so the second wave's briefing can cite accurate signatures. Then produce the batch report ([template in PIPELINE.md](PIPELINE.md#batch-report)) and loop to Step 1, or stop if returns are diminishing.
 
