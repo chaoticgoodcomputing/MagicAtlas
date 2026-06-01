@@ -90,4 +90,30 @@ public sealed record CantAttackEffect : ContinuousEffect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public EvasionCondition? UnlessDefendingControls { get; init; }
+
+  /// <summary>
+  /// "alone" qualifier: when <c>true</c>, the oracle line reads "can't attack
+  /// alone" — the restriction applies only when this object would be the sole
+  /// attacker, i.e. it is lifted whenever at least one other creature is also
+  /// declared as an attacker.
+  ///
+  /// <para>
+  /// CR 508.1 (excerpt): "First, the active player declares attackers. This
+  /// turn-based action doesn't use the stack…" — "alone" describes the
+  /// declared-attackers set: the restriction bites precisely when this object
+  /// is the only member of that set. MAST records what the word means (the
+  /// restriction is conditional on no other creature also attacking); it does
+  /// not model the declare-attackers turn-based action itself.
+  /// </para>
+  /// <para>
+  /// Shared with <see cref="CantBlockEffect.Alone"/>. "This creature can't
+  /// attack or block alone." is ONE restriction whose "alone" qualifier applies
+  /// to both halves; per the multi-effect-per-clause doctrine that clause yields
+  /// a <see cref="CantAttackEffect"/> and a <see cref="CantBlockEffect"/>, each
+  /// carrying <c>Alone = true</c> — not a combined node and not a free-text
+  /// "alone" string.
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool Alone { get; init; }
 }
