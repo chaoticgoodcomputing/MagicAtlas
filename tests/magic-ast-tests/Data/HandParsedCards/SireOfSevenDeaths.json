@@ -1,0 +1,161 @@
+{
+  "Input": {
+    "Name": "Sire of Seven Deaths",
+    "ManaCost": "{7}",
+    "TypeLine": "Creature — Eldrazi",
+    "OracleText": "First strike, vigilance\nMenace, trample\nReach, lifelink\nWard—Pay 7 life.",
+    "Power": "7",
+    "Toughness": "7",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Sire of Seven Deaths",
+    "TypeLine": {
+      "Raw": "Creature — Eldrazi",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Eldrazi"
+      ]
+    },
+    "Oracle": {
+      "RawText": "First strike, vigilance\nMenace, trample\nReach, lifelink\nWard—Pay 7 life.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "First strike",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "First"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Vigilance",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Vigilance"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Menace",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ]
+              },
+              "MinimumBlockers": 2
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Reach",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Lifelink",
+          "Effects": [
+            {
+              "EffectType": "lifelink"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Ward",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesTarget",
+            "Filter": {
+              "Controller": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": {
+                  "Kind": "It"
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "ThatPlayer"
+                },
+                "Cost": {
+                  "CostType": "payLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 7
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{7}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 7
+          }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        }
+      }
+    ]
+  }
+}
