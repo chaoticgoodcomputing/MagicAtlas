@@ -98,16 +98,21 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return null;
     }
 
+    // Strip trailing parenthetical reminder text (Rule 207.2) before effect
+    // parsing. Reminder text follows the effect sentence as "(explanation...)" —
+    // e.g. "Create a Treasure token. (It's an artifact with ...)".
+    // MUST run before ExtractActivationRestrictions: when the reminder is the
+    // final sentence (e.g. the Phyrexian "({B/P} can be paid with either {B} or
+    // 2 life.)" — CR 107.4f), restriction extraction inspects the parenthetical,
+    // fails to match "Activate only as a sorcery", and bails — leaving the
+    // restriction sentence glued to the effect.
+    StripTrailingReminder(ref effectPart);
+
     // Extract trailing "Activate only as ..." restriction sentences from
     // effectPart before effect parsing. These are not effects — they constrain
     // when the ability can be activated (Rule 602.5). Stripping them prevents
     // TryParseMultiEffectSentences from failing when it encounters them.
     var restrictions = ExtractActivationRestrictions(ref effectPart);
-
-    // Strip trailing parenthetical reminder text (Rule 207.2) before effect
-    // parsing. Reminder text follows the effect sentence as "(explanation...)" —
-    // e.g. "Create a Treasure token. (It's an artifact with ...)".
-    StripTrailingReminder(ref effectPart);
 
     // Parse effects
     var effects = ParseEffects(effectPart);
