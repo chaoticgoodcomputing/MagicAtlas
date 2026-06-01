@@ -332,7 +332,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = isToken ? (IReadOnlyList<Characteristic>?)[Characteristic.Other("token")] : null,
+          IsToken = isToken ? true : (bool?)null,
           Controller = ControllerFilter.You,
         },
       };
@@ -350,7 +350,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         {
           CardTypes = ["creature"],
           Subtypes = [subtype],
-          Characteristics = isToken ? (IReadOnlyList<Characteristic>?)[Characteristic.Other("token")] : null,
+          IsToken = isToken ? true : (bool?)null,
           Controller = ControllerFilter.You,
         },
       };

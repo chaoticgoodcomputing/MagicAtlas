@@ -37,18 +37,12 @@
                   "CardTypes": [
                     "creature"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "token"
-                    }
-                  ],
+                  "IsToken": true,
                   "Controller": "You"
                 }
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Flying",
                 "Effects": [
                   {
                     "EffectType": "evasion",
@@ -68,7 +62,8 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "KeywordSource": "Flying"
               }
             }
           ]
@@ -103,12 +98,7 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "Characteristics": [
-                  {
-                    "CharacteristicType": "other",
-                    "Description": "token"
-                  }
-                ]
+                "IsToken": true
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -164,7 +154,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -176,8 +167,8 @@
       {
         "Kind": "colorIdentity",
         "ColorIdentity": [
-          "G",
-          "U"
+          "U",
+          "G"
         ]
       }
     ]

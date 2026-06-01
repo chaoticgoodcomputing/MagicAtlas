@@ -121,24 +121,19 @@
                   "CardTypes": [
                     "creature"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "token"
-                    }
-                  ],
+                  "IsToken": true,
                   "Controller": "You"
                 }
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Deathtouch",
                 "Effects": [
                   {
                     "EffectType": "keywordAbility",
                     "Keyword": "Deathtouch"
                   }
-                ]
+                ],
+                "KeywordSource": "Deathtouch"
               }
             }
           ]
@@ -167,7 +162,8 @@
             ]
           }
         ],
-        "ManaValue": 7
+        "ManaValue": 7,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -185,13 +181,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         }
       }
     ]

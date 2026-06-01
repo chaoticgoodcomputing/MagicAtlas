@@ -105,10 +105,9 @@ internal static class ActivatedRuleHelpers
     else if (Regex.IsMatch(lower, @"\btoken\b") && !lower.Contains("creature") && !lower.Contains("artifact"))
     {
       // "Sacrifice a token" — "token" is a characteristic predicate (Rule 111.7),
-      // not a card type or subtype. Encodes as Characteristics: ["token"] to
-      // match the gold convention and distinguish from typed-token costs like
-      // "Sacrifice a creature token".
-      filter = new ObjectFilter { Characteristics = [Characteristic.Other("token")] };
+      // not a card type or subtype. Encodes as the structured IsToken axis,
+      // distinguishing it from typed-token costs like "Sacrifice a creature token".
+      filter = new ObjectFilter { IsToken = true };
     }
     else if (lower.Contains("creature"))
     {
