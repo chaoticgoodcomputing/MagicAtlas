@@ -364,12 +364,28 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   /// </summary>
   private static bool IsManaAbility(IReadOnlyList<Cost> costs, IReadOnlyList<Effect> effects)
   {
-    // Check if any effect is an AddManaEffect
-    var hasAddManaEffect = effects.Any(e => e is AddManaEffect);
+    // Check if any effect could add mana. A CompositeEffect that bundles several
+    // AddManaEffects ("Add {B}, then add an additional {B} …" — ADR 0009 S4)
+    // still satisfies CR 605.1a: it could add mana when it resolves, so look one
+    // level into composites.
+    var hasAddManaEffect = effects.Any(EffectAddsMana);
 
     // For now, simple heuristic: if it adds mana and doesn't have complex targeting,
     // it's probably a mana ability
     return hasAddManaEffect;
   }
+
+  /// <summary>
+  /// Whether an effect could add mana — directly an <see cref="AddManaEffect"/>,
+  /// or a <see cref="MagicAST.AST.Effects.Core.CompositeEffect"/> any of whose
+  /// members could (CR 605.1a).
+  /// </summary>
+  private static bool EffectAddsMana(Effect effect) =>
+    effect switch
+    {
+      AddManaEffect => true,
+      MagicAST.AST.Effects.Core.CompositeEffect composite => composite.Effects.Any(EffectAddsMana),
+      _ => false,
+    };
 
 }
