@@ -1372,6 +1372,12 @@
           ]
         },
         {
+          "Type": "RingTemptsEffect",
+          "Discriminator": "ringTemptsYou",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "SacrificeEffect",
           "Discriminator": "sacrifice",
           "IsUnparsed": false,
@@ -1798,5 +1804,5 @@
       ]
     }
   ],
-  "SchemaHash": "2d621b98775860c330592c10fa10f20aaefb62a0e0f25d055c024cfbaa7cba77"
+  "SchemaHash": "ae30355c64f5568904630fcb5099c92ca5edc0f9b10a56bcb2fcf6e2824a8bc4"
 }
