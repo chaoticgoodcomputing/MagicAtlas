@@ -1,0 +1,119 @@
+{
+  "Input": {
+    "Name": "Blessing of Leeches",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Flash\nEnchant creature\nAt the beginning of your upkeep, you lose 1 life.\n{0}: Regenerate enchanted creature.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Blessing of Leeches",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Flash\nEnchant creature\nAt the beginning of your upkeep, you lose 1 life.\n{0}: Regenerate enchanted creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flash",
+          "Effects": [
+            {
+              "EffectType": "timingModification",
+              "Modification": "Grant",
+              "Timing": "Instant"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": ["creature"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 0
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "regenerate",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}

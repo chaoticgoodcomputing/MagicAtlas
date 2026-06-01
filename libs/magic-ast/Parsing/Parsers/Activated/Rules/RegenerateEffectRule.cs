@@ -29,6 +29,21 @@ public sealed class RegenerateEffectRule : IActivatedEffectRule
       return new RegenerateEffect { Target = ObjectReference.Self() };
     }
 
+    // "Regenerate enchanted creature" / "Regenerate equipped creature"
+    // CR 701.19a: creates a replacement effect protecting the attached permanent.
+    if (
+      lower == "regenerate enchanted creature"
+      || lower == "regenerate equipped creature"
+      || lower == "regenerate enchanted permanent"
+      || lower == "regenerate equipped permanent"
+    )
+    {
+      return new RegenerateEffect
+      {
+        Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+      };
+    }
+
     // "Regenerate target [type]"
     var m = Regex.Match(
       trimmed,
