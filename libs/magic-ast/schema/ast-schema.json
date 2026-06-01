@@ -1082,6 +1082,14 @@
           ]
         },
         {
+          "Type": "MayPlayFromGraveyardEffect",
+          "Discriminator": "mayPlayFromGraveyard",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cards"
+          ]
+        },
+        {
           "Type": "MegamorphEffect",
           "Discriminator": "megamorph",
           "IsUnparsed": false,
@@ -1853,5 +1861,5 @@
       ]
     }
   ],
-  "SchemaHash": "5aebe45cf34851b56744e3ad587a7224780687b6ecce0b52c93cdafcfa813173"
+  "SchemaHash": "af85b0143e55cf684e210e1840b740e15beb01939314f78a8584f251993d3b29"
 }

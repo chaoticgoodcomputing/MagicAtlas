@@ -1,0 +1,89 @@
+{
+  "Input": {
+    "Name": "Ramunap Excavator",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Creature — Snake Cleric",
+    "OracleText": "You may play lands from your graveyard.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Ramunap Excavator",
+    "TypeLine": {
+      "Raw": "Creature — Snake Cleric",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Snake",
+        "Cleric"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You may play lands from your graveyard.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "mayPlayFromGraveyard",
+              "Cards": {
+                "CardTypes": [
+                  "land"
+                ],
+                "Zone": "Graveyard",
+                "Controller": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
