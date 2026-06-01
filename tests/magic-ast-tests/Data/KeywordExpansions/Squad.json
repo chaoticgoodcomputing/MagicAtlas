@@ -1,0 +1,32 @@
+{
+  "Keyword": "Squad",
+  "Parameter": "{1}{G}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Squad",
+    "Effects": [
+      {
+        "EffectType": "additionalCastCost",
+        "AdditionalCost": {
+          "Cost": {
+            "CostType": "mana",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "G"
+                ]
+              }
+            ]
+          },
+          "IsOptional": true,
+          "Repeatable": true
+        }
+      }
+    ]
+  }
+}
