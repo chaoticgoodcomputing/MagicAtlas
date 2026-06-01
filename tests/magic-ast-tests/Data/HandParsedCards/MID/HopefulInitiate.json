@@ -82,12 +82,17 @@
           ],
           "Effects": [
             {
-              "EffectType": "unparsed",
-              "SourceSpan": {
-                "Start": 189,
-                "Length": 40
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "artifact",
+                    "enchantment"
+                  ]
+                }
               },
-              "RawText": "Destroy target artifact or enchantment."
+              "CantBeRegenerated": false
             }
           ],
           "IsManaAbility": false

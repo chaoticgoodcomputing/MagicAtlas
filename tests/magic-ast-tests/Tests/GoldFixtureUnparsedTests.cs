@@ -38,7 +38,6 @@ public class GoldFixtureUnparsedTests
     "EOE/PlasmaBolt",
     "EOE/TragicTrajectory",
     "LRW/WindbriskHeights",
-    "MID/HopefulInitiate",
     "ONS/IxidorRealitySculptor",
     "ORI/WhirlerRogue",
     "SOM/PrecursorGolem",
