@@ -29,9 +29,6 @@
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Source": {
-                "Kind": "Self"
-              },
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 4
@@ -44,11 +41,14 @@
                   ],
                   "Characteristics": [
                     {
-                      "CharacteristicType": "other",
-                      "Description": "attacking or blocking"
+                      "CharacteristicType": "combatState",
+                      "State": "AttackingOrBlocking"
                     }
                   ]
                 }
+              },
+              "Source": {
+                "Kind": "Self"
               }
             }
           ]
@@ -67,7 +67,8 @@
             ]
           }
         ],
-        "ManaValue": 1
+        "ManaValue": 1,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

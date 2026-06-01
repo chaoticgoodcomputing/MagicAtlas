@@ -39,9 +39,6 @@
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Source": {
-                "Kind": "Self"
-              },
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 3
@@ -54,11 +51,14 @@
                   ],
                   "Characteristics": [
                     {
-                      "CharacteristicType": "other",
-                      "Description": "attacking or blocking"
+                      "CharacteristicType": "combatState",
+                      "State": "AttackingOrBlocking"
                     }
                   ]
                 }
+              },
+              "Source": {
+                "Kind": "Self"
               }
             }
           ],
@@ -101,13 +101,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         }
       }
     ]

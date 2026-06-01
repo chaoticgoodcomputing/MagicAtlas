@@ -35,7 +35,10 @@
                   ],
                   "Controller": "You",
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "attacking"}
+                    {
+                      "CharacteristicType": "combatState",
+                      "State": "Attacking"
+                    }
                   ]
                 }
               },
@@ -68,7 +71,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

@@ -219,6 +219,14 @@
       "DiscriminatorKey": "CharacteristicType",
       "Types": [
         {
+          "Type": "CombatStateCharacteristic",
+          "Discriminator": "combatState",
+          "IsUnparsed": false,
+          "Fields": [
+            "State"
+          ]
+        },
+        {
           "Type": "KeywordCharacteristic",
           "Discriminator": "keyword",
           "IsUnparsed": false,
@@ -1874,5 +1882,5 @@
       ]
     }
   ],
-  "SchemaHash": "e82654327cc0ca9deaebc615ba9734406968533e6130bed5d58ac70f1704ad83"
+  "SchemaHash": "19560f866e83e1e32da2ab92281d2ab1a7244743abc2281303cc7f7e73bd7b26"
 }

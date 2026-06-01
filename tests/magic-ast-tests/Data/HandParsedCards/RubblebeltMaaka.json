@@ -6,15 +6,23 @@
     "OracleText": "Bloodrush — {R}, Discard this card: Target attacking creature gets +3/+3 until end of turn.",
     "Power": "3",
     "Toughness": "3",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Rubblebelt Maaka",
     "TypeLine": {
       "Raw": "Creature — Cat",
-      "Types": ["Creature"],
-      "Subtypes": ["Cat"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat"
+      ]
     },
     "Oracle": {
       "RawText": "Bloodrush — {R}, Discard this card: Target attacking creature gets +3/+3 until end of turn.",
@@ -25,13 +33,25 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["R"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                }
               ]
             },
             {
               "CostType": "discard",
-              "Filter": { "CardTypes": ["card"] },
-              "Quantity": { "QuantityType": "literal", "Value": 1 }
+              "Filter": {
+                "CardTypes": [
+                  "card"
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
           ],
           "Effects": [
@@ -40,15 +60,31 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Characteristics": [{ "CharacteristicType": "other", "Description": "attacking" }]
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "combatState",
+                      "State": "Attacking"
+                    }
+                  ]
                 }
               },
-              "PowerModifier": { "QuantityType": "literal", "Value": 3 },
-              "ToughnessModifier": { "QuantityType": "literal", "Value": 3 },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
               "Duration": {
                 "DurationType": "untilTime",
-                "Until": { "Part": "Turn", "Edge": "End" }
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
               }
             }
           ],
@@ -62,24 +98,44 @@
         "Kind": "manaCost",
         "Raw": "{3}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 4,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 3, "Raw": "3" },
-        "Toughness": { "ValueType": "fixed", "Value": 3, "Raw": "3" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
       }
     ]
   }

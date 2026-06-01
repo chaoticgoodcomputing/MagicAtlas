@@ -37,8 +37,8 @@
                     ],
                     "Characteristics": [
                       {
-                        "CharacteristicType": "other",
-                        "Description": "attacking"
+                        "CharacteristicType": "combatState",
+                        "State": "Attacking"
                       }
                     ]
                   }

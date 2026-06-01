@@ -13,7 +13,7 @@ using MagicAST.AST.References;
 /// <para>
 /// Distinct from <see cref="ModifyPTEffectRule"/>'s "Target creature gets …" shape:
 /// the target is narrowed to an <em>attacking</em> creature, carried as the
-/// state-predicate residual <c>Characteristic.Other("attacking")</c> per ADR 0001
+/// state-predicate residual <c>Characteristic.InCombat(CombatState.Attacking)</c> per ADR 0001
 /// (no first-class ObjectFilter field for combat state) — mirroring how
 /// "Attacking creatures get …" (Goblin Oriflamme) and "Destroy target attacking
 /// creature" (Immolating Glare) already encode the attacking filter.
@@ -56,7 +56,7 @@ public sealed class ModifyPTTargetAttackingCreatureEffectRule : IActivatedEffect
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = [Characteristic.Other("attacking")],
+          Characteristics = [Characteristic.InCombat(CombatState.Attacking)],
         },
       },
       PowerModifier = ActivatedRuleHelpers.ParseSignedModifier(m.Groups["p"].Value),

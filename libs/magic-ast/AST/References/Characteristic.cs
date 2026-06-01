@@ -46,11 +46,21 @@ public abstract record Characteristic
       "infect" => new KeywordCharacteristic { Keyword = KeywordAbility.Infect },
       "hexproof" => new KeywordCharacteristic { Keyword = KeywordAbility.Hexproof },
       "shroud" => new KeywordCharacteristic { Keyword = KeywordAbility.Shroud },
+      "attacking" => new CombatStateCharacteristic { State = CombatState.Attacking },
+      "blocking" => new CombatStateCharacteristic { State = CombatState.Blocking },
+      "attacking or blocking" => new CombatStateCharacteristic
+      {
+        State = CombatState.AttackingOrBlocking,
+      },
+      "attacking alone" => new CombatStateCharacteristic { State = CombatState.AttackingAlone },
       _ => new OtherCharacteristic { Description = label },
     };
 
   /// <summary>A keyword-ability constraint ("has [keyword]"). Terse construction at parser sites.</summary>
   public static KeywordCharacteristic HasKeyword(KeywordAbility keyword) => new() { Keyword = keyword };
+
+  /// <summary>A combat-state constraint ("attacking creatures", "blocking creature"). Terse construction at parser sites.</summary>
+  public static CombatStateCharacteristic InCombat(CombatState state) => new() { State = state };
 
   /// <summary>The typed residual for a not-yet-structured characteristic phrase.</summary>
   public static OtherCharacteristic Other(string description) => new() { Description = description };
@@ -66,6 +76,39 @@ public sealed record KeywordCharacteristic : Characteristic
 {
   /// <summary>The required keyword ability.</summary>
   public required KeywordAbility Keyword { get; init; }
+}
+
+/// <summary>
+/// A combat-state constraint — the filtered object is attacking and/or blocking.
+/// "Attacking creatures get +1/+1", "deals damage to target blocking creature",
+/// "exile target attacking creature". The combat-state predicate the
+/// <see cref="Characteristic"/> doc calls out as a first-class carve-out from the
+/// <see cref="OtherCharacteristic"/> residual. Describes what the oracle text says
+/// (the object is in this combat role); the turn/combat machinery is engine
+/// territory (CR 508/509).
+/// </summary>
+[CharacteristicKind("combatState")]
+public sealed record CombatStateCharacteristic : Characteristic
+{
+  /// <summary>Which combat role the filtered object is in.</summary>
+  public required CombatState State { get; init; }
+}
+
+/// <summary>The combat role a <see cref="CombatStateCharacteristic"/> constrains.</summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum CombatState
+{
+  /// <summary>Attacking (CR 508).</summary>
+  Attacking,
+
+  /// <summary>Blocking (CR 509).</summary>
+  Blocking,
+
+  /// <summary>Attacking or blocking — the disjunction "attacking or blocking creature".</summary>
+  AttackingOrBlocking,
+
+  /// <summary>Attacking alone — attacking with no other attacker (e.g. "can't attack alone" companions).</summary>
+  AttackingAlone,
 }
 
 /// <summary>
