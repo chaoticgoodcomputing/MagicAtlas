@@ -49,6 +49,19 @@ public static class ConditionParser
     @"^(?:it|this\s+(?:spell|creature|permanent|card))\s+was\s+kicked$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+  /// <summary>
+  /// "that player has two or fewer cards in hand" / "you have N or more cards in
+  /// hand" — a hand-size predicate (Prickle Faeries' upkeep intervening-if). The
+  /// possessive subject maps to the owner of the counted cards (hand membership is
+  /// by ownership, CR 108.3): "that player" → <see cref="ControllerFilter.ThatPlayer"/>
+  /// (the player whose step fired the trigger, CR 109.5), "you/your" → You. Structured
+  /// to a <see cref="CountCondition"/> over the Hand zone rather than left as a
+  /// free-text residual.
+  /// </summary>
+  private static readonly Regex HandSize = new(
+    @"^(?<who>that\s+player|you|your)\s+(?:has|have)\s+(?<quant>a|an|\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer))?\s+cards?\s+in\s+(?:hand|their\s+hand|your\s+hand)$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
   /// <summary>Parse a condition phrase; never throws — unrecognised phrases become a residual.</summary>
   public static Condition Parse(string phrase)
   {
@@ -77,6 +90,24 @@ public static class ConditionParser
     if (WasKicked.IsMatch(body))
     {
       return new KeywordCostPaidCondition { Keyword = KeywordAbility.Kicker };
+    }
+
+    if (HandSize.Match(body) is { Success: true } hm)
+    {
+      var owner = hm.Groups["who"].Value.StartsWith("that", StringComparison.OrdinalIgnoreCase)
+        ? ControllerFilter.ThatPlayer
+        : ControllerFilter.You;
+      var filter = new ObjectFilter
+      {
+        CardTypes = ["card"],
+        Zone = Zone.Hand,
+        Owner = owner,
+      };
+      return new CountCondition
+      {
+        Filter = filter,
+        Count = Quant(hm.Groups["quant"].Value, hm.Groups["dir"].Value),
+      };
     }
 
     return new OtherCondition { Text = verbatim };

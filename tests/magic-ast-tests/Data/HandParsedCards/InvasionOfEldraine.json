@@ -1,0 +1,263 @@
+{
+  "Input": {
+    "Name": "Invasion of Eldraine // Prickle Faeries",
+    "TypeLine": "Battle — Siege // Creature — Faerie",
+    "Layout": "transform",
+    "ColorIdentity": [
+      "B"
+    ],
+    "Keywords": [
+      "Flying",
+      "Transform"
+    ],
+    "CardFaces": [
+      {
+        "Name": "Invasion of Eldraine",
+        "ManaCost": "{3}{B}",
+        "TypeLine": "Battle — Siege",
+        "OracleText": "(As a Siege enters, choose an opponent to protect it. You and others can attack it. When it's defeated, exile it, then cast it transformed.)\nWhen this Siege enters, target opponent discards two cards.",
+        "Power": null,
+        "Toughness": null,
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Name": "Prickle Faeries",
+        "ManaCost": "",
+        "TypeLine": "Creature — Faerie",
+        "OracleText": "Flying\nAt the beginning of each opponent's upkeep, if that player has two or fewer cards in hand, this creature deals 2 damage to them.",
+        "Power": "2",
+        "Toughness": "2",
+        "Colors": [
+          "B"
+        ]
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Invasion of Eldraine // Prickle Faeries",
+    "TypeLine": {
+      "Raw": "Battle — Siege // Creature — Faerie",
+      "Types": [
+        "Battle"
+      ],
+      "Subtypes": [
+        "Siege",
+        "//",
+        "Creature",
+        "—",
+        "Faerie"
+      ]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "layout",
+        "Layout": "transform"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Invasion of Eldraine",
+        "TypeLine": {
+          "Raw": "Battle — Siege",
+          "Types": [
+            "Battle"
+          ],
+          "Subtypes": [
+            "Siege"
+          ]
+        },
+        "Oracle": {
+          "RawText": "(As a Siege enters, choose an opponent to protect it. You and others can attack it. When it's defeated, exile it, then cast it transformed.)\nWhen this Siege enters, target opponent discards two cards.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "siege"
+                }
+              ],
+              "Reminder": {
+                "Text": "(As a Siege enters, choose an opponent to protect it. You and others can attack it. When it's defeated, exile it, then cast it transformed.)"
+              }
+            },
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "When",
+                "Event": "Enters",
+                "Filter": {
+                  "CardTypes": [
+                    "siege"
+                  ]
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "discardCards",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "Player": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": [
+                        "opponent"
+                      ]
+                    }
+                  },
+                  "RevealHand": false,
+                  "Random": false
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{3}{B}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 3
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "B"
+                ]
+              }
+            ],
+            "ManaValue": 4,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": [
+              "B"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Prickle Faeries",
+        "TypeLine": {
+          "Raw": "Creature — Faerie",
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Faerie"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Flying\nAt the beginning of each opponent's upkeep, if that player has two or fewer cards in hand, this creature deals 2 damage to them.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "evasion",
+                  "CanBeBlockedBy": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Characteristics": [
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Flying"
+                      },
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Reach"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "KeywordSource": "Flying"
+            },
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "At",
+                "Event": {
+                  "Part": "Upkeep",
+                  "Edge": "Beginning",
+                  "Whose": "Opponent"
+                }
+              },
+              "InterveningIf": {
+                "ConditionType": "count",
+                "Filter": {
+                  "CardTypes": [
+                    "card"
+                  ],
+                  "Owner": "ThatPlayer",
+                  "Zone": "Hand"
+                },
+                "Count": {
+                  "Operator": "LessThanOrEqual",
+                  "Value": 2
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "dealDamage",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "Target": {
+                    "Kind": "ThatPlayer"
+                  },
+                  "Source": {
+                    "Kind": "Self"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "colors",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 2,
+              "Raw": "2"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 2,
+              "Raw": "2"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

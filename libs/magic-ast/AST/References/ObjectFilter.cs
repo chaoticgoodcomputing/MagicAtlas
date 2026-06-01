@@ -290,6 +290,18 @@ public enum ControllerFilter
   /// the ability's own controller.
   /// </summary>
   EnchantedPlayer,
+
+  /// <summary>
+  /// Objects belonging to the player named by the trigger condition — "cards in
+  /// [that player's] hand" in an intervening-if on an each-opponent's-upkeep
+  /// trigger (Prickle Faeries: "if that player has two or fewer cards in hand").
+  /// The controller/owner axis analogue of <see cref="ObjectReferenceKind.ThatPlayer"/>:
+  /// the player whose turn/step fired the trigger (CR 109.5 — "that player"), not
+  /// the ability's own controller. Used on the <see cref="ObjectFilter.Owner"/>
+  /// axis when the count is of cards in that player's hand (hand membership is by
+  /// ownership, CR 108.3).
+  /// </summary>
+  ThatPlayer,
 }
 
 /// <summary>
