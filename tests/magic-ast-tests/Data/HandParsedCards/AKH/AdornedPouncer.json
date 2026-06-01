@@ -38,38 +38,75 @@
           ]
         },
         {
-          "Kind": "static",
+          "Kind": "activated",
           "KeywordSource": "Eternalize",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ],
+                  "IsPhyrexian": false,
+                  "IsSnow": false
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ],
+                  "IsPhyrexian": false,
+                  "IsSnow": false
+                }
+              ]
+            },
+            {
+              "CostType": "exile",
+              "Filter": {
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "this card"
+                  }
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "FromZone": "Graveyard"
+            }
+          ],
           "Effects": [
             {
-              "EffectType": "eternalize",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 3
-                  },
-                  {
-                    "Kind": "colored",
-                    "Colors": [
-                      "W"
-                    ],
-                    "IsPhyrexian": false,
-                    "IsSnow": false
-                  },
-                  {
-                    "Kind": "colored",
-                    "Colors": [
-                      "W"
-                    ],
-                    "IsPhyrexian": false,
-                    "IsSnow": false
-                  }
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "IsCopy": true,
+                "Colors": [
+                  "B"
+                ],
+                "Power": "4",
+                "Toughness": "4",
+                "Subtypes": [
+                  "Zombie"
                 ]
               }
             }
           ],
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
           "Reminder": {
             "Text": "({3}{W}{W}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a 4/4 black Zombie Cat with no mana cost. Eternalize only as a sorcery.)"
           }
