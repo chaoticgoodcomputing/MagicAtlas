@@ -1,0 +1,247 @@
+{
+  "Input": {
+    "Name": "Invasion of Karsus // Refraction Elemental",
+    "TypeLine": "Battle — Siege // Creature — Elemental",
+    "Layout": "transform",
+    "ColorIdentity": ["R"],
+    "Keywords": ["Transform", "Ward"],
+    "CardFaces": [
+      {
+        "Name": "Invasion of Karsus",
+        "ManaCost": "{2}{R}{R}",
+        "TypeLine": "Battle — Siege",
+        "OracleText": "(As a Siege enters, choose an opponent to protect it. You and others can attack it. When it's defeated, exile it, then cast it transformed.)\nWhen this Siege enters, it deals 3 damage to each creature and each planeswalker.",
+        "Power": null,
+        "Toughness": null,
+        "Colors": ["R"]
+      },
+      {
+        "Name": "Refraction Elemental",
+        "ManaCost": "",
+        "TypeLine": "Creature — Elemental",
+        "OracleText": "Ward—Pay 2 life.\nWhenever you cast a spell, this creature deals 2 damage to each opponent.",
+        "Power": "4",
+        "Toughness": "4",
+        "Colors": ["R"]
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Invasion of Karsus // Refraction Elemental",
+    "TypeLine": {
+      "Raw": "Battle — Siege // Creature — Elemental",
+      "Types": ["Battle"],
+      "Subtypes": ["Siege", "//", "Creature", "—", "Elemental"]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "layout",
+        "Layout": "transform"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Invasion of Karsus",
+        "TypeLine": {
+          "Raw": "Battle — Siege",
+          "Types": ["Battle"],
+          "Subtypes": ["Siege"]
+        },
+        "Oracle": {
+          "RawText": "(As a Siege enters, choose an opponent to protect it. You and others can attack it. When it's defeated, exile it, then cast it transformed.)\nWhen this Siege enters, it deals 3 damage to each creature and each planeswalker.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "siege"
+                }
+              ],
+              "Reminder": {
+                "Text": "(As a Siege enters, choose an opponent to protect it. You and others can attack it. When it's defeated, exile it, then cast it transformed.)"
+              }
+            },
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "When",
+                "Event": "Enters",
+                "Filter": {
+                  "CardTypes": ["siege"]
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "composite",
+                  "Effects": [
+                    {
+                      "EffectType": "dealDamage",
+                      "Amount": {
+                        "QuantityType": "literal",
+                        "Value": 3
+                      },
+                      "Target": {
+                        "Kind": "Each",
+                        "Filter": {
+                          "CardTypes": ["creature"]
+                        }
+                      },
+                      "Source": {
+                        "Kind": "It"
+                      }
+                    },
+                    {
+                      "EffectType": "dealDamage",
+                      "Amount": {
+                        "QuantityType": "literal",
+                        "Value": 3
+                      },
+                      "Target": {
+                        "Kind": "Each",
+                        "Filter": {
+                          "CardTypes": ["planeswalker"]
+                        }
+                      },
+                      "Source": {
+                        "Kind": "It"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{2}{R}{R}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              },
+              {
+                "Kind": "colored",
+                "Colors": ["R"]
+              },
+              {
+                "Kind": "colored",
+                "Colors": ["R"]
+              }
+            ],
+            "ManaValue": 4,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": ["R"]
+          }
+        ]
+      },
+      {
+        "Name": "Refraction Elemental",
+        "TypeLine": {
+          "Raw": "Creature — Elemental",
+          "Types": ["Creature"],
+          "Subtypes": ["Elemental"]
+        },
+        "Oracle": {
+          "RawText": "Ward—Pay 2 life.\nWhenever you cast a spell, this creature deals 2 damage to each opponent.",
+          "Abilities": [
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "Whenever",
+                "Event": "BecomesTarget",
+                "Filter": {
+                  "Controller": "Opponent"
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "preventable",
+                  "Inner": {
+                    "EffectType": "counterSpell",
+                    "Target": {
+                      "Kind": "It"
+                    }
+                  },
+                  "Unless": {
+                    "Player": {
+                      "Kind": "ThatPlayer"
+                    },
+                    "Cost": {
+                      "CostType": "payLife",
+                      "Amount": {
+                        "QuantityType": "literal",
+                        "Value": 2
+                      }
+                    }
+                  }
+                }
+              ],
+              "KeywordSource": "Ward"
+            },
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "Whenever",
+                "Event": "SpellCast",
+                "Filter": {
+                  "Controller": "You"
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "dealDamage",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "Target": {
+                    "Kind": "EachOpponent"
+                  },
+                  "Source": {
+                    "Kind": "Self"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "colors",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 4,
+              "Raw": "4"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 4,
+              "Raw": "4"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
