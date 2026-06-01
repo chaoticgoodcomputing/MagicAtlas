@@ -27,13 +27,59 @@
         {
           "Kind": "static",
           "KeywordSource": "Modular",
+          "When": "asThisEnters",
           "Reminder": {
             "Text": "(This enters with a +1/+1 counter on it. When it dies, you may put its +1/+1 counters on target artifact creature.)"
           },
           "Effects": [
             {
-              "EffectType": "modular",
-              "Value": 1
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Modular",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "permanent"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "putCounters",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "artifact",
+                      "creature"
+                    ]
+                  }
+                },
+                "CounterType": "+1/+1",
+                "Count": {
+                  "QuantityType": "counterCount",
+                  "CounterType": "+1/+1",
+                  "On": {
+                    "Kind": "Self"
+                  }
+                }
+              }
             }
           ]
         }
