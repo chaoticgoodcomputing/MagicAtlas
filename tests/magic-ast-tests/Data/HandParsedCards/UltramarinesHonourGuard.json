@@ -33,21 +33,49 @@
           "KeywordSource": "Squad",
           "Effects": [
             {
-              "EffectType": "squad",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 2
-                  }
-                ]
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    }
+                  ]
+                },
+                "IsOptional": true,
+                "Repeatable": true
               }
             }
           ],
           "Reminder": {
             "Text": "(As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)"
           }
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Squad",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters"
+          },
+          "InterveningIf": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Squad"
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "keywordCostPaidCount",
+                "Keyword": "Squad"
+              },
+              "Token": {
+                "IsCopy": true
+              }
+            }
+          ]
         },
         {
           "Kind": "static",
