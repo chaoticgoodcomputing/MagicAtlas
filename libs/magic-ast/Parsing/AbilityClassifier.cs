@@ -443,6 +443,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "You may cast spells as though they had flash." — Vedalken Orrery and
+    // similar global flash-grant static abilities (CR 702.8a: "Flash is a static
+    // ability … 'Flash' means 'You may play this card any time you could cast an
+    // instant.'"). This is a continuous static permission on the permanent — NOT
+    // a one-shot spell-resolution step — so it belongs on the static path where
+    // CastSpellsAsFlashRule emits a TimingModificationEffect with AppliesTo
+    // covering all spells you cast. Intercept before StartsWithYouMaySpellInstruction
+    // swallows it (parallels the "You may cast this spell as though it had flash"
+    // and "You may cast this card from your graveyard" intercepts above).
+    if (clause.RawText.TrimStart().StartsWith(
+      "You may cast spells as though they had flash",
+      StringComparison.OrdinalIgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.95,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "You may [spell-verb] ..." optional resolution-step phrasing on a spell
     // (Rule 117.7) — e.g., "You may discard a card. If you do, draw two cards."
     // (Abandon Attachments). The opening "You may" is a player-instruction frame
