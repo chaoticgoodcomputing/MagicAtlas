@@ -93,7 +93,10 @@ public sealed class CopyTargetSpellRule : ISpellRule, IMultiSpellRule
     effects = new List<Effect>
     {
       BuildCopy(m),
-      new ReturnToHandEffect { Target = SpellTarget() },
+      // "then return IT" is a back-reference to the already-targeted spell, not a
+      // second target (CR 707.10 — one targeted spell). ObjectReferenceKind.It,
+      // per the Act of Treason "do X to target, then do Y to it" precedent.
+      new ReturnToHandEffect { Target = new ObjectReference { Kind = ObjectReferenceKind.It } },
     };
     return true;
   }

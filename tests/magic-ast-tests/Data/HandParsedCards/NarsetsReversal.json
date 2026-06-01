@@ -44,14 +44,7 @@
             {
               "EffectType": "returnToHand",
               "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "instant",
-                    "sorcery"
-                  ],
-                  "Zone": "Stack"
-                }
+                "Kind": "It"
               }
             }
           ]
