@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "Demonspine Whip",
+    "ManaCost": "{B}{R}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "{X}: Equipped creature gets +X/+0 until end of turn.\nEquip {1}",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B", "R"],
+    "ColorIdentity": ["B", "R"]
+  },
+  "Output": {
+    "Name": "Demonspine Whip",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": ["Artifact"],
+      "Subtypes": ["Equipment"]
+    },
+    "Oracle": {
+      "RawText": "{X}: Equipped creature gets +X/+0 until end of turn.\nEquip {1}",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "variable"
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "variable",
+                "Name": "X"
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Restrictions": ["OnlyAsSorcery"],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}{R}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "R"]
+      }
+    ]
+  }
+}
