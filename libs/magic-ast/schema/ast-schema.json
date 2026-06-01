@@ -483,6 +483,12 @@
           ]
         },
         {
+          "Type": "AssignDamageAsUnblockedEffect",
+          "Discriminator": "assignDamageAsUnblocked",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "AttachEffect",
           "Discriminator": "attach",
           "IsUnparsed": false,
@@ -1810,5 +1816,5 @@
       ]
     }
   ],
-  "SchemaHash": "b1ed37ccc8302982b8b8c2c53f2b86870be6b1a7721c86340393c50f9b5f98a4"
+  "SchemaHash": "3f4612c0c10db15fabf1546aded3d0c9d3ecf0e8a2443d337139b61f61e76f64"
 }
