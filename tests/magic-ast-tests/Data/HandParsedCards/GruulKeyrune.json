@@ -1,0 +1,137 @@
+{
+  "Input": {
+    "Name": "Gruul Keyrune",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "{T}: Add {R} or {G}.\n{R}{G}: This artifact becomes a 3/2 red and green Beast artifact creature with trample until end of turn.",
+    "Colors": [],
+    "ColorIdentity": ["G", "R"],
+    "Keywords": [],
+    "Id": "7cf96f1c-066e-4fde-acb8-4674842fb6c2",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Gruul Keyrune",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: Add {R} or {G}.\n{R}{G}: This artifact becomes a 3/2 red and green Beast artifact creature with trample until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{R} or {G}",
+              "AnyColor": false
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "becomesCreature",
+              "Subject": {
+                "Kind": "Self"
+              },
+              "Power": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Toughness": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Colors": [
+                "R",
+                "G"
+              ],
+              "CardTypes": [
+                "artifact",
+                "creature"
+              ],
+              "AddedSubtypes": [
+                "Beast"
+              ],
+              "GainedAbilities": [
+                {
+                  "Kind": "static",
+                  "KeywordSource": "Trample",
+                  "Effects": [
+                    {
+                      "EffectType": "keywordAbility",
+                      "Keyword": "Trample"
+                    }
+                  ]
+                }
+              ],
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "G"
+        ]
+      }
+    ]
+  }
+}
