@@ -3,24 +3,31 @@ namespace MagicAST.Keywords.Definitions;
 using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
-using MagicAST.AST.Effects.Keyword;
-using MagicAST.Parsing;
+using MagicAST.AST.Effects.CardFlow;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
-/// Buyback {cost}: You may pay an additional {cost} as you cast this spell. If you do,
-/// put this card into your hand as it resolves. Rule 702.26. MAST records the keyword
-/// and the buyback cost; the conditional-hand-return resolution is engine territory.
+/// Buyback [cost]: two static abilities per CR 702.27a.
 ///
 /// <para>
-/// Exemplar of the <b>mana-cost-parameterized</b> keyword shape (Stage A template). The
-/// <see cref="Definition"/> is the verbatim former <c>KeywordDefinitions.Buyback</c>
-/// (including its inlined <c>ParseManaCost</c> guard); the <see cref="Combinator"/> is
-/// the verbatim former <c>OracleParsers.Buyback</c>, with its inline mana-symbol
-/// matcher replaced by the shared <see cref="KeywordCombinators.ManaCostSymbols"/>
-/// (behaviour-identical — produces the same <see cref="ManaCost"/>).
+/// CR 702.27a (verbatim): "Buyback appears on some instants and sorceries. It represents
+/// two static abilities that function while the spell is on the stack. 'Buyback [cost]'
+/// means 'You may pay an additional [cost] as you cast this spell' and 'If the buyback
+/// cost was paid, put this spell into its owner's hand instead of into that player's
+/// graveyard as it resolves.'"
+/// </para>
+///
+/// <para>
+/// Oracle-text parsing is handled by
+/// <see cref="MagicAST.Parsing.Parsers.Static.BuybackStaticRule"/> (priority 1001),
+/// which returns both abilities as a list. This keyword file keeps the combinator live as
+/// a fallback but no longer uses the deleted <c>BuybackEffect</c> opaque marker: it emits
+/// only the PRIMARY additional-cast-cost static ability ("You may pay an additional [cost]
+/// as you cast this spell"). The <see cref="Definition"/> is null because
+/// <see cref="IKeywordExpander.Expand"/> can only return a single <see cref="Ability"/> and
+/// Buyback decomposes into two.
 /// </para>
 /// </summary>
 [Keyword]
@@ -30,23 +37,12 @@ public sealed class BuybackKeyword : IKeyword
   public KeywordTier Tier => KeywordTier.Parameterized;
 
   /// <inheritdoc/>
-  public KeywordDefinition Definition { get; } =
-    new()
-    {
-      Name = "Buyback",
-      RuleReference = "702.26",
-      Category = KeywordCategory.Static,
-      HasParameter = true,
-      ParameterType = KeywordParameterType.ManaCost,
-      CreateExpansion = parameter => new StaticAbility
-      {
-        KeywordSource = KeywordAbility.Buyback,
-        Effects = [new BuybackEffect
-        {
-          BuybackCost = ParseManaCost(parameter),
-        }],
-      },
-    };
+  /// <remarks>
+  /// Null: the keyword expander returns a single Ability, but Buyback decomposes into two
+  /// static abilities (CR 702.27a). The oracle-text parser handles the full two-ability
+  /// output via BuybackStaticRule.
+  /// </remarks>
+  public KeywordDefinition? Definition => null;
 
   /// <inheritdoc/>
   public TokenListParser<OracleToken, Ability> Combinator { get; } = (
@@ -56,23 +52,18 @@ public sealed class BuybackKeyword : IKeyword
     select (Ability)new StaticAbility
     {
       KeywordSource = KeywordAbility.Buyback,
-      Effects = [new BuybackEffect { BuybackCost = cost }],
       Reminder = reminder,
+      Effects =
+      [
+        new AdditionalCastCostEffect
+        {
+          AdditionalCost = new AdditionalCost
+          {
+            Cost = cost,
+            IsOptional = true,
+          },
+        },
+      ],
     }
   );
-
-  /// <summary>
-  /// Mana-cost-parameter parser, inlined from the former
-  /// <c>KeywordDefinitions.ParseManaCost</c>.
-  /// </summary>
-  private static ManaCost ParseManaCost(string? parameter)
-  {
-    if (string.IsNullOrWhiteSpace(parameter))
-    {
-      throw new ArgumentException("Buyback requires a mana cost parameter.", nameof(parameter));
-    }
-
-    var parsed = new ManaCostParser().Parse(parameter.Trim());
-    return new ManaCost { Symbols = parsed.Symbols.ToList() };
-  }
 }
