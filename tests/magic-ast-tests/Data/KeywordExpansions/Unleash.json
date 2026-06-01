@@ -1,0 +1,24 @@
+{
+  "Keyword": "Unleash",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Unleash",
+    "When": "asThisEnters",
+    "Effects": [
+      {
+        "EffectType": "optional",
+        "Inner": {
+          "EffectType": "putCounters",
+          "Target": {
+            "Kind": "Self"
+          },
+          "CounterType": "+1/+1",
+          "Count": {
+            "QuantityType": "literal",
+            "Value": 1
+          }
+        }
+      }
+    ]
+  }
+}
