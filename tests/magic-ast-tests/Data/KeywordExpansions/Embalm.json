@@ -1,0 +1,66 @@
+{
+  "Keyword": "Embalm",
+  "Parameter": "{3}{W}",
+  "Expected": {
+    "Kind": "activated",
+    "KeywordSource": "Embalm",
+    "Costs": [
+      {
+        "CostType": "mana",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ]
+      },
+      {
+        "CostType": "exile",
+        "Filter": {
+          "CardTypes": [
+            "card"
+          ],
+          "Characteristics": [
+            {
+              "CharacteristicType": "other",
+              "Description": "this card"
+            }
+          ]
+        },
+        "Quantity": {
+          "QuantityType": "literal",
+          "Value": 1
+        },
+        "FromZone": "Graveyard"
+      }
+    ],
+    "Effects": [
+      {
+        "EffectType": "createToken",
+        "Count": {
+          "QuantityType": "literal",
+          "Value": 1
+        },
+        "Token": {
+          "IsCopy": true,
+          "Colors": [
+            "W"
+          ],
+          "Subtypes": [
+            "Zombie"
+          ]
+        }
+      }
+    ],
+    "Restrictions": [
+      "OnlyAsSorcery"
+    ],
+    "IsManaAbility": false
+  }
+}
