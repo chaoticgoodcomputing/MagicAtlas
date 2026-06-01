@@ -1,0 +1,161 @@
+{
+  "Input": {
+    "Name": "Saurian Symbiote",
+    "ManaCost": "{3}{G}",
+    "TypeLine": "Creature — Fungus Dinosaur",
+    "OracleText": "Reach (This creature can block creatures with flying.)\nWhen this creature enters, choose one —\n• Put a +1/+1 counter on this creature.\n• Create a 1/1 green Saproling creature token.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Saurian Symbiote",
+    "TypeLine": {
+      "Raw": "Creature — Fungus Dinosaur",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Fungus",
+        "Dinosaur"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Reach (This creature can block creatures with flying.)\nWhen this creature enters, choose one —\n• Put a +1/+1 counter on this creature.\n• Create a 1/1 green Saproling creature token.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Reach",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
+            }
+          ],
+          "Reminder": {
+            "Text": "(This creature can block creatures with flying.)"
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "modal",
+              "ModeSelection": {
+                "Minimum": 1,
+                "Maximum": 1
+              },
+              "Modes": [
+                {
+                  "Ability": {
+                    "Kind": "spell",
+                    "Effects": [
+                      {
+                        "EffectType": "putCounters",
+                        "Target": {
+                          "Kind": "Self"
+                        },
+                        "CounterType": "+1/+1",
+                        "Count": {
+                          "QuantityType": "literal",
+                          "Value": 1
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Ability": {
+                    "Kind": "spell",
+                    "Effects": [
+                      {
+                        "EffectType": "createToken",
+                        "Count": {
+                          "QuantityType": "literal",
+                          "Value": 1
+                        },
+                        "Token": {
+                          "Power": "1",
+                          "Toughness": "1",
+                          "Colors": [
+                            "G"
+                          ],
+                          "Types": [
+                            "creature"
+                          ],
+                          "Subtypes": [
+                            "Saproling"
+                          ],
+                          "IsCopy": false
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "AllowDuplicates": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
