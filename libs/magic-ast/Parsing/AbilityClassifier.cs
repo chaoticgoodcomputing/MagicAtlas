@@ -317,6 +317,29 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Each player can't cast more than N spell(s) each turn." — a declarative
+    // permanent static that caps cast events per player per turn (Eidolon of
+    // Rhetoric, Arcane Laboratory). A rules-of-the-game-modifying continuous
+    // effect (CR 611.1), NOT an imperative spell-resolution step. The generic
+    // "Each player ..." → Spell route immediately below would mis-route it to the
+    // spell parser (where it falls through), so intercept the "can't cast" cap
+    // shape here and send it to the static path.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Each\s+player\s+can'?t\s+cast\s+more\s+than\s+\S+\s+spell",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.95,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Each player ..." / "Each opponent ..." instructional sentences on the
     // spell (Rule 113.3a) — life-loss, discard prompts, etc. Static doesn't
     // fit; the text is an imperative resolution step.

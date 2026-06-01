@@ -1,0 +1,91 @@
+{
+  "Input": {
+    "Name": "Eidolon of Rhetoric",
+    "ManaCost": "{2}{W}",
+    "TypeLine": "Enchantment Creature — Spirit",
+    "OracleText": "Each player can't cast more than one spell each turn.",
+    "Power": "1",
+    "Toughness": "4",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Eidolon of Rhetoric",
+    "TypeLine": {
+      "Raw": "Enchantment Creature — Spirit",
+      "Types": [
+        "Enchantment",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spirit"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Each player can't cast more than one spell each turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantCastMoreThanNSpells",
+              "Player": {
+                "Kind": "EachPlayer"
+              },
+              "MaxPerPeriod": 1,
+              "Period": "eachTurn"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
