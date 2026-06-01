@@ -61,12 +61,7 @@
                   "CardTypes": [
                     "creature"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "another"
-                    }
-                  ]
+                  "ExcludeSelf": true
                 }
               },
               "PowerModifier": {
@@ -101,7 +96,8 @@
             ]
           }
         ],
-        "ManaValue": 1
+        "ManaValue": 1,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

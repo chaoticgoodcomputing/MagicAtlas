@@ -77,7 +77,7 @@ internal static class ActivatedRuleHelpers
     ObjectFilter? filter = null;
     if (lower.Contains("another creature"))
     {
-      filter = new ObjectFilter { CardTypes = ["creature"], Characteristics = [Characteristic.Other("another")] };
+      filter = new ObjectFilter { CardTypes = ["creature"], ExcludeSelf = true };
     }
     else if (lower.Contains("this creature") || lower.Contains("this permanent"))
     {

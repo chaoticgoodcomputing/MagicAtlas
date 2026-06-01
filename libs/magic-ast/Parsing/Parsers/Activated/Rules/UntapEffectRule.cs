@@ -85,7 +85,7 @@ public sealed class UntapEffectRule : IActivatedEffectRule
             Filter = new ObjectFilter
             {
               CardTypes = ["creature", "land"],
-              Characteristics = [Characteristic.Other("another")],
+              ExcludeSelf = true,
               Controller = hasController ? ControllerFilter.You : null,
             },
           },

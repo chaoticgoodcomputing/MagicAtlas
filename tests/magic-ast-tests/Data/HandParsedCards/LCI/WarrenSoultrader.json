@@ -44,12 +44,7 @@
                 "CardTypes": [
                   "creature"
                 ],
-                "Characteristics": [
-                  {
-                    "CharacteristicType": "other",
-                    "Description": "another"
-                  }
-                ]
+                "ExcludeSelf": true
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -71,10 +66,10 @@
                 "Subtypes": [
                   "Treasure"
                 ],
-                "IsCopy": false,
                 "AbilityText": [
                   "{T}, Sacrifice this artifact: Add one mana of any color."
-                ]
+                ],
+                "IsCopy": false
               }
             }
           ],
@@ -98,7 +93,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -116,13 +112,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

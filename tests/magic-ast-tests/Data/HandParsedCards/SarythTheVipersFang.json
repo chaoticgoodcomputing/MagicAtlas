@@ -57,13 +57,13 @@
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Deathtouch",
                 "Effects": [
                   {
                     "EffectType": "keywordAbility",
                     "Keyword": "Deathtouch"
                   }
-                ]
+                ],
+                "KeywordSource": "Deathtouch"
               }
             }
           ]
@@ -94,13 +94,13 @@
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Hexproof",
                 "Effects": [
                   {
                     "EffectType": "keywordAbility",
                     "Keyword": "Hexproof"
                   }
-                ]
+                ],
+                "KeywordSource": "Hexproof"
               }
             }
           ]
@@ -131,13 +131,8 @@
                     "creature",
                     "land"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "another"
-                    }
-                  ],
-                  "Controller": "You"
+                  "Controller": "You",
+                  "ExcludeSelf": true
                 }
               }
             }
@@ -168,7 +163,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -186,13 +182,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         }
       }
     ]

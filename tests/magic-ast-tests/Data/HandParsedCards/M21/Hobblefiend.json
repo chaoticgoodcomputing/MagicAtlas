@@ -29,13 +29,16 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Trample",
           "Effects": [
             {
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "KeywordSource": "Trample",
+          "Reminder": {
+            "Text": "(This creature can deal excess combat damage to the player or planeswalker it's attacking.)"
+          }
         },
         {
           "Kind": "activated",
@@ -55,12 +58,7 @@
                 "CardTypes": [
                   "creature"
                 ],
-                "Characteristics": [
-                  {
-                    "CharacteristicType": "other",
-                    "Description": "another"
-                  }
-                ]
+                "ExcludeSelf": true
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -80,7 +78,8 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "IsManaAbility": false
         }
       ]
     },
@@ -100,7 +99,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -118,13 +118,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]
