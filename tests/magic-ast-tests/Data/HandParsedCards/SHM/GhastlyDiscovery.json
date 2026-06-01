@@ -57,13 +57,52 @@
           "KeywordSource": "Conspire",
           "Effects": [
             {
-              "EffectType": "keywordAbility",
-              "Keyword": "Conspire"
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "tapPermanents",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Controller": "You"
+                  },
+                  "Quantity": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  }
+                },
+                "IsOptional": true,
+                "Repeatable": false
+              }
             }
           ],
           "Reminder": {
             "Text": "(As you cast this spell, you may tap two untapped creatures you control that share a color with it. When you do, copy it.)"
           }
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Conspire",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "SpellCast",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Conspire"
+          },
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ]
         }
       ]
     },
