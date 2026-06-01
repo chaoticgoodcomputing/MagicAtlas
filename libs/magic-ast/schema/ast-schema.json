@@ -461,7 +461,6 @@
           "Discriminator": "alternativeCast",
           "IsUnparsed": false,
           "Fields": [
-            "Cost",
             "FromZone"
           ]
         },
@@ -1078,6 +1077,14 @@
           "IsUnparsed": false,
           "Fields": [
             "Actions",
+            "Cards"
+          ]
+        },
+        {
+          "Type": "MayPlayFromGraveyardEffect",
+          "Discriminator": "mayPlayFromGraveyard",
+          "IsUnparsed": false,
+          "Fields": [
             "Cards"
           ]
         },
@@ -1859,5 +1866,5 @@
       ]
     }
   ],
-  "SchemaHash": "01b7458ccdad138fa2c0a5c149c66f75721a8a1808375cd43010f91d4e13158d"
+  "SchemaHash": "5976361a3a063d10fb4496266945cb599c03b269569f2a4ea4fe0876a7ddf2fb"
 }
