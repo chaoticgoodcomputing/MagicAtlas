@@ -1,0 +1,128 @@
+{
+  "Input": {
+    "Name": "Qasali Pridemage",
+    "ManaCost": "{G}{W}",
+    "TypeLine": "Creature — Cat Wizard",
+    "OracleText": "Exalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)\n{1}, Sacrifice this creature: Destroy target artifact or enchantment.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["G", "W"],
+    "ColorIdentity": ["G", "W"],
+    "Keywords": ["Exalted"],
+    "Id": "a103646d-b363-4896-a48f-0527d746587e",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Qasali Pridemage",
+    "TypeLine": {
+      "Raw": "Creature — Cat Wizard",
+      "Types": ["Creature"],
+      "Subtypes": ["Cat", "Wizard"]
+    },
+    "Oracle": {
+      "RawText": "Exalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)\n{1}, Sacrifice this creature: Destroy target artifact or enchantment.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Exalted",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Controller": "You",
+              "Characteristics": [
+                {
+                  "CharacteristicType": "other",
+                  "Description": "attacking alone"
+                }
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "ThatCreature"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 1 }
+              ]
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"],
+                "Characteristics": [{ "CharacteristicType": "other", "Description": "this permanent" }]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["artifact", "enchantment"]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}{W}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G", "W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
