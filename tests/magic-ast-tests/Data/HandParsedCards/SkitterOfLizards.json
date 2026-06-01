@@ -1,0 +1,131 @@
+{
+  "Input": {
+    "Name": "Skitter of Lizards",
+    "ManaCost": "{R}",
+    "TypeLine": "Creature — Lizard",
+    "OracleText": "Multikicker {1}{R} (You may pay an additional {1}{R} any number of times as you cast this spell.)\nHaste\nThis creature enters with a +1/+1 counter on it for each time it was kicked.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Skitter of Lizards",
+    "TypeLine": {
+      "Raw": "Creature — Lizard",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Lizard"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Multikicker {1}{R} (You may pay an additional {1}{R} any number of times as you cast this spell.)\nHaste\nThis creature enters with a +1/+1 counter on it for each time it was kicked.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Multikicker",
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 1
+                    },
+                    {
+                      "Kind": "colored",
+                      "Colors": [
+                        "R"
+                      ]
+                    }
+                  ]
+                },
+                "IsOptional": true,
+                "Repeatable": true
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(You may pay an additional {1}{R} any number of times as you cast this spell.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Haste",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "When": "asThisEnters",
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "keywordCostPaidCount",
+                "Keyword": "Kicker"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{R}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
