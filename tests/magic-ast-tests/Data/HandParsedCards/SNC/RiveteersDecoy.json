@@ -42,9 +42,13 @@
         {
           "Kind": "static",
           "KeywordSource": "Blitz",
+          "Reminder": {
+            "Text": "(If you cast this spell for its blitz cost, it gains haste and \"When this creature dies, draw a card.\" Sacrifice it at the beginning of the next end step.)"
+          },
           "Effects": [
             {
-              "EffectType": "blitz",
+              "EffectType": "alternativeCast",
+              "FromZone": "Hand",
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
@@ -61,10 +65,104 @@
                 ]
               }
             }
-          ],
-          "Reminder": {
-            "Text": "(If you cast this spell for its blitz cost, it gains haste and \"When this creature dies, draw a card.\" Sacrifice it at the beginning of the next end step.)"
-          }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Blitz",
+          "Condition": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Blitz"
+          },
+          "Effects": [
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "At",
+                  "Event": {
+                    "Part": "End",
+                    "Edge": "Beginning",
+                    "When": "Next"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "sacrifice",
+                    "Target": {
+                      "Kind": "Self"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Blitz",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Haste",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Haste"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "keywordCostPaid",
+                  "Keyword": "Blitz"
+                }
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "triggered",
+                "Trigger": {
+                  "Timing": "When",
+                  "Event": "Dies",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ]
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "drawCards",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "keywordCostPaid",
+                  "Keyword": "Blitz"
+                }
+              }
+            }
+          ]
         }
       ]
     },
