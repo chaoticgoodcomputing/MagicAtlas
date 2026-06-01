@@ -17,7 +17,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// <remarks>
 /// Integer-parameterized keyword effect; <see cref="Value"/> is the saddle
 /// threshold N lifted from the printed oracle text (e.g., "Saddle 2" → 2).
-/// Mirrors the BushidoEffect and SoulshiftEffect shape: literal printed
+/// Mirrors the BushidoEffect shape: literal printed
 /// numeral, not a <c>Quantity</c> wrapper — the value is fixed at
 /// oracle-print time, not derived at runtime.
 ///
