@@ -1,0 +1,62 @@
+{
+  "Input": {
+    "Name": "Crucible of Worlds",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "You may play lands from your graveyard.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Crucible of Worlds",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You may play lands from your graveyard.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "mayPlayFromGraveyard",
+              "Cards": {
+                "CardTypes": [
+                  "land"
+                ],
+                "Zone": "Graveyard",
+                "Controller": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
