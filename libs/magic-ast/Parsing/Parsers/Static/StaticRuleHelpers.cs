@@ -531,9 +531,12 @@ internal static class StaticRuleHelpers
       .ToList();
 
   /// <summary>
-  /// Maps a type noun phrase like "lands", "legendary creature", "Mountain" onto
-  /// an <see cref="ObjectFilter"/>. Leading words are treated as supertypes when
-  /// recognised (e.g. "legendary"); the head noun is classified card type →
+  /// Maps a type noun phrase like "lands", "legendary creature", "Mountain",
+  /// "other Rat" onto an <see cref="ObjectFilter"/>. A leading "other" qualifier
+  /// (Rule 109.2 — excludes the source object itself) is peeled off and recorded
+  /// as an <see cref="OtherCharacteristic"/>, mirroring the "Other creatures you
+  /// control" anthem convention. Remaining leading words are treated as supertypes
+  /// when recognised (e.g. "legendary"); the head noun is classified card type →
   /// subtype. Returns null when the head noun is empty.
   /// </summary>
   private static ObjectFilter? ClassifyTypeNounPhrase(string phrase)
@@ -544,8 +547,19 @@ internal static class StaticRuleHelpers
       return null;
     }
 
+    // Peel a leading "other" — the self-exclusion qualifier (Rule 109.2). It is
+    // never a head noun, so consuming it here leaves the type classification to
+    // run on the remaining "[supertypes] head" words.
+    var isOther = false;
+    var start = 0;
+    if (words.Length > 1 && words[0].Equals("other", StringComparison.OrdinalIgnoreCase))
+    {
+      isOther = true;
+      start = 1;
+    }
+
     var supertypes = new List<string>();
-    var i = 0;
+    var i = start;
     while (i < words.Length - 1 && _spellFilterSupertypes.Contains(words[i]))
     {
       supertypes.Add(Capitalize(words[i]));
@@ -560,6 +574,10 @@ internal static class StaticRuleHelpers
     if (supertypes.Count > 0)
     {
       filter = filter with { Supertypes = supertypes };
+    }
+    if (isOther)
+    {
+      filter = filter with { Characteristics = [Characteristic.Other("other")] };
     }
     return filter;
   }
