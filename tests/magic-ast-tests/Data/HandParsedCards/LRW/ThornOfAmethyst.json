@@ -11,7 +11,9 @@
     "Name": "Thorn of Amethyst",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "Noncreature spells cost {1} more to cast.",
@@ -21,12 +23,19 @@
           "Effects": [
             {
               "EffectType": "costIncrease",
-              "Amount": { "QuantityType": "literal", "Value": 1 }
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["spell"],
-            "Characteristics": [{"CharacteristicType": "other", "Description": "noncreature"}]
+            "CardTypes": [
+              "spell"
+            ],
+            "ExcludedCardTypes": [
+              "creature"
+            ]
           }
         }
       ]
@@ -36,12 +45,22 @@
         "Kind": "manaCost",
         "Raw": "{2}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] }
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
     ]
   }
 }

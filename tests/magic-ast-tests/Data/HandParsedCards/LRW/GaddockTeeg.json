@@ -44,8 +44,8 @@
             "CardTypes": [
               "spell"
             ],
-            "Characteristics": [
-              {"CharacteristicType": "other", "Description": "noncreature"}
+            "ExcludedCardTypes": [
+              "creature"
             ],
             "ManaValueComparison": {
               "Operator": "GreaterThanOrEqual",
@@ -64,9 +64,14 @@
             "CardTypes": [
               "spell"
             ],
+            "ExcludedCardTypes": [
+              "creature"
+            ],
             "Characteristics": [
-              {"CharacteristicType": "other", "Description": "noncreature"},
-              {"CharacteristicType": "other", "Description": "with {X} in their mana costs"}
+              {
+                "CharacteristicType": "other",
+                "Description": "with {X} in their mana costs"
+              }
             ]
           }
         }
@@ -90,7 +95,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -110,13 +116,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]
