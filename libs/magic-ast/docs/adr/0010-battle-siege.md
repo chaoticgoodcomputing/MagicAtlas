@@ -57,3 +57,9 @@ Back face (`Refraction Elemental`, `Creature — Elemental`): its own abilities 
 - Unblocks **all 39 Siege fronts** corpus-wide (the self-noun entry is the lever; the effects already parse).
 - A Battle **flips** (whole-card green) only when its **back face** also fully parses — back faces are ordinary permanents/spells, handled by the rest of the parser, so flips accrue as those families land; this ADR closes the *front/Siege* gap, not the back-face tail.
 - One new field-less marker node (`SiegeEffect`) + one self-noun entry. No base-type/trait/infrastructure change. Defense deferred to an `Input`-model change.
+
+## Addendum (implementation finding, 2026-06-01)
+
+The Decision's claim that the front-face *effects* "already parse" proved **false** in practice: triggered-side effect coverage is thinner than spell-side. The self-noun lever resolves the *trigger condition* ("When this Siege enters" → `Filter:{CardTypes:["siege"]}`) for all 39, but each front's *effect* must have a **triggered-side** rule. Landing the first two real golds required adding triggered-side rules that spell-side already had: deal-damage-to-each-creature-and-planeswalker, deal-damage-to-each-opponent, target-opponent-discards-N, deal-damage-to-that-player — plus structuring a "≤N cards in hand" `CountCondition` and a `ControllerFilter.ThatPlayer` owner-axis value.
+
+**So Battle/Siege is a *hub*, not a self-contained mechanic.** The lever (this ADR) is high-leverage and done — it unblocked every front trigger-condition corpus-wide (the Siege-reminder cluster left the triage top entirely, +70 cards from the lever plus the four general triggered-effect families). The remaining ~37 Battles each flip when (a) their specific front effect has a triggered-side rule and (b) their back face fully parses — a long tail of *general* triggered-effect families (each one also helps non-Battle cards), not Battle-specific work.
