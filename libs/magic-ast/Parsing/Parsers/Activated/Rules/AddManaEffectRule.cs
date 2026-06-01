@@ -7,7 +7,16 @@ using MagicAST.AST.Effects.Resource;
 /// <summary>
 /// "Add {mana}" — e.g. "Add {G}", "Add {C}{C}{C}", "Add {W}{U}{B}{R}{G}". Also
 /// handles "Add one mana of any color" (Crystal Grotto / Chromatic Lantern shape)
-/// where the produced mana is a single choice across all five colors.
+/// where the produced mana is a single choice across all five colors, and
+/// "Add one mana of the chosen color" (Coldsteel Heart / Shimmerdrift Vale /
+/// Thriving lands) where the produced mana's color is the color chosen as this
+/// permanent entered — the consumer side of a CR 607 linked "choose a color".
+///
+/// <para>Per CR 605.1a — "An activated ability is a mana ability if it meets all of
+/// the following criteria: it doesn't require a target (see rule 115.6), it could add
+/// mana to a player's mana pool when it resolves, and it's not a loyalty ability." —
+/// the enclosing "{T}: Add ..." ability is a mana ability; the chosen-color back-
+/// reference does not introduce a target.</para>
 /// </summary>
 [ActivatedEffectRule(Priority = 1000)]
 public sealed class AddManaEffectRule : IActivatedEffectRule
@@ -62,6 +71,23 @@ public sealed class AddManaEffectRule : IActivatedEffectRule
         SpendRestriction = restrictionGroup.Success
           ? restrictionGroup.Value.Trim()
           : null,
+      };
+    }
+
+    // "one mana of the chosen color" — the produced color is the color chosen as
+    // this permanent entered (CR 607 linked consumer; producer is the "As this
+    // enters, choose a color" ChooseColorEffect). Captured STRUCTURALLY via the
+    // OfChosenColor marker, never free-texted into Mana, mirroring the AnyColor
+    // branch above.
+    if (Regex.IsMatch(
+          manaText,
+          @"^one\s+mana\s+of\s+the\s+chosen\s+color$",
+          RegexOptions.IgnoreCase))
+    {
+      return new AddManaEffect
+      {
+        Mana = string.Empty,
+        OfChosenColor = true,
       };
     }
 

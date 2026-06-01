@@ -1,26 +1,28 @@
 {
   "Input": {
-    "Name": "Thriving Isle",
+    "Name": "Shimmerdrift Vale",
     "ManaCost": "",
-    "TypeLine": "Land",
-    "OracleText": "This land enters tapped. As it enters, choose a color other than blue.\n{T}: Add {U}.\n{T}: Add one mana of the chosen color.",
-    "Power": null,
-    "Toughness": null,
+    "TypeLine": "Snow Land",
+    "OracleText": "This land enters tapped.\nAs this land enters, choose a color.\n{T}: Add one mana of the chosen color.",
     "Colors": [],
-    "ColorIdentity": [
-      "U"
-    ]
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "f09d98db-0176-41a7-b99b-ead29876cdab",
+    "Layout": "normal"
   },
   "Output": {
-    "Name": "Thriving Isle",
+    "Name": "Shimmerdrift Vale",
     "TypeLine": {
-      "Raw": "Land",
+      "Raw": "Snow Land",
+      "Supertypes": [
+        "Snow"
+      ],
       "Types": [
         "Land"
       ]
     },
     "Oracle": {
-      "RawText": "This land enters tapped. As it enters, choose a color other than blue.\n{T}: Add {U}.\n{T}: Add one mana of the chosen color.",
+      "RawText": "This land enters tapped.\nAs this land enters, choose a color.\n{T}: Add one mana of the chosen color.",
       "Abilities": [
         {
           "Kind": "static",
@@ -30,29 +32,18 @@
               "Target": {
                 "Kind": "Self"
               }
-            },
-            {
-              "EffectType": "chooseColor",
-              "Restriction": "other than blue"
             }
           ],
           "When": "asThisEnters"
         },
         {
-          "Kind": "activated",
-          "Costs": [
-            {
-              "CostType": "tap"
-            }
-          ],
+          "Kind": "static",
           "Effects": [
             {
-              "EffectType": "addMana",
-              "Mana": "{U}",
-              "AnyColor": false
+              "EffectType": "chooseColor"
             }
           ],
-          "IsManaAbility": true
+          "When": "asThisEnters"
         },
         {
           "Kind": "activated",
@@ -80,9 +71,7 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": [
-          "U"
-        ]
+        "ColorIdentity": []
       }
     ]
   }
