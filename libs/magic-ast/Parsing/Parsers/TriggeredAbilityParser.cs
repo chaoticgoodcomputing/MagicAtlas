@@ -208,8 +208,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     // Capture it for the Reminder field on the returned TriggeredAbility.
     var reminder = ExtractTrailingReminder(ref effectPart);
 
-    // Parse effects
-    var effects = ParseEffects(effectPart);
+    // Parse effects. The trigger condition is threaded in so an effect rule can
+    // resolve a "that much" derived quantity against the triggering event — the
+    // antecedent of "that much" is the trigger's own event (CR 603.2), so e.g.
+    // "you gain that much life" keys on LifeLost under a LosesLife trigger and on
+    // DamageDealt under a deals-damage trigger.
+    var effects = ParseEffects(effectPart, trigger);
     if (effects == null || effects.Count == 0)
     {
       return null;
@@ -574,9 +578,25 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   /// first (Sanctum and Stormfist shapes), then dispatches to single-effect rules
   /// via reflection-discovered <see cref="Triggered.ITriggeredRule"/> implementations.
   /// </summary>
-  private static IReadOnlyList<Effect>? ParseEffects(string effectText)
+  private static IReadOnlyList<Effect>? ParseEffects(string effectText, TriggerCondition trigger)
   {
     var trimmed = effectText.Trim().TrimEnd('.').Trim();
+
+    // Trigger-aware "that much" antecedent: "you gain that much life" under a
+    // LosesLife trigger is the life just lost (DerivedKind.LifeLost), distinct
+    // from the identical surface under a deals-damage trigger (DamageDealt,
+    // handled by the reflection-discovered YouGainThatMuchLifeRule). The
+    // antecedent of "that much" is the triggering event itself (CR 603.2 /
+    // CR 119.3), so this disambiguation belongs to the dispatcher, which holds
+    // the trigger, rather than to a surface-only effect rule.
+    if (
+      trigger.Event is EventOccurrence { Event: TriggerEvent.LosesLife }
+      && new Triggered.Rules.YouGainThatMuchLifeLostRule().TryMatch(trimmed, out var lifeLost)
+      && lifeLost is not null
+    )
+    {
+      return new List<Effect> { lifeLost };
+    }
 
     var opponentExileThenExile = TryParseOpponentExileCreatureThenExileGraveyardCard(trimmed);
     if (opponentExileThenExile is not null)

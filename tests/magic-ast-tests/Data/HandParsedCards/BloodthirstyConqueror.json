@@ -1,0 +1,143 @@
+{
+  "Input": {
+    "Name": "Bloodthirsty Conqueror",
+    "TypeLine": "Creature — Vampire Knight",
+    "ManaCost": "{3}{B}{B}",
+    "OracleText": "Flying, deathtouch\nWhenever an opponent loses life, you gain that much life. (Damage causes loss of life.)",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Bloodthirsty Conqueror",
+    "TypeLine": {
+      "Raw": "Creature — Vampire Knight",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire",
+        "Knight"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying, deathtouch\nWhenever an opponent loses life, you gain that much life. (Damage causes loss of life.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Deathtouch",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Deathtouch"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "LosesLife",
+            "Filter": {
+              "Controller": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "LifeLost"
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "Damage causes loss of life."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
