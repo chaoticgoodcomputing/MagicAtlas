@@ -1,0 +1,51 @@
+{
+  "Keyword": "Battle cry",
+  "Expected": {
+    "Kind": "triggered",
+    "KeywordSource": "Battle cry",
+    "Trigger": {
+      "Timing": "Whenever",
+      "Event": "Attacks",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ]
+      }
+    },
+    "Effects": [
+      {
+        "EffectType": "modifyPT",
+        "Target": {
+          "Kind": "Each",
+          "Filter": {
+            "CardTypes": [
+              "creature"
+            ],
+            "ExcludeSelf": true,
+            "Characteristics": [
+              {
+                "CharacteristicType": "other",
+                "Description": "attacking"
+              }
+            ]
+          }
+        },
+        "PowerModifier": {
+          "QuantityType": "literal",
+          "Value": 1
+        },
+        "ToughnessModifier": {
+          "QuantityType": "literal",
+          "Value": 0
+        },
+        "Duration": {
+          "DurationType": "untilTime",
+          "Until": {
+            "Part": "Turn",
+            "Edge": "End"
+          }
+        }
+      }
+    ]
+  }
+}
