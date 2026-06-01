@@ -1,0 +1,117 @@
+{
+  "Input": {
+    "Name": "Helm of the Host",
+    "TypeLine": "Legendary Artifact — Equipment",
+    "ManaCost": "{4}",
+    "OracleText": "At the beginning of combat on your turn, create a token that's a copy of equipped creature, except the token isn't legendary. That token gains haste.\nEquip {5}",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Helm of the Host",
+    "TypeLine": {
+      "Raw": "Legendary Artifact — Equipment",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of combat on your turn, create a token that's a copy of equipped creature, except the token isn't legendary. That token gains haste.\nEquip {5}",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Combat",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "Modifications": [
+                {
+                  "ModificationType": "supertypeRemover",
+                  "Supertypes": [
+                    "Legendary"
+                  ]
+                },
+                {
+                  "ModificationType": "abilityAdder",
+                  "AbilityText": "haste"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 5
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

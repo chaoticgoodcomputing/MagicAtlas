@@ -289,6 +289,14 @@
           ]
         },
         {
+          "Type": "SupertypeRemover",
+          "Discriminator": "supertypeRemover",
+          "IsUnparsed": false,
+          "Fields": [
+            "Supertypes"
+          ]
+        },
+        {
           "Type": "TypeAdder",
           "Discriminator": "typeAdder",
           "IsUnparsed": false,
@@ -1866,5 +1874,5 @@
       ]
     }
   ],
-  "SchemaHash": "5976361a3a063d10fb4496266945cb599c03b269569f2a4ea4fe0876a7ddf2fb"
+  "SchemaHash": "e82654327cc0ca9deaebc615ba9734406968533e6130bed5d58ac70f1704ad83"
 }

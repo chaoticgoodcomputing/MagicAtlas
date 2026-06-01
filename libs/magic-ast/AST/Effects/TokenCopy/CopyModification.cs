@@ -58,3 +58,20 @@ public sealed record AbilityAdder : CopyModification
   [FreeTextField]
   public required string AbilityText { get; init; }
 }
+
+/// <summary>
+/// "except the token isn't legendary" — removes one or more supertypes from the
+/// copy (Helm of the Host strips Legendary so its copies aren't culled by the
+/// legend rule, CR 704.5j). The negation analogue of <see cref="TypeAdder"/>:
+/// that node ADDS card-type/subtype tokens, this one REMOVES supertypes from the
+/// copiable values the token would otherwise inherit (CR 707.2). A structured
+/// list rather than free text — the removed supertype is rules-meaningful.
+/// </summary>
+[CopyModificationKind("supertypeRemover")]
+public sealed record SupertypeRemover : CopyModification
+{
+  /// <summary>
+  /// Supertypes removed from the copy (e.g. "Legendary").
+  /// </summary>
+  public required IReadOnlyList<string> Supertypes { get; init; }
+}
