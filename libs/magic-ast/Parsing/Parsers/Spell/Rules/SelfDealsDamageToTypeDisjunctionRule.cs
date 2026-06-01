@@ -7,8 +7,12 @@ using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 
 /// <summary>
-/// "[Self] deals N damage to target [type] (or [type])?." — Ready to Rumble.
+/// "[Self] deals N damage to target [type] (or [type])?." — Ready to Rumble,
+/// Lava Axe ("target player or planeswalker").
 /// Bare-target shape with no "with [characteristic]" suffix.
+/// "player" is listed alongside card types here because <see cref="ObjectFilter.CardTypes"/>
+/// encodes both card types and game entities (per CR 120.1: objects deal damage to
+/// battles, creatures, planeswalkers, and players).
 /// </summary>
 [SpellRule]
 public sealed class SelfDealsDamageToTypeDisjunctionRule : ISpellRule
@@ -18,7 +22,7 @@ public sealed class SelfDealsDamageToTypeDisjunctionRule : ISpellRule
     effect = null;
     var m = Regex.Match(
       text,
-      @"^(?<subject>\S.*?)\s+deals?\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+damage\s+to\s+target\s+(?<type1>creature|artifact|enchantment|land|planeswalker|permanent)(?:\s+or\s+(?<type2>creature|artifact|enchantment|land|planeswalker|permanent))?\.?$",
+      @"^(?<subject>\S.*?)\s+deals?\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+damage\s+to\s+target\s+(?<type1>player|creature|artifact|enchantment|land|planeswalker|permanent)(?:\s+or\s+(?<type2>player|creature|artifact|enchantment|land|planeswalker|permanent))?\.?$",
       RegexOptions.IgnoreCase
     );
     if (!m.Success)
