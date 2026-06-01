@@ -1,0 +1,109 @@
+{
+  "Input": {
+    "Name": "Boggart Harbinger",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Goblin Shaman",
+    "OracleText": "When this creature enters, you may search your library for a Goblin card, reveal it, then shuffle and put that card on top.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Boggart Harbinger",
+    "TypeLine": {
+      "Raw": "Creature — Goblin Shaman",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin",
+        "Shaman"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, you may search your library for a Goblin card, reveal it, then shuffle and put that card on top.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "searchLibrary",
+                "Filter": {
+                  "Subtypes": [
+                    "Goblin"
+                  ]
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Destination": "TopOfLibrary",
+                "Revealed": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

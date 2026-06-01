@@ -1,0 +1,112 @@
+{
+  "Input": {
+    "Name": "Dune Mover",
+    "ManaCost": "{2}",
+    "TypeLine": "Artifact Creature — Phyrexian Golem",
+    "OracleText": "Toxic 1 (Players dealt combat damage by this creature also get a poison counter.)\nWhen this creature enters, you may search your library for a basic land card, reveal it, then shuffle and put that card on top.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Dune Mover",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Phyrexian Golem",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Golem"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Toxic 1 (Players dealt combat damage by this creature also get a poison counter.)\nWhen this creature enters, you may search your library for a basic land card, reveal it, then shuffle and put that card on top.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Toxic",
+          "Reminder": {
+            "Text": "(Players dealt combat damage by this creature also get a poison counter.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "toxic",
+              "Value": 1
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "searchLibrary",
+                "Filter": {
+                  "Supertypes": [
+                    "Basic"
+                  ],
+                  "CardTypes": [
+                    "land"
+                  ]
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Destination": "TopOfLibrary",
+                "Revealed": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
