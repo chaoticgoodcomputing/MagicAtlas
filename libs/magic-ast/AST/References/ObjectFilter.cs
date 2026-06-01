@@ -87,6 +87,18 @@ public sealed record ObjectFilter
   public IReadOnlyList<string>? Supertypes { get; init; }
 
   /// <summary>
+  /// Supertypes EXCLUDED by a "non[supertype]" qualifier — e.g. "nonlegendary
+  /// creature" → <c>CardTypes=["creature"]</c> + <c>ExcludedSupertypes=["Legendary"]</c>
+  /// (Kiki-Jiki's "target nonlegendary creature you control"). Parallel negation
+  /// axis to <see cref="Supertypes"/>, mirroring <see cref="ExcludedCardTypes"/>
+  /// over <see cref="CardTypes"/> and <see cref="ExcludedSubtypes"/> over
+  /// <see cref="Subtypes"/>: a filter matches only objects with none of these
+  /// supertypes.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? ExcludedSupertypes { get; init; }
+
+  /// <summary>
   /// Colors to match. An object passes the filter if it has at least one of
   /// the listed colors. Do NOT use this to encode colorlessness — colorless
   /// is the absence of color (Rule 105.1: "Colorless is not a color"). Use
