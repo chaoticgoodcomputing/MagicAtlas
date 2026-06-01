@@ -1,0 +1,46 @@
+{
+  "Keyword": "Exalted",
+  "Expected": {
+    "Kind": "triggered",
+    "KeywordSource": "Exalted",
+    "Trigger": {
+      "Timing": "Whenever",
+      "Event": "Attacks",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ],
+        "Controller": "You",
+        "Characteristics": [
+          {
+            "CharacteristicType": "other",
+            "Description": "attacking alone"
+          }
+        ]
+      }
+    },
+    "Effects": [
+      {
+        "EffectType": "modifyPT",
+        "Target": {
+          "Kind": "ThatCreature"
+        },
+        "PowerModifier": {
+          "QuantityType": "literal",
+          "Value": 1
+        },
+        "ToughnessModifier": {
+          "QuantityType": "literal",
+          "Value": 1
+        },
+        "Duration": {
+          "DurationType": "untilTime",
+          "Until": {
+            "Part": "Turn",
+            "Edge": "End"
+          }
+        }
+      }
+    ]
+  }
+}
