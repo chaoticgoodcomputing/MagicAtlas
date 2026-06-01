@@ -596,6 +596,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return loseGainLifeWhereX;
     }
 
+    var targetOpponentLoseYouGain = TryParseTargetOpponentLoseAndYouGainLife(trimmed);
+    if (targetOpponentLoseYouGain is not null)
+    {
+      return targetOpponentLoseYouGain;
+    }
+
     var opponentLoseYouGain = TryParseEachOpponentLoseAndYouGainLife(trimmed);
     if (opponentLoseYouGain is not null)
     {
@@ -884,6 +890,66 @@ public sealed class TriggeredAbilityParser : IAbilityParser
             ExcludedCardTypes = ["land"],
           },
         },
+      },
+    };
+  }
+
+  /// <summary>
+  /// ETB drain composite: "target opponent loses N life and you gain N life." —
+  /// the Highway Robber / Dakmor Ghoul family (CR 603.2: triggered ETB drain;
+  /// CR 119.3: life totals adjusted accordingly). Returns a flat two-element
+  /// list [loseLife(Target player, N), gainLife(You, N)].
+  ///
+  /// <para>
+  /// "target opponent" is a targeted player reference (Rule 115.1 — "target"
+  /// in oracle text creates a targeting requirement). The Player reference uses
+  /// <see cref="ObjectReferenceKind.Target"/> with a
+  /// <c>Filter {{ CardTypes = ["player"] }}</c>, matching the established
+  /// convention for targeted-player life-loss (Vito / LoseLifeDerivedRule).
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseTargetOpponentLoseAndYouGainLife(string effectText)
+  {
+    var match = Regex.Match(
+      effectText,
+      @"^target\s+opponent\s+loses\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life\s+and\s+you\s+gain\s+(?<gain>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    static int ParseAmount(string raw) => raw.ToLowerInvariant() switch
+    {
+      "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      "four" => 4,
+      "five" => 5,
+      "six" => 6,
+      "seven" => 7,
+      "eight" => 8,
+      "nine" => 9,
+      "ten" => 10,
+      _ => int.Parse(raw),
+    };
+    var loseAmount = ParseAmount(match.Groups["amount"].Value);
+    var gainAmount = ParseAmount(match.Groups["gain"].Value);
+    return new List<Effect>
+    {
+      new LoseLifeEffect
+      {
+        Amount = LiteralQuantity.Of(loseAmount),
+        Player = new ObjectReference
+        {
+          Kind = ObjectReferenceKind.Target,
+          Filter = new ObjectFilter { CardTypes = ["player"] },
+        },
+      },
+      new GainLifeEffect
+      {
+        Amount = LiteralQuantity.Of(gainAmount),
+        Player = ObjectReference.You(),
       },
     };
   }
