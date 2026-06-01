@@ -461,7 +461,6 @@
           "Discriminator": "alternativeCast",
           "IsUnparsed": false,
           "Fields": [
-            "Cost",
             "FromZone"
           ]
         },
@@ -1853,5 +1852,5 @@
       ]
     }
   ],
-  "SchemaHash": "5aebe45cf34851b56744e3ad587a7224780687b6ecce0b52c93cdafcfa813173"
+  "SchemaHash": "8cd223264e3c16b69434af58527aff9942c3167df4d4f437b68a54b4e1c8743f"
 }

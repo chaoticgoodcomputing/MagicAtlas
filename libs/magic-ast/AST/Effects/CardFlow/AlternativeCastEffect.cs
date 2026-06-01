@@ -44,8 +44,18 @@ public sealed record AlternativeCastEffect : Effect
   /// <see cref="CompositeCost"/> bundling mana with an <see cref="ExileCost"/> /
   /// <see cref="DiscardCost"/> for keywords whose alternative cost includes paying with
   /// filtered cards.
+  ///
+  /// <para>
+  /// Null when the permission does NOT replace the cost — "You may cast this card from
+  /// your graveyard …" (Gravecrawler, CR 601.3e) only relaxes the legal-to-cast zone, so
+  /// the card is cast for its own (unchanged) mana cost. The zone permission is the whole
+  /// of the alternative set of characteristics; there is no alternative cost to record.
+  /// Distinct from a <see cref="ManaCost"/> equal to the printed cost, which would falsely
+  /// assert a cost <i>replacement</i>.
+  /// </para>
   /// </summary>
-  public required Cost Cost { get; init; }
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Cost? Cost { get; init; }
 
   /// <summary>
   /// Condition gating the permission, when the keyword adds one — Surge ("if you or a
