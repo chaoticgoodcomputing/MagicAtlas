@@ -585,6 +585,16 @@
           "Fields": []
         },
         {
+          "Type": "CantCastMoreThanNSpellsEffect",
+          "Discriminator": "cantCastMoreThanNSpells",
+          "IsUnparsed": false,
+          "Fields": [
+            "MaxPerPeriod",
+            "Period",
+            "Player"
+          ]
+        },
+        {
           "Type": "CastWithoutPayingEffect",
           "Discriminator": "castWithoutPaying",
           "IsUnparsed": false,
@@ -1816,5 +1826,5 @@
       ]
     }
   ],
-  "SchemaHash": "3f4612c0c10db15fabf1546aded3d0c9d3ecf0e8a2443d337139b61f61e76f64"
+  "SchemaHash": "1e64db0f024ff84ba9136043e1107695ebcf13758753d0560fa3ecd6261fef3f"
 }
