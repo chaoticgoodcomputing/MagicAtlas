@@ -800,7 +800,8 @@
           "Fields": [
             "Count",
             "Player",
-            "Random"
+            "Random",
+            "RevealHand"
           ]
         },
         {
@@ -1840,5 +1841,5 @@
       ]
     }
   ],
-  "SchemaHash": "c92a6d293898bc585cf7fe6915bcfe3690ac3fe2a5e4c06ff52325f6fa04f63d"
+  "SchemaHash": "a4c604e34b70cc3671029de7d82154ad96e99f032b06d8d03cf3a04e65524988"
 }
