@@ -1,0 +1,32 @@
+{
+  "Keyword": "Replicate",
+  "Parameter": "{1}{U}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Replicate",
+    "Effects": [
+      {
+        "EffectType": "additionalCastCost",
+        "AdditionalCost": {
+          "Cost": {
+            "CostType": "mana",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "U"
+                ]
+              }
+            ]
+          },
+          "IsOptional": true,
+          "Repeatable": true
+        }
+      }
+    ]
+  }
+}

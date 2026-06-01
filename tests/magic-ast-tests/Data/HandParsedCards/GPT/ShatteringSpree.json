@@ -29,23 +29,51 @@
           "KeywordSource": "Replicate",
           "Effects": [
             {
-              "EffectType": "replicate",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "colored",
-                    "Colors": [
-                      "R"
-                    ]
-                  }
-                ]
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "colored",
+                      "Colors": [
+                        "R"
+                      ]
+                    }
+                  ]
+                },
+                "IsOptional": true,
+                "Repeatable": true
               }
             }
           ],
           "Reminder": {
             "Text": "(When you cast this spell, copy it for each time you paid its replicate cost. You may choose new targets for the copies.)"
           }
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Replicate",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "SpellCast"
+          },
+          "InterveningIf": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Replicate"
+          },
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "Self"
+              },
+              "Count": {
+                "QuantityType": "keywordCostPaidCount",
+                "Keyword": "Replicate"
+              }
+            }
+          ]
         },
         {
           "Kind": "spell",
