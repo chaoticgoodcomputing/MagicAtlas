@@ -1,0 +1,19 @@
+{
+  "name": "mast-query-cli",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/mast-query-cli",
+  "targets": {
+    "build": {
+      "//": "Build the mast-query CLI (parse the corpus and run a query fixture against it).",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet build"],
+        "cwd": "apps/mast-query-cli",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
+    }
+  },
+  "tags": ["type:app", "scope:mast-query"]
+}

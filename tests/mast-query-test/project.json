@@ -1,0 +1,42 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "mast-query-test",
+  "sourceRoot": "tests/mast-query-test",
+  "projectType": "application",
+  "tags": ["type:test", "scope:mast-query"],
+  "targets": {
+    "build": {
+      "//": "Build the mast-query conformance harness.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet build"],
+        "cwd": "tests/mast-query-test",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "//": "Run the mast-query conformance suite. Every fixture must reproduce its expected result.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet test"],
+        "cwd": "tests/mast-query-test",
+        "parallel": false
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot}",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "format:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot} --check",
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  }
+}

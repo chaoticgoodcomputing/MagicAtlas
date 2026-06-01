@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>14</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>MagicAST.Query</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- mast-query binds to MAST's schema + canonical serialization + filter-overlap (ADR-0008).
+         The dependency is one-directional: MAST never references the query engine. -->
+    <ProjectReference Include="../magic-ast/MagicAST.csproj" />
+  </ItemGroup>
+
+</Project>

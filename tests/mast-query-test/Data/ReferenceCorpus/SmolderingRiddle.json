@@ -1,0 +1,13 @@
+{
+  "Name": "Smoldering Riddle",
+  "Oracle": {
+    "RawText": "Answer the riddle. If you do, Smoldering Riddle deals damage equal to the answer to any target.",
+    "Abilities": [
+      {
+        "Kind": "unparsed",
+        "RawText": "deals damage equal to the answer to any target",
+        "SourceSpan": { "Start": 30, "End": 90 }
+      }
+    ]
+  }
+}

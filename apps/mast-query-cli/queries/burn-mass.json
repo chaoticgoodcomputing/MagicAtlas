@@ -1,0 +1,10 @@
+{
+  "name": "burn.mass",
+  "intent": "Direct damage to each member of a set (sweeper / group burn).",
+  "pattern": {
+    "$descendant": {
+      "$type": "dealDamage",
+      "Target": { "$capture": "victims", "Kind": { "$in": ["Each", "EachPlayer", "EachOpponent"] } }
+    }
+  }
+}

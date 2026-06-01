@@ -1,0 +1,1803 @@
+{
+  "SchemaVersion": 1,
+  "DiscriminatorKeys": [
+    "CharacteristicType",
+    "ConditionType",
+    "CostType",
+    "DurationType",
+    "EffectType",
+    "EventType",
+    "Kind",
+    "ModificationType",
+    "PredicateType",
+    "QuantityType",
+    "ValueType"
+  ],
+  "UnparsedDiscriminators": [
+    {
+      "Key": "EffectType",
+      "Value": "unparsed"
+    },
+    {
+      "Key": "Kind",
+      "Value": "unparsed"
+    }
+  ],
+  "Bases": [
+    {
+      "Type": "Ability",
+      "DiscriminatorKey": "Kind",
+      "Types": [
+        {
+          "Type": "ActivatedAbility",
+          "Discriminator": "activated",
+          "IsUnparsed": false,
+          "Fields": [
+            "Costs",
+            "Effects",
+            "IsManaAbility"
+          ]
+        },
+        {
+          "Type": "LevelUpAbility",
+          "Discriminator": "levelUp",
+          "IsUnparsed": false,
+          "Fields": [
+            "LevelUpCost",
+            "Stanzas"
+          ]
+        },
+        {
+          "Type": "ModalAbility",
+          "Discriminator": "modal",
+          "IsUnparsed": false,
+          "Fields": [
+            "AllowDuplicates",
+            "ModeSelection",
+            "Modes"
+          ]
+        },
+        {
+          "Type": "SagaAbility",
+          "Discriminator": "saga",
+          "IsUnparsed": false,
+          "Fields": [
+            "Chapters"
+          ]
+        },
+        {
+          "Type": "SpellAbility",
+          "Discriminator": "spell",
+          "IsUnparsed": false,
+          "Fields": [
+            "Effects"
+          ]
+        },
+        {
+          "Type": "StaticAbility",
+          "Discriminator": "static",
+          "IsUnparsed": false,
+          "Fields": [
+            "Effects"
+          ]
+        },
+        {
+          "Type": "TriggeredAbility",
+          "Discriminator": "triggered",
+          "IsUnparsed": false,
+          "Fields": [
+            "Effects",
+            "Trigger"
+          ]
+        },
+        {
+          "Type": "UnparsedAbility",
+          "Discriminator": "unparsed",
+          "IsUnparsed": true,
+          "Fields": [
+            "Diagnostics",
+            "RawText",
+            "SourceSpan"
+          ]
+        }
+      ]
+    },
+    {
+      "Type": "AbilityReference",
+      "DiscriminatorKey": "Kind",
+      "Types": [
+        {
+          "Type": "ActivatedAbilityReference",
+          "Discriminator": "activatedAbility",
+          "IsUnparsed": false,
+          "Fields": [
+            "Keyword"
+          ]
+        },
+        {
+          "Type": "SpellReference",
+          "Discriminator": "spell",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter"
+          ]
+        }
+      ]
+    },
+    {
+      "Type": "CardAttribute",
+      "DiscriminatorKey": "Kind",
+      "Types": [
+        {
+          "Type": "AdditionalCostsAttribute",
+          "Discriminator": "additionalCosts",
+          "IsUnparsed": false,
+          "Fields": [
+            "Costs"
+          ]
+        },
+        {
+          "Type": "AlternativeCostsAttribute",
+          "Discriminator": "alternativeCosts",
+          "IsUnparsed": false,
+          "Fields": [
+            "Costs"
+          ]
+        },
+        {
+          "Type": "ColorIdentityAttribute",
+          "Discriminator": "colorIdentity",
+          "IsUnparsed": false,
+          "Fields": [
+            "ColorIdentity"
+          ]
+        },
+        {
+          "Type": "ColorsAttribute",
+          "Discriminator": "colors",
+          "IsUnparsed": false,
+          "Fields": [
+            "Colors"
+          ]
+        },
+        {
+          "Type": "CostReductionsAttribute",
+          "Discriminator": "costReductions",
+          "IsUnparsed": false,
+          "Fields": [
+            "Reductions"
+          ]
+        },
+        {
+          "Type": "CreatureStatsAttribute",
+          "Discriminator": "creatureStats",
+          "IsUnparsed": false,
+          "Fields": [
+            "Power",
+            "Toughness"
+          ]
+        },
+        {
+          "Type": "DefenseAttribute",
+          "Discriminator": "defense",
+          "IsUnparsed": false,
+          "Fields": [
+            "Defense"
+          ]
+        },
+        {
+          "Type": "LayoutAttribute",
+          "Discriminator": "layout",
+          "IsUnparsed": false,
+          "Fields": [
+            "Layout"
+          ]
+        },
+        {
+          "Type": "LoyaltyAttribute",
+          "Discriminator": "loyalty",
+          "IsUnparsed": false,
+          "Fields": [
+            "IsVariable",
+            "Raw"
+          ]
+        },
+        {
+          "Type": "ManaCostAttribute",
+          "Discriminator": "manaCost",
+          "IsUnparsed": false,
+          "Fields": [
+            "IsVariable",
+            "Raw",
+            "Symbols"
+          ]
+        }
+      ]
+    },
+    {
+      "Type": "Characteristic",
+      "DiscriminatorKey": "CharacteristicType",
+      "Types": [
+        {
+          "Type": "KeywordCharacteristic",
+          "Discriminator": "keyword",
+          "IsUnparsed": false,
+          "Fields": [
+            "Keyword"
+          ]
+        },
+        {
+          "Type": "OtherCharacteristic",
+          "Discriminator": "other",
+          "IsUnparsed": false,
+          "Fields": [
+            "Description"
+          ]
+        }
+      ]
+    },
+    {
+      "Type": "Condition",
+      "DiscriminatorKey": "ConditionType",
+      "Types": [
+        {
+          "Type": "CountCondition",
+          "Discriminator": "count",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Filter"
+          ]
+        },
+        {
+          "Type": "KeywordCostPaidCondition",
+          "Discriminator": "keywordCostPaid",
+          "IsUnparsed": false,
+          "Fields": [
+            "Keyword"
+          ]
+        },
+        {
+          "Type": "OtherCondition",
+          "Discriminator": "other",
+          "IsUnparsed": false,
+          "Fields": [
+            "Text"
+          ]
+        }
+      ]
+    },
+    {
+      "Type": "CopyModification",
+      "DiscriminatorKey": "ModificationType",
+      "Types": [
+        {
+          "Type": "AbilityAdder",
+          "Discriminator": "abilityAdder",
+          "IsUnparsed": false,
+          "Fields": [
+            "AbilityText"
+          ]
+        },
+        {
+          "Type": "PowerToughnessOverride",
+          "Discriminator": "powerToughnessOverride",
+          "IsUnparsed": false,
+          "Fields": [
+            "Power",
+            "Toughness"
+          ]
+        },
+        {
+          "Type": "TypeAdder",
+          "Discriminator": "typeAdder",
+          "IsUnparsed": false,
+          "Fields": []
+        }
+      ]
+    },
+    {
+      "Type": "Cost",
+      "DiscriminatorKey": "CostType",
+      "Types": [
+        {
+          "Type": "CompositeCost",
+          "Discriminator": "composite",
+          "IsUnparsed": false,
+          "Fields": [
+            "Costs"
+          ]
+        },
+        {
+          "Type": "DiscardCost",
+          "Discriminator": "discard",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Quantity"
+          ]
+        },
+        {
+          "Type": "ExileCost",
+          "Discriminator": "exile",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "FromZone",
+            "Quantity"
+          ]
+        },
+        {
+          "Type": "ManaCost",
+          "Discriminator": "mana",
+          "IsUnparsed": false,
+          "Fields": [
+            "Symbols"
+          ]
+        },
+        {
+          "Type": "PayLifeCost",
+          "Discriminator": "payLife",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount"
+          ]
+        },
+        {
+          "Type": "RemoveCountersCost",
+          "Discriminator": "removeCounters",
+          "IsUnparsed": false,
+          "Fields": [
+            "CounterType",
+            "Quantity"
+          ]
+        },
+        {
+          "Type": "SacrificeCost",
+          "Discriminator": "sacrifice",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Quantity"
+          ]
+        },
+        {
+          "Type": "TapCost",
+          "Discriminator": "tap",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "TapPermanentsCost",
+          "Discriminator": "tapPermanents",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Quantity"
+          ]
+        },
+        {
+          "Type": "UntapCost",
+          "Discriminator": "untap",
+          "IsUnparsed": false,
+          "Fields": []
+        }
+      ]
+    },
+    {
+      "Type": "Duration",
+      "DiscriminatorKey": "DurationType",
+      "Types": [
+        {
+          "Type": "AsLongAsDuration",
+          "Discriminator": "asLongAs",
+          "IsUnparsed": false,
+          "Fields": [
+            "Condition"
+          ]
+        },
+        {
+          "Type": "PermanentDuration",
+          "Discriminator": "permanent",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "UntilLeavesBattlefieldDuration",
+          "Discriminator": "untilLeavesBattlefield",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "UntilTimeDuration",
+          "Discriminator": "untilTime",
+          "IsUnparsed": false,
+          "Fields": [
+            "Until"
+          ]
+        }
+      ]
+    },
+    {
+      "Type": "Effect",
+      "DiscriminatorKey": "EffectType",
+      "Types": [
+        {
+          "Type": "AdaptEffect",
+          "Discriminator": "adapt",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count"
+          ]
+        },
+        {
+          "Type": "AddManaEffect",
+          "Discriminator": "addMana",
+          "IsUnparsed": false,
+          "Fields": [
+            "AnyColor",
+            "Mana",
+            "OfChosenColor"
+          ]
+        },
+        {
+          "Type": "AdditionalCastCostEffect",
+          "Discriminator": "additionalCastCost",
+          "IsUnparsed": false,
+          "Fields": [
+            "AdditionalCost"
+          ]
+        },
+        {
+          "Type": "AllMustBlockEffect",
+          "Discriminator": "allMustBlock",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "AlternativeCastEffect",
+          "Discriminator": "alternativeCast",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost",
+            "FromZone"
+          ]
+        },
+        {
+          "Type": "AlternativePaymentEffect",
+          "Discriminator": "alternativePayment",
+          "IsUnparsed": false,
+          "Fields": [
+            "Method",
+            "Pays"
+          ]
+        },
+        {
+          "Type": "AmplifyEffect",
+          "Discriminator": "amplify",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "AttachEffect",
+          "Discriminator": "attach",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "AwakenEffect",
+          "Discriminator": "awaken",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "BackupEffect",
+          "Discriminator": "backup",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "BecomeMonarchEffect",
+          "Discriminator": "becomeMonarch",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
+          "Type": "BecomesCreatureEffect",
+          "Discriminator": "becomesCreature",
+          "IsUnparsed": false,
+          "Fields": [
+            "AddedSubtypes",
+            "CardTypes",
+            "Colors",
+            "GainedAbilities",
+            "Power",
+            "Subject",
+            "Toughness"
+          ]
+        },
+        {
+          "Type": "BlockAdditionalEffect",
+          "Discriminator": "blockAdditional",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "CanBlockOnlyEffect",
+          "Discriminator": "canBlockOnly",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter"
+          ]
+        },
+        {
+          "Type": "CantActivateAbilitiesEffect",
+          "Discriminator": "cantActivateAbilities",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "CantAttackEffect",
+          "Discriminator": "cantAttack",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "CantBeBlockedEffect",
+          "Discriminator": "cantBeBlocked",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "CantBeCastEffect",
+          "Discriminator": "cantBeCast",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "CantBeCounteredEffect",
+          "Discriminator": "cantBeCountered",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "CantBlockEffect",
+          "Discriminator": "cantBlock",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "CastWithoutPayingEffect",
+          "Discriminator": "castWithoutPaying",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "ChampionEffect",
+          "Discriminator": "champion",
+          "IsUnparsed": false,
+          "Fields": [
+            "CreatureType"
+          ]
+        },
+        {
+          "Type": "ChangeColorEffect",
+          "Discriminator": "changeColor",
+          "IsUnparsed": false,
+          "Fields": [
+            "Colors",
+            "Target"
+          ]
+        },
+        {
+          "Type": "ChangeSubtypeEffect",
+          "Discriminator": "changeSubtype",
+          "IsUnparsed": false,
+          "Fields": [
+            "Subtypes",
+            "Target"
+          ]
+        },
+        {
+          "Type": "ChangeTargetEffect",
+          "Discriminator": "changeTarget",
+          "IsUnparsed": false,
+          "Fields": [
+            "Spell"
+          ]
+        },
+        {
+          "Type": "ChooseColorEffect",
+          "Discriminator": "chooseColor",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "ChooseCreatureTypeEffect",
+          "Discriminator": "chooseCreatureType",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "CombatDamageTimingEffect",
+          "Discriminator": "combatDamageTiming",
+          "IsUnparsed": false,
+          "Fields": [
+            "Timing"
+          ]
+        },
+        {
+          "Type": "CommanderDesignationEffect",
+          "Discriminator": "commanderDesignation",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "CompositeEffect",
+          "Discriminator": "composite",
+          "IsUnparsed": false,
+          "Fields": [
+            "Effects"
+          ]
+        },
+        {
+          "Type": "ConditionalPayEffect",
+          "Discriminator": "conditionalPay",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "CopyEffect",
+          "Discriminator": "copy",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "CostIncreaseEffect",
+          "Discriminator": "costIncrease",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount"
+          ]
+        },
+        {
+          "Type": "CostReductionEffect",
+          "Discriminator": "costReduction",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount"
+          ]
+        },
+        {
+          "Type": "CounterSpellEffect",
+          "Discriminator": "counterSpell",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "CreateDelayedTriggerEffect",
+          "Discriminator": "createDelayedTrigger",
+          "IsUnparsed": false,
+          "Fields": [
+            "DelayedTrigger"
+          ]
+        },
+        {
+          "Type": "CreateEmblemEffect",
+          "Discriminator": "createEmblem",
+          "IsUnparsed": false,
+          "Fields": [
+            "Emblem"
+          ]
+        },
+        {
+          "Type": "CreateTokenEffect",
+          "Discriminator": "createToken",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Token"
+          ]
+        },
+        {
+          "Type": "CrewEffect",
+          "Discriminator": "crew",
+          "IsUnparsed": false,
+          "Fields": [
+            "Power"
+          ]
+        },
+        {
+          "Type": "CumulativeUpkeepEffect",
+          "Discriminator": "cumulativeUpkeep",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "DayNightEffect",
+          "Discriminator": "dayNight",
+          "IsUnparsed": false,
+          "Fields": [
+            "Phase"
+          ]
+        },
+        {
+          "Type": "DealDamageEffect",
+          "Discriminator": "dealDamage",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount",
+            "Target"
+          ]
+        },
+        {
+          "Type": "DefinePTEffect",
+          "Discriminator": "definePT",
+          "IsUnparsed": false,
+          "Fields": [
+            "Characteristic",
+            "Value"
+          ]
+        },
+        {
+          "Type": "DestroyEffect",
+          "Discriminator": "destroy",
+          "IsUnparsed": false,
+          "Fields": [
+            "CantBeRegenerated",
+            "Target"
+          ]
+        },
+        {
+          "Type": "DevourEffect",
+          "Discriminator": "devour",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "DiscardCardsEffect",
+          "Discriminator": "discardCards",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Player",
+            "Random"
+          ]
+        },
+        {
+          "Type": "DisguiseEffect",
+          "Discriminator": "disguise",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "DoesntUntapEffect",
+          "Discriminator": "doesntUntap",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "DrawCardsEffect",
+          "Discriminator": "drawCards",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Player"
+          ]
+        },
+        {
+          "Type": "DredgeEffect",
+          "Discriminator": "dredge",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "EmergeEffect",
+          "Discriminator": "emerge",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "EnchantRestrictionEffect",
+          "Discriminator": "enchantRestriction",
+          "IsUnparsed": false,
+          "Fields": [
+            "LegalTargets"
+          ]
+        },
+        {
+          "Type": "EncoreEffect",
+          "Discriminator": "encore",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "EscapeEffect",
+          "Discriminator": "escape",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "EvasionEffect",
+          "Discriminator": "evasion",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "ExchangeCharacteristicEffect",
+          "Discriminator": "exchangeCharacteristic",
+          "IsUnparsed": false,
+          "Fields": [
+            "Characteristic",
+            "First",
+            "Second"
+          ]
+        },
+        {
+          "Type": "ExileEffect",
+          "Discriminator": "exile",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "ExploreEffect",
+          "Discriminator": "explore",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "FabricateEffect",
+          "Discriminator": "fabricate",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "FadingEffect",
+          "Discriminator": "fading",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "FightEffect",
+          "Discriminator": "fight",
+          "IsUnparsed": false,
+          "Fields": [
+            "Controlled",
+            "Opposed"
+          ]
+        },
+        {
+          "Type": "ForetellEffect",
+          "Discriminator": "foretell",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "GainAbilityEffect",
+          "Discriminator": "gainAbility",
+          "IsUnparsed": false,
+          "Fields": [
+            "GainedAbility",
+            "Target"
+          ]
+        },
+        {
+          "Type": "GainControlEffect",
+          "Discriminator": "gainControl",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "GainEnergyEffect",
+          "Discriminator": "gainEnergy",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount",
+            "Player"
+          ]
+        },
+        {
+          "Type": "GainLifeEffect",
+          "Discriminator": "gainLife",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount",
+            "Player"
+          ]
+        },
+        {
+          "Type": "GraftEffect",
+          "Discriminator": "graft",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "HarmonizeEffect",
+          "Discriminator": "harmonize",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "HideawayEffect",
+          "Discriminator": "hideaway",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount"
+          ]
+        },
+        {
+          "Type": "ImpulseEffect",
+          "Discriminator": "impulse",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "RestDestination"
+          ]
+        },
+        {
+          "Type": "IncrementEffect",
+          "Discriminator": "increment",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "InvestigateEffect",
+          "Discriminator": "investigate",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "KeywordAbilityEffect",
+          "Discriminator": "keywordAbility",
+          "IsUnparsed": false,
+          "Fields": [
+            "Keyword"
+          ]
+        },
+        {
+          "Type": "LegendRuleSuppressionEffect",
+          "Discriminator": "legendRuleSuppression",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "LifelinkEffect",
+          "Discriminator": "lifelink",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "LookAtCardsEffect",
+          "Discriminator": "lookAtCards",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Player",
+            "Zone"
+          ]
+        },
+        {
+          "Type": "LookAtTopCardAnyTimeEffect",
+          "Discriminator": "lookAtTopCardAnyTime",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "LoseAbilityEffect",
+          "Discriminator": "loseAbility",
+          "IsUnparsed": false,
+          "Fields": [
+            "AbilityText",
+            "Target"
+          ]
+        },
+        {
+          "Type": "LoseLifeEffect",
+          "Discriminator": "loseLife",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount",
+            "Player"
+          ]
+        },
+        {
+          "Type": "MayPlayFromExileEffect",
+          "Discriminator": "mayPlayFromExile",
+          "IsUnparsed": false,
+          "Fields": [
+            "Actions",
+            "Cards"
+          ]
+        },
+        {
+          "Type": "MegamorphEffect",
+          "Discriminator": "megamorph",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "MillEffect",
+          "Discriminator": "mill",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Player"
+          ]
+        },
+        {
+          "Type": "MiracleEffect",
+          "Discriminator": "miracle",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "MobilizeEffect",
+          "Discriminator": "mobilize",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount"
+          ]
+        },
+        {
+          "Type": "ModalEffect",
+          "Discriminator": "modal",
+          "IsUnparsed": false,
+          "Fields": [
+            "AllowDuplicates",
+            "ModeSelection",
+            "Modes"
+          ]
+        },
+        {
+          "Type": "ModifyPTEffect",
+          "Discriminator": "modifyPT",
+          "IsUnparsed": false,
+          "Fields": [
+            "PowerModifier",
+            "Target",
+            "ToughnessModifier"
+          ]
+        },
+        {
+          "Type": "MonstrosityEffect",
+          "Discriminator": "monstrosity",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "MorphEffect",
+          "Discriminator": "morph",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "MoveCountersEffect",
+          "Discriminator": "moveCounters",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "CounterType",
+            "From",
+            "To"
+          ]
+        },
+        {
+          "Type": "MustAttackEffect",
+          "Discriminator": "mustAttack",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "MustBeBlockedEffect",
+          "Discriminator": "mustBeBlocked",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "MustBlockEffect",
+          "Discriminator": "mustBlock",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "MutateEffect",
+          "Discriminator": "mutate",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "NinjutsuEffect",
+          "Discriminator": "ninjutsu",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "NoMaxHandSizeEffect",
+          "Discriminator": "noMaxHandSize",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "OffspringEffect",
+          "Discriminator": "offspring",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "OpeningHandEffect",
+          "Discriminator": "openingHand",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "OptionalEffect",
+          "Discriminator": "optional",
+          "IsUnparsed": false,
+          "Fields": [
+            "Inner"
+          ]
+        },
+        {
+          "Type": "OverloadEffect",
+          "Discriminator": "overload",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "PairEffect",
+          "Discriminator": "pair",
+          "IsUnparsed": false,
+          "Fields": [
+            "Partner"
+          ]
+        },
+        {
+          "Type": "PartnerEffect",
+          "Discriminator": "partner",
+          "IsUnparsed": false,
+          "Fields": [
+            "PartnerType"
+          ]
+        },
+        {
+          "Type": "PayLifeEffect",
+          "Discriminator": "payLife",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount"
+          ]
+        },
+        {
+          "Type": "PlayAdditionalLandEffect",
+          "Discriminator": "playAdditionalLand",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "PlotEffect",
+          "Discriminator": "plot",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "PreventDamageEffect",
+          "Discriminator": "preventDamage",
+          "IsUnparsed": false,
+          "Fields": [
+            "All"
+          ]
+        },
+        {
+          "Type": "PreventableEffect",
+          "Discriminator": "preventable",
+          "IsUnparsed": false,
+          "Fields": [
+            "Inner",
+            "Unless"
+          ]
+        },
+        {
+          "Type": "ProliferateEffect",
+          "Discriminator": "proliferate",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "ProtectionEffect",
+          "Discriminator": "protection",
+          "IsUnparsed": false,
+          "Fields": [
+            "From"
+          ]
+        },
+        {
+          "Type": "PrototypeEffect",
+          "Discriminator": "prototype",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost",
+            "Power",
+            "Toughness"
+          ]
+        },
+        {
+          "Type": "PutCountersEffect",
+          "Discriminator": "putCounters",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "CounterType",
+            "Target"
+          ]
+        },
+        {
+          "Type": "PutOnTopOfLibraryEffect",
+          "Discriminator": "putOnTopOfLibrary",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "RecoverEffect",
+          "Discriminator": "recover",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "RegenerateEffect",
+          "Discriminator": "regenerate",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "RemoveCountersEffect",
+          "Discriminator": "removeCounters",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "CounterType",
+            "Target"
+          ]
+        },
+        {
+          "Type": "RenownEffect",
+          "Discriminator": "renown",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "ReplacementEffect",
+          "Discriminator": "replacement",
+          "IsUnparsed": false,
+          "Fields": [
+            "Event",
+            "OriginalEventOccurs"
+          ]
+        },
+        {
+          "Type": "ReturnToBattlefieldEffect",
+          "Discriminator": "returnToBattlefield",
+          "IsUnparsed": false,
+          "Fields": [
+            "Tapped",
+            "Target"
+          ]
+        },
+        {
+          "Type": "ReturnToHandEffect",
+          "Discriminator": "returnToHand",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "SacrificeEffect",
+          "Discriminator": "sacrifice",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "SaddleEffect",
+          "Discriminator": "saddle",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "ScryEffect",
+          "Discriminator": "scry",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count"
+          ]
+        },
+        {
+          "Type": "SearchLibraryEffect",
+          "Discriminator": "searchLibrary",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Destination",
+            "Filter",
+            "Revealed"
+          ]
+        },
+        {
+          "Type": "ShuffleEffect",
+          "Discriminator": "shuffle",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
+          "Type": "ShuffleIntoLibraryEffect",
+          "Discriminator": "shuffleIntoLibrary",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "SkipUntapEffect",
+          "Discriminator": "skipUntap",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "SneakEffect",
+          "Discriminator": "sneak",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "SpliceEffect",
+          "Discriminator": "splice",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost",
+            "Onto"
+          ]
+        },
+        {
+          "Type": "SurveilEffect",
+          "Discriminator": "surveil",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count"
+          ]
+        },
+        {
+          "Type": "SuspendEffect",
+          "Discriminator": "suspend",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "TapEffect",
+          "Discriminator": "tap",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "TapOrUntapEffect",
+          "Discriminator": "tapOrUntap",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "TargetingRestrictionEffect",
+          "Discriminator": "targetingRestriction",
+          "IsUnparsed": false,
+          "Fields": [
+            "AppliesWhen",
+            "Condition",
+            "Restriction",
+            "Target"
+          ]
+        },
+        {
+          "Type": "TimingModificationEffect",
+          "Discriminator": "timingModification",
+          "IsUnparsed": false,
+          "Fields": [
+            "Modification",
+            "Timing"
+          ]
+        },
+        {
+          "Type": "ToxicEffect",
+          "Discriminator": "toxic",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "TransformEffect",
+          "Discriminator": "transform",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "TransmuteEffect",
+          "Discriminator": "transmute",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "TributeEffect",
+          "Discriminator": "tribute",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "TypecyclingEffect",
+          "Discriminator": "typecycling",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost",
+            "Type"
+          ]
+        },
+        {
+          "Type": "UnattachEffect",
+          "Discriminator": "unattach",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "UnearthEffect",
+          "Discriminator": "unearth",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "UnparsedEffect",
+          "Discriminator": "unparsed",
+          "IsUnparsed": true,
+          "Fields": [
+            "RawText",
+            "SourceSpan"
+          ]
+        },
+        {
+          "Type": "UntapEffect",
+          "Discriminator": "untap",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
+          "Type": "VanishingEffect",
+          "Discriminator": "vanishing",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "WarpEffect",
+          "Discriminator": "warp",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        },
+        {
+          "Type": "WebSlingingEffect",
+          "Discriminator": "webSlinging",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cost"
+          ]
+        }
+      ]
+    },
+    {
+      "Type": "HistoryPredicate",
+      "DiscriminatorKey": "PredicateType",
+      "Types": [
+        {
+          "Type": "CrewedPredicate",
+          "Discriminator": "crewed",
+          "IsUnparsed": false,
+          "Fields": [
+            "Timeframe",
+            "Vehicle"
+          ]
+        },
+        {
+          "Type": "DealtDamageByPredicate",
+          "Discriminator": "dealtDamageBy",
+          "IsUnparsed": false,
+          "Fields": [
+            "Source",
+            "Timeframe"
+          ]
+        },
+        {
+          "Type": "OtherHistoryPredicate",
+          "Discriminator": "other",
+          "IsUnparsed": false,
+          "Fields": [
+            "Description"
+          ]
+        }
+      ]
+    },
+    {
+      "Type": "PowerToughnessValue",
+      "DiscriminatorKey": "ValueType",
+      "Types": [
+        {
+          "Type": "DerivedPTValue",
+          "Discriminator": "derived",
+          "IsUnparsed": false,
+          "Fields": [
+            "BaseValue",
+            "Raw"
+          ]
+        },
+        {
+          "Type": "FixedPTValue",
+          "Discriminator": "fixed",
+          "IsUnparsed": false,
+          "Fields": [
+            "Raw",
+            "Value"
+          ]
+        },
+        {
+          "Type": "VariablePTValue",
+          "Discriminator": "variable",
+          "IsUnparsed": false,
+          "Fields": [
+            "Raw"
+          ]
+        }
+      ]
+    },
+    {
+      "Type": "Quantity",
+      "DiscriminatorKey": "QuantityType",
+      "Types": [
+        {
+          "Type": "CalculatedQuantity",
+          "Discriminator": "calculated",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "CountQuantity",
+          "Discriminator": "count",
+          "IsUnparsed": false,
+          "Fields": [
+            "CountOf"
+          ]
+        },
+        {
+          "Type": "CounterCountQuantity",
+          "Discriminator": "counterCount",
+          "IsUnparsed": false,
+          "Fields": [
+            "CounterType",
+            "On"
+          ]
+        },
+        {
+          "Type": "DerivedQuantity",
+          "Discriminator": "derived",
+          "IsUnparsed": false,
+          "Fields": [
+            "DerivedFrom"
+          ]
+        },
+        {
+          "Type": "KeywordCostPaidCountQuantity",
+          "Discriminator": "keywordCostPaidCount",
+          "IsUnparsed": false,
+          "Fields": [
+            "Keyword"
+          ]
+        },
+        {
+          "Type": "LiteralQuantity",
+          "Discriminator": "literal",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
+          "Type": "UpToQuantity",
+          "Discriminator": "upTo",
+          "IsUnparsed": false,
+          "Fields": [
+            "Maximum",
+            "Minimum"
+          ]
+        },
+        {
+          "Type": "VariableQuantity",
+          "Discriminator": "variable",
+          "IsUnparsed": false,
+          "Fields": [
+            "Name"
+          ]
+        }
+      ]
+    },
+    {
+      "Type": "ReplacementEvent",
+      "DiscriminatorKey": "EventType",
+      "Types": [
+        {
+          "Type": "CounterPlacementEvent",
+          "Discriminator": "counterPlacement",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "DamageEvent",
+          "Discriminator": "damage",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "DeathEvent",
+          "Discriminator": "death",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "DestructionEvent",
+          "Discriminator": "destruction",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "DrawCardEvent",
+          "Discriminator": "drawCard",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "GenericEvent",
+          "Discriminator": "generic",
+          "IsUnparsed": false,
+          "Fields": [
+            "Description"
+          ]
+        },
+        {
+          "Type": "LifeChangeEvent",
+          "Discriminator": "lifeChange",
+          "IsUnparsed": false,
+          "Fields": [
+            "ChangeType"
+          ]
+        },
+        {
+          "Type": "TokenCreationEvent",
+          "Discriminator": "tokenCreation",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "UntapEvent",
+          "Discriminator": "untap",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "ZoneChangeEvent",
+          "Discriminator": "zoneChange",
+          "IsUnparsed": false,
+          "Fields": []
+        }
+      ]
+    }
+  ],
+  "SchemaHash": "7481b58c9a217bfe27d4257a3f140b2595e4139fbeda174f2765a87eaf3202b5"
+}

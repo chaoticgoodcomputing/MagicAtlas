@@ -44,6 +44,14 @@
         "command": "python3 scripts/generate-glossary.py --check",
         "cwd": "libs/magic-ast"
       }
+    },
+    "schema": {
+      "//": "Regenerate libs/magic-ast/schema/ast-schema.json from the current node model (reflection).",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet test ../../tests/magic-ast-tests --filter \"FullyQualifiedName~Regenerate_schema_export\"",
+        "cwd": "libs/magic-ast"
+      }
     }
   },
   "tags": [ "type:library", "scope:magic-ast" ]
