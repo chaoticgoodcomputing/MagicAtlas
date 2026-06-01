@@ -1,0 +1,135 @@
+{
+  "Input": {
+    "Name": "Reiterate",
+    "TypeLine": "Instant",
+    "ManaCost": "{1}{R}{R}",
+    "OracleText": "Buyback {3} (You may pay an additional {3} as you cast this spell. If you do, put this card into your hand as it resolves.)\nCopy target instant or sorcery spell. You may choose new targets for the copy.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Reiterate",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Buyback {3} (You may pay an additional {3} as you cast this spell. If you do, put this card into your hand as it resolves.)\nCopy target instant or sorcery spell. You may choose new targets for the copy.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Buyback",
+          "Reminder": {
+            "Text": "(You may pay an additional {3} as you cast this spell. If you do, put this card into your hand as it resolves.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 3
+                    }
+                  ]
+                },
+                "IsOptional": true
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Buyback",
+          "Condition": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Buyback"
+          },
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "zoneChange",
+                "DestinationZone": "Graveyard",
+                "OriginZone": "Stack"
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "returnToHand",
+                "Target": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "instant",
+                    "sorcery"
+                  ],
+                  "Zone": "Stack"
+                }
+              },
+              "MayChooseNewTargets": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
+    ]
+  }
+}
