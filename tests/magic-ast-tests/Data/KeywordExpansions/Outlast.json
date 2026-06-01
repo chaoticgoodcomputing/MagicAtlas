@@ -1,0 +1,45 @@
+{
+  "Keyword": "Outlast",
+  "Parameter": "{1}{G}",
+  "Expected": {
+    "Kind": "activated",
+    "KeywordSource": "Outlast",
+    "Costs": [
+      {
+        "CostType": "mana",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ]
+      },
+      {
+        "CostType": "tap"
+      }
+    ],
+    "Effects": [
+      {
+        "EffectType": "putCounters",
+        "Target": {
+          "Kind": "Self"
+        },
+        "CounterType": "+1/+1",
+        "Count": {
+          "QuantityType": "literal",
+          "Value": 1
+        }
+      }
+    ],
+    "Restrictions": [
+      "OnlyAsSorcery"
+    ],
+    "IsManaAbility": false
+  }
+}

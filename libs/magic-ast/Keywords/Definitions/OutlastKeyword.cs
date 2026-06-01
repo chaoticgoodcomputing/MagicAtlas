@@ -1,18 +1,22 @@
 namespace MagicAST.Keywords.Definitions;
 
-using MagicAST.AST.References;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
-using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects.Counter;
+using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
 using MagicAST.Parsing;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
-/// Outlast {cost}: {cost}, {T}: Put a +1/+1 counter on this creature. Outlast only as a sorcery.
-/// Rule 702.107. MAST records the keyword and its mana-cost parameter; the tap cost,
-/// sorcery-speed restriction, and counter-placement are engine territory.
+/// Outlast [cost]: activated ability per CR 702.107a.
+///
+/// <para>
+/// CR 702.107a (verbatim): "Outlast is an activated ability. 'Outlast [cost]' means
+/// '[Cost], {T}: Put a +1/+1 counter on this creature. Activate only as a sorcery.'"
+/// </para>
 /// </summary>
 [Keyword]
 public sealed class OutlastKeyword : IKeyword
@@ -25,17 +29,29 @@ public sealed class OutlastKeyword : IKeyword
     new()
     {
       Name = "Outlast",
-      RuleReference = "702.107",
+      RuleReference = "702.107a",
       Category = KeywordCategory.Activated,
       HasParameter = true,
       ParameterType = KeywordParameterType.ManaCost,
-      CreateExpansion = parameter => new StaticAbility
+      CreateExpansion = parameter => new ActivatedAbility
       {
         KeywordSource = KeywordAbility.Outlast,
-        Effects = [new OutlastEffect
-        {
-          Cost = ParseManaCost(parameter),
-        }],
+        Costs =
+        [
+          ParseManaCost(parameter),
+          new TapCost(),
+        ],
+        Effects =
+        [
+          new PutCountersEffect
+          {
+            Target = ObjectReference.Self(),
+            CounterType = "+1/+1",
+            Count = LiteralQuantity.Of(1),
+          },
+        ],
+        Restrictions = [ActivationRestriction.OnlyAsSorcery],
+        IsManaAbility = false,
       },
     };
 
@@ -44,13 +60,21 @@ public sealed class OutlastKeyword : IKeyword
     from keyword in Keyword("Outlast")
     from cost in ManaCostSymbols
     from reminder in OptionalReminder
-    select (Ability)new StaticAbility
+    select (Ability)new ActivatedAbility
     {
       KeywordSource = KeywordAbility.Outlast,
-      Effects = [new OutlastEffect
-      {
-        Cost = cost,
-      }],
+      Costs = [cost, new TapCost()],
+      Effects =
+      [
+        new PutCountersEffect
+        {
+          Target = ObjectReference.Self(),
+          CounterType = "+1/+1",
+          Count = LiteralQuantity.Of(1),
+        },
+      ],
+      Restrictions = [ActivationRestriction.OnlyAsSorcery],
+      IsManaAbility = false,
       Reminder = reminder,
     }
   );
