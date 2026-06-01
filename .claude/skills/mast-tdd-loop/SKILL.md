@@ -82,13 +82,13 @@ If a family's mechanic isn't in `glossary.json` at all (and is genuinely MTG-dom
 
 ### Step 2.5 — Assignment matrix (pre-dispatch checkpoint)
 
-Before spawning anything, write an **assignment matrix** as the header table of the briefing doc — one row per family, three columns:
+Before spawning anything, lay out an **assignment matrix** inline in the session — in your response, **not** written to a file (keep it out of the briefing doc; the briefing is for rules facts, the matrix is ephemeral dispatch reasoning) — one row per family, three columns:
 
 | Family | Model | Anticipated updates |
 |---|---|---|
 | `{id} — short name (cluster it closes)` | `opus` / `sonnet` + one-word why (novel-shape vs mechanical) | new node? which existing rule(s) extended? which **shared** AST primitive touched (`ObjectFilter`, `Duration`, an effect node, `AbilityClassifier.cs`)? |
 
-This turns the dispatch reasoning — which until now lived only in the orchestrator's head — into a reviewable artifact *before* N agents run. It exists to force three checks while they're still cheap:
+This surfaces the dispatch reasoning — which until now lived only in the orchestrator's head — in the session *before* N agents run, where you (and the user) can review it. It exists to force three checks while they're still cheap:
 
 1. **Collision pre-check (the main payoff).** Read down the *Anticipated updates* column for two families that would write the **same file** — a shared AST node (`AddManaEffect`, `PreventDamageEffect`, `ObjectFilter`, `Duration`, …) or `AbilityClassifier.cs`. New one-file-per-rule surfaces never collide; **shared-file writes do.** If two rows target one file, serialize them or re-scope one **now** — this is the cheap, pre-dispatch version of the Steps 5-6 joint-regression catch.
 2. **Model commitment.** The *Model* column is the single source for Step 3's per-spawn `model:` override — decided once, with rationale visible, not ad hoc at spawn time.
