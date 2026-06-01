@@ -1,0 +1,124 @@
+{
+  "Input": {
+    "Name": "Fleetfeather Sandals",
+    "ManaCost": "{2}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "Equipped creature has flying and haste.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Fleetfeather Sandals",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": ["Artifact"],
+      "Subtypes": ["Equipment"]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature has flying and haste.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Flying",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": ["creature"],
+                      "Characteristics": [
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Flying"
+                        },
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Reach"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Haste",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Haste"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Restrictions": ["OnlyAsSorcery"],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
