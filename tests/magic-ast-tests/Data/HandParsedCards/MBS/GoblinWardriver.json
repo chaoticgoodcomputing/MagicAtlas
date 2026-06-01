@@ -29,25 +29,101 @@
       "RawText": "Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)\nBattle cry",
       "Abilities": [
         {
-          "Kind": "static",
+          "Kind": "triggered",
           "KeywordSource": "Battle cry",
-          "Reminder": {
-            "Text": "(Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)"
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
           },
           "Effects": [
             {
-              "EffectType": "keywordAbility",
-              "Keyword": "Battle cry"
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "ExcludeSelf": true,
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "attacking"
+                    }
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
             }
-          ]
+          ],
+          "Reminder": {
+            "Text": "(Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)"
+          }
         },
         {
-          "Kind": "static",
+          "Kind": "triggered",
           "KeywordSource": "Battle cry",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
           "Effects": [
             {
-              "EffectType": "keywordAbility",
-              "Keyword": "Battle cry"
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "ExcludeSelf": true,
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "attacking"
+                    }
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
             }
           ]
         }
