@@ -9,19 +9,24 @@ using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 
 /// <summary>
-/// "Create (a|X|&lt;num&gt;) &lt;P&gt;/&lt;T&gt; &lt;color&gt; &lt;subtype&gt; creature token(s) [with &lt;keyword&gt;]."
+/// "Create (a|X|&lt;num&gt;) &lt;P&gt;/&lt;T&gt; &lt;color&gt; [subtype ...] creature token(s) [with &lt;keyword&gt;]."
 /// Handles literal counts ("a"), variable counts ("X"), and numeric literals.
 /// Also handles predefined artifact tokens (Food, Treasure, Clue, Blood) which
 /// have no P/T and whose activated ability is reminder text only (Rule 107.10b).
 /// Reminder text is stripped by <see cref="SpellAbilityParser"/> before dispatch.
 /// The optional "with &lt;keyword&gt;" suffix captures a single granted keyword ability
 /// for the created token (e.g. "with flying", "with haste").
+///
+/// Multi-subtype tokens (e.g. "Knight Ally") are supported: the subtypes group
+/// captures all words between the color and "creature", which are split on
+/// whitespace to produce a <see cref="TokenDefinition.Subtypes"/> list.
+/// (CR 111.1: a token is a marker representing a permanent that isn't a card.)
 /// </summary>
 [SpellRule(Priority = 60)]
 public sealed class CreateTokenRule : ISpellRule
 {
   private static readonly Regex CreaturePattern = new(
-    @"^Create\s+(?<count>a|X|Y|Z|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<power>\d+)/(?<toughness>\d+)\s+(?<color>white|blue|black|red|green)\s+(?<subtype>\w+)\s+creature\s+tokens?(?:\s+with\s+(?<keyword>[a-z][a-z\s]*[a-z]|[a-z]+))?$",
+    @"^Create\s+(?<count>a|X|Y|Z|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?<power>\d+)/(?<toughness>\d+)\s+(?<color>white|blue|black|red|green)\s+(?<subtypes>(?:\w+\s+)+)creature\s+tokens?(?:\s+with\s+(?<keyword>[a-z][a-z\s]*[a-z]|[a-z]+))?$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -159,9 +164,12 @@ public sealed class CreateTokenRule : ISpellRule
     var colorCode = ColorMap[m.Groups["color"].Value];
     var power = m.Groups["power"].Value;
     var toughness = m.Groups["toughness"].Value;
-    // Capitalize first letter of subtype to match canonical MTG form.
-    var subtype = m.Groups["subtype"].Value;
-    subtype = char.ToUpperInvariant(subtype[0]) + subtype[1..];
+    // Split the subtypes group (e.g. "Knight Ally ") into individual canonical
+    // subtype strings. Capitalize first letter to match canonical MTG form.
+    var subtypes = m.Groups["subtypes"].Value
+      .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+      .Select(s => char.ToUpperInvariant(s[0]) + s[1..])
+      .ToArray();
 
     // Resolve optional "with <keyword>" granted ability.
     IReadOnlyList<Ability>? grantedAbilities = null;
@@ -183,7 +191,7 @@ public sealed class CreateTokenRule : ISpellRule
         Toughness = toughness,
         Colors = [colorCode],
         Types = ["creature"],
-        Subtypes = [subtype],
+        Subtypes = subtypes,
         Abilities = grantedAbilities,
         IsCopy = false,
       },
