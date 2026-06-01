@@ -421,6 +421,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "You may cast this card from your graveyard [as long as …]." — the
+    // written-out conditional graveyard-recursion permission (Gravecrawler, CR
+    // 601.3e). Although the clause opens with "You may cast", which the generic
+    // gate below routes to the spell parser, this is a permanent static property
+    // of the card (a continuous cast-from-zone permission, CR 604.2) — NOT a
+    // one-shot spell-resolution step — so it belongs on the static path where
+    // CastFromGraveyardConditionalRule emits the AlternativeCastEffect. Intercept
+    // before StartsWithYouMaySpellInstruction swallows it (mirrors the
+    // "You may cast this spell as though it had flash" interception above).
+    if (clause.RawText.TrimStart().StartsWith(
+      "You may cast this card from your graveyard",
+      StringComparison.OrdinalIgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.95,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "You may [spell-verb] ..." optional resolution-step phrasing on a spell
     // (Rule 117.7) — e.g., "You may discard a card. If you do, draw two cards."
     // (Abandon Attachments). The opening "You may" is a player-instruction frame
