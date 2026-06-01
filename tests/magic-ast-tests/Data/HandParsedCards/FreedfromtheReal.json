@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Freed from the Real",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\n{U}: Tap enchanted creature.\n{U}: Untap enchanted creature.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": ["Enchant"],
+    "Id": "c47ee6f6-50c1-4f56-b9ce-4c309bfb92ca",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Freed from the Real",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\n{U}: Tap enchanted creature.\n{U}: Untap enchanted creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": ["creature"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["U"] }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["U"] }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
