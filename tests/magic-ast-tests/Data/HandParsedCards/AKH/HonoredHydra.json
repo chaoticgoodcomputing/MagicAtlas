@@ -39,28 +39,66 @@
           ]
         },
         {
-          "Kind": "static",
+          "Kind": "activated",
           "KeywordSource": "Embalm",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
+              ]
+            },
+            {
+              "CostType": "exile",
+              "Filter": {
+                "CardTypes": [
+                  "card"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "this card"
+                  }
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "FromZone": "Graveyard"
+            }
+          ],
           "Effects": [
             {
-              "EffectType": "embalm",
-              "Cost": {
-                "CostType": "mana",
-                "Symbols": [
-                  {
-                    "Kind": "generic",
-                    "GenericAmount": 3
-                  },
-                  {
-                    "Kind": "colored",
-                    "Colors": [
-                      "G"
-                    ]
-                  }
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "IsCopy": true,
+                "Colors": [
+                  "W"
+                ],
+                "Subtypes": [
+                  "Zombie"
                 ]
               }
             }
           ],
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
           "Reminder": {
             "Text": "({3}{G}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a white Zombie Snake Hydra with no mana cost. Embalm only as a sorcery.)"
           }
