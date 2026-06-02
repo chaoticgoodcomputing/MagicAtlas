@@ -1,3 +1,6 @@
+# Flowthru runtime cache (step memoization state — not source)
+.flowthru/
+
 # Logs
 logs
 *.log
