@@ -41,7 +41,7 @@ public sealed class FilterAndVerifyEngine : IQueryEngine
     // Deterministic ordering (ADR-0001): by card id.
     foreach (var card in corpus.OrderBy(c => c.Card, StringComparer.Ordinal))
     {
-      var captures = new Dictionary<string, string>(StringComparer.Ordinal);
+      var captures = new Dictionary<string, JsonNode>(StringComparer.Ordinal);
       var (det, path) = EvaluateCard(pattern, card.Ast, captures);
       switch (det)
       {
@@ -81,16 +81,29 @@ public sealed class FilterAndVerifyEngine : IQueryEngine
     };
   }
 
+  /// <summary>
+  /// Match <paramref name="pattern"/> at a single node (a port sub-tree), not over a card corpus —
+  /// the interaction engine's entry point for matching family patterns at <em>ports</em>. Returns
+  /// the three-valued outcome plus the typed captures the cross-query join feeds to the
+  /// <c>ObjectFilter</c> relation operators.
+  /// </summary>
+  public MatchOutcome Match(Pattern pattern, JsonNode node)
+  {
+    var captures = new Dictionary<string, JsonNode>(StringComparer.Ordinal);
+    var (det, path) = EvaluateCard(pattern, node, captures);
+    return new MatchOutcome(det, path, captures.Count > 0 ? captures : null);
+  }
+
   private (Determinacy, string?) EvaluateCard(
     Pattern pattern,
     JsonNode root,
-    Dictionary<string, string> captures
+    Dictionary<string, JsonNode> captures
   )
   {
     if (pattern is AnyDepthPattern depth)
       return EvaluateAnyDepth(depth.Inner, root, "$", captures);
 
-    var local = new Dictionary<string, string>(StringComparer.Ordinal);
+    var local = new Dictionary<string, JsonNode>(StringComparer.Ordinal);
     if (MatchHere(pattern, root, local))
     {
       Merge(captures, local);
@@ -103,7 +116,7 @@ public sealed class FilterAndVerifyEngine : IQueryEngine
     Pattern inner,
     JsonNode root,
     string path,
-    Dictionary<string, string> captures
+    Dictionary<string, JsonNode> captures
   )
   {
     var sawUnparsed = false;
@@ -112,7 +125,7 @@ public sealed class FilterAndVerifyEngine : IQueryEngine
       if (IsUnparsed(node))
         sawUnparsed = true;
 
-      var local = new Dictionary<string, string>(StringComparer.Ordinal);
+      var local = new Dictionary<string, JsonNode>(StringComparer.Ordinal);
       if (MatchHere(inner, node, local))
       {
         Merge(captures, local);
@@ -122,7 +135,7 @@ public sealed class FilterAndVerifyEngine : IQueryEngine
     return (sawUnparsed ? Determinacy.Unknown : Determinacy.NoMatch, null);
   }
 
-  private bool MatchHere(Pattern pattern, JsonNode? node, Dictionary<string, string> captures)
+  private bool MatchHere(Pattern pattern, JsonNode? node, Dictionary<string, JsonNode> captures)
   {
     switch (pattern)
     {
@@ -147,7 +160,7 @@ public sealed class FilterAndVerifyEngine : IQueryEngine
           return false;
 
         // Accumulate into a pending set so a later failing field leaves no partial captures.
-        var pending = new Dictionary<string, string>(StringComparer.Ordinal);
+        var pending = new Dictionary<string, JsonNode>(StringComparer.Ordinal);
         if (np.Fields is not null)
         {
           foreach (var field in np.Fields)
@@ -159,7 +172,9 @@ public sealed class FilterAndVerifyEngine : IQueryEngine
           }
         }
         if (np.Capture is not null)
-          pending[np.Capture] = CanonicalJson.Serialize(node);
+          // Retain the matched node itself (detached clone) so a consumer can deserialize it to a
+          // typed node — e.g. an ObjectFilter fed to the interaction join — not its canonical text.
+          pending[np.Capture] = node!.DeepClone();
         Merge(captures, pending);
         return true;
 
@@ -219,7 +234,7 @@ public sealed class FilterAndVerifyEngine : IQueryEngine
     }
   }
 
-  private static void Merge(Dictionary<string, string> into, Dictionary<string, string> from)
+  private static void Merge(Dictionary<string, JsonNode> into, Dictionary<string, JsonNode> from)
   {
     foreach (var kv in from)
       into[kv.Key] = kv.Value;

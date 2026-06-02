@@ -1,5 +1,6 @@
 namespace MagicAST.Query;
 
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -18,6 +19,17 @@ public static class CanonicalJson
     Write(node, sb);
     return sb.ToString();
   }
+
+  /// <summary>
+  /// Stable, cross-process content hash (lowercase-hex SHA-256) of the canonical serialization —
+  /// the basis for the interaction engine's port-identity scheme (a port keyed by its
+  /// canonical-subtree hash, mast-interaction ADR-0001). Key-order-invariant and reproducible
+  /// across runs/languages, unlike record <c>GetHashCode</c>.
+  /// </summary>
+  public static string Hash(JsonNode? node) =>
+    Convert
+      .ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(Serialize(node))))
+      .ToLowerInvariant();
 
   private static void Write(JsonNode? node, StringBuilder sb)
   {
