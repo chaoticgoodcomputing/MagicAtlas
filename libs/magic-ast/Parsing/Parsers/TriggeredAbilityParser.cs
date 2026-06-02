@@ -778,6 +778,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
 
       creates.Add(new CreateTokenEffect
       {
+        Player = ObjectReference.You(),
         Count = LiteralQuantity.Of(1),
         Token = new TokenDefinition
         {

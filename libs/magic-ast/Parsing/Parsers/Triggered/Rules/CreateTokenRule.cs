@@ -66,6 +66,7 @@ public sealed class CreateTokenRule : ITriggeredRule
     if (_foodTokenPattern.IsMatch(createText))
     {
       effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new CreateTokenEffect {
+        Player = ObjectReference.You(),
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Food()}, isOptional);
       return true;
@@ -76,6 +77,7 @@ public sealed class CreateTokenRule : ITriggeredRule
     if (_treasureTokenPattern.IsMatch(createText))
     {
       effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new CreateTokenEffect {
+        Player = ObjectReference.You(),
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Treasure()}, isOptional);
       return true;
@@ -86,6 +88,7 @@ public sealed class CreateTokenRule : ITriggeredRule
     if (_clueTokenPattern.IsMatch(createText))
     {
       effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new CreateTokenEffect {
+        Player = ObjectReference.You(),
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Clue()}, isOptional);
       return true;
@@ -96,6 +99,7 @@ public sealed class CreateTokenRule : ITriggeredRule
     if (_bloodTokenPattern.IsMatch(createText))
     {
       effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new CreateTokenEffect {
+        Player = ObjectReference.You(),
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Blood()}, isOptional);
       return true;
@@ -140,6 +144,7 @@ public sealed class CreateTokenRule : ITriggeredRule
       : LiteralQuantity.Of(count);
 
     effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new CreateTokenEffect {
+      Player = ObjectReference.You(),
       Count = tokenCount,
       Token = new TokenDefinition
       {

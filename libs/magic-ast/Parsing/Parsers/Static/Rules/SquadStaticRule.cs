@@ -117,6 +117,7 @@ public sealed class SquadStaticRule : IStaticRule
       [
         new CreateTokenEffect
         {
+          Player = ObjectReference.You(),
           Count = new KeywordCostPaidCountQuantity { Keyword = KeywordAbility.Squad },
           Token = new TokenDefinition { IsCopy = true },
         },

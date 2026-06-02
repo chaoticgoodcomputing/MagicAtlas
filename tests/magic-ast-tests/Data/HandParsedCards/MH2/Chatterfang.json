@@ -64,6 +64,9 @@
               "OriginalEventOccurs": true,
               "Replacement": {
                 "EffectType": "createToken",
+                "Player": {
+                  "Kind": "You"
+                },
                 "Count": {
                   "QuantityType": "calculated",
                   "Expression": "that many",

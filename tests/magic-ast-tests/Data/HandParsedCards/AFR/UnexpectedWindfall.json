@@ -39,6 +39,9 @@
             },
             {
               "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2

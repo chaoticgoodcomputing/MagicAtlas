@@ -66,6 +66,7 @@ public sealed class CreateTokenEffectRule : IActivatedEffectRule
       {
         return new MagicAST.AST.Effects.TokenCopy.CreateTokenEffect
         {
+          Player = MagicAST.AST.References.ObjectReference.You(),
           Count = MagicAST.AST.Quantities.LiteralQuantity.Of(pCount),
           Token = tokenFactory,
         };
@@ -99,6 +100,7 @@ public sealed class CreateTokenEffectRule : IActivatedEffectRule
 
     return new MagicAST.AST.Effects.TokenCopy.CreateTokenEffect
     {
+      Player = MagicAST.AST.References.ObjectReference.You(),
       Count = count,
       Token = new MagicAST.AST.Effects.TokenDefinition
       {

@@ -752,6 +752,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Count",
+            "Player",
             "Token"
           ]
         },
@@ -1882,5 +1883,5 @@
       ]
     }
   ],
-  "SchemaHash": "19560f866e83e1e32da2ab92281d2ab1a7244743abc2281303cc7f7e73bd7b26"
+  "SchemaHash": "4dffd5d7ca210bd940f3444cc35579e54dc5c0bc37aa2ed89bc17a8f902c6a9f"
 }

@@ -6,6 +6,7 @@ using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Core;
 using MagicAST.AST.Effects.TokenCopy;
 using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
 
 /// <summary>
 /// "create a [TokenA] token or a [TokenB] token" — a one-of-two CHOICE between
@@ -87,6 +88,6 @@ public sealed class CreateTokenChoiceRule : ITriggeredRule
     {
       return null;
     }
-    return new CreateTokenEffect { Count = LiteralQuantity.Of(1), Token = token };
+    return new CreateTokenEffect { Player = ObjectReference.You(), Count = LiteralQuantity.Of(1), Token = token };
   }
 }

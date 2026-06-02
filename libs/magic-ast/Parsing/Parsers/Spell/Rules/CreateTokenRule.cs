@@ -103,6 +103,7 @@ public sealed class CreateTokenRule : ISpellRule
     {
       effect = new CreateTokenEffect
       {
+        Player = ObjectReference.You(),
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Food(),
       };
@@ -114,6 +115,7 @@ public sealed class CreateTokenRule : ISpellRule
     {
       effect = new CreateTokenEffect
       {
+        Player = ObjectReference.You(),
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Treasure(),
       };
@@ -125,6 +127,7 @@ public sealed class CreateTokenRule : ISpellRule
     {
       effect = new CreateTokenEffect
       {
+        Player = ObjectReference.You(),
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Clue(),
       };
@@ -136,6 +139,7 @@ public sealed class CreateTokenRule : ISpellRule
     {
       effect = new CreateTokenEffect
       {
+        Player = ObjectReference.You(),
         Count = LiteralQuantity.Of(1),
         Token = TokenDefinition.Blood(),
       };
@@ -184,6 +188,7 @@ public sealed class CreateTokenRule : ISpellRule
 
     effect = new CreateTokenEffect
     {
+      Player = ObjectReference.You(),
       Count = count,
       Token = new TokenDefinition
       {

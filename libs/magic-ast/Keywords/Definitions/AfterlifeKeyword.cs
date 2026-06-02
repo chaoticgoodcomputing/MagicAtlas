@@ -71,6 +71,7 @@ public sealed class AfterlifeKeyword : IKeyword
       [
         new CreateTokenEffect
         {
+          Player = ObjectReference.You(),
           Count = LiteralQuantity.Of(value),
           Token = new TokenDefinition
           {

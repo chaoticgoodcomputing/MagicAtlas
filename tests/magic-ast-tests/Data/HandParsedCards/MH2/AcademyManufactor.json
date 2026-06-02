@@ -45,6 +45,9 @@
                 "Effects": [
                   {
                     "EffectType": "createToken",
+                    "Player": {
+                      "Kind": "You"
+                    },
                     "Count": {
                       "QuantityType": "literal",
                       "Value": 1
@@ -64,6 +67,9 @@
                   },
                   {
                     "EffectType": "createToken",
+                    "Player": {
+                      "Kind": "You"
+                    },
                     "Count": {
                       "QuantityType": "literal",
                       "Value": 1
@@ -83,6 +89,9 @@
                   },
                   {
                     "EffectType": "createToken",
+                    "Player": {
+                      "Kind": "You"
+                    },
                     "Count": {
                       "QuantityType": "literal",
                       "Value": 1

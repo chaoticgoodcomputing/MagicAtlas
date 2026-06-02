@@ -66,6 +66,7 @@ public sealed class DrawAndCreateTreasureRule : ISpellRule, IMultiSpellRule
       },
       new CreateTokenEffect
       {
+        Player = ObjectReference.You(),
         Count = tokenCount,
         Token = TokenDefinition.Treasure(),
       },

@@ -45,6 +45,9 @@
               "EffectType": "optional",
               "Inner": {
                 "EffectType": "createToken",
+                "Player": {
+                  "Kind": "You"
+                },
                 "Count": {
                   "QuantityType": "literal",
                   "Value": 1

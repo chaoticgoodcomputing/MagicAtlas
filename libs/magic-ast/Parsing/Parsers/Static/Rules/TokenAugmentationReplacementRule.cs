@@ -49,6 +49,7 @@ public sealed class TokenAugmentationReplacementRule : IStaticRule
 
     var replacement = new MagicAST.AST.Effects.TokenCopy.CreateTokenEffect
     {
+      Player = MagicAST.AST.References.ObjectReference.You(),
       Count = new MagicAST.AST.Quantities.CalculatedQuantity
       {
         Expression = "that many",

@@ -66,6 +66,7 @@ public sealed class EmbalmKeyword : IKeyword
       [
         new CreateTokenEffect
         {
+          Player = ObjectReference.You(),
           Count = LiteralQuantity.Of(1),
           Token = new TokenDefinition
           {

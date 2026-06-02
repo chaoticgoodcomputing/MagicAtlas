@@ -52,6 +52,7 @@ public sealed class TokenSubstitutionReplacementRule : IStaticRule
       }
       createEffects.Add(new MagicAST.AST.Effects.TokenCopy.CreateTokenEffect
       {
+        Player = MagicAST.AST.References.ObjectReference.You(),
         Count = MagicAST.AST.Quantities.LiteralQuantity.Of(1),
         Token = token,
       });

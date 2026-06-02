@@ -30,6 +30,9 @@
           "Effects": [
             {
               "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
               "Count": {
                 "QuantityType": "variable",
                 "Name": "X"
