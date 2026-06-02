@@ -1,0 +1,9 @@
+[
+  {
+    "_note": "Ruthless Knave sacrifices a creature; Blood Artist drains on any creature's death. A reliable (GREEN) creature-death handoff: creature ⊆ creature, you-controlled ⊆ any controller. The sound contrast to the Squirrel ⊄ creature AMBER of the Chatterfang × Pitiless gold.",
+    "from": "sac-outlet",
+    "to": "death-payoff",
+    "resource": "Death",
+    "family": "Flow"
+  }
+]
