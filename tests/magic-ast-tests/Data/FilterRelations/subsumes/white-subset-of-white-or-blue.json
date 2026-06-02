@@ -1,0 +1,6 @@
+{
+  "_note": "'has white' ⊆ 'has white or blue' → Yes.",
+  "Sub": { "Colors": ["W"] },
+  "Sup": { "Colors": ["W", "U"] },
+  "Expected": "Yes"
+}

@@ -1,0 +1,5 @@
+{
+  "A": { "PowerComparison": { "Operator": "GreaterThanOrEqual", "Value": 2 } },
+  "B": { "PowerComparison": { "Operator": "LessThanOrEqual", "Value": 5 } },
+  "Expected": "Overlaps"
+}

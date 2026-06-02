@@ -1,0 +1,6 @@
+{
+  "_note": "A creature can't be both attacking and blocking at once (CR 508/509) → Disjoint.",
+  "A": { "Characteristics": [{ "CharacteristicType": "combatState", "State": "Attacking" }] },
+  "B": { "Characteristics": [{ "CharacteristicType": "combatState", "State": "Blocking" }] },
+  "Expected": "Disjoint"
+}

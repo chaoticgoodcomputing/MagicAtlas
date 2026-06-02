@@ -1,0 +1,6 @@
+{
+  "_note": "Operator-spec canonical fixture #1: 'another Squirrel you control' (the sac fodder) vs 'another creature you control' — Subtypes + Controller + ExcludeSelf together → Overlaps.",
+  "A": { "Subtypes": ["Squirrel"], "Controller": "You", "ExcludeSelf": true },
+  "B": { "CardTypes": ["creature"], "Controller": "You", "ExcludeSelf": true },
+  "Expected": "Overlaps"
+}

@@ -1,0 +1,5 @@
+{
+  "A": { "IsToken": true },
+  "B": { "IsToken": false },
+  "Expected": "Disjoint"
+}

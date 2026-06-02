@@ -1,0 +1,6 @@
+{
+  "_note": "Not every creature is legendary → No.",
+  "Sub": { "CardTypes": ["creature"] },
+  "Sup": { "CardTypes": ["creature"], "Supertypes": ["Legendary"] },
+  "Expected": "No"
+}

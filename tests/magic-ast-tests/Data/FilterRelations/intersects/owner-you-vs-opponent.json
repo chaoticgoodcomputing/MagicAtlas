@@ -1,0 +1,5 @@
+{
+  "A": { "Owner": "You" },
+  "B": { "Owner": "Opponent" },
+  "Expected": "Disjoint"
+}

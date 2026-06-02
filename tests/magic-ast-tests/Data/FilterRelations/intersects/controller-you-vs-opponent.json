@@ -1,0 +1,5 @@
+{
+  "A": { "Controller": "You" },
+  "B": { "Controller": "Opponent" },
+  "Expected": "Disjoint"
+}

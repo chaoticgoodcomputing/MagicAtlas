@@ -1,0 +1,6 @@
+{
+  "_note": "Intra-filter unsatisfiability guard: a creature∧instant sub denotes ∅, and ∅ ⊆ everything → Yes.",
+  "Sub": { "CardTypes": ["creature", "instant"] },
+  "Sup": { "CardTypes": ["artifact"] },
+  "Expected": "Yes"
+}

@@ -1,0 +1,6 @@
+{
+  "_note": "Guards that kindred-vs-a-concrete-type is uniformly Unknown (not land-specific): even though Kindred Enchantments are printed, the operator can't prove the specific combo statically → Unknown, never a false Overlaps.",
+  "A": { "CardTypes": ["kindred"] },
+  "B": { "CardTypes": ["enchantment"] },
+  "Expected": "Unknown"
+}

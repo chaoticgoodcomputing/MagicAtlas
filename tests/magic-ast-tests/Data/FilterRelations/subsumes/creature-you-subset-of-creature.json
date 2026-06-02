@@ -1,0 +1,6 @@
+{
+  "_note": "Reliable edge: every 'creature you control' is a creature → Yes.",
+  "Sub": { "CardTypes": ["creature"], "Controller": "You" },
+  "Sup": { "CardTypes": ["creature"] },
+  "Expected": "Yes"
+}

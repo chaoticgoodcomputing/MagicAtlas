@@ -1,0 +1,6 @@
+{
+  "_note": "Keyword presence is combinable — an object can have both flying and trample → Overlaps.",
+  "A": { "Characteristics": [{ "CharacteristicType": "keyword", "Keyword": "Flying" }] },
+  "B": { "Characteristics": [{ "CharacteristicType": "keyword", "Keyword": "Trample" }] },
+  "Expected": "Overlaps"
+}

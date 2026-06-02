@@ -21,6 +21,10 @@ Data/**
 # of truth, one per keyword.
 !Data/KeywordExpansions/**/*
 
+# ObjectFilter relation-operator conformance fixtures (ADR-0008) + the vendored
+# type-ontology the operator binds to — agent-facing source of truth for Intersects/Subsumes.
+!Data/FilterRelations/**/*
+
 # Allow all schema and catalog .cs files
 !Data/**/*.cs
 

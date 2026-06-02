@@ -1,0 +1,6 @@
+{
+  "_note": "Not every creature is one you control → No.",
+  "Sub": { "CardTypes": ["creature"] },
+  "Sup": { "CardTypes": ["creature"], "Controller": "You" },
+  "Expected": "No"
+}

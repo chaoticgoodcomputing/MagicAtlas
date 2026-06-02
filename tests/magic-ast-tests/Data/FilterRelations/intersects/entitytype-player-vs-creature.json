@@ -1,0 +1,6 @@
+{
+  "_note": "A player is not an object (CR 102 vs 109) → Disjoint against any object-type filter.",
+  "A": { "EntityType": "player" },
+  "B": { "CardTypes": ["creature"] },
+  "Expected": "Disjoint"
+}

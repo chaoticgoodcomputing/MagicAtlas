@@ -1,0 +1,6 @@
+{
+  "_note": "Interval containment: [6,∞) ⊆ [4,∞) → Yes.",
+  "Sub": { "PowerComparison": { "Operator": "GreaterThanOrEqual", "Value": 6 } },
+  "Sup": { "PowerComparison": { "Operator": "GreaterThanOrEqual", "Value": 4 } },
+  "Expected": "Yes"
+}

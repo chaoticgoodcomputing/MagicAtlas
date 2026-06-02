@@ -1,0 +1,6 @@
+{
+  "_note": "creature ⊆ permanent (110.4) → Yes.",
+  "Sub": { "CardTypes": ["creature"] },
+  "Sup": { "CardTypes": ["permanent"] },
+  "Expected": "Yes"
+}

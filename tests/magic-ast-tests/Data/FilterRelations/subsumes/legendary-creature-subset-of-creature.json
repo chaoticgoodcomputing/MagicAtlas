@@ -1,0 +1,5 @@
+{
+  "Sub": { "CardTypes": ["creature"], "Supertypes": ["Legendary"] },
+  "Sup": { "CardTypes": ["creature"] },
+  "Expected": "Yes"
+}

@@ -1,0 +1,5 @@
+{
+  "A": { "Colors": ["W"] },
+  "B": { "IsColorless": true },
+  "Expected": "Disjoint"
+}

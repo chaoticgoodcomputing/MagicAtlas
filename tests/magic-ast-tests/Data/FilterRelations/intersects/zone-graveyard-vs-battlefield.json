@@ -1,0 +1,5 @@
+{
+  "A": { "Zone": "Graveyard" },
+  "B": { "Zone": "Battlefield" },
+  "Expected": "Disjoint"
+}

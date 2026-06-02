@@ -1,0 +1,5 @@
+{
+  "A": { "CardTypes": ["creature"] },
+  "B": { "ExcludedCardTypes": ["creature"] },
+  "Expected": "Disjoint"
+}

@@ -1,0 +1,5 @@
+{
+  "A": { "Name": "Sol Ring" },
+  "B": { "Name": "Black Lotus" },
+  "Expected": "Disjoint"
+}
