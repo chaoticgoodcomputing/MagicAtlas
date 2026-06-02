@@ -1,6 +1,6 @@
 using Flowthru.Data.Schema;
 
-namespace MagicAtlas.Data._03_Primary.Schemas;
+namespace MagicAtlas.Rules.Data._03_Primary.Schemas;
 
 /// <summary>
 /// Hierarchical structure of MTG comprehensive rules.

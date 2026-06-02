@@ -1,6 +1,6 @@
 using Flowthru.Step;
 
-namespace MagicAtlas.Flows.RulesProcessing.Nodes;
+namespace MagicAtlas.Rules.Flows.RulesProcessing.Nodes;
 
 /// <summary>
 /// Splits raw MTG rules text into five major sections.

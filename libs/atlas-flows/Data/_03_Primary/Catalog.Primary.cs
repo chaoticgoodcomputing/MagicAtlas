@@ -10,28 +10,6 @@ namespace MagicAtlas.Data;
 public partial class Catalog
 {
   /// <summary>
-  /// Parsed hierarchical rules structure.
-  /// </summary>
-  public IItem<RulesStructure> ParsedRules =>
-    CreateItem(() =>
-      Item.Of<RulesStructure>("ParsedRules")
-        .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/rules-structure.json")
-        .Build()
-    );
-
-  /// <summary>
-  /// Parsed glossary as term-definition pairs.
-  /// </summary>
-  public IItem<GlossaryEntries> ParsedGlossary =>
-    CreateItem(() =>
-      Item.Of<GlossaryEntries>("ParsedGlossary")
-        .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/glossary.json")
-        .Build()
-    );
-
-  /// <summary>
   /// Filtered card core data (analysis-relevant fields). Persisted to disk as JSON.
   /// </summary>
   public IItem<IEnumerable<CardCoreData>> FilteredCardCoreData =>

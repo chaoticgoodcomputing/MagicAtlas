@@ -11,7 +11,6 @@ using MagicAtlas.Flows.FineTuneEval;
 using MagicAtlas.Flows.Ingest;
 using MagicAtlas.Flows.OracleEmbedding;
 using MagicAtlas.Flows.Reporting;
-using MagicAtlas.Flows.RulesProcessing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -25,8 +24,8 @@ namespace MagicAtlas.Harness;
 /// six pipeline flows:
 /// </summary>
 /// <list type="number">
-/// <item><b>Ingest</b> — HTTP boundary; fetches MTG rules + Scryfall card/symbology bytes.</item>
-/// <item><b>RulesProcessing</b> — section/rule/glossary extraction from the rules text.</item>
+/// <item><b>Ingest</b> — HTTP boundary; fetches Scryfall card/symbology bytes. (MTG rules text
+/// moved to the standalone <c>mtg-rules</c> project.)</item>
 /// <item><b>CardProcessing</b> — typed Scryfall card parsing + commander-format filter.</item>
 /// <item><b>FineTune</b> — MTG-corpus fine-tune of the base sentence-transformer.</item>
 /// <item><b>OracleEmbedding</b> — encode oracle lines → unsupervised UMAP → 2D atlas coordinates.</item>
@@ -180,10 +179,6 @@ public class Program
         .WithDescription(
           "Fetches MTG rules + Scryfall card and symbology data into the _01_Raw layer"
         );
-
-      flowthru
-        .RegisterFlow<Catalog>("RulesProcessing", RulesProcessingFlow.Create)
-        .WithDescription("Parses the comprehensive rules text into structured JSON");
 
       flowthru
         .RegisterFlow<Catalog, CardProcessingFlowConfig>(

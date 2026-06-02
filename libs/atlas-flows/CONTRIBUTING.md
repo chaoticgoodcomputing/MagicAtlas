@@ -26,16 +26,18 @@ not in this directory. Run flows from there.
 
 ## Pipeline shape
 
-Six flows, registered in [`Program.cs`](../../tests/atlas-flow-test/Program.cs):
+Five flows, registered in [`Program.cs`](../../tests/atlas-flow-test/Program.cs):
 
-1. **Ingest** — HTTP boundary; fetches MTG rules + Scryfall card and symbology bytes into `_01_Raw`.
-2. **RulesProcessing** — section/rule/glossary extraction from the rules text.
-3. **CardProcessing** — typed Scryfall card parsing + commander-format filter.
-4. **FineTune** — base-model download + MTG-corpus fine-tune. Training pairs are derived
-   entirely from glossary/CR/oracle-text (no manual curated overrides).
-5. **OracleEmbedding** — encode oracle lines via the fine-tuned model → unsupervised UMAP →
+1. **Ingest** — HTTP boundary; fetches Scryfall card and symbology bytes into `_01_Raw`. (The MTG
+   comprehensive rules text moved to the standalone `mtg-rules` project, which publishes the
+   structured rules + glossary + type ontology this project vendors.)
+2. **CardProcessing** — typed Scryfall card parsing + commander-format filter.
+3. **FineTune** — base-model download + MTG-corpus fine-tune. Training pairs are derived
+   entirely from glossary/CR/oracle-text (no manual curated overrides); the glossary + rules
+   inputs are vendored from the `mtg-rules` project.
+4. **OracleEmbedding** — encode oracle lines via the fine-tuned model → unsupervised UMAP →
    2D atlas coordinates + a label-free fidelity scorecard.
-6. **Reporting** — render the atlas as a standalone Plotly HTML, colored by MTG color identity.
+5. **Reporting** — render the atlas as a standalone Plotly HTML, colored by MTG color identity.
 
 ## Language
 
@@ -46,8 +48,8 @@ to *"what role does this artifact play in the ML lifecycle?"* (Kedro-strict; see
 [ADR-0001](docs/adr/0001-kedro-strict-layer-placement.md)).
 
 **`_01_Raw`**:
-Original source bytes — Scryfall bulk JSON, Magic comprehensive rules text. Never modified
-after fetch.
+Original source bytes — Scryfall bulk JSON. Never modified after fetch. (Comprehensive rules
+text now lives in the standalone `mtg-rules` project.)
 _Avoid_: "Bronze layer", "ingest output"
 
 **`_02_Intermediate`**:

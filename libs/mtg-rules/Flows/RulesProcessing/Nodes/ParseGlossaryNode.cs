@@ -1,8 +1,8 @@
-using MagicAtlas.Data._03_Primary.Schemas;
-using MagicAtlas.Helpers;
 using Flowthru.Step;
+using MagicAtlas.Rules.Data._03_Primary.Schemas;
+using MagicAtlas.Rules.Helpers;
 
-namespace MagicAtlas.Flows.RulesProcessing.Nodes;
+namespace MagicAtlas.Rules.Flows.RulesProcessing.Nodes;
 
 /// <summary>
 /// Parses glossary text into term-definition pairs.

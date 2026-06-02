@@ -1,14 +1,13 @@
 using Flowthru.Flow;
-using MagicAtlas.Data;
-using MagicAtlas.Data._03_Primary.Schemas;
-using MagicAtlas.Flows.RulesProcessing.Nodes;
+using MagicAtlas.Rules.Data;
+using MagicAtlas.Rules.Data._03_Primary.Schemas;
+using MagicAtlas.Rules.Flows.RulesProcessing.Nodes;
 
-namespace MagicAtlas.Flows.RulesProcessing;
+namespace MagicAtlas.Rules.Flows.RulesProcessing;
 
 /// <summary>
-/// Parses the MTG comprehensive rules text file (produced by the <c>Ingest</c> flow) into
-/// structured JSON: a hierarchical rules tree plus a flat glossary dictionary. Pure C# —
-/// text/regex processing only, no Python and no HTTP.
+/// Parses the MTG comprehensive rules text (produced by <c>Ingest</c>) into structured JSON:
+/// a hierarchical rules tree plus a flat glossary dictionary. Pure C# — text/regex only, no HTTP.
 /// </summary>
 public static class RulesProcessingFlow
 {
@@ -17,14 +16,7 @@ public static class RulesProcessingFlow
     return FlowBuilder.CreateFlow("RulesProcessing", pipeline =>
     {
       // Node 1: split raw text into 5 sections
-      pipeline.AddStep<
-        string,
-        string,
-        string,
-        string,
-        string,
-        string
-      >(
+      pipeline.AddStep<string, string, string, string, string, string>(
         label: "SplitRulesIntoMajorSections",
         transform: SplitSectionsNode.Create(),
         inputs: catalog.RawRules,

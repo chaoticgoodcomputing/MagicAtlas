@@ -1,0 +1,30 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "mtg-rules",
+  "sourceRoot": "libs/mtg-rules",
+  "projectType": "application",
+  "targets": {
+    "run": {
+      "//": "Run the rules pipeline. --flows Ingest,RulesProcessing,TypeOntology to limit, or no args for full run.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run"],
+        "cwd": "libs/mtg-rules"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot}",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "format:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet csharpier {projectRoot} --check",
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  }
+}

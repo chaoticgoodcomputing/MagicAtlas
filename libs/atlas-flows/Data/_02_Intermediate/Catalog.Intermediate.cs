@@ -35,29 +35,9 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Introduction section.
-  /// </summary>
-  public IItem<string> Intro =>
-    CreateItem(() =>
-      Item.Of<string>("Intro")
-        .Text()
-        .AtPath($"{_basePath}/_02_Intermediate/Datasets/RulesSections/intro.txt")
-        .Build()
-    );
-
-  /// <summary>
-  /// Table of contents section.
-  /// </summary>
-  public IItem<string> TableOfContents =>
-    CreateItem(() =>
-      Item.Of<string>("TableOfContents")
-        .Text()
-        .AtPath($"{_basePath}/_02_Intermediate/Datasets/RulesSections/toc.txt")
-        .Build()
-    );
-
-  /// <summary>
-  /// Rules section (numbered rules only).
+  /// Rules section (numbered rules only). Produced by the standalone <c>mtg-rules</c> project and
+  /// vendored into this project's <c>_02_Intermediate</c> layer; consumed by the FineTune
+  /// training-pair builder.
   /// </summary>
   public IItem<string> RulesText =>
     CreateItem(() =>
@@ -68,24 +48,14 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Glossary section.
+  /// Glossary section. Produced by the standalone <c>mtg-rules</c> project and vendored into this
+  /// project's <c>_02_Intermediate</c> layer; consumed by the FineTune training-pair builder.
   /// </summary>
   public IItem<string> GlossaryText =>
     CreateItem(() =>
       Item.Of<string>("GlossaryText")
         .Text()
         .AtPath($"{_basePath}/_02_Intermediate/Datasets/RulesSections/glossary.txt")
-        .Build()
-    );
-
-  /// <summary>
-  /// Credits section.
-  /// </summary>
-  public IItem<string> Credits =>
-    CreateItem(() =>
-      Item.Of<string>("Credits")
-        .Text()
-        .AtPath($"{_basePath}/_02_Intermediate/Datasets/RulesSections/credits.txt")
         .Build()
     );
 }
