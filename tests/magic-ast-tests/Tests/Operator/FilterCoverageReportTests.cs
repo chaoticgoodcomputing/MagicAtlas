@@ -18,14 +18,8 @@ public class FilterCoverageReportTests
   [Explicit("Diagnostic corpus rollup; run on demand.")]
   public void Emits_filter_coverage_report()
   {
-    var ontologyPath = Path.Combine(
-      TestContext.CurrentContext.TestDirectory,
-      "Data",
-      "FilterRelations",
-      "type-ontology.json"
-    );
     var ontology =
-      JsonSerializer.Deserialize<TypeOntology>(File.ReadAllText(ontologyPath))
+      JsonSerializer.Deserialize<TypeOntology>(File.ReadAllText(TestData.OntologyPath))
       ?? throw new InvalidOperationException("ontology");
 
     var filters = new List<ObjectFilter>();

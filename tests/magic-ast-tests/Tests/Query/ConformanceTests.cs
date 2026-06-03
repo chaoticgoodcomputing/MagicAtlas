@@ -16,7 +16,7 @@ public class ConformanceTests
 {
   private static readonly string DataDir = Path.Combine(
     Path.GetDirectoryName(typeof(ConformanceTests).Assembly.Location)!,
-    "Data",
+    "Fixtures",
     "Query"
   );
 

@@ -198,7 +198,7 @@ Bail and escalate if any of these hold.
 | Effect trait interfaces | `libs/magic-ast/AST/Effects/Traits/` |
 | Ability parsers | `libs/magic-ast/Parsing/Parsers/*.cs` |
 | Failure-pattern inference | `libs/magic-ast/Parsing/Parsers/FallbackParser.cs` |
-| Hand-parsed fixtures | `tests/magic-ast-tests/Data/HandParsedCards/{set}/*.json` |
+| Hand-parsed fixtures | `tests/magic-ast-tests/Fixtures/HandParsedCards/{set}/*.json` |
 | Test diff dumps (on failure) | `/tmp/mast-diffs/{set}_{card}.expected.json` + `.actual.json` |
 | Orchestrator merge-gate / triage / glossary (main checkout, `nx` available) | `nx run mast:test` / `nx run mast:run` / `nx run magic-ast:glossary` |
 | Worker targeted test (worktree — `nx` UNavailable, no `node_modules`) | `dotnet test tests/magic-ast-tests/MagicAtlas.Ast.Tests.csproj --filter "FullyQualifiedName~<CardNameNoSpaces>" --nologo` |

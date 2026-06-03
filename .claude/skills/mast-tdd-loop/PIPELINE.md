@@ -13,7 +13,7 @@ The Invariants in SKILL.md ("Gold AST = eventual truth", fixtures immutable, GLO
 
 ### Fixture file shape
 
-Create `tests/magic-ast-tests/Data/HandParsedCards/{Set}/{CardName}.json`:
+Create `tests/magic-ast-tests/Fixtures/HandParsedCards/{Set}/{CardName}.json`:
 
 ```json
 {

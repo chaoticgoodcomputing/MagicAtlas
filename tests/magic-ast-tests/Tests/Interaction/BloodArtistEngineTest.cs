@@ -5,6 +5,7 @@ using System.Text.Json.Nodes;
 using MagicAST.AST.References;
 using MagicAST.Interaction;
 using MagicAST.Schema;
+using MagicAST.Tests.Infrastructure;
 
 /// <summary>
 /// The second mast-interaction reconstruction gold (C3) — a <b>different</b> combo than Chatterfang ×
@@ -22,14 +23,14 @@ public class BloodArtistEngineTest
 {
   private static readonly AstSchema Schema = SchemaExport.Build();
   private static readonly TypeOntology Ontology = JsonSerializer.Deserialize<TypeOntology>(
-    File.ReadAllText(DataPath("type-ontology.json"))
+    File.ReadAllText(TestData.OntologyPath)
   )!;
   private static readonly IReadOnlyList<FamilyEdge> Grammar = FamilyGrammar.Load(
     DataPath("blood-artist-engine.json")
   );
 
   private static string DataPath(params string[] parts) =>
-    Path.Combine([TestContext.CurrentContext.TestDirectory, "Data", "Interactions", .. parts]);
+    Path.Combine([TestContext.CurrentContext.TestDirectory, "Fixtures", "Interactions", .. parts]);
 
   private static IReadOnlyList<Port> Project(string file, string card)
   {

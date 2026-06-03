@@ -13,7 +13,7 @@ public static class KeywordExpansionTestCaseLoader
   private const string Subdirectory = "KeywordExpansions";
 
   private static string Directory() =>
-    Path.Combine(TestContext.CurrentContext.TestDirectory, "Data", Subdirectory);
+    Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", Subdirectory);
 
   /// <summary>All keyword-expansion gold cases under <c>Data/KeywordExpansions</c>.</summary>
   public static IEnumerable<KeywordExpansionTestCase> GetAllTestCases()

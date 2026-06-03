@@ -19,7 +19,7 @@ public sealed class CardTestCaseLoader
     _categoryName = dataSubdirectory;
     _testCasesDirectory = Path.Combine(
       TestContext.CurrentContext.TestDirectory,
-      "Data",
+      "Fixtures",
       dataSubdirectory
     );
   }

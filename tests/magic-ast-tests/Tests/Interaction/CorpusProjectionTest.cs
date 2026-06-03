@@ -17,35 +17,17 @@ public class CorpusProjectionTest
 {
   private static readonly AstSchema Schema = SchemaExport.Build();
 
-  private static string FindCorpusDir()
-  {
-    for (
-      var dir = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
-      dir is not null;
-      dir = dir.Parent
-    )
-    {
-      var candidate = Path.Combine(
-        dir.FullName,
-        "tests",
-        "magic-ast-tests",
-        "Data",
-        "HandParsedCards"
-      );
-      if (Directory.Exists(candidate))
-        return candidate;
-    }
-    throw new DirectoryNotFoundException(
-      "HandParsedCards corpus not found above " + TestContext.CurrentContext.TestDirectory
-    );
-  }
+  // The hand-parsed corpus now lives in this project's own Fixtures/ (copied to the test output
+  // dir), so the projector sweep reads it directly — no cross-project walk-up.
+  private static string CorpusDir() =>
+    Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "HandParsedCards");
 
   [Test]
   public void Projects_every_corpus_card_without_throwing()
   {
     var projector = new PortProjector(Schema);
     var files = Directory
-      .EnumerateFiles(FindCorpusDir(), "*.json", SearchOption.AllDirectories)
+      .EnumerateFiles(CorpusDir(), "*.json", SearchOption.AllDirectories)
       .ToList();
     Assert.That(files.Count, Is.GreaterThan(500), "expected the full hand-parsed corpus");
 

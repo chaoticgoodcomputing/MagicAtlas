@@ -40,7 +40,7 @@ The discriminator: *can the printed text + the CR decide it?* If yes and the ope
 |---|---|
 | `tests/atlas-flow-test/Data/_03_Primary/Datasets/rules-structure.json` | Full Comprehensive Rules, hierarchical (`sections → subsections → rules → subrules`). Query a rule: `jq '.sections[].subsections[] \| select(.number == 205) \| .rules[] \| select(.number == "205.3")'`. |
 | `tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` | Indexed MTG terms with definitions + rule cites. `jq '.terms.{Term}'`. |
-| `tests/mast-interaction-test/Data/type-ontology.json` | The derived type ontology the operator consumes (subtype pools, permanent partition, colors). Confirms what the operator *can* know. |
+| `tests/magic-ast-tests/Data/_01_Raw/Datasets/Curated/type-ontology.json` | The derived type ontology the operator consumes (subtype pools, permanent partition, colors), vendored from `mtg-rules`. Confirms what the operator *can* know. |
 | `docs/scratch/mast-objectfilter-intersects-subsumes.md` | The operator spec — the per-axis Intersects/Subsumes contract and the certainty semantics. |
 | `libs/magic-ast/AST/References/ObjectFilter.cs` | The filter axes and the `ControllerFilter` values (which controllers are runtime-chosen). |
 
@@ -50,7 +50,7 @@ The discriminator: *can the printed text + the CR decide it?* If yes and the ope
 
 The dispatch prompt names, for each reconstruction gold:
 
-1. The **card AST paths** (the parsed golds under `tests/mast-interaction-test/Data/cards/` or `tests/magic-ast-tests/Data/HandParsedCards/`).
+1. The **card AST paths** (the parsed golds under `tests/magic-ast-tests/Fixtures/Interactions/cards/` or `tests/magic-ast-tests/Fixtures/HandParsedCards/`).
 2. The **grammar** (the authored `families.json`-shaped edge list) and/or the **test file** that asserts the reconstructed edges and their tiers (the test is the verified source of truth for what the engine produced — it is green).
 3. The **edges to judge**: each as `from-label --(Resource)--> to-label`, with the operator's `Overlap`, `Reliability`, `Reason`, and resulting `Tier`.
 

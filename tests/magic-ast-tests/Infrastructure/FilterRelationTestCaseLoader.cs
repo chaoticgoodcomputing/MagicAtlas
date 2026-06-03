@@ -15,7 +15,7 @@ public static class FilterRelationTestCaseLoader
   private static string Directory() =>
     Path.Combine(
       TestContext.CurrentContext.TestDirectory,
-      "Data",
+      "Fixtures",
       "FilterRelations",
       "intersects"
     );

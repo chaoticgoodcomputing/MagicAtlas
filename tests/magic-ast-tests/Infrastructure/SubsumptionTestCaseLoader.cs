@@ -12,7 +12,7 @@ using MagicAST.AST.References;
 public static class SubsumptionTestCaseLoader
 {
   private static string Directory() =>
-    Path.Combine(TestContext.CurrentContext.TestDirectory, "Data", "FilterRelations", "subsumes");
+    Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "FilterRelations", "subsumes");
 
   public static IEnumerable<SubsumptionTestCase> GetAllTestCases()
   {

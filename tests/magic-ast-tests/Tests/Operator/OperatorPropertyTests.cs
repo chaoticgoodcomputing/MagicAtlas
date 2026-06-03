@@ -26,12 +26,7 @@ public class OperatorPropertyTests
 
   private static TypeOntology LoadOntology()
   {
-    var path = Path.Combine(
-      TestContext.CurrentContext.TestDirectory,
-      "Data",
-      "FilterRelations",
-      "type-ontology.json"
-    );
+    var path = TestData.OntologyPath;
     return JsonSerializer.Deserialize<TypeOntology>(File.ReadAllText(path))
       ?? throw new InvalidOperationException($"Failed to deserialize TypeOntology from {path}");
   }

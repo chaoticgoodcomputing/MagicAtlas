@@ -33,6 +33,18 @@
         "parallel": false
       }
     },
+    "seed-ontology": {
+      "//": "Regenerate the MTG type ontology from the upstream mtg-rules project and copy it into this project's Curated input layer. Preserves the explicit 'copied from mtg-rules' provenance; the raw CR text stays in mtg-rules (gitignored). Run after mtg-rules' ontology rules change.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "dotnet run --project libs/mtg-rules",
+          "cp libs/mtg-rules/Data/_03_Primary/Datasets/type-ontology.json tests/magic-ast-tests/Data/_01_Raw/Datasets/Curated/type-ontology.json"
+        ],
+        "cwd": "{workspaceRoot}",
+        "parallel": false
+      }
+    },
     "worktree-clean": {
       "//": "Reap MAST TDD-loop agent worktrees + merged agent branches (run after every batch). Default deletes only MERGED mast-tdd/* and worktree-agent-* branches; for a DISCARDED batch run `bash tools/clean-worktrees.sh --force` to also drop unmerged ones.",
       "executor": "nx:run-commands",

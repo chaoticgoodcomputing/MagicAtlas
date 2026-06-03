@@ -39,7 +39,7 @@ When invoked, you receive:
 
 1. **Mode**: `verify` (post-implementation, pre-merge — the only mode this skill currently supports).
 2. **Scope**: a list of file paths to judge. Typically:
-   - Modified or new fixtures under `tests/magic-ast-tests/Data/HandParsedCards/`
+   - Modified or new fixtures under `tests/magic-ast-tests/Fixtures/HandParsedCards/`
    - New or modified AST node files under `libs/magic-ast/AST/`
 3. **Output path**: where to write the verdict report. Default: `docs/judgments/verdict-{YYYY-MM-DD}.md`. Suffix with `-N` if the file already exists for today.
 
@@ -49,7 +49,7 @@ The orchestrator passes scope + output path explicitly in the dispatch prompt.
 
 For each file in scope:
 
-### Fixtures (`tests/magic-ast-tests/Data/HandParsedCards/**/*.json`)
+### Fixtures (`tests/magic-ast-tests/Fixtures/HandParsedCards/**/*.json`)
 
 1. Read the fixture's `Input.OracleText`.
 2. Read `Output.Oracle.Abilities` (and nested ability bodies — Saga chapters, Modal options, Level-up stanzas).
@@ -208,5 +208,5 @@ The orchestrator reads only this closing message + the verdict file; everything 
 | MAST conventions | `libs/magic-ast/CONTRIBUTING.md` |
 | Engine-lens structural audit (background) | `docs/ast-engine-lens-audit.md` |
 | Verdict report (output) | `docs/judgments/verdict-{date}.md` |
-| Hand-parsed fixtures | `tests/magic-ast-tests/Data/HandParsedCards/{set}/{card}.json` |
+| Hand-parsed fixtures | `tests/magic-ast-tests/Fixtures/HandParsedCards/{set}/{card}.json` |
 | AST nodes | `libs/magic-ast/AST/**/*.cs` |
