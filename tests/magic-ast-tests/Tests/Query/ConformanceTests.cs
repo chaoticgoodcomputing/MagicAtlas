@@ -16,7 +16,8 @@ public class ConformanceTests
 {
   private static readonly string DataDir = Path.Combine(
     Path.GetDirectoryName(typeof(ConformanceTests).Assembly.Location)!,
-    "Data"
+    "Data",
+    "Query"
   );
 
   private static readonly AstSchema Schema = SchemaExport.Build();

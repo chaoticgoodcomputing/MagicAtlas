@@ -25,6 +25,10 @@ Data/**
 # type-ontology the operator binds to — agent-facing source of truth for Intersects/Subsumes.
 !Data/FilterRelations/**/*
 
+# mast-query + mast-interaction test fixtures, absorbed from the satellite projects.
+!Data/Query/**/*
+!Data/Interactions/**/*
+
 # Allow all schema and catalog .cs files
 !Data/**/*.cs
 

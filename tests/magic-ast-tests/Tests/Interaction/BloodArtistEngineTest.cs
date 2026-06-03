@@ -29,7 +29,7 @@ public class BloodArtistEngineTest
   );
 
   private static string DataPath(params string[] parts) =>
-    Path.Combine([TestContext.CurrentContext.TestDirectory, "Data", .. parts]);
+    Path.Combine([TestContext.CurrentContext.TestDirectory, "Data", "Interactions", .. parts]);
 
   private static IReadOnlyList<Port> Project(string file, string card)
   {

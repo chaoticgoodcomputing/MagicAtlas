@@ -43,6 +43,8 @@
 
   <ItemGroup>
     <ProjectReference Include="../../libs/magic-ast/MagicAST.csproj" />
+    <ProjectReference Include="../../libs/mast-query/MagicAST.Query.csproj" />
+    <ProjectReference Include="../../libs/mast-interaction/MagicAST.Interaction.csproj" />
   </ItemGroup>
 
   <ItemGroup>

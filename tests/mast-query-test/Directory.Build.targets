@@ -1,4 +1,0 @@
-<!-- Override the repo-root Nx module-boundary check — see libs/magic-ast/Directory.Build.targets. -->
-<Project>
-  <Target Name="CheckNxModuleBoundaries" BeforeTargets="Build" />
-</Project>
