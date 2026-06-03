@@ -1,6 +1,8 @@
 using Flowthru.Cli;
 using Flowthru.Hosting;
+using Flowthru.Step.Python;
 using MagicAtlas.Ast.Tests.Data;
+using MagicAtlas.Ast.Tests.Flows.InteractionTriage;
 using MagicAtlas.Ast.Tests.Flows.MagicAstSmoke;
 using MagicAtlas.Ast.Tests.Flows.MagicAstTriage;
 using Microsoft.Extensions.Configuration;
@@ -76,13 +78,61 @@ public class Program
     var ratchetBaselinePath = Path.Combine(basePath, "test-baseline.json");
     var handParsedFixturesRoot = Path.Combine(basePath, "Fixtures", "HandParsedCards");
 
+    // Commander Spellbook combo dump — a curled, gitignored static input (Flowthru's HTTP catalog
+    // medium can't serve the .Json() singleton; see FetchCombosStep). Refresh with:
+    // curl -o <this path> https://json.commanderspellbook.com/variants.json
+    var csbVariantsPath = Path.Combine(
+      dataPath,
+      "_01_Raw",
+      "Datasets",
+      "External",
+      "csb-variants.json"
+    );
+
+    // Interaction-graph inputs: the canonical known-families grammar (committed fixture) and the
+    // vendored type ontology (Curated). Both feed the InteractionTriage reconstruction + viz.
+    var knownFamiliesPath = Path.Combine(basePath, "Fixtures", "Interactions", "known-families.json");
+    var ontologyPath = Path.Combine(
+      dataPath,
+      "_01_Raw",
+      "Datasets",
+      "Curated",
+      "type-ontology.json"
+    );
+
     services.AddFlowthru(flowthru =>
     {
+      // Python step host for the interaction-graph Plotly viz — this project's own .venv (deps in
+      // pyproject.toml: networkx, pandas, plotly, pyarrow). Module search rooted at the project dir,
+      // so "Flows.InteractionTriage.plot_interaction_graph" resolves.
+      flowthru.UsePython(python =>
+      {
+        python.ModuleSearchPaths.Add(basePath);
+        python.VenvPath = Path.Combine(basePath, ".venv");
+      });
+
       flowthru.RegisterCatalog(_ => new Catalog(dataPath, ratchetBaselinePath));
 
       flowthru
         .RegisterFlow<Catalog>("MagicAstSmoke", MagicAstSmokeFlow.Create)
         .WithDescription("Placeholder smoke test that runs MagicAST.OracleParser over a fixed input.");
+
+      flowthru
+        .RegisterFlow<Catalog, IPythonExecutor>(
+          "InteractionTriage",
+          (catalog, executor) =>
+            InteractionTriageFlow.Create(
+              catalog,
+              executor,
+              csbVariantsPath,
+              knownFamiliesPath,
+              ontologyPath
+            )
+        )
+        .WithDescription(
+          "Streams the curled Commander Spellbook combo dump into the lean work-list and classifies "
+            + "each combo by blocking layer (parse vs reconstruction) → Data/_08_Reporting/interaction-triage-report.json."
+        );
 
       flowthru
         .RegisterFlow<Catalog>(

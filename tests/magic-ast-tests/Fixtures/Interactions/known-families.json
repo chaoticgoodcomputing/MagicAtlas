@@ -1,0 +1,5 @@
+[
+  { "_note": "A sacrificed permanent dies → feeds a creature-death payoff (sac-outlet → death-payoff).", "from": "sac-outlet", "to": "death-payoff", "resource": "Death", "family": "Flow" },
+  { "_note": "A death-payoff's token creation is intercepted by a token doubler/replacement.", "from": "death-payoff", "to": "token-doubler", "resource": "Token", "family": "Modifier" },
+  { "_note": "A token doubler's created tokens refuel a sacrifice outlet.", "from": "token-doubler", "to": "sac-outlet", "resource": "Token", "family": "Flow" }
+]

@@ -16,4 +16,10 @@ public partial class Catalog
       .Json()
       .AtPath($"{_basePath}/_01_Raw/Datasets/External/oracle-cards.json")
       .Build());
+
+  // Commander Spellbook's combo dump (variants.json, ~510 MB) is NOT a catalog item: it is curled
+  // to a gitignored static input (_01_Raw/Datasets/External/csb-variants.json) and stream-read by
+  // FetchCombosStep. Flowthru's HTTP catalog medium can't serve it — the .Json() singleton builder
+  // doesn't route https:// through UseHttp (treated as a file path) — a gap to push upstream. The
+  // raw bytes are never committed; only our derived edge fixtures are ours to keep.
 }

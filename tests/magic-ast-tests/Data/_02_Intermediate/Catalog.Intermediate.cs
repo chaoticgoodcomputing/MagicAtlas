@@ -16,4 +16,15 @@ public partial class Catalog
       .Json()
       .AtPath($"{_basePath}/_02_Intermediate/Datasets/card-inputs.json")
       .Build());
+
+  /// <summary>
+  /// Lean interaction-triage combos — the Commander Spellbook dump projected to
+  /// <see cref="Combo"/> (cards + popularity + results), the ~510 MB raw stripped to what triage
+  /// uses. Cached on disk so the projection runs once per fetched dump.
+  /// </summary>
+  public IItem<IEnumerable<Combo>> Combos =>
+    CreateItem(() => Item.Of<IEnumerable<Combo>>("Combos")
+      .Json()
+      .AtPath($"{_basePath}/_02_Intermediate/Datasets/combos.json")
+      .Build());
 }

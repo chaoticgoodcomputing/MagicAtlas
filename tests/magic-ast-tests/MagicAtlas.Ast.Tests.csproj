@@ -21,6 +21,8 @@
     <!-- Flowthru host -->
     <PackageReference Include="Flowthru" Version="0.17.*" />
     <PackageReference Include="Flowthru.Cli" Version="0.17.*" />
+    <!-- Python step host: the interaction-graph Plotly viz node (own .venv via pyproject.toml). -->
+    <PackageReference Include="Flowthru.Extensions.Python" Version="0.17.*" />
 
     <!-- Hosting plumbing -->
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.*" />
@@ -51,6 +53,9 @@
     <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="Data\**\*.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="Fixtures\**\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Python step sources + dep manifest (resolved via ModuleSearchPaths at the project root). -->
+    <None Include="Flows\**\*.py" />
+    <None Include="pyproject.toml" />
   </ItemGroup>
 
 </Project>
