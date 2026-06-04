@@ -493,14 +493,17 @@ public static class ObjectFilterRelations
   /// Each landed axis removes its property from this scan. <b>Decided so far:</b> Controller, Owner,
   /// IsToken, Zone, the three numeric comparisons, the type identity axis (CardTypes, Subtypes,
   /// ExcludedCardTypes, ExcludedSubtypes), Supertypes/ExcludedSupertypes, the color family,
-  /// Characteristics (keyword + combat-state), Name, EntityType, and ExcludeSelf. The residue is the
-  /// Phase-3 relational axes.
+  /// Characteristics (keyword + combat-state), Name, EntityType, <c>ExcludeSelf</c>, and
+  /// <c>IsSelf</c>. The residue is the Phase-3 relational axes.
   /// <para>
   /// <c>ExcludeSelf</c> (CR 109.5 "another") is intentionally absent: excluding the source object
   /// from a category never empties the category at the static level, so it is relationally
   /// compatible — it never blocks overlap, and flooring it to Unknown would needlessly demote every
   /// "another …" edge. Whether the only shared object happens to be the source is a runtime question
-  /// the analytical operator does not answer.
+  /// the analytical operator does not answer. <c>IsSelf</c> ("this object") is absent for the same
+  /// reason — the source is a real object, so a self-filter still overlaps a type-compatible filter;
+  /// it is the <see cref="Subsumes"/> direction that gates it (a self-only sup is not contained by a
+  /// non-self sub).
   /// </para>
   /// </summary>
   private static string? UndecidedAxis(ObjectFilter f) =>
@@ -537,6 +540,7 @@ public static class ObjectFilterRelations
       ("Owner", ControllerSubsumes(sub.Owner, sup.Owner)),
       ("Zone", ZoneSubsumes(sub.Zone, sup.Zone)),
       ("IsToken", BoolSubsumes(sub.IsToken, sup.IsToken)),
+      ("IsSelf", BoolSubsumes(sub.IsSelf, sup.IsSelf)),
       ("Power", ComparisonSubsumes(sub.PowerComparison, sup.PowerComparison)),
       ("Toughness", ComparisonSubsumes(sub.ToughnessComparison, sup.ToughnessComparison)),
       ("ManaValue", ComparisonSubsumes(sub.ManaValueComparison, sup.ManaValueComparison)),
