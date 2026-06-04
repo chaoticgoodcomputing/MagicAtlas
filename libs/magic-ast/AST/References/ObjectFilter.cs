@@ -176,6 +176,17 @@ public sealed record ObjectFilter
   public bool? ExcludeSelf { get; init; }
 
   /// <summary>
+  /// "this" — the filter is the source object of the ability itself ("this creature", "this
+  /// permanent"; CR 109). The dual of <see cref="ExcludeSelf"/>: where ExcludeSelf omits the source,
+  /// IsSelf restricts to <em>only</em> the source. Lets "when this creature dies" be distinguished
+  /// from "when a creature dies" — the self/any axis the interaction operator gates, since an
+  /// arbitrary object is not provably the source. Mirrors <see cref="ObjectReferenceKind.Self"/> at
+  /// the filter level.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsSelf { get; init; }
+
+  /// <summary>
   /// Additional characteristic constraints beyond the structured axes above —
   /// a keyword-ability requirement (<see cref="KeywordCharacteristic"/>) or the
   /// typed residual (<see cref="OtherCharacteristic"/>) for shapes not yet
