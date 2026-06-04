@@ -1,5 +1,6 @@
 namespace MagicAST.Interaction;
 
+using MagicAST.AST.Costs;
 using MagicAST.AST.References;
 
 /// <summary>
@@ -98,6 +99,41 @@ public static class PortLabel
   /// </summary>
   public static string SacrificeCost(ObjectFilter fodder, TypeOntology ontology) =>
     Join("sac", Subject(fodder, ontology), Scope(fodder) ?? "controlled", Exclusion(fodder));
+
+  /// <summary>
+  /// A mana cost (CR 118) → per-requirement consume resources with their quantities. Each colored
+  /// symbol is a <c>pay:mana:&lt;color&gt;</c> requirement (grouped + counted), generic symbols sum
+  /// into a color-less <c>pay:mana</c>, and <c>{C}</c> is <c>pay:mana:colorless</c>. <b><c>{0}</c>
+  /// projects <c>pay:mana</c> quantity 0</b> — the zero-magnitude activation cost a cost-modifier
+  /// attaches to (ADR-0002 §4/§6, the totality principle), never dropped. Quantity rides beside the
+  /// label (§8), not in it. Exotic symbols (hybrid, variable <c>{X}</c>, snow) are a later slice.
+  /// </summary>
+  public static IReadOnlyList<(string Label, int Quantity)> PayMana(IReadOnlyList<ManaSymbol> symbols)
+  {
+    var requirements = new List<(string Label, int Quantity)>();
+
+    // Generic: one `pay:mana` requirement summing every generic symbol — emitted even at 0 ({0}).
+    var generic = symbols.Where(s => s.Kind == ManaSymbolKind.Generic).ToList();
+    if (generic.Count > 0)
+      requirements.Add(("pay:mana", generic.Sum(s => s.GenericAmount ?? 0)));
+
+    // Colorless {C}: its own requirement.
+    var colorless = symbols.Count(s => s.Kind == ManaSymbolKind.Colorless);
+    if (colorless > 0)
+      requirements.Add(("pay:mana:colorless", colorless));
+
+    // Colored: one requirement per color, counting the symbols of that color (deterministic order).
+    foreach (
+      var group in symbols
+        .Where(s => s.Kind == ManaSymbolKind.Colored && s.Colors is { Count: > 0 })
+        .SelectMany(s => s.Colors!)
+        .GroupBy(c => c)
+        .OrderBy(g => g.Key)
+    )
+      requirements.Add(($"pay:mana:{group.Key.ToString().ToLowerInvariant()}", group.Count()));
+
+    return requirements;
+  }
 
   /// <summary>
   /// An emit port for a <c>createToken</c> effect (ADR-0002 §3b): the resource-kind axis carries

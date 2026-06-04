@@ -2,6 +2,7 @@ namespace MagicAST.Interaction.Tests;
 
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using MagicAST.AST.Costs;
 using MagicAST.AST.References;
 using MagicAST.Interaction;
 using MagicAST.Tests.Infrastructure;
@@ -222,6 +223,56 @@ public class PortLabelTest
     // post-parser-fix target, not what the AST carries today.)
     Assert.That(replacement["Event"]?["Controller"], Is.Null);
     Assert.That(PortLabel.Replacement(eventType), Is.EqualTo("replace:token-creation"));
+  }
+
+  // --- pay:mana cost (ADR-0002 §4 totality — quantity rides beside the label, incl. 0) ---
+
+  [Test]
+  public void Pay_mana_single_color() =>
+    Assert.That(
+      PortLabel.PayMana([ManaSymbol.Black]),
+      Is.EqualTo(new[] { ("pay:mana:black", 1) })
+    );
+
+  // {0} is a zero-MAGNITUDE cost, not the absence of one — projected so a cost-modifier can attach.
+  [Test]
+  public void Pay_mana_zero_projects_a_quantity_0_port() =>
+    Assert.That(
+      PortLabel.PayMana([ManaSymbol.Generic(0)]),
+      Is.EqualTo(new[] { ("pay:mana", 0) })
+    );
+
+  // A mixed cost decomposes into a generic requirement plus a per-color requirement.
+  [Test]
+  public void Pay_mana_mixed_decomposes_into_generic_plus_colored() =>
+    Assert.That(
+      PortLabel.PayMana([ManaSymbol.Generic(2), ManaSymbol.Black]),
+      Is.EqualTo(new[] { ("pay:mana", 2), ("pay:mana:black", 1) })
+    );
+
+  // --- projection over the REAL parsed Chatterfang activated mana cost ({B}) ---
+  [Test]
+  public void Projects_chatterfangs_real_mana_cost()
+  {
+    var path = Path.Combine(
+      TestContext.CurrentContext.TestDirectory,
+      "Fixtures",
+      "HandParsedCards",
+      "MH2",
+      "Chatterfang.json"
+    );
+    var gold = JsonNode.Parse(File.ReadAllText(path));
+    var abilities = (JsonArray)gold!["Output"]!["Oracle"]!["Abilities"]!;
+
+    JsonNode? manaCost = null;
+    foreach (var ability in abilities)
+      foreach (var cost in ability?["Costs"] as JsonArray ?? [])
+        if (cost?["CostType"]?.ToString() == "mana")
+          manaCost = cost["Symbols"];
+
+    Assert.That(manaCost, Is.Not.Null, "Chatterfang's activated ability has a {B} mana cost");
+    var symbols = manaCost.Deserialize<List<ManaSymbol>>(MagicAST.MagicASTJsonOptions.Strict)!;
+    Assert.That(PortLabel.PayMana(symbols), Is.EqualTo(new[] { ("pay:mana:black", 1) }));
   }
 
   private static JsonNode? FindByEffectType(JsonNode? node, string effectType) =>
