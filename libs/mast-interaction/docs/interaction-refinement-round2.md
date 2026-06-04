@@ -74,5 +74,12 @@ A-caveat refinement) is contained; the anchor max-overlap is a cheap bundle-alon
 - **B (per-colour balance) — DONE**: `ManaBalanced` now buckets by colour (a coloured pip must be paid
   in its colour or from the `any` pool, CR 107.4). Ant Queen × Ashnod's Altar → Amber (mana-negative);
   canonical combos retained; Green 39→38.
-- **Anchor max-overlap** — pending (next).
-- **C (tap rate-limit / net-zero filter)** — new follow-on surfaced by A; not yet scoped.
+- **Anchor max-overlap — DONE** (commit `c69e62f6`): `Classify` scores every candidate combo by
+  card-overlap and anchors a partial to the max-overlap (tightest, then lowest-index) combo. The
+  Ashnod × Pitiless × Chatterfang loop now anchors onto {Chatterfang, Pitiless Plunderer} (its real
+  core synergy) instead of the unrelated 5-card Wretched Throng combo.
+- **C (tap rate-limit / net-zero filter)** — new follow-on surfaced by A; not yet scoped. The engine
+  treats `{T}` as a free cost (no once-per-untap gate) and certifies a net-zero 1-for-1 mana filter as
+  infinite, so a tap-gated filter pair (Bog Initiate + Farrelite Priest) is still false-GREEN. Needs a
+  tap rate-limit gate (a `{T}` ability can't re-fire within a turn without an untapper) and/or a
+  net-positivity requirement (a filter that converts N→N produces no surplus).
