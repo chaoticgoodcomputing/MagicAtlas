@@ -1,4 +1,5 @@
 using Flowthru.Step;
+using MagicAST.Interaction;
 using MagicAtlas.Ast.Tests.Data._02_Intermediate.Schemas;
 using MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
@@ -37,6 +38,41 @@ public static class MaterializeCyclesStep
         ontologyPath
       );
 
+      // CSB cross-check index: a card → the combos that contain it. A reconstructed cycle is a KNOWN
+      // verified combo when its cards all co-occur in one Commander Spellbook combo (cycle.cards ⊆ a
+      // combo) — the intersection of the per-card combo lists; else it is an engine-DERIVED loop.
+      var comboCards = inputs
+        .Combos.Select(c =>
+          (c.Id, Cards: c.Cards.Select(x => x.Name).ToHashSet(StringComparer.Ordinal))
+        )
+        .ToList();
+      var cardToCombo = new Dictionary<string, List<int>>(StringComparer.Ordinal);
+      for (var i = 0; i < comboCards.Count; i++)
+        foreach (var card in comboCards[i].Cards)
+        {
+          if (!cardToCombo.TryGetValue(card, out var list))
+            cardToCombo[card] = list = [];
+          list.Add(i);
+        }
+
+      string KnownComboFor(PortCycle cycle)
+      {
+        List<int>? candidates = null;
+        foreach (
+          var card in cycle
+            .Edges.SelectMany(e => new[] { e.From.Card, e.To.Card })
+            .Distinct(StringComparer.Ordinal)
+        )
+        {
+          if (!cardToCombo.TryGetValue(card, out var combos))
+            return ""; // a cycle card in no combo — can't be a known combo
+          candidates = candidates is null ? [.. combos] : [.. candidates.Intersect(combos)];
+          if (candidates.Count == 0)
+            return ""; // cards span multiple combos — a derived (cross-combo) loop
+        }
+        return candidates is { Count: > 0 } ? comboCards[candidates[0]].Id : "";
+      }
+
       var ranked = engine
         .FindCycles(edges, LengthBound)
         // No 1-card combo exists in MTG — a loop whose ports all belong to one card is an artifact.
@@ -45,20 +81,22 @@ public static class MaterializeCyclesStep
             .Distinct(StringComparer.Ordinal)
             .Count() > 1
         )
-        .OrderBy(c => (int)c.Tier) // GREEN verdict first
-        .ThenBy(c => c.Edges.Count) // then shortest
+        .Select(c => (Cycle: c, ComboId: KnownComboFor(c)))
+        .OrderBy(x => x.ComboId.Length == 0 ? 1 : 0) // KNOWN verified combos first
+        .ThenBy(x => (int)x.Cycle.Tier) // then GREEN verdict
+        .ThenBy(x => x.Cycle.Edges.Count) // then shortest
         .ToList();
 
       // Dedup by node set (keep the best-ranked representative of each loop).
       var seen = new HashSet<string>(StringComparer.Ordinal);
       var deduped = ranked
-        .Where(c =>
+        .Where(x =>
           seen.Add(
             string.Join(
               "|",
-              c.Edges.SelectMany(e => new[] { e.From.Identity, e.To.Identity })
+              x.Cycle.Edges.SelectMany(e => new[] { e.From.Identity, e.To.Identity })
                 .Distinct(StringComparer.Ordinal)
-                .OrderBy(x => x, StringComparer.Ordinal)
+                .OrderBy(id => id, StringComparer.Ordinal)
             )
           )
         )
@@ -69,8 +107,8 @@ public static class MaterializeCyclesStep
       return deduped
         .Take(DisplayCap)
         .SelectMany(
-          (cycle, index) =>
-            cycle.Edges.Select(
+          (item, index) =>
+            item.Cycle.Edges.Select(
               (hop, hopIndex) =>
                 new CycleEdgeRow
                 {
@@ -81,10 +119,12 @@ public static class MaterializeCyclesStep
                   ToCard = hop.To.Card,
                   ToLabel = hop.To.Label,
                   EdgeTier = hop.Tier.ToString(),
-                  CycleTier = cycle.Tier.ToString(),
-                  Firable = cycle.Firable,
-                  CoCostsSatisfied = cycle.CoCostsSatisfied,
-                  LimitingReason = cycle.LimitingReason ?? "",
+                  CycleTier = item.Cycle.Tier.ToString(),
+                  Firable = item.Cycle.Firable,
+                  CoCostsSatisfied = item.Cycle.CoCostsSatisfied,
+                  LimitingReason = item.Cycle.LimitingReason ?? "",
+                  Known = item.ComboId.Length > 0,
+                  ComboId = item.ComboId,
                   Total = total,
                 }
             )

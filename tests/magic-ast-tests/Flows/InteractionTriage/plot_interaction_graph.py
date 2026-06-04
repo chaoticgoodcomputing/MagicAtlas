@@ -189,6 +189,8 @@ def _cycles_from_rows(cycle_edges: pd.DataFrame):
                 "edges": edges,
                 "tier": grp["cycletier"].iloc[0],
                 "reason": grp["limitingreason"].iloc[0],
+                "known": bool(grp["known"].iloc[0]),
+                "combo": grp["comboid"].iloc[0],
             }
         )
     return cycles, total
@@ -204,17 +206,19 @@ def plot_interaction_graph(
 
     cycles, total = _cycles_from_rows(cycle_edges)
     certified = sum(1 for c in cycles if c["tier"] == "Green")
+    n_known = sum(1 for c in cycles if c["known"])
     logger.info(
-        "[plot_interaction_graph] %d label edges, %d nodes -> %d engine cycles of %d (%d GREEN-certified)",
-        len(label_edges), len(port_nodes), len(cycles), total, certified,
+        "[plot_interaction_graph] %d label edges, %d nodes -> %d engine cycles of %d "
+        "(%d known CSB combos, %d GREEN-certified)",
+        len(label_edges), len(port_nodes), len(cycles), total, n_known, certified,
     )
 
     fig = make_subplots(
         rows=1, cols=2, column_widths=[0.32, 0.68],
         subplot_titles=(
             "Label grammar",
-            f"Reconstructed cycles — {len(cycles)} of {total} ({certified} GREEN-certified; "
-            "edge colour = engine verdict)",
+            f"Reconstructed cycles — {n_known} known / {len(cycles) - n_known} derived of {total} "
+            f"({certified} GREEN-certified; edge colour = engine verdict)",
         ),
         horizontal_spacing=0.05,
     )
@@ -236,7 +240,8 @@ def plot_interaction_graph(
         ):
             fig.add_trace(t, row=1, col=1)
 
-    # ---- right: reconstructed cycles, ports duplicated per cycle, tiled; edge colour = CYCLE verdict ----
+    # ---- right: reconstructed cycles, two sections — KNOWN verified combos on top, DERIVED below.
+    # Ports duplicated per cycle, tiled; edge colour = the CYCLE verdict (firability + conjunction). ----
     if cycles:
         cols = max(1, math.ceil(math.sqrt(len(cycles))))
         cell, radius = 3.0, 1.0
@@ -244,20 +249,44 @@ def plot_interaction_graph(
         node_items: list = []
         hover_extra: dict = {}
         segs_by_tier: dict[str, list] = {}
-        for idx, cyc in enumerate(cycles):
-            nodes, tier = cyc["nodes"], cyc["tier"]
-            verdict = f"cycle: {tier}" + (f" — {cyc['reason']}" if cyc["reason"] else "")
-            cx, cy = (idx % cols) * cell, -(idx // cols) * cell
-            k = len(nodes)
-            for j, node in enumerate(nodes):
-                ang = 2 * math.pi * j / k
-                pos[(idx, node)] = (cx + radius * math.cos(ang), cy + radius * math.sin(ang))
-                node_items.append(((idx, node), node))
-                hover_extra[(idx, node)] = verdict
-            # every hop is coloured by the CYCLE's verdict tier (firability + conjunction floored),
-            # not its own edge tier — so a green-edged but unfirable / unfed-co-cost loop reads Amber.
-            for u, v in cyc["edges"]:
-                segs_by_tier.setdefault(tier, []).append((pos[(idx, u)], pos[(idx, v)]))
+
+        known = [c for c in cycles if c["known"]]
+        derived = [c for c in cycles if not c["known"]]
+
+        def _place(section, start_row, idx0):
+            """Tile a section starting at grid row `start_row`; return the next free row."""
+            for i, cyc in enumerate(section):
+                idx = idx0 + i
+                cx, cy = (i % cols) * cell, -(start_row + i // cols) * cell
+                nodes, tier = cyc["nodes"], cyc["tier"]
+                tag = f"known · {cyc['combo']}" if cyc["known"] else "derived"
+                verdict = f"{tag} · {tier}" + (f" — {cyc['reason']}" if cyc["reason"] else "")
+                k = len(nodes)
+                for j, node in enumerate(nodes):
+                    ang = 2 * math.pi * j / k
+                    pos[(idx, node)] = (cx + radius * math.cos(ang), cy + radius * math.sin(ang))
+                    node_items.append(((idx, node), node))
+                    hover_extra[(idx, node)] = verdict
+                # every hop is coloured by the CYCLE verdict (a green-edged but unfirable / unfed-co-cost
+                # loop reads Amber), not its own edge tier.
+                for u, v in cyc["edges"]:
+                    segs_by_tier.setdefault(tier, []).append((pos[(idx, u)], pos[(idx, v)]))
+            return start_row + math.ceil(len(section) / cols)
+
+        def _section_label(text, row, color):
+            fig.add_annotation(
+                text=text, xref="x2", yref="y2",
+                x=-radius, y=-row * cell + radius + 0.7,
+                showarrow=False, xanchor="left", font=dict(size=13, color=color),
+            )
+
+        row = 0
+        if known:
+            _section_label(f"✓ Known verified combos ({len(known)})", row, "#2ca02c")
+            row = _place(known, row, 0) + 1  # blank gap row between sections
+        if derived:
+            _section_label(f"Derived loops ({len(derived)})", row, "#888")
+            _place(derived, row, len(known))
 
         seen_tiers: set[str] = set()
         for tier in _TIER_ORDER:

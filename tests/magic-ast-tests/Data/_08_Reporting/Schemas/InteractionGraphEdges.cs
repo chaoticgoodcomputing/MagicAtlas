@@ -113,6 +113,14 @@ public partial record CycleEdgeRow
   [SerializedLabel("limitingReason")]
   public string LimitingReason { get; init; } = "";
 
+  /// <summary>True when the cycle's cards all co-occur in a Commander Spellbook verified combo (cycle.cards ⊆ a combo) — a reconstructed KNOWN combo, vs an engine-DERIVED loop. The viz groups known on top.</summary>
+  [SerializedLabel("known")]
+  public bool Known { get; init; }
+
+  /// <summary>The id of the matched CSB combo (empty for derived loops) — for hover / drill-through.</summary>
+  [SerializedLabel("comboId")]
+  public string ComboId { get; init; } = "";
+
   /// <summary>Total cycles found pre-cap (carried on every row, so the viz can show "showing N of T").</summary>
   [SerializedLabel("total")]
   public int Total { get; init; }
