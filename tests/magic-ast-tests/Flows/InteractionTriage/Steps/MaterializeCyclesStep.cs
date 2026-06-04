@@ -56,58 +56,44 @@ public static class MaterializeCyclesStep
           list.Add(i);
         }
 
-      // Classify a loop against the CSB corpus: VERIFIED when its cards EXACTLY match a combo
-      // (cycle.cards == a combo); PARTIAL when they're a subset of one (a partial reconstruction of a
-      // known combo); DERIVED when they span no single combo (a genuinely novel loop).
+      // Classify a loop against the CSB corpus by its MAXIMAL-OVERLAP combo (the combo sharing the most
+      // of the loop's cards — not the first co-occurring pair, which can anchor onto an unrelated combo
+      // that happens to share two cards while the loop is really a different, larger combo). VERIFIED
+      // when the loop's cards EXACTLY match a combo; PARTIAL when the best combo shares ≥2 of them (a
+      // partial reconstruction of a known combo); DERIVED otherwise (no two cards are a known combo).
       (string Match, string ComboId) Classify(PortCycle cycle)
       {
         var cards = cycle
           .Edges.SelectMany(e => new[] { e.From.Card, e.To.Card })
           .Distinct(StringComparer.Ordinal)
           .ToList();
+        var cardSet = cards.ToHashSet(StringComparer.Ordinal);
 
-        // Combos containing EVERY cycle card (⊆). Exact size ⇒ verified; else a partial reconstruction.
-        List<int>? superset = null;
-        var allInOneCombo = true;
+        // Candidate combos: any that shares ≥1 card (via the index) — avoids a full corpus scan.
+        var candidates = new HashSet<int>();
         foreach (var card in cards)
-        {
-          if (!cardToCombo.TryGetValue(card, out var combos))
-          {
-            allInOneCombo = false;
-            break;
-          }
-          superset = superset is null ? [.. combos] : [.. superset.Intersect(combos)];
-          if (superset.Count == 0)
-          {
-            allInOneCombo = false;
-            break;
-          }
-        }
-        if (allInOneCombo && superset is { Count: > 0 })
-        {
-          foreach (var idx in superset)
-            if (comboCards[idx].Cards.Count == cards.Count)
-              return ("verified", comboCards[idx].Id); // cards == a combo, exactly
-          var best = superset.OrderBy(i => comboCards[i].Cards.Count).First();
-          return ("partial", comboCards[best].Id); // cards ⊆ a combo
-        }
+          if (cardToCombo.TryGetValue(card, out var combos))
+            candidates.UnionWith(combos);
+        if (candidates.Count == 0)
+          return ("derived", "");
 
-        // PARTIAL on a weaker test too: ANY two of the loop's cards co-occur in a known combo (≥2
-        // cards from a CSB combo). A loop that shares a known 2-card synergy is a partial reconstruction,
-        // not novel — reserving "derived" for loops where no two cards are a known combo together.
-        for (var i = 0; i < cards.Count; i++)
-          for (var j = i + 1; j < cards.Count; j++)
-            if (
-              cardToCombo.TryGetValue(cards[i], out var ci)
-              && cardToCombo.TryGetValue(cards[j], out var cj)
-            )
-            {
-              var both = ci.Intersect(cj).ToList();
-              if (both.Count > 0)
-                return ("partial", comboCards[both[0]].Id);
-            }
+        // The best anchor: most shared cards, then the tightest combo, then lowest index (deterministic).
+        var best = candidates
+          .Select(i => (
+            Index: i,
+            Overlap: comboCards[i].Cards.Count(cardSet.Contains),
+            Size: comboCards[i].Cards.Count
+          ))
+          .OrderByDescending(x => x.Overlap)
+          .ThenBy(x => x.Size)
+          .ThenBy(x => x.Index)
+          .First();
 
-        return ("derived", ""); // no two cards co-occur in any combo — genuinely novel
+        if (best.Overlap < 2)
+          return ("derived", ""); // a single shared card is not a partial reconstruction
+        if (best.Overlap == cards.Count && best.Size == cards.Count)
+          return ("verified", comboCards[best.Index].Id); // cards == a combo, exactly
+        return ("partial", comboCards[best.Index].Id); // best combo shares ≥2 (subset or overlap)
       }
 
       static int Rank(string match) =>
