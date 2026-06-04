@@ -103,4 +103,22 @@ public class PortWalkTest
     Assert.That(edge.From.Label, Is.EqualTo("ltb:creature:to-graveyard:controlled"));
     Assert.That(edge.To.Label, Is.EqualTo("emit:token:artifact:treasure:controlled"));
   }
+
+  // The label names; the operator decides (§7) — so each non-scalar port carries its subject filter.
+  [Test]
+  public void Ports_carry_the_operators_subject_filter()
+  {
+    var graph = Walk("MH2", "Chatterfang.json", "Chatterfang");
+
+    var sac = graph.Ports.Single(p => p.Label == "sac:creature:squirrel:controlled");
+    Assert.That(sac.Subject!.Subtypes, Does.Contain("Squirrel"));
+    Assert.That(sac.Subject!.Controller, Is.EqualTo(ControllerFilter.You)); // CR 701.21a treatment
+
+    var emit = graph.Ports.Single(p => p.Label == "emit:token:creature:squirrel:controlled");
+    Assert.That(emit.Subject!.IsToken, Is.True);
+    Assert.That(emit.Subject!.Subtypes, Does.Contain("Squirrel"));
+
+    // Inert ports carry no subject (scalar / no object).
+    Assert.That(graph.Ports.Single(p => p.Label == "modify:pt").Subject, Is.Null);
+  }
 }

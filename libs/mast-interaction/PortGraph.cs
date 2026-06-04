@@ -33,6 +33,13 @@ public sealed record PortNode
   /// <summary>The §8 magnitude. <c>null</c> = symbolic (variable / calculated), floored to Amber-balance.</summary>
   public int? Quantity { get; init; } = 1;
 
+  /// <summary>
+  /// The object the port acts on — the operator's input (§7: the label names, the operator decides).
+  /// <c>null</c> for scalar resources (mana) and inert ports. The label is the readable projection of
+  /// this; the engine matches on labels but tiers on this filter.
+  /// </summary>
+  public ObjectFilter? Subject { get; init; }
+
   public required string Identity { get; init; }
 
   public override string ToString() => $"{Card}::{Label}";
@@ -111,7 +118,9 @@ public sealed class PortWalk
     var ev = t["Event"]?.ToString();
     var filter = Filter(t["Filter"]);
     if (ev == "Dies" && filter is not null)
-      consumes.Add(Port(card, PortLabel.DeathTrigger(filter, _ontology), PortSide.Consume));
+      consumes.Add(
+        Port(card, PortLabel.DeathTrigger(filter, _ontology), PortSide.Consume, subject: filter)
+      );
     else if (ev is not null)
       // Coarse fallback (totality): the event name as the role, plus the subject if any.
       consumes.Add(Port(card, Coarse(ev, filter), PortSide.Consume));
@@ -124,10 +133,20 @@ public sealed class PortWalk
     switch (c["CostType"]?.ToString())
     {
       case "sacrifice" when Filter(c["Filter"]) is { } fodder:
+      {
+        // CR 701.21a: you sacrifice only what you control — the operator sees a controlled fodder.
+        var controlled = fodder with { Controller = fodder.Controller ?? ControllerFilter.You };
         consumes.Add(
-          Port(card, PortLabel.SacrificeCost(fodder, _ontology), PortSide.Consume, Qty(c["Quantity"]))
+          Port(
+            card,
+            PortLabel.SacrificeCost(fodder, _ontology),
+            PortSide.Consume,
+            Qty(c["Quantity"]),
+            controlled
+          )
         );
         break;
+      }
       case "mana":
         var symbols =
           c["Symbols"].Deserialize<List<ManaSymbol>>(MagicAST.MagicASTJsonOptions.Strict) ?? [];
@@ -157,7 +176,14 @@ public sealed class PortWalk
     {
       // Intercept side: the replaced event (ADR-0002 §3, CR 614). Scope rides only if the event carries it.
       var eventType = e["Event"]?["EventType"]?.ToString() ?? "event";
-      consumes.Add(Port(card, PortLabel.Replacement(eventType), PortSide.Intercept));
+      consumes.Add(
+        Port(
+          card,
+          PortLabel.Replacement(eventType),
+          PortSide.Intercept,
+          subject: new ObjectFilter { IsToken = true }
+        )
+      );
       // Emit side: the replacement's own effect (Chatterfang's added Squirrels).
       if (EmitPort(e["Replacement"], card, keyword) is { } inner)
         emits.Add(inner);
@@ -171,14 +197,20 @@ public sealed class PortWalk
   {
     if (effect is not JsonObject e)
       return null;
-    return e["EffectType"]?.ToString() switch
+    var effectType = e["EffectType"]?.ToString();
+    if (effectType == "createToken")
     {
-      "createToken" => Port(
+      var token = TokenFilter(e["Token"], e["Player"]);
+      return Port(
         card,
-        PortLabel.CreateTokenEmit(TokenFilter(e["Token"], e["Player"]), _ontology),
+        PortLabel.CreateTokenEmit(token, _ontology),
         PortSide.Emit,
-        Qty(e["Count"])
-      ),
+        Qty(e["Count"]),
+        token
+      );
+    }
+    return effectType switch
+    {
       // Inert effects (no flow) are still ports, by totality (§4) — edge-sparse, never dropped.
       "modifyPT" => Port(card, "modify:pt", PortSide.Emit),
       "evasion" => Port(card, $"evasion:{keyword?.ToLowerInvariant() ?? "evasion"}", PortSide.Emit),
@@ -189,13 +221,20 @@ public sealed class PortWalk
 
   // --- helpers ---
 
-  private static PortNode Port(string card, string label, PortSide side, int? quantity = 1) =>
+  private static PortNode Port(
+    string card,
+    string label,
+    PortSide side,
+    int? quantity = 1,
+    ObjectFilter? subject = null
+  ) =>
     new()
     {
       Card = card,
       Label = label,
       Side = side,
       Quantity = quantity,
+      Subject = subject,
       Identity = $"{card}::{label}",
     };
 
