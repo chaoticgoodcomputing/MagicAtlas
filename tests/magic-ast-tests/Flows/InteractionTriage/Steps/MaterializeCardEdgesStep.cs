@@ -4,7 +4,6 @@ using MagicAST;
 using MagicAST.AST.References;
 using MagicAST.Interaction;
 using MagicAST.Parsing;
-using MagicAST.Schema;
 using MagicAtlas.Ast.Tests.Data._02_Intermediate.Schemas;
 using MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
@@ -12,19 +11,18 @@ using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
 namespace MagicAtlas.Ast.Tests.Flows.InteractionTriage.Steps;
 
 /// <summary>
-/// The L2+ reconstruction step — the materialized card-level <b>union</b> interaction graph. Projects
-/// the ports of <em>every</em> card across the parse-ready combos (a port is a card property, deduped
-/// per card — NOT siloed per combo), then runs the engine's materialization ONCE over the whole port
-/// set under the known-families grammar. Result: every card-card edge that can hold (the operator's
-/// <c>Disjoint</c> prune drops the impossible ones), so cycles form from any closed loop among the
-/// recognized ports — not just within a single catalogued combo. Emits one flat
-/// <see cref="CardEdgeRow"/> per edge (tier-tagged); the viz finds the elementary cycles over the union.
+/// The L2+ reconstruction step — the materialized card-level <b>union</b> interaction graph, on the
+/// ADR-0002 single-role port model. Walks the ports of <em>every</em> card across the parse-ready
+/// combos (a port is a card property, deduped per card — NOT siloed per combo), then runs the
+/// <see cref="PortGraphEngine"/> ONCE over the whole set: it combines the walk's card-defined edges
+/// (certain) with the rules-defined edges it derives (flow + the sac→death bridge + modifier), tiered
+/// by the operator (<c>Disjoint</c> pruned). Cycles form from any closed loop among the union's
+/// ports. Emits one flat <see cref="CardEdgeRow"/> per edge (tier-tagged); the viz finds the cycles.
 /// </summary>
 /// <remarks>
-/// Parsing + projection are cached per distinct card name. Port projection serializes the parser's
-/// ability AST to the JSON shape the recognizers match (<see cref="MagicASTJsonOptions.Strict"/>). The
-/// materialization is a cartesian per grammar edge (every from-label × to-label), bounded by recognizer
-/// coverage and pruned by the operator; widen to sampling/caps if the recognized port set grows large.
+/// Parsing + the walk are cached per distinct card name. The walk serializes the parser's ability AST
+/// to the JSON shape it dispatches over (<see cref="MagicASTJsonOptions.Strict"/>). The materialization
+/// is quadratic in the union's emit/consume ports; widen to sampling/caps if the set grows large.
 /// </remarks>
 [FlowthruStep]
 public static class MaterializeCardEdgesStep
@@ -36,7 +34,7 @@ public static class MaterializeCardEdgesStep
       IEnumerable<MastCardInput> CardInputs
     ),
     IEnumerable<CardEdgeRow>
-  > Create(string grammarPath, string ontologyPath) =>
+  > Create(string ontologyPath) =>
     inputs =>
     {
       var fullyParsed = inputs
@@ -48,20 +46,19 @@ public static class MaterializeCardEdgesStep
       foreach (var ci in inputs.CardInputs)
         byName.TryAdd(ci.Input.Name, ci.Input);
 
-      var grammar = FamilyGrammar.Load(grammarPath);
       var ontology = JsonSerializer.Deserialize<TypeOntology>(File.ReadAllText(ontologyPath))!;
-      var projector = new PortProjector(SchemaExport.Build());
-      var engine = new InteractionEngine(ontology);
+      var walk = new PortWalk(ontology);
+      var engine = new PortGraphEngine(ontology);
       var parser = new OracleParser();
 
-      var portCache = new Dictionary<string, IReadOnlyList<Port>>(StringComparer.Ordinal);
+      var graphCache = new Dictionary<string, PortGraph>(StringComparer.Ordinal);
 
-      IReadOnlyList<Port> PortsFor(string name)
+      PortGraph GraphFor(string name)
       {
-        if (portCache.TryGetValue(name, out var cached))
+        if (graphCache.TryGetValue(name, out var cached))
           return cached;
 
-        IReadOnlyList<Port> ports = [];
+        var graph = new PortGraph();
         if (byName.TryGetValue(name, out var dto))
         {
           var text = dto.OracleText;
@@ -78,36 +75,46 @@ public static class MaterializeCardEdgesStep
               parser.Parse(text).Output.Abilities,
               MagicASTJsonOptions.Strict
             );
-            ports = projector.Project(name, abilities);
+            graph = walk.Project(name, abilities);
           }
         }
-        portCache[name] = ports;
-        return ports;
+        graphCache[name] = graph;
+        return graph;
       }
 
-      // The union port set: every distinct card across parse-ready combos, projected once (a port
-      // is a card property — deduped here, not re-derived per combo).
-      var allPorts = inputs
+      // The union: every distinct parse-ready card walked once (a port is a card property).
+      var allGraphs = inputs
         .Combos.Where(c => c.Cards.All(card => fullyParsed.Contains(card.Name)))
         .SelectMany(c => c.Cards.Select(card => card.Name))
         .Distinct(StringComparer.Ordinal)
-        .SelectMany(PortsFor)
+        .Select(GraphFor)
         .ToList();
 
       // ONE materialization over the whole set → the union card-card graph.
       return engine
-        .Materialize(allPorts, grammar)
+        .Materialize(allGraphs)
         .Select(e => new CardEdgeRow
         {
           FromCard = e.From.Card,
           FromLabel = e.From.Label,
           ToCard = e.To.Card,
           ToLabel = e.To.Label,
-          Resource = e.Resource.ToString(),
+          Resource = ResourceOf(e),
           Family = e.Family.ToString(),
           Tier = e.Tier.ToString(),
           Reason = e.Reason ?? "",
         })
         .ToList();
     };
+
+  /// <summary>The flowing resource, read off the source label: <c>emit:&lt;kind&gt;</c> → the kind; a sac source bridges to a death.</summary>
+  private static string ResourceOf(PortEdge edge)
+  {
+    var parts = edge.From.Label.Split(':');
+    if (parts[0] == "emit" && parts.Length > 1)
+      return parts[1];
+    if (parts[0] == "sac")
+      return "death"; // the bridge: a sacrificed permanent dies
+    return parts[0];
+  }
 }

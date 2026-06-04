@@ -65,7 +65,7 @@ public static class InteractionTriageFlow
           IEnumerable<CardEdgeRow>
         >(
           label: "MaterializeCardEdges",
-          transform: MaterializeCardEdgesStep.Create(grammarPath, ontologyPath),
+          transform: MaterializeCardEdgesStep.Create(ontologyPath),
           inputs: (catalog.Combos, catalog.ParseRecords, catalog.CardInputs),
           outputs: catalog.CardEdges
         );

@@ -27,14 +27,23 @@ from plotly.subplots import make_subplots
 
 logger = logging.getLogger(__name__)
 
-# Port-label palette — avoids the tier greens/ambers/reds so node color (role)
-# and edge color (certainty) never collide.
+# Port-role palette (ADR-0002 colon-labels: <role>:<subject>:...). Nodes are colored by their ROLE
+# (the first colon segment) so the new single-role labels group sensibly; avoids the tier
+# greens/ambers/reds so node color (role) and edge color (certainty) never collide.
 _LABEL_COLORS = {
-    "sac-outlet": "#4c78a8",     # blue
-    "death-payoff": "#b279a2",   # purple
-    "token-doubler": "#439894",  # teal
+    "sac": "#4c78a8",      # blue   — sacrifice cost / bridge source
+    "ltb": "#b279a2",      # purple — leaves-the-battlefield (dies) trigger
+    "etb": "#9c6b4f",      # brown  — enters-the-battlefield trigger
+    "emit": "#59a14f",     # green  — an effect emitting a resource
+    "replace": "#439894",  # teal   — replacement (doubler) intercept
+    "pay": "#e7ba52",      # gold   — mana / cost
+    "cast": "#76b7b2",     # cyan   — cast trigger
 }
 _DEFAULT_LABEL_COLOR = "#9d755d"
+
+
+def _role_of(label: str) -> str:
+    return label.split(":", 1)[0]
 _TIER_COLOR = {"Green": "#2ca02c", "Amber": "#e6a817", "Red": "#d62728"}
 _TIER_ORDER = ["Green", "Amber", "Red"]
 
@@ -68,7 +77,7 @@ def _node_traces(nodes, pos, oracle, *, size, font, show_text, legend, seen_labe
         by_label.setdefault(_label_of(node), []).append((key, node))
     traces = []
     for label, items in sorted(by_label.items()):
-        color = _LABEL_COLORS.get(label, _DEFAULT_LABEL_COLOR)
+        color = _LABEL_COLORS.get(_role_of(label), _DEFAULT_LABEL_COLOR)
         show = legend and label not in seen_labels
         if show:
             seen_labels.add(label)
