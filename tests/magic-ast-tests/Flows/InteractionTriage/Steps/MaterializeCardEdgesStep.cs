@@ -1,9 +1,5 @@
-using System.Text.Json;
 using Flowthru.Step;
-using MagicAST;
-using MagicAST.AST.References;
 using MagicAST.Interaction;
-using MagicAST.Parsing;
 using MagicAtlas.Ast.Tests.Data._02_Intermediate.Schemas;
 using MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
@@ -37,62 +33,14 @@ public static class MaterializeCardEdgesStep
   > Create(string ontologyPath) =>
     inputs =>
     {
-      var fullyParsed = inputs
-        .Records.Where(r => r.TotalAbilities > 0 && r.TotalAbilities == r.ParsedAbilities)
-        .Select(r => r.CardName)
-        .ToHashSet(StringComparer.Ordinal);
+      var (_, edges) = InteractionUnion.Materialize(
+        inputs.Combos,
+        inputs.Records,
+        inputs.CardInputs,
+        ontologyPath
+      );
 
-      var byName = new Dictionary<string, CardInputDTO>(StringComparer.Ordinal);
-      foreach (var ci in inputs.CardInputs)
-        byName.TryAdd(ci.Input.Name, ci.Input);
-
-      var ontology = JsonSerializer.Deserialize<TypeOntology>(File.ReadAllText(ontologyPath))!;
-      var walk = new PortWalk(ontology);
-      var engine = new PortGraphEngine(ontology);
-      var parser = new OracleParser();
-
-      var graphCache = new Dictionary<string, PortGraph>(StringComparer.Ordinal);
-
-      PortGraph GraphFor(string name)
-      {
-        if (graphCache.TryGetValue(name, out var cached))
-          return cached;
-
-        var graph = new PortGraph();
-        if (byName.TryGetValue(name, out var dto))
-        {
-          var text = dto.OracleText;
-          if (string.IsNullOrWhiteSpace(text) && dto.CardFaces is { Count: > 0 })
-          {
-            text = string.Join(
-              "\n\n",
-              dto.CardFaces.Select(f => f.OracleText ?? "").Where(t => t.Length > 0)
-            );
-          }
-          if (!string.IsNullOrWhiteSpace(text))
-          {
-            var abilities = JsonSerializer.SerializeToNode(
-              parser.Parse(text).Output.Abilities,
-              MagicASTJsonOptions.Strict
-            );
-            graph = walk.Project(name, abilities);
-          }
-        }
-        graphCache[name] = graph;
-        return graph;
-      }
-
-      // The union: every distinct parse-ready card walked once (a port is a card property).
-      var allGraphs = inputs
-        .Combos.Where(c => c.Cards.All(card => fullyParsed.Contains(card.Name)))
-        .SelectMany(c => c.Cards.Select(card => card.Name))
-        .Distinct(StringComparer.Ordinal)
-        .Select(GraphFor)
-        .ToList();
-
-      // ONE materialization over the whole set → the union card-card graph.
-      return engine
-        .Materialize(allGraphs)
+      return edges
         .Select(e => new CardEdgeRow
         {
           FromCard = e.From.Card,

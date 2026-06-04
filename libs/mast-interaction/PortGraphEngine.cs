@@ -70,6 +70,15 @@ public sealed record PortCycle
       .OrderByDescending(e => (int)e.Tier)
       .ThenBy(e => e.From.Label, StringComparer.Ordinal)
       .FirstOrDefault();
+
+  /// <summary>Why this cycle isn't a certified-GREEN infinite (for the viz hover): the cycle-level floor
+  /// reason takes precedence (a gate / an unfed co-cost), else the worst hop's operator reason; <c>null</c> when GREEN.</summary>
+  public string? LimitingReason =>
+    Tier == CertaintyTier.Green ? null
+    : !Firable ? "gated (rate-limit / intervening-if)"
+    : !CoCostsSatisfied ? "unfed co-cost"
+    : LimitingHop?.Reason is { Length: > 0 } reason ? reason
+    : "amber hop";
 }
 
 /// <summary>
@@ -262,7 +271,10 @@ public sealed class PortGraphEngine
   /// once). A cycle is a candidate loop; its tier is the worst hop. (Same discipline as
   /// the original engine's <c>FindCycles</c>, over the new edge type.)
   /// </summary>
-  public IReadOnlyList<PortCycle> FindCycles(IReadOnlyList<PortEdge> edges)
+  public IReadOnlyList<PortCycle> FindCycles(
+    IReadOnlyList<PortEdge> edges,
+    int maxLength = int.MaxValue
+  )
   {
     var adjacency = edges
       .GroupBy(e => e.From.Identity)
@@ -292,7 +304,11 @@ public sealed class PortGraphEngine
           );
           path.RemoveAt(path.Count - 1);
         }
-        else if (string.CompareOrdinal(toId, startId) > 0 && !onPath.Contains(toId))
+        else if (
+          path.Count < maxLength - 1 // leave room for the closing edge (≤ maxLength edges per cycle)
+          && string.CompareOrdinal(toId, startId) > 0
+          && !onPath.Contains(toId)
+        )
         {
           path.Add(edge);
           onPath.Add(toId);

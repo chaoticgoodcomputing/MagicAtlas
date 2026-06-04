@@ -70,6 +70,20 @@ public static class InteractionTriageFlow
           outputs: catalog.CardEdges
         );
 
+        // Reconstructed cycles (right viz subplot): computed in C# by the engine, with cycle-level
+        // verdict tiers (firability + multi-cost conjunction floors) the per-edge export can't carry.
+        pipeline.AddStep<
+          IEnumerable<Combo>,
+          IEnumerable<ParseRecord>,
+          IEnumerable<MastCardInput>,
+          IEnumerable<CycleEdgeRow>
+        >(
+          label: "MaterializeCycles",
+          transform: MaterializeCyclesStep.Create(ontologyPath),
+          inputs: (catalog.Combos, catalog.ParseRecords, catalog.CardInputs),
+          outputs: catalog.CycleEdges
+        );
+
         // Per-card oracle text for the viz hover (reads the union edges + card inputs; no re-parse).
         pipeline.AddStep<IEnumerable<CardEdgeRow>, IEnumerable<MastCardInput>, IEnumerable<PortNodeRow>>(
           label: "PortNodes",
@@ -78,12 +92,13 @@ public static class InteractionTriageFlow
           outputs: catalog.PortNodes
         );
 
-        // The Plotly viz (Python step): label grammar | atomic cycles, oracle-text hover, directed.
+        // The Plotly viz (Python step): label grammar | reconstructed cycles (engine verdicts),
+        // oracle-text hover, directed.
         pipeline.AddPythonStep(
           label: "PlotInteractionGraph",
           module: "Flows.InteractionTriage.plot_interaction_graph",
           function: "plot_interaction_graph",
-          input: (catalog.LabelEdges, catalog.CardEdges, catalog.PortNodes),
+          input: (catalog.LabelEdges, catalog.CycleEdges, catalog.PortNodes),
           output: catalog.InteractionGraphHtml,
           executor: executor
         );

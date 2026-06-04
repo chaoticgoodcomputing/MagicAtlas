@@ -43,6 +43,13 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/card-edges.json")
       .Build());
 
+  /// <summary>The reconstructed cycles (computed in C# by the PortGraphEngine, with cycle-level verdict tiers) — the viz's cycle subplot.</summary>
+  public IItem<IEnumerable<CycleEdgeRow>> CycleEdges =>
+    CreateItem(() => Item.Of<IEnumerable<CycleEdgeRow>>("CycleEdges")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/cycle-edges.json")
+      .Build());
+
   /// <summary>Per-card node metadata (oracle text) for the viz hover — keyed by card name.</summary>
   public IItem<IEnumerable<PortNodeRow>> PortNodes =>
     CreateItem(() => Item.Of<IEnumerable<PortNodeRow>>("PortNodes")

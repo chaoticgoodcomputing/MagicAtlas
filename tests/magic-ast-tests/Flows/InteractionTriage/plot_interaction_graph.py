@@ -95,11 +95,14 @@ def _hover(node: str, oracle: dict) -> str:
     return f"<b>{html.escape(card)}</b> · [{label}]" + (f"<br>{body}" if body else "")
 
 
-def _node_traces(nodes, pos, oracle, *, size, font, show_text, legend, seen_labels, collapse):
+def _node_traces(
+    nodes, pos, oracle, *, size, font, show_text, legend, seen_labels, collapse, hover_extra=None
+):
     """One marker trace per label family (so the legend reads as a family key). `nodes` is a list of
     (key, display_node); `pos` maps key -> (x, y). `collapse` groups by the wildcard FAMILY
     (_generalize) — used for the cycle nodes (full labels) to tame the legend; the grammar nodes are
-    already wildcard patterns, so they pass collapse=False and group as-is."""
+    already wildcard patterns, so they pass collapse=False and group as-is. `hover_extra` (key -> str)
+    appends per-node context (the cycle's verdict + limiting reason)."""
     by_label: dict[str, list] = {}
     for key, node in nodes:
         group = _generalize(_label_of(node)) if collapse else _label_of(node)
@@ -118,7 +121,11 @@ def _node_traces(nodes, pos, oracle, *, size, font, show_text, legend, seen_labe
                 text=[_label_of(n) if show_text else "" for _, n in items],
                 textposition="top center",
                 textfont=dict(size=font),
-                hovertext=[_hover(n, oracle) for _, n in items],
+                hovertext=[
+                    _hover(n, oracle)
+                    + (f"<br><i>{hover_extra[k]}</i>" if hover_extra and k in hover_extra else "")
+                    for k, n in items
+                ],
                 hoverinfo="text",
                 marker=dict(size=size, color=color, line=dict(width=1, color="#2b2b2b")),
                 name=label,
@@ -158,61 +165,56 @@ def _arrow_trace(segments, color):
     )
 
 
-def _find_cycles(card_edges: pd.DataFrame, length_bound: int = 3, cap: int = 120):
-    """ATOMIC elementary cycles over the whole UNION graph, bounded to `length_bound` so we surface
-    fundamental sac->death->doubler loops rather than their combinatorial compositions. Deduped by
-    node set, ranked GREEN-first then shortest, display-capped. Returns (cycles, total_found)."""
-    g = nx.DiGraph()
-    for _, r in card_edges.iterrows():
-        g.add_edge(
-            f'{r["fromcard"]}::{r["fromlabel"]}',
-            f'{r["tocard"]}::{r["tolabel"]}',
-            tier=r["tier"],
-        )
-
+def _cycles_from_rows(cycle_edges: pd.DataFrame):
+    """Group the flat C# hop rows (MaterializeCyclesStep) into cycles. Each cycle carries the engine's
+    CYCLE-level verdict tier — the worst hop floored by §8 firability + the multi-cost conjunction
+    (an unfed co-cost) — which a per-edge export cannot express. The cycles are already filtered (no
+    1-card loops), deduped, ranked (GREEN-verdict-first then shortest) and capped in C#; here we only
+    lay them out. Returns (cycles, total_found_pre_cap)."""
+    if not len(cycle_edges):
+        return [], 0
+    total = int(cycle_edges["total"].iloc[0])
     cycles = []
-    seen: set[frozenset] = set()
-    for cyc in nx.simple_cycles(g, length_bound=length_bound):
-        if len(cyc) < 2:
-            continue
-        # No 1-card combos exist in MTG (a CSB combo is >=2 cards), so a cycle whose ports all
-        # belong to ONE card is a projection artifact (a replacement feeding its own output, or a
-        # subject-mismatched flow the operator under-pruned) — drop it.
-        if len({_card_of(n) for n in cyc}) == 1:
-            continue
-        key = frozenset(cyc)
-        if key in seen:
-            continue
-        seen.add(key)
-        edges = [
-            (cyc[i], cyc[(i + 1) % len(cyc)], g.edges[cyc[i], cyc[(i + 1) % len(cyc)]]["tier"])
-            for i in range(len(cyc))
-        ]
-        cycles.append((cyc, edges))
-
-    cycles.sort(key=lambda ce: (0 if all(t == "Green" for _, _, t in ce[1]) else 1, len(ce[0])))
-    return cycles[:cap], len(cycles)
+    for _, grp in cycle_edges.groupby("cycle", sort=True):
+        grp = grp.sort_values("hop")
+        nodes, edges = [], []
+        for _, r in grp.iterrows():
+            u = f'{r["fromcard"]}::{r["fromlabel"]}'
+            v = f'{r["tocard"]}::{r["tolabel"]}'
+            nodes.append(u)  # cycle order = the From of each hop
+            edges.append((u, v))
+        cycles.append(
+            {
+                "nodes": nodes,
+                "edges": edges,
+                "tier": grp["cycletier"].iloc[0],
+                "reason": grp["limitingreason"].iloc[0],
+            }
+        )
+    return cycles, total
 
 
-@step(inputs=["LabelEdgeRow", "CardEdgeRow", "PortNodeRow"], outputs="InteractionGraphHtml")
+@step(inputs=["LabelEdgeRow", "CycleEdgeRow", "PortNodeRow"], outputs="InteractionGraphHtml")
 def plot_interaction_graph(
-    label_edges: pd.DataFrame, card_edges: pd.DataFrame, port_nodes: pd.DataFrame
+    label_edges: pd.DataFrame, cycle_edges: pd.DataFrame, port_nodes: pd.DataFrame
 ) -> str:
-    for df in (label_edges, card_edges, port_nodes):
+    for df in (label_edges, cycle_edges, port_nodes):
         df.columns = [c.lower() for c in df.columns]
     oracle = {r["card"]: r["oracletext"] for _, r in port_nodes.iterrows()}
 
-    cycles, total = _find_cycles(card_edges) if len(card_edges) else ([], 0)
+    cycles, total = _cycles_from_rows(cycle_edges)
+    certified = sum(1 for c in cycles if c["tier"] == "Green")
     logger.info(
-        "[plot_interaction_graph] %d label edges, %d union card edges, %d nodes -> %d atomic cycles (showing %d)",
-        len(label_edges), len(card_edges), len(port_nodes), total, len(cycles),
+        "[plot_interaction_graph] %d label edges, %d nodes -> %d engine cycles of %d (%d GREEN-certified)",
+        len(label_edges), len(port_nodes), len(cycles), total, certified,
     )
 
     fig = make_subplots(
         rows=1, cols=2, column_widths=[0.32, 0.68],
         subplot_titles=(
             "Label grammar",
-            f"Atomic cycles — showing {len(cycles)} of {total} (sac→death→doubler, GREEN-first)",
+            f"Reconstructed cycles — {len(cycles)} of {total} ({certified} GREEN-certified; "
+            "edge colour = engine verdict)",
         ),
         horizontal_spacing=0.05,
     )
@@ -234,21 +236,27 @@ def plot_interaction_graph(
         ):
             fig.add_trace(t, row=1, col=1)
 
-    # ---- right: atomic cycles, ports duplicated per cycle, tiled ----
+    # ---- right: reconstructed cycles, ports duplicated per cycle, tiled; edge colour = CYCLE verdict ----
     if cycles:
         cols = max(1, math.ceil(math.sqrt(len(cycles))))
         cell, radius = 3.0, 1.0
         pos: dict = {}
         node_items: list = []
+        hover_extra: dict = {}
         segs_by_tier: dict[str, list] = {}
-        for idx, (cyc, edges) in enumerate(cycles):
+        for idx, cyc in enumerate(cycles):
+            nodes, tier = cyc["nodes"], cyc["tier"]
+            verdict = f"cycle: {tier}" + (f" — {cyc['reason']}" if cyc["reason"] else "")
             cx, cy = (idx % cols) * cell, -(idx // cols) * cell
-            k = len(cyc)
-            for j, node in enumerate(cyc):
+            k = len(nodes)
+            for j, node in enumerate(nodes):
                 ang = 2 * math.pi * j / k
                 pos[(idx, node)] = (cx + radius * math.cos(ang), cy + radius * math.sin(ang))
                 node_items.append(((idx, node), node))
-            for u, v, tier in edges:
+                hover_extra[(idx, node)] = verdict
+            # every hop is coloured by the CYCLE's verdict tier (firability + conjunction floored),
+            # not its own edge tier — so a green-edged but unfirable / unfed-co-cost loop reads Amber.
+            for u, v in cyc["edges"]:
                 segs_by_tier.setdefault(tier, []).append((pos[(idx, u)], pos[(idx, v)]))
 
         seen_tiers: set[str] = set()
@@ -259,12 +267,13 @@ def plot_interaction_graph(
             show = tier not in seen_tiers
             seen_tiers.add(tier)
             fig.add_trace(
-                _line_trace(segs, _TIER_COLOR[tier], name=f"{tier} edge", legend=show), row=1, col=2
+                _line_trace(segs, _TIER_COLOR[tier], name=f"{tier} cycle", legend=show), row=1, col=2
             )
             fig.add_trace(_arrow_trace(segs, _TIER_COLOR[tier]), row=1, col=2)
         for t in _node_traces(
             node_items, pos, oracle,
             size=11, font=7, show_text=False, legend=True, seen_labels=seen_labels, collapse=True,
+            hover_extra=hover_extra,
         ):
             fig.add_trace(t, row=1, col=2)
     else:
@@ -276,7 +285,7 @@ def plot_interaction_graph(
     fig.update_layout(
         title="MAST interaction graph — label grammar vs reconstructed atomic cycles",
         template="plotly_white",
-        legend=dict(title="node = label family (·=wildcard) · edge = tier", orientation="v", x=1.01, y=1),
+        legend=dict(title="node = label family (·=wildcard) · edge = cycle verdict", orientation="v", x=1.01, y=1),
         height=820,
         margin=dict(l=20, r=20, t=70, b=20),
     )
