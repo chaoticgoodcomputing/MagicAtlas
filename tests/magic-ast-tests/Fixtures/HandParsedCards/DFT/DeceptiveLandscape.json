@@ -46,12 +46,7 @@
               "CostType": "sacrifice",
               "Filter": {
                 "CardTypes": ["land"],
-                "Characteristics": [
-                  {
-                    "CharacteristicType": "other",
-                    "Description": "this permanent"
-                  }
-                ]
+                "IsSelf": true
               },
               "Quantity": {
                 "QuantityType": "literal",

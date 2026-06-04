@@ -511,6 +511,77 @@ public class PortGraphEngineTest
     );
   }
 
+  // One-shot self-sacrifice (§8 "A"): a created token can never satisfy a :self sacrifice ("Sacrifice
+  // this") — the token is a different object, not the source (CR 400.7, the dual of the one-shot
+  // self-death). So no flow edge refuels a self-sac, and a self-sacrificing producer (Chromatic Star,
+  // Barrels of Blasting Jelly) can't have its loop falsely closed/certified. A generic "sacrifice an
+  // artifact" is still refuelled by a created artifact token.
+  [Test]
+  public void A_created_token_does_not_refuel_a_self_sacrifice()
+  {
+    static PortNode Emit(string label, ObjectFilter subj) =>
+      new()
+      {
+        Card = "Maker",
+        Label = label,
+        Side = PortSide.Emit,
+        Subject = subj,
+        Identity = "Maker::" + label,
+      };
+    static PortNode Sac(string card, string label, ObjectFilter subj) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Consume,
+        Subject = subj,
+        Identity = card + "::" + label,
+      };
+
+    var token = Emit(
+      "emit:token:artifact:treasure:controlled",
+      new ObjectFilter
+      {
+        CardTypes = ["artifact"],
+        Subtypes = ["Treasure"],
+        IsToken = true,
+        Controller = ControllerFilter.You,
+      }
+    );
+    var selfSac = Sac(
+      "SelfSaccer",
+      "sac:artifact:self",
+      new ObjectFilter
+      {
+        CardTypes = ["artifact"],
+        IsSelf = true,
+        Controller = ControllerFilter.You,
+      }
+    );
+    var genericSac = Sac(
+      "Outlet",
+      "sac:artifact:controlled",
+      new ObjectFilter { CardTypes = ["artifact"], Controller = ControllerFilter.You }
+    );
+
+    var edges = new PortGraphEngine(Ontology).Materialize(
+      [new PortGraph { Ports = [token, selfSac, genericSac] }]
+    );
+    bool Flows(PortNode f, PortNode t) =>
+      edges.Any(e => e.From.Identity == f.Identity && e.To.Identity == t.Identity);
+
+    Assert.That(
+      Flows(token, genericSac),
+      Is.True,
+      "a created Treasure refuels a generic 'sacrifice an artifact'"
+    );
+    Assert.That(
+      Flows(token, selfSac),
+      Is.False,
+      "a created token is never the source of a 'Sacrifice this' — no refuel"
+    );
+  }
+
   // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
   [Test]
   public void A_gated_cycle_floors_to_amber_even_with_green_edges()

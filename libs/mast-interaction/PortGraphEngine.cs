@@ -187,6 +187,12 @@ public sealed class PortGraphEngine
   {
     if (emit.Subject is null || consume.Subject is null)
       return true;
+    // A created token can never satisfy a :self sacrifice ("Sacrifice this") — the token is a different
+    // object, not the source permanent (CR 400.7; the dual of the §8 one-shot self-death). So a
+    // self-sacrificing producer is never refuelled by the tokens a loop makes — its self-sac is
+    // consumed once. (A type-based "sacrifice a Treasure", IsSelf null, stays refuellable.)
+    if (consume.Subject.IsSelf == true)
+      return false;
     // The token's at-creation card types: created-token filters often carry their type as a SUBTYPE
     // with CardTypes null (the card-type in the label is a display-time lift), so lift through the
     // ontology — a Treasure ⇒ artifact, a Saproling ⇒ creature (CR 205.3, a subtype rides its type).

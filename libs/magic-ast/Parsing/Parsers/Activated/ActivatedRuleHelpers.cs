@@ -79,21 +79,25 @@ internal static class ActivatedRuleHelpers
     // artifact / enchantment / land / permanent" carry ExcludeSelf too, not just "another creature".
     bool? another = Regex.IsMatch(lower, @"\banother\b") ? true : null;
     ObjectFilter? filter = null;
+    // "Sacrifice this [type]" is the source itself → IsSelf (the structured self-reference, the cost
+    // dual of the §6 trigger self-bind), replacing the free-text Characteristic.Other("this permanent")
+    // marker. The interaction engine reads IsSelf to know a created token can never refuel a
+    // self-sacrifice (a self-sac source is consumed once — ADR-0002 §8).
     if (lower.Contains("this creature") || lower.Contains("this permanent"))
     {
-      filter = new ObjectFilter { CardTypes = ["creature"], Characteristics = [Characteristic.Other("this permanent")] };
+      filter = new ObjectFilter { CardTypes = ["creature"], IsSelf = true };
     }
     else if (lower.Contains("this artifact"))
     {
-      filter = new ObjectFilter { CardTypes = ["artifact"], Characteristics = [Characteristic.Other("this permanent")] };
+      filter = new ObjectFilter { CardTypes = ["artifact"], IsSelf = true };
     }
     else if (lower.Contains("this enchantment"))
     {
-      filter = new ObjectFilter { CardTypes = ["enchantment"], Characteristics = [Characteristic.Other("this permanent")] };
+      filter = new ObjectFilter { CardTypes = ["enchantment"], IsSelf = true };
     }
     else if (lower.Contains("this land"))
     {
-      filter = new ObjectFilter { CardTypes = ["land"], Characteristics = [Characteristic.Other("this permanent")] };
+      filter = new ObjectFilter { CardTypes = ["land"], IsSelf = true };
     }
     else if (Regex.IsMatch(lower, @"\bpermanent\b"))
     {
@@ -168,9 +172,9 @@ internal static class ActivatedRuleHelpers
             type = type[..^1];
           }
           // Capitalized SINGULAR without an article (e.g., "Sacrifice Denethor") —
-          // the card refers to itself by name. Encode as a "this permanent"
-          // self-reference on Characteristics rather than a literal Subtypes
-          // entry, matching the gold convention for self-by-name cost references.
+          // the card refers to itself by name. Encode as the structured IsSelf
+          // self-reference rather than a literal Subtypes entry (the cost dual of
+          // the §6 trigger self-by-name bind).
           //
           // Capitalized PLURAL (e.g., "Sacrifice X Squirrels") or capitalized with
           // an article (e.g., "Sacrifice a Saproling") is a creature subtype, not
@@ -180,7 +184,7 @@ internal static class ActivatedRuleHelpers
           // self-ref shape.
           if (char.IsUpper(typeRaw[0]) && !wasPlural && !hasArticle)
           {
-            filter = new ObjectFilter { Characteristics = [Characteristic.Other("this permanent")] };
+            filter = new ObjectFilter { IsSelf = true };
           }
           else
           {
