@@ -1,5 +1,5 @@
 [
-  { "_note": "A sacrificed permanent dies → feeds a creature-death payoff (sac-outlet → death-payoff).", "from": "sac-outlet", "to": "death-payoff", "resource": "Death", "family": "Flow" },
-  { "_note": "A death-payoff's token creation is intercepted by a token doubler/replacement.", "from": "death-payoff", "to": "token-doubler", "resource": "Token", "family": "Modifier" },
-  { "_note": "A token doubler's created tokens refuel a sacrifice outlet.", "from": "token-doubler", "to": "sac-outlet", "resource": "Token", "family": "Flow" }
+  { "_note": "sac→death bridge: a sacrificed permanent dies and feeds a dies-trigger payoff (CR 701.21a→700.4). Wildcard families (ADR-0002 §2): ** globs the subject.", "from": "sac:**", "to": "ltb:**:to-graveyard:**", "resource": "Death", "family": "Flow" },
+  { "_note": "death payoff → token doubler: the dies-trigger's token creation is intercepted by a replacement (CR 614).", "from": "ltb:**:to-graveyard:**", "to": "replace:**", "resource": "Token", "family": "Modifier" },
+  { "_note": "token doubler → sac outlet: the doubled tokens refuel the sacrifice outlet.", "from": "replace:**", "to": "sac:**", "resource": "Token", "family": "Flow" }
 ]

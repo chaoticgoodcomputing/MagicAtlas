@@ -286,6 +286,24 @@ public class PortLabelTest
     Assert.That(PortLabel.PayMana(symbols), Is.EqualTo(new[] { ("pay:mana:black", 1) }));
   }
 
+  // --- ADR-0002 §2: the wildcard query operator (prefix-preimage extended to glob facets) ---
+  [TestCase("emit:token:**:controlled", "emit:token:artifact:treasure:controlled", true)]
+  [TestCase("emit:token:**:controlled", "emit:token:creature:squirrel:controlled", true)]
+  [TestCase("emit:token:**:controlled", "emit:token:controlled", true)] // ** matches zero segments
+  [TestCase("emit:token:**:controlled", "emit:token:artifact:treasure:opponent", false)] // scope anchored
+  [TestCase("emit:token:**", "emit:token:artifact:treasure:controlled", true)]
+  [TestCase("sac:**", "sac:creature:controlled", true)]
+  [TestCase("sac:*:controlled", "sac:creature:controlled", true)] // * = exactly one segment
+  [TestCase("sac:*:controlled", "sac:artifact:treasure:controlled", false)] // subject is two segments
+  [TestCase("ltb:**:to-graveyard:**", "ltb:creature:to-graveyard:self", true)]
+  [TestCase("ltb:**:to-graveyard:**", "ltb:creature:to-graveyard:controlled", true)]
+  [TestCase("ltb:**:to-graveyard:**", "ltb:creature:to-graveyard", true)] // trailing ** matches zero
+  [TestCase("replace:**", "replace:token-creation", true)]
+  [TestCase("sac:**", "emit:token:artifact:treasure:controlled", false)] // role anchored
+  [TestCase("sac:creature", "sac:creature:controlled", false)] // exact (no glob) is not a prefix
+  public void Matches_globs_colon_facets(string pattern, string label, bool expected) =>
+    Assert.That(PortLabel.Matches(pattern, label), Is.EqualTo(expected));
+
   private static JsonNode? FindByEffectType(JsonNode? node, string effectType) =>
     node switch
     {

@@ -18,6 +18,40 @@ using MagicAST.AST.References;
 public static class PortLabel
 {
   /// <summary>
+  /// ADR-0002 §2 — the <b>wildcard query operator</b> over a colon-label, generalising the
+  /// prefix-preimage to glob wildcards on the <c>:</c>-delimited facets: <c>*</c> matches exactly one
+  /// segment, <c>**</c> matches zero or more. A bare prefix query is the special case
+  /// <c>&lt;prefix&gt;:**</c>. Deterministic and total. Examples: <c>emit:token:**:controlled</c>
+  /// matches every controlled token-emit regardless of subject arity (with or without a subtype);
+  /// <c>ltb:**:to-graveyard:**</c> matches any dies-trigger; <c>sac:*:controlled</c> matches only a
+  /// single-segment-subject sacrifice (so <c>sac:creature:controlled</c> ✓, <c>sac:artifact:treasure:controlled</c> ✗).
+  /// </summary>
+  public static bool Matches(string pattern, string label) =>
+    Glob(pattern.Split(':'), 0, label.Split(':'), 0);
+
+  /// <summary>Glob match over facet segments: <c>*</c> = one segment, <c>**</c> = zero or more.</summary>
+  private static bool Glob(string[] p, int i, string[] l, int j)
+  {
+    while (i < p.Length)
+    {
+      if (p[i] == "**")
+      {
+        for (var k = j; k <= l.Length; k++) // ** absorbs zero..all remaining segments
+          if (Glob(p, i + 1, l, k))
+            return true;
+        return false;
+      }
+      if (j >= l.Length)
+        return false;
+      if (p[i] != "*" && !string.Equals(p[i], l[j], StringComparison.OrdinalIgnoreCase))
+        return false;
+      i++;
+      j++;
+    }
+    return j == l.Length;
+  }
+
+  /// <summary>
   /// The subject facet — the object a port acts on, card-type first then subtype (ADR-0002 §3a).
   /// <c>{creature}</c> → <c>"creature"</c>; <c>{creature}+{Squirrel}</c> → <c>"creature:squirrel"</c>.
   /// A subtype-only filter is <b>lifted</b> through the same vendored <see cref="TypeOntology"/> the

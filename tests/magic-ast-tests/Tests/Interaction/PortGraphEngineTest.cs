@@ -192,4 +192,47 @@ public class PortGraphEngineTest
     Assert.That(ungated.Firable, Is.True);
     Assert.That(ungated.Tier, Is.EqualTo(CertaintyTier.Green));
   }
+
+  // Grammar-figure guard (ADR-0002 §2): every derived-edge family in known-families.json must be a
+  // real wildcard pattern (PortLabel.Matches) that the canonical Chatterfang × Pitiless loop's ports
+  // actually match — so the grammar stays a faithful description of the projection and can't drift
+  // back to phantom names (sac-outlet/death-payoff) disconnected from the real colon-labels.
+  [Test]
+  public void Grammar_families_are_wildcard_patterns_that_real_loop_ports_match()
+  {
+    var families = JsonNode
+      .Parse(
+        File.ReadAllText(
+          Path.Combine(
+            TestContext.CurrentContext.TestDirectory,
+            "Fixtures",
+            "Interactions",
+            "known-families.json"
+          )
+        )
+      )!
+      .AsArray();
+    var patterns = families
+      .SelectMany(f => new[] { f!["from"]!.ToString(), f!["to"]!.ToString() })
+      .ToHashSet(StringComparer.Ordinal);
+
+    var ports = new[]
+    {
+      Walk("MH2", "Chatterfang.json", "Chatterfang"),
+      Walk("RIX", "PitilessPlunderer.json", "Pitiless Plunderer"),
+    }
+      .SelectMany(g => g.Ports)
+      .Select(p => p.Label)
+      .ToList();
+
+    foreach (var family in new[] { "sac:**", "ltb:**:to-graveyard:**", "replace:**" })
+    {
+      Assert.That(patterns, Does.Contain(family), $"grammar must declare the family {family}");
+      Assert.That(
+        ports.Any(l => PortLabel.Matches(family, l)),
+        Is.True,
+        $"a real canonical-loop port should match the grammar family {family}"
+      );
+    }
+  }
 }

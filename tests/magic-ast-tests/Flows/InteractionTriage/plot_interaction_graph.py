@@ -44,6 +44,32 @@ _DEFAULT_LABEL_COLOR = "#9d755d"
 
 def _role_of(label: str) -> str:
     return label.split(":", 1)[0]
+
+
+# Facet vocabulary mirroring PortLabel.Matches (the C# canonical wildcard operator, ADR-0002 §2).
+_RESOURCE_KINDS = {"token", "mana", "counter"}
+_SCOPES = {"controlled", "opponent", "owned", "self", "another"}
+
+
+def _generalize(label: str) -> str:
+    """Collapse a colon-label to its wildcard FAMILY: keep the role (+ the emit resource-kind) and the
+    trailing scope/exclusion, glob the variable subject to ** — emit:token:artifact:treasure:controlled
+    -> emit:token:**:controlled; sac:creature:controlled -> sac:**:controlled; ltb:creature:to-graveyard:self
+    -> ltb:**:self. Tames the 60+ distinct emit labels in the legend down to a handful of families
+    (ADR-0002 §2; the family is itself a valid pattern that PortLabel.Matches would match the label)."""
+    segs = label.split(":")
+    role, rest = segs[0], segs[1:]
+    prefix = [role]
+    if role == "emit" and rest and rest[0] in _RESOURCE_KINDS:
+        prefix.append(rest[0])
+        rest = rest[1:]
+    suffix: list[str] = []
+    while rest and rest[-1] in _SCOPES:
+        suffix.insert(0, rest.pop())
+    middle = ["**"] if rest else []
+    return ":".join(prefix + middle + suffix)
+
+
 _TIER_COLOR = {"Green": "#2ca02c", "Amber": "#e6a817", "Red": "#d62728"}
 _TIER_ORDER = ["Green", "Amber", "Red"]
 
@@ -69,12 +95,15 @@ def _hover(node: str, oracle: dict) -> str:
     return f"<b>{html.escape(card)}</b> · [{label}]" + (f"<br>{body}" if body else "")
 
 
-def _node_traces(nodes, pos, oracle, *, size, font, show_text, legend, seen_labels):
-    """One marker trace per label (so the legend reads as a label key). `nodes` is
-    a list of (key, display_node); `pos` maps key -> (x, y)."""
+def _node_traces(nodes, pos, oracle, *, size, font, show_text, legend, seen_labels, collapse):
+    """One marker trace per label family (so the legend reads as a family key). `nodes` is a list of
+    (key, display_node); `pos` maps key -> (x, y). `collapse` groups by the wildcard FAMILY
+    (_generalize) — used for the cycle nodes (full labels) to tame the legend; the grammar nodes are
+    already wildcard patterns, so they pass collapse=False and group as-is."""
     by_label: dict[str, list] = {}
     for key, node in nodes:
-        by_label.setdefault(_label_of(node), []).append((key, node))
+        group = _generalize(_label_of(node)) if collapse else _label_of(node)
+        by_label.setdefault(group, []).append((key, node))
     traces = []
     for label, items in sorted(by_label.items()):
         color = _LABEL_COLORS.get(_role_of(label), _DEFAULT_LABEL_COLOR)
@@ -201,7 +230,7 @@ def plot_interaction_graph(
         fig.add_trace(_arrow_trace(lsegs, "#999"), row=1, col=1)
         for t in _node_traces(
             [(n, n) for n in lg.nodes()], lpos, oracle,
-            size=30, font=11, show_text=True, legend=True, seen_labels=seen_labels,
+            size=30, font=11, show_text=True, legend=True, seen_labels=seen_labels, collapse=False,
         ):
             fig.add_trace(t, row=1, col=1)
 
@@ -235,7 +264,7 @@ def plot_interaction_graph(
             fig.add_trace(_arrow_trace(segs, _TIER_COLOR[tier]), row=1, col=2)
         for t in _node_traces(
             node_items, pos, oracle,
-            size=11, font=7, show_text=False, legend=True, seen_labels=seen_labels,
+            size=11, font=7, show_text=False, legend=True, seen_labels=seen_labels, collapse=True,
         ):
             fig.add_trace(t, row=1, col=2)
     else:
@@ -247,7 +276,7 @@ def plot_interaction_graph(
     fig.update_layout(
         title="MAST interaction graph — label grammar vs reconstructed atomic cycles",
         template="plotly_white",
-        legend=dict(title="node = port label · edge = tier", orientation="v", x=1.01, y=1),
+        legend=dict(title="node = label family (·=wildcard) · edge = tier", orientation="v", x=1.01, y=1),
         height=820,
         margin=dict(l=20, r=20, t=70, b=20),
     )
