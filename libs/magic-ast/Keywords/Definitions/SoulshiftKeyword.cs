@@ -67,7 +67,9 @@ public sealed class SoulshiftKeyword : IKeyword
       {
         Timing = TriggerTiming.When,
         Event = TriggerEvent.Dies,
-        Filter = new ObjectFilter { CardTypes = ["permanent"] },
+        // CR 109 self-binding (§6): "this permanent" — the source's own death, so a cross-card
+        // sacrifice does not subsume it (operator returns No → bridge falls to Amber, not GREEN).
+        Filter = new ObjectFilter { CardTypes = ["permanent"], IsSelf = true },
       },
       Effects =
       [

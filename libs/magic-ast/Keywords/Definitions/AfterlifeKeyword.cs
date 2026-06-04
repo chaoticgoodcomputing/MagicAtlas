@@ -65,7 +65,9 @@ public sealed class AfterlifeKeyword : IKeyword
       {
         Timing = TriggerTiming.When,
         Event = TriggerEvent.Dies,
-        Filter = new ObjectFilter { CardTypes = ["creature"] },
+        // CR 109 self-binding (§6): "this permanent" — the source's own death, so a cross-card
+        // sacrifice does not subsume it (operator returns No → bridge falls to Amber, not GREEN).
+        Filter = new ObjectFilter { CardTypes = ["creature"], IsSelf = true },
       },
       Effects =
       [

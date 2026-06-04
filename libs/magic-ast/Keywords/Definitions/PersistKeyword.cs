@@ -49,7 +49,9 @@ public sealed class PersistKeyword : IKeyword
       {
         Timing = TriggerTiming.When,
         Event = TriggerEvent.Dies,
-        Filter = new MagicAST.AST.References.ObjectFilter { CardTypes = ["permanent"] },
+        // CR 109 self-binding (§6): "this permanent" — the source's own death, so a cross-card
+        // sacrifice does not subsume it (operator returns No → bridge falls to Amber, not GREEN).
+        Filter = new MagicAST.AST.References.ObjectFilter { CardTypes = ["permanent"], IsSelf = true },
       },
       InterveningIf = new OtherCondition
       {

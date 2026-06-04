@@ -10,7 +10,8 @@
       "Filter": {
         "CardTypes": [
           "permanent"
-        ]
+        ],
+        "IsSelf": true
       }
     },
     "Effects": [

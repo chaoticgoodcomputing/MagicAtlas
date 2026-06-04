@@ -37,7 +37,8 @@
             "Filter": {
               "CardTypes": [
                 "permanent"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "InterveningIf": {

@@ -177,7 +177,9 @@ public sealed class BlitzStaticRule : IStaticRule
             {
               Timing = TriggerTiming.When,
               Event = TriggerEvent.Dies,
-              Filter = new ObjectFilter { CardTypes = ["creature"] },
+              // CR 109 self-binding (§6): Blitz grants this dies-trigger to Self — the source's own
+              // death, so a cross-card sacrifice does not subsume it (operator No → Amber, not GREEN).
+              Filter = new ObjectFilter { CardTypes = ["creature"], IsSelf = true },
             },
             Effects =
             [
