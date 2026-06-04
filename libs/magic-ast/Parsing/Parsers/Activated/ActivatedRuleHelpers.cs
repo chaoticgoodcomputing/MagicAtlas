@@ -73,13 +73,13 @@ internal static class ActivatedRuleHelpers
       quantity = LiteralQuantity.Of(count);
     }
 
-    // Parse filter
+    // Parse filter. "Another X" excludes the source (CR 701.21 — a cost requiring another permanent
+    // cannot be paid by the source itself), distinct from "a/an X" (any) and "this X" / a bare name
+    // (the source). Detect the exclusion once and fold it onto every typed branch — so "another
+    // artifact / enchantment / land / permanent" carry ExcludeSelf too, not just "another creature".
+    bool? another = Regex.IsMatch(lower, @"\banother\b") ? true : null;
     ObjectFilter? filter = null;
-    if (lower.Contains("another creature"))
-    {
-      filter = new ObjectFilter { CardTypes = ["creature"], ExcludeSelf = true };
-    }
-    else if (lower.Contains("this creature") || lower.Contains("this permanent"))
+    if (lower.Contains("this creature") || lower.Contains("this permanent"))
     {
       filter = new ObjectFilter { CardTypes = ["creature"], Characteristics = [Characteristic.Other("this permanent")] };
     }
@@ -95,27 +95,37 @@ internal static class ActivatedRuleHelpers
     {
       filter = new ObjectFilter { CardTypes = ["land"], Characteristics = [Characteristic.Other("this permanent")] };
     }
+    else if (Regex.IsMatch(lower, @"\bpermanent\b"))
+    {
+      // "permanent" is the CR 110.4a pseudo card-type ("Sacrifice another permanent" — Pious Evangel).
+      // Without this branch "another" leaks into the subject slot via the fallback regex (sac:another).
+      filter = new ObjectFilter { CardTypes = ["permanent"], ExcludeSelf = another };
+    }
     else if (lower.Contains(" land") || lower.EndsWith("land"))
     {
       // "Sacrifice a land" / "Sacrifice another land" — land is a card type (Rule 205.3a),
       // not a subtype. Must precede the creature/artifact branches to avoid misrouting via
       // the generic fallback regex which would emit Subtypes: ["land"] instead.
-      filter = new ObjectFilter { CardTypes = ["land"] };
+      filter = new ObjectFilter { CardTypes = ["land"], ExcludeSelf = another };
     }
     else if (Regex.IsMatch(lower, @"\btoken\b") && !lower.Contains("creature") && !lower.Contains("artifact"))
     {
       // "Sacrifice a token" — "token" is a characteristic predicate (Rule 111.7),
       // not a card type or subtype. Encodes as the structured IsToken axis,
       // distinguishing it from typed-token costs like "Sacrifice a creature token".
-      filter = new ObjectFilter { IsToken = true };
+      filter = new ObjectFilter { IsToken = true, ExcludeSelf = another };
     }
     else if (lower.Contains("creature"))
     {
-      filter = new ObjectFilter { CardTypes = ["creature"] };
+      filter = new ObjectFilter { CardTypes = ["creature"], ExcludeSelf = another };
     }
     else if (lower.Contains("artifact"))
     {
-      filter = new ObjectFilter { CardTypes = ["artifact"] };
+      filter = new ObjectFilter { CardTypes = ["artifact"], ExcludeSelf = another };
+    }
+    else if (lower.Contains("enchantment"))
+    {
+      filter = new ObjectFilter { CardTypes = ["enchantment"], ExcludeSelf = another };
     }
     else
     {
