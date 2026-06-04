@@ -167,16 +167,19 @@ public sealed class PortWalk
         continue;
 
       var emitPort = Port(card, spec.Emit, PortSide.Emit);
-      var self = new ObjectFilter
+      var costs = new List<PortNode>();
+      if (spec.Sacrifices)
       {
-        Subtypes = [subtype],
-        Controller = ControllerFilter.You,
-        IsToken = true,
-      };
-      var costs = new List<PortNode>
-      {
-        Port(card, PortLabel.SacrificeCost(self, _ontology), PortSide.Consume, subject: self),
-      };
+        var self = new ObjectFilter
+        {
+          Subtypes = [subtype],
+          Controller = ControllerFilter.You,
+          IsToken = true,
+        };
+        costs.Add(
+          Port(card, PortLabel.SacrificeCost(self, _ontology), PortSide.Consume, subject: self)
+        );
+      }
       if (spec.Taps)
         costs.Add(Port(card, "tap:self", PortSide.Consume));
       if (spec.GenericMana > 0)
