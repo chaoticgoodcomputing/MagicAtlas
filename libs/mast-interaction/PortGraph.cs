@@ -190,6 +190,17 @@ public sealed class PortWalk
       if (spec.Discards)
         costs.Add(Port(card, "pay:discard", PortSide.Consume));
 
+      // A token that TAPS but is not consumed (no self-sac) is a persistent, reused producer — its tap
+      // is a rate limit (CR 107.5), so gate it (ADR-0002 §8). A token that SACRIFICES itself for the
+      // mana (a Treasure) is re-created fresh each iteration, so its tap is not a cross-iteration limit
+      // (gating it would wrongly floor the Chatterfang × Pitiless Treasure-fed loop).
+      if (spec.Taps && !spec.Sacrifices)
+      {
+        emitPort = emitPort with { Gated = true };
+        for (var i = 0; i < costs.Count; i++)
+          costs[i] = costs[i] with { Gated = true };
+      }
+
       ports.Add(emitPort);
       ports.AddRange(costs);
       foreach (var c in costs)
@@ -360,7 +371,9 @@ public sealed class PortWalk
     "OnlyIfNoUntappedLands",
   };
 
-  /// <summary>Firability gate (ADR-0002 §8): an intervening-if or a rate-limit/conditional restriction.</summary>
+  /// <summary>Firability gate (ADR-0002 §8): an intervening-if, a rate-limit/conditional restriction, or
+  /// a tap cost (a permanent taps only once per untap, CR 107.5 — a persistent permanent's tap ability
+  /// re-fires each iteration only with an untapper, so a loop through it isn't infinite without one).</summary>
   private static bool IsGated(JsonNode ability)
   {
     if (ability["InterveningIf"] is not null)
@@ -368,6 +381,10 @@ public sealed class PortWalk
     if (ability["Restrictions"] is JsonArray restrictions)
       foreach (var r in restrictions)
         if (r is not null && GatingRestrictions.Contains(r.ToString()))
+          return true;
+    if (ability["Costs"] is JsonArray costs)
+      foreach (var c in costs)
+        if (c?["CostType"]?.ToString() == "tap")
           return true;
     return false;
   }

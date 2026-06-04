@@ -78,8 +78,18 @@ A-caveat refinement) is contained; the anchor max-overlap is a cheap bundle-alon
   card-overlap and anchors a partial to the max-overlap (tightest, then lowest-index) combo. The
   Ashnod × Pitiless × Chatterfang loop now anchors onto {Chatterfang, Pitiless Plunderer} (its real
   core synergy) instead of the unrelated 5-card Wretched Throng combo.
-- **C (tap rate-limit / net-zero filter)** — new follow-on surfaced by A; not yet scoped. The engine
-  treats `{T}` as a free cost (no once-per-untap gate) and certifies a net-zero 1-for-1 mana filter as
-  infinite, so a tap-gated filter pair (Bog Initiate + Farrelite Priest) is still false-GREEN. Needs a
-  tap rate-limit gate (a `{T}` ability can't re-fire within a turn without an untapper) and/or a
-  net-positivity requirement (a filter that converts N→N produces no surplus).
+- **C-tap (tap rate-limit) — DONE**: a `{T}` cost now gates firability (CR 107.5; `PortGraph.IsGated`),
+  so tap mana-rock / mana-dork loops floor to Amber instead of false-certifying. §9 tokens gated only
+  when tap-without-sac (Treasure stays ungated). *Conservative limitation:* self-untapping permanents
+  (Blasting Station) and externally-untapped dorks floor to Amber (false-Amber) — untap **renewal**
+  isn't modeled. Follow-on C-untap: an untap-renewal carve-out (the firability dual of B's self-return).
+  Correction: Bog Initiate / Farrelite Priest / Initiates are NOT tap abilities (I mis-tagged them) —
+  they are `{1}: Add {one mana}` filters → the net-zero class below.
+- **C-netzero (net-zero mana filter) — open.** A 1-for-1 mana filter loop (Bog Initiate `{1}:Add{B}` ↔
+  Farrelite Priest `{1}:Add{W}`) produces no net surplus but `Balanced` certifies it because produced
+  `==` cost (`>=`). A pure mana loop with **no** non-mana output (token / counter / trigger) and net-zero
+  mana is a do-nothing, not a combo. Fix: require net-positive mana OR a non-mana side-output for a
+  mana-only loop. Distinct from tap.
+- **Grinning Ignus — open (separate).** "{R}, Return this to hand: Add {C}{C}{R}" reads net +2 but the
+  return-to-hand forces a recast ({3}{R}) the loop doesn't model → false-GREEN. A return-to-hand /
+  recast-cost gap.
