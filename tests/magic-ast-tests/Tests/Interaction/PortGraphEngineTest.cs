@@ -650,6 +650,60 @@ public class PortGraphEngineTest
     Assert.That(loop.Tier, Is.EqualTo(CertaintyTier.Amber));
   }
 
+  // Productivity (§8): a pure-mana loop must net POSITIVE mana — a 1-for-1 filter (Bog Initiate
+  // {1}:Add{B} ↔ Farrelite Priest {1}:Add{W}) cycles the same mana forever, producing no advantage, so
+  // it is a do-nothing, not an infinite combo. Net-zero pure-mana → Amber; net-positive → Green.
+  [Test]
+  public void A_net_zero_pure_mana_filter_is_not_productive_and_floors_to_amber()
+  {
+    static PortNode Pay(string card) =>
+      new()
+      {
+        Card = card,
+        Label = "pay:mana",
+        Side = PortSide.Consume,
+        Quantity = 1,
+        Identity = card + "::pay:mana",
+      };
+    static PortNode Emit(string card, string colour, int qty) =>
+      new()
+      {
+        Card = card,
+        Label = "emit:mana:" + colour,
+        Side = PortSide.Emit,
+        Quantity = qty,
+        Identity = card + "::emit:mana:" + colour,
+      };
+
+    var engine = new PortGraphEngine(Ontology);
+    PortCycle TwoCardLoop(int bProduction)
+    {
+      var aPay = Pay("A");
+      var aEmit = Emit("A", "black", 1);
+      var bPay = Pay("B");
+      var bEmit = Emit("B", "white", bProduction);
+      var graphs = new[]
+      {
+        new PortGraph { Ports = [aPay, aEmit], CardDefinedEdges = [new() { From = aPay, To = aEmit }] },
+        new PortGraph { Ports = [bPay, bEmit], CardDefinedEdges = [new() { From = bPay, To = bEmit }] },
+      };
+      var cycles = engine.FindCycles(engine.Materialize(graphs), maxLength: 5);
+      return cycles.First(c =>
+        c.Edges.Any(e => e.From.Card == "A") && c.Edges.Any(e => e.From.Card == "B")
+      );
+    }
+
+    // 1-for-1 both ways: net-zero, pure mana → do-nothing → Amber.
+    var netZero = TwoCardLoop(1);
+    Assert.That(netZero.Productive, Is.False, "a 1-for-1 mana filter nets nothing");
+    Assert.That(netZero.Tier, Is.EqualTo(CertaintyTier.Amber));
+
+    // B makes 2 for 1 → net +1 mana per loop → a real infinite-mana engine → Green.
+    var netPositive = TwoCardLoop(2);
+    Assert.That(netPositive.Productive, Is.True);
+    Assert.That(netPositive.Tier, Is.EqualTo(CertaintyTier.Green));
+  }
+
   // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
   [Test]
   public void A_gated_cycle_floors_to_amber_even_with_green_edges()

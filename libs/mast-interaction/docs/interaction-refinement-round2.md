@@ -85,11 +85,11 @@ A-caveat refinement) is contained; the anchor max-overlap is a cheap bundle-alon
   isn't modeled. Follow-on C-untap: an untap-renewal carve-out (the firability dual of B's self-return).
   Correction: Bog Initiate / Farrelite Priest / Initiates are NOT tap abilities (I mis-tagged them) —
   they are `{1}: Add {one mana}` filters → the net-zero class below.
-- **C-netzero (net-zero mana filter) — open.** A 1-for-1 mana filter loop (Bog Initiate `{1}:Add{B}` ↔
-  Farrelite Priest `{1}:Add{W}`) produces no net surplus but `Balanced` certifies it because produced
-  `==` cost (`>=`). A pure mana loop with **no** non-mana output (token / counter / trigger) and net-zero
-  mana is a do-nothing, not a combo. Fix: require net-positive mana OR a non-mana side-output for a
-  mana-only loop. Distinct from tap.
+- **C-netzero (net-zero mana filter) — DONE**: new `PortCycle.Productive` axis — a pure-mana loop must
+  net **positive** mana (`ManaProductive`, `produced > cost`); a 1-for-1 filter (Bog/Farrelite/Initiates)
+  is a do-nothing → Amber (reason `net-zero filter (no surplus)`). A loop with a non-mana output (token)
+  is productive via that output. Judge: SOUND, no counterexample; the inert-emit lenience concern is moot
+  (inert emits aren't cycle members). Green 35→32; canonical combos retained.
 - **Grinning Ignus — open (separate).** "{R}, Return this to hand: Add {C}{C}{R}" reads net +2 but the
   return-to-hand forces a recast ({3}{R}) the loop doesn't model → false-GREEN. A return-to-hand /
   recast-cost gap.

@@ -63,14 +63,24 @@ public sealed record PortCycle
   /// </summary>
   public bool Balanced { get; init; } = true;
 
-  /// <summary>The worst hop sets the tier, floored to Amber when the cycle is not firable, has an unfed co-cost, or is resource-negative (§8).</summary>
+  /// <summary>
+  /// Productivity (ADR-0002 §8): the loop nets an <em>unbounded</em> resource — it doesn't just sustain
+  /// itself, it produces something. A <b>pure-mana</b> loop (every emit is mana) that nets exactly zero
+  /// (a 1-for-1 filter: Bog Initiate <c>{1}:Add{B}</c> ↔ Farrelite Priest <c>{1}:Add{W}</c>) is a
+  /// do-nothing — it cycles the same mana forever, producing no advantage — so it is not an infinite
+  /// combo and floors to Amber. A loop with a non-mana output (a created token, a counter, a trigger)
+  /// is productive via that output even at net-zero mana. Default <c>true</c>; the engine sets it.
+  /// </summary>
+  public bool Productive { get; init; } = true;
+
+  /// <summary>The worst hop sets the tier, floored to Amber when the cycle is not firable, has an unfed co-cost, is resource-negative, or nets nothing (§8).</summary>
   public CertaintyTier Tier =>
     Edges.Count == 0
       ? CertaintyTier.Green
       : (CertaintyTier)
         Math.Max(
           (int)Edges.Max(e => e.Tier),
-          Firable && CoCostsSatisfied && Balanced ? 0 : (int)CertaintyTier.Amber
+          Firable && CoCostsSatisfied && Balanced && Productive ? 0 : (int)CertaintyTier.Amber
         );
 
   /// <summary>The hop that limits the tier (and its operator <see cref="PortEdge.Reason"/>).</summary>
@@ -86,6 +96,7 @@ public sealed record PortCycle
     Tier == CertaintyTier.Green ? null
     : !Firable ? "gated (rate-limit / intervening-if)"
     : !Balanced ? "mana-negative"
+    : !Productive ? "net-zero filter (no surplus)"
     : !CoCostsSatisfied ? "unfed co-cost"
     : LimitingHop?.Reason is { Length: > 0 } reason ? reason
     : "amber hop";
@@ -322,6 +333,7 @@ public sealed class PortGraphEngine
                 Edges = loop,
                 CoCostsSatisfied = ConjunctionHolds(loop, coCosts, fed),
                 Balanced = ManaBalanced(loop, coCosts, edges),
+                Productive = ManaProductive(loop, coCosts, edges),
               }
             );
           path.RemoveAt(path.Count - 1);
@@ -427,47 +439,10 @@ public sealed class PortGraphEngine
     IReadOnlyList<PortEdge> edges
   )
   {
-    var inCycle = cycle
-      .SelectMany(e => new[] { e.From.Identity, e.To.Identity })
-      .ToHashSet(StringComparer.Ordinal);
-    var cycleCards = cycle
-      .SelectMany(e => new[] { e.From.Card, e.To.Card })
-      .ToHashSet(StringComparer.Ordinal);
-
-    // Mana costs: the pay:mana co-costs of the cycle's consumes (+ any in-cycle pay:mana consume).
-    var costs = new Dictionary<string, PortNode>(StringComparer.Ordinal);
-    void AddIfMana(PortNode p)
-    {
-      if (p.Side == PortSide.Consume && IsPayMana(p.Label))
-        costs[p.Identity] = p;
-    }
-    foreach (var id in inCycle)
-      if (coCosts.TryGetValue(id, out var siblings))
-        foreach (var s in siblings)
-          AddIfMana(s);
-    foreach (var e in cycle)
-    {
-      AddIfMana(e.From);
-      AddIfMana(e.To);
-    }
-    if (costs.Count == 0)
-      return true; // no mana cost — nothing to balance
-    if (costs.Values.Any(p => p.Quantity is null))
-      return true; // symbolic cost — can't prove a shortfall (conservative)
-
-    // Producers: distinct emit:mana ports ON THE CYCLE'S CARDS that feed those costs.
-    var producers = edges
-      .Where(e =>
-        costs.ContainsKey(e.To.Identity)
-        && IsEmitMana(e.From.Label)
-        && cycleCards.Contains(e.From.Card)
-      )
-      .Select(e => e.From)
-      .GroupBy(p => p.Identity, StringComparer.Ordinal)
-      .Select(g => g.First())
-      .ToList();
-    if (producers.Any(p => p.Quantity is null))
-      return true; // symbolic production — conservative
+    var flow = GatherManaFlow(cycle, coCosts, edges);
+    if (flow is null)
+      return true; // no provable mana cost — nothing to balance (conservative)
+    var (costs, producers) = flow.Value;
 
     // Per-colour balance: produced mana must cover each COLOURED pip in its OWN colour, not just the
     // fungible total — colorless can pay a generic {N} but never a {G} (CR 107.4). 'any'-colour
@@ -483,7 +458,7 @@ public sealed class PortGraphEngine
 
     var genericNeed = 0;
     var colouredNeed = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-    foreach (var c in costs.Values)
+    foreach (var c in costs)
     {
       var colour = ManaColor(c.Label);
       if (colour is null)
@@ -509,6 +484,85 @@ public sealed class PortGraphEngine
     var unusedColour = supply.Where(kv => !colouredNeed.ContainsKey(kv.Key)).Sum(kv => kv.Value);
     var leftover = anyPool - requiredAny + colourSurplus + unusedColour;
     return leftover >= genericNeed;
+  }
+
+  /// <summary>
+  /// The §8 productivity test: a <b>pure-mana</b> loop (every emit is mana) must net <em>positive</em>
+  /// mana — a 1-for-1 filter (produced == cost) cycles the same mana forever and yields no advantage, so
+  /// it is a do-nothing, not an infinite combo (Bog Initiate <c>{1}:Add{B}</c> ↔ Farrelite Priest
+  /// <c>{1}:Add{W}</c>). A loop with a NON-mana output (a created token, a counter, a trigger) is
+  /// productive via that output even at net-zero mana, so only pure-mana loops are tested. CONSERVATIVE:
+  /// returns true when there's no provable mana cost or any quantity is symbolic.
+  /// </summary>
+  private static bool ManaProductive(
+    IReadOnlyList<PortEdge> cycle,
+    IReadOnlyDictionary<string, IReadOnlyList<PortNode>> coCosts,
+    IReadOnlyList<PortEdge> edges
+  )
+  {
+    var flow = GatherManaFlow(cycle, coCosts, edges);
+    if (flow is null)
+      return true; // no provable mana cost — productivity isn't mana-gated (a free / token loop)
+    var pureMana = cycle
+      .SelectMany(e => new[] { e.From, e.To })
+      .Where(p => p.Side == PortSide.Emit)
+      .All(p => IsEmitMana(p.Label));
+    if (!pureMana)
+      return true; // a non-mana output makes the loop productive even at net-zero mana
+    var (costs, producers) = flow.Value;
+    return producers.Sum(p => p.Quantity!.Value) > costs.Sum(p => p.Quantity!.Value);
+  }
+
+  /// <summary>
+  /// Shared mana-flow gather (§8): the cycle's <c>pay:mana</c> costs (co-costs of its consumes + any
+  /// in-cycle pay) and the distinct <c>emit:mana</c> producers ON THE CYCLE'S CARDS that feed them.
+  /// Returns <c>null</c> — the conservative "can't prove anything" signal — when there's no mana cost or
+  /// any relevant quantity is symbolic.
+  /// </summary>
+  private static (List<PortNode> Costs, List<PortNode> Producers)? GatherManaFlow(
+    IReadOnlyList<PortEdge> cycle,
+    IReadOnlyDictionary<string, IReadOnlyList<PortNode>> coCosts,
+    IReadOnlyList<PortEdge> edges
+  )
+  {
+    var inCycle = cycle
+      .SelectMany(e => new[] { e.From.Identity, e.To.Identity })
+      .ToHashSet(StringComparer.Ordinal);
+    var cycleCards = cycle
+      .SelectMany(e => new[] { e.From.Card, e.To.Card })
+      .ToHashSet(StringComparer.Ordinal);
+
+    var costs = new Dictionary<string, PortNode>(StringComparer.Ordinal);
+    void AddIfMana(PortNode p)
+    {
+      if (p.Side == PortSide.Consume && IsPayMana(p.Label))
+        costs[p.Identity] = p;
+    }
+    foreach (var id in inCycle)
+      if (coCosts.TryGetValue(id, out var siblings))
+        foreach (var s in siblings)
+          AddIfMana(s);
+    foreach (var e in cycle)
+    {
+      AddIfMana(e.From);
+      AddIfMana(e.To);
+    }
+    if (costs.Count == 0 || costs.Values.Any(p => p.Quantity is null))
+      return null;
+
+    var producers = edges
+      .Where(e =>
+        costs.ContainsKey(e.To.Identity)
+        && IsEmitMana(e.From.Label)
+        && cycleCards.Contains(e.From.Card)
+      )
+      .Select(e => e.From)
+      .GroupBy(p => p.Identity, StringComparer.Ordinal)
+      .Select(g => g.First())
+      .ToList();
+    if (producers.Any(p => p.Quantity is null))
+      return null;
+    return (costs.Values.ToList(), producers);
   }
 
   /// <summary>
