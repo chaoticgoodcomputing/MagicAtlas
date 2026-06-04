@@ -115,13 +115,32 @@ public sealed class PortWalk
   {
     if (trigger is not JsonObject t)
       return;
-    var ev = t["Event"]?.ToString();
+    var eventNode = t["Event"];
     var filter = Filter(t["Filter"]);
+
+    // A structured (phase) event — "at the beginning of [phase]". Never ToString the object (that
+    // leaked raw JSON into labels); derive a clean token from its part, else a generic trigger.
+    if (eventNode is JsonObject phase)
+    {
+      var part = (phase["Part"] ?? phase["part"])?.ToString();
+      consumes.Add(
+        Port(card, part is not null ? $"at:{part.ToLowerInvariant()}" : "trigger", PortSide.Consume)
+      );
+      return;
+    }
+
+    var ev = (eventNode as JsonValue)?.ToString();
+    if (ev is null)
+      return;
     if (ev == "Dies" && filter is not null)
       consumes.Add(
         Port(card, PortLabel.DeathTrigger(filter, _ontology), PortSide.Consume, subject: filter)
       );
-    else if (ev is not null)
+    else if (ev == "Enters" && filter is not null)
+      consumes.Add(
+        Port(card, PortLabel.EntersTrigger(filter, _ontology), PortSide.Consume, subject: filter)
+      );
+    else
       // Coarse fallback (totality): the event name as the role, plus the subject if any.
       consumes.Add(Port(card, Coarse(ev, filter), PortSide.Consume));
   }

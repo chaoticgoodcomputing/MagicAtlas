@@ -121,4 +121,36 @@ public class PortWalkTest
     // Inert ports carry no subject (scalar / no object).
     Assert.That(graph.Ports.Single(p => p.Label == "modify:pt").Subject, Is.Null);
   }
+
+  // An "enters" trigger projects the canonical `etb` role, not the coarse `enters` fallback.
+  [Test]
+  public void Enters_trigger_projects_the_canonical_etb_role()
+  {
+    var abilities = JsonNode.Parse(
+      """
+      [{"Kind":"triggered",
+        "Trigger":{"Event":"Enters","Filter":{"CardTypes":["creature"],"Controller":"You"}},
+        "Effects":[{"EffectType":"drawCards","Count":{"QuantityType":"literal","Value":1}}]}]
+      """
+    );
+    var graph = new PortWalk(Ontology).Project("Synthetic", abilities);
+    Assert.That(graph.Ports.Select(p => p.Label), Does.Contain("etb:creature:controlled"));
+    Assert.That(graph.Ports.Any(p => p.Label.StartsWith("enters")), Is.False);
+  }
+
+  // A structured (phase) event must never leak raw JSON into a label (the {\n "part" bug).
+  [Test]
+  public void Structured_phase_event_never_leaks_json_into_a_label()
+  {
+    var abilities = JsonNode.Parse(
+      """
+      [{"Kind":"triggered",
+        "Trigger":{"Event":{"part":"Upkeep","edge":"Begin"}},
+        "Effects":[{"EffectType":"drawCards","Count":{"QuantityType":"literal","Value":1}}]}]
+      """
+    );
+    var graph = new PortWalk(Ontology).Project("Synthetic", abilities);
+    Assert.That(graph.Ports.All(p => !p.Label.Contains('{')), "no raw JSON in any label");
+    Assert.That(graph.Ports.Select(p => p.Label), Does.Contain("at:upkeep"));
+  }
 }

@@ -93,6 +93,10 @@ public static class PortLabel
   public static string DeathTrigger(ObjectFilter dying, TypeOntology ontology) =>
     Join("ltb", Subject(dying, ontology), "to-graveyard", Scope(dying), Exclusion(dying));
 
+  /// <summary>An "enters the battlefield" trigger (CR 603.6a) — consumes an entering object.</summary>
+  public static string EntersTrigger(ObjectFilter entering, TypeOntology ontology) =>
+    Join("etb", Subject(entering, ontology), Scope(entering), Exclusion(entering));
+
   /// <summary>
   /// A sacrifice cost. CR 701.21a: a player only sacrifices a permanent they control, so an unscoped
   /// fodder filter floors to <c>controlled</c> (the rules-invariant lives here, not in the parse).
