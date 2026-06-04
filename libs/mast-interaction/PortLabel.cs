@@ -18,13 +18,16 @@ public static class PortLabel
 {
   /// <summary>
   /// The subject facet — the object a port acts on, card-type first then subtype (ADR-0002 §3a).
-  /// <c>{creature}</c> → <c>"creature"</c>; <c>{creature}+{Squirrel}</c> → <c>"creature:squirrel"</c>;
-  /// <c>{Squirrel}</c> alone → <c>"squirrel"</c> (subtype-only — the type-ontology lift to
-  /// <c>creature:squirrel</c> is a later slice). <c>null</c> when the filter names no type.
+  /// <c>{creature}</c> → <c>"creature"</c>; <c>{creature}+{Squirrel}</c> → <c>"creature:squirrel"</c>.
+  /// A subtype-only filter is <b>lifted</b> through the same vendored <see cref="TypeOntology"/> the
+  /// operator reads: <c>{Squirrel}</c> → <c>"creature:squirrel"</c> (the kindred card-type is dropped
+  /// as a non-permanent — a port acts on a permanent). The lift is a <em>coarse over-approximation</em>
+  /// for matching; the operator independently decides the precise <c>Squirrel ⊄ creature</c> straddle
+  /// (ADR-0002 §6/§7). <c>null</c> when the filter names no type (and no subtype resolves).
   /// </summary>
-  public static string? Subject(ObjectFilter f)
+  public static string? Subject(ObjectFilter f, TypeOntology ontology)
   {
-    var cardTypes = Canon(f.CardTypes);
+    var cardTypes = Canon(f.CardTypes) ?? LiftCardTypes(f.Subtypes, ontology);
     var subtypes = Canon(f.Subtypes);
     return (cardTypes, subtypes) switch
     {
@@ -33,6 +36,31 @@ public static class PortLabel
       (null, not null) => subtypes,
       _ => $"{cardTypes}:{subtypes}",
     };
+  }
+
+  /// <summary>
+  /// Lift a subtype-only fodder filter to its <b>permanent</b> card-type(s) via the ontology
+  /// (ADR-0002 §3a): <c>Squirrel</c> → <c>creature</c> (its <c>kindred</c> membership is filtered
+  /// out — kindred is not a permanent type, and a sac/death port acts on a permanent). <c>null</c>
+  /// if no subtype resolves to a permanent type.
+  /// </summary>
+  private static string? LiftCardTypes(IReadOnlyList<string>? subtypes, TypeOntology ontology)
+  {
+    if (subtypes is null || subtypes.Count == 0)
+      return null;
+    var permanents = ontology.PermanentTypes.ToHashSet(StringComparer.OrdinalIgnoreCase);
+    var lifted = subtypes
+      .SelectMany(s =>
+        ontology.SubtypeToCardTypes.TryGetValue(s, out var cardTypes)
+          ? cardTypes
+          : Enumerable.Empty<string>()
+      )
+      .Where(permanents.Contains)
+      .Select(c => c.ToLowerInvariant())
+      .Distinct()
+      .OrderBy(c => c, StringComparer.Ordinal)
+      .ToList();
+    return lifted.Count == 0 ? null : string.Join("+", lifted);
   }
 
   /// <summary>
@@ -57,15 +85,15 @@ public static class PortLabel
   /// A "dies" trigger — leaves-the-battlefield to graveyard (CR 700.4), the destination carried as a
   /// qualifier of <c>ltb</c> so <c>ltb:…:to-graveyard ⊆ ltb:…</c> (ADR-0002 §3).
   /// </summary>
-  public static string DeathTrigger(ObjectFilter dying) =>
-    Join("ltb", Subject(dying), "to-graveyard", Scope(dying), Exclusion(dying));
+  public static string DeathTrigger(ObjectFilter dying, TypeOntology ontology) =>
+    Join("ltb", Subject(dying, ontology), "to-graveyard", Scope(dying), Exclusion(dying));
 
   /// <summary>
   /// A sacrifice cost. CR 701.21a: a player only sacrifices a permanent they control, so an unscoped
   /// fodder filter floors to <c>controlled</c> (the rules-invariant lives here, not in the parse).
   /// </summary>
-  public static string SacrificeCost(ObjectFilter fodder) =>
-    Join("sac", Subject(fodder), Scope(fodder) ?? "controlled", Exclusion(fodder));
+  public static string SacrificeCost(ObjectFilter fodder, TypeOntology ontology) =>
+    Join("sac", Subject(fodder, ontology), Scope(fodder) ?? "controlled", Exclusion(fodder));
 
   /// <summary>Join the facets in canonical order, dropping the absent ones.</summary>
   private static string Join(params string?[] facets) =>
