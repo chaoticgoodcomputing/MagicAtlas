@@ -309,14 +309,15 @@ public sealed class PortGraphEngine
         {
           path.Add(edge);
           var loop = path.ToList();
-          cycles.Add(
-            new PortCycle
-            {
-              Edges = loop,
-              CoCostsSatisfied = ConjunctionHolds(loop, coCosts, fed),
-              Balanced = ManaBalanced(loop, coCosts, edges),
-            }
-          );
+          if (!IsOneShotSelfRemoval(loop, edges)) // §8 "B": prune the structurally non-repeatable
+            cycles.Add(
+              new PortCycle
+              {
+                Edges = loop,
+                CoCostsSatisfied = ConjunctionHolds(loop, coCosts, fed),
+                Balanced = ManaBalanced(loop, coCosts, edges),
+              }
+            );
           path.RemoveAt(path.Count - 1);
         }
         else if (
@@ -465,6 +466,53 @@ public sealed class PortGraphEngine
     var manaProduced = producers.Sum(p => p.Quantity!.Value);
 
     return manaProduced >= manaCost;
+  }
+
+  /// <summary>
+  /// ADR-0002 §8 ("B") — one-shot self-removal. A cycle that traverses a source's OWN
+  /// leaves-the-battlefield-to-graveyard trigger (a self-scoped <c>ltb:…:to-graveyard:self</c> consume)
+  /// is <b>structurally non-repeatable</b>: the source is a single object that dies at most once and the
+  /// trigger fires only for that one death (CR 603.x); the objects the loop feeds back (created tokens)
+  /// are <em>different</em> objects that can't re-satisfy the source's self-trigger. So the loop closes
+  /// in the graph but cannot fire twice — it is <b>pruned</b> (impossible), not floored to Amber. This
+  /// is the structural reading the user gave: "the token creation is attached to the creature itself
+  /// dying, making it fundamentally non-reusable" — a property of the AST, not a game-state trace.
+  /// <para><b>Carve-out (Persist/Undying):</b> if the same self-death also returns the source to the
+  /// battlefield (a card-defined <c>ltb:…:self → emit:returntobattlefield</c>), the source can die
+  /// again, so the cycle is retained (its finiteness then turns on counters — a separate axis).</para>
+  /// </summary>
+  private static bool IsOneShotSelfRemoval(
+    IReadOnlyList<PortEdge> cycle,
+    IReadOnlyList<PortEdge> edges
+  )
+  {
+    var selfDeaths = cycle
+      .SelectMany(e => new[] { e.From, e.To })
+      .Where(p => p.Side == PortSide.Consume && IsSelfLeavesToGraveyard(p.Label))
+      .GroupBy(p => p.Identity, StringComparer.Ordinal)
+      .Select(g => g.First());
+
+    foreach (var death in selfDeaths)
+    {
+      var returnsSelf = edges.Any(e =>
+        e.Provenance == EdgeProvenance.CardDefined
+        && string.Equals(e.From.Identity, death.Identity, StringComparison.Ordinal)
+        && e.To.Label.StartsWith("emit:returntobattlefield", StringComparison.Ordinal)
+      );
+      if (!returnsSelf)
+        return true; // a self-death with no self-return — the source dies once
+    }
+    return false;
+  }
+
+  /// <summary>A self-scoped dies-trigger: <c>ltb</c> role, destination <c>to-graveyard</c> (CR 700.4), scope <c>self</c>.</summary>
+  private static bool IsSelfLeavesToGraveyard(string label)
+  {
+    var segments = label.Split(':');
+    return segments.Length > 0
+      && segments[0] == "ltb"
+      && segments.Contains("to-graveyard")
+      && segments.Contains("self");
   }
 
   private static bool IsPayMana(string label) =>

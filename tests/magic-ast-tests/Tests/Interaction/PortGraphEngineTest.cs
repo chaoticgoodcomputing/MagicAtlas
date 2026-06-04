@@ -360,6 +360,157 @@ public class PortGraphEngineTest
     Assert.That(loopB.Tier, Is.EqualTo(CertaintyTier.Green), "3 mana covers the {3} cost");
   }
 
+  // One-shot self-removal (§8, "B"): a cycle that traverses a source's OWN dies-trigger
+  // (ltb:…:to-graveyard:self) is non-repeatable — the unique source dies once and the trigger fires
+  // for that one death; the tokens it feeds back are different objects that can't re-satisfy the
+  // self-trigger. So an Afterlife/Elenda-class self-death → token loop fed by a sac outlet is PRUNED
+  // (structurally impossible), not floored to Amber. The control — the SAME shape with a non-self
+  // ("another creature dies") trigger — is a real repeatable aristocrat, so it is retained.
+  [Test]
+  public void A_self_death_token_loop_is_pruned_as_one_shot()
+  {
+    static PortNode Consume(string card, string label, ObjectFilter subj) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Consume,
+        Subject = subj,
+        Identity = card + "::" + label,
+      };
+    static PortNode Emit(string card, string label, ObjectFilter subj) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Emit,
+        Subject = subj,
+        Identity = card + "::" + label,
+      };
+
+    var engine = new PortGraphEngine(Ontology);
+    // A free sac outlet on a second card (shared by both arms).
+    var sac = Consume(
+      "Outlet",
+      "sac:creature:controlled",
+      new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You }
+    );
+    bool ClosesAcrossOutlet(IReadOnlyList<PortCycle> cycles) =>
+      cycles.Any(c => c.Edges.Any(e => e.From.Card == "Outlet" || e.To.Card == "Outlet"));
+
+    // Afterlife/Elenda-class: "when this creature dies, create a creature token" (self-death).
+    var selfDies = Consume(
+      "Elenda",
+      "ltb:creature:to-graveyard:self",
+      new ObjectFilter { CardTypes = ["creature"], IsSelf = true }
+    );
+    var selfToken = Emit(
+      "Elenda",
+      "emit:token:creature:controlled",
+      new ObjectFilter { CardTypes = ["creature"], IsToken = true, Controller = ControllerFilter.You }
+    );
+    var selfGraph = new PortGraph
+    {
+      Ports = [selfDies, selfToken, sac],
+      CardDefinedEdges = [new() { From = selfDies, To = selfToken }],
+    };
+    Assert.That(
+      ClosesAcrossOutlet(engine.FindCycles(engine.Materialize([selfGraph]), maxLength: 5)),
+      Is.False,
+      "self-death → token + sac outlet is one-shot (the source dies once) — must be pruned, not surfaced"
+    );
+
+    // Control: a non-self ("another creature you control dies", Pitiless-style) trigger is a real
+    // repeatable loop — retained — proving it is the self-ness that prunes, not the loop shape.
+    var otherDies = Consume(
+      "Pitiless",
+      "ltb:creature:to-graveyard:controlled:another",
+      new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Controller = ControllerFilter.You,
+        ExcludeSelf = true,
+      }
+    );
+    var otherToken = Emit(
+      "Pitiless",
+      "emit:token:creature:controlled",
+      new ObjectFilter { CardTypes = ["creature"], IsToken = true, Controller = ControllerFilter.You }
+    );
+    var otherGraph = new PortGraph
+    {
+      Ports = [otherDies, otherToken, sac],
+      CardDefinedEdges = [new() { From = otherDies, To = otherToken }],
+    };
+    Assert.That(
+      ClosesAcrossOutlet(engine.FindCycles(engine.Materialize([otherGraph]), maxLength: 5)),
+      Is.True,
+      "a non-self (another-creature) death trigger is a real repeatable loop — retained"
+    );
+  }
+
+  // One-shot carve-out (§8, "B"): Persist/Undying — the SAME self-death also returns the source to the
+  // battlefield (a card-defined ltb:…:self → emit:returntobattlefield), so it can die again and the
+  // loop is NOT pruned (its finiteness then turns on counters, a separate axis). Without the carve-out
+  // this would be wrongly pruned as one-shot.
+  [Test]
+  public void A_self_returning_source_is_not_pruned_as_one_shot()
+  {
+    static PortNode Consume(string card, string label, ObjectFilter? subj) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Consume,
+        Subject = subj,
+        Identity = card + "::" + label,
+      };
+    static PortNode Emit(string card, string label, ObjectFilter? subj) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Emit,
+        Subject = subj,
+        Identity = card + "::" + label,
+      };
+
+    var engine = new PortGraphEngine(Ontology);
+    var sac = Consume(
+      "Outlet",
+      "sac:creature:controlled",
+      new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You }
+    );
+    // Persist-class: "when this dies, create a token AND return this to the battlefield."
+    var selfDies = Consume(
+      "Persistor",
+      "ltb:creature:to-graveyard:self",
+      new ObjectFilter { CardTypes = ["creature"], IsSelf = true }
+    );
+    var token = Emit(
+      "Persistor",
+      "emit:token:creature:controlled",
+      new ObjectFilter { CardTypes = ["creature"], IsToken = true, Controller = ControllerFilter.You }
+    );
+    var selfReturn = Emit("Persistor", "emit:returntobattlefield", null);
+    var graph = new PortGraph
+    {
+      Ports = [selfDies, token, selfReturn, sac],
+      CardDefinedEdges =
+      [
+        new() { From = selfDies, To = token },
+        new() { From = selfDies, To = selfReturn },
+      ],
+    };
+
+    var cycles = engine.FindCycles(engine.Materialize([graph]), maxLength: 5);
+    Assert.That(
+      cycles.Any(c => c.Edges.Any(e => e.From.Card == "Outlet" || e.To.Card == "Outlet")),
+      Is.True,
+      "a self-returning source (Persist/Undying) can die again — the loop is retained, not pruned"
+    );
+  }
+
   // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
   [Test]
   public void A_gated_cycle_floors_to_amber_even_with_green_edges()
