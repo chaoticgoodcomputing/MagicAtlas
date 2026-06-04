@@ -55,6 +55,17 @@ public class PortLabelTest
       Is.EqualTo("ltb:creature:to-graveyard:controlled:another")
     );
 
+  // "When this creature dies" → self-scoped, distinct from "a creature dies" (§6 self-binding).
+  [Test]
+  public void Death_trigger_this_creature_projects_self_scope() =>
+    Assert.That(
+      PortLabel.DeathTrigger(
+        new ObjectFilter { CardTypes = ["creature"], IsSelf = true },
+        Ontology
+      ),
+      Is.EqualTo("ltb:creature:to-graveyard:self")
+    );
+
   // --- sacrifice cost (Chatterfang) — subtype-only fodder lifted to its permanent card-type ---
   [Test]
   public void Sacrifice_cost_lifts_squirrel_subtype_to_creature_and_floors_to_controlled() =>

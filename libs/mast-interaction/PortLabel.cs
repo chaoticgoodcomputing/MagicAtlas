@@ -71,7 +71,8 @@ public static class PortLabel
   /// control, CR 108.3 vs 108.4).
   /// </summary>
   public static string? Scope(ObjectFilter f) =>
-    ScopeToken(f.Controller) ?? (f.Owner == ControllerFilter.You ? "owned" : null);
+    f.IsSelf == true ? "self" // "this creature" — the source itself (ADR-0002 §3/§6); narrowest scope
+    : ScopeToken(f.Controller) ?? (f.Owner == ControllerFilter.You ? "owned" : null);
 
   /// <summary>The control-axis token (shared by object filters and replacement events).</summary>
   private static string? ScopeToken(ControllerFilter? controller) =>
