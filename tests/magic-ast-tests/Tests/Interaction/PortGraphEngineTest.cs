@@ -582,6 +582,74 @@ public class PortGraphEngineTest
     );
   }
 
+  // Per-colour balance (§8): a loop must produce each COLOURED pip its costs owe, not just the total.
+  // Ant Queen ("{2}{G}: create a token") sacrificed to Ashnod's Altar ("Sacrifice a creature: {C}{C}"):
+  // colorless can pay the generic {2} but never the {G} (CR 107.4) — so even three colorless can't make
+  // it infinite. The balance must floor on the unpayable green pip, not certify on the fungible total.
+  [Test]
+  public void A_loop_whose_produced_colour_cannot_pay_a_coloured_pip_floors_to_amber()
+  {
+    static PortNode Consume(string card, string label, int? qty) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Consume,
+        Quantity = qty,
+        Identity = card + "::" + label,
+      };
+    static PortNode Emit(string card, string label, ObjectFilter? subj, int? qty) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Emit,
+        Subject = subj,
+        Quantity = qty,
+        Identity = card + "::" + label,
+      };
+
+    // Ant Queen: "{2}{G}: create a token" — generic {2} on the cycle, the {G} pip a co-cost (sibling).
+    var payGeneric = Consume("Queen", "pay:mana", 2);
+    var payGreen = Consume("Queen", "pay:mana:green", 1);
+    var token = Emit(
+      "Queen",
+      "emit:token:creature:controlled",
+      new ObjectFilter { CardTypes = ["creature"], IsToken = true },
+      1
+    );
+    // Ashnod's Altar: "Sacrifice a creature: {C}{C}{C}" — three colorless (covers the TOTAL of 3).
+    var sac = Consume("Altar", "sac:creature:controlled", 1);
+    var colorless = Emit("Altar", "emit:mana:colorless", null, 3);
+    sac = sac with { Subject = new ObjectFilter { CardTypes = ["creature"] } };
+
+    CardDefinedEdge[] cardDefined =
+    [
+      new() { From = payGeneric, To = token },
+      new() { From = payGreen, To = token },
+      new() { From = sac, To = colorless },
+    ];
+    var engine = new PortGraphEngine(Ontology);
+    var cycles = engine.FindCycles(
+      engine.Materialize(
+        [
+          new PortGraph
+          {
+            Ports = [payGeneric, payGreen, token, sac, colorless],
+            CardDefinedEdges = cardDefined,
+          },
+        ]
+      )
+    );
+    var loop = cycles.First(c => c.Edges.Any(e => e.From.Label == "sac:creature:controlled"));
+    Assert.That(
+      loop.Balanced,
+      Is.False,
+      "3 colorless covers the {2} but never the {G} pip (CR 107.4) — not infinite"
+    );
+    Assert.That(loop.Tier, Is.EqualTo(CertaintyTier.Amber));
+  }
+
   // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
   [Test]
   public void A_gated_cycle_floors_to_amber_even_with_green_edges()

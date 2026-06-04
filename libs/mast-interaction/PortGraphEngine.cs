@@ -454,7 +454,6 @@ public sealed class PortGraphEngine
       return true; // no mana cost — nothing to balance
     if (costs.Values.Any(p => p.Quantity is null))
       return true; // symbolic cost — can't prove a shortfall (conservative)
-    var manaCost = costs.Values.Sum(p => p.Quantity!.Value);
 
     // Producers: distinct emit:mana ports ON THE CYCLE'S CARDS that feed those costs.
     var producers = edges
@@ -469,9 +468,47 @@ public sealed class PortGraphEngine
       .ToList();
     if (producers.Any(p => p.Quantity is null))
       return true; // symbolic production — conservative
-    var manaProduced = producers.Sum(p => p.Quantity!.Value);
 
-    return manaProduced >= manaCost;
+    // Per-colour balance: produced mana must cover each COLOURED pip in its OWN colour, not just the
+    // fungible total — colorless can pay a generic {N} but never a {G} (CR 107.4). 'any'-colour
+    // production is a flexible pool (a Treasure picks the colour, ADR-0002 §3b†); a specific colour pays
+    // its own pip first and lends any surplus to the generic cost.
+    var anyPool = producers
+      .Where(p => string.Equals(ManaColor(p.Label), "any", StringComparison.OrdinalIgnoreCase))
+      .Sum(p => p.Quantity!.Value);
+    var supply = producers
+      .Where(p => !string.Equals(ManaColor(p.Label), "any", StringComparison.OrdinalIgnoreCase))
+      .GroupBy(p => ManaColor(p.Label) ?? "", StringComparer.OrdinalIgnoreCase)
+      .ToDictionary(g => g.Key, g => g.Sum(p => p.Quantity!.Value), StringComparer.OrdinalIgnoreCase);
+
+    var genericNeed = 0;
+    var colouredNeed = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+    foreach (var c in costs.Values)
+    {
+      var colour = ManaColor(c.Label);
+      if (colour is null)
+        genericNeed += c.Quantity!.Value;
+      else
+        colouredNeed[colour] = colouredNeed.GetValueOrDefault(colour) + c.Quantity!.Value;
+    }
+
+    // Each coloured pip draws first on its own colour, then on the flexible 'any' pool.
+    var requiredAny = 0;
+    var colourSurplus = 0;
+    foreach (var (colour, need) in colouredNeed)
+    {
+      var own = supply.GetValueOrDefault(colour);
+      if (own >= need)
+        colourSurplus += own - need;
+      else
+        requiredAny += need - own;
+    }
+    if (requiredAny > anyPool)
+      return false; // a coloured pip is provably unpayable by the produced colours
+    // Generic {N} is covered by leftover 'any' + every colour's surplus (incl. colours with no pip).
+    var unusedColour = supply.Where(kv => !colouredNeed.ContainsKey(kv.Key)).Sum(kv => kv.Value);
+    var leftover = anyPool - requiredAny + colourSurplus + unusedColour;
+    return leftover >= genericNeed;
   }
 
   /// <summary>

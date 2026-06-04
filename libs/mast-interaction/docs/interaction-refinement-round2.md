@@ -64,3 +64,15 @@ it's a nearest-match, not ground truth). Cheap fix, improves the viz/enrichment 
 ## Recommended order
 A (self-sac — 3 FPs, de-deferred B follow-on) is highest-impact; B (per-colour balance — 1 FP, the
 A-caveat refinement) is contained; the anchor max-overlap is a cheap bundle-along.
+
+## Resolution (2026-06-04)
+- **A (self-sac one-shot) — DONE** (commit `4d3235b6`): parser self-binds "Sacrifice this" → `IsSelf`
+  (14 golds); `TokenSatisfiesSacAtCreation` refuses to refuel a `:self` sac from a created token. The
+  Chromatic Star / Dromar's Attendant / Barrels false-GREENs left the surfaced set; Green 74→39.
+  *Newly visible (distinct cause):* net-zero / **tap-gated** mana filters (Bog Initiate + a `{T}` filter)
+  remain false-GREEN — the engine treats `{T}` as a free cost (no once-per-untap gate). Follow-on C.
+- **B (per-colour balance) — DONE**: `ManaBalanced` now buckets by colour (a coloured pip must be paid
+  in its colour or from the `any` pool, CR 107.4). Ant Queen × Ashnod's Altar → Amber (mana-negative);
+  canonical combos retained; Green 39→38.
+- **Anchor max-overlap** — pending (next).
+- **C (tap rate-limit / net-zero filter)** — new follow-on surfaced by A; not yet scoped.
