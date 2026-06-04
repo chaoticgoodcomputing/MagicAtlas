@@ -32,7 +32,8 @@
             "Filter": {
               "CardTypes": [
                 "creature"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [
@@ -66,7 +67,8 @@
             "Filter": {
               "CardTypes": [
                 "creature"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [

@@ -58,7 +58,8 @@
             "Filter": {
               "CardTypes": [
                 "land"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [

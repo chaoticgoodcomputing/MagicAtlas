@@ -275,7 +275,19 @@ internal static class TriggeredRuleHelpers
     {
       if (Regex.IsMatch(lower, $@"\bthis\s+{selfType}\b"))
       {
-        return new ObjectFilter { CardTypes = [selfType], Controller = controller };
+        // "this [type]" is the source object itself (CR 109) — mark IsSelf so a self-event trigger
+        // ("when this creature dies") is distinguishable from "a [type]" ("when a creature dies").
+        // This is the §6 self/any axis the interaction operator gates (an arbitrary object is not
+        // provably the source); without it a cross-card sac false-bridges to a self-death trigger.
+        // Self-ONLY: a disjunction like "this creature or another creature" means ANY creature, so it
+        // must NOT be marked IsSelf (Blood Artist) — guard on "other"/"another" in the subject text.
+        var selfOnly = !lower.Contains("other");
+        return new ObjectFilter
+        {
+          CardTypes = [selfType],
+          Controller = controller,
+          IsSelf = selfOnly ? true : null,
+        };
       }
     }
 

@@ -24,7 +24,8 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"]
+              "CardTypes": ["land"],
+              "IsSelf": true
             }
           },
           "Effects": [

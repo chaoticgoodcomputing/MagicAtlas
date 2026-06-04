@@ -63,7 +63,8 @@
             "Filter": {
               "CardTypes": [
                 "creature"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "InterveningIf": {

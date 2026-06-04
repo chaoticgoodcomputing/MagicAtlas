@@ -67,7 +67,8 @@
             "Filter": {
               "CardTypes": [
                 "aura"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [

@@ -28,7 +28,8 @@
             "Filter": {
               "CardTypes": [
                 "artifact"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [

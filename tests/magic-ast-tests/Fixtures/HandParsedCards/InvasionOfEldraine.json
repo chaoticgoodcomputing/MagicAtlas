@@ -104,7 +104,8 @@
                 "Filter": {
                   "CardTypes": [
                     "siege"
-                  ]
+                  ],
+                  "IsSelf": true
                 }
               },
               "Effects": [

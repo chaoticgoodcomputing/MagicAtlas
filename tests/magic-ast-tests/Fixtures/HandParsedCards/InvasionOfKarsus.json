@@ -79,7 +79,8 @@
                 "Timing": "When",
                 "Event": "Enters",
                 "Filter": {
-                  "CardTypes": ["siege"]
+                  "CardTypes": ["siege"],
+                  "IsSelf": true
                 }
               },
               "Effects": [

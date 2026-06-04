@@ -31,7 +31,8 @@
             "Filter": {
               "CardTypes": [
                 "enchantment"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [

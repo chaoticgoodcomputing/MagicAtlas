@@ -31,7 +31,8 @@
             "Filter": {
               "CardTypes": [
                 "equipment"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [

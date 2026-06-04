@@ -58,7 +58,8 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": ["creature"],
+              "IsSelf": true
             }
           },
           "Effects": [

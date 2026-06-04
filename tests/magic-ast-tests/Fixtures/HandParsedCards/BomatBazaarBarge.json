@@ -36,7 +36,8 @@
             "Filter": {
               "CardTypes": [
                 "vehicle"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [
