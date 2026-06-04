@@ -21,7 +21,7 @@ public enum PortSide
 /// <summary>
 /// A single-role port (ADR-0002 §4) — one ability sub-tree in one role, its canonical
 /// <see cref="PortLabel"/> leaf, its side, and its §8 quantity (<c>null</c> = symbolic, e.g. a
-/// variable <c>X</c> or a "that many" count). Supersedes the old <see cref="Port"/>'s
+/// variable <c>X</c> or a "that many" count). Supersedes the old <c>Port</c>'s
 /// emit/consume/intercept resource sets; a multi-role card (Chatterfang) projects several of these.
 /// </summary>
 public sealed record PortNode
@@ -68,7 +68,7 @@ public sealed record PortGraph
 /// single-role ports via <see cref="PortLabel"/>, joined by card-defined edges. Dispatches on node
 /// kind (trigger / cost / effect / replacement); totality (§4) means it projects a port for every
 /// structural role — costs at quantity 0, inert keywords — never gating on resource flow. The
-/// successor to the hand-coded recognizers in <see cref="PortProjector"/>; built alongside it (S2a)
+/// successor to the hand-coded recognizers (the retired <c>PortProjector</c>); built during (S2a)
 /// so the existing engine + golds stay green until the migration (S3).
 /// </summary>
 public sealed class PortWalk

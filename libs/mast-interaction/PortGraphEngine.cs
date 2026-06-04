@@ -13,7 +13,7 @@ public enum EdgeProvenance
 /// A directed port→port edge over the single-role <see cref="PortNode"/> model (ADR-0002), carrying
 /// its provenance (§5) and — for rules-defined edges — the operator's verdicts. A card-defined edge
 /// is GREEN by construction (the card's own causality); a rules-defined edge is tiered like the
-/// classic <see cref="InteractionEdge"/>.
+/// classic <c>InteractionEdge</c>.
 /// </summary>
 public sealed record PortEdge
 {
@@ -50,7 +50,7 @@ public sealed record PortCycle
 
 /// <summary>
 /// The interaction engine over the single-role port model (ADR-0002 §4–6) — the successor to
-/// <see cref="InteractionEngine"/>. Combines the walk's <b>card-defined</b> edges (certain, §5) with
+/// the original <c>InteractionEngine</c>. Combines the walk's <b>card-defined</b> edges (certain, §5) with
 /// <b>rules-defined</b> edges it derives: flow (an emitted object refuels a consume; mana refunds a
 /// mana cost), the curated <b>sac→death bridge</b> (a sacrificed creature dies, CR 701.21a→700.4),
 /// and <b>modifier</b> edges (a replacement intercepts a token emission). Type decisions go through
@@ -147,7 +147,7 @@ public sealed class PortGraphEngine
   /// <summary>
   /// Elementary cycles over the materialised graph (each rooted at its lowest-identity port, surfaced
   /// once). A cycle is a candidate loop; its tier is the worst hop. (Same discipline as
-  /// <see cref="InteractionEngine.FindCycles"/>, over the new edge type.)
+  /// the original engine's <c>FindCycles</c>, over the new edge type.)
   /// </summary>
   public IReadOnlyList<PortCycle> FindCycles(IReadOnlyList<PortEdge> edges)
   {
