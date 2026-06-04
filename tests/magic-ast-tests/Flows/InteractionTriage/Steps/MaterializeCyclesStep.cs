@@ -55,23 +55,42 @@ public static class MaterializeCyclesStep
           list.Add(i);
         }
 
-      string KnownComboFor(PortCycle cycle)
+      // Classify a loop against the CSB corpus: VERIFIED when its cards EXACTLY match a combo
+      // (cycle.cards == a combo); PARTIAL when they're a subset of one (a partial reconstruction of a
+      // known combo); DERIVED when they span no single combo (a genuinely novel loop).
+      (string Match, string ComboId) Classify(PortCycle cycle)
       {
+        var cards = cycle
+          .Edges.SelectMany(e => new[] { e.From.Card, e.To.Card })
+          .Distinct(StringComparer.Ordinal)
+          .ToList();
         List<int>? candidates = null;
-        foreach (
-          var card in cycle
-            .Edges.SelectMany(e => new[] { e.From.Card, e.To.Card })
-            .Distinct(StringComparer.Ordinal)
-        )
+        foreach (var card in cards)
         {
           if (!cardToCombo.TryGetValue(card, out var combos))
-            return ""; // a cycle card in no combo — can't be a known combo
+            return ("derived", "");
           candidates = candidates is null ? [.. combos] : [.. candidates.Intersect(combos)];
           if (candidates.Count == 0)
-            return ""; // cards span multiple combos — a derived (cross-combo) loop
+            return ("derived", ""); // cards span multiple combos
         }
-        return candidates is { Count: > 0 } ? comboCards[candidates[0]].Id : "";
+        if (candidates is null or { Count: 0 })
+          return ("derived", "");
+        // Exact set equality first (a candidate already ⊇ the cards, so equal count ⇒ ==).
+        foreach (var idx in candidates)
+          if (comboCards[idx].Cards.Count == cards.Count)
+            return ("verified", comboCards[idx].Id);
+        // Otherwise a subset of a combo — report the smallest (most specific) superset.
+        var best = candidates.OrderBy(i => comboCards[i].Cards.Count).First();
+        return ("partial", comboCards[best].Id);
       }
+
+      static int Rank(string match) =>
+        match switch
+        {
+          "verified" => 0,
+          "partial" => 1,
+          _ => 2,
+        };
 
       var ranked = engine
         .FindCycles(edges, LengthBound)
@@ -81,8 +100,8 @@ public static class MaterializeCyclesStep
             .Distinct(StringComparer.Ordinal)
             .Count() > 1
         )
-        .Select(c => (Cycle: c, ComboId: KnownComboFor(c)))
-        .OrderBy(x => x.ComboId.Length == 0 ? 1 : 0) // KNOWN verified combos first
+        .Select(c => (Cycle: c, Class: Classify(c)))
+        .OrderBy(x => Rank(x.Class.Match)) // verified, then partial, then derived
         .ThenBy(x => (int)x.Cycle.Tier) // then GREEN verdict
         .ThenBy(x => x.Cycle.Edges.Count) // then shortest
         .ToList();
@@ -123,8 +142,8 @@ public static class MaterializeCyclesStep
                   Firable = item.Cycle.Firable,
                   CoCostsSatisfied = item.Cycle.CoCostsSatisfied,
                   LimitingReason = item.Cycle.LimitingReason ?? "",
-                  Known = item.ComboId.Length > 0,
-                  ComboId = item.ComboId,
+                  Match = item.Class.Match,
+                  ComboId = item.Class.ComboId,
                   Total = total,
                 }
             )

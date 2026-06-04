@@ -113,9 +113,11 @@ public partial record CycleEdgeRow
   [SerializedLabel("limitingReason")]
   public string LimitingReason { get; init; } = "";
 
-  /// <summary>True when the cycle's cards all co-occur in a Commander Spellbook verified combo (cycle.cards ⊆ a combo) — a reconstructed KNOWN combo, vs an engine-DERIVED loop. The viz groups known on top.</summary>
-  [SerializedLabel("known")]
-  public bool Known { get; init; }
+  /// <summary>How the loop relates to the Commander Spellbook corpus: <c>verified</c> (cards EXACTLY a CSB
+  /// combo, cycle.cards == a combo) · <c>partial</c> (cards ⊆ a combo — a partial reconstruction of a
+  /// known combo) · <c>derived</c> (cards span no single combo — a genuinely novel loop). The viz tiers them.</summary>
+  [SerializedLabel("match")]
+  public string Match { get; init; } = "derived";
 
   /// <summary>The id of the matched CSB combo (empty for derived loops) — for hover / drill-through.</summary>
   [SerializedLabel("comboId")]

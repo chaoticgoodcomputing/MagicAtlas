@@ -189,7 +189,7 @@ def _cycles_from_rows(cycle_edges: pd.DataFrame):
                 "edges": edges,
                 "tier": grp["cycletier"].iloc[0],
                 "reason": grp["limitingreason"].iloc[0],
-                "known": bool(grp["known"].iloc[0]),
+                "match": grp["match"].iloc[0],
                 "combo": grp["comboid"].iloc[0],
             }
         )
@@ -206,19 +206,20 @@ def plot_interaction_graph(
 
     cycles, total = _cycles_from_rows(cycle_edges)
     certified = sum(1 for c in cycles if c["tier"] == "Green")
-    n_known = sum(1 for c in cycles if c["known"])
+    n = {m: sum(1 for c in cycles if c["match"] == m) for m in ("verified", "partial", "derived")}
     logger.info(
         "[plot_interaction_graph] %d label edges, %d nodes -> %d engine cycles of %d "
-        "(%d known CSB combos, %d GREEN-certified)",
-        len(label_edges), len(port_nodes), len(cycles), total, n_known, certified,
+        "(%d verified / %d partial / %d derived, %d GREEN-certified)",
+        len(label_edges), len(port_nodes), len(cycles), total,
+        n["verified"], n["partial"], n["derived"], certified,
     )
 
     fig = make_subplots(
         rows=1, cols=2, column_widths=[0.32, 0.68],
         subplot_titles=(
             "Label grammar",
-            f"Reconstructed cycles — {n_known} known / {len(cycles) - n_known} derived of {total} "
-            f"({certified} GREEN-certified; edge colour = engine verdict)",
+            f"Reconstructed cycles of {total} — {n['verified']} verified / {n['partial']} partial / "
+            f"{n['derived']} derived ({certified} GREEN; edge colour = engine verdict)",
         ),
         horizontal_spacing=0.05,
     )
@@ -250,16 +251,13 @@ def plot_interaction_graph(
         hover_extra: dict = {}
         segs_by_tier: dict[str, list] = {}
 
-        known = [c for c in cycles if c["known"]]
-        derived = [c for c in cycles if not c["known"]]
-
         def _place(section, start_row, idx0):
             """Tile a section starting at grid row `start_row`; return the next free row."""
             for i, cyc in enumerate(section):
                 idx = idx0 + i
                 cx, cy = (i % cols) * cell, -(start_row + i // cols) * cell
                 nodes, tier = cyc["nodes"], cyc["tier"]
-                tag = f"known · {cyc['combo']}" if cyc["known"] else "derived"
+                tag = cyc["match"] + (f" · {cyc['combo']}" if cyc["combo"] else "")
                 verdict = f"{tag} · {tier}" + (f" — {cyc['reason']}" if cyc["reason"] else "")
                 k = len(nodes)
                 for j, node in enumerate(nodes):
@@ -280,13 +278,20 @@ def plot_interaction_graph(
                 showarrow=False, xanchor="left", font=dict(size=13, color=color),
             )
 
-        row = 0
-        if known:
-            _section_label(f"✓ Known verified combos ({len(known)})", row, "#2ca02c")
-            row = _place(known, row, 0) + 1  # blank gap row between sections
-        if derived:
-            _section_label(f"Derived loops ({len(derived)})", row, "#888")
-            _place(derived, row, len(known))
+        # Three tiers: cards EXACTLY a CSB combo (verified) · ⊆ a combo (partial reconstruction) ·
+        # span no single combo (derived / novel). Already ranked verified→partial→derived in C#.
+        sections = [
+            ([c for c in cycles if c["match"] == "verified"], "✓ Verified combos", "#2ca02c"),
+            ([c for c in cycles if c["match"] == "partial"], "~ Partial reconstructions", "#e6a817"),
+            ([c for c in cycles if c["match"] == "derived"], "? Derived / novel loops", "#888"),
+        ]
+        row, idx0 = 0, 0
+        for section, label, color in sections:
+            if not section:
+                continue
+            _section_label(f"{label} ({len(section)})", row, color)
+            row = _place(section, row, idx0) + 1  # blank gap row between sections
+            idx0 += len(section)
 
         seen_tiers: set[str] = set()
         for tier in _TIER_ORDER:
