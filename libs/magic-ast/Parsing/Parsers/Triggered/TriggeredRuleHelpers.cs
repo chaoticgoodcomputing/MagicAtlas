@@ -326,7 +326,18 @@ internal static class TriggeredRuleHelpers
     // already used for "this creature" — MAST describes what the text says).
     if (IsSelfByNameTrigger(text))
     {
-      return new ObjectFilter { CardTypes = ["creature"], Controller = controller };
+      // CR 201.4: a card naming itself refers to THAT object — a self-reference, exactly like "this
+      // creature" (§6). Mark IsSelf so "When Elenda dies" → ltb:creature:to-graveyard:self, not the
+      // generic ltb:creature; without it a cross-card sacrifice false-bridges to the self-death
+      // trigger (the interaction judge harness caught this on the Elenda loops). Self-ONLY, guarded
+      // against an "... or another ..." disjunction, mirroring the "this [type]" path above.
+      var selfOnly = !lower.Contains("other");
+      return new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Controller = controller,
+        IsSelf = selfOnly ? true : null,
+      };
     }
 
     return null;

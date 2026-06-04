@@ -44,7 +44,9 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -62,7 +64,8 @@
             "Filter": {
               "CardTypes": [
                 "creature"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [

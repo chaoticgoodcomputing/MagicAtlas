@@ -40,7 +40,8 @@
             "Filter": {
               "CardTypes": [
                 "creature"
-              ]
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [
@@ -59,15 +60,35 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 3 },
-                { "Kind": "colored", "Colors": ["R"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                }
               ]
             },
-            { "CostType": "tap" },
+            {
+              "CostType": "tap"
+            },
             {
               "CostType": "sacrifice",
-              "Filter": { "Characteristics": [{"CharacteristicType": "other", "Description": "this permanent"}] },
-              "Quantity": { "QuantityType": "literal", "Value": 1 }
+              "Filter": {
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "this permanent"
+                  }
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
           ],
           "Effects": [
@@ -75,14 +96,25 @@
               "EffectType": "becomeMonarch",
               "Player": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["player"] }
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
               }
             },
             {
               "EffectType": "dealDamage",
-              "Amount": { "QuantityType": "literal", "Value": 3 },
-              "Source": { "Kind": "Self" },
-              "Target": { "Kind": "AnyTarget" }
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Source": {
+                "Kind": "Self"
+              },
+              "Target": {
+                "Kind": "AnyTarget"
+              }
             }
           ],
           "IsManaAbility": false

@@ -6,15 +6,26 @@
     "OracleText": "Flash\nWhen Whisper Agent enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["U", "B"],
-    "ColorIdentity": ["U", "B"]
+    "Colors": [
+      "U",
+      "B"
+    ],
+    "ColorIdentity": [
+      "U",
+      "B"
+    ]
   },
   "Output": {
     "Name": "Whisper Agent",
     "TypeLine": {
       "Raw": "Creature — Human Advisor",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Advisor"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Advisor"
+      ]
     },
     "Oracle": {
       "RawText": "Flash\nWhen Whisper Agent enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
@@ -36,7 +47,10 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [
@@ -56,19 +70,38 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U", "B"]
+        "Colors": [
+          "U",
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "B"]
+        "ColorIdentity": [
+          "U",
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

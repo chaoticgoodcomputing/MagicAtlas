@@ -6,15 +6,25 @@
     "OracleText": "Flying\nWhen Watcher in the Mist enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
     "Power": "3",
     "Toughness": "4",
-    "Colors": ["U", "B"],
-    "ColorIdentity": ["U", "B"]
+    "Colors": [
+      "U",
+      "B"
+    ],
+    "ColorIdentity": [
+      "U",
+      "B"
+    ]
   },
   "Output": {
     "Name": "Watcher in the Mist",
     "TypeLine": {
       "Raw": "Creature — Spirit",
-      "Types": ["Creature"],
-      "Subtypes": ["Spirit"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spirit"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nWhen Watcher in the Mist enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
@@ -26,8 +36,19 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
-                "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
               }
             }
           ]
@@ -38,7 +59,10 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
             }
           },
           "Effects": [
@@ -58,19 +82,38 @@
         "Kind": "manaCost",
         "Raw": "{3}{U}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["U", "B"]
+        "Colors": [
+          "U",
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "B"]
+        "ColorIdentity": [
+          "U",
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",
