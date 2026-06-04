@@ -87,6 +87,68 @@ public class PortGraphEngineTest
     Assert.That(cardDefined.Tier, Is.EqualTo(CertaintyTier.Green));
   }
 
+  // A created token refuels a sacrifice cost only if its AT-CREATION type satisfies the sac (CR 111.10:
+  // a Treasure is a non-creature artifact). A later animation is an external enabler outside the
+  // reconstructed loop — an engine policy, NOT an operator Disjoint claim (judge panel 2026-06-04:
+  // operator subtype-exclusivity is unsound — crewed Vehicles, CR 301.7). Kills the corpus's
+  // creature-token ↔ artifact-sac junk edges.
+  [Test]
+  public void Token_flow_refuels_a_sac_only_when_the_token_satisfies_it_at_creation()
+  {
+    static PortNode Emit(string label, ObjectFilter subj) =>
+      new()
+      {
+        Card = "T",
+        Label = label,
+        Side = PortSide.Emit,
+        Subject = subj,
+        Identity = "T::" + label,
+      };
+    static PortNode Sac(string label, ObjectFilter subj) =>
+      new()
+      {
+        Card = "T",
+        Label = label,
+        Side = PortSide.Consume,
+        Subject = subj,
+        Identity = "T::" + label,
+      };
+
+    // Created-token filters carry their type as a SUBTYPE with CardTypes null (the card-type in the
+    // label is a display-time lift) — so the guard must lift subtype→card-type on both sides.
+    var squirrelTok = Emit(
+      "emit:token:creature:squirrel:controlled",
+      new ObjectFilter { Subtypes = ["Squirrel"] }
+    );
+    var treasureTok = Emit(
+      "emit:token:artifact:treasure:controlled",
+      new ObjectFilter { Subtypes = ["Treasure"] }
+    );
+    var creatureSac = Sac("sac:creature:controlled", new ObjectFilter { CardTypes = ["creature"] });
+    var artifactSac = Sac("sac:artifact:controlled", new ObjectFilter { CardTypes = ["artifact"] });
+    var treasureSac = Sac("sac:artifact:treasure:controlled", new ObjectFilter { Subtypes = ["Treasure"] });
+
+    var edges = new PortGraphEngine(Ontology).Materialize(
+      [
+        new PortGraph
+        {
+          Ports = [squirrelTok, treasureTok, creatureSac, artifactSac, treasureSac],
+        },
+      ]
+    );
+    bool Flow(PortNode from, PortNode to) =>
+      edges.Any(e => ReferenceEquals(e.From, from) && ReferenceEquals(e.To, to));
+
+    // At-creation type match → the token refuels the sac.
+    Assert.That(Flow(squirrelTok, creatureSac), Is.True, "a Squirrel refuels a creature-sac");
+    Assert.That(Flow(treasureTok, artifactSac), Is.True, "a Treasure refuels an artifact-sac");
+    Assert.That(Flow(treasureTok, treasureSac), Is.True, "a Treasure refuels a Treasure-sac");
+    // At-creation type MISMATCH → no flow edge.
+    Assert.That(Flow(treasureTok, creatureSac), Is.False, "a Treasure is not a creature at creation");
+    Assert.That(Flow(squirrelTok, artifactSac), Is.False, "a Squirrel is not an artifact at creation");
+    Assert.That(Flow(squirrelTok, treasureSac), Is.False, "a Squirrel is not a Treasure at creation");
+  }
+
   // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
   [Test]
   public void A_gated_cycle_floors_to_amber_even_with_green_edges()

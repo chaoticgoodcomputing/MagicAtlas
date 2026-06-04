@@ -94,7 +94,7 @@ public sealed class PortGraphEngine
     // (2) Flow — an emitted object refuels a consume; mana refunds a mana cost.
     foreach (var emit in emits)
       foreach (var consume in consumes)
-        if (Flows(emit, consume))
+        if (FlowFeasible(emit, consume))
           AddRulesEdge(edges, emit, consume, EdgeFamily.Flow);
 
     // (3) Bridge — a sacrificed creature dies (CR 701.21a→700.4), feeding a dies-trigger.
@@ -111,13 +111,83 @@ public sealed class PortGraphEngine
   }
 
   /// <summary>The minimal derived flow grammar (§6) the gold needs: a created token refuels a sac; mana refunds a mana cost.</summary>
-  private static bool Flows(PortNode emit, PortNode consume) =>
+  private bool FlowFeasible(PortNode emit, PortNode consume) =>
     (ResourceKind(emit.Label), Role(consume.Label)) switch
     {
-      ("token", "sac") => true, // a created token is a permanent that can be sacrificed
+      ("token", "sac") => TokenSatisfiesSacAtCreation(emit, consume),
       ("mana", "pay") => ResourceKind(consume.Label) == "mana", // mana refunds a mana cost
       _ => false,
     };
+
+  /// <summary>
+  /// A created token refuels a sacrifice cost only if its <b>at-creation</b> type already satisfies the
+  /// sac's required card types. A create-token effect fully specifies the token's type (CR 111.10 — a
+  /// Treasure is a non-creature artifact), so the emit's <c>CardTypes</c> are <b>exact</b>: a Treasure
+  /// cannot feed "sacrifice a creature", and a creature token cannot feed "sacrifice an artifact". An
+  /// intervening <em>animation</em> that later adds <c>creature</c> is an external enabler outside the
+  /// reconstructed loop — a deliberate modeling boundary, <b>not</b> a claim the types are
+  /// <see cref="FilterRelation.Disjoint"/> (the <see cref="ObjectFilterRelations"/> operator stays a
+  /// pure type relation; a crewed Vehicle genuinely IS a creature). This guard lives at the engine as a
+  /// loop-reconstruction policy, accepting that animation false-negative. (MAST judge panel 2026-06-04:
+  /// operator subtype→cardtype exclusivity is UNSOUND — Vehicles CR 301.7, Equipment CR 301.5c — so the
+  /// fix belongs here, not in the operator.) Removes the corpus's creature-token ↔ artifact-sac junk.
+  /// </summary>
+  private bool TokenSatisfiesSacAtCreation(PortNode emit, PortNode consume)
+  {
+    if (emit.Subject is null || consume.Subject is null)
+      return true;
+    // The token's at-creation card types: created-token filters often carry their type as a SUBTYPE
+    // with CardTypes null (the card-type in the label is a display-time lift), so lift through the
+    // ontology — a Treasure ⇒ artifact, a Saproling ⇒ creature (CR 205.3, a subtype rides its type).
+    var tokenTypes = EffectiveCardTypes(emit.Subject);
+    if (tokenTypes.Count == 0)
+      return true; // under-specified token — no basis to prune
+
+    // Every explicitly-required card type must be present (CR 110.4a — "permanent" is any permanent type).
+    foreach (var t in consume.Subject.CardTypes ?? [])
+      if (!TokenHasCardType(tokenTypes, t))
+        return false;
+    // Every required subtype must be bearable: the token must have one of the subtype's (non-kindred)
+    // owner card types, else it cannot be that subtype at creation (a Saproling is not a Treasure).
+    foreach (var s in consume.Subject.Subtypes ?? [])
+    {
+      var owners = PrimaryOwners(s);
+      if (owners.Count > 0 && !owners.Any(o => tokenTypes.Contains(o, StringComparer.OrdinalIgnoreCase)))
+        return false;
+    }
+    return true;
+  }
+
+  /// <summary>The token's at-creation card types: its explicit CardTypes plus the (non-kindred) owner
+  /// card types of each of its subtypes (a Treasure ⇒ artifact; a Squirrel ⇒ creature). CR 205.3.</summary>
+  private HashSet<string> EffectiveCardTypes(ObjectFilter f)
+  {
+    var set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    foreach (var t in f.CardTypes ?? [])
+      set.Add(t);
+    foreach (var s in f.Subtypes ?? [])
+      foreach (var o in PrimaryOwners(s))
+        set.Add(o);
+    return set;
+  }
+
+  /// <summary>A subtype's ordinary (non-kindred) owner card types, via the ontology (CR 308.1: kindred is partition-neutral). Empty for an unknown subtype — no basis to prune.</summary>
+  private List<string> PrimaryOwners(string subtype)
+  {
+    foreach (var kv in _ontology.SubtypeToCardTypes)
+      if (string.Equals(kv.Key, subtype, StringComparison.OrdinalIgnoreCase))
+        return
+        [
+          .. kv.Value.Where(o => !string.Equals(o, "kindred", StringComparison.OrdinalIgnoreCase)),
+        ];
+    return [];
+  }
+
+  /// <summary>Does the created token's effective card-type set carry the required type? "permanent" (CR 110.4a) is satisfied by any permanent type.</summary>
+  private bool TokenHasCardType(HashSet<string> tokenTypes, string required) =>
+    string.Equals(required, "permanent", StringComparison.OrdinalIgnoreCase)
+      ? tokenTypes.Any(t => _ontology.PermanentTypes.Contains(t, StringComparer.OrdinalIgnoreCase))
+      : tokenTypes.Contains(required, StringComparer.OrdinalIgnoreCase);
 
   private void AddRulesEdge(List<PortEdge> edges, PortNode from, PortNode to, EdgeFamily family)
   {
