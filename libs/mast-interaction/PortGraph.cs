@@ -2,6 +2,7 @@ namespace MagicAST.Interaction;
 
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using MagicAST.AST.Costs;
 using MagicAST.AST.References;
 
@@ -166,7 +167,9 @@ public sealed class PortWalk
       )
         continue;
 
-      var emitPort = Port(card, spec.Emit, PortSide.Emit);
+      // The token's intrinsic emit inherits the creation count (2 Treasures → 2 mana) so the §8
+      // balance sums the real per-iteration yield, not 1.
+      var emitPort = Port(card, spec.Emit, PortSide.Emit, emit.Quantity);
       var costs = new List<PortNode>();
       if (spec.Sacrifices)
       {
@@ -311,6 +314,14 @@ public sealed class PortWalk
         token
       );
     }
+    if (effectType == "addMana")
+    {
+      // A mana-producing effect (ADR-0002 §3b): project the color-axis emit:mana:<color> with its
+      // count (so the colour-aware mana-flow arm feeds a cost AND the §8 balance can sum it), instead
+      // of the opaque emit:addmana fallback that no flow edge reads.
+      var (color, count) = ParseAddedMana(e);
+      return Port(card, PortLabel.ManaEmit(color), PortSide.Emit, count);
+    }
     return effectType switch
     {
       // Inert effects (no flow) are still ports, by totality (§4) — edge-sparse, never dropped.
@@ -390,6 +401,47 @@ public sealed class PortWalk
     {
       "literal" or "fixed" => quantity["Value"]?.GetValue<int>(),
       _ => null,
+    };
+
+  /// <summary>
+  /// Parse an <c>addMana</c> effect's produced mana into (colour, count): <c>{C}{C}</c> →
+  /// (colorless, 2), <c>{G}</c> → (green, 1), "any color" → (any, n). A mixed-colour add (rare) and a
+  /// generic <c>{N}</c> fall back to <c>any</c>. The count is the §8 quantity the balance sums.
+  /// </summary>
+  private static (string Color, int Count) ParseAddedMana(JsonObject e)
+  {
+    var mana = e["Mana"]?.ToString() ?? "";
+    var symbols = Regex.Matches(mana, @"\{([^}]+)\}").Select(m => m.Groups[1].Value).ToList();
+    if (e["AnyColor"]?.GetValue<bool>() == true)
+      return ("any", Math.Max(1, symbols.Count));
+    if (symbols.Count == 0)
+      return ("any", 1);
+    var count = 0;
+    var colors = new HashSet<string>(StringComparer.Ordinal);
+    foreach (var s in symbols)
+      if (int.TryParse(s, out var n))
+      {
+        count += n;
+        colors.Add("any");
+      }
+      else
+      {
+        count += 1;
+        colors.Add(ManaColorName(s));
+      }
+    return (colors.Count == 1 ? colors.First() : "any", count);
+  }
+
+  private static string ManaColorName(string symbol) =>
+    symbol.ToUpperInvariant() switch
+    {
+      "W" => "white",
+      "U" => "blue",
+      "B" => "black",
+      "R" => "red",
+      "G" => "green",
+      "C" => "colorless",
+      _ => "any",
     };
 
   private static IReadOnlyList<string>? StrList(JsonNode? node) =>

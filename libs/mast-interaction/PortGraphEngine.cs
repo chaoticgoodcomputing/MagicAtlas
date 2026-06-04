@@ -54,14 +54,23 @@ public sealed record PortCycle
   /// </summary>
   public bool CoCostsSatisfied { get; init; } = true;
 
-  /// <summary>The worst hop sets the tier, floored to Amber when the cycle is not firable or has an unfed co-cost (§8).</summary>
+  /// <summary>
+  /// Balance (ADR-0002 §8): the loop's per-iteration resource production covers its consumption —
+  /// <c>net(R) ≥ 0</c>. The engine sets this for mana (the binding combo resource): a cycle whose
+  /// <c>pay:mana</c> costs exceed the mana its own producers feed back (Chatterfang × Ruthless Knave —
+  /// {2}{B} = 3 mana vs two Treasures = 2) is finite, not infinite, so it floors to Amber. Default
+  /// <c>true</c> (and conservative: only floored when the shortfall is provable from known quantities).
+  /// </summary>
+  public bool Balanced { get; init; } = true;
+
+  /// <summary>The worst hop sets the tier, floored to Amber when the cycle is not firable, has an unfed co-cost, or is resource-negative (§8).</summary>
   public CertaintyTier Tier =>
     Edges.Count == 0
       ? CertaintyTier.Green
       : (CertaintyTier)
         Math.Max(
           (int)Edges.Max(e => e.Tier),
-          Firable && CoCostsSatisfied ? 0 : (int)CertaintyTier.Amber
+          Firable && CoCostsSatisfied && Balanced ? 0 : (int)CertaintyTier.Amber
         );
 
   /// <summary>The hop that limits the tier (and its operator <see cref="PortEdge.Reason"/>).</summary>
@@ -76,6 +85,7 @@ public sealed record PortCycle
   public string? LimitingReason =>
     Tier == CertaintyTier.Green ? null
     : !Firable ? "gated (rate-limit / intervening-if)"
+    : !Balanced ? "mana-negative"
     : !CoCostsSatisfied ? "unfed co-cost"
     : LimitingHop?.Reason is { Length: > 0 } reason ? reason
     : "amber hop";
@@ -300,7 +310,12 @@ public sealed class PortGraphEngine
           path.Add(edge);
           var loop = path.ToList();
           cycles.Add(
-            new PortCycle { Edges = loop, CoCostsSatisfied = ConjunctionHolds(loop, coCosts, fed) }
+            new PortCycle
+            {
+              Edges = loop,
+              CoCostsSatisfied = ConjunctionHolds(loop, coCosts, fed),
+              Balanced = ManaBalanced(loop, coCosts, edges),
+            }
           );
           path.RemoveAt(path.Count - 1);
         }
@@ -390,6 +405,73 @@ public sealed class PortGraphEngine
   /// <summary>A cost always payable without producing a resource — a tap (its untap rate-limit is the separate §8 gate).</summary>
   private static bool IsFreeCost(string label) =>
     label.StartsWith("tap:", StringComparison.Ordinal);
+
+  /// <summary>
+  /// The §8 mana-balance: the loop's per-iteration mana production must cover its mana costs
+  /// (<c>net(mana) ≥ 0</c>). The costs are the <c>pay:mana</c> co-costs of the cycle's abilities; the
+  /// production is the distinct <c>emit:mana</c> ports — <b>on the cycle's own cards</b> (so a Treasure
+  /// from an unrelated combo can't subsidise it) — that feed those costs. CONSERVATIVE: returns true
+  /// (no floor) when there is no mana cost, or when any relevant quantity is symbolic/unknown — it only
+  /// floors when the shortfall is provable. Catches Chatterfang × Ruthless Knave ({2}{B}=3 vs 2 Treasures).
+  /// </summary>
+  private static bool ManaBalanced(
+    IReadOnlyList<PortEdge> cycle,
+    IReadOnlyDictionary<string, IReadOnlyList<PortNode>> coCosts,
+    IReadOnlyList<PortEdge> edges
+  )
+  {
+    var inCycle = cycle
+      .SelectMany(e => new[] { e.From.Identity, e.To.Identity })
+      .ToHashSet(StringComparer.Ordinal);
+    var cycleCards = cycle
+      .SelectMany(e => new[] { e.From.Card, e.To.Card })
+      .ToHashSet(StringComparer.Ordinal);
+
+    // Mana costs: the pay:mana co-costs of the cycle's consumes (+ any in-cycle pay:mana consume).
+    var costs = new Dictionary<string, PortNode>(StringComparer.Ordinal);
+    void AddIfMana(PortNode p)
+    {
+      if (p.Side == PortSide.Consume && IsPayMana(p.Label))
+        costs[p.Identity] = p;
+    }
+    foreach (var id in inCycle)
+      if (coCosts.TryGetValue(id, out var siblings))
+        foreach (var s in siblings)
+          AddIfMana(s);
+    foreach (var e in cycle)
+    {
+      AddIfMana(e.From);
+      AddIfMana(e.To);
+    }
+    if (costs.Count == 0)
+      return true; // no mana cost — nothing to balance
+    if (costs.Values.Any(p => p.Quantity is null))
+      return true; // symbolic cost — can't prove a shortfall (conservative)
+    var manaCost = costs.Values.Sum(p => p.Quantity!.Value);
+
+    // Producers: distinct emit:mana ports ON THE CYCLE'S CARDS that feed those costs.
+    var producers = edges
+      .Where(e =>
+        costs.ContainsKey(e.To.Identity)
+        && IsEmitMana(e.From.Label)
+        && cycleCards.Contains(e.From.Card)
+      )
+      .Select(e => e.From)
+      .GroupBy(p => p.Identity, StringComparer.Ordinal)
+      .Select(g => g.First())
+      .ToList();
+    if (producers.Any(p => p.Quantity is null))
+      return true; // symbolic production — conservative
+    var manaProduced = producers.Sum(p => p.Quantity!.Value);
+
+    return manaProduced >= manaCost;
+  }
+
+  private static bool IsPayMana(string label) =>
+    label.StartsWith("pay:mana", StringComparison.Ordinal);
+
+  private static bool IsEmitMana(string label) =>
+    label.StartsWith("emit:mana", StringComparison.Ordinal);
 
   private static string Role(string label) => label.Split(':', 2)[0];
 

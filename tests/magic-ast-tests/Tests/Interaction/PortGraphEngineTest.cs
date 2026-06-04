@@ -272,6 +272,94 @@ public class PortGraphEngineTest
     Assert.That(loopB.Tier, Is.EqualTo(CertaintyTier.Green), "with the {B} fed, the loop certifies");
   }
 
+  // Balance (§8) end-to-end on the exemplar: the 2-card Chatterfang × Ruthless Knave loop is
+  // mana-negative — Ruthless's {2}{B} (3 mana) exceeds the two Treasures it makes (2 mana) — so the
+  // engine floors it to Amber (the third combo card supplies the missing mana). Pins the user's case
+  // through the real parse → walk → §9 token-mana → balance pipeline.
+  [Test]
+  public void Chatterfang_x_ruthless_two_card_loop_is_mana_negative_amber()
+  {
+    var engine = new PortGraphEngine(Ontology);
+    var cycles = engine.FindCycles(
+      engine.Materialize(
+        new[]
+        {
+          Walk("MH2", "Chatterfang.json", "Chatterfang"),
+          Walk("XLN", "RuthlessKnave.json", "Ruthless Knave"),
+        }
+      ),
+      maxLength: 5
+    );
+
+    var loop = cycles.FirstOrDefault(c =>
+      c.Edges.Any(e => e.From.Label == "emit:token:creature:squirrel:controlled" && e.To.Card == "Ruthless Knave")
+      && c.Edges.All(e => e.From.Card is "Chatterfang" or "Ruthless Knave")
+    );
+    Assert.That(loop, Is.Not.Null, "the squirrel↔treasure loop should reconstruct");
+    Assert.That(loop!.Balanced, Is.False, "{2}{B} cost (3) > two Treasures (2) — mana-negative");
+    Assert.That(loop.Tier, Is.EqualTo(CertaintyTier.Amber));
+    Assert.That(loop.LimitingReason, Is.EqualTo("mana-negative"));
+  }
+
+  // Balance (§8): a loop whose pay:mana cost exceeds the mana its own producers feed back is finite,
+  // not infinite (Chatterfang × Ruthless Knave: {2}{B}=3 vs two Treasures=2). It floors to Amber until
+  // the per-iteration mana production covers the cost.
+  [Test]
+  public void A_mana_negative_loop_floors_to_amber_until_production_covers_the_cost()
+  {
+    static PortNode Consume(string label, ObjectFilter? subj, int? qty = 1) =>
+      new()
+      {
+        Card = "A",
+        Label = label,
+        Side = PortSide.Consume,
+        Subject = subj,
+        Quantity = qty,
+        Identity = "A::" + label,
+      };
+    static PortNode Emit(string label, ObjectFilter? subj, int? qty = 1) =>
+      new()
+      {
+        Card = "A",
+        Label = label,
+        Side = PortSide.Emit,
+        Subject = subj,
+        Quantity = qty,
+        Identity = "A::" + label,
+      };
+
+    var sac = Consume("sac:creature:controlled", new ObjectFilter { CardTypes = ["creature"] });
+    var pay = Consume("pay:mana", null, 3); // the {3} co-cost
+    var tok = Emit(
+      "emit:token:creature:controlled",
+      new ObjectFilter { CardTypes = ["creature"], IsToken = true }
+    );
+    CardDefinedEdge[] cardDefined = [new() { From = sac, To = tok }, new() { From = pay, To = tok }];
+    var engine = new PortGraphEngine(Ontology);
+
+    // Production 2 < cost 3 → mana-negative → Amber.
+    var shortMana = Emit("emit:mana:any", null, 2);
+    var negative = engine.FindCycles(
+      engine.Materialize(
+        [new PortGraph { Ports = [sac, pay, tok, shortMana], CardDefinedEdges = cardDefined }]
+      )
+    );
+    var loopA = negative.First(c => c.Edges.Any(e => e.From.Label == "sac:creature:controlled"));
+    Assert.That(loopA.Balanced, Is.False);
+    Assert.That(loopA.Tier, Is.EqualTo(CertaintyTier.Amber), "2 mana < {3} cost — finite, not infinite");
+
+    // Production 3 ≥ cost 3 → balanced → Green.
+    var enoughMana = Emit("emit:mana:any", null, 3);
+    var balanced = engine.FindCycles(
+      engine.Materialize(
+        [new PortGraph { Ports = [sac, pay, tok, enoughMana], CardDefinedEdges = cardDefined }]
+      )
+    );
+    var loopB = balanced.First(c => c.Edges.Any(e => e.From.Label == "sac:creature:controlled"));
+    Assert.That(loopB.Balanced, Is.True);
+    Assert.That(loopB.Tier, Is.EqualTo(CertaintyTier.Green), "3 mana covers the {3} cost");
+  }
+
   // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
   [Test]
   public void A_gated_cycle_floors_to_amber_even_with_green_edges()
