@@ -103,7 +103,7 @@ Chatterfang's `Oracle.Abilities` projects six ports:
 | AST node | Port | side |
 |---|---|---|
 | static `evasion` (Forestwalk) | `evasion:forestwalk` | inert |
-| static `replacement` `Event:tokenCreation` | `replace:token-creation:controlled` | consume *(intercept)* |
+| static `replacement` `Event:tokenCreation` | `replace:token-creation:controlled`‡ | consume *(intercept)* |
 | `Replacement:createToken{1/1 G Squirrel}` | `emit:token:creature:squirrel` | emit |
 | activated `Costs[0]:{mana B}` | `pay:mana:black` | consume |
 | activated `Costs[1]:{sacrifice X Squirrels}` | `sac:creature:squirrel:controlled` | consume |
@@ -122,6 +122,8 @@ Pitiless's real text is "Whenever **another** creature you control dies…" → 
 
 \* `modify:pt` is inert except a lethal `-X` toughness (death via SBA, CR 704), conditional on `X ≥ toughness` → the operator floors that bridge to Amber.
 † `emit:mana:any → pay:mana:black` is GREEN by **producer choice** (a Treasure makes any one color; its controller picks black), *not* by `any ⊆ black` (false at the type level). This requires the operator to model choosable-any mana as satisfying a specific demand; absent that, the hop is Amber, not the clean net-0 shown. The shorthand `any ⊇ black` in the prior draft laundered an Amber — the honest reading is "GREEN under producer choice, pending operator support."
+
+‡ The S1 projector found this label is **unscoped today** — `replace:token-creation`. Chatterfang's parsed `Event` is `{EventType:tokenCreation, MinimumQuantity:1}` with no controller, so "under your control" is dropped; the `:controlled` scope rides along once a parser fix carries the event controller (a second parser-precision target, after `ltb:…:self`). The unscoped label over-approximates safely (§6) — the projection surfacing the gap rather than asserting a scope the AST does not hold.
 
 ## Considered options
 
