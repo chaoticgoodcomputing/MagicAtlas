@@ -153,4 +153,25 @@ public class PortWalkTest
     Assert.That(graph.Ports.All(p => !p.Label.Contains('{')), "no raw JSON in any label");
     Assert.That(graph.Ports.Select(p => p.Label), Does.Contain("at:upkeep"));
   }
+
+  // A rate-limited ("only once each turn") ability gates all its ports (ADR-0002 §8 firability).
+  [Test]
+  public void Rate_limited_ability_gates_its_ports()
+  {
+    var abilities = JsonNode.Parse(
+      """
+      [{"Kind":"activated","Restrictions":["OnlyOnceEachTurn"],
+        "Costs":[{"CostType":"mana","Symbols":[{"Kind":"generic","GenericAmount":0}]}],
+        "Effects":[{"EffectType":"createToken","Player":{"Kind":"You"},
+          "Count":{"QuantityType":"literal","Value":1},
+          "Token":{"Types":["creature"],"Subtypes":["Squirrel"]}}]}]
+      """
+    );
+    var graph = new PortWalk(Ontology).Project("Synthetic", abilities);
+    Assert.That(graph.Ports, Is.Not.Empty);
+    Assert.That(graph.Ports.All(p => p.Gated), "once-each-turn gates every port of the ability");
+
+    // An unrestricted card (Chatterfang) gates nothing.
+    Assert.That(Walk("MH2", "Chatterfang.json", "Chatterfang").Ports.Any(p => p.Gated), Is.False);
+  }
 }

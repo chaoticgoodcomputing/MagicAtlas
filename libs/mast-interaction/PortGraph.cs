@@ -40,6 +40,13 @@ public sealed record PortNode
   /// </summary>
   public ObjectFilter? Subject { get; init; }
 
+  /// <summary>
+  /// Firability gate (ADR-0002 §8): the port's ability carries a rate limit ("only once each turn")
+  /// or a boolean condition (an intervening-if / conditional restriction). A cycle through a gated
+  /// port cannot be certified infinite — net(R) is blind to these — so its tier floors to Amber.
+  /// </summary>
+  public bool Gated { get; init; }
+
   public required string Identity { get; init; }
 
   public override string ToString() => $"{Card}::{Label}";
@@ -99,6 +106,16 @@ public sealed class PortWalk
         Costs(cost, card, consumes);
       foreach (var effect in ability["Effects"] as JsonArray ?? [])
         Effects(effect, card, keyword, consumes, emits);
+
+      // Firability (§8): a rate-limited or gated ability marks all its ports — done before the edges
+      // are built so they reference the gated port objects.
+      if (IsGated(ability))
+      {
+        for (var i = 0; i < consumes.Count; i++)
+          consumes[i] = consumes[i] with { Gated = true };
+        for (var i = 0; i < emits.Count; i++)
+          emits[i] = emits[i] with { Gated = true };
+      }
 
       ports.AddRange(consumes);
       ports.AddRange(emits);
@@ -256,6 +273,27 @@ public sealed class PortWalk
       Subject = subject,
       Identity = $"{card}::{label}",
     };
+
+  // Restrictions that gate firability (ADR-0002 §8): a rate limit or a board-state condition. Timing
+  // restrictions (OnlyAsSorcery, OnlyDuringYourTurn) don't block a loop within a turn, so they don't gate.
+  private static readonly HashSet<string> GatingRestrictions = new(StringComparer.Ordinal)
+  {
+    "OnlyOnceEachTurn",
+    "Conditional",
+    "OnlyIfNoUntappedLands",
+  };
+
+  /// <summary>Firability gate (ADR-0002 §8): an intervening-if or a rate-limit/conditional restriction.</summary>
+  private static bool IsGated(JsonNode ability)
+  {
+    if (ability["InterveningIf"] is not null)
+      return true;
+    if (ability["Restrictions"] is JsonArray restrictions)
+      foreach (var r in restrictions)
+        if (r is not null && GatingRestrictions.Contains(r.ToString()))
+          return true;
+    return false;
+  }
 
   private static string Coarse(string eventName, ObjectFilter? filter)
   {

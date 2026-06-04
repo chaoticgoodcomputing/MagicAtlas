@@ -37,8 +37,19 @@ public sealed record PortCycle
 {
   public required IReadOnlyList<PortEdge> Edges { get; init; }
 
+  /// <summary>
+  /// Firability (ADR-0002 §8): no hop touches a gated port (a rate limit / intervening-if). A
+  /// non-firable cycle cannot be certified infinite — <c>net(R)</c> is blind to gates — so its tier
+  /// floors to Amber even when every edge is Green.
+  /// </summary>
+  public bool Firable => !Edges.Any(e => e.From.Gated || e.To.Gated);
+
+  /// <summary>The worst hop sets the tier, floored to Amber when the cycle is not firable (§8).</summary>
   public CertaintyTier Tier =>
-    Edges.Count == 0 ? CertaintyTier.Green : Edges.Max(e => e.Tier);
+    Edges.Count == 0
+      ? CertaintyTier.Green
+      : (CertaintyTier)
+        Math.Max((int)Edges.Max(e => e.Tier), Firable ? 0 : (int)CertaintyTier.Amber);
 
   /// <summary>The hop that limits the tier (and its operator <see cref="PortEdge.Reason"/>).</summary>
   public PortEdge? LimitingHop =>

@@ -86,4 +86,48 @@ public class PortGraphEngineTest
     Assert.That(cardDefined.To.Label, Is.EqualTo("emit:token:artifact:treasure:controlled"));
     Assert.That(cardDefined.Tier, Is.EqualTo(CertaintyTier.Green));
   }
+
+  // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
+  [Test]
+  public void A_gated_cycle_floors_to_amber_even_with_green_edges()
+  {
+    var emit = new PortNode
+    {
+      Card = "A",
+      Label = "emit:token:creature:squirrel:controlled",
+      Side = PortSide.Emit,
+      Identity = "A::emit",
+    };
+    var sac = new PortNode
+    {
+      Card = "A",
+      Label = "sac:creature:squirrel:controlled",
+      Side = PortSide.Consume,
+      Identity = "A::sac",
+    };
+    PortCycle Cycle(PortNode e, PortNode s) =>
+      new()
+      {
+        Edges =
+        [
+          new PortEdge { From = s, To = e, Provenance = EdgeProvenance.CardDefined }, // green
+          new PortEdge
+          {
+            From = e,
+            To = s,
+            Provenance = EdgeProvenance.RulesDefined,
+            Overlap = FilterRelation.Overlaps,
+            Reliability = Trilean.Yes,
+          }, // green
+        ],
+      };
+
+    var gated = Cycle(emit with { Gated = true }, sac);
+    Assert.That(gated.Firable, Is.False);
+    Assert.That(gated.Tier, Is.EqualTo(CertaintyTier.Amber)); // floored from Green
+
+    var ungated = Cycle(emit, sac);
+    Assert.That(ungated.Firable, Is.True);
+    Assert.That(ungated.Tier, Is.EqualTo(CertaintyTier.Green));
+  }
 }
