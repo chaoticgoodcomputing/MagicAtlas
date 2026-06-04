@@ -114,8 +114,9 @@ public partial record CycleEdgeRow
   public string LimitingReason { get; init; } = "";
 
   /// <summary>How the loop relates to the Commander Spellbook corpus: <c>verified</c> (cards EXACTLY a CSB
-  /// combo, cycle.cards == a combo) · <c>partial</c> (cards ⊆ a combo — a partial reconstruction of a
-  /// known combo) · <c>derived</c> (cards span no single combo — a genuinely novel loop). The viz tiers them.</summary>
+  /// combo, cycle.cards == a combo) · <c>partial</c> (≥2 of the loop's cards co-occur in a CSB combo — a
+  /// known synergy is involved, a partial reconstruction) · <c>derived</c> (no two cards co-occur in any
+  /// combo — a genuinely novel loop). The viz tiers them.</summary>
   [SerializedLabel("match")]
   public string Match { get; init; } = "derived";
 

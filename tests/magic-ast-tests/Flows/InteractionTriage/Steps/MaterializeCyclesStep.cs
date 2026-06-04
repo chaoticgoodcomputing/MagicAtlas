@@ -13,13 +13,14 @@ namespace MagicAtlas.Ast.Tests.Flows.InteractionTriage.Steps;
 /// which a per-edge export cannot express. Bounded to length ≤5 — a full sac→death→token→doubler→refuel
 /// loop spans five hops (the Ashnod's Altar × Pitiless × Chatterfang archetype), still ~3s at corpus
 /// scale. Single-card loops dropped (no 1-card combo exists in MTG), deduped by node set, ranked
-/// GREEN-verdict-first then shortest, and display-capped. One flat <see cref="CycleEdgeRow"/> per hop.
+/// GREEN-verdict-first then shortest, and PER-TIER display-capped (verified/partial/derived each capped
+/// so all three appear — partial + derived each far exceed a flat cap). One <see cref="CycleEdgeRow"/> per hop.
 /// </summary>
 [FlowthruStep]
 public static class MaterializeCyclesStep
 {
   private const int LengthBound = 5;
-  private const int DisplayCap = 120;
+  private const int PerTierCap = 60;
 
   public static Func<
     (
@@ -64,24 +65,49 @@ public static class MaterializeCyclesStep
           .Edges.SelectMany(e => new[] { e.From.Card, e.To.Card })
           .Distinct(StringComparer.Ordinal)
           .ToList();
-        List<int>? candidates = null;
+
+        // Combos containing EVERY cycle card (⊆). Exact size ⇒ verified; else a partial reconstruction.
+        List<int>? superset = null;
+        var allInOneCombo = true;
         foreach (var card in cards)
         {
           if (!cardToCombo.TryGetValue(card, out var combos))
-            return ("derived", "");
-          candidates = candidates is null ? [.. combos] : [.. candidates.Intersect(combos)];
-          if (candidates.Count == 0)
-            return ("derived", ""); // cards span multiple combos
+          {
+            allInOneCombo = false;
+            break;
+          }
+          superset = superset is null ? [.. combos] : [.. superset.Intersect(combos)];
+          if (superset.Count == 0)
+          {
+            allInOneCombo = false;
+            break;
+          }
         }
-        if (candidates is null or { Count: 0 })
-          return ("derived", "");
-        // Exact set equality first (a candidate already ⊇ the cards, so equal count ⇒ ==).
-        foreach (var idx in candidates)
-          if (comboCards[idx].Cards.Count == cards.Count)
-            return ("verified", comboCards[idx].Id);
-        // Otherwise a subset of a combo — report the smallest (most specific) superset.
-        var best = candidates.OrderBy(i => comboCards[i].Cards.Count).First();
-        return ("partial", comboCards[best].Id);
+        if (allInOneCombo && superset is { Count: > 0 })
+        {
+          foreach (var idx in superset)
+            if (comboCards[idx].Cards.Count == cards.Count)
+              return ("verified", comboCards[idx].Id); // cards == a combo, exactly
+          var best = superset.OrderBy(i => comboCards[i].Cards.Count).First();
+          return ("partial", comboCards[best].Id); // cards ⊆ a combo
+        }
+
+        // PARTIAL on a weaker test too: ANY two of the loop's cards co-occur in a known combo (≥2
+        // cards from a CSB combo). A loop that shares a known 2-card synergy is a partial reconstruction,
+        // not novel — reserving "derived" for loops where no two cards are a known combo together.
+        for (var i = 0; i < cards.Count; i++)
+          for (var j = i + 1; j < cards.Count; j++)
+            if (
+              cardToCombo.TryGetValue(cards[i], out var ci)
+              && cardToCombo.TryGetValue(cards[j], out var cj)
+            )
+            {
+              var both = ci.Intersect(cj).ToList();
+              if (both.Count > 0)
+                return ("partial", comboCards[both[0]].Id);
+            }
+
+        return ("derived", ""); // no two cards co-occur in any combo — genuinely novel
       }
 
       static int Rank(string match) =>
@@ -123,8 +149,13 @@ public static class MaterializeCyclesStep
 
       var total = deduped.Count;
 
-      return deduped
-        .Take(DisplayCap)
+      // Per-tier display cap so verified / partial / derived ALL appear — partial and derived each far
+      // exceed a flat cap, so a single Take would show only the top tier and hide the novel loops.
+      var shown = new[] { "verified", "partial", "derived" }
+        .SelectMany(m => deduped.Where(x => x.Class.Match == m).Take(PerTierCap))
+        .ToList();
+
+      return shown
         .SelectMany(
           (item, index) =>
             item.Cycle.Edges.Select(
