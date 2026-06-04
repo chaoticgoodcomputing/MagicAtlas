@@ -44,12 +44,25 @@ public sealed record PortCycle
   /// </summary>
   public bool Firable => !Edges.Any(e => e.From.Gated || e.To.Gated);
 
-  /// <summary>The worst hop sets the tier, floored to Amber when the cycle is not firable (§8).</summary>
+  /// <summary>
+  /// Multi-cost conjunction (ADR-0002 §8): an activated ability fires only if <b>all</b> its costs are
+  /// paid, so a loop that closes through one cost port of an ability is certifiable only if the
+  /// ability's <em>other</em> cost ports are each fed too — by the loop, by a producer, or free (tap).
+  /// The engine sets this; an unfed resource co-cost (Chatterfang's <c>{B}</c> with no mana source)
+  /// means the ability can't actually fire, so the cycle floors to Amber. Default <c>true</c> for
+  /// hand-built cycles that don't carry the card-defined cost structure.
+  /// </summary>
+  public bool CoCostsSatisfied { get; init; } = true;
+
+  /// <summary>The worst hop sets the tier, floored to Amber when the cycle is not firable or has an unfed co-cost (§8).</summary>
   public CertaintyTier Tier =>
     Edges.Count == 0
       ? CertaintyTier.Green
       : (CertaintyTier)
-        Math.Max((int)Edges.Max(e => e.Tier), Firable ? 0 : (int)CertaintyTier.Amber);
+        Math.Max(
+          (int)Edges.Max(e => e.Tier),
+          Firable && CoCostsSatisfied ? 0 : (int)CertaintyTier.Amber
+        );
 
   /// <summary>The hop that limits the tier (and its operator <see cref="PortEdge.Reason"/>).</summary>
   public PortEdge? LimitingHop =>
@@ -255,6 +268,10 @@ public sealed class PortGraphEngine
       .GroupBy(e => e.From.Identity)
       .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.Ordinal);
 
+    // §8 conjunction inputs: which ports are "fed" (a producer targets them), and each cost's co-costs.
+    var fed = edges.Select(e => e.To.Identity).ToHashSet(StringComparer.Ordinal);
+    var coCosts = CoCostMap(edges);
+
     var cycles = new List<PortCycle>();
     var path = new List<PortEdge>();
     var onPath = new HashSet<string>(StringComparer.Ordinal);
@@ -269,7 +286,10 @@ public sealed class PortGraphEngine
         if (toId == startId)
         {
           path.Add(edge);
-          cycles.Add(new PortCycle { Edges = path.ToList() });
+          var loop = path.ToList();
+          cycles.Add(
+            new PortCycle { Edges = loop, CoCostsSatisfied = ConjunctionHolds(loop, coCosts, fed) }
+          );
           path.RemoveAt(path.Count - 1);
         }
         else if (string.CompareOrdinal(toId, startId) > 0 && !onPath.Contains(toId))
@@ -292,6 +312,68 @@ public sealed class PortGraphEngine
     }
     return cycles;
   }
+
+  /// <summary>
+  /// Co-cost siblings (§8): two consume ports are co-costs of one ability iff each has a card-defined
+  /// edge to a common effect (within an ability every cost drives every effect, §5). Maps a cost's
+  /// Identity → its sibling cost ports.
+  /// </summary>
+  private static IReadOnlyDictionary<string, IReadOnlyList<PortNode>> CoCostMap(
+    IReadOnlyList<PortEdge> edges
+  )
+  {
+    var costsByEffect = edges
+      .Where(e => e.Provenance == EdgeProvenance.CardDefined && e.From.Side == PortSide.Consume)
+      .ToLookup(e => e.To.Identity, e => e.From);
+
+    var map = new Dictionary<string, Dictionary<string, PortNode>>(StringComparer.Ordinal);
+    foreach (var group in costsByEffect)
+      foreach (var a in group)
+        foreach (var b in group)
+          if (!string.Equals(a.Identity, b.Identity, StringComparison.Ordinal))
+          {
+            if (!map.TryGetValue(a.Identity, out var siblings))
+              map[a.Identity] = siblings = new Dictionary<string, PortNode>(StringComparer.Ordinal);
+            siblings[b.Identity] = b;
+          }
+
+    return map.ToDictionary(
+      kv => kv.Key,
+      kv => (IReadOnlyList<PortNode>)kv.Value.Values.ToList(),
+      StringComparer.Ordinal
+    );
+  }
+
+  /// <summary>
+  /// The §8 multi-cost conjunction: for every consume port the cycle traverses, each of its co-costs
+  /// must be payable each iteration — already in the loop, fed by a producer, or a free cost (tap). A
+  /// resource co-cost with no feeder means the ability can't fire, so the loop is not certifiable.
+  /// </summary>
+  private static bool ConjunctionHolds(
+    IReadOnlyList<PortEdge> cycle,
+    IReadOnlyDictionary<string, IReadOnlyList<PortNode>> coCosts,
+    ISet<string> fed
+  )
+  {
+    var inCycle = cycle
+      .SelectMany(e => new[] { e.From.Identity, e.To.Identity })
+      .ToHashSet(StringComparer.Ordinal);
+
+    foreach (var id in inCycle)
+      if (coCosts.TryGetValue(id, out var siblings))
+        foreach (var s in siblings)
+          if (
+            !IsFreeCost(s.Label)
+            && !inCycle.Contains(s.Identity)
+            && !fed.Contains(s.Identity)
+          )
+            return false;
+    return true;
+  }
+
+  /// <summary>A cost always payable without producing a resource — a tap (its untap rate-limit is the separate §8 gate).</summary>
+  private static bool IsFreeCost(string label) =>
+    label.StartsWith("tap:", StringComparison.Ordinal);
 
   private static string Role(string label) => label.Split(':', 2)[0];
 

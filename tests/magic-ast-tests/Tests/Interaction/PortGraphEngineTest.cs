@@ -217,6 +217,61 @@ public class PortGraphEngineTest
     Assert.That(Flow(squirrelTok, treasureSac), Is.False, "a Squirrel is not a Treasure at creation");
   }
 
+  // Multi-cost conjunction (§8): an ability fires only if ALL its costs are paid. A loop closing
+  // through one cost port ("{B}, Sacrifice a creature: create a creature token" — the token refuels
+  // the sac) is certifiable only if the ability's OTHER cost ports are fed too. With the {B} unfed
+  // the loop floors to Amber; once a mana producer feeds pay:mana:black it can certify.
+  [Test]
+  public void A_loop_with_an_unfed_co_cost_floors_to_amber_until_it_is_fed()
+  {
+    static PortNode Consume(string label, ObjectFilter? subj) =>
+      new()
+      {
+        Card = "A",
+        Label = label,
+        Side = PortSide.Consume,
+        Subject = subj,
+        Identity = "A::" + label,
+      };
+    static PortNode Emit(string label, ObjectFilter? subj) =>
+      new()
+      {
+        Card = "A",
+        Label = label,
+        Side = PortSide.Emit,
+        Subject = subj,
+        Identity = "A::" + label,
+      };
+
+    var sac = Consume("sac:creature:controlled", new ObjectFilter { CardTypes = ["creature"] });
+    var payB = Consume("pay:mana:black", null);
+    var tok = Emit(
+      "emit:token:creature:controlled",
+      new ObjectFilter { CardTypes = ["creature"], IsToken = true }
+    );
+    CardDefinedEdge[] cardDefined = [new() { From = sac, To = tok }, new() { From = payB, To = tok }];
+    var engine = new PortGraphEngine(Ontology);
+
+    // {B} has no producer — the sac→token→sac loop exists but the ability can't actually fire.
+    var unfed = engine.FindCycles(
+      engine.Materialize([new PortGraph { Ports = [sac, payB, tok], CardDefinedEdges = cardDefined }])
+    );
+    var loopA = unfed.First(c => c.Edges.Any(e => e.From.Label == "sac:creature:controlled"));
+    Assert.That(loopA.CoCostsSatisfied, Is.False);
+    Assert.That(loopA.Tier, Is.EqualTo(CertaintyTier.Amber), "an unfed {B} co-cost floors the loop");
+
+    // Add a mana producer: emit:mana:any → pay:mana:black feeds the co-cost (producer choice).
+    var mana = Emit("emit:mana:any", null);
+    var fed = engine.FindCycles(
+      engine.Materialize(
+        [new PortGraph { Ports = [sac, payB, tok, mana], CardDefinedEdges = cardDefined }]
+      )
+    );
+    var loopB = fed.First(c => c.Edges.Any(e => e.From.Label == "sac:creature:controlled"));
+    Assert.That(loopB.CoCostsSatisfied, Is.True);
+    Assert.That(loopB.Tier, Is.EqualTo(CertaintyTier.Green), "with the {B} fed, the loop certifies");
+  }
+
   // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
   [Test]
   public void A_gated_cycle_floors_to_amber_even_with_green_edges()
