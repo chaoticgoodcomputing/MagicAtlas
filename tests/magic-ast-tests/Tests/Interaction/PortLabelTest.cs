@@ -119,4 +119,81 @@ public class PortLabelTest
       Is.EqualTo("sac:creature:squirrel:controlled")
     );
   }
+
+  // --- emit role + resource-kind axis (ADR-0002 §3b) ---
+
+  // Object resource: kind = token, the token's object-type as subject, creator's control as scope.
+  [Test]
+  public void Create_token_emit_projects_kind_subject_and_scope() =>
+    Assert.That(
+      PortLabel.CreateTokenEmit(
+        new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Subtypes = ["Squirrel"],
+          Controller = ControllerFilter.You,
+        },
+        Ontology
+      ),
+      Is.EqualTo("emit:token:creature:squirrel:controlled")
+    );
+
+  // The subject lift applies on the emit side too: a Treasure token → artifact:treasure.
+  [Test]
+  public void Create_token_emit_lifts_treasure_subtype_to_artifact() =>
+    Assert.That(
+      PortLabel.CreateTokenEmit(
+        new ObjectFilter { Subtypes = ["Treasure"], Controller = ControllerFilter.You },
+        Ontology
+      ),
+      Is.EqualTo("emit:token:artifact:treasure:controlled")
+    );
+
+  // Scalar resource: kind = mana, no object subject — the axis the card-type facet can't express.
+  [Test]
+  public void Mana_emit_carries_a_scalar_resource_with_no_object_subject()
+  {
+    Assert.That(PortLabel.ManaEmit("black"), Is.EqualTo("emit:mana:black"));
+    Assert.That(PortLabel.ManaEmit("any"), Is.EqualTo("emit:mana:any"));
+  }
+
+  // --- projection over the REAL parsed Chatterfang createToken (inside the replacement) ---
+  [Test]
+  public void Projects_chatterfangs_real_token_emit()
+  {
+    var path = Path.Combine(
+      TestContext.CurrentContext.TestDirectory,
+      "Fixtures",
+      "HandParsedCards",
+      "MH2",
+      "Chatterfang.json"
+    );
+    var gold = JsonNode.Parse(File.ReadAllText(path));
+    var create = FindByEffectType(gold!["Output"]!["Oracle"]!["Abilities"], "createToken");
+    Assert.That(create, Is.Not.Null, "Chatterfang's replacement should produce a createToken");
+
+    var token = new ObjectFilter
+    {
+      CardTypes = StrList(create!["Token"]?["Types"]),
+      Subtypes = StrList(create["Token"]?["Subtypes"]),
+      Controller =
+        create["Player"]?["Kind"]?.ToString() == "You" ? ControllerFilter.You : null,
+    };
+    Assert.That(
+      PortLabel.CreateTokenEmit(token, Ontology),
+      Is.EqualTo("emit:token:creature:squirrel:controlled")
+    );
+  }
+
+  private static JsonNode? FindByEffectType(JsonNode? node, string effectType) =>
+    node switch
+    {
+      JsonObject o when o["EffectType"]?.ToString() == effectType => o,
+      JsonObject o => o.Select(kv => FindByEffectType(kv.Value, effectType)).FirstOrDefault(r => r is not null),
+      JsonArray a => a.Select(x => FindByEffectType(x, effectType)).FirstOrDefault(r => r is not null),
+      _ => null,
+    };
+
+  private static IReadOnlyList<string>? StrList(JsonNode? node) =>
+    node is JsonArray arr ? arr.Where(x => x is not null).Select(x => x!.ToString()).ToList() : null;
 }

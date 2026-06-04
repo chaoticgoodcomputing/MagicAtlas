@@ -95,6 +95,38 @@ public static class PortLabel
   public static string SacrificeCost(ObjectFilter fodder, TypeOntology ontology) =>
     Join("sac", Subject(fodder, ontology), Scope(fodder) ?? "controlled", Exclusion(fodder));
 
+  /// <summary>
+  /// An emit port for a <c>createToken</c> effect (ADR-0002 §3b): the resource-kind axis carries
+  /// <c>token</c>, the token's object-type is the subject (via the same lift), and the creator's
+  /// control is the scope (CR 111.2 — a token's creator controls it). A 1/1 Squirrel you create →
+  /// <c>emit:token:creature:squirrel:controlled</c>.
+  /// </summary>
+  public static string CreateTokenEmit(ObjectFilter token, TypeOntology ontology) =>
+    Join("emit", Kind(ResourceKind.Token), Subject(token, ontology), Scope(token));
+
+  /// <summary>
+  /// An emit port for a mana-producing effect (ADR-0002 §3b): the resource-kind axis carries a
+  /// <em>scalar</em> resource with no object subject, the color as its qualifier —
+  /// <c>emit:mana:black</c>, or <c>emit:mana:any</c> for producer-chosen any-color mana. This is the
+  /// axis the card-type <see cref="Subject"/> facet cannot express; it rides beside it, not within it.
+  /// </summary>
+  public static string ManaEmit(string color) => Join("emit", Kind(ResourceKind.Mana), color.ToLowerInvariant());
+
+  /// <summary>The resource-kind facet (ADR-0002 §3b) — the flowing resource, lifted from <see cref="ResourceKind"/>.</summary>
+  private static string Kind(ResourceKind kind) =>
+    kind switch
+    {
+      ResourceKind.Token => "token",
+      ResourceKind.Mana => "mana",
+      ResourceKind.Counter => "counter",
+      ResourceKind.Death => "death",
+      ResourceKind.EntersBattlefield => "etb",
+      ResourceKind.LeavesBattlefield => "ltb",
+      ResourceKind.Sacrifice => "sacrifice",
+      ResourceKind.Cast => "cast",
+      _ => kind.ToString().ToLowerInvariant(),
+    };
+
   /// <summary>Join the facets in canonical order, dropping the absent ones.</summary>
   private static string Join(params string?[] facets) =>
     string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
