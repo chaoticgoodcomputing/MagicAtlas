@@ -185,6 +185,45 @@ public class PortLabelTest
     );
   }
 
+  // --- replace role (ADR-0002 §3, CR 614) ---
+
+  // Chatterfang's parsed Event carries no controller, so the honest projection is unscoped — the
+  // projection surfacing the parser dropping "under your control" (a §10-style fidelity gap).
+  [Test]
+  public void Replacement_projects_unscoped_when_the_event_carries_no_controller() =>
+    Assert.That(PortLabel.Replacement("tokenCreation"), Is.EqualTo("replace:token-creation"));
+
+  // When the parser does carry the event's controller, the scope rides along with no projector change.
+  [Test]
+  public void Replacement_carries_scope_when_the_event_provides_a_controller() =>
+    Assert.That(
+      PortLabel.Replacement("tokenCreation", ControllerFilter.You),
+      Is.EqualTo("replace:token-creation:controlled")
+    );
+
+  // --- projection over the REAL parsed Chatterfang replacement ---
+  [Test]
+  public void Projects_chatterfangs_real_token_replacement_unscoped()
+  {
+    var path = Path.Combine(
+      TestContext.CurrentContext.TestDirectory,
+      "Fixtures",
+      "HandParsedCards",
+      "MH2",
+      "Chatterfang.json"
+    );
+    var gold = JsonNode.Parse(File.ReadAllText(path));
+    var replacement = FindByEffectType(gold!["Output"]!["Oracle"]!["Abilities"], "replacement");
+    Assert.That(replacement, Is.Not.Null, "Chatterfang has a token-creation replacement");
+
+    var eventType = replacement!["Event"]?["EventType"]?.ToString()!;
+    Assert.That(eventType, Is.EqualTo("tokenCreation"));
+    // No controller on the parsed Event → unscoped. (The ADR worked example's :controlled is the
+    // post-parser-fix target, not what the AST carries today.)
+    Assert.That(replacement["Event"]?["Controller"], Is.Null);
+    Assert.That(PortLabel.Replacement(eventType), Is.EqualTo("replace:token-creation"));
+  }
+
   private static JsonNode? FindByEffectType(JsonNode? node, string effectType) =>
     node switch
     {

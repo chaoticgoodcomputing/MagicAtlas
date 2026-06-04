@@ -70,11 +70,15 @@ public static class PortLabel
   /// control, CR 108.3 vs 108.4).
   /// </summary>
   public static string? Scope(ObjectFilter f) =>
-    f.Controller switch
+    ScopeToken(f.Controller) ?? (f.Owner == ControllerFilter.You ? "owned" : null);
+
+  /// <summary>The control-axis token (shared by object filters and replacement events).</summary>
+  private static string? ScopeToken(ControllerFilter? controller) =>
+    controller switch
     {
       ControllerFilter.You => "controlled",
       ControllerFilter.Opponent => "opponent",
-      _ => f.Owner == ControllerFilter.You ? "owned" : null,
+      _ => null,
     };
 
   /// <summary>The exclude-self qualifier — the CR "another" (ADR-0002 §3); the self-scope counterpart
@@ -111,6 +115,26 @@ public static class PortLabel
   /// axis the card-type <see cref="Subject"/> facet cannot express; it rides beside it, not within it.
   /// </summary>
   public static string ManaEmit(string color) => Join("emit", Kind(ResourceKind.Mana), color.ToLowerInvariant());
+
+  /// <summary>
+  /// A replacement effect (CR 614) — the <c>replace</c> role over the event it intercepts (ADR-0002
+  /// §3). Chatterfang's "if tokens would be created … created instead" → <c>replace:token-creation</c>.
+  /// The intercept scope ("under your control") is carried <em>only when the parsed event provides a
+  /// controller</em>; the current parser drops it from the <c>tokenCreation</c> event, so Chatterfang
+  /// projects <b>unscoped</b> — the projection surfacing a parser-fidelity gap (ADR-0002 §10), and the
+  /// unscoped label over-approximates safely (§6). A parser fix that carries the event controller
+  /// promotes it to <c>replace:token-creation:controlled</c> with no change here.
+  /// </summary>
+  public static string Replacement(string replacedEventType, ControllerFilter? eventController = null) =>
+    Join("replace", ReplacedEvent(replacedEventType), ScopeToken(eventController));
+
+  /// <summary>The replaced-event subject token (ADR-0002 §3).</summary>
+  private static string ReplacedEvent(string eventType) =>
+    eventType switch
+    {
+      "tokenCreation" => "token-creation",
+      _ => eventType.ToLowerInvariant(),
+    };
 
   /// <summary>The resource-kind facet (ADR-0002 §3b) — the flowing resource, lifted from <see cref="ResourceKind"/>.</summary>
   private static string Kind(ResourceKind kind) =>
