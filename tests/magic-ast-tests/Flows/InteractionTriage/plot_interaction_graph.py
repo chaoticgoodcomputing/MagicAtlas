@@ -146,6 +146,11 @@ def _find_cycles(card_edges: pd.DataFrame, length_bound: int = 3, cap: int = 120
     for cyc in nx.simple_cycles(g, length_bound=length_bound):
         if len(cyc) < 2:
             continue
+        # No 1-card combos exist in MTG (a CSB combo is >=2 cards), so a cycle whose ports all
+        # belong to ONE card is a projection artifact (a replacement feeding its own output, or a
+        # subject-mismatched flow the operator under-pruned) — drop it.
+        if len({_card_of(n) for n in cyc}) == 1:
+            continue
         key = frozenset(cyc)
         if key in seen:
             continue
