@@ -81,10 +81,78 @@ public class PortGraphEngineTest
     var edges = new PortGraphEngine(Ontology).Materialize(
       new[] { Walk("RIX", "PitilessPlunderer.json", "Pitiless Plunderer") }
     );
-    var cardDefined = edges.Single(e => e.Provenance == EdgeProvenance.CardDefined);
-    Assert.That(cardDefined.From.Label, Is.EqualTo("ltb:creature:to-graveyard:controlled"));
+    var cardDefined = edges.First(e =>
+      e.Provenance == EdgeProvenance.CardDefined
+      && e.From.Label == "ltb:creature:to-graveyard:controlled"
+    );
     Assert.That(cardDefined.To.Label, Is.EqualTo("emit:token:artifact:treasure:controlled"));
     Assert.That(cardDefined.Tier, Is.EqualTo(CertaintyTier.Green));
+  }
+
+  // ADR-0002 §9: a created Treasure is an object with its OWN ports — "{T}, Sacrifice this token: add
+  // one mana of any color" (CR 111.10a) → an emit:mana:any fed by sacrificing the Treasure. That mana
+  // then feeds Chatterfang's {B} cost (color-aware producer-choice), closing the combo's mana
+  // sub-loop — pay:mana:black previously had no feeder, so the {B} half of the loop was invisible.
+  [Test]
+  public void Pitiless_treasure_resolves_to_mana_feeding_chatterfangs_black_cost()
+  {
+    var edges = new PortGraphEngine(Ontology).Materialize(
+      new[]
+      {
+        Walk("MH2", "Chatterfang.json", "Chatterfang"),
+        Walk("RIX", "PitilessPlunderer.json", "Pitiless Plunderer"),
+      }
+    );
+    Assert.That(
+      edges.Any(e =>
+        e.From.Label == "sac:artifact:treasure:controlled" && e.To.Label == "emit:mana:any"
+      ),
+      Is.True,
+      "the Treasure's self-sacrifice should drive its emit:mana:any"
+    );
+    var manaHop = edges.FirstOrDefault(e =>
+      e.From.Label == "emit:mana:any" && e.To.Label == "pay:mana:black"
+    );
+    Assert.That(manaHop, Is.Not.Null, "Treasure mana should feed Chatterfang's pay:mana:black");
+    Assert.That(manaHop!.Tier, Is.EqualTo(CertaintyTier.Green)); // producer choice (CR — any color)
+  }
+
+  // The mana flow arm is colour-aware: any-colour mana (a Treasure) feeds any demand, a generic {N}
+  // cost takes any colour, but a specific colour cannot pay a different colour (no green-pays-black).
+  [Test]
+  public void Mana_flow_is_colour_aware()
+  {
+    static PortNode Emit(string label) =>
+      new()
+      {
+        Card = "T",
+        Label = label,
+        Side = PortSide.Emit,
+        Identity = "T::" + label,
+      };
+    static PortNode Pay(string label) =>
+      new()
+      {
+        Card = "U",
+        Label = label,
+        Side = PortSide.Consume,
+        Identity = "U::" + label,
+      };
+    var any = Emit("emit:mana:any");
+    var green = Emit("emit:mana:green");
+    var payBlack = Pay("pay:mana:black");
+    var payGeneric = Pay("pay:mana");
+
+    var edges = new PortGraphEngine(Ontology).Materialize(
+      [new PortGraph { Ports = [any, green, payBlack, payGeneric] }]
+    );
+    bool Flow(PortNode f, PortNode t) =>
+      edges.Any(e => ReferenceEquals(e.From, f) && ReferenceEquals(e.To, t));
+
+    Assert.That(Flow(any, payBlack), Is.True, "any-colour mana pays a black cost (producer choice)");
+    Assert.That(Flow(any, payGeneric), Is.True, "any-colour mana pays a generic cost");
+    Assert.That(Flow(green, payGeneric), Is.True, "green mana pays a generic cost");
+    Assert.That(Flow(green, payBlack), Is.False, "green mana cannot pay a black cost");
   }
 
   // A created token refuels a sacrifice cost only if its AT-CREATION type satisfies the sac (CR 111.10:

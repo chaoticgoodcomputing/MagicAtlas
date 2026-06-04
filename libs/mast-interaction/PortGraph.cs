@@ -125,7 +125,70 @@ public sealed class PortWalk
           edges.Add(new CardDefinedEdge { From = from, To = to });
     }
 
-    return new PortGraph { Ports = ports, CardDefinedEdges = edges };
+    ResolvePredefinedTokens(card, ports, edges);
+
+    // One port per (card, label) — the Identity is card::label. The §9 resolution can re-derive a port
+    // the card already declares (Ruthless Knave sacs Treasures in its own draw ability too); collapse
+    // the duplicate so the engine sees one node, not parallel edges.
+    var distinctPorts = ports.GroupBy(p => p.Identity).Select(g => g.First()).ToList();
+    var distinctEdges = edges
+      .GroupBy(e => (e.From.Identity, e.To.Identity))
+      .Select(g => g.First())
+      .ToList();
+    return new PortGraph { Ports = distinctPorts, CardDefinedEdges = distinctEdges };
+  }
+
+  /// <summary>
+  /// ADR-0002 §9 — a created predefined token (CR 111.10) is an object with its OWN ports. For each
+  /// distinct created token in the <see cref="PredefinedTokens"/> registry, project its intrinsic
+  /// activated ability: the self-sacrifice (plus tap / generic-mana / discard) costs that consume the
+  /// token, each driving the resource it emits (a Treasure → <c>emit:mana:any</c>). The card's
+  /// <c>emit:token</c> port then flows into that self-sacrifice (the engine's token-flow arm), and the
+  /// emitted resource feeds a cost elsewhere — closing e.g. Chatterfang's <c>{B}</c> via Pitiless's
+  /// Treasure. Attributed to the creating card (CR 111.2 — a token's creator controls it).
+  /// </summary>
+  private void ResolvePredefinedTokens(
+    string card,
+    List<PortNode> ports,
+    List<CardDefinedEdge> edges
+  )
+  {
+    var resolved = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    foreach (
+      var emit in ports.Where(p => p.Side == PortSide.Emit && p.Subject?.IsToken == true).ToList()
+    )
+    {
+      var subtype = emit.Subject!.Subtypes?.FirstOrDefault();
+      if (
+        subtype is null
+        || !resolved.Add(subtype) // resolve each token subtype once per card
+        || !PredefinedTokens.Registry.TryGetValue(subtype, out var spec)
+      )
+        continue;
+
+      var emitPort = Port(card, spec.Emit, PortSide.Emit);
+      var self = new ObjectFilter
+      {
+        Subtypes = [subtype],
+        Controller = ControllerFilter.You,
+        IsToken = true,
+      };
+      var costs = new List<PortNode>
+      {
+        Port(card, PortLabel.SacrificeCost(self, _ontology), PortSide.Consume, subject: self),
+      };
+      if (spec.Taps)
+        costs.Add(Port(card, "tap:self", PortSide.Consume));
+      if (spec.GenericMana > 0)
+        costs.Add(Port(card, "pay:mana", PortSide.Consume, spec.GenericMana));
+      if (spec.Discards)
+        costs.Add(Port(card, "pay:discard", PortSide.Consume));
+
+      ports.Add(emitPort);
+      ports.AddRange(costs);
+      foreach (var c in costs)
+        edges.Add(new CardDefinedEdge { From = c, To = emitPort });
+    }
   }
 
   private void Trigger(JsonNode? trigger, string card, List<PortNode> consumes)

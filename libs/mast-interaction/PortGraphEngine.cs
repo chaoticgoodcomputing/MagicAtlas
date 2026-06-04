@@ -115,9 +115,28 @@ public sealed class PortGraphEngine
     (ResourceKind(emit.Label), Role(consume.Label)) switch
     {
       ("token", "sac") => TokenSatisfiesSacAtCreation(emit, consume),
-      ("mana", "pay") => ResourceKind(consume.Label) == "mana", // mana refunds a mana cost
+      ("mana", "pay") => ResourceKind(consume.Label) == "mana" // mana refunds a mana cost…
+        && ManaColorFeeds(ManaColor(emit.Label), ManaColor(consume.Label)), // …of a colour it can pay
       _ => false,
     };
+
+  /// <summary>The colour facet of a mana label (<c>emit:mana:&lt;colour&gt;</c> / <c>pay:mana:&lt;colour&gt;</c>); <c>null</c> for a generic <c>pay:mana</c>.</summary>
+  private static string? ManaColor(string label)
+  {
+    var parts = label.Split(':');
+    return parts.Length >= 3 ? parts[2] : null;
+  }
+
+  /// <summary>
+  /// Does emitted mana of one colour satisfy a mana cost's colour? <c>any</c> satisfies anything (the
+  /// producer picks the colour — a Treasure makes any one colour, so it pays <c>{B}</c>, GREEN by
+  /// producer choice, ADR-0002 §3b†); a generic <c>{N}</c> cost takes any colour; otherwise the colours
+  /// must match — so <c>emit:mana:green</c> does NOT pay <c>pay:mana:black</c> (no false-GREEN).
+  /// </summary>
+  private static bool ManaColorFeeds(string? emitColor, string? payColor) =>
+    string.Equals(emitColor, "any", StringComparison.OrdinalIgnoreCase)
+    || payColor is null
+    || string.Equals(emitColor, payColor, StringComparison.OrdinalIgnoreCase);
 
   /// <summary>
   /// A created token refuels a sacrifice cost only if its <b>at-creation</b> type already satisfies the

@@ -85,13 +85,22 @@ public class PortWalkTest
   }
 
   [Test]
-  public void Pitiless_projects_trigger_and_emit_with_one_edge()
+  public void Pitiless_projects_dies_trigger_emit_and_resolved_treasure_mana()
   {
     var graph = Walk("RIX", "PitilessPlunderer.json", "Pitiless Plunderer");
     Assert.That(
       graph.Ports.Select(p => p.Label),
       Is.EquivalentTo(
-        new[] { "ltb:creature:to-graveyard:controlled", "emit:token:artifact:treasure:controlled" }
+        new[]
+        {
+          // the card's own dies-trigger → Treasure creation
+          "ltb:creature:to-graveyard:controlled",
+          "emit:token:artifact:treasure:controlled",
+          // ADR-0002 §9: the created Treasure resolves to its intrinsic mana ability
+          "sac:artifact:treasure:controlled",
+          "tap:self",
+          "emit:mana:any",
+        }
       )
     );
     Assert.That(
@@ -99,9 +108,21 @@ public class PortWalkTest
       Is.EqualTo(PortSide.Consume)
     );
 
-    var edge = graph.CardDefinedEdges.Single();
-    Assert.That(edge.From.Label, Is.EqualTo("ltb:creature:to-graveyard:controlled"));
-    Assert.That(edge.To.Label, Is.EqualTo("emit:token:artifact:treasure:controlled"));
+    // The card's own causality: the dies-trigger drives the Treasure creation.
+    Assert.That(
+      graph.CardDefinedEdges.Any(e =>
+        e.From.Label == "ltb:creature:to-graveyard:controlled"
+        && e.To.Label == "emit:token:artifact:treasure:controlled"
+      ),
+      Is.True
+    );
+    // §9: the Treasure's self-sacrifice (and tap) drive its mana emit.
+    Assert.That(
+      graph.CardDefinedEdges.Any(e =>
+        e.From.Label == "sac:artifact:treasure:controlled" && e.To.Label == "emit:mana:any"
+      ),
+      Is.True
+    );
   }
 
   // The label names; the operator decides (§7) — so each non-scalar port carries its subject filter.
