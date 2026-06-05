@@ -40,9 +40,21 @@ public sealed record PortCycle
   /// <summary>
   /// Firability (ADR-0002 §8): no hop touches a gated port (a rate limit / intervening-if). A
   /// non-firable cycle cannot be certified infinite — <c>net(R)</c> is blind to gates — so its tier
-  /// floors to Amber even when every edge is Green.
+  /// floors to Amber even when every edge is Green. A <b>tap</b> gate is the dischargeable exception:
+  /// it floors unless the loop renews it (<see cref="TapRenewed"/>) by untapping the permanent each
+  /// iteration (Blasting Station's "untap when a creature enters", fed by the loop's creature tokens).
   /// </summary>
-  public bool Firable => !Edges.Any(e => e.From.Gated || e.To.Gated);
+  public bool Firable =>
+    !Edges.Any(e => e.From.Gated || e.To.Gated)
+    && (TapRenewed || !Edges.Any(e => e.From.TapGated || e.To.TapGated));
+
+  /// <summary>
+  /// All the cycle's tap gates are renewed (ADR-0002 §8): every tap-gated permanent the loop traverses
+  /// untaps itself each iteration on an event the loop produces (a self-untap <c>etb:X → emit:untap</c>
+  /// fed by a created token whose type triggers it). The engine sets this; default <c>false</c> (a tap
+  /// gate floors unless proven renewed — the carve-out is strict, the dual of §8-B's self-return).
+  /// </summary>
+  public bool TapRenewed { get; init; }
 
   /// <summary>
   /// Multi-cost conjunction (ADR-0002 §8): an activated ability fires only if <b>all</b> its costs are
@@ -94,7 +106,8 @@ public sealed record PortCycle
   /// reason takes precedence (a gate / an unfed co-cost), else the worst hop's operator reason; <c>null</c> when GREEN.</summary>
   public string? LimitingReason =>
     Tier == CertaintyTier.Green ? null
-    : !Firable ? "gated (rate-limit / intervening-if)"
+    : Edges.Any(e => e.From.Gated || e.To.Gated) ? "gated (rate-limit / intervening-if)"
+    : !Firable ? "tap (not renewed by an untapper)"
     : !Balanced ? "mana-negative"
     : !Productive ? "net-zero filter (no surplus)"
     : !CoCostsSatisfied ? "unfed co-cost"
@@ -334,6 +347,7 @@ public sealed class PortGraphEngine
                 CoCostsSatisfied = ConjunctionHolds(loop, coCosts, fed),
                 Balanced = ManaBalanced(loop, coCosts, edges),
                 Productive = ManaProductive(loop, coCosts, edges),
+                TapRenewed = TapGatesRenewed(loop, edges),
               }
             );
           path.RemoveAt(path.Count - 1);
@@ -600,6 +614,59 @@ public sealed class PortGraphEngine
         return true; // a self-death with no self-return — the source dies once
     }
     return false;
+  }
+
+  /// <summary>
+  /// ADR-0002 §8 — every tap-gated permanent the cycle traverses is <b>renewed</b>: it untaps itself
+  /// each iteration on an event the loop produces. A card is renewed iff it has a card-defined <b>self</b>
+  /// untap (an <c>etb:X → emit:untap:self</c> trigger — "untap THIS", not "untap target permanent" which
+  /// renews someone else) and the loop creates a token whose type triggers <c>etb:X</c> (the token enters
+  /// → untaps it). Blasting Station — "untap this whenever a creature enters" — is
+  /// renewed by the very creature tokens its sac outlet consumes. STRICT (the dual of §8-B's self-return
+  /// carve-out): a tap gate with no provable in-loop untap stays floored. Vacuously true when the cycle
+  /// has no tap gate.
+  /// </summary>
+  private bool TapGatesRenewed(IReadOnlyList<PortEdge> cycle, IReadOnlyList<PortEdge> edges)
+  {
+    var tapCards = cycle
+      .SelectMany(e => new[] { e.From, e.To })
+      .Where(p => p.TapGated)
+      .Select(p => p.Card)
+      .ToHashSet(StringComparer.Ordinal);
+    if (tapCards.Count == 0)
+      return true;
+
+    // Tokens the loop creates each iteration (they enter the battlefield, triggering an etb untap).
+    var tokens = cycle
+      .SelectMany(e => new[] { e.From, e.To })
+      .Where(p => p.Side == PortSide.Emit && ResourceKind(p.Label) == "token" && p.Subject is not null)
+      .GroupBy(p => p.Identity, StringComparer.Ordinal)
+      .Select(g => g.First())
+      .ToList();
+
+    foreach (var card in tapCards)
+    {
+      var untapTriggers = edges
+        .Where(e =>
+          e.Provenance == EdgeProvenance.CardDefined
+          && string.Equals(e.From.Card, card, StringComparison.Ordinal)
+          && e.From.Side == PortSide.Consume
+          && Role(e.From.Label) == "etb"
+          && e.To.Label == "emit:untap:self" // a SELF-untap — untapping a target renews someone else
+          && e.From.Subject is not null
+        )
+        .Select(e => e.From)
+        .ToList();
+      var renewed = untapTriggers.Any(trig =>
+        tokens.Any(tok =>
+          ObjectFilterRelations.Intersects(tok.Subject!, trig.Subject!, _ontology).Relation
+          != FilterRelation.Disjoint
+        )
+      );
+      if (!renewed)
+        return false;
+    }
+    return true;
   }
 
   /// <summary>A self-scoped dies-trigger: <c>ltb</c> role, destination <c>to-graveyard</c> (CR 700.4), scope <c>self</c>.</summary>

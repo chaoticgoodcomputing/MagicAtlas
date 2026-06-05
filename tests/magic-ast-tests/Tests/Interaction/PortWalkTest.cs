@@ -196,11 +196,11 @@ public class PortWalkTest
     Assert.That(Walk("MH2", "Chatterfang.json", "Chatterfang").Ports.Any(p => p.Gated), Is.False);
   }
 
-  // A {T} (tap) cost is a rate limit too (CR 107.5 — a permanent taps only once per untap), so a
-  // persistent permanent's tap ability re-fires only with an untapper; absent one, a loop through it
-  // isn't infinite. It gates all the ability's ports (ADR-0002 §8 firability), like once-each-turn.
+  // A {T} (tap) cost is a rate limit (CR 107.5 — once per untap), so it TAP-gates the ability's ports
+  // (ADR-0002 §8) — the dischargeable gate, distinct from the hard Gated of an intervening-if/once-each-
+  // turn. (The discharge — an untapper in the loop — lives in the engine, PortCycle.TapRenewed.)
   [Test]
-  public void Tap_cost_gates_its_ports()
+  public void Tap_cost_tap_gates_its_ports()
   {
     var abilities = JsonNode.Parse(
       """
@@ -212,6 +212,7 @@ public class PortWalkTest
     var graph = new PortWalk(Ontology).Project("Synthetic", abilities);
     Assert.That(graph.Ports, Is.Not.Empty);
     Assert.That(graph.Ports.Any(p => p.Label == "tap:self"));
-    Assert.That(graph.Ports.All(p => p.Gated), "a {T} cost gates every port of the ability");
+    Assert.That(graph.Ports.All(p => p.TapGated), "a {T} cost tap-gates every port of the ability");
+    Assert.That(graph.Ports.Any(p => p.Gated), Is.False, "a tap is a dischargeable gate, not a hard gate");
   }
 }

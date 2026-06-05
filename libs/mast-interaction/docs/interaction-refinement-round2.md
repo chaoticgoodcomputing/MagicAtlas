@@ -82,9 +82,16 @@ A-caveat refinement) is contained; the anchor max-overlap is a cheap bundle-alon
   so tap mana-rock / mana-dork loops floor to Amber instead of false-certifying. §9 tokens gated only
   when tap-without-sac (Treasure stays ungated). *Conservative limitation:* self-untapping permanents
   (Blasting Station) and externally-untapped dorks floor to Amber (false-Amber) — untap **renewal**
-  isn't modeled. Follow-on C-untap: an untap-renewal carve-out (the firability dual of B's self-return).
-  Correction: Bog Initiate / Farrelite Priest / Initiates are NOT tap abilities (I mis-tagged them) —
-  they are `{1}: Add {one mana}` filters → the net-zero class below.
+  isn't modeled (now resolved — see C-untap). Correction: Bog Initiate / Farrelite Priest / Initiates are
+  NOT tap abilities (I mis-tagged them) — they are `{1}: Add {one mana}` filters → the net-zero class below.
+- **C-untap (untap-renewal carve-out) — DONE**: a tap gate is now *dischargeable* (`PortNode.TapGated` /
+  `PortCycle.TapRenewed`): every tap-gated permanent the loop traverses must untap **itself** each
+  iteration (`etb:X → emit:untap:self`, fed by a loop-made token triggering `etb:X`). Blasting Station ×
+  Pitiless × Chatterfang is GREEN again; Corridor Monitor ("untap **target**") stays Amber. A first judge
+  ruled it UNSOUND (the projection dropped the untap target, so target-untap read as self-untap →
+  false-GREEN); fixed by projecting `emit:untap:self` only for `ObjectReference.Self` and requiring it in
+  renewal; re-judge SOUND. Residual (safe): triggered "untap it" collapses to Self (errs to false-Amber,
+  never false-GREEN) — optional parser follow-up.
 - **C-netzero (net-zero mana filter) — DONE**: new `PortCycle.Productive` axis — a pure-mana loop must
   net **positive** mana (`ManaProductive`, `produced > cost`); a 1-for-1 filter (Bog/Farrelite/Initiates)
   is a do-nothing → Amber (reason `net-zero filter (no surplus)`). A loop with a non-mana output (token)

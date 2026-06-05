@@ -42,11 +42,21 @@ public sealed record PortNode
   public ObjectFilter? Subject { get; init; }
 
   /// <summary>
-  /// Firability gate (ADR-0002 §8): the port's ability carries a rate limit ("only once each turn")
-  /// or a boolean condition (an intervening-if / conditional restriction). A cycle through a gated
-  /// port cannot be certified infinite — net(R) is blind to these — so its tier floors to Amber.
+  /// Firability gate (ADR-0002 §8): the port's ability carries a <b>hard</b> rate limit ("only once each
+  /// turn") or a boolean condition (an intervening-if / conditional restriction). A cycle through a gated
+  /// port cannot be certified infinite — net(R) is blind to these — so its tier floors to Amber. This
+  /// gate is never discharged (distinct from <see cref="TapGated"/>).
   /// </summary>
   public bool Gated { get; init; }
+
+  /// <summary>
+  /// A <b>tap</b> rate limit (ADR-0002 §8): the port's ability has a <c>{T}</c> cost, so it fires only
+  /// once per untap (CR 107.5). Distinct from <see cref="Gated"/> because it is <em>dischargeable</em>:
+  /// a loop that untaps the permanent each iteration (Blasting Station — "untap this whenever a creature
+  /// enters" — fed by the loop's own creature tokens) renews the tap, so the cycle stays firable
+  /// (<see cref="PortCycle.TapRenewed"/>). Absent such renewal it floors to Amber like any rate limit.
+  /// </summary>
+  public bool TapGated { get; init; }
 
   public required string Identity { get; init; }
 
@@ -108,14 +118,17 @@ public sealed class PortWalk
       foreach (var effect in ability["Effects"] as JsonArray ?? [])
         Effects(effect, card, keyword, consumes, emits);
 
-      // Firability (§8): a rate-limited or gated ability marks all its ports — done before the edges
-      // are built so they reference the gated port objects.
-      if (IsGated(ability))
+      // Firability (§8): a hard-gated ability marks all its ports Gated; a tap ability marks them
+      // TapGated (the dischargeable rate limit). Done before the edges are built so they reference the
+      // marked port objects.
+      var hardGated = IsGated(ability);
+      var tapGated = HasTapCost(ability);
+      if (hardGated || tapGated)
       {
         for (var i = 0; i < consumes.Count; i++)
-          consumes[i] = consumes[i] with { Gated = true };
+          consumes[i] = consumes[i] with { Gated = hardGated, TapGated = tapGated };
         for (var i = 0; i < emits.Count; i++)
-          emits[i] = emits[i] with { Gated = true };
+          emits[i] = emits[i] with { Gated = hardGated, TapGated = tapGated };
       }
 
       ports.AddRange(consumes);
@@ -191,14 +204,14 @@ public sealed class PortWalk
         costs.Add(Port(card, "pay:discard", PortSide.Consume));
 
       // A token that TAPS but is not consumed (no self-sac) is a persistent, reused producer — its tap
-      // is a rate limit (CR 107.5), so gate it (ADR-0002 §8). A token that SACRIFICES itself for the
+      // is a rate limit (CR 107.5), so tap-gate it (ADR-0002 §8). A token that SACRIFICES itself for the
       // mana (a Treasure) is re-created fresh each iteration, so its tap is not a cross-iteration limit
       // (gating it would wrongly floor the Chatterfang × Pitiless Treasure-fed loop).
       if (spec.Taps && !spec.Sacrifices)
       {
-        emitPort = emitPort with { Gated = true };
+        emitPort = emitPort with { TapGated = true };
         for (var i = 0; i < costs.Count; i++)
-          costs[i] = costs[i] with { Gated = true };
+          costs[i] = costs[i] with { TapGated = true };
       }
 
       ports.Add(emitPort);
@@ -333,6 +346,14 @@ public sealed class PortWalk
       var (color, count) = ParseAddedMana(e);
       return Port(card, PortLabel.ManaEmit(color), PortSide.Emit, count);
     }
+    if (effectType == "untap")
+    {
+      // Carry the untap's SCOPE: "untap this" (ObjectReference.Self) → emit:untap:self; "untap target X"
+      // → emit:untap (a different permanent). The §8 tap-renewal carve-out only discharges a tap gate for
+      // a SELF-untap — untapping someone else doesn't renew the source's own tap (CR 107.5).
+      var self = e["Target"]?["Kind"]?.ToString() == "Self";
+      return Port(card, self ? "emit:untap:self" : "emit:untap", PortSide.Emit);
+    }
     return effectType switch
     {
       // Inert effects (no flow) are still ports, by totality (§4) — edge-sparse, never dropped.
@@ -371,9 +392,9 @@ public sealed class PortWalk
     "OnlyIfNoUntappedLands",
   };
 
-  /// <summary>Firability gate (ADR-0002 §8): an intervening-if, a rate-limit/conditional restriction, or
-  /// a tap cost (a permanent taps only once per untap, CR 107.5 — a persistent permanent's tap ability
-  /// re-fires each iteration only with an untapper, so a loop through it isn't infinite without one).</summary>
+  /// <summary>A <b>hard</b> firability gate (ADR-0002 §8): an intervening-if or a rate-limit/conditional
+  /// restriction. Never discharged. (A <c>{T}</c> tap cost is the separate, dischargeable <see
+  /// cref="HasTapCost"/> gate.)</summary>
   private static bool IsGated(JsonNode ability)
   {
     if (ability["InterveningIf"] is not null)
@@ -382,6 +403,13 @@ public sealed class PortWalk
       foreach (var r in restrictions)
         if (r is not null && GatingRestrictions.Contains(r.ToString()))
           return true;
+    return false;
+  }
+
+  /// <summary>A <c>{T}</c> tap cost — a once-per-untap rate limit (CR 107.5), dischargeable by an
+  /// untapper in the loop (ADR-0002 §8, <see cref="PortNode.TapGated"/>).</summary>
+  private static bool HasTapCost(JsonNode ability)
+  {
     if (ability["Costs"] is JsonArray costs)
       foreach (var c in costs)
         if (c?["CostType"]?.ToString() == "tap")

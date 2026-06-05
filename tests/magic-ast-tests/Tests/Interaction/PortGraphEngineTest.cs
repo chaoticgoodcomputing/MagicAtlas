@@ -704,6 +704,91 @@ public class PortGraphEngineTest
     Assert.That(netPositive.Tier, Is.EqualTo(CertaintyTier.Green));
   }
 
+  // Tap renewal (§8, "C-untap"): a tap gate is the dischargeable rate-limit — a loop that untaps the
+  // permanent each iteration renews it. Blasting Station ("{T}, Sacrifice a creature: …" + "untap this
+  // whenever a creature enters") is renewed by the very creature tokens its sac outlet consumes, so its
+  // loop stays GREEN; strip the self-untap and the tap is a rate-limit with no untapper → Amber.
+  [Test]
+  public void A_tap_gate_is_discharged_when_the_loop_untaps_the_permanent()
+  {
+    static PortNode Consume(string card, string label, ObjectFilter subj, bool tap = false) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Consume,
+        Subject = subj,
+        Identity = card + "::" + label,
+        TapGated = tap,
+      };
+    static PortNode Emit(string card, string label, ObjectFilter? subj) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Emit,
+        Subject = subj,
+        Identity = card + "::" + label,
+      };
+
+    var creature = new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You };
+    // Blasting Station: a tap-gated sac outlet + a self-untap triggered by a creature entering.
+    var sac = Consume("Station", "sac:creature:controlled", creature, tap: true);
+    var dmg = Emit("Station", "emit:dealdamage", null); // inert payoff
+    var etb = Consume("Station", "etb:creature", creature);
+    // Token maker: when a creature dies, create a creature token (the loop's carrier).
+    var dies = Consume("Maker", "ltb:creature:to-graveyard:controlled", creature);
+    var token = Emit(
+      "Maker",
+      "emit:token:creature:controlled",
+      new ObjectFilter { CardTypes = ["creature"], IsToken = true, Controller = ControllerFilter.You }
+    );
+    var makerGraph = new PortGraph
+    {
+      Ports = [dies, token],
+      CardDefinedEdges = [new() { From = dies, To = token }],
+    };
+    var engine = new PortGraphEngine(Ontology);
+
+    // untapLabel: null = no untap; "emit:untap:self" = "untap this"; "emit:untap" = "untap target" (other).
+    PortCycle Loop(string? untapLabel)
+    {
+      var ports = new List<PortNode> { sac, dmg };
+      var cardDefined = new List<CardDefinedEdge> { new() { From = sac, To = dmg } };
+      if (untapLabel is not null)
+      {
+        var untap = Emit("Station", untapLabel, null);
+        ports.Add(etb);
+        ports.Add(untap);
+        cardDefined.Add(new() { From = etb, To = untap });
+      }
+      var station = new PortGraph { Ports = ports, CardDefinedEdges = cardDefined };
+      return engine
+        .FindCycles(engine.Materialize([station, makerGraph]), maxLength: 5)
+        .First(c =>
+          c.Edges.Any(e => e.From.Card == "Station") && c.Edges.Any(e => e.From.Card == "Maker")
+        );
+    }
+
+    // "untap this" + the loop's creature tokens → self-untap fires each iteration → renewed → Green.
+    var renewed = Loop("emit:untap:self");
+    Assert.That(renewed.TapRenewed, Is.True);
+    Assert.That(renewed.Firable, Is.True);
+    Assert.That(renewed.Tier, Is.EqualTo(CertaintyTier.Green));
+
+    // No untap → the tap is a rate-limit with no untapper → not firable → Amber.
+    var noUntap = Loop(null);
+    Assert.That(noUntap.TapRenewed, Is.False);
+    Assert.That(noUntap.Tier, Is.EqualTo(CertaintyTier.Amber));
+    Assert.That(noUntap.LimitingReason, Is.EqualTo("tap (not renewed by an untapper)"));
+
+    // "untap TARGET permanent" (Corridor Monitor) renews someone ELSE, not the source's own tap — so the
+    // tap is NOT renewed and the loop stays Amber. Guards the judge's false-GREEN.
+    var targetUntap = Loop("emit:untap");
+    Assert.That(targetUntap.TapRenewed, Is.False, "untapping a target is not a self-untap");
+    Assert.That(targetUntap.Tier, Is.EqualTo(CertaintyTier.Amber));
+  }
+
   // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
   [Test]
   public void A_gated_cycle_floors_to_amber_even_with_green_edges()
