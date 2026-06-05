@@ -1,9 +1,9 @@
 {
   "Input": {
     "Name": "Niv-Mizzet, the Firemind",
-    "ManaCost": "{U}{U}{R}{R}{R}{R}",
+    "ManaCost": "{2}{U}{U}{R}{R}",
     "TypeLine": "Legendary Creature — Dragon Wizard",
-    "OracleText": "Flying\n{T}: Draw a card.\nWhenever you draw a card, Niv-Mizzet, the Firemind deals 1 damage to any target.",
+    "OracleText": "Flying\nWhenever you draw a card, Niv-Mizzet deals 1 damage to any target.\n{T}: Draw a card.",
     "Power": "4",
     "Toughness": "4",
     "Colors": [
@@ -31,7 +31,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Flying\n{T}: Draw a card.\nWhenever you draw a card, Niv-Mizzet, the Firemind deals 1 damage to any target.",
+      "RawText": "Flying\nWhenever you draw a card, Niv-Mizzet deals 1 damage to any target.\n{T}: Draw a card.",
       "Abilities": [
         {
           "Kind": "static",
@@ -58,6 +58,31 @@
           "KeywordSource": "Flying"
         },
         {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DrawsCard",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": {
+                "Kind": "AnyTarget"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        },
+        {
           "Kind": "activated",
           "Costs": [
             {
@@ -77,44 +102,17 @@
             }
           ],
           "IsManaAbility": false
-        },
-        {
-          "Kind": "triggered",
-          "Trigger": {
-            "Timing": "Whenever",
-            "Event": "DrawsCard",
-            "Filter": {
-              "Controller": "You"
-            }
-          },
-          "Effects": [
-            {
-              "EffectType": "dealDamage",
-              "Amount": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Source": {
-                "Kind": "Self"
-              },
-              "Target": {
-                "Kind": "AnyTarget"
-              }
-            }
-          ]
         }
       ]
     },
     "Attributes": [
       {
         "Kind": "manaCost",
-        "Raw": "{U}{U}{R}{R}{R}{R}",
+        "Raw": "{2}{U}{U}{R}{R}",
         "Symbols": [
           {
-            "Kind": "colored",
-            "Colors": [
-              "U"
-            ]
+            "Kind": "generic",
+            "GenericAmount": 2
           },
           {
             "Kind": "colored",
@@ -125,13 +123,7 @@
           {
             "Kind": "colored",
             "Colors": [
-              "R"
-            ]
-          },
-          {
-            "Kind": "colored",
-            "Colors": [
-              "R"
+              "U"
             ]
           },
           {
@@ -147,7 +139,8 @@
             ]
           }
         ],
-        "ManaValue": 6
+        "ManaValue": 6,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -159,21 +152,21 @@
       {
         "Kind": "colorIdentity",
         "ColorIdentity": [
-          "R",
-          "U"
+          "U",
+          "R"
         ]
       },
       {
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         }
       }
     ]

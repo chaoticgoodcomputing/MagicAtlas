@@ -3,9 +3,7 @@
     "Name": "Azorius Chancery",
     "ManaCost": "",
     "TypeLine": "Land",
-    "OracleText": "{T}: Add {W}{U}.\nThis land enters tapped.\nWhen this land enters, return a land you control to its owner's hand.",
-    "Power": null,
-    "Toughness": null,
+    "OracleText": "This land enters tapped.\nWhen this land enters, return a land you control to its owner's hand.\n{T}: Add {W}{U}.",
     "Colors": [],
     "ColorIdentity": [
       "U",
@@ -21,23 +19,8 @@
       ]
     },
     "Oracle": {
-      "RawText": "{T}: Add {W}{U}.\nThis land enters tapped.\nWhen this land enters, return a land you control to its owner's hand.",
+      "RawText": "This land enters tapped.\nWhen this land enters, return a land you control to its owner's hand.\n{T}: Add {W}{U}.",
       "Abilities": [
-        {
-          "Kind": "activated",
-          "Costs": [
-            {
-              "CostType": "tap"
-            }
-          ],
-          "Effects": [
-            {
-              "EffectType": "addMana",
-              "Mana": "{W}{U}"
-            }
-          ],
-          "IsManaAbility": true
-        },
         {
           "Kind": "static",
           "Effects": [
@@ -76,6 +59,23 @@
               }
             }
           ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{W}{U}",
+              "AnyColor": false,
+              "OfChosenColor": false
+            }
+          ],
+          "IsManaAbility": true
         }
       ]
     },
@@ -87,8 +87,8 @@
       {
         "Kind": "colorIdentity",
         "ColorIdentity": [
-          "U",
-          "W"
+          "W",
+          "U"
         ]
       }
     ]

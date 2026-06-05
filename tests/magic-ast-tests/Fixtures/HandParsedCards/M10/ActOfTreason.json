@@ -1,11 +1,9 @@
 {
   "Input": {
     "Name": "Act of Treason",
-    "ManaCost": "{2}{R}{R}",
+    "ManaCost": "{2}{R}",
     "TypeLine": "Sorcery",
-    "OracleText": "Gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn.",
-    "Power": null,
-    "Toughness": null,
+    "OracleText": "Gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn. (It can attack and {T} this turn.)",
     "Colors": [
       "R"
     ],
@@ -22,7 +20,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn.",
+      "RawText": "Gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn. (It can attack and {T} this turn.)",
       "Abilities": [
         {
           "Kind": "spell",
@@ -58,13 +56,13 @@
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Haste",
                 "Effects": [
                   {
                     "EffectType": "keywordAbility",
                     "Keyword": "Haste"
                   }
-                ]
+                ],
+                "KeywordSource": "Haste"
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -81,7 +79,7 @@
     "Attributes": [
       {
         "Kind": "manaCost",
-        "Raw": "{2}{R}{R}",
+        "Raw": "{2}{R}",
         "Symbols": [
           {
             "Kind": "generic",
@@ -92,15 +90,10 @@
             "Colors": [
               "R"
             ]
-          },
-          {
-            "Kind": "colored",
-            "Colors": [
-              "R"
-            ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

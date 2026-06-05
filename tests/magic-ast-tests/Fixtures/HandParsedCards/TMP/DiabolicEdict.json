@@ -3,9 +3,7 @@
     "Name": "Diabolic Edict",
     "ManaCost": "{1}{B}",
     "TypeLine": "Instant",
-    "OracleText": "Target opponent sacrifices a creature.",
-    "Power": null,
-    "Toughness": null,
+    "OracleText": "Target player sacrifices a creature of their choice.",
     "Colors": [
       "B"
     ],
@@ -22,7 +20,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Target opponent sacrifices a creature.",
+      "RawText": "Target player sacrifices a creature of their choice.",
       "Abilities": [
         {
           "Kind": "spell",
@@ -33,7 +31,7 @@
                 "Kind": "Target",
                 "Filter": {
                   "CardTypes": [
-                    "opponent"
+                    "player"
                   ]
                 }
               },
@@ -63,7 +61,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

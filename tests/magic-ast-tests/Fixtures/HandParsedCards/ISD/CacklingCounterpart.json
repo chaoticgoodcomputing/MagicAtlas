@@ -3,7 +3,7 @@
     "Name": "Cackling Counterpart",
     "ManaCost": "{1}{U}{U}",
     "TypeLine": "Instant",
-    "OracleText": "Create a token that's a copy of target creature you control.\nFlashback {3}{U}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+    "OracleText": "Create a token that's a copy of target creature you control.\nFlashback {5}{U}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
     "Colors": [
       "U"
     ],
@@ -20,7 +20,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Create a token that's a copy of target creature you control.\nFlashback {3}{U}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "RawText": "Create a token that's a copy of target creature you control.\nFlashback {5}{U}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
       "Abilities": [
         {
           "Kind": "spell",
@@ -41,7 +41,6 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Flashback",
           "Effects": [
             {
               "EffectType": "alternativeCast",
@@ -51,7 +50,7 @@
                 "Symbols": [
                   {
                     "Kind": "generic",
-                    "GenericAmount": 3
+                    "GenericAmount": 5
                   },
                   {
                     "Kind": "colored",
@@ -68,7 +67,11 @@
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Flashback",
+          "Reminder": {
+            "Text": "(You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+          }
         }
       ]
     },
@@ -94,7 +97,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
