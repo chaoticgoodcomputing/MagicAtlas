@@ -322,8 +322,8 @@ public sealed class PortGraphEngine
       .GroupBy(e => e.From.Identity)
       .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.Ordinal);
 
-    // §8 conjunction inputs: which ports are "fed" (a producer targets them), and each cost's co-costs.
-    var fed = edges.Select(e => e.To.Identity).ToHashSet(StringComparer.Ordinal);
+    // §8 conjunction input: each cost's co-costs. (Whether a co-cost is "fed" is now decided per-cycle
+    // against the LOOP's own producers, not a corpus-global set — see ConjunctionHolds.)
     var coCosts = CoCostMap(edges);
 
     var cycles = new List<PortCycle>();
@@ -350,7 +350,7 @@ public sealed class PortGraphEngine
               new PortCycle
               {
                 Edges = loop,
-                CoCostsSatisfied = ConjunctionHolds(loop, coCosts, fed),
+                CoCostsSatisfied = ConjunctionHolds(loop, coCosts, edges),
                 Balanced = ManaBalanced(loop, coCosts, edges),
                 Productive = ManaProductive(loop, coCosts, edges),
                 TapRenewed = TapGatesRenewed(loop, edges),
@@ -416,27 +416,39 @@ public sealed class PortGraphEngine
 
   /// <summary>
   /// The §8 multi-cost conjunction: for every consume port the cycle traverses, each of its co-costs
-  /// must be payable each iteration — already in the loop, fed by a producer, or a free cost (tap). A
-  /// resource co-cost with no feeder means the ability can't fire, so the loop is not certifiable.
+  /// must be payable <b>each iteration</b> — already in the loop, a free cost (tap), or <b>fed by the
+  /// loop itself</b> (a producer ON A CYCLE CARD targets it). The "fed by the loop" tightening (phase 10):
+  /// a co-cost is NOT satisfied merely because some producer exists somewhere in the corpus — it must be
+  /// fed by a card the loop actually contains, mirroring <see cref="ManaBalanced"/>'s cycle-card
+  /// restriction. This is what separates Chatterfang × Pitiless (its <c>{B}</c> is fed by the very
+  /// Treasure the loop produces — Pitiless is a cycle card, §9) from the Ruthless Knave family (its
+  /// "Sacrifice a creature" co-cost is fed only by some unrelated corpus creature-maker; the loop itself
+  /// makes only Treasures, so the ability can't actually fire each iteration → not certifiable).
   /// </summary>
   private static bool ConjunctionHolds(
     IReadOnlyList<PortEdge> cycle,
     IReadOnlyDictionary<string, IReadOnlyList<PortNode>> coCosts,
-    ISet<string> fed
+    IReadOnlyList<PortEdge> edges
   )
   {
     var inCycle = cycle
       .SelectMany(e => new[] { e.From.Identity, e.To.Identity })
       .ToHashSet(StringComparer.Ordinal);
+    var cycleCards = cycle
+      .SelectMany(e => new[] { e.From.Card, e.To.Card })
+      .ToHashSet(StringComparer.Ordinal);
+
+    // A co-cost is fed by the loop iff a producer ON A CYCLE CARD targets it (not a corpus-global feeder).
+    bool LoopFeeds(PortNode s) =>
+      edges.Any(e =>
+        string.Equals(e.To.Identity, s.Identity, StringComparison.Ordinal)
+        && cycleCards.Contains(e.From.Card)
+      );
 
     foreach (var id in inCycle)
       if (coCosts.TryGetValue(id, out var siblings))
         foreach (var s in siblings)
-          if (
-            !IsFreeCost(s.Label)
-            && !inCycle.Contains(s.Identity)
-            && !fed.Contains(s.Identity)
-          )
+          if (!IsFreeCost(s.Label) && !inCycle.Contains(s.Identity) && !LoopFeeds(s))
             return false;
     return true;
   }

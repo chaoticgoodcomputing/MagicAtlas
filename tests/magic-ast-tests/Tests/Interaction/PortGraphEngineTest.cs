@@ -964,6 +964,78 @@ public class PortGraphEngineTest
     );
   }
 
+  // Phase-10 conjunction tightening (§8): a co-cost is satisfied only if fed BY THE LOOP (a producer on
+  // a cycle card), not by a corpus-global producer. A Ruthless-Knave-shaped ability ("{1} + Sacrifice a
+  // creature: make a Treasure") whose sac:creature is fed only by an OFF-CYCLE creature-maker can't
+  // actually fire each iteration (the loop makes only Treasures) → Amber. Move the creature source onto
+  // a cycle card → fed by the loop → Green.
+  [Test]
+  public void A_co_cost_is_satisfied_only_when_fed_by_a_cycle_card()
+  {
+    static PortNode C(string card, string label, ObjectFilter? subj, int? qty = 1) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Consume,
+        Subject = subj,
+        Quantity = qty,
+        Identity = card + "::" + label,
+      };
+    static PortNode E(string card, string label, ObjectFilter? subj, int? qty = 1) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Emit,
+        Subject = subj,
+        Quantity = qty,
+        Identity = card + "::" + label,
+      };
+
+    var you = ControllerFilter.You;
+    var engine = new PortGraphEngine(Ontology);
+    var treasure = new ObjectFilter { CardTypes = ["artifact"], Subtypes = ["Treasure"], IsToken = true, Controller = you };
+    var creatureTok = new ObjectFilter { CardTypes = ["creature"], IsToken = true, Controller = you };
+
+    // P: "{1}, Sacrifice a creature: create a Treasure" — the sac:creature is a co-cost of pay:mana.
+    var pPay = C("P", "pay:mana", null, 1);
+    var pSac = C("P", "sac:creature:controlled", new ObjectFilter { CardTypes = ["creature"], Controller = you });
+    var pTreasure = E("P", "emit:token:artifact:treasure:controlled", treasure);
+    CardDefinedEdge[] pEdges = [new() { From = pPay, To = pTreasure }, new() { From = pSac, To = pTreasure }];
+    // Q: sac the Treasure → mana, closing the mana loop P↔Q.
+    var qSac = C("Q", "sac:artifact:treasure:controlled", new ObjectFilter { CardTypes = ["artifact"], Subtypes = ["Treasure"], Controller = you });
+    var qMana = E("Q", "emit:mana:any", null, 1);
+    CardDefinedEdge[] qEdges = [new() { From = qSac, To = qMana }];
+    var pGraph = new PortGraph { Ports = [pPay, pSac, pTreasure], CardDefinedEdges = pEdges };
+
+    PortCycle PQ(params PortGraph[] more)
+    {
+      var graphs = new List<PortGraph> { pGraph };
+      graphs.AddRange(more);
+      return engine
+        .FindCycles(engine.Materialize(graphs), maxLength: 5)
+        .First(c => c.Edges.Any(e => e.From.Card == "P") && c.Edges.Any(e => e.From.Card == "Q"));
+    }
+
+    // Off-cycle creature-maker R feeds P's sac:creature — NOT a loop producer → co-cost unfed → Amber.
+    var qGraph = new PortGraph { Ports = [qSac, qMana], CardDefinedEdges = qEdges };
+    var rGraph = new PortGraph { Ports = [E("R", "emit:token:creature:controlled", creatureTok)] };
+    var amber = PQ(qGraph, rGraph);
+    Assert.That(amber.CoCostsSatisfied, Is.False, "a co-cost fed only off-cycle is not fed by the loop");
+    Assert.That(amber.Tier, Is.EqualTo(CertaintyTier.Amber));
+
+    // The cycle card Q makes the creature → fed by the loop → satisfied → Green.
+    var qGraphWithCreature = new PortGraph
+    {
+      Ports = [qSac, qMana, E("Q", "emit:token:creature:controlled", creatureTok)],
+      CardDefinedEdges = qEdges,
+    };
+    var green = PQ(qGraphWithCreature);
+    Assert.That(green.CoCostsSatisfied, Is.True, "a co-cost fed by a cycle-card producer is satisfied");
+    Assert.That(green.Tier, Is.EqualTo(CertaintyTier.Green));
+  }
+
   // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
   [Test]
   public void A_gated_cycle_floors_to_amber_even_with_green_edges()
