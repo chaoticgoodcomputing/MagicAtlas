@@ -789,6 +789,93 @@ public class PortGraphEngineTest
     Assert.That(targetUntap.Tier, Is.EqualTo(CertaintyTier.Amber));
   }
 
+  // Bridge respects the loop's token type (§8): the sac→death bridge fires only if the object the loop
+  // sacrifices can actually be the type the dies-trigger requires. A loop that sacrifices a Treasure
+  // (artifact token, provably not a creature at creation — CR 111.10 / 110.4) into a "a creature you
+  // control dies" trigger can never fire it, so the loop can't close → prune (Lithatog/Extruder ×
+  // Pitiless). A creature token genuinely dies, so that loop is retained. Dual of the token→sac guard.
+  [Test]
+  public void A_loop_that_sacrifices_a_noncreature_token_into_a_creature_death_is_pruned()
+  {
+    static PortNode Consume(string card, string label, ObjectFilter subj) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Consume,
+        Subject = subj,
+        Identity = card + "::" + label,
+      };
+    static PortNode Emit(string card, string label, ObjectFilter? subj) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Emit,
+        Subject = subj,
+        Identity = card + "::" + label,
+      };
+
+    var engine = new PortGraphEngine(Ontology);
+    var you = ControllerFilter.You;
+    PortGraph DiesMaker(string tokenLabel, ObjectFilter tokenSubj)
+    {
+      var dies = Consume(
+        "Pitiless",
+        "ltb:creature:to-graveyard:controlled",
+        new ObjectFilter { CardTypes = ["creature"], Controller = you }
+      );
+      var token = Emit("Pitiless", tokenLabel, tokenSubj);
+      return new PortGraph { Ports = [dies, token], CardDefinedEdges = [new() { From = dies, To = token }] };
+    }
+    PortGraph Outlet(string sacLabel, ObjectFilter sacSubj)
+    {
+      var sac = Consume("Outlet", sacLabel, sacSubj);
+      var dmg = Emit("Outlet", "emit:dealdamage", null);
+      return new PortGraph { Ports = [sac, dmg], CardDefinedEdges = [new() { From = sac, To = dmg }] };
+    }
+    bool ClosesAcrossOutlet(IReadOnlyList<PortCycle> cycles) =>
+      cycles.Any(c => c.Edges.Any(e => e.From.Card == "Outlet" || e.To.Card == "Outlet"));
+
+    // A Treasure (artifact token) sacrificed into a creature-dies trigger — the trigger can't fire.
+    var treasureLoop = engine.FindCycles(
+      engine.Materialize(
+        [
+          DiesMaker(
+            "emit:token:artifact:treasure:controlled",
+            new ObjectFilter { CardTypes = ["artifact"], Subtypes = ["Treasure"], IsToken = true, Controller = you }
+          ),
+          Outlet("sac:artifact:controlled", new ObjectFilter { CardTypes = ["artifact"], Controller = you }),
+        ]
+      ),
+      maxLength: 5
+    );
+    Assert.That(
+      ClosesAcrossOutlet(treasureLoop),
+      Is.False,
+      "a sacrificed Treasure isn't a creature, so the creature-dies trigger can't fire — prune"
+    );
+
+    // Control: a CREATURE token sacrificed into the same trigger genuinely dies → retained.
+    var creatureLoop = engine.FindCycles(
+      engine.Materialize(
+        [
+          DiesMaker(
+            "emit:token:creature:controlled",
+            new ObjectFilter { CardTypes = ["creature"], IsToken = true, Controller = you }
+          ),
+          Outlet("sac:creature:controlled", new ObjectFilter { CardTypes = ["creature"], Controller = you }),
+        ]
+      ),
+      maxLength: 5
+    );
+    Assert.That(
+      ClosesAcrossOutlet(creatureLoop),
+      Is.True,
+      "a sacrificed creature token genuinely dies — the loop is retained"
+    );
+  }
+
   // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
   [Test]
   public void A_gated_cycle_floors_to_amber_even_with_green_edges()

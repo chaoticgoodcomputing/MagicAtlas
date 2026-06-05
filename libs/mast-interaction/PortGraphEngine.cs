@@ -170,7 +170,7 @@ public sealed class PortGraphEngine
   private bool FlowFeasible(PortNode emit, PortNode consume) =>
     (ResourceKind(emit.Label), Role(consume.Label)) switch
     {
-      ("token", "sac") => TokenSatisfiesSacAtCreation(emit, consume),
+      ("token", "sac") => TokenSatisfiesAtCreation(emit, consume),
       ("mana", "pay") => ResourceKind(consume.Label) == "mana" // mana refunds a mana cost…
         && ManaColorFeeds(ManaColor(emit.Label), ManaColor(consume.Label)), // …of a colour it can pay
       _ => false,
@@ -195,10 +195,12 @@ public sealed class PortGraphEngine
     || string.Equals(emitColor, payColor, StringComparison.OrdinalIgnoreCase);
 
   /// <summary>
-  /// A created token refuels a sacrifice cost only if its <b>at-creation</b> type already satisfies the
-  /// sac's required card types. A create-token effect fully specifies the token's type (CR 111.10 — a
-  /// Treasure is a non-creature artifact), so the emit's <c>CardTypes</c> are <b>exact</b>: a Treasure
-  /// cannot feed "sacrifice a creature", and a creature token cannot feed "sacrifice an artifact". An
+  /// A created token satisfies a consume's type requirement (a <c>sac</c> cost, or — via the bridge —
+  /// a <c>dies</c>-trigger) only if its <b>at-creation</b> type already carries the consume's required
+  /// card types. A create-token effect fully specifies the token's type (CR 111.10 — a Treasure is a
+  /// non-creature artifact), so the emit's <c>CardTypes</c> are <b>exact</b>: a Treasure cannot feed
+  /// "sacrifice a creature" (nor satisfy "a creature dies"), and a creature token cannot feed "sacrifice
+  /// an artifact". An
   /// intervening <em>animation</em> that later adds <c>creature</c> is an external enabler outside the
   /// reconstructed loop — a deliberate modeling boundary, <b>not</b> a claim the types are
   /// <see cref="FilterRelation.Disjoint"/> (the <see cref="ObjectFilterRelations"/> operator stays a
@@ -207,11 +209,11 @@ public sealed class PortGraphEngine
   /// operator subtype→cardtype exclusivity is UNSOUND — Vehicles CR 301.7, Equipment CR 301.5c — so the
   /// fix belongs here, not in the operator.) Removes the corpus's creature-token ↔ artifact-sac junk.
   /// </summary>
-  private bool TokenSatisfiesSacAtCreation(PortNode emit, PortNode consume)
+  private bool TokenSatisfiesAtCreation(PortNode emit, PortNode consume)
   {
     if (emit.Subject is null || consume.Subject is null)
       return true;
-    // A created token can never satisfy a :self sacrifice ("Sacrifice this") — the token is a different
+    // A created token can never satisfy a :self consume ("Sacrifice this") — the token is a different
     // object, not the source permanent (CR 400.7; the dual of the §8 one-shot self-death). So a
     // self-sacrificing producer is never refuelled by the tokens a loop makes — its self-sac is
     // consumed once. (A type-based "sacrifice a Treasure", IsSelf null, stays refuellable.)
@@ -339,7 +341,10 @@ public sealed class PortGraphEngine
         {
           path.Add(edge);
           var loop = path.ToList();
-          if (!IsOneShotSelfRemoval(loop, edges)) // §8 "B": prune the structurally non-repeatable
+          if (
+            !IsOneShotSelfRemoval(loop, edges) // §8 "B": prune the structurally non-repeatable
+            && !BridgeFedByIncompatibleToken(loop) // §8: the loop's token can't satisfy the dies-trigger
+          )
             cycles.Add(
               new PortCycle
               {
@@ -667,6 +672,41 @@ public sealed class PortGraphEngine
         return false;
     }
     return true;
+  }
+
+  /// <summary>
+  /// ADR-0002 §8 — the sac→death <b>bridge respects the loop's token type</b>. A bridge claims "a
+  /// sacrificed creature dies, feeding a dies-trigger" (CR 701.21a→700.4), but the dies-trigger fires
+  /// only if the thing sacrificed is the type it requires. When the object the loop feeds into the sac
+  /// is a <em>created token</em> whose at-creation type can't be that (a Treasure — artifact, CR 111.10
+  /// — sacrificed into "a creature you control dies"), the bridge can never fire, so the loop can't
+  /// close → prune (Lithatog / Extruder × Pitiless Plunderer). The dual of the token→sac flow guard
+  /// (<see cref="TokenSatisfiesAtCreation"/>); like it, this lives in the engine as a loop-reconstruction
+  /// policy (an in-loop animation that makes the token a creature is an out-of-boundary false-negative),
+  /// keeping the <see cref="ObjectFilterRelations"/> operator a pure type relation.
+  /// </summary>
+  private bool BridgeFedByIncompatibleToken(IReadOnlyList<PortEdge> cycle)
+  {
+    foreach (var bridge in cycle)
+    {
+      if (
+        Role(bridge.From.Label) != "sac"
+        || Role(bridge.To.Label) != "ltb"
+        || !bridge.To.Label.Contains(":to-graveyard", StringComparison.Ordinal)
+        || bridge.To.Subject?.IsSelf == true // a :self death is the §8-B one-shot rule's domain, not a type mismatch
+      )
+        continue;
+      var dies = bridge.To;
+      foreach (var feed in cycle)
+        if (
+          string.Equals(feed.To.Identity, bridge.From.Identity, StringComparison.Ordinal)
+          && feed.From.Side == PortSide.Emit
+          && ResourceKind(feed.From.Label) == "token"
+          && !TokenSatisfiesAtCreation(feed.From, dies)
+        )
+          return true; // the sacrificed token can't be the dies-trigger's type — the bridge can't fire
+    }
+    return false;
   }
 
   /// <summary>A self-scoped dies-trigger: <c>ltb</c> role, destination <c>to-graveyard</c> (CR 700.4), scope <c>self</c>.</summary>

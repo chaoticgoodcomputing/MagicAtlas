@@ -105,3 +105,31 @@ A-caveat refinement) is contained; the anchor max-overlap is a cheap bundle-alon
   mana cost the loop doesn't model → can't certify → Amber). Conservative: also floors reanimator
   self-bouncers (Recurring/Chthonian Nightmare) to Amber — the safe direction (recast + its enablers
   unmodeled); modelling the recast cost + cost-reducers is a deeper follow-on.
+
+---
+
+# Round 3 — 3-judge cleanup on the PARTIAL tier (2026-06-04)
+
+Sampled 9 partials across 3 thematic judges (Green / gated+Types / straddle+reason), CSB-anchor
+enriched. Findings: the partial tier carried systematic **false-Ambers that should prune** and
+**false-GREENs**. (Process note: the auto-briefs paraphrased some cards wrong; the judges re-derived
+from the real AST and ruled on that — future briefs must carry real oracle text.)
+
+- **Seat 1 (Green partials):** 3/3 sampled FALSE-GREEN — Ghave's `+1/+1 counter` token-cost dropped;
+  Ruthless Knave needs a recursive creature feeder; Greater Good's "activate only as a sorcery" dropped.
+  *Caveat:* Ghave / Greater Good / Anointer Priest have **no fixtures**, so these rest on printed text,
+  not the engine's actual parse — verify the ports before fixing.
+- **Seats 2+3 (Amber):** 5/6 SHOULD-PRUNE, 1 AMBER-CORRECT (#31 One with the Kami "modified-creature"
+  predicate — calibration ✓). Two systematic impossible-loop classes, 10 cycles each:
+  1. **Treasure-sac → creature-dies** (Lithatog/Extruder/Megatog/… × Pitiless): an artifact token can't
+     be a creature, so the dies-trigger never fires.
+  2. **Basri's Lieutenant intervening-if** ("if it had a +1/+1 counter"): the loop's counter-less
+     Knight tokens fail the gate, so it can't repeat.
+
+## Fixes (engine prunes)
+- **Bridge-respects-token-type — DONE** (`BridgeFedByIncompatibleToken`): prunes a cycle whose loop
+  sacrifices a created token that can't be the type its bridged dies-trigger requires (a Treasure into
+  "a creature dies"). Dual of `TokenSatisfiesAtCreation`; excludes `:self` (the §8-B rule's domain);
+  artifact-creature tokens (Construct/Servo) are retained via the creature lift. Judge: SOUND, no
+  false-prune. Corpus: Lithatog/Extruder/Megatog/Ravenous Intruder loops gone; "Types" partials 14→5.
+- **Basri intervening-if prune** — next (a counter-condition intervening-if the loop's tokens fail).
