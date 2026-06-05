@@ -272,6 +272,15 @@
           "Fields": [
             "Text"
           ]
+        },
+        {
+          "Type": "TriggeringObjectCounterCondition",
+          "Discriminator": "triggeringObjectCounter",
+          "IsUnparsed": false,
+          "Fields": [
+            "CounterType",
+            "Present"
+          ]
         }
       ]
     },
@@ -1891,5 +1900,5 @@
       ]
     }
   ],
-  "SchemaHash": "fd8dec48887012d553068c116dd5f751a847d4671f74efd4e22c6fce9f951012"
+  "SchemaHash": "7abde6ac2d8b0771fa7d3b6502bdef50fee1b1629da09ab88aec696fbdb33ed9"
 }

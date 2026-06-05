@@ -62,6 +62,15 @@ public static class ConditionParser
     @"^(?<who>that\s+player|you|your)\s+(?:has|have)\s+(?<quant>a|an|\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer))?\s+cards?\s+in\s+(?:hand|their\s+hand|your\s+hand)$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+  /// <summary>
+  /// "it had a +1/+1 counter on it" / "it had no +1/+1 counters on it" — the dying/triggering object's
+  /// counter-gate (Basri's Lieutenant, Persist "had no -1/-1", Undying "had no +1/+1"). Structured to
+  /// <see cref="TriggeringObjectCounterCondition"/> rather than left as a free-text residual.
+  /// </summary>
+  private static readonly Regex TriggeringObjectCounter = new(
+    @"^it\s+had\s+(?:(?<neg>no)|a|an|one|\d+)\s+(?<counter>[+\-]?\d+/[+\-]?\d+)\s+counters?\s+on\s+it$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
   /// <summary>Parse a condition phrase; never throws — unrecognised phrases become a residual.</summary>
   public static Condition Parse(string phrase)
   {
@@ -90,6 +99,15 @@ public static class ConditionParser
     if (WasKicked.IsMatch(body))
     {
       return new KeywordCostPaidCondition { Keyword = KeywordAbility.Kicker };
+    }
+
+    if (TriggeringObjectCounter.Match(body) is { Success: true } ocm)
+    {
+      return new TriggeringObjectCounterCondition
+      {
+        CounterType = ocm.Groups["counter"].Value,
+        Present = !ocm.Groups["neg"].Success,
+      };
     }
 
     if (HandSize.Match(body) is { Success: true } hm)

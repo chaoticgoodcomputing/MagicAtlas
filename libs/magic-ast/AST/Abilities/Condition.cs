@@ -73,6 +73,24 @@ public sealed record KeywordCostPaidCondition : Condition
 }
 
 /// <summary>
+/// "if it had a +1/+1 counter on it" / "if it had no +1/+1 counters on it" — the triggering object
+/// (the dying/affected permanent a leaves-the-battlefield trigger refers to) had, or had not, a counter
+/// of the given kind immediately before the event (CR 603.10 — dies-triggers look back in time). The
+/// structured form of the recurring Persist / Undying / Basri's-Lieutenant counter-gate, replacing the
+/// free-text residual. Reference-not-resolution: the engine reads the dying object's last-known counters,
+/// not a pre-evaluated boolean.
+/// </summary>
+[ConditionKind("triggeringObjectCounter")]
+public sealed record TriggeringObjectCounterCondition : Condition
+{
+  /// <summary>The counter kind the condition checks (e.g. <c>"+1/+1"</c>, <c>"-1/-1"</c>).</summary>
+  public required string CounterType { get; init; }
+
+  /// <summary>True for "had a [counter]" (≥1 present); false for "had no [counters]" (0 present).</summary>
+  public required bool Present { get; init; }
+}
+
+/// <summary>
 /// Typed residual for a condition that does not yet have a structured variant —
 /// carries the literal oracle phrase. A deferral, not a destination (ADR 0001):
 /// counted by the residual-debt metric, structured when the shape recurs.

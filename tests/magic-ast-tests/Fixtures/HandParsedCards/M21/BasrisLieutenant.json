@@ -98,8 +98,9 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "it had a +1/+1 counter on it"
+            "ConditionType": "triggeringObjectCounter",
+            "CounterType": "+1/+1",
+            "Present": true
           },
           "Effects": [
             {
