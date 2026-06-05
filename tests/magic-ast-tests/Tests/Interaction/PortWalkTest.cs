@@ -215,4 +215,24 @@ public class PortWalkTest
     Assert.That(graph.Ports.All(p => p.TapGated), "a {T} cost tap-gates every port of the ability");
     Assert.That(graph.Ports.Any(p => p.Gated), Is.False, "a tap is a dischargeable gate, not a hard gate");
   }
+
+  // A self-bounce cost ("Return this to hand") HARD-gates the ability (ADR-0002 §8): the source leaves
+  // the battlefield and must be recast (a mana cost the loop doesn't model), so a loop through it can't
+  // be certified infinite — Grinning Ignus. Unlike a tap, this gate is never discharged.
+  [Test]
+  public void Self_bounce_cost_hard_gates_its_ports()
+  {
+    var abilities = JsonNode.Parse(
+      """
+      [{"Kind":"activated",
+        "Costs":[{"CostType":"mana","Symbols":[{"Kind":"generic","GenericAmount":1}]},
+                 {"CostType":"returnToHand","Target":{"Kind":"Self"}}],
+        "Effects":[{"EffectType":"addMana","Mana":"{C}{C}{R}"}]}]
+      """
+    );
+    var graph = new PortWalk(Ontology).Project("Synthetic", abilities);
+    Assert.That(graph.Ports, Is.Not.Empty);
+    Assert.That(graph.Ports.All(p => p.Gated), "a self-bounce cost hard-gates every port");
+    Assert.That(graph.Ports.Any(p => p.TapGated), Is.False, "a self-bounce is a hard gate, not a tap gate");
+  }
 }

@@ -392,9 +392,11 @@ public sealed class PortWalk
     "OnlyIfNoUntappedLands",
   };
 
-  /// <summary>A <b>hard</b> firability gate (ADR-0002 §8): an intervening-if or a rate-limit/conditional
-  /// restriction. Never discharged. (A <c>{T}</c> tap cost is the separate, dischargeable <see
-  /// cref="HasTapCost"/> gate.)</summary>
+  /// <summary>A <b>hard</b> firability gate (ADR-0002 §8): an intervening-if, a rate-limit/conditional
+  /// restriction, or a <b>self-bounce</b> cost ("Return this … to its owner's hand" — the source leaves
+  /// the battlefield and must be recast, a mana cost the loop doesn't model, so a loop through it can't
+  /// be certified infinite — Grinning Ignus). Never discharged. (A <c>{T}</c> tap cost is the separate,
+  /// dischargeable <see cref="HasTapCost"/> gate.)</summary>
   private static bool IsGated(JsonNode ability)
   {
     if (ability["InterveningIf"] is not null)
@@ -402,6 +404,10 @@ public sealed class PortWalk
     if (ability["Restrictions"] is JsonArray restrictions)
       foreach (var r in restrictions)
         if (r is not null && GatingRestrictions.Contains(r.ToString()))
+          return true;
+    if (ability["Costs"] is JsonArray costs)
+      foreach (var c in costs)
+        if (c?["CostType"]?.ToString() == "returnToHand")
           return true;
     return false;
   }

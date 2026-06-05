@@ -97,6 +97,11 @@ A-caveat refinement) is contained; the anchor max-overlap is a cheap bundle-alon
   is a do-nothing → Amber (reason `net-zero filter (no surplus)`). A loop with a non-mana output (token)
   is productive via that output. Judge: SOUND, no counterexample; the inert-emit lenience concern is moot
   (inert emits aren't cycle members). Green 35→32; canonical combos retained.
-- **Grinning Ignus — open (separate).** "{R}, Return this to hand: Add {C}{C}{R}" reads net +2 but the
-  return-to-hand forces a recast ({3}{R}) the loop doesn't model → false-GREEN. A return-to-hand /
-  recast-cost gap.
+- **Grinning Ignus (self-bounce recast) — DONE.** "{R}, Return this to hand: Add {C}{C}{R}" read net +2,
+  but the return-to-hand cost was **dropped at parse** (no cost rule), so the engine missed the recast.
+  Two parts: (1) parser — a new `ReturnToHandCost` + `ReturnSelfToHandCostRule` (13 corpus cards whose
+  self-bounce cost was silently dropped, 0 golds; a parser-fidelity fix beyond the graph); (2) engine —
+  `IsGated` hard-gates a self-bounce ability (the source leaves the battlefield and must be recast, a
+  mana cost the loop doesn't model → can't certify → Amber). Conservative: also floors reanimator
+  self-bouncers (Recurring/Chthonian Nightmare) to Amber — the safe direction (recast + its enablers
+  unmodeled); modelling the recast cost + cost-reducers is a deeper follow-on.

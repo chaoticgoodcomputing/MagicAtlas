@@ -172,3 +172,15 @@ public sealed record CompositeCost : Cost
   /// </summary>
   public required IReadOnlyList<Cost> Costs { get; init; }
 }
+
+/// <summary>
+/// "Return this [permanent] to its owner's hand" activation cost (a self-bounce) — e.g. Grinning Ignus
+/// "{R}, Return this creature to its owner's hand: Add {C}{C}{R}". CR 701.x: the permanent is moved to
+/// the Hand zone as part of paying the cost, so the ability can't repeat without recasting it.
+/// </summary>
+[OracleCost("returnToHand")]
+public sealed record ReturnToHandCost : Cost
+{
+  /// <summary>What returns. For a self-bounce cost this is <see cref="ObjectReference.Self"/>.</summary>
+  public required ObjectReference Target { get; init; }
+}
