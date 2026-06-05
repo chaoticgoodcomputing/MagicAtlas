@@ -179,3 +179,22 @@ is fed only externally). Now well-motivated (many combos in hand — no longer a
 Minor parser gaps the judges flagged (non-blocking): Pitiless Plunderer's trigger drops "**another**"
 (ExcludeSelf); Embalm projects a repeatable token-emit (it's one-shot — exiles the card); the back-face
 Sorcery Treasure should not be a repeatable producer.
+
+## Resolution (2026-06-05)
+- **Phase-10 conjunction tightening — DONE** (commit `b5457ddf`): `ConjunctionHolds` now decides "fed"
+  per-cycle — a co-cost is satisfied only if a producer ON A CYCLE CARD targets it (`LoopFeeds`), not the
+  corpus-global `fed`. Corpus: the derived GREEN tier went **13→0** (every derived Green was a
+  Ruthless-family false-positive); Chatterfang × Pitiless still certifies and the legit Chatterfang ×
+  Ruthless × Pitiless stays Green (Ruthless sacs the loop's own Squirrels). Interaction-judge: **SOUND, no
+  false-Amber** (the change is a strict subset of the old `fed`, so it can only demote, never introduce a
+  false-GREEN). **This resolves the Round-4 false-GREENs** — the necessary fix.
+- The other Round-4 findings are now **fidelity/latent, not false-GREEN-causing** (after phase-10 the
+  one-shot-producer loops are Amber via the demoted `sac:creature` co-cost):
+  - *Latent FALSE-GREEN gap (judge-flagged follow-on):* `LoopFeeds` (and `ManaBalanced`) use cycle-**CARD**
+    membership, not loop-**reachability** — an incidental/gated/one-shot producer on a cycle card could
+    keep a loop Green. Latent today (no surviving Green exercises it; confined to flow-wired token→sac /
+    mana→pay co-costs). Fix both to "producer reachable from the loop's flow" together.
+  - *Parser fidelity (no tier impact):* Pitiless drops "another" (ExcludeSelf); Embalm / back-face-Sorcery
+    Treasures project repeatable token-emits (one-shot); Ghave's "Remove a +1/+1 counter" Saproling
+    co-cost is dropped at parse (Ghave × Ashnod is Green-by-accident — genuinely infinite, but the
+    co-cost is invisible rather than proven fed).
