@@ -417,13 +417,14 @@ public sealed class PortGraphEngine
   /// <summary>
   /// The §8 multi-cost conjunction: for every consume port the cycle traverses, each of its co-costs
   /// must be payable <b>each iteration</b> — already in the loop, a free cost (tap), or <b>fed by the
-  /// loop itself</b> (a producer ON A CYCLE CARD targets it). The "fed by the loop" tightening (phase 10):
-  /// a co-cost is NOT satisfied merely because some producer exists somewhere in the corpus — it must be
-  /// fed by a card the loop actually contains, mirroring <see cref="ManaBalanced"/>'s cycle-card
-  /// restriction. This is what separates Chatterfang × Pitiless (its <c>{B}</c> is fed by the very
-  /// Treasure the loop produces — Pitiless is a cycle card, §9) from the Ruthless Knave family (its
-  /// "Sacrifice a creature" co-cost is fed only by some unrelated corpus creature-maker; the loop itself
-  /// makes only Treasures, so the ability can't actually fire each iteration → not certifiable).
+  /// loop itself</b> (a producer <see cref="ReachableWithinLoop">reachable from the loop's flow</see>
+  /// targets it). The "fed by the loop" tightening (phase 10): a co-cost is NOT satisfied merely because
+  /// some producer exists in the corpus, nor merely because a producer sits on a cycle card — it must be
+  /// fed by a producer the loop actually <em>drives</em>. This separates Chatterfang × Pitiless (its
+  /// <c>{B}</c> is fed by the very Treasure the loop produces — reached via the loop's own
+  /// emit:token → sac:treasure → emit:mana, §9) from the Ruthless Knave family (its "Sacrifice a creature"
+  /// co-cost is fed only by an unrelated creature-maker the loop never drives — the loop makes only
+  /// Treasures, so the ability can't fire each iteration → not certifiable).
   /// </summary>
   private static bool ConjunctionHolds(
     IReadOnlyList<PortEdge> cycle,
@@ -434,15 +435,13 @@ public sealed class PortGraphEngine
     var inCycle = cycle
       .SelectMany(e => new[] { e.From.Identity, e.To.Identity })
       .ToHashSet(StringComparer.Ordinal);
-    var cycleCards = cycle
-      .SelectMany(e => new[] { e.From.Card, e.To.Card })
-      .ToHashSet(StringComparer.Ordinal);
+    var reachable = ReachableWithinLoop(cycle, edges);
 
-    // A co-cost is fed by the loop iff a producer ON A CYCLE CARD targets it (not a corpus-global feeder).
+    // A co-cost is fed by the loop iff a producer the loop drives (in the reachable closure) targets it.
     bool LoopFeeds(PortNode s) =>
       edges.Any(e =>
         string.Equals(e.To.Identity, s.Identity, StringComparison.Ordinal)
-        && cycleCards.Contains(e.From.Card)
+        && reachable.Contains(e.From.Identity)
       );
 
     foreach (var id in inCycle)
@@ -451,6 +450,54 @@ public sealed class PortGraphEngine
           if (!IsFreeCost(s.Label) && !inCycle.Contains(s.Identity) && !LoopFeeds(s))
             return false;
     return true;
+  }
+
+  /// <summary>
+  /// The ports the loop's own flow <b>drives</b> (ADR-0002 §8): the forward closure from the cycle's
+  /// ports, following only edges whose <b>both</b> endpoints are on cycle cards. Tighter than cycle-card
+  /// membership — it reaches a §9 token-ability the loop produces (the Treasure's mana, via the loop's own
+  /// <c>emit:token → sac:treasure → emit:mana</c>) but EXCLUDES an incidental same-card ability the loop
+  /// never drives. The within-cards restriction is essential: the loop's mana flows to <c>pay:mana</c>
+  /// ports corpus-wide, so unrestricted reachability would re-admit the corpus-global leniency. Shared by
+  /// <see cref="ConjunctionHolds"/> (co-cost feeders) and <see cref="ManaBalanced"/> (mana producers).
+  /// </summary>
+  private static HashSet<string> ReachableWithinLoop(
+    IReadOnlyList<PortEdge> cycle,
+    IReadOnlyList<PortEdge> edges
+  )
+  {
+    var cycleCards = cycle
+      .SelectMany(e => new[] { e.From.Card, e.To.Card })
+      .ToHashSet(StringComparer.Ordinal);
+    var reachable = cycle
+      .SelectMany(e => new[] { e.From.Identity, e.To.Identity })
+      .ToHashSet(StringComparer.Ordinal);
+
+    // Seed the FREE producers on cycle cards too: an emit with no driving cost (no card-defined
+    // consume→emit edge) is unconditional, so it fires every iteration regardless of the loop's flow —
+    // unlike a DRIVEN producer (an ETB/cost-gated ability), which fires only if the loop drives it
+    // (reached via the BFS below). This is what keeps the latent gap closed (incidental cost-gated
+    // same-card abilities are NOT seeded) while still counting genuine free sources.
+    var driven = edges
+      .Where(e => e.Provenance == EdgeProvenance.CardDefined && e.From.Side == PortSide.Consume)
+      .Select(e => e.To.Identity)
+      .ToHashSet(StringComparer.Ordinal);
+    foreach (var p in edges.SelectMany(e => new[] { e.From, e.To }))
+      if (p.Side == PortSide.Emit && cycleCards.Contains(p.Card) && !driven.Contains(p.Identity))
+        reachable.Add(p.Identity);
+
+    var adjacency = edges
+      .Where(e => cycleCards.Contains(e.From.Card) && cycleCards.Contains(e.To.Card))
+      .GroupBy(e => e.From.Identity, StringComparer.Ordinal)
+      .ToDictionary(g => g.Key, g => g.Select(e => e.To.Identity).ToList(), StringComparer.Ordinal);
+
+    var queue = new Queue<string>(reachable);
+    while (queue.Count > 0)
+      if (adjacency.TryGetValue(queue.Dequeue(), out var outs))
+        foreach (var t in outs)
+          if (reachable.Add(t))
+            queue.Enqueue(t);
+    return reachable;
   }
 
   /// <summary>A cost always payable without producing a resource — a tap (its untap rate-limit is the separate §8 gate).</summary>
@@ -547,9 +594,9 @@ public sealed class PortGraphEngine
 
   /// <summary>
   /// Shared mana-flow gather (§8): the cycle's <c>pay:mana</c> costs (co-costs of its consumes + any
-  /// in-cycle pay) and the distinct <c>emit:mana</c> producers ON THE CYCLE'S CARDS that feed them.
-  /// Returns <c>null</c> — the conservative "can't prove anything" signal — when there's no mana cost or
-  /// any relevant quantity is symbolic.
+  /// in-cycle pay) and the distinct <c>emit:mana</c> producers <see cref="ReachableWithinLoop">the loop
+  /// drives</see> that feed them. Returns <c>null</c> — the conservative "can't prove anything" signal —
+  /// when there's no mana cost or any relevant quantity is symbolic.
   /// </summary>
   private static (List<PortNode> Costs, List<PortNode> Producers)? GatherManaFlow(
     IReadOnlyList<PortEdge> cycle,
@@ -560,9 +607,7 @@ public sealed class PortGraphEngine
     var inCycle = cycle
       .SelectMany(e => new[] { e.From.Identity, e.To.Identity })
       .ToHashSet(StringComparer.Ordinal);
-    var cycleCards = cycle
-      .SelectMany(e => new[] { e.From.Card, e.To.Card })
-      .ToHashSet(StringComparer.Ordinal);
+    var reachable = ReachableWithinLoop(cycle, edges);
 
     var costs = new Dictionary<string, PortNode>(StringComparer.Ordinal);
     void AddIfMana(PortNode p)
@@ -586,7 +631,7 @@ public sealed class PortGraphEngine
       .Where(e =>
         costs.ContainsKey(e.To.Identity)
         && IsEmitMana(e.From.Label)
-        && cycleCards.Contains(e.From.Card)
+        && reachable.Contains(e.From.Identity)
       )
       .Select(e => e.From)
       .GroupBy(p => p.Identity, StringComparer.Ordinal)
