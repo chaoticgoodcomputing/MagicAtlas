@@ -344,6 +344,7 @@ public sealed class PortGraphEngine
           if (
             !IsOneShotSelfRemoval(loop, edges) // §8 "B": prune the structurally non-repeatable
             && !BridgeFedByIncompatibleToken(loop) // §8: the loop's token can't satisfy the dies-trigger
+            && !CounterGateUnsatisfiable(loop, edges) // §8: a "had a counter" gate the loop can't re-satisfy
           )
             cycles.Add(
               new PortCycle
@@ -705,6 +706,59 @@ public sealed class PortGraphEngine
           && !TokenSatisfiesAtCreation(feed.From, dies)
         )
           return true; // the sacrificed token can't be the dies-trigger's type — the bridge can't fire
+    }
+    return false;
+  }
+
+  /// <summary>
+  /// ADR-0002 §8 — a death-trigger's <b>counter gate</b> the loop can never re-satisfy. A trigger that
+  /// fires only "if [the dying creature] had a +1/+1 counter on it" (Basri's Lieutenant; <c>RequiresCounter</c>,
+  /// CR 603.10 look-back) makes tokens that enter <em>without</em> that counter, so a loop fed by those
+  /// tokens dies counter-less each iteration and the gate never re-fires — prune. UNLESS the loop has a
+  /// <b>per-iteration</b> counter source: a card-defined <c>etb:X → emit:counter:&lt;kind&gt;</c> on a loop
+  /// card whose <c>etb:X</c> a loop-created token triggers (a creature-enters → put-a-counter, Cathars'
+  /// Crusade) — that counters each token before it dies. A one-time <em>self</em>-ETB counter (the source's
+  /// own enter) is excluded (it fires once). The firability dual of the tap-renewal carve-out. STRICT.
+  /// <para>Boundary: the loop's tokens are assumed to enter without the counter — a token effect that
+  /// creates it WITH a counter (none known that re-satisfies its own gate) would be a false-prune, the
+  /// declared modeling limit (no in-loop counter-state, like the bridge guard's in-loop animation).</para>
+  /// </summary>
+  private bool CounterGateUnsatisfiable(IReadOnlyList<PortEdge> cycle, IReadOnlyList<PortEdge> edges)
+  {
+    var gates = cycle
+      .SelectMany(e => new[] { e.From, e.To })
+      .Where(p => p.RequiresCounter is not null)
+      .Select(p => p.RequiresCounter!)
+      .Distinct(StringComparer.OrdinalIgnoreCase)
+      .ToList();
+    if (gates.Count == 0)
+      return false;
+
+    var cards = cycle.SelectMany(e => new[] { e.From.Card, e.To.Card }).ToHashSet(StringComparer.Ordinal);
+    var tokens = cycle
+      .SelectMany(e => new[] { e.From, e.To })
+      .Where(p => p.Side == PortSide.Emit && ResourceKind(p.Label) == "token" && p.Subject is not null)
+      .GroupBy(p => p.Identity, StringComparer.Ordinal)
+      .Select(g => g.First())
+      .ToList();
+
+    foreach (var counter in gates)
+    {
+      var active = edges.Any(e =>
+        e.Provenance == EdgeProvenance.CardDefined
+        && cards.Contains(e.From.Card)
+        && e.From.Side == PortSide.Consume
+        && Role(e.From.Label) == "etb"
+        && e.From.Subject is not null
+        && e.From.Subject.IsSelf != true // a one-time self-ETB doesn't sustain the loop
+        && e.To.Label.StartsWith($"emit:counter:{counter.ToLowerInvariant()}", StringComparison.Ordinal)
+        && tokens.Any(tok =>
+          ObjectFilterRelations.Intersects(tok.Subject!, e.From.Subject, _ontology).Relation
+          != FilterRelation.Disjoint
+        )
+      );
+      if (!active)
+        return true; // the gate requires a counter the loop's tokens never carry and nothing renews
     }
     return false;
   }

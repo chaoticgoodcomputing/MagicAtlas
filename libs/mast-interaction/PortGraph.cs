@@ -58,6 +58,14 @@ public sealed record PortNode
   /// </summary>
   public bool TapGated { get; init; }
 
+  /// <summary>
+  /// A dies-trigger whose intervening-if requires the dying object to have had a counter of this kind
+  /// (Basri's Lieutenant — "if it had a +1/+1 counter on it"; CR 603.10 look-back). <c>null</c> when the
+  /// ability has no such gate. The §8 counter-gate prune uses this: a loop whose own tokens enter without
+  /// the counter, and which has no in-loop counter source, can never re-satisfy the gate.
+  /// </summary>
+  public string? RequiresCounter { get; init; }
+
   public required string Identity { get; init; }
 
   public override string ToString() => $"{Card}::{Label}";
@@ -130,6 +138,14 @@ public sealed class PortWalk
         for (var i = 0; i < emits.Count; i++)
           emits[i] = emits[i] with { Gated = hardGated, TapGated = tapGated };
       }
+
+      // §8 counter-gate: a dies-trigger whose intervening-if requires the dying object to have had a
+      // counter ("if it had a +1/+1 counter on it") marks its consume ports so the engine can prune a
+      // loop whose own tokens can never carry it (Basri's Lieutenant).
+      var requiresCounter = CounterRequirement(ability);
+      if (requiresCounter is not null)
+        for (var i = 0; i < consumes.Count; i++)
+          consumes[i] = consumes[i] with { RequiresCounter = requiresCounter };
 
       ports.AddRange(consumes);
       ports.AddRange(emits);
@@ -346,6 +362,20 @@ public sealed class PortWalk
       var (color, count) = ParseAddedMana(e);
       return Port(card, PortLabel.ManaEmit(color), PortSide.Emit, count);
     }
+    if (effectType == "putCounters")
+    {
+      // A counter-adder (ADR-0002 §8): "put a +1/+1 counter on [target]". The §8 counter-gate prune
+      // reads this as a potential in-loop counter SOURCE — a loop with one can re-satisfy a "had a
+      // counter" dies-gate, so it is NOT pruned. Scope: self vs a target/other creature.
+      var counterType = e["CounterType"]?.ToString() ?? "counter";
+      var self = e["Target"]?["Kind"]?.ToString() == "Self";
+      return Port(
+        card,
+        $"emit:counter:{counterType.ToLowerInvariant()}:{(self ? "self" : "target")}",
+        PortSide.Emit,
+        Qty(e["Count"])
+      );
+    }
     if (effectType == "untap")
     {
       // Carry the untap's SCOPE: "untap this" (ObjectReference.Self) → emit:untap:self; "untap target X"
@@ -410,6 +440,21 @@ public sealed class PortWalk
         if (c?["CostType"]?.ToString() == "returnToHand")
           return true;
     return false;
+  }
+
+  /// <summary>The counter kind a dies-trigger's intervening-if requires PRESENT on the dying object
+  /// ("if it had a +1/+1 counter on it" → <c>"+1/+1"</c>), or <c>null</c>. The absent form ("had no
+  /// +1/+1 counters", Persist/Undying) is about returning the source, not a loop-repeat gate, so it
+  /// doesn't count here.</summary>
+  private static string? CounterRequirement(JsonNode ability)
+  {
+    if (
+      ability["InterveningIf"] is JsonObject iv
+      && iv["ConditionType"]?.ToString() == "triggeringObjectCounter"
+      && iv["Present"]?.GetValue<bool>() == true
+    )
+      return iv["CounterType"]?.ToString();
+    return null;
   }
 
   /// <summary>A <c>{T}</c> tap cost — a once-per-untap rate limit (CR 107.5), dischargeable by an

@@ -132,4 +132,11 @@ from the real AST and ruled on that — future briefs must carry real oracle tex
   "a creature dies"). Dual of `TokenSatisfiesAtCreation`; excludes `:self` (the §8-B rule's domain);
   artifact-creature tokens (Construct/Servo) are retained via the creature lift. Judge: SOUND, no
   false-prune. Corpus: Lithatog/Extruder/Megatog/Ravenous Intruder loops gone; "Types" partials 14→5.
-- **Basri intervening-if prune** — next (a counter-condition intervening-if the loop's tokens fail).
+- **Basri intervening-if prune — DONE** (`CounterGateUnsatisfiable`): a "had a +1/+1 counter" dies-gate
+  (Basri's Lieutenant) makes counter-less tokens, so a loop fed by them never re-fires the gate → prune.
+  Done properly: structured the condition (`TriggeringObjectCounterCondition`), projected `RequiresCounter`
+  onto the dies-trigger + `putCounters` → `emit:counter`, and the prune carves out a per-iteration counter
+  source (a loop-fed `etb:creature → emit:counter`, Cathars'-Crusade-style; the one-time self-ETB counter
+  is excluded). Judge: SOUND, no false-prune (the real 3-card Cathars' combo closes through counter-flow,
+  which isn't an edge type, so it's never reconstructed — pruning the false 2-card loop costs nothing).
+  Corpus: all 10 Basri loops gone; canonical combos intact.

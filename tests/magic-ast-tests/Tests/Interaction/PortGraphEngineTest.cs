@@ -876,6 +876,94 @@ public class PortGraphEngineTest
     );
   }
 
+  // Counter-gate prune (§8): a death-trigger that requires the dying creature to have had a +1/+1
+  // counter (Basri's Lieutenant) makes counter-less tokens, so a loop fed by those tokens can never
+  // re-satisfy the gate — prune. Unless the loop has a PER-ITERATION counter source: a creature-enters →
+  // put-a-counter trigger (Cathars' Crusade) counters each token before it dies. A one-time self-ETB
+  // counter ("when THIS enters, put a counter") does NOT sustain the loop (it fires once).
+  [Test]
+  public void A_counter_gated_death_loop_with_no_per_iteration_counter_source_is_pruned()
+  {
+    static PortNode Consume(string card, string label, ObjectFilter subj, string? req = null) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Consume,
+        Subject = subj,
+        Identity = card + "::" + label,
+        RequiresCounter = req,
+      };
+    static PortNode Emit(string card, string label, ObjectFilter? subj) =>
+      new()
+      {
+        Card = card,
+        Label = label,
+        Side = PortSide.Emit,
+        Subject = subj,
+        Identity = card + "::" + label,
+      };
+
+    var you = ControllerFilter.You;
+    var engine = new PortGraphEngine(Ontology);
+    var knightSubj = new ObjectFilter
+    {
+      CardTypes = ["creature"],
+      Subtypes = ["Knight"],
+      IsToken = true,
+      Controller = you,
+    };
+    bool ClosesAcrossOutlet(IReadOnlyList<PortCycle> cycles) =>
+      cycles.Any(c => c.Edges.Any(e => e.From.Card == "Outlet" || e.To.Card == "Outlet"));
+
+    // Basri's "had a +1/+1 counter" dies-trigger → a counter-less Knight, + a sac outlet. `counterEtb`
+    // is the subject of Basri's own counter-add trigger: "self" = one-time (when Basri enters);
+    // "creature" = per-iteration (when ANY creature enters → counters the loop's Knights).
+    PortGraph Basri(string counterEtbScope)
+    {
+      var dies = Consume(
+        "Basri",
+        "ltb:creature:to-graveyard:controlled",
+        new ObjectFilter { CardTypes = ["creature"], Controller = you },
+        req: "+1/+1"
+      );
+      var knight = Emit("Basri", "emit:token:creature:knight:controlled", knightSubj);
+      var etb = Consume(
+        "Basri",
+        counterEtbScope == "self" ? "etb:creature:controlled:self" : "etb:creature:controlled",
+        new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Controller = you,
+          IsSelf = counterEtbScope == "self" ? true : null,
+        }
+      );
+      var counter = Emit("Basri", "emit:counter:+1/+1:target", null);
+      return new PortGraph
+      {
+        Ports = [dies, knight, etb, counter],
+        CardDefinedEdges = [new() { From = dies, To = knight }, new() { From = etb, To = counter }],
+      };
+    }
+    var sac = Consume("Outlet", "sac:creature:controlled", new ObjectFilter { CardTypes = ["creature"], Controller = you });
+    var dmg = Emit("Outlet", "emit:dealdamage", null);
+    var outlet = new PortGraph { Ports = [sac, dmg], CardDefinedEdges = [new() { From = sac, To = dmg }] };
+
+    // Only a one-time self-ETB counter → the Knights die counter-less → the gate can't re-fire → prune.
+    Assert.That(
+      ClosesAcrossOutlet(engine.FindCycles(engine.Materialize([Basri("self"), outlet]), maxLength: 5)),
+      Is.False,
+      "a one-time self-ETB counter doesn't sustain the loop — the 'had a counter' gate can't re-fire"
+    );
+
+    // A per-iteration creature-ETB counter source counters each Knight before it dies → retained.
+    Assert.That(
+      ClosesAcrossOutlet(engine.FindCycles(engine.Materialize([Basri("creature"), outlet]), maxLength: 5)),
+      Is.True,
+      "a creature-enters → counter source makes the gate satisfiable each iteration — retained"
+    );
+  }
+
   // Firability (§8): a gated port floors the whole cycle to Amber even when every edge is Green.
   [Test]
   public void A_gated_cycle_floors_to_amber_even_with_green_edges()
