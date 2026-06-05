@@ -140,3 +140,42 @@ from the real AST and ruled on that — future briefs must carry real oracle tex
   is excluded). Judge: SOUND, no false-prune (the real 3-card Cathars' combo closes through counter-flow,
   which isn't an edge type, so it's never reconstructed — pruning the false 2-card loop costs nothing).
   Corpus: all 10 Basri loops gone; canonical combos intact.
+
+---
+
+# Round 4 — 5-judge run on the DERIVED tier (2026-06-04)
+
+5 judges, each given the two Chatterfang calibration anchors (judged blind) + a derived batch covering
+the 7 distinct Green families + a spread of Amber reasons.
+
+**Calibration: PASS (unanimous).** All 5 seats independently ruled CAL-A (3-card Ashnod×Pitiless×Chatterfang)
+a GENUINE-LOOP / correct GREEN, and CAL-B (2-card Chatterfang×Pitiless) a sound CORRECTLY-HEDGED (the
+Squirrel⊄creature straddle, CR 205.3m/308.1). Chatterfang is a good anchor; the judges are calibrated.
+The asymmetry is correct: CAL-A's closing hop is the *token-emit* port (typed `creature` → Subsumes →
+Green); CAL-B's is the *sac-cost* port (`Subtypes:[Squirrel]` only → Unknown → Amber).
+
+**Amber derived tier: clean.** Every sampled Amber (#74 #87 #91 #97 #115 #119 #88 #99) ruled
+CORRECTLY-HEDGED with the right reason — the round-2/3 fixes (net-zero, tap-not-renewed, mana-negative,
+gated, Types straddle) are landing correctly.
+
+**Green derived tier: systematic FALSE-GREENs (the Ruthless Knave family, #61–73).** Root cause:
+- **The multi-cost conjunction's `fed` set is corpus-GLOBAL.** Ruthless Knave's Treasure ability is
+  "{2}{B}, **Sacrifice a creature**: Create two Treasures." A loop traverses only its generic `pay:mana`;
+  the `sac:creature` and `pay:mana:black` co-costs are off-cycle and `ConjunctionHolds` marks them
+  satisfied because *some card in the corpus* feeds them — even though the loop itself produces only
+  Treasures (artifacts), never a creature. Seat 4 re-ran the pipeline ISOLATED (2 cards) and got Amber,
+  proving the Green is purely the global-`fed` leniency. **This is the deferred phase-10 tightening**:
+  a co-cost must be fed BY THE LOOP each iteration, not merely have a producer somewhere.
+- **One-shot token producers treated as repeatable.** Goblin Glasswright's Treasure is a back-face
+  *Sorcery* (Craft with Pride) — created once, but the §9 attribution gives it a repeatable
+  `emit:mana:any` / `sac:treasure` port. (Patron of the Arts / Prosperous Innkeeper similarly have
+  ETB-only Treasures, not repeatable engines.)
+
+**Recommended fix:** the phase-10 conjunction tightening — `ConjunctionHolds` should require a co-cost be
+fed *in-cycle* (a producer ON the loop), not by the corpus-global `fed`. This keeps the real combos (the
+Chatterfang `{B}` IS fed by the loop's own §9 Treasure) and prunes the Ruthless family (its `sac:creature`
+is fed only externally). Now well-motivated (many combos in hand — no longer a hyper-fit risk).
+
+Minor parser gaps the judges flagged (non-blocking): Pitiless Plunderer's trigger drops "**another**"
+(ExcludeSelf); Embalm projects a repeatable token-emit (it's one-shot — exiles the card); the back-face
+Sorcery Treasure should not be a repeatable producer.
