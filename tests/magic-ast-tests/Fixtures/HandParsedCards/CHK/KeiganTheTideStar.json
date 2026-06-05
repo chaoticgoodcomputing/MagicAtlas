@@ -3,7 +3,7 @@
     "Name": "Keiga, the Tide Star",
     "ManaCost": "{5}{U}",
     "TypeLine": "Legendary Creature — Dragon Spirit",
-    "OracleText": "Flying\nWhen this creature dies, gain control of target creature.",
+    "OracleText": "Flying\nWhen Keiga dies, gain control of target creature.",
     "Power": "5",
     "Toughness": "5",
     "Colors": [
@@ -17,11 +17,11 @@
     "Name": "Keiga, the Tide Star",
     "TypeLine": {
       "Raw": "Legendary Creature — Dragon Spirit",
-      "Types": [
-        "Creature"
-      ],
       "Supertypes": [
         "Legendary"
+      ],
+      "Types": [
+        "Creature"
       ],
       "Subtypes": [
         "Dragon",
@@ -29,11 +29,10 @@
       ]
     },
     "Oracle": {
-      "RawText": "Flying\nWhen this creature dies, gain control of target creature.",
+      "RawText": "Flying\nWhen Keiga dies, gain control of target creature.",
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Flying",
           "Effects": [
             {
               "EffectType": "evasion",
@@ -53,7 +52,8 @@
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Flying"
         },
         {
           "Kind": "triggered",
@@ -99,7 +99,8 @@
             ]
           }
         ],
-        "ManaValue": 6
+        "ManaValue": 6,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -117,13 +118,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "5",
-          "Value": 5
+          "Value": 5,
+          "Raw": "5"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "5",
-          "Value": 5
+          "Value": 5,
+          "Raw": "5"
         }
       }
     ]

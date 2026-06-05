@@ -3,20 +3,24 @@
     "Name": "Peek",
     "ManaCost": "{U}",
     "TypeLine": "Instant",
-    "OracleText": "Look at target player's hand.",
-    "Power": null,
-    "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "OracleText": "Look at target player's hand.\nDraw a card.",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Peek",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
-      "RawText": "Look at target player's hand.",
+      "RawText": "Look at target player's hand.\nDraw a card.",
       "Abilities": [
         {
           "Kind": "spell",
@@ -26,7 +30,9 @@
               "Player": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["player"]
+                  "CardTypes": [
+                    "player"
+                  ]
                 }
               },
               "Count": {
@@ -34,6 +40,21 @@
                 "DerivedFrom": "CardsInHand"
               },
               "Zone": "Hand"
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
             }
           ]
         }
@@ -44,18 +65,27 @@
         "Kind": "manaCost",
         "Raw": "{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 1,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

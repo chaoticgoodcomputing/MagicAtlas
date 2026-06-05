@@ -1,16 +1,18 @@
 {
   "Input": {
     "Name": "Fleetfoot Dancer",
-    "ManaCost": "{1}{R}{W}",
-    "TypeLine": "Creature — Elf",
-    "OracleText": "Haste, lifelink\nThis creature enters with a shield counter on it. (If it would be dealt damage or destroyed, remove a shield counter from it instead.)",
-    "Power": "3",
-    "Toughness": "3",
+    "ManaCost": "{1}{R}{G}{W}",
+    "TypeLine": "Creature — Elf Druid",
+    "OracleText": "Trample, lifelink, haste",
+    "Power": "4",
+    "Toughness": "4",
     "Colors": [
+      "G",
       "R",
       "W"
     ],
     "ColorIdentity": [
+      "G",
       "R",
       "W"
     ]
@@ -18,26 +20,27 @@
   "Output": {
     "Name": "Fleetfoot Dancer",
     "TypeLine": {
-      "Raw": "Creature — Elf",
+      "Raw": "Creature — Elf Druid",
       "Types": [
         "Creature"
       ],
       "Subtypes": [
-        "Elf"
+        "Elf",
+        "Druid"
       ]
     },
     "Oracle": {
-      "RawText": "Haste, lifelink\nThis creature enters with a shield counter on it. (If it would be dealt damage or destroyed, remove a shield counter from it instead.)",
+      "RawText": "Trample, lifelink, haste",
       "Abilities": [
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "keywordAbility",
-              "Keyword": "Haste"
+              "Keyword": "Trample"
             }
           ],
-          "KeywordSource": "Haste"
+          "KeywordSource": "Trample"
         },
         {
           "Kind": "static",
@@ -52,25 +55,18 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "putCounters",
-              "Target": {
-                "Kind": "Self"
-              },
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "CounterType": "shield"
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
             }
           ],
-          "When": "asThisEnters"
+          "KeywordSource": "Haste"
         }
       ]
     },
     "Attributes": [
       {
         "Kind": "manaCost",
-        "Raw": "{1}{R}{W}",
+        "Raw": "{1}{R}{G}{W}",
         "Symbols": [
           {
             "Kind": "generic",
@@ -85,15 +81,23 @@
           {
             "Kind": "colored",
             "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
               "W"
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
         "Colors": [
+          "G",
           "R",
           "W"
         ]
@@ -101,21 +105,22 @@
       {
         "Kind": "colorIdentity",
         "ColorIdentity": [
+          "W",
           "R",
-          "W"
+          "G"
         ]
       },
       {
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 4,
+          "Raw": "4"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 4,
+          "Raw": "4"
         }
       }
     ]

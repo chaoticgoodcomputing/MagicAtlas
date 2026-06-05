@@ -3,9 +3,7 @@
     "Name": "Anointed Procession",
     "ManaCost": "{3}{W}",
     "TypeLine": "Enchantment",
-    "OracleText": "If one or more tokens would be created under your control, twice that many of those tokens are created instead.",
-    "Power": null,
-    "Toughness": null,
+    "OracleText": "If an effect would create one or more tokens under your control, it creates twice that many of those tokens instead.",
     "Colors": [
       "W"
     ],
@@ -22,7 +20,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "If one or more tokens would be created under your control, twice that many of those tokens are created instead.",
+      "RawText": "If an effect would create one or more tokens under your control, it creates twice that many of those tokens instead.",
       "Abilities": [
         {
           "Kind": "static",

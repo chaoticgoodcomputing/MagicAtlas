@@ -1,10 +1,10 @@
 {
   "Input": {
     "Name": "Anurid Murkdiver",
-    "ManaCost": "{4}{B}",
-    "TypeLine": "Creature — Frog Beast",
-    "OracleText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +2/+2 and can't block.",
-    "Power": "3",
+    "ManaCost": "{4}{B}{B}",
+    "TypeLine": "Creature — Zombie Frog Beast",
+    "OracleText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)",
+    "Power": "4",
     "Toughness": "3",
     "Colors": [
       "B"
@@ -16,81 +16,45 @@
   "Output": {
     "Name": "Anurid Murkdiver",
     "TypeLine": {
-      "Raw": "Creature — Frog Beast",
+      "Raw": "Creature — Zombie Frog Beast",
       "Types": [
         "Creature"
       ],
       "Subtypes": [
+        "Zombie",
         "Frog",
         "Beast"
       ]
     },
     "Oracle": {
-      "RawText": "Threshold — As long as there are seven or more cards in your graveyard, this creature gets +2/+2 and can't block.",
+      "RawText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)",
       "Abilities": [
         {
           "Kind": "static",
-          "AbilityWord": "Threshold",
           "Effects": [
             {
-              "EffectType": "modifyPT",
-              "Target": {
-                "Kind": "Self"
-              },
-              "PowerModifier": {
-                "QuantityType": "literal",
-                "Value": 2
-              },
-              "ToughnessModifier": {
-                "QuantityType": "literal",
-                "Value": 2
-              },
-              "Duration": {
-                "DurationType": "asLongAs",
-                "Condition": {
-                  "ConditionType": "count",
-                  "Filter": {
-                    "CardTypes": [
-                      "card"
-                    ],
-                    "Zone": "Graveyard",
-                    "Controller": "You"
-                  },
-                  "Count": {
-                    "Operator": "GreaterThanOrEqual",
-                    "Value": 7
-                  }
-                }
-              }
-            },
-            {
-              "EffectType": "cantBlock",
-              "Duration": {
-                "DurationType": "asLongAs",
-                "Condition": {
-                  "ConditionType": "count",
-                  "Filter": {
-                    "CardTypes": [
-                      "card"
-                    ],
-                    "Zone": "Graveyard",
-                    "Controller": "You"
-                  },
-                  "Count": {
-                    "Operator": "GreaterThanOrEqual",
-                    "Value": 7
-                  }
+              "EffectType": "evasion",
+              "UnblockableCondition": {
+                "ConditionType": "DefendingPlayerControls",
+                "PermanentFilter": {
+                  "Subtypes": [
+                    "Swamp"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "KeywordSource": "Swampwalk",
+          "Reminder": {
+            "Text": "(This creature can't be blocked as long as defending player controls a Swamp.)"
+          }
         }
       ]
     },
     "Attributes": [
       {
         "Kind": "manaCost",
-        "Raw": "{4}{B}",
+        "Raw": "{4}{B}{B}",
         "Symbols": [
           {
             "Kind": "generic",
@@ -101,9 +65,16 @@
             "Colors": [
               "B"
             ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
           }
         ],
-        "ManaValue": 5
+        "ManaValue": 6,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -121,13 +92,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 4,
+          "Raw": "4"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         }
       }
     ]

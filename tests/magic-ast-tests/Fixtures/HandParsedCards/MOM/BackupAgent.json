@@ -2,10 +2,10 @@
   "Input": {
     "Name": "Backup Agent",
     "ManaCost": "{1}{W}",
-    "TypeLine": "Creature — Human Advisor",
-    "OracleText": "Backup 1 (When this creature enters, put a +1/+1 counter on target creature. If that's another creature, it gains the following ability until end of turn.)\nReach",
+    "TypeLine": "Creature — Human Citizen",
+    "OracleText": "When this creature enters, put a +1/+1 counter on target creature.",
     "Power": "1",
-    "Toughness": "2",
+    "Toughness": "1",
     "Colors": [
       "W"
     ],
@@ -16,38 +16,46 @@
   "Output": {
     "Name": "Backup Agent",
     "TypeLine": {
-      "Raw": "Creature — Human Advisor",
+      "Raw": "Creature — Human Citizen",
       "Types": [
         "Creature"
       ],
       "Subtypes": [
         "Human",
-        "Advisor"
+        "Citizen"
       ]
     },
     "Oracle": {
-      "RawText": "Backup 1 (When this creature enters, put a +1/+1 counter on target creature. If that's another creature, it gains the following ability until end of turn.)\nReach",
+      "RawText": "When this creature enters, put a +1/+1 counter on target creature.",
       "Abilities": [
         {
-          "Kind": "static",
-          "KeywordSource": "Backup",
-          "Reminder": {
-            "Text": "(When this creature enters, put a +1/+1 counter on target creature. If that's another creature, it gains the following ability until end of turn.)"
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
           },
           "Effects": [
             {
-              "EffectType": "backup",
-              "Value": 1
-            }
-          ]
-        },
-        {
-          "Kind": "static",
-          "KeywordSource": "Reach",
-          "Effects": [
-            {
-              "EffectType": "keywordAbility",
-              "Keyword": "Reach"
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
           ]
         }
@@ -69,7 +77,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -87,13 +96,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]

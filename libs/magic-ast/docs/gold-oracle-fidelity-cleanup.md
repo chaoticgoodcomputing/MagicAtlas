@@ -26,9 +26,20 @@ is green now and no *new* gold can drift. This worklist burns the quarantine dow
    **FAIL** → the card is a red gold driving a **parser fix**; close the parser gap, re-bootstrap, re-judge,
    then commit. This is the TDD loop — the snapshot just bootstraps the red.
 
-A 12-card judge sample already ran: 9 PASS (3 with the deferred `another→ExcludeSelf` gap noted), 3 FAIL
-(GoblinRabblemaster `mustAttack`→Self **inversion**; ArmadilloCloak `Characteristic.Other("enchanted")`
-trigger-subject; KariZev dropped legendary supertype + entry-state + delayed self-exile on its token).
+### Judge-batch log
+
+- **Sample (12)**: 9 PASS (3 with the deferred `another→ExcludeSelf` gap noted), 3 FAIL —
+  GoblinRabblemaster `mustAttack`→Self **inversion**; ArmadilloCloak `Characteristic.Other("enchanted")`
+  trigger-subject; KariZev dropped legendary supertype + entry-state + delayed self-exile on its token.
+  6 of the PASS committed as batch 0 (`0788a67c`).
+- **Batch 1 (14 misc-clean)**: 12 PASS (committed), 2 FAIL —
+  - **AggressiveMammoth** — "**Other** creatures you control" → `Characteristic.Other("other")` instead of
+    `ExcludeSelf: true`. The tranche-2 migration (`f68eb16a`) covered "another" but not the synonym
+    "other …", and this is a *static gainAbility filter*, not a trigger subject. → fold into
+    **another-ExcludeSelf** (extend detection to "other" + non-trigger filter paths).
+  - **CorridorMonitor** — "target artifact or **creature you control**" → `CardTypes:["artifact",
+    "creature you control"]`: the `Controller:You` restriction is *lost* into the type axis. NEW family
+    **disjunctive-target-controller**: "X or Y you control" target parsing drops the trailing controller.
 
 ## Known parser-fix families (drive these as TDD slices)
 

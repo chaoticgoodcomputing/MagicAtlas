@@ -2,8 +2,8 @@
   "Input": {
     "Name": "Spirited Companion",
     "ManaCost": "{1}{W}",
-    "TypeLine": "Creature — Dog Spirit",
-    "OracleText": "When Spirited Companion enters or dies, draw a card.",
+    "TypeLine": "Enchantment Creature — Dog",
+    "OracleText": "When this creature enters, draw a card.",
     "Power": "1",
     "Toughness": "1",
     "Colors": [
@@ -16,23 +16,23 @@
   "Output": {
     "Name": "Spirited Companion",
     "TypeLine": {
-      "Raw": "Creature — Dog Spirit",
+      "Raw": "Enchantment Creature — Dog",
       "Types": [
+        "Enchantment",
         "Creature"
       ],
       "Subtypes": [
-        "Dog",
-        "Spirit"
+        "Dog"
       ]
     },
     "Oracle": {
-      "RawText": "When Spirited Companion enters or dies, draw a card.",
+      "RawText": "When this creature enters, draw a card.",
       "Abilities": [
         {
           "Kind": "triggered",
           "Trigger": {
             "Timing": "When",
-            "Event": "EntersOrDies",
+            "Event": "Enters",
             "Filter": {
               "CardTypes": [
                 "creature"
@@ -90,13 +90,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]

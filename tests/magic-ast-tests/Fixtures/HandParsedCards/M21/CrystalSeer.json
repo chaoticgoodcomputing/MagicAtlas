@@ -2,10 +2,10 @@
   "Input": {
     "Name": "Crystal Seer",
     "ManaCost": "{4}{U}",
-    "TypeLine": "Creature — Merfolk Wizard",
-    "OracleText": "When this creature enters, look at the top four cards of your library, then put them back in any order.",
+    "TypeLine": "Creature — Vedalken Wizard",
+    "OracleText": "When this creature enters, look at the top four cards of your library, then put them back in any order.\n{4}{U}: Return this creature to its owner's hand.",
     "Power": "2",
-    "Toughness": "3",
+    "Toughness": "2",
     "Colors": [
       "U"
     ],
@@ -16,17 +16,17 @@
   "Output": {
     "Name": "Crystal Seer",
     "TypeLine": {
-      "Raw": "Creature — Merfolk Wizard",
+      "Raw": "Creature — Vedalken Wizard",
       "Types": [
         "Creature"
       ],
       "Subtypes": [
-        "Merfolk",
+        "Vedalken",
         "Wizard"
       ]
     },
     "Oracle": {
-      "RawText": "When this creature enters, look at the top four cards of your library, then put them back in any order.",
+      "RawText": "When this creature enters, look at the top four cards of your library, then put them back in any order.\n{4}{U}: Return this creature to its owner's hand.",
       "Abilities": [
         {
           "Kind": "triggered",
@@ -55,6 +55,35 @@
               "PutBackInAnyOrder": true
             }
           ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 4
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "IsManaAbility": false
         }
       ]
     },
@@ -74,7 +103,8 @@
             ]
           }
         ],
-        "ManaValue": 5
+        "ManaValue": 5,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -92,13 +122,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

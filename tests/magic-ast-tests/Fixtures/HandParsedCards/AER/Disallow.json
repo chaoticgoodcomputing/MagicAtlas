@@ -3,20 +3,24 @@
     "Name": "Disallow",
     "ManaCost": "{1}{U}{U}",
     "TypeLine": "Instant",
-    "OracleText": "Counter target spell, activated ability, or triggered ability.",
-    "Power": null,
-    "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "OracleText": "Counter target spell, activated ability, or triggered ability. (Mana abilities can't be targeted.)",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Disallow",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
-      "RawText": "Counter target spell, activated ability, or triggered ability.",
+      "RawText": "Counter target spell, activated ability, or triggered ability. (Mana abilities can't be targeted.)",
       "Abilities": [
         {
           "Kind": "spell",
@@ -26,7 +30,11 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["spell", "activatedAbility", "triggeredAbility"]
+                  "CardTypes": [
+                    "spell",
+                    "activatedAbility",
+                    "triggeredAbility"
+                  ]
                 }
               }
             }
@@ -39,19 +47,37 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }
