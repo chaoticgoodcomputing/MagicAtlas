@@ -17,9 +17,21 @@ public partial class Catalog
       .AtPath($"{_basePath}/_01_Raw/Datasets/External/oracle-cards.json")
       .Build());
 
-  // Commander Spellbook's combo dump (variants.json, ~510 MB) is NOT a catalog item: it is curled
-  // to a gitignored static input (_01_Raw/Datasets/External/csb-variants.json) and stream-read by
-  // FetchCombosStep. Flowthru's HTTP catalog medium can't serve it — the .Json() singleton builder
-  // doesn't route https:// through UseHttp (treated as a file path) — a gap to push upstream. The
-  // raw bytes are never committed; only our derived edge fixtures are ours to keep.
+  /// <summary>
+  /// Commander Spellbook's combo dump (<c>variants.json</c>, ~510 MB) as a plain HTTP catalog item —
+  /// the <c>.Json()</c> singleton builder routes the <c>https://</c> URI through <c>UseHttp</c>'s
+  /// <c>HttpStorageMedium</c> (Flowthru ≥ 0.21). <c>FetchCombos</c> reads this and projects it to the
+  /// lean <see cref="MagicAtlas.Ast.Tests.Data._02_Intermediate.Schemas.Combo"/> work-list; the host's
+  /// <c>UseHttp</c> conditional-GET cache (under <c>_01_Raw/Datasets/External/.http-cache</c>) means a
+  /// fresh clone fetches the dump once and reuses it for 24h — no manual curl, ever. The narrow
+  /// <see cref="CsbVariantsDump"/> schema drops CSB's bloat (image URIs, prices, card-state) on read;
+  /// the raw bytes are never committed, only our derived edge fixtures are.
+  /// </summary>
+  public IItem<CsbVariantsDump> CsbVariantsRaw =>
+    CreateItem(() =>
+      Item.Of<CsbVariantsDump>("CsbVariantsRaw")
+        .Json()
+        .AtPath("https://json.commanderspellbook.com/variants.json")
+        .Build()
+    );
 }

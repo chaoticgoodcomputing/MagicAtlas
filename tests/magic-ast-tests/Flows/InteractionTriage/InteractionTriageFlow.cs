@@ -1,6 +1,7 @@
 using Flowthru.Flow;
 using Flowthru.Step.Python;
 using MagicAtlas.Ast.Tests.Data;
+using MagicAtlas.Ast.Tests.Data._01_Raw.Schemas;
 using MagicAtlas.Ast.Tests.Data._02_Intermediate.Schemas;
 using MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
@@ -28,7 +29,6 @@ public static class InteractionTriageFlow
   public static BuiltFlow Create(
     Catalog catalog,
     IPythonExecutor executor,
-    string variantsJsonPath,
     string grammarPath,
     string ontologyPath
   )
@@ -37,9 +37,12 @@ public static class InteractionTriageFlow
       "InteractionTriage",
       pipeline =>
       {
-        pipeline.AddStep<IEnumerable<Combo>>(
+        // The CSB variants.json dump is fetched (and conditional-GET cached) by Flowthru's
+        // HttpStorageMedium via the CsbVariantsRaw catalog item; this step just projects it.
+        pipeline.AddStep<CsbVariantsDump, IEnumerable<Combo>>(
           label: "FetchCombos",
-          transform: FetchCombosStep.Create(variantsJsonPath),
+          transform: FetchCombosStep.Create(),
+          inputs: catalog.CsbVariantsRaw,
           outputs: catalog.Combos
         );
 

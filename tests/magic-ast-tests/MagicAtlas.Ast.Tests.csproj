@@ -19,10 +19,13 @@
 
   <ItemGroup>
     <!-- Flowthru host -->
-    <PackageReference Include="Flowthru" Version="0.17.*" />
-    <PackageReference Include="Flowthru.Cli" Version="0.17.*" />
+    <PackageReference Include="Flowthru" Version="0.25.0" />
+    <PackageReference Include="Flowthru.Cli" Version="0.25.0" />
+    <!-- HTTP storage medium: lets the Commander Spellbook variants.json dump load as a plain
+         https:// catalog item (FetchCombos), with conditional-GET caching under Datasets/External/.http-cache. -->
+    <PackageReference Include="Flowthru.Extensions.Http" Version="0.25.0" />
     <!-- Python step host: the interaction-graph Plotly viz node (own .venv via pyproject.toml). -->
-    <PackageReference Include="Flowthru.Extensions.Python" Version="0.17.*" />
+    <PackageReference Include="Flowthru.Extensions.Python" Version="0.25.0" />
 
     <!-- Hosting plumbing -->
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.*" />

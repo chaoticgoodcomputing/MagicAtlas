@@ -1,4 +1,5 @@
 using Flowthru.Cli;
+using Flowthru.Data.Storage.Http;
 using Flowthru.Hosting;
 using Flowthru.Step.Python;
 using MagicAtlas.Ast.Tests.Data;
@@ -78,17 +79,6 @@ public class Program
     var ratchetBaselinePath = Path.Combine(basePath, "test-baseline.json");
     var handParsedFixturesRoot = Path.Combine(basePath, "Fixtures", "HandParsedCards");
 
-    // Commander Spellbook combo dump — a curled, gitignored static input (Flowthru's HTTP catalog
-    // medium can't serve the .Json() singleton; see FetchCombosStep). Refresh with:
-    // curl -o <this path> https://json.commanderspellbook.com/variants.json
-    var csbVariantsPath = Path.Combine(
-      dataPath,
-      "_01_Raw",
-      "Datasets",
-      "External",
-      "csb-variants.json"
-    );
-
     // Interaction-graph inputs: the canonical known-families grammar (committed fixture) and the
     // vendored type ontology (Curated). Both feed the InteractionTriage reconstruction + viz.
     var knownFamiliesPath = Path.Combine(basePath, "Fixtures", "Interactions", "known-families.json");
@@ -111,6 +101,19 @@ public class Program
         python.VenvPath = Path.Combine(basePath, ".venv");
       });
 
+      // HTTP storage medium: lets the Commander Spellbook variants.json dump load as a plain https://
+      // catalog item (CsbVariantsRaw → FetchCombos). The conditional-GET disk cache means a fresh
+      // clone fetches the ~510 MB dump once and reuses it for 24h — no manual curl, ever.
+      flowthru.UseHttp(http =>
+      {
+        http.UserAgent = "MagicAtlas-MAST/0.1";
+        http.Cache = new HttpCacheOptions
+        {
+          Directory = Path.Combine(dataPath, "_01_Raw", "Datasets", "External", ".http-cache"),
+          MaxAge = TimeSpan.FromHours(24),
+        };
+      });
+
       flowthru.RegisterCatalog(_ => new Catalog(dataPath, ratchetBaselinePath));
 
       flowthru
@@ -124,7 +127,6 @@ public class Program
             InteractionTriageFlow.Create(
               catalog,
               executor,
-              csbVariantsPath,
               knownFamiliesPath,
               ontologyPath
             )
