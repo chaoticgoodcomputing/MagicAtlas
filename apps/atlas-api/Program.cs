@@ -2,13 +2,15 @@
 // Magic Atlas — GraphQL API
 //
 // A read-only GraphQL representation of the Scryfall MTG oracle catalog,
-// powered by Trax + HotChocolate. Seeds from oracle-cards.json on first run.
+// powered by Trax + HotChocolate. Self-seeds from Scryfall over HTTP on first run.
 //
 // Prerequisites:
 //   1. Start Postgres:  docker compose up -d   (from apps/atlas-api/)
-//   2. Download bulk:   https://scryfall.com/docs/api/bulk-data  (oracle-cards)
-//   3. Set path:        Atlas:ScryfallBulkPath in appsettings.Development.json
-//   4. Run:             dotnet run --project apps/atlas-api
+//   2. Run:             dotnet run --project apps/atlas-api
+//
+// Cards stream from Scryfall's oracle-cards bulk over HTTP on first start (no manual
+// download). To use a pre-downloaded bulk file instead, point Atlas:ScryfallBulkPath
+// at it in appsettings.Development.json — present-and-readable wins over the HTTP fetch.
 //
 // Try it:
 //   http://localhost:5250/trax/graphql  — Banana Cake Pop IDE
