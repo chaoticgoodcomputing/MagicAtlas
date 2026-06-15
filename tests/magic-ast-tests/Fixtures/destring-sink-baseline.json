@@ -1,0 +1,11 @@
+{
+  "_doc": "Initiative 05 (de-string the AST leaves) free-text-sink ratchet baseline. Per-sink INSTANCE count over every gold under Fixtures/HandParsedCards/**. The ratchet (DestringSinkRatchetTests) asserts each sink's live count may only SHRINK vs this baseline; a shrink fails loudly and forces a baseline update (same shrink-only contract as Fixtures/oracle-text-quarantine.json and KnownUnparsedGold). A sink listed here that vanishes from the model is a violation until removed. Seeded 2026-06-15 against 951 golds. See libs/magic-ast/schema/destring-worklist.json for the affected cards.",
+  "sinks": {
+    "AbilityText": 18,
+    "Instructions": 3,
+    "Timeframe": 0,
+    "OtherCharacteristic": 94,
+    "OtherCondition": 55,
+    "OtherHistoryPredicate": 1
+  }
+}
