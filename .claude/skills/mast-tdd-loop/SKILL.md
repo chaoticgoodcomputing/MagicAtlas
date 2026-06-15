@@ -53,7 +53,8 @@ Step 4   Judge novel-shape branches (per policy) → verdict JSON.
 Step 5   Merge by file-affinity order. NUnit gate after each merge group.
 Step 6   NUnit 100% green required (joint regressions surface here).  [CORE merge gate]
 Step 7   Regenerate GLOSSARY.md once on the integration branch, commit.
-Step 8   Re-run triage. Reap worktrees (nx run mast:worktree-clean). Report. Loop or stop.
+Step 8   Re-run triage. GATE: nx run bench:recall (combo-recall ratchet — HALT if recall dropped).
+         Reap worktrees (nx run mast:worktree-clean). Report (incl. recall numbers). Loop or stop.
 ```
 
 **Deterministic gates (the loop's safety floor).** Four meta-gates convert former agent *promises*
@@ -201,8 +202,12 @@ nx run magic-ast:glossary
 git add libs/magic-ast/GLOSSARY.md
 git commit -m "chore(mast): regenerate GLOSSARY after batch {date}"
 nx run mast:run            # refresh corpus-wide triage
+nx run bench:recall        # GATE: end-product combo-recall ratchet (initiative 04) — HALT if recall dropped
+git add tools/bench/MagicAtlas.Bench/bench-report.json  # commit if the gate advanced the baseline (a recall gain)
 nx run mast:worktree-clean # reap this batch's worktrees + merged agent branches
 ```
+
+**GATE — combo recall (initiative 04), Step 8.** `nx run bench:recall` re-runs the interaction engine over the eligible Commander Spellbook combos and **fails if recall@Green or recall@(Green+Amber) dropped vs the committed `bench-report.json`** — the only test that catches a batch silently *losing* interaction reconstruction (the end-product measure; parser-green ≠ product-green). A drop is an unconditional HALT: investigate the regression before looping. On a recall *gain* the ratchet rewrites the baseline itself — commit it. **Put the recall numbers (`combosEligible / Green / Amber / missed`) in the batch report**; the missed combos are the aligned worklist for the next pick (Step 1). (The de-string free-text sink ratchet — initiative 05's `DestringSinkRatchetTests` — already rides the core ring in `nx run mast:test`, so it gates at Steps 5-6 automatically; no separate Step-8 call.)
 
 **Reap worktrees every batch.** `nx run mast:worktree-clean` removes the batch's isolated worktrees (Claude only auto-removes *clean* ones; ours have commits) and deletes the now-**merged** `mast-tdd/*` + `worktree-agent-*` branches. Skipping this is how the pool reached 318 worktrees and forced the in-place-checkout fallback. For a **discarded** batch (branches unmerged), run `bash tools/clean-worktrees.sh --force` to also drop the unmerged branches.
 
@@ -246,6 +251,7 @@ Bail and escalate if any of these hold.
 - `gate-judge-verdict.sh` exits nonzero (any non-PASS verdict) — do not merge; surface the gate output + offending branches, remediate, re-judge, re-run the gate.
 - `gate-fixture-immutability.sh` exits nonzero (a worker edited an existing gold) — do not merge that branch; the worker should have STOPped. Investigate; if the gold genuinely needs changing, that is orchestrator back-prop, not worker work.
 - `gate-preflight.sh` exits nonzero before dispatch — clean up (`nx run mast:worktree-clean`) and re-run; do not dispatch into a polluted environment.
+- `nx run bench:recall` fails (combo recall@Green or @(Green+Amber) dropped vs baseline) — a batch silently lost interaction reconstruction. HALT; find which merged branch's node-shape/projection change dropped a cycle (the sentinel snapshot diff from initiative 03 usually localizes it); do not advance the baseline to paper over a real loss.
 - Two agents claim the same `AbilityKind` or discriminator string — serialize: land one, re-dispatch the other against the post-merge tree.
 - Two agents target the same hot parser file beyond its cap — serialize across batches.
 - Post-batch triage shows fewer total successes than pre-batch — roll back and investigate.

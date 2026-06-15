@@ -1,0 +1,25 @@
+{
+  "name": "bench",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "tools/bench/MagicAtlas.Bench",
+  "tags": ["type:bench", "scope:interaction"],
+  "targets": {
+    "recall": {
+      "//": "Combo-recall RATCHET gate (alignment initiative 04). Re-runs the bench over the pinned Spellbook snapshot + gold corpus and compares to the committed bench-report.json: FAILS if recall@Green or recall@(Green+Amber) DECREASED; auto-rewrites the baseline on an increase/detail-drift (commit the updated bench-report.json). Run at mast-tdd-loop Step 8.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet test MagicAtlas.Bench.csproj --nologo",
+        "cwd": "tools/bench/MagicAtlas.Bench"
+      }
+    },
+    "recall:write": {
+      "//": "Reseed bench-report.json from current behavior, after a DELIBERATE recall change (e.g. initiative 06). Use only when the change is judge-reviewed; the ratchet otherwise advances the baseline itself on improvement.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet run -- --write",
+        "cwd": "tools/bench/MagicAtlas.Bench"
+      }
+    }
+  }
+}
