@@ -1,0 +1,19 @@
+{
+  "Name": "Brute Force",
+  "Ports": [
+    {
+      "Identity": "Brute Force::modify:pt",
+      "Card": "Brute Force",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

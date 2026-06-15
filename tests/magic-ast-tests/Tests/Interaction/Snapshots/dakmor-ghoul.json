@@ -1,0 +1,71 @@
+{
+  "Name": "Dakmor Ghoul",
+  "Ports": [
+    {
+      "Identity": "Dakmor Ghoul::emit:gainlife",
+      "Card": "Dakmor Ghoul",
+      "Label": "emit:gainlife",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Dakmor Ghoul::emit:loselife",
+      "Card": "Dakmor Ghoul",
+      "Label": "emit:loselife",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Dakmor Ghoul::etb:creature:self",
+      "Card": "Dakmor Ghoul",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Dakmor Ghoul::etb:creature:self",
+      "To": "Dakmor Ghoul::emit:gainlife"
+    },
+    {
+      "From": "Dakmor Ghoul::etb:creature:self",
+      "To": "Dakmor Ghoul::emit:loselife"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Dakmor Ghoul::etb:creature:self",
+      "To": "Dakmor Ghoul::emit:gainlife",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Dakmor Ghoul::etb:creature:self",
+      "To": "Dakmor Ghoul::emit:loselife",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

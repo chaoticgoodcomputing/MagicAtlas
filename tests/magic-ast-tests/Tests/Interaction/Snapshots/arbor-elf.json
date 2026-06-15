@@ -1,0 +1,46 @@
+{
+  "Name": "Arbor Elf",
+  "Ports": [
+    {
+      "Identity": "Arbor Elf::emit:untap",
+      "Card": "Arbor Elf",
+      "Label": "emit:untap",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Arbor Elf::tap:self",
+      "Card": "Arbor Elf",
+      "Label": "tap:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Arbor Elf::tap:self",
+      "To": "Arbor Elf::emit:untap"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Arbor Elf::tap:self",
+      "To": "Arbor Elf::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

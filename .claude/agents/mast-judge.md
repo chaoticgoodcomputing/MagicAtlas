@@ -14,6 +14,8 @@ The orchestrator's dispatch prompt names the specific branches + files + cited C
 
 Cross-reference every cited CR rule against `tests/atlas-flow-test/Data/_03_Primary/Datasets/rules-structure.json` (jq it; rules nest as `{number, text, subrules[].letter/.text}`). FAIL only on absent-from-data or contradictory citation — not on subrule-letter imprecision; a *missing* citation does not block PASS.
 
+**Projection decision (initiative 03):** if a branch adds a new discriminator (effect/cost type, trigger event, restriction), confirm its PortWalk projection decision is present AND sensible — a semantic projection (`PortGraph` case + `PortWalkProjection` entry) or a justified `known-coarse-projections.json` entry. The ratchet enforces presence; you FAIL only an *insensible* choice (something a flow rule would clearly want, parked as coarse). Emit this as its own `items[]` verdict for the branch.
+
 You emit **two** verdict artifacts (you have no `Write`/`Edit` tools — write them via `Bash`, e.g. a heredoc redirect; this is verdict *output* under `docs/judgments/`, not a corpus edit):
 
 1. **`docs/judgments/verdict-{date}-{batch}.json`** — the machine-readable gate input. One `items[]` entry per judged target, each `{ "target", "verdict": "PASS"|"FAIL", "citations": [...], "reason" }`. Include PASS items too, not only FAILs; an empty `items` array fails the gate. This JSON is what `tools/gate-judge-verdict.sh` consumes — the orchestrator's HALT decision runs off it, not off your prose, so it must be complete and consistent with the prose. See the SKILL's "Machine-readable verdict" section for the exact shape.

@@ -1,0 +1,68 @@
+{
+  "Name": "Reiterate",
+  "Ports": [
+    {
+      "Identity": "Reiterate::emit:additionalcastcost",
+      "Card": "Reiterate",
+      "Label": "emit:additionalcastcost",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Reiterate::emit:copy",
+      "Card": "Reiterate",
+      "Label": "emit:copy",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Reiterate::emit:returntohand",
+      "Card": "Reiterate",
+      "Label": "emit:returntohand",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Reiterate::replace:zonechange",
+      "Card": "Reiterate",
+      "Label": "replace:zonechange",
+      "Side": "Intercept",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=True|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Reiterate::replace:zonechange",
+      "To": "Reiterate::emit:returntohand"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Reiterate::replace:zonechange",
+      "To": "Reiterate::emit:returntohand",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

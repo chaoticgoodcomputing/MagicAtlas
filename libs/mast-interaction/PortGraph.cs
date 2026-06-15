@@ -415,12 +415,8 @@ public sealed class PortWalk
 
   // Restrictions that gate firability (ADR-0002 §8): a rate limit or a board-state condition. Timing
   // restrictions (OnlyAsSorcery, OnlyDuringYourTurn) don't block a loop within a turn, so they don't gate.
-  private static readonly HashSet<string> GatingRestrictions = new(StringComparer.Ordinal)
-  {
-    "OnlyOnceEachTurn",
-    "Conditional",
-    "OnlyIfNoUntappedLands",
-  };
+  // Declared in PortWalkProjection (single source of truth) so the exhaustiveness ratchet can see it.
+  private static readonly IReadOnlySet<string> GatingRestrictions = PortWalkProjection.GatingRestrictions;
 
   /// <summary>A <b>hard</b> firability gate (ADR-0002 §8): an intervening-if, a rate-limit/conditional
   /// restriction, or a <b>self-bounce</b> cost ("Return this … to its owner's hand" — the source leaves

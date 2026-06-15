@@ -1,0 +1,30 @@
+{
+  "Name": "Artful Dodge",
+  "Ports": [
+    {
+      "Identity": "Artful Dodge::emit:alternativecast",
+      "Card": "Artful Dodge",
+      "Label": "emit:alternativecast",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Artful Dodge::emit:cantbeblocked",
+      "Card": "Artful Dodge",
+      "Label": "emit:cantbeblocked",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

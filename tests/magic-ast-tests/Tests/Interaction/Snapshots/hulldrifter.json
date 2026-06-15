@@ -1,0 +1,68 @@
+{
+  "Name": "Hulldrifter",
+  "Ports": [
+    {
+      "Identity": "Hulldrifter::emit:crew",
+      "Card": "Hulldrifter",
+      "Label": "emit:crew",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Hulldrifter::emit:drawcards",
+      "Card": "Hulldrifter",
+      "Label": "emit:drawcards",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Hulldrifter::etb:vehicle:self",
+      "Card": "Hulldrifter",
+      "Label": "etb:vehicle:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=vehicle|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Hulldrifter::evasion:flying",
+      "Card": "Hulldrifter",
+      "Label": "evasion:flying",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Hulldrifter::etb:vehicle:self",
+      "To": "Hulldrifter::emit:drawcards"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Hulldrifter::etb:vehicle:self",
+      "To": "Hulldrifter::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

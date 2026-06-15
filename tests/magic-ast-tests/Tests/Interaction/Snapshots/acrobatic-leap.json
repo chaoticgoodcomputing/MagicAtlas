@@ -1,0 +1,41 @@
+{
+  "Name": "Acrobatic Leap",
+  "Ports": [
+    {
+      "Identity": "Acrobatic Leap::emit:gainability",
+      "Card": "Acrobatic Leap",
+      "Label": "emit:gainability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Acrobatic Leap::emit:untap",
+      "Card": "Acrobatic Leap",
+      "Label": "emit:untap",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Acrobatic Leap::modify:pt",
+      "Card": "Acrobatic Leap",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

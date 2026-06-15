@@ -1,0 +1,57 @@
+{
+  "Name": "Peregrine Drake",
+  "Ports": [
+    {
+      "Identity": "Peregrine Drake::emit:untap",
+      "Card": "Peregrine Drake",
+      "Label": "emit:untap",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Peregrine Drake::etb:creature:self",
+      "Card": "Peregrine Drake",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Peregrine Drake::evasion:flying",
+      "Card": "Peregrine Drake",
+      "Label": "evasion:flying",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Peregrine Drake::etb:creature:self",
+      "To": "Peregrine Drake::emit:untap"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Peregrine Drake::etb:creature:self",
+      "To": "Peregrine Drake::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

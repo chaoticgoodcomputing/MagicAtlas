@@ -1,0 +1,68 @@
+{
+  "Name": "Conviction",
+  "Ports": [
+    {
+      "Identity": "Conviction::emit:enchantrestriction",
+      "Card": "Conviction",
+      "Label": "emit:enchantrestriction",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Conviction::emit:returntohand",
+      "Card": "Conviction",
+      "Label": "emit:returntohand",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Conviction::modify:pt",
+      "Card": "Conviction",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Conviction::pay:mana:white",
+      "Card": "Conviction",
+      "Label": "pay:mana:white",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Conviction::pay:mana:white",
+      "To": "Conviction::emit:returntohand"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Conviction::pay:mana:white",
+      "To": "Conviction::emit:returntohand",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

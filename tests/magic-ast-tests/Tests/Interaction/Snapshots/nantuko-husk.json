@@ -1,0 +1,46 @@
+{
+  "Name": "Nantuko Husk",
+  "Ports": [
+    {
+      "Identity": "Nantuko Husk::modify:pt",
+      "Card": "Nantuko Husk",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Nantuko Husk::sac:creature:controlled",
+      "Card": "Nantuko Husk",
+      "Label": "sac:creature:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Nantuko Husk::sac:creature:controlled",
+      "To": "Nantuko Husk::modify:pt"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Nantuko Husk::sac:creature:controlled",
+      "To": "Nantuko Husk::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

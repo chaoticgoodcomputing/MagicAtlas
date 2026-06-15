@@ -1,0 +1,30 @@
+{
+  "Name": "Bargain",
+  "Ports": [
+    {
+      "Identity": "Bargain::emit:drawcards",
+      "Card": "Bargain",
+      "Label": "emit:drawcards",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bargain::emit:gainlife",
+      "Card": "Bargain",
+      "Label": "emit:gainlife",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

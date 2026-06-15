@@ -1,0 +1,93 @@
+{
+  "Name": "Kari Zev, Skyship Raider",
+  "Ports": [
+    {
+      "Identity": "Kari Zev, Skyship Raider::attacks:creature",
+      "Card": "Kari Zev, Skyship Raider",
+      "Label": "attacks:creature",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Kari Zev, Skyship Raider::emit:combatdamagetiming",
+      "Card": "Kari Zev, Skyship Raider",
+      "Label": "emit:combatdamagetiming",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Kari Zev, Skyship Raider::emit:createdelayedtrigger",
+      "Card": "Kari Zev, Skyship Raider",
+      "Label": "emit:createdelayedtrigger",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Kari Zev, Skyship Raider::emit:token:creature:monkey:controlled",
+      "Card": "Kari Zev, Skyship Raider",
+      "Label": "emit:token:creature:monkey:controlled",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=Monkey|supertypes=|controller=You|isToken=True|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Kari Zev, Skyship Raider::evasion:menace",
+      "Card": "Kari Zev, Skyship Raider",
+      "Label": "evasion:menace",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Kari Zev, Skyship Raider::attacks:creature",
+      "To": "Kari Zev, Skyship Raider::emit:createdelayedtrigger"
+    },
+    {
+      "From": "Kari Zev, Skyship Raider::attacks:creature",
+      "To": "Kari Zev, Skyship Raider::emit:token:creature:monkey:controlled"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Kari Zev, Skyship Raider::attacks:creature",
+      "To": "Kari Zev, Skyship Raider::emit:createdelayedtrigger",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Kari Zev, Skyship Raider::attacks:creature",
+      "To": "Kari Zev, Skyship Raider::emit:token:creature:monkey:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

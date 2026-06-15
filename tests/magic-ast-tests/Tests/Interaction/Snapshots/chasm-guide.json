@@ -1,0 +1,46 @@
+{
+  "Name": "Chasm Guide",
+  "Ports": [
+    {
+      "Identity": "Chasm Guide::emit:gainability",
+      "Card": "Chasm Guide",
+      "Label": "emit:gainability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Chasm Guide::etb:creature:ally:controlled",
+      "Card": "Chasm Guide",
+      "Label": "etb:creature:ally:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=Ally|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Chasm Guide::etb:creature:ally:controlled",
+      "To": "Chasm Guide::emit:gainability"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Chasm Guide::etb:creature:ally:controlled",
+      "To": "Chasm Guide::emit:gainability",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

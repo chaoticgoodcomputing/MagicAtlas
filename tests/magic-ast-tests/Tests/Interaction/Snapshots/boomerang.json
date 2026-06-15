@@ -1,0 +1,19 @@
+{
+  "Name": "Boomerang",
+  "Ports": [
+    {
+      "Identity": "Boomerang::emit:returntohand",
+      "Card": "Boomerang",
+      "Label": "emit:returntohand",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

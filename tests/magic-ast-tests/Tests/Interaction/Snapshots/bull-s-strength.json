@@ -1,0 +1,41 @@
+{
+  "Name": "Bull\u0027s Strength",
+  "Ports": [
+    {
+      "Identity": "Bull\u0027s Strength::emit:gainability",
+      "Card": "Bull\u0027s Strength",
+      "Label": "emit:gainability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bull\u0027s Strength::emit:untap",
+      "Card": "Bull\u0027s Strength",
+      "Label": "emit:untap",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bull\u0027s Strength::modify:pt",
+      "Card": "Bull\u0027s Strength",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

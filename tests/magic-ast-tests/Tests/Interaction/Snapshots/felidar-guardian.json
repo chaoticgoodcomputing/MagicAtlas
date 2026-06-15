@@ -1,0 +1,46 @@
+{
+  "Name": "Felidar Guardian",
+  "Ports": [
+    {
+      "Identity": "Felidar Guardian::emit:optional",
+      "Card": "Felidar Guardian",
+      "Label": "emit:optional",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Felidar Guardian::etb:creature:self",
+      "Card": "Felidar Guardian",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Felidar Guardian::etb:creature:self",
+      "To": "Felidar Guardian::emit:optional"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Felidar Guardian::etb:creature:self",
+      "To": "Felidar Guardian::emit:optional",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

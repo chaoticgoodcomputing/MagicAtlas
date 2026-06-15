@@ -1,0 +1,68 @@
+{
+  "Name": "Bloodthirsty Conqueror",
+  "Ports": [
+    {
+      "Identity": "Bloodthirsty Conqueror::emit:gainlife",
+      "Card": "Bloodthirsty Conqueror",
+      "Label": "emit:gainlife",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bloodthirsty Conqueror::emit:keywordability",
+      "Card": "Bloodthirsty Conqueror",
+      "Label": "emit:keywordability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bloodthirsty Conqueror::evasion:flying",
+      "Card": "Bloodthirsty Conqueror",
+      "Label": "evasion:flying",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bloodthirsty Conqueror::loseslife:object",
+      "Card": "Bloodthirsty Conqueror",
+      "Label": "loseslife:object",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Bloodthirsty Conqueror::loseslife:object",
+      "To": "Bloodthirsty Conqueror::emit:gainlife"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Bloodthirsty Conqueror::loseslife:object",
+      "To": "Bloodthirsty Conqueror::emit:gainlife",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

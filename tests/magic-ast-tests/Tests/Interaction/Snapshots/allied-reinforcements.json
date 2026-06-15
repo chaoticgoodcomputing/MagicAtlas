@@ -1,0 +1,19 @@
+{
+  "Name": "Allied Reinforcements",
+  "Ports": [
+    {
+      "Identity": "Allied Reinforcements::emit:token:creature:ally\u002Bknight:controlled",
+      "Card": "Allied Reinforcements",
+      "Label": "emit:token:creature:ally\u002Bknight:controlled",
+      "Side": "Emit",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=Ally,Knight|supertypes=|controller=You|isToken=True|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

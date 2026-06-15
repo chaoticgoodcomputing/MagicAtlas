@@ -79,7 +79,7 @@ for the full two-ring model. Self-test the gates with `nx run mast:gate-test`.
 
 Read `tests/magic-ast-tests/Data/_08_Reporting/triage-report.json`. **`topYieldClusters[]` is the primary pick surface; the two `topGaps` lists are diagnostics.**
 
-- **`topYieldClusters[]`** (PRIMARY — data-derived) — unparsed lines clustered by normalized lexical template, ranked by **`fractionalYield`** (proximity-weighted: each card contributes `1/(distinct templates on it)`, so a template ranks high when it's the last-or-near-last missing piece across many nearly-complete cards). Each cluster is a **buildable family** — one normalized template → one parser surface — and carries: `template`, `fractionalYield` (primary signal), `directYield` (whole-card flips, a hard floor), `dominantPattern` + `dominantLastAttemptedRule` (the "where it fails" navigation hint — which parser the template bails in), and `exemplars[]` (each with `input` DTO and `alreadyHandParsed`, ready to hand-parse). ~50 entries deep, so the long tail (small/partial-card families like specific triggered abilities) is visible, not just the top whole-card flips. **The template is the family unit; `dominantPattern`/`dominantLastAttemptedRule` are annotations, not the key** — this is what splits coarse buckets (e.g. "UnparsedTriggered" — proliferate-trigger, roll-a-d20, play-a-card-trigger each surface as their own cluster).
+- **`topYieldClusters[]`** (PRIMARY — data-derived) — unparsed lines clustered by normalized lexical template, ranked by **`fractionalYield`** (proximity-weighted: each card contributes `1/(distinct templates on it)`, so a template ranks high when it's the last-or-near-last missing piece across many nearly-complete cards). Each cluster is a **buildable family** — one normalized template → one parser surface — and carries: `template`, `fractionalYield` (primary signal), `directYield` (whole-card flips, a hard floor), `dominantPattern` + `dominantLastAttemptedRule` (the "where it fails" navigation hint — which parser the template bails in), `dominantShare` (diagnostic-spread homogeneity in [0,1] — see the gate below), and `exemplars[]` (each with `input` DTO and `alreadyHandParsed`, ready to hand-parse). ~50 entries deep, so the long tail (small/partial-card families like specific triggered abilities) is visible, not just the top whole-card flips. **The template is the family unit; `dominantPattern`/`dominantLastAttemptedRule` are annotations, not the key** — this is what splits coarse buckets (e.g. "UnparsedTriggered" — proliferate-trigger, roll-a-d20, play-a-card-trigger each surface as their own cluster).
 - **`topGaps[]`** / **`topGapsByLineFrequency[]`** (DIAGNOSTIC) — failures grouped by the coarse `(pattern, lastAttemptedRule)` key, ranked by fractional yield and by raw line frequency respectively. Use these to *see where the parser bails broadly* (e.g. "4747 cards bail in TriggeredAbilityParser.Parse"), NOT as a pick surface — a single entry usually spans several distinct families, so it's not a pickable unit. If a gap looks interesting, find the matching `topYieldClusters[]` entries to get the actual buildable families.
 
 **Heuristic:** pick families off `topYieldClusters[]` top-down by `fractionalYield`. High `directYield` = flips whole cards now; high `fractionalYield` with low `directYield` = chips many cards toward done (good when coverage is high and most cards have several gaps). Cross-reference the diagnostic gap lists only to understand *where* in the parser the work lands.
@@ -87,6 +87,15 @@ Read `tests/magic-ast-tests/Data/_08_Reporting/triage-report.json`. **`topYieldC
 For each family: select **1-3 fixtures** from the cluster's `exemplars[]` (already ranked cleanest-first by fewest other unparsed templates; skip `alreadyHandParsed: true`). The low count is deliberate — N agents × 5 fixtures is unsustainable merge overhead, and coverage-per-fixture is the optimization target. (`OtherUnparsedClusters: 0` is low-risk, not zero-risk — a multi-clause non-target line can still fail and force a worker STOP; improving that signal is a triage concern, not a per-batch worry.) **Diversity check:** the 1-3 should vary the dimensions the parser surface must handle, not be near-duplicates. When exemplars are stacked with multi-keyword legendaries, pre-curate cleaner single-line non-legendaries from `tests/magic-ast-tests/Data/_01_Raw/Datasets/External/oracle-cards.json` with a `jq` regex on the cluster template.
 
 Choose batch size by the number of **non-overlapping** families, constrained by hot-file caps (below). Two families targeting the same hot parser file serialize across batches.
+
+**GATE — cluster homogeneity (initiative 02).** Clusters are grouped by *exact* template, so members share the template by construction; the residual risk is template **over-collapse** — one template lumping lines that bail in *different* parsers (e.g. `<SUBTYPE> <TYPE>` covering "Enchant land" and unrelated lines). A worker handed such a "family" lands a rule correct for only part of it. Each cluster carries `dominantShare` (the fraction of its failure signals that are the single dominant `(pattern, rule)`); below ~0.85 the cluster is heterogeneous. Before dispatch, guard your intended picks:
+
+```bash
+bash tools/gate-triage-cluster.sh tests/magic-ast-tests/Data/_08_Reporting/triage-report.json <rank> [<rank>...]   # nonzero → that pick is heterogeneous; HALT it
+bash tools/gate-triage-cluster.sh tests/magic-ast-tests/Data/_08_Reporting/triage-report.json                       # no ranks → audit: list all heterogeneous clusters
+```
+
+A heterogeneous cluster is **excluded from dispatch** (pick a different one, or hand-curate cleaner exemplars from `oracle-cards.json` and treat them as their own narrower family) — it is not a batch HALT, it's a pick exclusion. Tune via `MAST_MIN_HOMOGENEITY`.
 
 ### Step 2 — Brief each family
 
@@ -168,6 +177,20 @@ Merge in **file-affinity order**, NUnit-gating after each group. **`nx run mast:
 2. `AbilityClassifier.cs` agents sequentially — the one remaining hot file; routing entries are additive, keep both sides.
 3. Parser-orchestration agents last (rare): an agent that edited a thin dispatcher body in `TriggeredAbilityParser.cs`/`ActivatedAbilityParser.cs` (timing/split/multi-sentence only — adding a *rule* never lands here).
 4. `nx run mast:test` after each group; final joint run must be 100% green.
+
+**GATE — discriminator lint, after EACH merge group (initiative 02):** HALT on nonzero, then advance the baseline:
+
+```bash
+nx run magic-ast:lint-discriminators            # per-family duplicate (hard) + new near-dup w/o justification (soft)
+nx run magic-ast:lint-discriminators:baseline   # advance schema/discriminator-baseline.json so "new" stays well-defined
+git add libs/magic-ast/schema/discriminator-baseline.json && git commit -m "chore(mast): advance discriminator baseline after merge group"
+```
+
+Per-merge-group (not once at batch end) is the point: the lint reads the **merged source** directly, so it surfaces a concurrent duplicate/near-dup at the **first** merge that introduces it, not after the whole batch has landed (closing the concurrent-duplicate hole — initiative 02 #2). A hard fail (duplicate within a family) or an unexplained near-dup is an unconditional HALT — rename, or add a judge-reviewed entry to `libs/magic-ast/schema/discriminator-justifications.json` (`{name, near, reason}`). The same invariant is belt-and-braces in the core ring (`DiscriminatorUniquenessTests` in `nx run mast:test`) so anything that slips past the script still fails the suite. Uniqueness is **per-base, not global** — cross-base reuse (`untap` as Effect+Cost+ReplacementEvent) is legitimate.
+
+**Projection exhaustiveness (initiative 03) rides the core ring too.** `PortWalkExhaustivenessTests` (in `nx run mast:test`) fails if a new discriminator is neither projected by PortWalk nor in `libs/mast-interaction/known-coarse-projections.json` — so a batch that adds an effect/cost/trigger/restriction discriminator must make a projection decision (worker contract). `PortWalkSentinelSnapshotTest` snapshots the full pipeline (parse → ports → flow edges → cycle tiers) over ~56 sentinels; a cross-pillar regression (a node-shape change silently dropping a port) fails it — regenerate via its `[Explicit]` test and justify the diff in the commit.
+
+(`glossary:check` is deliberately NOT run per merge group: workers never regenerate `GLOSSARY.md`, so it is legitimately stale mid-batch and a `--check` would false-fail. GLOSSARY regen stays once at Step 7. The lint reads source, not the glossary, so it needs no fresh glossary to catch collisions.)
 
 See [Hot files](#hot-files) for the conflict-resolution protocol.
 

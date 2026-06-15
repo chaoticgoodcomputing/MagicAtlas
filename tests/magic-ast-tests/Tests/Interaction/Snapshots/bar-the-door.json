@@ -1,0 +1,19 @@
+{
+  "Name": "Bar the Door",
+  "Ports": [
+    {
+      "Identity": "Bar the Door::modify:pt",
+      "Card": "Bar the Door",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

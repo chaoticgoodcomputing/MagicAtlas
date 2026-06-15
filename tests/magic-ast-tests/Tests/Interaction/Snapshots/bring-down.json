@@ -1,0 +1,30 @@
+{
+  "Name": "Bring Down",
+  "Ports": [
+    {
+      "Identity": "Bring Down::emit:alternativepayment",
+      "Card": "Bring Down",
+      "Label": "emit:alternativepayment",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bring Down::emit:destroy",
+      "Card": "Bring Down",
+      "Label": "emit:destroy",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

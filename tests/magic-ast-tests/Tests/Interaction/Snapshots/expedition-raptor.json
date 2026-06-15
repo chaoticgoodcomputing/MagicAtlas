@@ -1,0 +1,57 @@
+{
+  "Name": "Expedition Raptor",
+  "Ports": [
+    {
+      "Identity": "Expedition Raptor::emit:counter:\u002B1/\u002B1:target",
+      "Card": "Expedition Raptor",
+      "Label": "emit:counter:\u002B1/\u002B1:target",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Expedition Raptor::etb:creature:self",
+      "Card": "Expedition Raptor",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Expedition Raptor::evasion:flying",
+      "Card": "Expedition Raptor",
+      "Label": "evasion:flying",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Expedition Raptor::etb:creature:self",
+      "To": "Expedition Raptor::emit:counter:\u002B1/\u002B1:target"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Expedition Raptor::etb:creature:self",
+      "To": "Expedition Raptor::emit:counter:\u002B1/\u002B1:target",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

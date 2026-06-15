@@ -1,0 +1,30 @@
+{
+  "Name": "Inspirit",
+  "Ports": [
+    {
+      "Identity": "Inspirit::emit:untap",
+      "Card": "Inspirit",
+      "Label": "emit:untap",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Inspirit::modify:pt",
+      "Card": "Inspirit",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

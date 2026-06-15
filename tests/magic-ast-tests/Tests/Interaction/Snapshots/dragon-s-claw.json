@@ -1,0 +1,46 @@
+{
+  "Name": "Dragon\u0027s Claw",
+  "Ports": [
+    {
+      "Identity": "Dragon\u0027s Claw::emit:optional",
+      "Card": "Dragon\u0027s Claw",
+      "Label": "emit:optional",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Dragon\u0027s Claw::spellcast:spell",
+      "Card": "Dragon\u0027s Claw",
+      "Label": "spellcast:spell",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Dragon\u0027s Claw::spellcast:spell",
+      "To": "Dragon\u0027s Claw::emit:optional"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Dragon\u0027s Claw::spellcast:spell",
+      "To": "Dragon\u0027s Claw::emit:optional",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

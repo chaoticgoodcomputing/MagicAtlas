@@ -1,0 +1,30 @@
+{
+  "Name": "Blood Tithe",
+  "Ports": [
+    {
+      "Identity": "Blood Tithe::emit:gainlife",
+      "Card": "Blood Tithe",
+      "Label": "emit:gainlife",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Blood Tithe::emit:loselife",
+      "Card": "Blood Tithe",
+      "Label": "emit:loselife",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

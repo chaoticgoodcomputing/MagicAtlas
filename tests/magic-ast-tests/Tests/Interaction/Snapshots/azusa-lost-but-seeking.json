@@ -1,0 +1,19 @@
+{
+  "Name": "Azusa, Lost but Seeking",
+  "Ports": [
+    {
+      "Identity": "Azusa, Lost but Seeking::emit:optional",
+      "Card": "Azusa, Lost but Seeking",
+      "Label": "emit:optional",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

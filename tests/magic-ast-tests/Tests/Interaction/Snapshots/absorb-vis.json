@@ -1,0 +1,41 @@
+{
+  "Name": "Absorb Vis",
+  "Ports": [
+    {
+      "Identity": "Absorb Vis::emit:gainlife",
+      "Card": "Absorb Vis",
+      "Label": "emit:gainlife",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Absorb Vis::emit:loselife",
+      "Card": "Absorb Vis",
+      "Label": "emit:loselife",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Absorb Vis::emit:typecycling",
+      "Card": "Absorb Vis",
+      "Label": "emit:typecycling",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

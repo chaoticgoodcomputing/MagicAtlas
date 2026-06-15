@@ -1,0 +1,57 @@
+{
+  "Name": "Dualcaster Mage",
+  "Ports": [
+    {
+      "Identity": "Dualcaster Mage::emit:copy",
+      "Card": "Dualcaster Mage",
+      "Label": "emit:copy",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Dualcaster Mage::emit:timingmodification",
+      "Card": "Dualcaster Mage",
+      "Label": "emit:timingmodification",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Dualcaster Mage::etb:creature:self",
+      "Card": "Dualcaster Mage",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Dualcaster Mage::etb:creature:self",
+      "To": "Dualcaster Mage::emit:copy"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Dualcaster Mage::etb:creature:self",
+      "To": "Dualcaster Mage::emit:copy",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}
