@@ -466,8 +466,34 @@ public sealed class PortGraphEngine
       ("mana", "pay") => ResourceKind(consume.Label) == "mana" // mana refunds a mana cost…
         && ManaColorFeeds(ManaColor(emit.Label), ManaColor(consume.Label)), // …of a colour it can pay
       ("life", "trigger") => LifeFlowFeasible(emit, consume), // a life event feeds a same-direction life trigger (CR 119)
+      // Aristocrat recursion (aristocrat-recursion-scope.md, Decision 2b). A creature re-entering the
+      // battlefield via a cast-from-graveyard permission (emit:returntobattlefield:self) refuels a sac
+      // whose fodder Subsumes it (the structural twin of (token, sac)), and feeds an ETB-trigger payoff
+      // (Essence Warden / Suture Priest). Feasibility only — AddRulesEdge's operator tiers the certainty.
+      ("returntobattlefield", "sac") => RecastSatisfies(emit, consume),
+      ("returntobattlefield", "etb") => RecastSatisfies(emit, consume),
       _ => false,
     };
+
+  /// <summary>
+  /// A re-entered creature (emit:returntobattlefield:self) satisfies a consume whose fodder/entering
+  /// filter <b>Subsumes</b> it — a re-cast Gravecrawler (a creature) satisfies "Sacrifice a creature"
+  /// and "another creature you control enters". The recast emit Subject is the card's self-filter
+  /// (CardTypes:[creature], IsSelf); the consume Subject is the sac/etb fodder. The actual certainty
+  /// (GREEN vs AMBER) is set by <see cref="AddRulesEdge"/>'s Intersects/Subsumes on those Subjects, NOT
+  /// here — this is the feasibility gate only (the structural twin of <see cref="TokenSatisfiesAtCreation"/>).
+  /// A consume scoped to a DIFFERENT specific object (a non-overlapping type) is pruned by the operator.
+  /// </summary>
+  private bool RecastSatisfies(PortNode emit, PortNode consume)
+  {
+    if (emit.Subject is null || consume.Subject is null)
+      return true;
+    // A sac/etb that requires a specific OTHER object (e.g. an artifact-Treasure sac) can't be the
+    // re-entered creature; the operator prunes a Disjoint type in AddRulesEdge. Here we only confirm the
+    // re-entered creature could BE the consume's target by type-compatibility (Subsumes/Intersects ≠ No).
+    return ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
+      != FilterRelation.Disjoint;
+  }
 
   /// <summary>A life-gain/loss event refuels a life trigger of the SAME direction (gain↔gain, loss↔loss,
   /// CR 119). Direction-match only — the player-scope overlap (who gains/loses vs whom the trigger

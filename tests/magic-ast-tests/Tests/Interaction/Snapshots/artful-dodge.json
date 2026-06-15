@@ -2,17 +2,6 @@
   "Name": "Artful Dodge",
   "Ports": [
     {
-      "Identity": "Artful Dodge::emit:alternativecast",
-      "Card": "Artful Dodge",
-      "Label": "emit:alternativecast",
-      "Side": "Emit",
-      "Quantity": 1,
-      "Gated": false,
-      "TapGated": false,
-      "RequiresCounter": null,
-      "Subject": null
-    },
-    {
       "Identity": "Artful Dodge::emit:cantbeblocked",
       "Card": "Artful Dodge",
       "Label": "emit:cantbeblocked",
@@ -22,9 +11,47 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": null
+    },
+    {
+      "Identity": "Artful Dodge::emit:returntobattlefield:self",
+      "Card": "Artful Dodge",
+      "Label": "emit:returntobattlefield:self",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Artful Dodge::pay:mana:blue",
+      "Card": "Artful Dodge",
+      "Label": "pay:mana:blue",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
     }
   ],
-  "CardDefinedEdges": [],
-  "DerivedEdges": [],
+  "CardDefinedEdges": [
+    {
+      "From": "Artful Dodge::pay:mana:blue",
+      "To": "Artful Dodge::emit:returntobattlefield:self"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Artful Dodge::pay:mana:blue",
+      "To": "Artful Dodge::emit:returntobattlefield:self",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
   "Cycles": []
 }

@@ -131,7 +131,7 @@ public sealed class PortWalk
 
   public PortWalk(TypeOntology ontology) => _ontology = ontology;
 
-  public PortGraph Project(string card, JsonNode? oracleAbilities)
+  public PortGraph Project(string card, JsonNode? oracleAbilities, JsonNode? manaCostSymbols = null)
   {
     if (oracleAbilities is not JsonArray abilities)
       return new PortGraph();
@@ -152,7 +152,7 @@ public sealed class PortWalk
       foreach (var cost in ability["Costs"] as JsonArray ?? [])
         Costs(cost, card, consumes);
       foreach (var effect in ability["Effects"] as JsonArray ?? [])
-        Effects(effect, card, keyword, consumes, emits);
+        Effects(effect, card, keyword, manaCostSymbols, consumes, emits);
 
       // Firability (§8): a hard-gated ability marks all its ports Gated; a tap ability marks them
       // TapGated (the dischargeable rate limit). Done before the edges are built so they reference the
@@ -346,6 +346,7 @@ public sealed class PortWalk
     JsonNode? effect,
     string card,
     string? keyword,
+    JsonNode? manaCostSymbols,
     List<PortNode> consumes,
     List<PortNode> emits
   )
@@ -365,19 +366,42 @@ public sealed class PortWalk
         )
       );
       // Emit side: the replacement's own effect (Chatterfang's added Squirrels).
-      if (EmitPort(e["Replacement"], card, keyword) is { } inner)
+      if (EmitPort(e["Replacement"], card, keyword, manaCostSymbols, consumes) is { } inner)
         emits.Add(inner);
       return;
     }
-    if (EmitPort(effect, card, keyword) is { } emit)
+    if (EmitPort(effect, card, keyword, manaCostSymbols, consumes) is { } emit)
       emits.Add(emit);
   }
 
-  private PortNode? EmitPort(JsonNode? effect, string card, string? keyword)
+  private PortNode? EmitPort(
+    JsonNode? effect,
+    string card,
+    string? keyword,
+    JsonNode? manaCostSymbols,
+    List<PortNode> consumes
+  )
   {
     if (effect is not JsonObject e)
       return null;
     var effectType = e["EffectType"]?.ToString();
+    if (
+      effectType == "alternativeCast"
+      && string.Equals(e["FromZone"]?.ToString(), "Graveyard", StringComparison.OrdinalIgnoreCase)
+    )
+    {
+      // Aristocrat recursion (aristocrat-recursion-scope.md, Decision 1/2a). A cast-from-graveyard
+      // permission (CR 601.3e) projects as the EXISTING emit:returntobattlefield:self label — the card
+      // re-enters the battlefield (refueling a sac), and the §8-B carve-out (which keys on this label for
+      // Persist/Undying) retains the self-death recursion cycle. The Subject is NON-NULL (the card's own
+      // self-filter), never a null-default GREEN (anti-pattern 3). The recast carries a pay:mana CO-COST
+      // = the card's OWN mana cost (AlternativeCastEffect.Cost is null for Gravecrawler ⇒ "cast for its
+      // own mana cost"), pushed into this ability's consumes so the §8 mana-balance machinery tiers it.
+      var self = new ObjectFilter { IsSelf = true, CardTypes = ["creature"], Controller = ControllerFilter.You };
+      foreach (var (label, quantity) in RecastManaCost(e["Cost"], manaCostSymbols))
+        consumes.Add(Port(card, label, PortSide.Consume, quantity));
+      return Port(card, PortLabel.ReturnToBattlefieldEmit(), PortSide.Emit, subject: self);
+    }
     if (effectType == "createToken")
     {
       var token = TokenFilter(e["Token"], e["Player"]);
@@ -576,6 +600,30 @@ public sealed class PortWalk
       IsToken = true,
       Controller = player?["Kind"]?.ToString() == "You" ? ControllerFilter.You : null,
     };
+
+  /// <summary>
+  /// The recast's <c>pay:mana</c> co-cost (aristocrat-recursion-scope §2a / Decision 1). When the
+  /// <c>alternativeCast</c> carries an explicit alternative <see cref="MagicAST.AST.Effects.CardFlow.AlternativeCastEffect.Cost"/>
+  /// that is a mana cost (Escape/Flashback "by paying {…}"), read its symbols; otherwise the card is cast
+  /// for its OWN mana cost (Gravecrawler — <c>Cost</c> null, CR 601.3e), so read the card's mana-cost
+  /// attribute symbols threaded in via <paramref name="manaCostSymbols"/>. Both flow through
+  /// <see cref="PortLabel.PayMana"/> so each coloured pip becomes its own per-colour <c>pay:mana</c>
+  /// requirement the §8 per-colour balance can floor. Empty when no mana cost is available (the recast
+  /// then carries no mana co-cost — the §8 balance is conservative and won't floor it; never invents a cost).
+  /// </summary>
+  private static IReadOnlyList<(string Label, int Quantity)> RecastManaCost(
+    JsonNode? alternativeCost,
+    JsonNode? manaCostSymbols
+  )
+  {
+    // An explicit alternative mana cost on the permission (e.g. Escape's "{2}{B}{B}") takes precedence.
+    var altSymbols = alternativeCost?["Symbols"] ?? alternativeCost?["ManaCost"]?["Symbols"];
+    var node = altSymbols ?? manaCostSymbols;
+    if (node is not JsonArray)
+      return [];
+    var symbols = node.Deserialize<List<ManaSymbol>>(MagicAST.MagicASTJsonOptions.Strict) ?? [];
+    return PortLabel.PayMana(symbols);
+  }
 
   /// <summary>The §8 quantity: literal/fixed → its value; variable/calculated → <c>null</c> (symbolic); absent → 1.</summary>
   private static int? Qty(JsonNode? quantity) =>

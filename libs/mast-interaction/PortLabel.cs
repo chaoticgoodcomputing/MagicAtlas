@@ -132,6 +132,16 @@ public static class PortLabel
   public static string EntersTrigger(ObjectFilter entering, TypeOntology ontology) =>
     Join("etb", Subject(entering, ontology), Scope(entering), Exclusion(entering));
 
+  /// <summary>
+  /// A cast-from-graveyard permission (CR 601.3e — Gravecrawler's <c>alternativeCast</c>/
+  /// <c>FromZone:Graveyard</c>) projected as the existing <c>emit:returntobattlefield</c> label so the
+  /// §8-B one-shot-self-removal carve-out (which keys on that label for Persist/Undying) retains the
+  /// self-death recursion cycle. The scope is <c>self</c> — the card itself leaves the graveyard and
+  /// re-enters the battlefield (a new object, CR 400.7, but the same card identity that refuels the sac).
+  /// The gating condition rides as the port Subject so the operator tiers the recast (aristocrat-recursion-scope §2a).
+  /// </summary>
+  public static string ReturnToBattlefieldEmit() => "emit:returntobattlefield:self";
+
   // --- Life as a flowing resource (CR 119). ---------------------------------------------------
   // A life-gain/loss EFFECT is an emit; a "whenever [a player] gains/loses life" TRIGGER is a consume.
   // The flow arm (PortGraphEngine.FlowFeasible) connects same-direction pairs; the PLAYER axis — who

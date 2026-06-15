@@ -106,7 +106,10 @@ public class PortWalkSentinelSnapshotTest
       .Cards.Select(c =>
       {
         var gold = JsonNode.Parse(File.ReadAllText(Path.Combine(FixturesDir(), c.Path)));
-        return walk.Project(c.Card, gold!["Output"]!["Oracle"]!["Abilities"]);
+        var manaCost = (gold!["Output"]?["Attributes"] as JsonArray)
+          ?.FirstOrDefault(a => a?["Kind"]?.ToString() == "manaCost")
+          ?["Symbols"];
+        return walk.Project(c.Card, gold!["Output"]!["Oracle"]!["Abilities"], manaCost);
       })
       .ToList();
 

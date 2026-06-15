@@ -43,6 +43,24 @@
       ]
     },
     {
+      "name": "Gravecrawler x Pitiless Plunderer x Ashnod's Altar (aristocrat recursion GREEN)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/Gravecrawler.json",
+          "card": "Gravecrawler"
+        },
+        {
+          "path": "HandParsedCards/RIX/PitilessPlunderer.json",
+          "card": "Pitiless Plunderer"
+        },
+        {
+          "path": "HandParsedCards/ATQ/AshnodsAltar.json",
+          "card": "Ashnod's Altar"
+        }
+      ]
+    },
+    {
       "name": "Chatterfang x Ruthless Knave",
       "kind": "combo",
       "cards": [

@@ -35,6 +35,7 @@ public static class PortWalkProjection
     "evasion", // PortWalk.EmitPort — evasion:<keyword> (inert, explicit)
     "gainLife", // PortWalk.EmitPort — emit:life:gain:<scope> (life flow arm)
     "loseLife", // PortWalk.EmitPort — emit:life:loss:<scope> (life flow arm)
+    "alternativeCast", // PortWalk.EmitPort — emit:returntobattlefield:self + pay:mana recast co-cost (aristocrat recursion, FromZone:Graveyard)
   };
 
   /// <summary><c>CostType</c> discriminators with a semantic projection (not the <c>pay:&lt;x&gt;</c> fallback).</summary>

@@ -121,7 +121,11 @@ public sealed class ComboRecallRunner
     // Walk each combo card's gold AST into its port graph, then materialize + find cycles over EXACTLY
     // this card set — no corpus-wide subsidy, no other combo's cards (the spec: "run the engine over
     // exactly that card set").
-    var graphs = cardNames.Select(name => _walk.Project(name, _corpus.AbilitiesFor(name))).ToList();
+    var graphs = cardNames
+      .Select(name =>
+        _walk.Project(name, _corpus.AbilitiesFor(name), _corpus.ManaCostSymbolsFor(name))
+      )
+      .ToList();
     var cycles = _engine.FindCycles(_engine.Materialize(graphs), LengthBound);
 
     // A cycle reconstructs THIS combo iff every card it spans belongs to the combo and it spans ≥2 of

@@ -38,8 +38,6 @@ using MagicAST.Tests.Infrastructure;
 [TestFixture]
 public class AristocratRecursionScopeTest
 {
-  private const string Pending = "aristocrat-recursion — pending";
-
   private static readonly TypeOntology Ontology = JsonSerializer.Deserialize<TypeOntology>(
     File.ReadAllText(TestData.OntologyPath)
   )!;
@@ -54,8 +52,20 @@ public class AristocratRecursionScopeTest
       file
     );
     var gold = JsonNode.Parse(File.ReadAllText(path));
-    return new PortWalk(Ontology).Project(card, gold!["Output"]!["Oracle"]!["Abilities"]);
+    return new PortWalk(Ontology).Project(
+      card,
+      gold!["Output"]!["Oracle"]!["Abilities"],
+      ManaCostSymbols(gold)
+    );
   }
+
+  /// <summary>The card's printed mana-cost symbols (Output.Attributes[Kind=manaCost].Symbols) — the
+  /// recast's pay:mana co-cost source for the cast-from-graveyard arm (Gravecrawler is cast for its own
+  /// mana cost, CR 601.3e). Null when the card has no manaCost attribute.</summary>
+  private static JsonNode? ManaCostSymbols(JsonNode? gold) =>
+    (gold?["Output"]?["Attributes"] as JsonArray)
+      ?.FirstOrDefault(a => a?["Kind"]?.ToString() == "manaCost")
+      ?["Symbols"];
 
   /// <summary>
   /// LEAD GREEN COMBO (bench: Gravecrawler + Pitiless Plunderer + Ashnod's Altar, pop 32 582). Ashnod's
@@ -71,14 +81,6 @@ public class AristocratRecursionScopeTest
   /// on this GREEN — recast loops are a prime false-positive surface.</para>
   /// </summary>
   [Test]
-  [Ignore(
-    "DESIGN ONLY (aristocrat-recursion-scope.md). The cast-from-graveyard arm is not built: "
-      + "alternativeCast/FromZone:Graveyard is still coarse (known-coarse-projections.json — 'no flow "
-      + "rule consumes it yet'), so Gravecrawler projects no recast emit, no (returntobattlefield, sac) "
-      + "flow edge forms, and no recursion cycle closes. Un-ignores when Track A (project the recast "
-      + "emit + its {1}{B} pay:mana co-cost) and Track B (the (returntobattlefield, sac) flow arm) land "
-      + "and the interaction-judge PROCEEDs on the GREEN. " + Pending
-  )]
   public void Gravecrawler_x_pitiless_x_ashnods_altar_reconstructs_green_mana_positive_recast()
   {
     var graphs = new[]
@@ -125,12 +127,6 @@ public class AristocratRecursionScopeTest
   /// (adding-a-flow-arm anti-pattern 2). The Warren+Zulaport sibling (pop 34 860) is the same shape.</para>
   /// </summary>
   [Test]
-  [Ignore(
-    "DESIGN ONLY (aristocrat-recursion-scope.md §4/§5). Same arm-not-built reason as the GREEN pin: no "
-      + "recast emit ⇒ no recursion cycle ⇒ the not-null assertion cannot pass yet. When the arm lands, "
-      + "this combo lands at AMBER (a provable {1} mana shortfall: 1 Treasure/iter vs a {1}{B}=2 recast), "
-      + "NOT GREEN — the honest tier the scope ratifies. " + Pending
-  )]
   public void Warren_x_gravecrawler_x_blood_artist_reconstructs_amber_mana_short_recast()
   {
     var graphs = new[]
@@ -170,12 +166,6 @@ public class AristocratRecursionScopeTest
   /// (returntobattlefield, sac) edge ⇒ no recursion cycle, exactly as a vanilla creature must not combo.</para>
   /// </summary>
   [Test]
-  [Ignore(
-    "DESIGN ONLY (aristocrat-recursion-scope.md §4). The arm is not built, so NO recursion cycle exists "
-      + "for ANY input today — this guard passes vacuously now and is only meaningful once the arm lands. "
-      + "It pins that the arm, when built, must gate on a real cast-from-graveyard permission: a creature "
-      + "with the permission STRIPPED must still produce no recursion cycle. " + Pending
-  )]
   public void Gravecrawler_without_recast_permission_manufactures_no_cycle_the_false_positive_guard()
   {
     // Gravecrawler with the cast-from-graveyard static REMOVED: only the inert "can't block" ability

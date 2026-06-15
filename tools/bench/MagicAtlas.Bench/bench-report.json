@@ -1,10 +1,10 @@
 {
   "CombosEligible": 33,
   "ReconstructedGreen": 5,
-  "ReconstructedAmber": 8,
-  "Missed": 20,
+  "ReconstructedAmber": 15,
+  "Missed": 13,
   "RecallAtGreen": 0.1515,
-  "RecallAtAmber": 0.3939,
+  "RecallAtAmber": 0.6061,
   "Combos": [
     {
       "Id": "1090-2781",
@@ -82,8 +82,11 @@
         "Gravecrawler",
         "Zulaport Cutthroat"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Warren Soultrader"
+      ]
     },
     {
       "Id": "1385-3000-5670",
@@ -149,8 +152,11 @@
         "Pitiless Plunderer",
         "Ashnod's Altar"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Pitiless Plunderer"
+      ]
     },
     {
       "Id": "2034-3000-5009",
@@ -174,8 +180,11 @@
         "Gravecrawler",
         "Bloodflow Connoisseur"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Pitiless Plunderer"
+      ]
     },
     {
       "Id": "2577-2741-5670",
@@ -185,8 +194,11 @@
         "Gravecrawler",
         "Essence Warden"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Warren Soultrader"
+      ]
     },
     {
       "Id": "2577-2842-5670",
@@ -196,8 +208,11 @@
         "Gravecrawler",
         "Blood Artist"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Warren Soultrader"
+      ]
     },
     {
       "Id": "2577-3983-4871",
@@ -207,8 +222,11 @@
         "Pitiless Plunderer",
         "Night of Souls' Betrayal"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Pitiless Plunderer"
+      ]
     },
     {
       "Id": "261-2577-5670",
@@ -218,8 +236,11 @@
         "Gravecrawler",
         "Suture Priest"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Warren Soultrader"
+      ]
     },
     {
       "Id": "261-3000-5670",

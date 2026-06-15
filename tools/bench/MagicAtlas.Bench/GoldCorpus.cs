@@ -13,9 +13,16 @@ namespace MagicAtlas.Bench;
 public sealed class GoldCorpus
 {
   private readonly IReadOnlyDictionary<string, JsonArray> _abilitiesByName;
+  private readonly IReadOnlyDictionary<string, JsonArray> _manaCostByName;
 
-  private GoldCorpus(IReadOnlyDictionary<string, JsonArray> abilitiesByName) =>
+  private GoldCorpus(
+    IReadOnlyDictionary<string, JsonArray> abilitiesByName,
+    IReadOnlyDictionary<string, JsonArray> manaCostByName
+  )
+  {
     _abilitiesByName = abilitiesByName;
+    _manaCostByName = manaCostByName;
+  }
 
   /// <summary>The distinct card names present in the corpus.</summary>
   public IReadOnlyCollection<string> CardNames => _abilitiesByName.Keys.ToList();
@@ -28,6 +35,12 @@ public sealed class GoldCorpus
   public JsonArray? AbilitiesFor(string cardName) =>
     _abilitiesByName.TryGetValue(cardName, out var ab) ? ab : null;
 
+  /// <summary>The card's printed mana-cost symbols (the manaCost attribute's <c>Symbols</c>), or
+  /// <c>null</c>. The recast <c>pay:mana</c> co-cost source for the cast-from-graveyard arm — Gravecrawler
+  /// is cast from the graveyard for its own mana cost (CR 601.3e).</summary>
+  public JsonArray? ManaCostSymbolsFor(string cardName) =>
+    _manaCostByName.TryGetValue(cardName, out var mc) ? mc : null;
+
   /// <summary>
   /// Load every <c>*.json</c> under <paramref name="fixturesRoot"/> (recursively), keying each by its
   /// <c>Input.Name</c>. DETERMINISTIC: files are visited in ordinal-sorted path order and a duplicate
@@ -39,6 +52,7 @@ public sealed class GoldCorpus
   public static GoldCorpus Load(string fixturesRoot)
   {
     var byName = new Dictionary<string, JsonArray>(StringComparer.Ordinal);
+    var manaByName = new Dictionary<string, JsonArray>(StringComparer.Ordinal);
     var files = Directory
       .EnumerateFiles(fixturesRoot, "*.json", SearchOption.AllDirectories)
       .OrderBy(p => p, StringComparer.Ordinal);
@@ -60,9 +74,18 @@ public sealed class GoldCorpus
         continue; // first-path-wins keeps the choice deterministic across duplicate-name fixtures
 
       if (root?["Output"]?["Oracle"]?["Abilities"] is JsonArray abilities)
+      {
         byName[name] = (JsonArray)abilities.DeepClone(); // detach from the parsed document
+        if (
+          (root?["Output"]?["Attributes"] as JsonArray)
+            ?.FirstOrDefault(a => a?["Kind"]?.ToString() == "manaCost")
+            ?["Symbols"]
+          is JsonArray symbols
+        )
+          manaByName[name] = (JsonArray)symbols.DeepClone();
+      }
     }
 
-    return new GoldCorpus(byName);
+    return new GoldCorpus(byName, manaByName);
   }
 }
