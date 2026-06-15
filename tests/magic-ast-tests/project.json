@@ -46,10 +46,10 @@
       }
     },
     "gate-test": {
-      "//": "Hermetic self-tests for the MAST loop meta-gates (tools/gate-*.sh). CI-safe — builds throwaway git repos in a temp dir; no network, no dependency on the live corpus. Runs alongside the core NUnit suite.",
+      "//": "Hermetic self-tests for the MAST loop meta tier (tools/test/*/run.sh): deterministic gates (initiative 01) + discriminator lint (initiative 02). CI-safe — builds throwaway git repos / synthetic source in a temp dir; no network, no dependency on the live corpus. Runs alongside the core NUnit suite.",
       "executor": "nx:run-commands",
       "options": {
-        "command": "bash tools/test/gates/run.sh",
+        "command": "bash tools/test/run.sh",
         "cwd": "{workspaceRoot}"
       }
     },

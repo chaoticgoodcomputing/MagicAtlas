@@ -1,0 +1,37 @@
+[
+  {
+    "name": "tap",
+    "near": "untap",
+    "reason": "Opposite operations, distinct as both Cost and Effect: 'tap' taps a permanent, 'untap' untaps it (CR 701.21 / 701.22). The shared root is the verb; the 'un-' prefix inverts it. Not sprawl."
+  },
+  {
+    "name": "attach",
+    "near": "unattach",
+    "reason": "Opposite operations: attach an Aura/Equipment to a permanent vs unattach it (CR 701.3 / 701.42). Distinct effects."
+  },
+  {
+    "name": "moveCounters",
+    "near": "removeCounters",
+    "reason": "Distinct counter operations (CR 122): 'moveCounters' relocates counters between permanents; 'removeCounters' takes them off entirely. Different effects."
+  },
+  {
+    "name": "shuffle",
+    "near": "shuffleIntoLibrary",
+    "reason": "'shuffle' shuffles a library/zone in place; 'shuffleIntoLibrary' is a zone-change moving object(s) into the library and then shuffling. Distinct effects."
+  },
+  {
+    "name": "tap",
+    "near": "warp",
+    "reason": "Unrelated concepts; heuristic false positive (Levenshtein 2). 'tap' is the tap action; 'warp' is the Warp keyword effect. Coincidental letter proximity, no semantic overlap."
+  },
+  {
+    "name": "count",
+    "near": "counterCount",
+    "reason": "Distinct quantities: 'count' counts objects matching a filter; 'counterCount' counts counters of a given kind on a permanent. Different quantity sources."
+  },
+  {
+    "name": "count",
+    "near": "countersRemovedThisWay",
+    "reason": "Distinct quantities: 'count' is a generic object/filter count; 'countersRemovedThisWay' is a linked back-reference to counters removed by the same effect (CR 607-style linkage). Different."
+  }
+]

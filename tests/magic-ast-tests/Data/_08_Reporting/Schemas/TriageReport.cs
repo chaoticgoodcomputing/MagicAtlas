@@ -103,6 +103,17 @@ public partial record YieldClusterSummary
   public string? DominantLastAttemptedRule { get; init; }
 
   /// <summary>
+  /// Diagnostic-spread homogeneity in [0,1]: the fraction of this cluster's failure
+  /// signals that are the single dominant <c>(Pattern, LastAttemptedRule)</c>. 1.0 means
+  /// every line bails the same way; a low value means one normalized template has
+  /// over-collapsed lines that fail in *different* parsers — the heterogeneity that
+  /// exact-template clustering can't see (alignment initiative 02). The triage cluster
+  /// gate (<c>tools/gate-triage-cluster.sh</c>) excludes low-homogeneity clusters from
+  /// dispatch.
+  /// </summary>
+  public required double DominantShare { get; init; }
+
+  /// <summary>
   /// Best fixture candidates — cards with the FEWEST other unparsed templates
   /// (cleanest exemplars). Capped at 5.
   /// </summary>

@@ -156,7 +156,7 @@ public static class YieldClusterAnalyzer
         })
         .ToList();
 
-      var (dominantPattern, dominantRule) = templateToDominant[bucket.TemplateId];
+      var (dominantPattern, dominantRule, dominantShare) = templateToDominant[bucket.TemplateId];
 
       summaries.Add(new YieldClusterSummary
       {
@@ -168,6 +168,7 @@ public static class YieldClusterAnalyzer
         FractionalYield = templateToFractionalYield.GetValueOrDefault(bucket.TemplateId),
         DominantPattern = dominantPattern,
         DominantLastAttemptedRule = dominantRule,
+        DominantShare = dominantShare,
         Exemplars = exemplars,
       });
     }
@@ -310,19 +311,27 @@ public static class YieldClusterAnalyzer
   /// <c>("Unknown", null)</c> if the cluster carries no diagnostics (shouldn't
   /// happen — every clustered line is unparsed).
   /// </summary>
-  private static (string Pattern, string? LastAttemptedRule) ComputeDominantDiagnostic(
+  private static (string Pattern, string? LastAttemptedRule, double Share) ComputeDominantDiagnostic(
     IReadOnlyList<LineEntry> lines
   )
   {
-    var best = lines
-      .SelectMany(l => l.Diagnostics)
+    var diagnostics = lines.SelectMany(l => l.Diagnostics).ToList();
+    var best = diagnostics
       .GroupBy(d => (d.Pattern, d.LastAttemptedRule))
       .OrderByDescending(g => g.Count())
       .ThenBy(g => g.Key.Pattern, StringComparer.Ordinal)
       .ThenBy(g => g.Key.LastAttemptedRule, StringComparer.Ordinal)
       .FirstOrDefault();
 
-    return best is null ? ("Unknown", null) : best.Key;
+    if (best is null)
+      return ("Unknown", null, 1.0);
+
+    // Diagnostic-spread homogeneity: the fraction of this cluster's failure signals that
+    // are the single dominant (pattern, rule). A cluster that lumps lines bailing in
+    // several different parsers despite a shared lexical template scores low — the
+    // over-collapse heterogeneity exact-template clustering can't see (initiative 02).
+    var share = (double)best.Count() / diagnostics.Count;
+    return (best.Key.Pattern, best.Key.LastAttemptedRule, share);
   }
 
   // ──────────────────────────────────────────────────────────────────────
