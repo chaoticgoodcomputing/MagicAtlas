@@ -1,0 +1,172 @@
+using System.Text.Json;
+using MagicAST.AST.References;
+using MagicAST.Interaction;
+
+namespace MagicAtlas.Bench;
+
+/// <summary>The reconstruction outcome for one eligible combo.</summary>
+public enum ReconstructionOutcome
+{
+  /// <summary>No cycle over the combo's cards reconstructs the interaction at all.</summary>
+  Missed = 0,
+
+  /// <summary>A cycle reconstructs the combo, but the best one the engine certifies is Amber (conditional).</summary>
+  Amber = 1,
+
+  /// <summary>A cycle reconstructs the combo at Green (a certified infinite loop).</summary>
+  Green = 2,
+}
+
+/// <summary>The per-combo result row in the bench report.</summary>
+public sealed record ComboResult
+{
+  public required string Id { get; init; }
+  public required int Popularity { get; init; }
+  public required IReadOnlyList<string> Cards { get; init; }
+  public required ReconstructionOutcome Outcome { get; init; }
+
+  /// <summary>The distinct cards the reconstructing cycle actually spans (empty when missed).</summary>
+  public required IReadOnlyList<string> CycleCards { get; init; }
+}
+
+/// <summary>The aggregate combo-recall report — the committed bench artifact (initiative 04 §2).</summary>
+public sealed record BenchReport
+{
+  public required int CombosEligible { get; init; }
+  public required int ReconstructedGreen { get; init; }
+  public required int ReconstructedAmber { get; init; }
+  public required int Missed { get; init; }
+  public required double RecallAtGreen { get; init; }
+  public required double RecallAtAmber { get; init; }
+
+  /// <summary>Per-combo detail, ordered by combo id (deterministic). Not part of the ratchet thresholds.</summary>
+  public required IReadOnlyList<ComboResult> Combos { get; init; }
+}
+
+/// <summary>
+/// The combo-recall benchmark runner (alignment initiative 04, Track A). For each pinned Commander
+/// Spellbook combo whose every card has a hand-parsed gold fixture, it runs the EXACT MAST interaction
+/// pipeline over precisely that card set —
+/// <c>PortWalk.Project</c> (per card) → <c>PortGraphEngine.Materialize</c> → <c>FindCycles</c> — and
+/// records whether the engine reconstructs the combo's interaction as a cycle, and at which certainty
+/// tier (Green = certified infinite, Amber = conditional, Missed = no spanning cycle).
+/// <para>
+/// This measures the END PRODUCT: recall against an external, crowd-sourced combo database the agents
+/// did not author. A low number is the correct, successful outcome — it is the measurement, not a test
+/// to pass. The harness is read-only over the engine; it never mutates it.
+/// </para>
+/// </summary>
+public sealed class ComboRecallRunner
+{
+  // The flow's MaterializeCyclesStep uses length-bound 5 (a full sac→death→token→doubler→refuel loop
+  // spans five hops — the Ashnod's Altar × Pitiless × Chatterfang archetype). Match it so the bench
+  // measures the same reconstruction reach the product viz shows.
+  private const int LengthBound = 5;
+
+  private readonly GoldCorpus _corpus;
+  private readonly PortWalk _walk;
+  private readonly PortGraphEngine _engine;
+
+  public ComboRecallRunner(GoldCorpus corpus, TypeOntology ontology)
+  {
+    _corpus = corpus;
+    _walk = new PortWalk(ontology);
+    _engine = new PortGraphEngine(ontology);
+  }
+
+  public static ComboRecallRunner Create(string fixturesRoot, string ontologyPath)
+  {
+    var ontology =
+      JsonSerializer.Deserialize<TypeOntology>(File.ReadAllText(ontologyPath))
+      ?? throw new InvalidOperationException($"Could not parse ontology at {ontologyPath}");
+    return new ComboRecallRunner(GoldCorpus.Load(fixturesRoot), ontology);
+  }
+
+  /// <summary>Run the recall benchmark over every combo in the snapshot. Combos whose cards aren't all
+  /// in the gold corpus are skipped (the snapshot is already scoped, but this is the safety belt).</summary>
+  public BenchReport Run(ComboSnapshot snapshot)
+  {
+    var results = new List<ComboResult>();
+
+    foreach (var combo in snapshot.Combos.OrderBy(c => c.Id, StringComparer.Ordinal))
+    {
+      var cardNames = combo.Cards.Select(c => c.Name).Distinct(StringComparer.Ordinal).ToList();
+      if (cardNames.Count < 2 || !cardNames.All(_corpus.Contains))
+        continue; // not eligible against the gold corpus
+
+      results.Add(Evaluate(combo, cardNames));
+    }
+
+    var green = results.Count(r => r.Outcome == ReconstructionOutcome.Green);
+    var amber = results.Count(r => r.Outcome == ReconstructionOutcome.Amber);
+    var missed = results.Count(r => r.Outcome == ReconstructionOutcome.Missed);
+    var eligible = results.Count;
+
+    return new BenchReport
+    {
+      CombosEligible = eligible,
+      ReconstructedGreen = green,
+      ReconstructedAmber = amber,
+      Missed = missed,
+      RecallAtGreen = Recall(green, eligible),
+      RecallAtAmber = Recall(green + amber, eligible),
+      Combos = [.. results.OrderBy(r => r.Id, StringComparer.Ordinal)],
+    };
+  }
+
+  private ComboResult Evaluate(SnapshotCombo combo, IReadOnlyList<string> cardNames)
+  {
+    var comboCardSet = cardNames.ToHashSet(StringComparer.Ordinal);
+
+    // Walk each combo card's gold AST into its port graph, then materialize + find cycles over EXACTLY
+    // this card set — no corpus-wide subsidy, no other combo's cards (the spec: "run the engine over
+    // exactly that card set").
+    var graphs = cardNames.Select(name => _walk.Project(name, _corpus.AbilitiesFor(name))).ToList();
+    var cycles = _engine.FindCycles(_engine.Materialize(graphs), LengthBound);
+
+    // A cycle reconstructs THIS combo iff every card it spans belongs to the combo and it spans ≥2 of
+    // them (a genuine multi-card interaction, not a 1-card artifact). The combo's tier is the BEST
+    // (lowest CertaintyTier) such cycle — Green beats Amber. Missed when no spanning cycle exists.
+    ComboResult? best = null;
+    foreach (var cycle in cycles)
+    {
+      var cycleCards = cycle
+        .Edges.SelectMany(e => new[] { e.From.Card, e.To.Card })
+        .Distinct(StringComparer.Ordinal)
+        .ToList();
+
+      if (cycleCards.Count < 2 || !cycleCards.All(comboCardSet.Contains))
+        continue;
+
+      var outcome =
+        cycle.Tier == CertaintyTier.Green ? ReconstructionOutcome.Green
+        : ReconstructionOutcome.Amber; // Red cycles don't certify a reconstruction
+
+      if (best is null || (int)outcome > (int)best.Outcome)
+        best = new ComboResult
+        {
+          Id = combo.Id,
+          Popularity = combo.Popularity,
+          Cards = cardNames,
+          Outcome = outcome,
+          CycleCards = [.. cycleCards.OrderBy(c => c, StringComparer.Ordinal)],
+        };
+
+      if (best.Outcome == ReconstructionOutcome.Green)
+        break; // can't do better than Green
+    }
+
+    return best
+      ?? new ComboResult
+      {
+        Id = combo.Id,
+        Popularity = combo.Popularity,
+        Cards = cardNames,
+        Outcome = ReconstructionOutcome.Missed,
+        CycleCards = [],
+      };
+  }
+
+  private static double Recall(int hit, int eligible) =>
+    eligible == 0 ? 0.0 : Math.Round((double)hit / eligible, 4);
+}

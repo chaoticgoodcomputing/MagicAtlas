@@ -1,0 +1,849 @@
+{
+  "combos": [
+    {
+      "cards": [
+        {
+          "name": "Felidar Guardian",
+          "oracleId": "33869ba6-13e5-4e48-8963-92f7965648fb"
+        },
+        {
+          "name": "Restoration Angel",
+          "oracleId": "dfbd3afc-9905-4cff-a4f4-df08a4d0a7fa"
+        }
+      ],
+      "id": "1090-2781",
+      "identity": "W",
+      "popularity": 48050,
+      "results": [
+        "Infinite ETB",
+        "Infinite LTB"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Narset's Reversal",
+          "oracleId": "d55f6c70-321f-4fb4-bd33-0850ae1a7c36"
+        },
+        {
+          "name": "Reiterate",
+          "oracleId": "38394ee3-6726-4f91-bc25-36bce0c6aab9"
+        }
+      ],
+      "id": "11-3368",
+      "identity": "UR",
+      "popularity": 10584,
+      "results": [
+        "Infinite magecraft triggers"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Exquisite Blood",
+          "oracleId": "8f933fae-6c0c-42d7-a817-14760d8285cd"
+        },
+        {
+          "name": "Marauding Blight-Priest",
+          "oracleId": "814b87fe-2a75-4ff2-8637-7e69e3fb285b"
+        }
+      ],
+      "id": "110-3966",
+      "identity": "B",
+      "popularity": 54808,
+      "results": [
+        "Infinite lifegain triggers",
+        "Infinite lifeloss",
+        "Infinite lifegain"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Bloodthirsty Conqueror",
+          "oracleId": "fd505c02-c59e-476d-8e88-35da862ddc23"
+        },
+        {
+          "name": "Marauding Blight-Priest",
+          "oracleId": "814b87fe-2a75-4ff2-8637-7e69e3fb285b"
+        }
+      ],
+      "id": "110-6191",
+      "identity": "B",
+      "popularity": 39019,
+      "results": [
+        "Infinite lifegain triggers",
+        "Infinite lifeloss",
+        "Infinite lifegain"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Displacer Kitten",
+          "oracleId": "09ef446c-a13d-49d9-a94c-cd5f5a2d440b"
+        },
+        {
+          "name": "Peregrine Drake",
+          "oracleId": "0bd67481-6bd9-48d6-92bd-8933b5ea1eae"
+        },
+        {
+          "name": "Mourning",
+          "oracleId": "20602d11-c0ae-47ce-a7fd-998b12480e18"
+        }
+      ],
+      "id": "1170-3540-3821",
+      "identity": "UB",
+      "popularity": 0,
+      "results": [
+        "Infinite LTB",
+        "Infinite ETB",
+        "Infinite mana lands you control can produce",
+        "Infinite untap of lands you control",
+        "Infinite storm count"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Displacer Kitten",
+          "oracleId": "09ef446c-a13d-49d9-a94c-cd5f5a2d440b"
+        },
+        {
+          "name": "Peregrine Drake",
+          "oracleId": "0bd67481-6bd9-48d6-92bd-8933b5ea1eae"
+        },
+        {
+          "name": "Conviction",
+          "oracleId": "4374b6b1-e691-4823-802d-8de8530aa461"
+        }
+      ],
+      "id": "1170-3821-6058",
+      "identity": "WU",
+      "popularity": 9,
+      "results": [
+        "Infinite LTB",
+        "Infinite ETB",
+        "Infinite storm count",
+        "Infinite mana lands you control can produce",
+        "Infinite untap of lands you control"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Warren Soultrader",
+          "oracleId": "ace86e56-efde-4eb7-8815-71456a4c3abe"
+        },
+        {
+          "name": "Gravecrawler",
+          "oracleId": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f"
+        },
+        {
+          "name": "Zulaport Cutthroat",
+          "oracleId": "76b003e0-15af-4f22-bdf2-1ade5430964a"
+        }
+      ],
+      "id": "1385-2577-5670",
+      "identity": "B",
+      "popularity": 34860,
+      "results": [
+        "Infinite death triggers",
+        "Infinite ETB",
+        "Infinite lifegain triggers",
+        "Infinite lifeloss",
+        "Infinite LTB",
+        "Infinite sacrifice triggers",
+        "Infinite storm count"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Warren Soultrader",
+          "oracleId": "ace86e56-efde-4eb7-8815-71456a4c3abe"
+        },
+        {
+          "name": "Zulaport Cutthroat",
+          "oracleId": "76b003e0-15af-4f22-bdf2-1ade5430964a"
+        },
+        {
+          "name": "Chatterfang, Squirrel General",
+          "oracleId": "f15b3b76-d38a-48db-bb44-3296183c8641"
+        }
+      ],
+      "id": "1385-3000-5670",
+      "identity": "BG",
+      "popularity": 25505,
+      "results": [
+        "Infinite LTB",
+        "Infinite ETB",
+        "Infinite colored mana",
+        "Infinite sacrifice triggers",
+        "Infinite death triggers",
+        "Infinite lifegain triggers",
+        "Infinite lifeloss",
+        "Infinite Treasure tokens"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Dualcaster Mage",
+          "oracleId": "8eb7c0a5-6190-40de-b473-2d1daa3bbe28"
+        },
+        {
+          "name": "Cackling Counterpart",
+          "oracleId": "9e2adca5-f39c-4a09-bcce-8238ebac2c4a"
+        }
+      ],
+      "id": "147-1810",
+      "identity": "UR",
+      "popularity": 2529,
+      "results": [
+        "Infinite ETB",
+        "Infinite creature tokens",
+        "Infinite magecraft triggers"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Ghostly Flicker",
+          "oracleId": "ad0070db-6454-41cb-861f-8f5b8fc2a3b8"
+        },
+        {
+          "name": "Dualcaster Mage",
+          "oracleId": "8eb7c0a5-6190-40de-b473-2d1daa3bbe28"
+        }
+      ],
+      "id": "147-1987",
+      "identity": "UR",
+      "popularity": 15899,
+      "results": [
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite magecraft triggers",
+        "Infinite landfall triggers",
+        "Infinite mana lands you control that enter the battlefield untapped can produce",
+        "Infinite blinking of artifacts",
+        "Infinite blinking of lands",
+        "Infinite blinking"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Ghostly Flicker",
+          "oracleId": "ad0070db-6454-41cb-861f-8f5b8fc2a3b8"
+        },
+        {
+          "name": "Peregrine Drake",
+          "oracleId": "0bd67481-6bd9-48d6-92bd-8933b5ea1eae"
+        },
+        {
+          "name": "Archaeomancer",
+          "oracleId": "a91a3266-cadd-47a0-9b20-160307f14c07"
+        }
+      ],
+      "id": "1987-2493-3821",
+      "identity": "U",
+      "popularity": 34280,
+      "results": [
+        "Infinite blinking",
+        "Infinite ETB",
+        "Infinite landfall triggers",
+        "Infinite LTB",
+        "Infinite magecraft triggers",
+        "Infinite mana lands you control can produce",
+        "Infinite storm count",
+        "Infinite untap of lands you control"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Ghostly Flicker",
+          "oracleId": "ad0070db-6454-41cb-861f-8f5b8fc2a3b8"
+        },
+        {
+          "name": "Peregrine Drake",
+          "oracleId": "0bd67481-6bd9-48d6-92bd-8933b5ea1eae"
+        },
+        {
+          "name": "Izzet Chronarch",
+          "oracleId": "1da438f3-db1c-4713-a60c-e078f31d809c"
+        }
+      ],
+      "id": "1987-3277-3821",
+      "identity": "UR",
+      "popularity": 217,
+      "results": [
+        "Infinite LTB",
+        "Infinite ETB",
+        "Infinite storm count",
+        "Infinite mana lands you control can produce",
+        "Infinite magecraft triggers",
+        "Infinite blinking",
+        "Infinite landfall triggers",
+        "Infinite untap of lands you control"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Gravecrawler",
+          "oracleId": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f"
+        },
+        {
+          "name": "Pitiless Plunderer",
+          "oracleId": "a784481f-eccb-4112-bb38-04a659319660"
+        },
+        {
+          "name": "Ashnod's Altar",
+          "oracleId": "4d18bcba-a346-445e-a182-6cc30b7e066d"
+        }
+      ],
+      "id": "2034-2577-4871",
+      "identity": "B",
+      "popularity": 32582,
+      "results": [
+        "Infinite colorless mana",
+        "Infinite death triggers",
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite sacrifice triggers",
+        "Infinite storm count"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Chatterfang, Squirrel General",
+          "oracleId": "f15b3b76-d38a-48db-bb44-3296183c8641"
+        },
+        {
+          "name": "Ruthless Knave",
+          "oracleId": "00225c40-27ff-410f-a591-5c788c6a2bd6"
+        },
+        {
+          "name": "Ashnod's Altar",
+          "oracleId": "4d18bcba-a346-445e-a182-6cc30b7e066d"
+        }
+      ],
+      "id": "2034-3000-5009",
+      "identity": "BG",
+      "popularity": 1988,
+      "results": [
+        "Infinite card draw",
+        "Infinite colored mana",
+        "Infinite creature tokens",
+        "Infinite death triggers",
+        "Infinite draw triggers",
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite sacrifice triggers",
+        "Infinite Treasure tokens",
+        "Infinite colorless mana",
+        "Reduce the toughness of creatures opponents control to 0"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Pitiless Plunderer",
+          "oracleId": "a784481f-eccb-4112-bb38-04a659319660"
+        },
+        {
+          "name": "Gravecrawler",
+          "oracleId": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f"
+        },
+        {
+          "name": "Bloodflow Connoisseur",
+          "oracleId": "ddb2fb87-235a-4365-aa25-40c197425e43"
+        }
+      ],
+      "id": "2511-2577-4871",
+      "identity": "B",
+      "popularity": 369,
+      "results": [
+        "Infinite LTB",
+        "Infinite ETB",
+        "Infinite sacrifice triggers",
+        "Infinite death triggers",
+        "Infinite storm count",
+        "Infinite +1/+1 counters on a creature",
+        "Infinite Treasure tokens",
+        "Infinite colored mana",
+        "Infinite colorless mana",
+        "Infinite creature tokens"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Warren Soultrader",
+          "oracleId": "ace86e56-efde-4eb7-8815-71456a4c3abe"
+        },
+        {
+          "name": "Gravecrawler",
+          "oracleId": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f"
+        },
+        {
+          "name": "Essence Warden",
+          "oracleId": "6ca2a89e-7032-4864-b4e9-66f3178f90ab"
+        }
+      ],
+      "id": "2577-2741-5670",
+      "identity": "BG",
+      "popularity": 589,
+      "results": [
+        "Infinite LTB",
+        "Infinite ETB",
+        "Infinite sacrifice triggers",
+        "Infinite death triggers",
+        "Infinite lifegain triggers",
+        "Infinite storm count"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Warren Soultrader",
+          "oracleId": "ace86e56-efde-4eb7-8815-71456a4c3abe"
+        },
+        {
+          "name": "Gravecrawler",
+          "oracleId": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f"
+        },
+        {
+          "name": "Blood Artist",
+          "oracleId": "310f141c-7f37-4729-aed6-dd9c09db448d"
+        }
+      ],
+      "id": "2577-2842-5670",
+      "identity": "B",
+      "popularity": 38733,
+      "results": [
+        "Infinite death triggers",
+        "Infinite ETB",
+        "Infinite lifegain triggers",
+        "Infinite lifeloss",
+        "Infinite LTB",
+        "Infinite sacrifice triggers",
+        "Infinite storm count"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Gravecrawler",
+          "oracleId": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f"
+        },
+        {
+          "name": "Pitiless Plunderer",
+          "oracleId": "a784481f-eccb-4112-bb38-04a659319660"
+        },
+        {
+          "name": "Night of Souls' Betrayal",
+          "oracleId": "916bd025-c44f-49c9-8d76-4b7b2f9a8ba3"
+        }
+      ],
+      "id": "2577-3983-4871",
+      "identity": "B",
+      "popularity": 87,
+      "results": [
+        "Infinite death triggers",
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite storm count"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Warren Soultrader",
+          "oracleId": "ace86e56-efde-4eb7-8815-71456a4c3abe"
+        },
+        {
+          "name": "Gravecrawler",
+          "oracleId": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f"
+        },
+        {
+          "name": "Suture Priest",
+          "oracleId": "c4d36522-3ace-4bfb-bf2d-1a366f458698"
+        }
+      ],
+      "id": "261-2577-5670",
+      "identity": "WB",
+      "popularity": 575,
+      "results": [
+        "Infinite LTB",
+        "Infinite ETB",
+        "Infinite sacrifice triggers",
+        "Infinite death triggers",
+        "Infinite lifegain triggers",
+        "Infinite storm count"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Warren Soultrader",
+          "oracleId": "ace86e56-efde-4eb7-8815-71456a4c3abe"
+        },
+        {
+          "name": "Suture Priest",
+          "oracleId": "c4d36522-3ace-4bfb-bf2d-1a366f458698"
+        },
+        {
+          "name": "Chatterfang, Squirrel General",
+          "oracleId": "f15b3b76-d38a-48db-bb44-3296183c8641"
+        }
+      ],
+      "id": "261-3000-5670",
+      "identity": "WBG",
+      "popularity": 62,
+      "results": [
+        "Infinite colored mana",
+        "Infinite death triggers",
+        "Infinite ETB",
+        "Infinite lifegain triggers",
+        "Infinite LTB",
+        "Infinite sacrifice triggers",
+        "Infinite Treasure tokens"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Warren Soultrader",
+          "oracleId": "ace86e56-efde-4eb7-8815-71456a4c3abe"
+        },
+        {
+          "name": "Essence Warden",
+          "oracleId": "6ca2a89e-7032-4864-b4e9-66f3178f90ab"
+        },
+        {
+          "name": "Chatterfang, Squirrel General",
+          "oracleId": "f15b3b76-d38a-48db-bb44-3296183c8641"
+        }
+      ],
+      "id": "2741-3000-5670",
+      "identity": "BG",
+      "popularity": 2844,
+      "results": [
+        "Infinite colored mana",
+        "Infinite death triggers",
+        "Infinite ETB",
+        "Infinite lifegain triggers",
+        "Infinite sacrifice triggers",
+        "Infinite Treasure tokens",
+        "Infinite LTB"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Warren Soultrader",
+          "oracleId": "ace86e56-efde-4eb7-8815-71456a4c3abe"
+        },
+        {
+          "name": "Blood Artist",
+          "oracleId": "310f141c-7f37-4729-aed6-dd9c09db448d"
+        },
+        {
+          "name": "Chatterfang, Squirrel General",
+          "oracleId": "f15b3b76-d38a-48db-bb44-3296183c8641"
+        }
+      ],
+      "id": "2842-3000-5670",
+      "identity": "BG",
+      "popularity": 22716,
+      "results": [
+        "Infinite LTB",
+        "Infinite ETB",
+        "Infinite colored mana",
+        "Infinite sacrifice triggers",
+        "Infinite death triggers",
+        "Infinite lifegain triggers",
+        "Infinite lifeloss",
+        "Infinite Treasure tokens"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Chatterfang, Squirrel General",
+          "oracleId": "f15b3b76-d38a-48db-bb44-3296183c8641"
+        },
+        {
+          "name": "Warren Soultrader",
+          "oracleId": "ace86e56-efde-4eb7-8815-71456a4c3abe"
+        },
+        {
+          "name": "Academy Manufactor",
+          "oracleId": "f36d1d8b-8303-44a9-ab56-531931641ea2"
+        }
+      ],
+      "id": "3000-4231-5670",
+      "identity": "BG",
+      "popularity": 21072,
+      "results": [
+        "Infinite LTB",
+        "Infinite ETB",
+        "Infinite colored mana",
+        "Infinite sacrifice triggers",
+        "Infinite death triggers",
+        "Infinite lifegain triggers",
+        "Infinite lifegain",
+        "Infinite card draw",
+        "Infinite draw triggers",
+        "Infinite Treasure tokens",
+        "Infinite Clue tokens",
+        "Infinite Food tokens",
+        "Infinite creature tokens",
+        "Destroy all creatures opponents control",
+        "Reduce the toughness of creatures opponents control to 0"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Chatterfang, Squirrel General",
+          "oracleId": "f15b3b76-d38a-48db-bb44-3296183c8641"
+        },
+        {
+          "name": "Ruthless Knave",
+          "oracleId": "00225c40-27ff-410f-a591-5c788c6a2bd6"
+        },
+        {
+          "name": "Doubling Season",
+          "oracleId": "01546b7d-a233-4176-8843-d732074dc5b6"
+        }
+      ],
+      "id": "3000-4772-5009",
+      "identity": "BG",
+      "popularity": 1279,
+      "results": [
+        "Infinite card draw",
+        "Infinite colored mana",
+        "Infinite creature tokens",
+        "Infinite death triggers",
+        "Infinite draw triggers",
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite sacrifice triggers",
+        "Infinite Treasure tokens",
+        "Reduce the toughness of creatures opponents control to 0"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Chatterfang, Squirrel General",
+          "oracleId": "f15b3b76-d38a-48db-bb44-3296183c8641"
+        },
+        {
+          "name": "Pitiless Plunderer",
+          "oracleId": "a784481f-eccb-4112-bb38-04a659319660"
+        }
+      ],
+      "id": "3000-4871",
+      "identity": "BG",
+      "popularity": 59860,
+      "results": [
+        "Infinite colored mana",
+        "Infinite death triggers",
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite sacrifice triggers",
+        "Infinite Treasure tokens",
+        "Reduce the toughness of creatures opponents control to 0"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Exquisite Blood",
+          "oracleId": "8f933fae-6c0c-42d7-a817-14760d8285cd"
+        },
+        {
+          "name": "Vito, Thorn of the Dusk Rose",
+          "oracleId": "7336a541-3ae9-4ab2-acb8-f574c0a5b3a9"
+        }
+      ],
+      "id": "314-3966",
+      "identity": "B",
+      "popularity": 115026,
+      "results": [
+        "Infinite lifegain triggers",
+        "Infinite lifeloss",
+        "Infinite lifegain"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Bloodthirsty Conqueror",
+          "oracleId": "fd505c02-c59e-476d-8e88-35da862ddc23"
+        },
+        {
+          "name": "Vito, Thorn of the Dusk Rose",
+          "oracleId": "7336a541-3ae9-4ab2-acb8-f574c0a5b3a9"
+        }
+      ],
+      "id": "314-6191",
+      "identity": "B",
+      "popularity": 74972,
+      "results": [
+        "Infinite lifegain triggers",
+        "Infinite lifeloss",
+        "Infinite lifegain"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Kiki-Jiki, Mirror Breaker",
+          "oracleId": "a34b7416-cfe3-4a1e-a8c1-a3056b747519"
+        },
+        {
+          "name": "Restoration Angel",
+          "oracleId": "dfbd3afc-9905-4cff-a4f4-df08a4d0a7fa"
+        }
+      ],
+      "id": "618-1090",
+      "identity": "RW",
+      "popularity": 5671,
+      "results": [
+        "Infinite creature tokens with haste",
+        "Infinite death triggers",
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite sacrifice triggers"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Kiki-Jiki, Mirror Breaker",
+          "oracleId": "a34b7416-cfe3-4a1e-a8c1-a3056b747519"
+        },
+        {
+          "name": "Helm of the Host",
+          "oracleId": "83b43aba-bf9c-4da2-967d-9daa632e97d2"
+        }
+      ],
+      "id": "618-1692",
+      "identity": "R",
+      "popularity": 15042,
+      "results": [
+        "Infinite death triggers",
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite sacrifice triggers",
+        "Infinite tapped creature tokens",
+        "Infinite tapped creature tokens until end of turn"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Kiki-Jiki, Mirror Breaker",
+          "oracleId": "a34b7416-cfe3-4a1e-a8c1-a3056b747519"
+        },
+        {
+          "name": "Felidar Guardian",
+          "oracleId": "33869ba6-13e5-4e48-8963-92f7965648fb"
+        }
+      ],
+      "id": "618-2781",
+      "identity": "RW",
+      "popularity": 13066,
+      "results": [
+        "Infinite creature tokens with haste",
+        "Infinite death triggers",
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite sacrifice triggers"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Kiki-Jiki, Mirror Breaker",
+          "oracleId": "a34b7416-cfe3-4a1e-a8c1-a3056b747519"
+        },
+        {
+          "name": "Freed from the Real",
+          "oracleId": "03d32ace-dd99-48c6-bcae-9b915d041aef"
+        }
+      ],
+      "id": "618-4222--140",
+      "identity": "UR",
+      "popularity": 927,
+      "results": [
+        "Infinite ETB",
+        "Infinite sacrifice triggers",
+        "Infinite death triggers",
+        "Infinite tapped creature tokens",
+        "Infinite LTB"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Kiki-Jiki, Mirror Breaker",
+          "oracleId": "a34b7416-cfe3-4a1e-a8c1-a3056b747519"
+        },
+        {
+          "name": "Corridor Monitor",
+          "oracleId": "07b6ee55-a77e-4ba7-9ab7-8a8375c7acc9"
+        }
+      ],
+      "id": "618-4404",
+      "identity": "UR",
+      "popularity": 1680,
+      "results": [
+        "Infinite creature tokens with haste",
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite sacrifice triggers",
+        "Infinite death triggers"
+      ]
+    },
+    {
+      "cards": [
+        {
+          "name": "Kiki-Jiki, Mirror Breaker",
+          "oracleId": "a34b7416-cfe3-4a1e-a8c1-a3056b747519"
+        },
+        {
+          "name": "Sea-Dasher Octopus",
+          "oracleId": "0b718d21-6873-4613-ad15-660d30527fcd"
+        }
+      ],
+      "id": "618-7624",
+      "identity": "UR",
+      "popularity": 174,
+      "results": [
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite death triggers",
+        "Infinite sacrifice triggers",
+        "Infinite tapped creature tokens"
+      ]
+    }
+  ],
+  "csbETag": "\"2d11a02cfa48e8b6d48ff55a399d08dd\"",
+  "csbLastModified": "Fri, 12 Jun 2026 07:24:54 GMT",
+  "csbTimestamp": "2026-06-12T07:24:47.226759+00:00",
+  "csbVersion": "5.4.10",
+  "eligibleCount": 33,
+  "goldCorpusSize": 946,
+  "scope": "multi-card combos whose every constituent card has a hand-parsed gold fixture under tests/magic-ast-tests/Fixtures/HandParsedCards",
+  "source": "Commander Spellbook variants.json bulk dump",
+  "sourceUrl": "https://json.commanderspellbook.com/variants.json",
+  "totalCsbCombos": 91795
+}

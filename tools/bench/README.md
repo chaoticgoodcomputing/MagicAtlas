@@ -1,0 +1,114 @@
+# External Ground-Truth Benchmarks
+
+Alignment initiative 04 — measure the **end product** of the interaction stack against an external,
+crowd-sourced combo database the agents did not author. The evaluation stack is otherwise
+self-referential (gold ASTs are authored and judged by the same model family); this harness answers a
+question no internal test can: **does the interaction engine reconstruct the combos that are known to
+exist?**
+
+The harness lives here, OUT of the runtime libs (`libs/`) and OUT of the Flowthru test host
+(`tests/magic-ast-tests`): it is evaluation tooling, not shipped product code. It depends on the libs;
+nothing in the libs depends on it.
+
+## Track A — combo recall (built)
+
+`MagicAtlas.Bench/` — for each pinned Commander Spellbook combo whose every constituent card has a
+hand-parsed gold fixture, run the **exact** MAST interaction pipeline over precisely that card set and
+record whether the engine reconstructs the combo's interaction as a cycle, and at which certainty tier.
+
+Pipeline (the same one `tests/magic-ast-tests/.../InteractionTriage` and `PortGraphEngineTest` drive):
+
+```
+PortWalk.Project(card, goldAbilities)   per combo card   →   PortGraph
+PortGraphEngine.Materialize(graphs)                       →   PortEdge[]
+PortGraphEngine.FindCycles(edges, maxLength: 5)           →   PortCycle[]
+```
+
+A combo is **reconstructed** iff some cycle spans ≥2 of its cards and every card the cycle touches
+belongs to the combo. The combo's tier is the best (lowest `CertaintyTier`) such cycle — Green
+(certified infinite) beats Amber (conditional); a combo with no spanning cycle is **Missed**.
+
+### Why read the gold AST, not re-parse oracle text
+
+The bench reads each fixture's committed gold AST (`Output.Oracle.Abilities`) directly. This keeps the
+bench fully offline, independent of the parser's current coverage, and measures the *engine* over the
+same trusted ASTs the MAST tests use — not the parser+engine compound.
+
+### Data scoping (IMPORTANT)
+
+The full parsed corpus (`card-inputs.json`) is gitignored and absent on a fresh checkout / in an
+isolated worktree. So the eligible set is scoped to **combos whose every card has a hand-parsed gold
+fixture** under `tests/magic-ast-tests/Fixtures/HandParsedCards/**` (these ARE committed). Of the
+~91.8k Commander Spellbook combos, **33** multi-card combos are eligible against the current
+946-card gold corpus. This scoping is recorded in the snapshot (`scope`, `eligibleCount`) and re-checked
+at runtime. As the gold corpus grows the eligible set grows automatically (re-pin the snapshot).
+
+### Running it
+
+```bash
+# Print the recall report (does not touch the committed baseline):
+dotnet run --project tools/bench/MagicAtlas.Bench
+
+# Re-pin the baseline (bench-report.json) — do this when the gold corpus or engine changes for the better:
+dotnet run --project tools/bench/MagicAtlas.Bench -- --write
+
+# The ratchet: recall@Green and recall@(Green+Amber) may not DECREASE vs the committed baseline.
+dotnet test tools/bench/MagicAtlas.Bench
+```
+
+(`nx` targets are not wired here; invoke `dotnet` directly. The bench has no network or Python
+dependency.)
+
+### The ratchet (`bench-report.json`)
+
+`MagicAtlas.Bench/bench-report.json` is the committed baseline:
+
+```json
+{ "CombosEligible", "ReconstructedGreen", "ReconstructedAmber", "Missed", "RecallAtGreen", "RecallAtAmber", "Combos": [...] }
+```
+
+`ComboRecallRatchetTest` asserts neither recall metric decreases vs this baseline; an increase (or a
+detail drift at equal recall) rewrites it. A merged batch that silently loses interaction-reconstruction
+coverage fails the ratchet. **The absolute numbers are deliberately low — this is a ratchet on the
+*direction*, not a target.**
+
+### Determinism
+
+Two consecutive runs produce a byte-identical `bench-report.json` (verified). The pin is enforced three
+ways: the combo list is a committed, **SHA-256-checksummed** snapshot (verified on load); the gold
+corpus resolves duplicate card names first-path-wins in ordinal order; and combos + per-combo cards are
+emitted in sorted order with a fixed JSON encoder (no timestamps, no machine paths).
+
+## Track B — query precision/recall (Scryfall Tagger) — NOT built (licensing TODO)
+
+The query-P/R track (score `mast-query` patterns against crowd-sourced Scryfall oracle tags) is a
+**stretch goal and is intentionally not implemented**, because its data source has an unclear
+redistribution license:
+
+- Scryfall's **card data** is permissive (their generated data is CC0; gameplay text falls under WotC's
+  Fan Content Policy). But the **Tagger** tags are a separate, crowd-sourced project.
+- Tagger data is **not** in any documented Scryfall bulk-data file, and there is **no documented public
+  API or stated redistribution license** for it (it is served from the undocumented
+  `tagger.scryfall.com` GraphQL endpoint).
+
+Per the initiative's guardrail — *do NOT commit Tagger raw data on an unclear license* — no Tagger
+snapshot is committed. **TODO (Track B):** if/when a clearly-licensed tag source is identified
+(documented API + explicit reuse terms), implement it as a *fetch-with-checksum + attribution* snapshot
+(never a committed raw dump), curate 5–10 high-signal tags with clean AST equivalents, author the
+matching `mast-query` patterns, and emit a per-tag P/R table into the bench report.
+
+## Sources, licensing & attribution
+
+| Source | Used for | License / terms | Committed? |
+|---|---|---|---|
+| **Commander Spellbook** — `variants.json` bulk dump (`https://json.commanderspellbook.com/variants.json`) | Track A combo list (the eligible-set ground truth) | Backend is **MIT-licensed** (`SpaceCowMedia/commander-spellbook-backend`). Card names/oracle text are WotC IP under the Fan Content Policy; Commander Spellbook is unofficial Fan Content. | Yes — a lean, **scoped** snapshot (only `{id, popularity, identity, cards{name,oracleId}, results}` for eligible combos; the ~510 MB raw dump and its image-URI/price/legality bloat are NOT committed). The snapshot records the CSB `version`, `timestamp`, and `ETag` for provenance. |
+| **Scryfall Tagger** — oracle tags | Track B query P/R (not built) | Unclear redistribution license (see Track B). | **No** — deliberately not committed. |
+
+The snapshot is **eval data, not shipped product data**. Combo identities, card names, and produced
+results originate with Commander Spellbook and the respective rights holders.
+
+### Pinned snapshot provenance
+
+`MagicAtlas.Bench/Data/spellbook-combos.snapshot.json` (+ `.sha256`): CSB `variants.json` version
+**5.4.10**, timestamp **2026-06-12T07:24:47Z**, 33 eligible combos pinned from the full ~91,795-combo
+dump.

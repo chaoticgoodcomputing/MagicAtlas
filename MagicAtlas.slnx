@@ -4,4 +4,5 @@
   <Project Path="libs/magic-ast/MagicAST.csproj" />
   <Project Path="tests/atlas-flow-test/MagicAtlas.Flows.Harness.csproj" />
   <Project Path="tests/magic-ast-tests/MagicAtlas.Ast.Tests.csproj" />
+  <Project Path="tools/bench/MagicAtlas.Bench/MagicAtlas.Bench.csproj" />
 </Solution>
