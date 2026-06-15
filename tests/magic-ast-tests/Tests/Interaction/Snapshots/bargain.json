@@ -13,15 +13,15 @@
       "Subject": null
     },
     {
-      "Identity": "Bargain::emit:gainlife",
+      "Identity": "Bargain::emit:life:gain:controlled",
       "Card": "Bargain",
-      "Label": "emit:gainlife",
+      "Label": "emit:life:gain:controlled",
       "Side": "Emit",
-      "Quantity": 1,
+      "Quantity": 7,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
     }
   ],
   "CardDefinedEdges": [],

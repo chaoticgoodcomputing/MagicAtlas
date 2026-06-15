@@ -24,15 +24,15 @@
       "Subject": null
     },
     {
-      "Identity": "Blessing of Leeches::emit:loselife",
+      "Identity": "Blessing of Leeches::emit:life:loss:controlled",
       "Card": "Blessing of Leeches",
-      "Label": "emit:loselife",
+      "Label": "emit:life:loss:controlled",
       "Side": "Emit",
       "Quantity": 1,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Blessing of Leeches::emit:regenerate",
@@ -71,7 +71,7 @@
   "CardDefinedEdges": [
     {
       "From": "Blessing of Leeches::at:upkeep",
-      "To": "Blessing of Leeches::emit:loselife"
+      "To": "Blessing of Leeches::emit:life:loss:controlled"
     },
     {
       "From": "Blessing of Leeches::pay:mana",
@@ -81,7 +81,7 @@
   "DerivedEdges": [
     {
       "From": "Blessing of Leeches::at:upkeep",
-      "To": "Blessing of Leeches::emit:loselife",
+      "To": "Blessing of Leeches::emit:life:loss:controlled",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",

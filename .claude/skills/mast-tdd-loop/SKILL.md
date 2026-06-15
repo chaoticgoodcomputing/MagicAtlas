@@ -275,6 +275,8 @@ Bail and escalate if any of these hold.
 | Orchestrator merge-gate / triage / glossary (main checkout, `nx` available) | `nx run mast:test` / `nx run mast:run` / `nx run magic-ast:glossary` |
 | Meta-gates (bash; HALT on nonzero) | `tools/gate-preflight.sh` / `tools/gate-isolation.sh` / `tools/gate-fixture-immutability.sh` / `tools/gate-judge-verdict.sh` |
 | Gate self-tests (CI-safe) | `nx run mast:gate-test` (`tools/test/gates/run.sh`) |
+| Combo-recall bench + ratchet (end-product, Step 8) | `nx run bench:recall` (`tools/bench/MagicAtlas.Bench/`, baseline `bench-report.json`) |
+| **Flow-arm reference pattern** (close a missed-combo family: project faithfully + connect in the engine) | [`libs/mast-interaction/docs/adding-a-flow-arm.md`](../../../libs/mast-interaction/docs/adding-a-flow-arm.md) |
 | Worker targeted test (worktree — `nx` UNavailable, no `node_modules`) | `dotnet test tests/magic-ast-tests/MagicAtlas.Ast.Tests.csproj --filter "FullyQualifiedName~<CardNameNoSpaces>" --nologo` |
 | Worker subagent / judge subagent definitions | [`.claude/agents/mast-worker.md`](../../agents/mast-worker.md) / [`.claude/agents/mast-judge.md`](../../agents/mast-judge.md) |
 | Two-phase fallback + authoring reference | [PIPELINE.md](PIPELINE.md) |

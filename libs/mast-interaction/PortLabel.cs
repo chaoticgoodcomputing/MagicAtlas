@@ -132,6 +132,22 @@ public static class PortLabel
   public static string EntersTrigger(ObjectFilter entering, TypeOntology ontology) =>
     Join("etb", Subject(entering, ontology), Scope(entering), Exclusion(entering));
 
+  // --- Life as a flowing resource (CR 119). ---------------------------------------------------
+  // A life-gain/loss EFFECT is an emit; a "whenever [a player] gains/loses life" TRIGGER is a consume.
+  // The flow arm (PortGraphEngine.FlowFeasible) connects same-direction pairs; the PLAYER axis — who
+  // gains/loses vs whom the trigger watches — rides as the port Subject so the operator tiers it
+  // (You↔You is GREEN; "a player" ⊋ "an opponent" is a sound AMBER, ADR-0002 §3/§7). The label carries
+  // only the scope name; the operator, not the label, decides certainty. The <c>who</c> filter is the
+  // affected/watched player (You → controlled, Opponent → opponent, an unqualified target player → no
+  // scope — the broadest, which is what floors the loss hop to AMBER until the parse layer sharpens it).
+  public static string LifeGainEmit(ObjectFilter? who) => Join("emit", "life", "gain", who is null ? null : Scope(who));
+
+  public static string LifeLossEmit(ObjectFilter? who) => Join("emit", "life", "loss", who is null ? null : Scope(who));
+
+  public static string LifeGainTrigger(ObjectFilter? who) => Join("trigger", "life", "gain", who is null ? null : Scope(who));
+
+  public static string LifeLossTrigger(ObjectFilter? who) => Join("trigger", "life", "loss", who is null ? null : Scope(who));
+
   /// <summary>
   /// A sacrifice cost. CR 701.21a: a player only sacrifices a permanent they control, so an unscoped
   /// fodder filter floors to <c>controlled</c> (the rules-invariant lives here, not in the parse).

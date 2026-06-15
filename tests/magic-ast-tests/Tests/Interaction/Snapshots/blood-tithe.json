@@ -2,26 +2,26 @@
   "Name": "Blood Tithe",
   "Ports": [
     {
-      "Identity": "Blood Tithe::emit:gainlife",
+      "Identity": "Blood Tithe::emit:life:gain:controlled",
       "Card": "Blood Tithe",
-      "Label": "emit:gainlife",
+      "Label": "emit:life:gain:controlled",
       "Side": "Emit",
-      "Quantity": 1,
+      "Quantity": null,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
     },
     {
-      "Identity": "Blood Tithe::emit:loselife",
+      "Identity": "Blood Tithe::emit:life:loss:opponent",
       "Card": "Blood Tithe",
-      "Label": "emit:loselife",
+      "Label": "emit:life:loss:opponent",
       "Side": "Emit",
-      "Quantity": 1,
+      "Quantity": 3,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=Opponent|isToken=|isSelf=|excludeSelf="
     }
   ],
   "CardDefinedEdges": [],

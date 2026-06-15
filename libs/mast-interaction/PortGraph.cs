@@ -266,6 +266,13 @@ public sealed class PortWalk
       consumes.Add(
         Port(card, PortLabel.EntersTrigger(filter, _ontology), PortSide.Consume, subject: filter)
       );
+    else if (ev == "GainsLife")
+      // "Whenever [a player] gains life" — consumes a life-gain event (CR 119). The watched player
+      // (filter Controller) rides as the subject so the operator tiers the flow (ADR-0002 §7). Non-null
+      // (broadest player if unqualified) — life is player-scoped, never a null-default-GREEN scalar.
+      consumes.Add(Port(card, PortLabel.LifeGainTrigger(filter), PortSide.Consume, subject: filter ?? AnyPlayer));
+    else if (ev == "LosesLife")
+      consumes.Add(Port(card, PortLabel.LifeLossTrigger(filter), PortSide.Consume, subject: filter ?? AnyPlayer));
     else
       // Coarse fallback (totality): the event name as the role, plus the subject if any.
       consumes.Add(Port(card, Coarse(ev, filter), PortSide.Consume));
@@ -384,6 +391,18 @@ public sealed class PortWalk
       var self = e["Target"]?["Kind"]?.ToString() == "Self";
       return Port(card, self ? "emit:untap:self" : "emit:untap", PortSide.Emit);
     }
+    if (effectType == "gainLife")
+    {
+      // A life-gain event (CR 119). The gaining player rides as the subject so a "whenever you gain
+      // life" trigger tiers by the player axis (ADR-0002 §3/§7). Feeds the life flow arm.
+      var who = PlayerFilter(e["Player"]);
+      return Port(card, PortLabel.LifeGainEmit(who), PortSide.Emit, Qty(e["Amount"]), who);
+    }
+    if (effectType == "loseLife")
+    {
+      var who = PlayerFilter(e["Player"]);
+      return Port(card, PortLabel.LifeLossEmit(who), PortSide.Emit, Qty(e["Amount"]), who);
+    }
     return effectType switch
     {
       // Inert effects (no flow) are still ports, by totality (§4) — edge-sparse, never dropped.
@@ -475,6 +494,28 @@ public sealed class PortWalk
 
   private static ObjectFilter? Filter(JsonNode? node) =>
     node?.Deserialize<ObjectFilter>(MagicAST.MagicASTJsonOptions.Strict);
+
+  /// <summary>The affected player of a life effect → an <see cref="ObjectFilter"/> subject the operator
+  /// can tier. <c>You</c> → controller You; <c>Opponent</c>/<c>EachOpponent</c> → controller Opponent
+  /// (so "each opponent loses life" REASONS to GREEN against a "whenever an opponent loses life" trigger,
+  /// not GREEN-by-accident); a <c>Target</c>/other player carries its embedded filter. Crucially this is
+  /// NEVER null: life is player-scoped, not a fungible scalar, so a null subject would wrongly hit the
+  /// mana-style scalar null-default (GREEN) in <c>AddRulesEdge</c> — a false-positive vector. An
+  /// unqualified player (e.g. <c>target player</c>) therefore floors to the broadest player filter, which
+  /// the operator tiers as a sound AMBER against an opponent-scoped trigger until the PARSE layer sharpens
+  /// the target to opponent-scoped (the GREEN ceiling lives in parse, never papered over here).</summary>
+  /// <summary>The broadest player subject (CR 109) — a non-null floor so life ports never hit the
+  /// scalar null-default GREEN in <see cref="PortGraphEngine"/>; tiers as a sound AMBER against a
+  /// controller-scoped trigger.</summary>
+  private static readonly ObjectFilter AnyPlayer = new() { CardTypes = ["player"] };
+
+  private static ObjectFilter PlayerFilter(JsonNode? player) =>
+    player?["Kind"]?.ToString() switch
+    {
+      "You" => new ObjectFilter { Controller = ControllerFilter.You },
+      "Opponent" or "EachOpponent" => new ObjectFilter { Controller = ControllerFilter.Opponent },
+      _ => Filter(player?["Filter"]) ?? AnyPlayer,
+    };
 
   /// <summary>Translate a created token's spec (<c>Types</c>/<c>Subtypes</c> + creator) into the filter the subject projection reads.</summary>
   private static ObjectFilter TokenFilter(JsonNode? token, JsonNode? player) =>

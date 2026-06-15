@@ -32,6 +32,8 @@ public static class PortWalkProjection
     "untap", // PortWalk.EmitPort — emit:untap[:self]
     "modifyPT", // PortWalk.EmitPort — modify:pt (inert, but an explicit stable label)
     "evasion", // PortWalk.EmitPort — evasion:<keyword> (inert, explicit)
+    "gainLife", // PortWalk.EmitPort — emit:life:gain:<scope> (life flow arm)
+    "loseLife", // PortWalk.EmitPort — emit:life:loss:<scope> (life flow arm)
   };
 
   /// <summary><c>CostType</c> discriminators with a semantic projection (not the <c>pay:&lt;x&gt;</c> fallback).</summary>
@@ -48,6 +50,8 @@ public static class PortWalkProjection
   {
     "Dies", // PortWalk.Trigger — DeathTrigger label
     "Enters", // PortWalk.Trigger — EntersTrigger label
+    "GainsLife", // PortWalk.Trigger — trigger:life:gain:<scope> (life flow arm)
+    "LosesLife", // PortWalk.Trigger — trigger:life:loss:<scope> (life flow arm)
   };
 
   /// <summary>Restriction values treated as HARD firability gates (ADR-0002 §8). Everything else is a

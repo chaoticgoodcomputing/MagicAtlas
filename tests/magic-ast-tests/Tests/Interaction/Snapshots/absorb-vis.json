@@ -2,26 +2,26 @@
   "Name": "Absorb Vis",
   "Ports": [
     {
-      "Identity": "Absorb Vis::emit:gainlife",
+      "Identity": "Absorb Vis::emit:life:gain:controlled",
       "Card": "Absorb Vis",
-      "Label": "emit:gainlife",
+      "Label": "emit:life:gain:controlled",
       "Side": "Emit",
-      "Quantity": 1,
+      "Quantity": 4,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
     },
     {
-      "Identity": "Absorb Vis::emit:loselife",
+      "Identity": "Absorb Vis::emit:life:loss",
       "Card": "Absorb Vis",
-      "Label": "emit:loselife",
+      "Label": "emit:life:loss",
       "Side": "Emit",
-      "Quantity": 1,
+      "Quantity": 4,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=player|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Absorb Vis::emit:typecycling",

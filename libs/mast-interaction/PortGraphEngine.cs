@@ -173,8 +173,24 @@ public sealed class PortGraphEngine
       ("token", "sac") => TokenSatisfiesAtCreation(emit, consume),
       ("mana", "pay") => ResourceKind(consume.Label) == "mana" // mana refunds a mana cost…
         && ManaColorFeeds(ManaColor(emit.Label), ManaColor(consume.Label)), // …of a colour it can pay
+      ("life", "trigger") => LifeFlowFeasible(emit, consume), // a life event feeds a same-direction life trigger (CR 119)
       _ => false,
     };
+
+  /// <summary>A life-gain/loss event refuels a life trigger of the SAME direction (gain↔gain, loss↔loss,
+  /// CR 119). Direction-match only — the player-scope overlap (who gains/loses vs whom the trigger
+  /// watches) is the operator's job via the port Subjects (ADR-0002 §7: the label names, the operator
+  /// decides), so "you gain → whenever you gain" certifies GREEN while "a player loses → whenever an
+  /// opponent loses" is a sound AMBER.</summary>
+  private static bool LifeFlowFeasible(PortNode emit, PortNode consume) =>
+    LifeDirection(emit.Label) is { } dir && dir == LifeDirection(consume.Label);
+
+  /// <summary>The gain/loss facet of a <c>emit:life:&lt;dir&gt;</c> / <c>trigger:life:&lt;dir&gt;</c> label.</summary>
+  private static string? LifeDirection(string label)
+  {
+    var parts = label.Split(':');
+    return parts.Length >= 3 && parts[1] == "life" ? parts[2] : null;
+  }
 
   /// <summary>The colour facet of a mana label (<c>emit:mana:&lt;colour&gt;</c> / <c>pay:mana:&lt;colour&gt;</c>); <c>null</c> for a generic <c>pay:mana</c>.</summary>
   private static string? ManaColor(string label)

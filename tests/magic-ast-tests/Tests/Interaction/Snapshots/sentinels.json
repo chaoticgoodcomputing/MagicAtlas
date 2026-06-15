@@ -15,6 +15,20 @@
       ]
     },
     {
+      "name": "Vito x Exquisite Blood (life flow arm exemplar)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/M21/VitoThornOfTheDuskRose.json",
+          "card": "Vito, Thorn of the Dusk Rose"
+        },
+        {
+          "path": "HandParsedCards/ExquisiteBlood.json",
+          "card": "Exquisite Blood"
+        }
+      ]
+    },
+    {
       "name": "Chatterfang x Ruthless Knave",
       "kind": "combo",
       "cards": [

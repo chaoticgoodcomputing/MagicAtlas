@@ -2,17 +2,6 @@
   "Name": "Bloodthirsty Conqueror",
   "Ports": [
     {
-      "Identity": "Bloodthirsty Conqueror::emit:gainlife",
-      "Card": "Bloodthirsty Conqueror",
-      "Label": "emit:gainlife",
-      "Side": "Emit",
-      "Quantity": 1,
-      "Gated": false,
-      "TapGated": false,
-      "RequiresCounter": null,
-      "Subject": null
-    },
-    {
       "Identity": "Bloodthirsty Conqueror::emit:keywordability",
       "Card": "Bloodthirsty Conqueror",
       "Label": "emit:keywordability",
@@ -22,6 +11,17 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": null
+    },
+    {
+      "Identity": "Bloodthirsty Conqueror::emit:life:gain:controlled",
+      "Card": "Bloodthirsty Conqueror",
+      "Label": "emit:life:gain:controlled",
+      "Side": "Emit",
+      "Quantity": null,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Bloodthirsty Conqueror::evasion:flying",
@@ -35,27 +35,27 @@
       "Subject": null
     },
     {
-      "Identity": "Bloodthirsty Conqueror::loseslife:object",
+      "Identity": "Bloodthirsty Conqueror::trigger:life:loss:opponent",
       "Card": "Bloodthirsty Conqueror",
-      "Label": "loseslife:object",
+      "Label": "trigger:life:loss:opponent",
       "Side": "Consume",
       "Quantity": 1,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=Opponent|isToken=|isSelf=|excludeSelf="
     }
   ],
   "CardDefinedEdges": [
     {
-      "From": "Bloodthirsty Conqueror::loseslife:object",
-      "To": "Bloodthirsty Conqueror::emit:gainlife"
+      "From": "Bloodthirsty Conqueror::trigger:life:loss:opponent",
+      "To": "Bloodthirsty Conqueror::emit:life:gain:controlled"
     }
   ],
   "DerivedEdges": [
     {
-      "From": "Bloodthirsty Conqueror::loseslife:object",
-      "To": "Bloodthirsty Conqueror::emit:gainlife",
+      "From": "Bloodthirsty Conqueror::trigger:life:loss:opponent",
+      "To": "Bloodthirsty Conqueror::emit:life:gain:controlled",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",

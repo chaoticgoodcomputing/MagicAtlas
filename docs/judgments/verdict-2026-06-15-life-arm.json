@@ -1,0 +1,35 @@
+{
+  "judgment": "mast-interaction life-flow arm (alignment 03/06 — life as a flowing resource, CR 119)",
+  "date": "2026-06-15",
+  "scope": "3 reconstructed combos, 6 life hops, READ-ONLY false-positive guard on a reference implementation",
+  "result": "PASS",
+  "summary": { "pass": 3, "fail": 0, "concern": 1 },
+  "items": [
+    {
+      "target": "Exquisite Blood + Marauding Blight-Priest (bench 110-3966, GREEN)",
+      "verdict": "PASS",
+      "reason": "Both hops reliable. Loss hop: Blight-Priest 'each opponent loses 1 life' parses Player.Kind=EachOpponent -> emit subject {Controller=Opponent}; Exquisite Blood 'whenever an opponent loses life' consume {Controller=Opponent}. ControllerSubsumes(Opponent,Opponent)=Yes, Intersects=Overlaps -> GREEN. CR 102.2/102.3: every member of 'each opponent' IS an opponent, so every emitted loss satisfies the consumer (quantified guarantee holds). Gain hop: 'you gain that much life' Player.Kind=You -> {Controller=You}; 'whenever you gain life' Controller=You; You subsumes You -> GREEN. No gates, no co-cost, no mana balance -> cycle floor GREEN. Real-world infinite combo. No scope mismatch, no missing seed the steady-state model owes."
+    },
+    {
+      "target": "Bloodthirsty Conqueror + Marauding Blight-Priest (bench 110-6191, GREEN)",
+      "verdict": "PASS",
+      "reason": "Bloodthirsty Conqueror's triggered ability is structurally identical to Exquisite Blood's (LosesLife/Controller=Opponent -> gainLife/You). Same two hops, same tiers: Opponent subsumes Opponent (loss) GREEN, You subsumes You (gain) GREEN. Flying/deathtouch are inert non-life ports outside the loop. Cycle GREEN correct."
+    },
+    {
+      "target": "Vito, Thorn of the Dusk Rose x Exquisite Blood (bench 314-3966, AMBER)",
+      "verdict": "PASS",
+      "reason": "AMBER is the honest, soundly-irreducible tier GIVEN THE GOLD. Loss hop: Vito 'target opponent loses that much life' parses Player.Kind=Target, Filter.CardTypes=[player] with NO Controller -> emit subject {CardTypes:[player]}, controller unconstrained. Exquisite Blood consume {Controller=Opponent}. Intersects: ControllerAxis(null,Opponent)=Overlaps. Subsumes: ControllerSubsumes(sub=null,sup=Opponent)=No -> reliability No, reason Controller -> AMBER. player superset opponent: an unqualified player who loses life could be YOU (CR 102.2/102.3), so the operator cannot certify the loser is an opponent; not every emitted object satisfies the consumer. Forcing GREEN in the engine would be UNSOUND (a quantified false-positive). Gain hop You->You is GREEN; cycle = worst hop = AMBER. FIX IS PARSE-LAYER: sharpen Vito's loseLife target from Player.Kind=Target/CardTypes=[player] to opponent-scoped (oracle literally says 'target opponent'; CR glossary Opponent / CR 102.2). NOT an engine change. CONCERN routed to parser-precision."
+    }
+  ],
+  "concern": {
+    "target": "Vito loseLife target parse",
+    "why_sound": "Given the gold's unqualified 'player' subject, AMBER correctly refuses to certify the loser is an opponent.",
+    "fixable_because": "The printed oracle text says 'target opponent' — the opponent restriction is text-present and was dropped to the broadest player filter.",
+    "routing": "parser-precision (NOT engine; engine fudging to GREEN would be unsound)"
+  },
+  "engine_soundness_notes": [
+    "AnyPlayer floor (PortWalk.cs ~L510) keeps life ports non-null so they never hit the scalar null-default GREEN in AddRulesEdge — correct false-positive guard.",
+    "LifeFlowFeasible enforces same-direction (gain<->gain, loss<->loss) and delegates player-scope to the operator via port Subjects — correct separation.",
+    "PlayerFilter maps EachOpponent -> Controller=Opponent so 'each opponent loses' REASONS to GREEN rather than GREEN-by-accident."
+  ]
+}

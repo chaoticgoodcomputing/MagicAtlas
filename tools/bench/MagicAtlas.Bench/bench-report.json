@@ -1,10 +1,10 @@
 {
   "CombosEligible": 33,
-  "ReconstructedGreen": 0,
-  "ReconstructedAmber": 8,
-  "Missed": 25,
-  "RecallAtGreen": 0,
-  "RecallAtAmber": 0.2424,
+  "ReconstructedGreen": 2,
+  "ReconstructedAmber": 10,
+  "Missed": 21,
+  "RecallAtGreen": 0.0606,
+  "RecallAtAmber": 0.3636,
   "Combos": [
     {
       "Id": "1090-2781",
@@ -33,8 +33,11 @@
         "Exquisite Blood",
         "Marauding Blight-Priest"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Green",
+      "CycleCards": [
+        "Exquisite Blood",
+        "Marauding Blight-Priest"
+      ]
     },
     {
       "Id": "110-6191",
@@ -43,8 +46,11 @@
         "Bloodthirsty Conqueror",
         "Marauding Blight-Priest"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Green",
+      "CycleCards": [
+        "Bloodthirsty Conqueror",
+        "Marauding Blight-Priest"
+      ]
     },
     {
       "Id": "1170-3540-3821",
@@ -305,8 +311,11 @@
         "Exquisite Blood",
         "Vito, Thorn of the Dusk Rose"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Exquisite Blood",
+        "Vito, Thorn of the Dusk Rose"
+      ]
     },
     {
       "Id": "314-6191",
@@ -315,8 +324,11 @@
         "Bloodthirsty Conqueror",
         "Vito, Thorn of the Dusk Rose"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Bloodthirsty Conqueror",
+        "Vito, Thorn of the Dusk Rose"
+      ]
     },
     {
       "Id": "618-1090",
