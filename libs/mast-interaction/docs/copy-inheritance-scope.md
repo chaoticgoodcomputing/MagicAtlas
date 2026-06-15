@@ -1,8 +1,14 @@
 # Copy-token inheritance — SCOPE / design
 
-**Status:** DESIGN ONLY. No engine/parser/schema code lands with this doc. Every decision below is
-marked **PROPOSED — pending ratification**. The acceptance tests are `[Ignore]`-pinned (they skip,
-they don't run) and document "done."
+**Status:** ✅ **BUILT (2026-06-15)** — all 5 decisions implemented (graft pass `GraftCopyInheritance`
+at `Materialize`; `TapGatesRenewed` generalized; `emit:copy` typed + `Subject` + `CopyMods`/`Grafter`/
+`CopiedFrom` facets). Interaction-judge-verified zero-false-positive
+(`docs/judgments/verdict-2026-06-15-copy-inheritance.json`, PROCEED — adversarial probes found no
+spurious graft). **Kiki × Corridor Monitor → GREEN** (recall@Green 0.121→0.152). The Corridor GREEN
+pin + the vanilla-creature negative control are un-`[Ignore]`d and pass; the **Restoration Angel /
+Felidar pins stay `[Ignore]`d — blocked on the separate blink arm** (the inherited ability is an
+optional ETB blink, not an untap; copy-inheritance grafts the copy but can't close the loop without
+blink). Decisions below were PROPOSED and are now ratified-as-built.
 
 **Companion reading:** `adding-a-flow-arm.md` (the projection↔connection split this feature must
 respect), ADR-0002 (single-role port model, §5 card-defined vs §7 operator tiering, §8 firability),

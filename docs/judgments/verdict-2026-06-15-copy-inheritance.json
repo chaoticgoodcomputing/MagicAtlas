@@ -1,0 +1,26 @@
+{
+  "judge": "interaction-judge",
+  "date": "2026-06-15",
+  "feature": "PortGraphEngine.GraftCopyInheritance (copy-token inheritance graft)",
+  "scope": "1 GREEN combo + the two-layer false-positive guard + Decision 3 conformance",
+  "result": "PASS",
+  "items": [
+    {
+      "target": "GREEN — Kiki-Jiki + Corridor Monitor (bench 618-4404)",
+      "verdict": "PASS",
+      "reason": "GREEN is genuinely reliable. (a) Kiki's copy filter {creature,!Legendary,Controller:You} Subsumes Corridor Monitor's self-type {creature} (CopyAdmits drops Controller/Owner, Subsumes Types=Yes, ExcludedSupertypes !Legendary=Unknown -> admitted; the runtime targeting 'target nonlegendary creature you control' guarantees the non-legendarity the static self-filter cannot witness, CR 707.2). (b) Corridor Monitor's untap is unconditional (no 'may', not Gated) so UntapReachesSource returns Trilean.Yes and the closing edge is GREEN. (c) target-untap soundness: untap filter {artifact,creature} admits a creature; Kiki is a Legendary Creature, a legal target, so the untap reliably renews Kiki's {T} (Decision 4, CR 707.2 copies the untap verbatim). (d) no seed/co-cost owed: the only cost is {T} (free); GatherManaFlow finds no mana cost; the loop is intra-turn and never traverses the end-step delayed sacrifice. (e) attribution honest: the cycle spans Kiki::tap:self -> Kiki::emit:copy -> (copy of Corridor Monitor)::etb:creature:self -> (copy)::emit:untap, and the loop genuinely requires Corridor Monitor's inherited ability (CopiedFrom=Corridor Monitor). Live test Kiki_x_corridor_monitor_reconstructs_green_via_inherited_target_untap PASSES."
+    },
+    {
+      "target": "False-positive guard — copier + vanilla creature produces NO combo",
+      "verdict": "PASS",
+      "reason": "Two-layered guard is sound. Layer (i) admissibility: CopyAdmits uses Subsumes (NOT Intersects), so a noncreature (e.g. an artifact whose self-filter is {artifact}) is provably excluded (TypeGuaranteed creature -> No -> not grafted), while Intersects would wrongly admit it. Layer (ii) closure: a grafted vanilla/no-loop-back copy forms no cycle because the ONLY synthesized closing edge into Kiki::tap:self is an inherited untap reaching the copier (CloseUntapToTap); flow arms (FlowFeasible) cover token/mana/life and never refuel a tap. Adversarial probes all hold: self-untap-only (UntapReachesSource returns null), untap-target-land-only (TargetAdmitsCreature false -> null), optional/gated untap (Reliability=Unknown -> AMBER not GREEN), grafted draw/mill/damage (no untap label -> no closing edge -> dead-weight harmless graft). The vanilla-bear case grafts nothing (no ports -> SelfFilter null -> skip). Live test Kiki_x_vanilla_creature_manufactures_no_cycle_the_false_positive_guard PASSES. NO false positive found."
+    },
+    {
+      "target": "Decision 3 conformance (intended guard vs implementation)",
+      "verdict": "PASS",
+      "reason": "Implementation matches Decision 3: admissibility is by Subsumes not Intersects (CopyAdmits); Subsumes==No is pruned (provable type mismatch); the GREEN ceiling rides on the closing inherited ability being unconditional (UntapReachesSource: Gated -> Unknown -> AMBER, unconditional -> Yes -> GREEN), not on the admissibility verdict. The implementation grafts on Unknown-admissibility too (Subsumes != No), which is slightly more permissive than a literal 'certify', but this never yields a false GREEN: admissibility only decides whether ports are cloned, and an Unknown-admissible graft whose closing untap is unconditional is the sound runtime-referent case (CR 707.2 + targeted 'creature you control' guarantees the constraint the static self-filter cannot witness)."
+    }
+  ],
+  "false_positive_guard_sound": true,
+  "proceed": true
+}
