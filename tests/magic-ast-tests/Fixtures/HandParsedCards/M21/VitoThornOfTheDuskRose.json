@@ -48,12 +48,7 @@
                 "DerivedFrom": "LifeGained"
               },
               "Player": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "player"
-                  ]
-                }
+                "Kind": "Opponent"
               }
             }
           ]

@@ -922,11 +922,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   /// list [loseLife(Target player, N), gainLife(You, N)].
   ///
   /// <para>
-  /// "target opponent" is a targeted player reference (Rule 115.1 — "target"
-  /// in oracle text creates a targeting requirement). The Player reference uses
-  /// <see cref="ObjectReferenceKind.Target"/> with a
-  /// <c>Filter {{ CardTypes = ["player"] }}</c>, matching the established
-  /// convention for targeted-player life-loss (Vito / LoseLifeDerivedRule).
+  /// The recipient is <see cref="ObjectReferenceKind.Opponent"/> — a singular opponent (CR glossary
+  /// "Opponent"), matching the corpus convention for opponent-player references and the sibling
+  /// <c>LoseLifeDerivedRule</c> (Vito). NOT a generic <c>Target {{ CardTypes = ["player"] }}</c>:
+  /// "an opponent" is not "any player" (which could be you), and dropping the constraint is both
+  /// rules-wrong and a downstream interaction-recall loss (the operator can't certify the loser is an
+  /// opponent). See libs/mast-interaction/docs/adding-a-flow-arm.md.
   /// </para>
   /// </summary>
   private static IReadOnlyList<Effect>? TryParseTargetOpponentLoseAndYouGainLife(string effectText)
@@ -961,11 +962,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       new LoseLifeEffect
       {
         Amount = LiteralQuantity.Of(loseAmount),
-        Player = new ObjectReference
-        {
-          Kind = ObjectReferenceKind.Target,
-          Filter = new ObjectFilter { CardTypes = ["player"] },
-        },
+        Player = new ObjectReference { Kind = ObjectReferenceKind.Opponent },
       },
       new GainLifeEffect
       {

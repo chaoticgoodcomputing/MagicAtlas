@@ -13,15 +13,15 @@
       "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
     },
     {
-      "Identity": "Dakmor Ghoul::emit:life:loss",
+      "Identity": "Dakmor Ghoul::emit:life:loss:opponent",
       "Card": "Dakmor Ghoul",
-      "Label": "emit:life:loss",
+      "Label": "emit:life:loss:opponent",
       "Side": "Emit",
       "Quantity": 2,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": "cardTypes=player|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=Opponent|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Dakmor Ghoul::etb:creature:self",
@@ -42,7 +42,7 @@
     },
     {
       "From": "Dakmor Ghoul::etb:creature:self",
-      "To": "Dakmor Ghoul::emit:life:loss"
+      "To": "Dakmor Ghoul::emit:life:loss:opponent"
     }
   ],
   "DerivedEdges": [
@@ -58,7 +58,7 @@
     },
     {
       "From": "Dakmor Ghoul::etb:creature:self",
-      "To": "Dakmor Ghoul::emit:life:loss",
+      "To": "Dakmor Ghoul::emit:life:loss:opponent",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",

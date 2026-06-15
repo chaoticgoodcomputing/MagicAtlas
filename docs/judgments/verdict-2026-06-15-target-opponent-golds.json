@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M21/VitoThornOfTheDuskRose.json",
+      "verdict": "PASS",
+      "citations": ["CR 102.2", "CR 119.3", "Glossary: Opponent"],
+      "reason": "loseLife recipient for 'target opponent loses that much life' modeled as Player:{Kind:Opponent}; an opponent is a player you play against (CR 102.2), not any player, so dropping the generic player filter is rules-correct; Kind:Opponent is the established singular-opponent convention (enum doc lists 'target opponent') and no targeted-opponent variant exists"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DakmorGhoul.json",
+      "verdict": "PASS",
+      "citations": ["CR 102.2", "CR 119.3", "Glossary: Opponent"],
+      "reason": "loseLife recipient for 'target opponent loses 2 life' modeled as Player:{Kind:Opponent}; correctly narrows from 'any player' (CR 102.2 — opponent is the other player); matches corpus convention (Eroded Canyon/Jagged Barrens/Lonely Arroyo); gain side Player:You unchanged and out of scope"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/HighwayRobber.json",
+      "verdict": "PASS",
+      "citations": ["CR 102.2", "CR 119.3", "Glossary: Opponent"],
+      "reason": "identical clause to Dakmor Ghoul; loseLife recipient Player:{Kind:Opponent} is the rules-correct descriptive model for 'target opponent' per CR 102.2 / glossary 'Opponent'; targeted aspect acceptably folded into Kind:Opponent (no dedicated targeted-opponent enum variant)"
+    }
+  ]
+}

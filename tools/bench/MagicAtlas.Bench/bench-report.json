@@ -1,9 +1,9 @@
 {
   "CombosEligible": 33,
-  "ReconstructedGreen": 2,
-  "ReconstructedAmber": 10,
+  "ReconstructedGreen": 4,
+  "ReconstructedAmber": 8,
   "Missed": 21,
-  "RecallAtGreen": 0.0606,
+  "RecallAtGreen": 0.1212,
   "RecallAtAmber": 0.3636,
   "Combos": [
     {
@@ -311,7 +311,7 @@
         "Exquisite Blood",
         "Vito, Thorn of the Dusk Rose"
       ],
-      "Outcome": "Amber",
+      "Outcome": "Green",
       "CycleCards": [
         "Exquisite Blood",
         "Vito, Thorn of the Dusk Rose"
@@ -324,7 +324,7 @@
         "Bloodthirsty Conqueror",
         "Vito, Thorn of the Dusk Rose"
       ],
-      "Outcome": "Amber",
+      "Outcome": "Green",
       "CycleCards": [
         "Bloodthirsty Conqueror",
         "Vito, Thorn of the Dusk Rose"

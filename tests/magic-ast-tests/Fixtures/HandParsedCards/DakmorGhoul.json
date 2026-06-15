@@ -47,12 +47,7 @@
                 "Value": 2
               },
               "Player": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "player"
-                  ]
-                }
+                "Kind": "Opponent"
               }
             },
             {

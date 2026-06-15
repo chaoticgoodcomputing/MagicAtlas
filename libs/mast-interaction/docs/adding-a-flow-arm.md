@@ -8,7 +8,11 @@ are a *missing flow arm*, not a parser bug.
 This doc is the canonical worked example. **Copy this pattern; do not copy the anti-patterns at the
 bottom.** The worked example is the **life-drain arm** (CR 119): Vito × Exquisite Blood,
 Marauding Blight-Priest combos — landed 2026-06-15, interaction-judge-verified zero-false-positive
-(`docs/judgments/verdict-2026-06-15-life-arm.json`), recall@Green 0→0.061, recall@Amber 0.24→0.36.
+(`docs/judgments/verdict-2026-06-15-life-arm.json`). It also demonstrates the **full parse↔interaction
+virtuous cycle**: the arm first landed Vito's loop at a sound AMBER (the gold under-modeled "target
+opponent"), then a parse-layer sharpen earned the GREEN — never an engine fudge (see anti-pattern 2 +
+`verdict-2026-06-15-target-opponent-golds.json` / `verdict-2026-06-15-vito-green.json`).
+Net recall@Green 0→0.121 (4 combos), recall@Amber 0.24→0.36.
 
 ## The split — two layers, each its own job
 
@@ -56,12 +60,17 @@ connections live in the engine. A flow arm is always the latter.
 1. **Don't encode the connection in the AST/parser.** "A sacrificed creature dies", "a life-loss
    triggers a life-loss watcher" are *rules consequences* across cards — they belong in the engine's
    flow grammar, never as a field the parser writes. The AST transcribes what the card *says*.
-2. **Don't fudge a GREEN.** When the gold is imprecise, the honest tier is AMBER. The life arm's Vito
-   hop is AMBER because Vito's gold models "target **opponent**" as an unqualified `target player`
-   (`{CardTypes:[player]}`) — the operator can't certify the loser is an opponent. The GREEN ceiling
-   is earned by a **parse-layer** sharpen of the gold ("target opponent" → opponent-scoped), **never**
-   by relaxing the operator or the arm. Marauding Blight-Priest reaches GREEN honestly because its gold
-   *is* opponent-scoped (`EachOpponent`).
+2. **Don't fudge a GREEN.** When the gold is imprecise, the honest tier is AMBER, and the GREEN is
+   earned in the **parse layer**, never by relaxing the operator or the arm. *Worked through here:*
+   the Vito hop first landed AMBER because the gold (and parser) modeled "target **opponent**" as an
+   unqualified `target player` (`{CardTypes:[player]}`) — the operator can't certify the loser is an
+   opponent. The fix was a parse-layer sharpen — the parser (`LoseLifeDerivedRule`,
+   `TryParseTargetOpponentLoseAndYouGainLife`) and the 3 affected golds (Vito, Dakmor Ghoul, Highway
+   Robber) now emit `Player:{Kind:Opponent}` — after which the **same arm** tiers the hop GREEN, with
+   no engine change. mast-judge confirmed the gold modeling; interaction-judge confirmed the new GREEN
+   is sound. Marauding Blight-Priest was GREEN from the start because its gold was already
+   opponent-scoped (`EachOpponent`). The takeaway: a needless AMBER is a *parse-precision* backlog
+   item, surfaced by recall, fixed at the parse layer — the engine stays honest throughout.
 3. **Don't let a non-scalar resource hit the scalar null-default GREEN.** `AddRulesEdge` defaults a
    **null** Subject to `Overlaps + reliability Yes` (GREEN) — correct only for a fungible scalar like
    mana. Life/cards/players are *scoped*, so a null Subject there would be a false-positive vector.

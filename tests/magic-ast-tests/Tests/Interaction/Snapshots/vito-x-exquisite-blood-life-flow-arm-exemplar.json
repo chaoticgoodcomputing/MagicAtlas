@@ -35,15 +35,15 @@
       "Subject": null
     },
     {
-      "Identity": "Vito, Thorn of the Dusk Rose::emit:life:loss",
+      "Identity": "Vito, Thorn of the Dusk Rose::emit:life:loss:opponent",
       "Card": "Vito, Thorn of the Dusk Rose",
-      "Label": "emit:life:loss",
+      "Label": "emit:life:loss:opponent",
       "Side": "Emit",
       "Quantity": null,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": "cardTypes=player|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=Opponent|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Vito, Thorn of the Dusk Rose::pay:mana",
@@ -94,7 +94,7 @@
     },
     {
       "From": "Vito, Thorn of the Dusk Rose::trigger:life:gain:controlled",
-      "To": "Vito, Thorn of the Dusk Rose::emit:life:loss"
+      "To": "Vito, Thorn of the Dusk Rose::emit:life:loss:opponent"
     }
   ],
   "DerivedEdges": [
@@ -119,14 +119,14 @@
       "Reason": null
     },
     {
-      "From": "Vito, Thorn of the Dusk Rose::emit:life:loss",
+      "From": "Vito, Thorn of the Dusk Rose::emit:life:loss:opponent",
       "To": "Exquisite Blood::trigger:life:loss:opponent",
       "Provenance": "RulesDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
-      "Reliability": "No",
-      "Tier": "Amber",
-      "Reason": "Controller"
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
     },
     {
       "From": "Vito, Thorn of the Dusk Rose::pay:mana:black",
@@ -150,7 +150,7 @@
     },
     {
       "From": "Vito, Thorn of the Dusk Rose::trigger:life:gain:controlled",
-      "To": "Vito, Thorn of the Dusk Rose::emit:life:loss",
+      "To": "Vito, Thorn of the Dusk Rose::emit:life:loss:opponent",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
@@ -161,18 +161,18 @@
   ],
   "Cycles": [
     {
-      "Tier": "Amber",
+      "Tier": "Green",
       "Firable": true,
       "TapRenewed": true,
       "CoCostsSatisfied": true,
       "Balanced": true,
       "Productive": true,
-      "LimitingReason": "Controller",
+      "LimitingReason": null,
       "Edges": [
         "Exquisite Blood::emit:life:gain:controlled=\u003EVito, Thorn of the Dusk Rose::trigger:life:gain:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
         "Exquisite Blood::trigger:life:loss:opponent=\u003EExquisite Blood::emit:life:gain:controlled|CardDefined|Flow|Overlaps|Yes|Green|",
-        "Vito, Thorn of the Dusk Rose::emit:life:loss=\u003EExquisite Blood::trigger:life:loss:opponent|RulesDefined|Flow|Overlaps|No|Amber|Controller",
-        "Vito, Thorn of the Dusk Rose::trigger:life:gain:controlled=\u003EVito, Thorn of the Dusk Rose::emit:life:loss|CardDefined|Flow|Overlaps|Yes|Green|"
+        "Vito, Thorn of the Dusk Rose::emit:life:loss:opponent=\u003EExquisite Blood::trigger:life:loss:opponent|RulesDefined|Flow|Overlaps|Yes|Green|",
+        "Vito, Thorn of the Dusk Rose::trigger:life:gain:controlled=\u003EVito, Thorn of the Dusk Rose::emit:life:loss:opponent|CardDefined|Flow|Overlaps|Yes|Green|"
       ]
     }
   ]
