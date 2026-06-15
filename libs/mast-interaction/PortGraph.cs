@@ -68,6 +68,34 @@ public sealed record PortNode
 
   public required string Identity { get; init; }
 
+  /// <summary>
+  /// Copy-token inheritance (copy-inheritance-scope.md, Decision 1/2): the parsed
+  /// <see cref="MagicAST.AST.Effects.TokenCopy.CopyModification"/>s an <c>emit:copy</c> applies to the
+  /// copy it creates — Kiki's <c>abilityAdder:haste</c>, Helm's <c>supertypeRemover:[Legendary]</c>,
+  /// a <c>typeAdder</c>/<c>powerToughnessOverride</c>. Read by <see cref="PortGraphEngine"/>'s graft
+  /// pass to adjust the cloned ports' type facets. Modifications never <em>add</em> an ability the
+  /// partner lacks (they remove/override/grant inert keywords), so they cannot widen the graft — the
+  /// soundness note in Decision 1. <c>null</c> for every non-copy port.
+  /// </summary>
+  public IReadOnlyList<MagicAST.AST.Effects.TokenCopy.CopyModification>? CopyMods { get; init; }
+
+  /// <summary>
+  /// Copy-token inheritance: a port that was <b>grafted</b> onto a synthesized copy identity by
+  /// <see cref="PortGraphEngine"/> (CR 707.2 — the copy carries the copied card's abilities). The
+  /// copier that created the copy; <c>null</c> for an ordinary projected port. Lets the generalized
+  /// <see cref="PortGraphEngine"/> tap-renewal recognise "this untap lives on a copy <c>Grafter</c>
+  /// made," so an inherited untap renews the copier's tap (Decision 4a).
+  /// </summary>
+  public string? Grafter { get; init; }
+
+  /// <summary>
+  /// Copy-token inheritance: the original card this grafted port was <b>copied from</b> (CR 707.2 — the
+  /// copy takes the copiable values of that card). <c>null</c> for an ordinary projected port. A grafted
+  /// copy belongs to BOTH its <see cref="Grafter"/> (the copier that created it) and this copied card, so
+  /// a reconstruction spanning the copy genuinely spans both combo cards.
+  /// </summary>
+  public string? CopiedFrom { get; init; }
+
   public override string ToString() => $"{Card}::{Label}";
 }
 
@@ -383,13 +411,35 @@ public sealed class PortWalk
         Qty(e["Count"])
       );
     }
+    if (effectType == "copy")
+    {
+      // Copy-token inheritance (copy-inheritance-scope.md, Decision 1/2 + §6 Track A): "create a token
+      // that's a copy of target nonlegendary creature you control" (Kiki). The copy emit is projected
+      // FAITHFULLY — a real label plus a NON-NULL Subject = the copy TARGET filter, the discriminator the
+      // graft operator tiers on (Decision 3). The Subject is NEVER null: a null subject would hit the
+      // scalar null-default GREEN in AddRulesEdge (adding-a-flow-arm anti-pattern 3) and graft
+      // unconditionally. The floor is {CardTypes:[creature]} — the broadest a copy can ever be — never
+      // narrower-by-omission. The parsed modifications (abilityAdder:haste, supertypeRemover, …) ride as
+      // CopyMods so the engine's graft pass can apply them to the cloned ports.
+      var copyTarget = Filter(e["Target"]?["Filter"]) ?? new ObjectFilter { CardTypes = ["creature"] };
+      var mods = e["Modifications"]?.Deserialize<List<MagicAST.AST.Effects.TokenCopy.CopyModification>>(
+        MagicAST.MagicASTJsonOptions.Strict
+      );
+      return Port(card, "emit:copy", PortSide.Emit, subject: copyTarget) with { CopyMods = mods };
+    }
     if (effectType == "untap")
     {
       // Carry the untap's SCOPE: "untap this" (ObjectReference.Self) → emit:untap:self; "untap target X"
-      // → emit:untap (a different permanent). The §8 tap-renewal carve-out only discharges a tap gate for
-      // a SELF-untap — untapping someone else doesn't renew the source's own tap (CR 107.5).
+      // → emit:untap (a different permanent). The §8 tap-renewal carve-out discharges a tap gate for a
+      // SELF-untap on the same card, OR — copy-inheritance Decision 4b — for a TARGET-untap whose target
+      // filter subsumes the tap-gated source (Corridor Monitor's "untap target artifact or creature"
+      // renews Kiki). So a non-self untap carries its TARGET FILTER as the port Subject, the discriminator
+      // the renewal operator tiers on (the projection sharpen in §6 Track A).
       var self = e["Target"]?["Kind"]?.ToString() == "Self";
-      return Port(card, self ? "emit:untap:self" : "emit:untap", PortSide.Emit);
+      if (self)
+        return Port(card, "emit:untap:self", PortSide.Emit);
+      var target = Filter(e["Target"]?["Filter"]);
+      return Port(card, "emit:untap", PortSide.Emit, subject: target);
     }
     if (effectType == "gainLife")
     {

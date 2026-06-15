@@ -7,10 +7,12 @@ using MagicAST.Interaction;
 using MagicAST.Tests.Infrastructure;
 
 /// <summary>
-/// Copy-token inheritance — ACCEPTANCE PINS (DESIGN ONLY; see
-/// <c>libs/mast-interaction/docs/copy-inheritance-scope.md</c>). Every test is <c>[Ignore]</c>d so it
-/// documents the desired tier WITHOUT running — the suite stays green. Together they define
-/// "copy-inheritance done."
+/// Copy-token inheritance — ACCEPTANCE PINS (see
+/// <c>libs/mast-interaction/docs/copy-inheritance-scope.md</c>). The Corridor Monitor GREEN pin and the
+/// vanilla-creature negative control are LIVE (the feature landed). The Restoration Angel AMBER pin
+/// stays <c>[Ignore]</c>d: it is blocked on the SEPARATE blink arm (the copy grafts, but Resto's only
+/// loop-closing ability is its optional ETB blink — no untap, so no closing edge forms without the
+/// out-of-scope blink feature; see that test's Ignore reason). Together they define "copy-inheritance done."
 ///
 /// <para>A "create a token that's a copy of [a creature]" effect makes a token carrying the COPIED
 /// card's abilities (CR 707.2). The engine today projects only a coarse <c>emit:copy</c> and never
@@ -60,7 +62,6 @@ public class CopyInheritanceScopeTest
   /// so the operator certifies the graft (Decision 3). interaction-judge must PROCEED on this GREEN.</para>
   /// </summary>
   [Test]
-  [Ignore(Pending)]
   public void Kiki_x_corridor_monitor_reconstructs_green_via_inherited_target_untap()
   {
     var graphs = new[]
@@ -103,7 +104,16 @@ public class CopyInheritanceScopeTest
   /// Subsumes it → graftable; the AMBER is soundly irreducible here, not a fudge.)</para>
   /// </summary>
   [Test]
-  [Ignore(Pending)]
+  [Ignore(
+    "BLOCKED on the blink arm (copy-inheritance-scope.md §2/§7/§8 — explicitly OUT OF SCOPE). "
+      + "Copy-inheritance DOES graft Restoration Angel's ports onto the copy, but Resto's only "
+      + "loop-closing ability is its OPTIONAL ETB blink (exile + returnToBattlefield) — there is no "
+      + "untap. With no untap there is no closing edge back to Kiki, so no cycle forms and the not-null "
+      + "assertion cannot pass. Closing it needs (a) PortWalk recursion into optional/composite to "
+      + "project the exile/returnToBattlefield ports AND (b) a blink flow arm — both the SEPARATE blink "
+      + "feature. Manufacturing any non-blink edge to satisfy the pin would be a false combo "
+      + "(adding-a-flow-arm anti-pattern). This pin un-ignores once the blink arm lands."
+  )]
   public void Kiki_x_restoration_angel_reconstructs_amber_pending_the_blink_arm()
   {
     var graphs = new[]
@@ -138,7 +148,6 @@ public class CopyInheritanceScopeTest
   /// reports a combo.</para>
   /// </summary>
   [Test]
-  [Ignore(Pending)]
   public void Kiki_x_vanilla_creature_manufactures_no_cycle_the_false_positive_guard()
   {
     // A minimal vanilla creature graph: a single inert ability-less body — nothing that loops back.

@@ -26,6 +26,7 @@ public static class PortWalkProjection
   public static readonly IReadOnlySet<string> EffectTypes = new HashSet<string>(StringComparer.Ordinal)
   {
     "replacement", // PortWalk.Effects — intercept + inner emit (CR 614)
+    "copy", // PortWalk.EmitPort — emit:copy with Subject = copy target filter (copy-inheritance graft)
     "createToken", // PortWalk.EmitPort — emit:token:<spec>
     "addMana", // PortWalk.EmitPort — emit:mana:<color>
     "putCounters", // PortWalk.EmitPort — emit:counter:<type>:<scope>

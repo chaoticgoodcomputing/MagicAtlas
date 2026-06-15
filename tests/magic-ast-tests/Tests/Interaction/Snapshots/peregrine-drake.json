@@ -10,7 +10,7 @@
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=land|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Peregrine Drake::etb:creature:self",

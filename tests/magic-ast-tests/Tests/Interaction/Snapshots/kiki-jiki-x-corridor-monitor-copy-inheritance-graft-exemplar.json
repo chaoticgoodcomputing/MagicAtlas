@@ -1,0 +1,164 @@
+{
+  "Name": "Kiki-Jiki x Corridor Monitor (copy-inheritance graft exemplar)",
+  "Ports": [
+    {
+      "Identity": "Corridor Monitor::emit:untap",
+      "Card": "Corridor Monitor",
+      "Label": "emit:untap",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=artifact,creature|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Corridor Monitor::etb:creature:self",
+      "Card": "Corridor Monitor",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::emit:copy",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "emit:copy",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::emit:createdelayedtrigger",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "emit:createdelayedtrigger",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::emit:keywordability",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "emit:keywordability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "tap:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Corridor Monitor::etb:creature:self",
+      "To": "Corridor Monitor::emit:untap"
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:copy"
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:createdelayedtrigger"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Corridor Monitor::etb:creature:self",
+      "To": "Corridor Monitor::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker copy of Corridor Monitor::emit:untap",
+      "To": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker copy of Corridor Monitor::etb:creature:self",
+      "To": "Kiki-Jiki, Mirror Breaker copy of Corridor Monitor::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::emit:copy",
+      "To": "Kiki-Jiki, Mirror Breaker copy of Corridor Monitor::etb:creature:self",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:copy",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:createdelayedtrigger",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": [
+    {
+      "Tier": "Green",
+      "Firable": true,
+      "TapRenewed": true,
+      "CoCostsSatisfied": true,
+      "Balanced": true,
+      "Productive": true,
+      "LimitingReason": null,
+      "Edges": [
+        "Kiki-Jiki, Mirror Breaker copy of Corridor Monitor::emit:untap=\u003EKiki-Jiki, Mirror Breaker::tap:self|RulesDefined|Flow|Overlaps|Yes|Green|",
+        "Kiki-Jiki, Mirror Breaker copy of Corridor Monitor::etb:creature:self=\u003EKiki-Jiki, Mirror Breaker copy of Corridor Monitor::emit:untap|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Kiki-Jiki, Mirror Breaker::emit:copy=\u003EKiki-Jiki, Mirror Breaker copy of Corridor Monitor::etb:creature:self|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Kiki-Jiki, Mirror Breaker::tap:self=\u003EKiki-Jiki, Mirror Breaker::emit:copy|CardDefined|Flow|Overlaps|Yes|Green|"
+      ]
+    }
+  ]
+}

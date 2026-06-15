@@ -1,10 +1,10 @@
 {
   "CombosEligible": 33,
-  "ReconstructedGreen": 4,
+  "ReconstructedGreen": 5,
   "ReconstructedAmber": 8,
-  "Missed": 21,
-  "RecallAtGreen": 0.1212,
-  "RecallAtAmber": 0.3636,
+  "Missed": 20,
+  "RecallAtGreen": 0.1515,
+  "RecallAtAmber": 0.3939,
   "Combos": [
     {
       "Id": "1090-2781",
@@ -377,8 +377,11 @@
         "Kiki-Jiki, Mirror Breaker",
         "Corridor Monitor"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Green",
+      "CycleCards": [
+        "Corridor Monitor",
+        "Kiki-Jiki, Mirror Breaker"
+      ]
     },
     {
       "Id": "618-7624",

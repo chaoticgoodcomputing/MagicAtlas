@@ -10,7 +10,7 @@
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Inspirit::modify:pt",

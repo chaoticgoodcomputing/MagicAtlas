@@ -130,13 +130,38 @@ public sealed class ComboRecallRunner
     ComboResult? best = null;
     foreach (var cycle in cycles)
     {
-      var cycleCards = cycle
-        .Edges.SelectMany(e => new[] { e.From.Card, e.To.Card })
-        .Distinct(StringComparer.Ordinal)
-        .ToList();
+      // Attribute every cycle PORT to its combo card(s). A port's own Card is the usual case; a copy-token
+      // graft (copy-inheritance-scope.md) carries a synthesized copy identity — the copy IS the copier's
+      // object AND carries the copied card's abilities (CR 707.2), so it attributes to BOTH its Grafter
+      // (the copier) and the card it was CopiedFrom. A cycle reconstructs THIS combo iff every port
+      // attributes only to combo cards and the cycle spans ≥2 distinct combo cards (Kiki + Corridor, via
+      // the grafted copy bridging them).
+      var ports = cycle.Edges.SelectMany(e => new[] { e.From, e.To }).ToList();
+      var attributedCards = new HashSet<string>(StringComparer.Ordinal);
+      var unattributable = false;
+      foreach (var p in ports)
+      {
+        if (comboCardSet.Contains(p.Card))
+          attributedCards.Add(p.Card);
+        else if (p.Grafter is not null || p.CopiedFrom is not null)
+        {
+          if (p.Grafter is { } g && comboCardSet.Contains(g))
+            attributedCards.Add(g);
+          if (p.CopiedFrom is { } cf && comboCardSet.Contains(cf))
+            attributedCards.Add(cf);
+          if (
+            (p.Grafter is null || !comboCardSet.Contains(p.Grafter))
+            && (p.CopiedFrom is null || !comboCardSet.Contains(p.CopiedFrom))
+          )
+            unattributable = true; // a graft from outside the combo — not this combo's reconstruction
+        }
+        else
+          unattributable = true; // a port on a card not in the combo
+      }
 
-      if (cycleCards.Count < 2 || !cycleCards.All(comboCardSet.Contains))
+      if (unattributable || attributedCards.Count < 2)
         continue;
+      var cycleCards = attributedCards.ToList();
 
       var outcome =
         cycle.Tier == CertaintyTier.Green ? ReconstructionOutcome.Green

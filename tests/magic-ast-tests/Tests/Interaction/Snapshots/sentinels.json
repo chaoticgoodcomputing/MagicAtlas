@@ -1,6 +1,20 @@
 {
   "entries": [
     {
+      "name": "Kiki-Jiki x Corridor Monitor (copy-inheritance graft exemplar)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/KikiJikiMirrorBreaker.json",
+          "card": "Kiki-Jiki, Mirror Breaker"
+        },
+        {
+          "path": "HandParsedCards/ELD/CorridorMonitor.json",
+          "card": "Corridor Monitor"
+        }
+      ]
+    },
+    {
       "name": "Chatterfang x Pitiless Plunderer",
       "kind": "combo",
       "cards": [

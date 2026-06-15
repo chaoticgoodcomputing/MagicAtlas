@@ -133,6 +133,13 @@ public sealed class PortGraphEngine
 
   public IReadOnlyList<PortEdge> Materialize(IReadOnlyList<PortGraph> graphs)
   {
+    // (0) Copy-token inheritance (copy-inheritance-scope.md, Decision 2): the copy effect is the ONLY
+    // port whose meaning depends on the OTHER cards in the set, so the graft runs here — where the card
+    // set is known — not in PortWalk (which sees one card). It resolves each copy emit's target filter
+    // against the materialised set and clones the matching cards' ports under a synthesized copy identity.
+    var grafted = GraftCopyInheritance(graphs);
+    graphs = grafted.Graphs;
+
     var ports = graphs.SelectMany(g => g.Ports).ToList();
     var edges = new List<PortEdge>();
 
@@ -142,6 +149,11 @@ public sealed class PortGraphEngine
         edges.Add(
           new PortEdge { From = edge.From, To = edge.To, Provenance = EdgeProvenance.CardDefined }
         );
+
+    // The graft's synthesized closing edges (an inherited target-untap renewing the copier's tap), tiered
+    // by the operator in the pass (Decision 3/4) — added alongside the card-defined edges so FindCycles
+    // closes the copy loop with no new arm (the connection layer doing its normal job, per §6 Track B).
+    edges.AddRange(grafted.ClosingEdges);
 
     var emits = ports.Where(p => p.Side == PortSide.Emit).ToList();
     var consumes = ports.Where(p => p.Side == PortSide.Consume).ToList();
@@ -165,6 +177,286 @@ public sealed class PortGraphEngine
 
     return edges;
   }
+
+  /// <summary>The graft pass's product: the original graphs PLUS a synthesized copy graph per admissible
+  /// (copier, copied-card) pair, and the closing edges that renew the copier's tap from an inherited
+  /// target-untap.</summary>
+  private sealed record GraftResult
+  {
+    public required IReadOnlyList<PortGraph> Graphs { get; init; }
+    public required IReadOnlyList<PortEdge> ClosingEdges { get; init; }
+  }
+
+  /// <summary>
+  /// Copy-token inheritance (copy-inheritance-scope.md, Decision 2/3) — the combo-aware graft. For each
+  /// <c>emit:copy</c> port (a copier), resolve its target filter against the OTHER cards in the set; for
+  /// each candidate C the copy filter <b>Subsumes</b> (Decision 3 — never merely <c>Intersects</c>), clone
+  /// C's ports + card-defined edges under a synthesized copy identity, applying the copier's
+  /// <see cref="PortNode.CopyMods"/> (e.g. Kiki's <c>abilityAdder:haste</c>, a <c>supertypeRemover</c>).
+  /// A GREEN card-defined edge <c>copier.emit:copy → copy.&lt;etb&gt;</c> records that the copier definitely
+  /// creates that object (CR 707.2). The cloned card-defined edges stay GREEN (C's own causality is
+  /// preserved). Finally, if the copy carries an inherited untap that reaches the copier's tap, synthesize
+  /// the closing edge (Decision 4) so the loop closes.
+  /// <para><b>The false-positive guard (Decision 3), two-layered:</b> (i) admissibility — we graft C only
+  /// when the copy filter does not <em>provably</em> exclude C's known type (<see cref="CopyAdmits"/> uses
+  /// <c>Subsumes</c>, which prunes a type-incompatible C that <c>Intersects</c> would wrongly admit);
+  /// (ii) closure — a grafted copy with no ability that acts back on the copier forms no cycle (dead weight
+  /// the cycle finder ignores). A copier + a vanilla creature therefore produces NO combo: a vanilla body
+  /// has no ports to clone, so no closing edge exists.</para>
+  /// </summary>
+  private GraftResult GraftCopyInheritance(IReadOnlyList<PortGraph> graphs)
+  {
+    var copies = graphs
+      .SelectMany(g => g.Ports)
+      .Where(p => p.Side == PortSide.Emit && p.Label == "emit:copy" && p.Subject is not null)
+      .ToList();
+    if (copies.Count == 0)
+      return new GraftResult { Graphs = graphs, ClosingEdges = [] };
+
+    // The card each port belongs to → its source graph (to read a candidate's full port graph + edges).
+    var graphByCard = graphs
+      .SelectMany(g => g.Ports.Select(p => (p.Card, g)))
+      .GroupBy(x => x.Card, StringComparer.Ordinal)
+      .ToDictionary(x => x.Key, x => x.First().g, StringComparer.Ordinal);
+
+    var extraGraphs = new List<PortGraph>();
+    var closingEdges = new List<PortEdge>();
+
+    foreach (var copy in copies)
+    {
+      var copier = copy.Card;
+      foreach (var candidate in graphs)
+      {
+        // The candidate card's identity (its ports all share one Card). Skip the copier copying itself.
+        var candidateCard = candidate.Ports.Select(p => p.Card).FirstOrDefault();
+        if (candidateCard is null || string.Equals(candidateCard, copier, StringComparison.Ordinal))
+          continue;
+
+        var candidateSelf = SelfFilter(candidate);
+        if (candidateSelf is null || !CopyAdmits(copy.Subject!, candidateSelf))
+          continue; // not a creature we can certify the copy may legally be — don't graft (guard layer i)
+
+        var (graftGraph, copyId) = CloneUnderCopyIdentity(candidate, candidateCard, copier, copy.CopyMods);
+        extraGraphs.Add(graftGraph);
+
+        // The copier definitely creates the copy object (CR 707.2): a card-defined GREEN edge from the
+        // copy emit to each of the copy's entry/cost consumes (its ETB fires in the copier's loop).
+        var graftEdges = graftGraph.CardDefinedEdges.ToList();
+        foreach (var entry in graftGraph.Ports.Where(p => p.Side == PortSide.Consume && Role(p.Label) == "etb"))
+          graftEdges.Add(new CardDefinedEdge { From = copy, To = entry });
+        extraGraphs[^1] = graftGraph with { CardDefinedEdges = graftEdges };
+
+        // The closing hop (Decision 4): an inherited untap on the copy that renews the COPIER's tap.
+        foreach (var untap in graftGraph.Ports.Where(p => p.Side == PortSide.Emit && IsUntap(p.Label)))
+          if (UntapReachesSource(untap) is { } reliability)
+            closingEdges.Add(CloseUntapToTap(untap, copier, graphByCard, reliability));
+      }
+    }
+
+    return new GraftResult { Graphs = [.. graphs, .. extraGraphs], ClosingEdges = closingEdges };
+  }
+
+  /// <summary>
+  /// A card's <b>self characteristics</b> reconstructed from its <c>IsSelf:true</c> ports (an ETB/LTB
+  /// trigger's "this creature" filter — Corridor Monitor's <c>etb:creature:self</c> ⇒ <c>{creature}</c>).
+  /// The card type line is not threaded into <see cref="PortWalk"/>, so this is the engine's only window
+  /// onto "what type is C": its own self-scoped abilities. <c>null</c> when no self-typed port exists (a
+  /// vanilla body — nothing to graft, which is exactly the negative-control behaviour).
+  /// </summary>
+  private static ObjectFilter? SelfFilter(PortGraph graph)
+  {
+    var cardTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    foreach (var p in graph.Ports)
+      if (p.Subject?.IsSelf == true && p.Subject.CardTypes is { } cts)
+        foreach (var t in cts)
+          cardTypes.Add(t);
+    return cardTypes.Count == 0 ? null : new ObjectFilter { CardTypes = [.. cardTypes] };
+  }
+
+  /// <summary>
+  /// Decision 3 admissibility, via <c>Subsumes</c> (NOT <c>Intersects</c>). C is graftable iff the copy
+  /// filter does not <b>provably</b> exclude C's known self-type — <c>Subsumes(sub=C, sup=copyFilter)</c>
+  /// returns <see cref="Trilean.Yes"/> (certified) or <see cref="Trilean.Unknown"/> (unverifiable from
+  /// ports — e.g. the copy filter's <c>!Legendary</c> exclusion against a self-type that carries no
+  /// supertype; the copy's "creature you control" targeting guarantees control + non-legendarity at copy
+  /// time, which the static self-filter cannot witness). A <see cref="Trilean.No"/> is a provable type
+  /// mismatch (the copy filter wants <c>{artifact}</c>, C is creature-only) — pruned. This is strictly
+  /// stronger than <c>Intersects</c>: a creature-only C is <c>Intersects</c>-compatible with an
+  /// artifact-wanting filter (both permanent) but <c>Subsumes</c> rejects it. The GREEN ceiling rides on
+  /// the closing ability (Decision 3b), not on this admissibility verdict.
+  /// </summary>
+  private bool CopyAdmits(ObjectFilter copyFilter, ObjectFilter candidateSelf)
+  {
+    // Drop the Controller/Owner axes from the copy filter before the containment check: "create a copy of
+    // target creature YOU CONTROL" enforces control at copy TIME via targeting (CR 707.2), a board-state
+    // guarantee the candidate's static self-filter (reconstructed from its own abilities) can never
+    // witness. Leaving Controller=You on the sup would make every copy's Subsumes verdict No (the
+    // self-filter has no controller), defeating the graft. The remaining axes — card type, subtype,
+    // supertype exclusion — are the type-identity constraints the static self-filter CAN speak to.
+    var typeFilter = copyFilter with { Controller = null, Owner = null };
+    return ObjectFilterRelations.Subsumes(candidateSelf, typeFilter, _ontology).Value != Trilean.No;
+  }
+
+  /// <summary>
+  /// Clone a candidate card's ports + card-defined edges under a synthesized copy identity
+  /// (<c>"&lt;copier&gt; copy of &lt;C&gt;"</c>), tagging each grafted port with its <see cref="PortNode.Grafter"/>
+  /// = the copier (CR 707.2 — the copy is a new object carrying C's copiable abilities). The copier's
+  /// <paramref name="mods"/> adjust the cloned ports' type facets — a <c>supertypeRemover</c> strips a
+  /// supertype, a <c>typeAdder</c> adds a card-type — but never <em>add</em> an ability C lacks, so they
+  /// cannot widen the graft (Decision 1/2 soundness). An <c>abilityAdder</c> (Kiki's haste) is an inert
+  /// keyword irrelevant to the untap loop, so it adds no flow port.
+  /// </summary>
+  private (PortGraph Graph, string CopyId) CloneUnderCopyIdentity(
+    PortGraph candidate,
+    string candidateCard,
+    string copier,
+    IReadOnlyList<MagicAST.AST.Effects.TokenCopy.CopyModification>? mods
+  )
+  {
+    var copyId = $"{copier} copy of {candidateCard}";
+    var remap = new Dictionary<string, PortNode>(StringComparer.Ordinal);
+
+    PortNode Clone(PortNode p)
+    {
+      if (remap.TryGetValue(p.Identity, out var existing))
+        return existing;
+      var subject = ApplyMods(p.Subject, mods);
+      var clone = p with
+      {
+        Card = copyId,
+        Identity = $"{copyId}::{p.Label}",
+        Subject = subject,
+        Grafter = copier,
+        CopiedFrom = candidateCard,
+      };
+      remap[p.Identity] = clone;
+      return clone;
+    }
+
+    var ports = candidate.Ports.Select(Clone).ToList();
+    var edges = candidate
+      .CardDefinedEdges.Select(e => new CardDefinedEdge { From = Clone(e.From), To = Clone(e.To) })
+      .ToList();
+    return (new PortGraph { Ports = ports, CardDefinedEdges = edges }, copyId);
+  }
+
+  /// <summary>Apply the copy's modifications to a cloned port's subject (CR 707.2 + the "except" clauses):
+  /// strip a removed supertype, add an added card type/subtype. Removals/additions of TYPE never add an
+  /// ability, so the graft cannot widen (Decision 1). <c>null</c> subject (a scalar/inert port) is unchanged.</summary>
+  private static ObjectFilter? ApplyMods(
+    ObjectFilter? subject,
+    IReadOnlyList<MagicAST.AST.Effects.TokenCopy.CopyModification>? mods
+  )
+  {
+    if (subject is null || mods is null || mods.Count == 0)
+      return subject;
+    var result = subject;
+    foreach (var mod in mods)
+      result = mod switch
+      {
+        MagicAST.AST.Effects.TokenCopy.SupertypeRemover sr => result with
+        {
+          ExcludedSupertypes = Concat(result.ExcludedSupertypes, sr.Supertypes),
+          Supertypes = result.Supertypes?.Where(s => !sr.Supertypes.Contains(s, StringComparer.OrdinalIgnoreCase)).ToList(),
+        },
+        MagicAST.AST.Effects.TokenCopy.TypeAdder ta => result with
+        {
+          CardTypes = Concat(result.CardTypes, ta.CardTypes),
+          Subtypes = Concat(result.Subtypes, ta.Subtypes),
+        },
+        _ => result, // abilityAdder / powerToughnessOverride don't change a port's type identity
+      };
+    return result;
+  }
+
+  private static IReadOnlyList<string>? Concat(IReadOnlyList<string>? a, IReadOnlyList<string>? b)
+  {
+    if (b is null || b.Count == 0)
+      return a;
+    var set = new List<string>(a ?? []);
+    foreach (var x in b)
+      if (!set.Contains(x, StringComparer.OrdinalIgnoreCase))
+        set.Add(x);
+    return set;
+  }
+
+  /// <summary>An untap emit — self (<c>emit:untap:self</c>) or target (<c>emit:untap</c>).</summary>
+  private static bool IsUntap(string label) =>
+    label == "emit:untap:self" || label == "emit:untap";
+
+  /// <summary>
+  /// Decision 4 — does an inherited untap reach the tap-gated copier, and at what reliability? An
+  /// <b>unconditional</b> untap (not <see cref="PortNode.Gated"/>) renews the copier when it is either
+  /// a SELF-untap (the copy untapping itself doesn't help the copier — excluded) or — the Corridor case —
+  /// a TARGET-untap whose target filter admits a creature (the copier is a creature; CR 707.2 makes the
+  /// copy's "untap target artifact or creature" able to choose the copier). The target's CardTypes are
+  /// read <b>disjunctively</b> ("artifact OR creature" — the card text), so a target naming <c>creature</c>
+  /// or <c>permanent</c>, or an unconstrained target, renews; a target naming only <c>land</c> does not
+  /// (no false renewal). A <see cref="PortNode.Gated"/> untap (optional / conditional) yields AMBER, not a
+  /// renewal — the closing hop is uncertain. Returns the edge reliability (<see cref="Trilean.Yes"/> =
+  /// GREEN-eligible), or <c>null</c> when the untap cannot reach the copier at all.
+  /// </summary>
+  private static Trilean? UntapReachesSource(PortNode untap)
+  {
+    if (untap.Label == "emit:untap:self")
+      return null; // a self-untap renews the COPY, not the copier — needs the inherited-self path (D), not here
+    // A bare target-untap (no Subject) targets any permanent → reaches a creature copier (unconstrained).
+    if (untap.Subject is null)
+      return untap.Gated ? Trilean.Unknown : Trilean.Yes;
+    var targetsCreature = TargetAdmitsCreature(untap.Subject);
+    if (!targetsCreature)
+      return null; // "untap target land" can't choose a creature copier — no renewal
+    return untap.Gated ? Trilean.Unknown : Trilean.Yes;
+  }
+
+  /// <summary>An untap TARGET filter (its CardTypes read disjunctively as "X or Y", per the card text)
+  /// can choose a creature iff it names <c>creature</c> or <c>permanent</c>, or constrains no card type.</summary>
+  private static bool TargetAdmitsCreature(ObjectFilter target)
+  {
+    if (target.CardTypes is not { Count: > 0 } types)
+      return true; // unconstrained-by-type target — any permanent, incl. a creature
+    return types.Any(t =>
+      string.Equals(t, "creature", StringComparison.OrdinalIgnoreCase)
+      || string.Equals(t, "permanent", StringComparison.OrdinalIgnoreCase)
+    );
+  }
+
+  /// <summary>Synthesize the closing edge from the inherited untap to the copier's <c>tap:self</c> cost
+  /// (Decision 4), tiered by the operator reliability the graft computed (GREEN when the untap is
+  /// unconditional and reaches the copier). When the copier has no <c>tap:self</c> port the loop can't
+  /// renew — but a copier whose copy is tap-activated always has one (the copy was made by tapping).</summary>
+  private PortEdge CloseUntapToTap(
+    PortNode untap,
+    string copier,
+    IReadOnlyDictionary<string, PortGraph> graphByCard,
+    Trilean reliability
+  )
+  {
+    var tap =
+      (graphByCard.TryGetValue(copier, out var g) ? g.Ports : [])
+        .FirstOrDefault(p => p.Side == PortSide.Consume && p.Label == "tap:self")
+      ?? Port(copier, "tap:self", PortSide.Consume);
+    return new PortEdge
+    {
+      From = untap,
+      To = tap,
+      Provenance = EdgeProvenance.RulesDefined,
+      Family = EdgeFamily.Flow,
+      Overlap = FilterRelation.Overlaps,
+      Reliability = reliability,
+      Reason = reliability == Trilean.Yes ? null : "inherited untap is optional/conditional",
+    };
+  }
+
+  /// <summary>A copier-side <c>tap:self</c> for the closing edge when the copier graph lacks one (defensive).</summary>
+  private static PortNode Port(string card, string label, PortSide side) =>
+    new()
+    {
+      Card = card,
+      Label = label,
+      Side = side,
+      Identity = $"{card}::{label}",
+    };
 
   /// <summary>The minimal derived flow grammar (§6) the gold needs: a created token refuels a sac; mana refunds a mana cost.</summary>
   private bool FlowFeasible(PortNode emit, PortNode consume) =>
@@ -725,6 +1017,8 @@ public sealed class PortGraphEngine
 
     foreach (var card in tapCards)
     {
+      // (a) Blasting Station — a card-defined SELF-untap on the tap-gated card, fed by a loop token whose
+      // type triggers its etb (the original renewal).
       var untapTriggers = edges
         .Where(e =>
           e.Provenance == EdgeProvenance.CardDefined
@@ -736,13 +1030,29 @@ public sealed class PortGraphEngine
         )
         .Select(e => e.From)
         .ToList();
-      var renewed = untapTriggers.Any(trig =>
+      var selfRenewed = untapTriggers.Any(trig =>
         tokens.Any(tok =>
           ObjectFilterRelations.Intersects(tok.Subject!, trig.Subject!, _ontology).Relation
           != FilterRelation.Disjoint
         )
       );
-      if (!renewed)
+
+      // (b) Copy-inheritance (Decision 4) — the cycle traverses a synthesized closing edge from an
+      // inherited untap, on a copy this card GRAFTED, into this card's tap:self. The graft already
+      // certified the untap reaches the source (the disjunctive target test) and tiered the edge; here we
+      // just confirm such a renewing hop is on the cycle. Covers both the inherited self-untap (4a, the
+      // copy untapping itself when the engine treats the copy's tap as the copier's — n/a for Kiki) and
+      // the target-untap aimed at the tap-gated source (4b, Corridor Monitor → Kiki).
+      var copyRenewed = cycle.Any(e =>
+        e.Provenance == EdgeProvenance.RulesDefined
+        && e.From.Side == PortSide.Emit
+        && IsUntap(e.From.Label)
+        && string.Equals(e.From.Grafter, card, StringComparison.Ordinal) // a copy THIS card grafted
+        && string.Equals(e.To.Card, card, StringComparison.Ordinal)
+        && e.To.Label == "tap:self"
+      );
+
+      if (!selfRenewed && !copyRenewed)
         return false;
     }
     return true;

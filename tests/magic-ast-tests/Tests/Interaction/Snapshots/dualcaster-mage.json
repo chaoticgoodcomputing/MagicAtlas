@@ -10,7 +10,7 @@
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Dualcaster Mage::emit:timingmodification",

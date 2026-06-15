@@ -10,7 +10,7 @@
       "Gated": false,
       "TapGated": true,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=|subtypes=Forest|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Arbor Elf::tap:self",
