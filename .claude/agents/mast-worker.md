@@ -9,12 +9,15 @@ You extend the MagicAST oracle-text parser at `libs/magic-ast/` for ONE card fam
 
 **Execute, don't plan.** Do NOT enter plan mode. Make edits, run tests, and commit directly.
 
-## Step 0 — isolation self-check (FIRST, before any edit/branch/commit)
-You run in a git worktree by default (this agent sets `isolation: worktree`). Verify it:
-- Run `git rev-parse --show-toplevel` and `git log --oneline -1 HEAD`.
-- If toplevel is NOT under `.claude/worktrees/` (e.g. it is the bare repo root): STOP, make NO changes, report `ISOLATION FAILED <toplevel>`.
-- If HEAD is not the base sha the orchestrator named: STOP, report `WRONG BASE <sha>`.
-- Else capture `WORKTREE_ROOT="$(pwd)"`, then `git -C "$WORKTREE_ROOT" checkout -b <branch the orchestrator named>`.
+## Step 0 — isolation gate (FIRST, before any edit/branch/commit)
+You run in a git worktree by default (this agent sets `isolation: worktree`). Verify it with the
+deterministic gate, NOT an ad-hoc check:
+- Run `bash tools/gate-isolation.sh <base sha the orchestrator named>`.
+- **If it exits nonzero: STOP, make NO changes, report its output verbatim** (`ISOLATION FAILED …`
+  means toplevel is not under `.claude/worktrees/` — you are in the main checkout; `WRONG BASE …`
+  means HEAD is not the orchestrator's base sha). Do not proceed under any circumstances.
+- If it exits zero: capture `WORKTREE_ROOT="$(pwd)"`, then
+  `git -C "$WORKTREE_ROOT" checkout -b <branch the orchestrator named>`.
 
 ## Path hygiene (a prior run corrupted a sibling worktree — this is not optional)
 - **Never `cd` anywhere.** Stay in your starting directory for the whole session.

@@ -18,7 +18,7 @@ If you are invoked directly by the user with no orchestrator above you, do every
 These hold for every batch and every agent. They are stated once, here.
 
 - **Gold AST = eventual truth, never a snapshot.** The hand-parsed JSON is what a fully-implemented parser *should* emit, not what the current parser emits. Never *any* `IUnparsed` node — neither `"Kind": "unparsed"` (UnparsedAbility) **nor `"EffectType": "unparsed"`** (UnparsedEffect, at any nesting depth) — never embedded `Diagnostics[]`, never `Pattern` strings copied from `FallbackParser`. Getting this wrong inverts the TDD direction — the test "passes" by matching the parser's current limitations. (This is the test-overfit guard: fixtures are the committed failing test; workers extend the parser to meet them, never edit them to pass.) **This is now machine-enforced:** `GoldFixtureUnparsedTests` (ADR 0001 goal b) fails any gold fixture carrying an `IUnparsed` node. A `KnownUnparsedGold` burn-down allowlist in that test grandfathers 18 pre-existing partial fixtures — when your batch closes one of *those* cards' parser gap, the gold loses its unparsed node and the test will tell you to **remove that card from `KnownUnparsedGold`** (the list only shrinks; never add to it).
-- **Fixtures are immutable to parser work.** Whoever writes the gold owns it. An agent closing a parser gap must NOT edit a fixture to make a test pass. If a gold looks wrong, STOP and report — orchestrator-side fix.
+- **Fixtures are immutable to parser work.** Whoever writes the gold owns it. An agent closing a parser gap must NOT edit a fixture to make a test pass. If a gold looks wrong, STOP and report — orchestrator-side fix. **Machine-enforced:** `tools/gate-fixture-immutability.sh <base> <branch>` halts the batch if a worker branch modifies/deletes any existing gold (additions only). Legitimately re-pointing other cards' golds after a parser change is *orchestrator* back-prop (core-green + mandatory re-judge), never worker work — see Step 4's "Back-propagation".
 - **GLOSSARY.md is orchestrator-only.** `libs/magic-ast/GLOSSARY.md` is the tracked, auto-generated AST index. Sub-agents **read it freely, never regenerate it.** `nx run magic-ast:glossary` runs on the integration branch, once, at the end of a batch. Any in-worktree regen is a guaranteed merge conflict for no benefit — no sub-agent's tests depend on the regenerated glossary.
 - **All git uses `git -C "$WORKTREE_ROOT"`.** Capture `WORKTREE_ROOT="$(pwd)"` at session start. CWD-based git can land commits on the wrong branch.
 - **MAST describes, it does not execute.** Model what oracle text *says*, not what the rules *do* at runtime. No turn-state, priority, stack ordering, or layering fields. (See memory `feedback_mast_describes_not_executes`.)
@@ -40,17 +40,30 @@ Read these first — five minutes, saves hours.
 
 ```
 Step 0   Pre-flight: confirm execute mode + worktree base + refresh triage.
+         GATE: bash tools/gate-preflight.sh — HALT on nonzero.
 Step 1   Pick N families from triage. A family = (pattern, lastAttemptedRule) cluster
          with 1-3 fixtures sharing one parser failure point. Respect hot-file caps.
 Step 2   Brief each family inline → docs/judgments/briefing-{date}.md (rules facts).
 Step 2.5 Assignment matrix (family | model | anticipated updates) → run the collision pre-check.
 Step 3   Dispatch N combined agents in parallel (worktree isolation), one per family.
-Step 4   Judge novel-shape branches (per policy). HALT on any FAIL.
+         Each worker self-gates isolation: bash tools/gate-isolation.sh <base>.
+Step 4   Judge novel-shape branches (per policy) → verdict JSON.
+         GATE: bash tools/gate-judge-verdict.sh <verdict.json>      — HALT on any FAIL.
+         GATE: bash tools/gate-fixture-immutability.sh <base> <br>  — per branch; HALT on illicit gold edit.
 Step 5   Merge by file-affinity order. NUnit gate after each merge group.
-Step 6   NUnit 100% green required (joint regressions surface here).
+Step 6   NUnit 100% green required (joint regressions surface here).  [CORE merge gate]
 Step 7   Regenerate GLOSSARY.md once on the integration branch, commit.
 Step 8   Re-run triage. Reap worktrees (nx run mast:worktree-clean). Report. Loop or stop.
 ```
+
+**Deterministic gates (the loop's safety floor).** Four meta-gates convert former agent *promises*
+into nonzero exit codes; a nonzero exit is an **unconditional HALT** with the gate's output quoted
+in the batch report. They run only inside the live loop (they need ephemeral state — a base sha, a
+branch, the worktree pool, a verdict file), so they are bash, not NUnit, and never run in CI. The
+*core* ring (`nx run mast:test` — gold fidelity, no-unparsed, round-trip) is the snapshot check and
+is what CI runs; the meta-gates are the transition check. See
+[01_deterministic-loop-gates.md](../../../docs/scratch/alignment-session/01_deterministic-loop-gates.md)
+for the full two-ring model. Self-test the gates with `nx run mast:gate-test`.
 
 ### Step 0 — Pre-flight
 
@@ -58,7 +71,8 @@ Step 8   Re-run triage. Reap worktrees (nx run mast:worktree-clean). Report. Loo
 - **Worktree isolation + base — BOTH are required.** These are two independent settings, and getting either wrong corrupts the run (this is the root cause of the batch-1 base-contamination incident):
   1. **Every `Agent` spawn MUST pass `isolation: "worktree"`.** Without it the agent runs *in the orchestrator's own checkout* and its `git checkout`/commit moves the primary branch — that is exactly what hijacked the integration branch and stranded agents on a stale ancestor. No exceptions; a spawn missing it is a bug, not a shortcut.
   2. **`worktree.baseRef: "head"`** is set in `.claude/settings.json`, so each isolated worktree branches from the **current local HEAD** — whatever branch you have checked out (e.g. `feat/mast-improvements`), **not** `main`/`origin/HEAD`. This is correct; do not "fix" it toward `main`. The integration branch is wherever you are checked out, and you merge agent branches back into *that* — there is no `main` in this loop.
-- **Canary the isolation, don't trust the config.** Before a large batch, spawn ONE agent whose prompt's first action reports `git rev-parse --show-toplevel` (must be under `.claude/worktrees/`, NOT the repo root) and `git log --oneline -1 HEAD` (must match your HEAD). If toplevel is the main repo, or HEAD is a stale base (e.g. the expected just-landed files are missing), STOP — isolation is broken; fix it before dispatching the rest.
+- **Canary the isolation, don't trust the config.** Before a large batch, spawn ONE agent whose prompt's first action runs `bash tools/gate-isolation.sh <base sha>` (the same gate workers run). If it exits nonzero — toplevel is the main repo, or HEAD is a stale base — STOP; isolation is broken; fix it before dispatching the rest.
+- **GATE — preflight hygiene:** `bash tools/gate-preflight.sh`. Nonzero exit (too many `mast-tdd/*` branches, too many agent worktrees, or a dirty tree) is a HALT: clean up (`nx run mast:worktree-clean`, commit/stash) and re-run before dispatching. This folds the old "remember to reap" reminder into a hard gate. Thresholds are tunable via `MAST_MAX_TDD_BRANCHES` / `MAST_MAX_WORKTREES`.
 - **Refresh triage:** `nx run mast:run`.
 
 ### Step 1 — Pick families
@@ -115,13 +129,40 @@ Wait for all N to report before merging.
 
 ### Step 4 — Judge
 
-Dispatch the judge via `Agent` with **`subagent_type: "mast-judge"`** — the checked-in `.claude/agents/mast-judge.md` definition is READ-ONLY by construction (no `Write`/`Edit` tools) and runs **non-isolated in your checkout** (it needs to see un-merged branch refs via `git`; do NOT give it `isolation: worktree`). It defers to `.claude/skills/mast-judge/SKILL.md` for doctrine. Your dispatch prompt names the specific branches + files + cited CR rules to judge, and the base sha for `git diff <baseSha>..<branch>`. **Policy:** judge any branch carrying novel-shape work (new AST types, replacement effects, combo depth, architectural changes, trigger/effect-separation or chosen-variable concerns); **skip** pure established-pattern branches (keyword additions mirroring existing patterns). When the judge runs it is a hard binary gate — **any FAIL HALTs the batch.** Do not merge the offending branch; remediate inline or via a focused follow-up agent, then re-judge. There is no "concern" tier. Judge novel-shape branches *before* merging them so the integration branch stays clean.
+Dispatch the judge via `Agent` with **`subagent_type: "mast-judge"`** — the checked-in `.claude/agents/mast-judge.md` definition is READ-ONLY by construction (no `Write`/`Edit` tools) and runs **non-isolated in your checkout** (it needs to see un-merged branch refs via `git`; do NOT give it `isolation: worktree`). It defers to `.claude/skills/mast-judge/SKILL.md` for doctrine. Your dispatch prompt names the specific branches + files + cited CR rules to judge, the base sha for `git diff <baseSha>..<branch>`, and the verdict JSON output path (`docs/judgments/verdict-{date}-{batch}.json`). **Policy:** judge any branch carrying novel-shape work (new AST types, replacement effects, combo depth, architectural changes, trigger/effect-separation or chosen-variable concerns); **skip** pure established-pattern branches (keyword additions mirroring existing patterns). **Always-judge override:** any branch (or back-prop commit) that *modifies an existing gold* is judged on those golds regardless of the skip policy — a changed gold is exactly the thing that must be re-blessed.
+
+The judge emits a machine-readable verdict JSON (`{ items: [{ target, verdict, citations, reason }] }`) alongside its prose. **The halt decision is a script, not a reading:**
+
+```bash
+bash tools/gate-judge-verdict.sh docs/judgments/verdict-{date}-{batch}.json   # nonzero = any non-PASS / malformed / missing → HALT
+```
+
+A nonzero exit is an unconditional HALT — do NOT merge the offending branch; quote the gate output, remediate inline or via a focused follow-up agent, then re-judge and re-run the gate. There is no "concern" tier; the gate, not your judgment of the prose, decides.
+
+**GATE — fixture immutability (per worker branch, before merge):**
+
+```bash
+bash tools/gate-fixture-immutability.sh <baseSha> <branch>   # nonzero = branch edits/deletes an existing gold → HALT
+```
+
+Run this on **every** worker branch (not only judged ones). Workers may only ADD fixtures; a worker that edited a gold to make its own test pass is the self-confirmation drift vector, and a nonzero exit halts the batch. (Legitimate back-prop is *your* job, off the worker path — see "Back-propagation" below.)
 
 The judge verifies **doctrine** (`unparsed` in gold, describe-vs-execute, wrong AST shape/discriminator, missing required fields, free-text where structure exists) **and cross-references each cited CR rule** against `rules-structure.json`. This is cheap and reliable now that citations are orchestrator-sourced (Step 2) rather than agent-guessed: the judge confirms the cited rule exists and its text matches the modeling, and FAILs only on an absent-from-data or contradictory citation — not on subrule-letter precision.
 
+### Back-propagation (orchestrator-only; off the worker path)
+
+When a parser change legitimately re-points *other* cards' golds to a new eventual-truth (history shows this is bimodal — one card, or a systematic sweep; the largest single event re-pointed 154 golds), that is **your** action, never a worker's. The worker whose test is being made green is the wrong actor to also redefine other golds (the same self-confirmation vector, spread across cards). So the immutability gate is worker-scoped, and back-prop is governed by the **core ring + a mandatory re-judge** instead of an allowlist:
+
+1. Edit the affected golds yourself on the integration branch.
+2. `nx run mast:test` stays 100% green (core: gold fidelity, no-unparsed, round-trip).
+3. **Mandatory re-judge** of the changed golds → verdict JSON → `bash tools/gate-judge-verdict.sh` passes.
+4. Commit with the count + rationale in the message (e.g. "re-point 12 judge-verified golds — §6 self-binding"); that message is the audit trail.
+
+The immutability gate does not run against your back-prop commit (it is worker-scoped, run on worker branches `<base>..<branch>`); the re-judge gate is what blesses a back-propped Output AST.
+
 ### Steps 5-6 — Merge and gate
 
-Merge in **file-affinity order**, NUnit-gating after each group. Two individually-green branches can be jointly-red — Step 6 catches that, and no-ratchet-tolerance means any red halts the batch (roll back the merges, investigate per Stop conditions).
+Merge in **file-affinity order**, NUnit-gating after each group. **`nx run mast:test` is the CORE ring** — the same snapshot suite CI runs (gold oracle-text fidelity, no-unparsed-in-gold, round-trip); a red here is a corpus-correctness failure, distinct from the meta-gates above. Two individually-green branches can be jointly-red — Step 6 catches that, and no-ratchet-tolerance means any red halts the batch (roll back the merges, investigate per Stop conditions).
 
 1. Unique-file rule agents first (the overwhelming majority — every keyword and spell/static/triggered/activated rule is its own file; trivial auto-merge; `--ours` on any GLOSSARY conflict).
 2. `AbilityClassifier.cs` agents sequentially — the one remaining hot file; routing entries are additive, keep both sides.
@@ -179,7 +220,9 @@ Bail and escalate if any of these hold.
 
 **`[main]`** — when a sub-agent reports a stop, route to human with its manifest; don't silently re-dispatch. Conditions:
 - Post-merge NUnit isn't 100% green (semantic conflict between individually-green branches) — roll back, re-dispatch serially or escalate.
-- Judge returns HALT — do not merge; surface the verdict + offending branches.
+- `gate-judge-verdict.sh` exits nonzero (any non-PASS verdict) — do not merge; surface the gate output + offending branches, remediate, re-judge, re-run the gate.
+- `gate-fixture-immutability.sh` exits nonzero (a worker edited an existing gold) — do not merge that branch; the worker should have STOPped. Investigate; if the gold genuinely needs changing, that is orchestrator back-prop, not worker work.
+- `gate-preflight.sh` exits nonzero before dispatch — clean up (`nx run mast:worktree-clean`) and re-run; do not dispatch into a polluted environment.
 - Two agents claim the same `AbilityKind` or discriminator string — serialize: land one, re-dispatch the other against the post-merge tree.
 - Two agents target the same hot parser file beyond its cap — serialize across batches.
 - Post-batch triage shows fewer total successes than pre-batch — roll back and investigate.
@@ -201,6 +244,8 @@ Bail and escalate if any of these hold.
 | Hand-parsed fixtures | `tests/magic-ast-tests/Fixtures/HandParsedCards/{set}/*.json` |
 | Test diff dumps (on failure) | `/tmp/mast-diffs/{set}_{card}.expected.json` + `.actual.json` |
 | Orchestrator merge-gate / triage / glossary (main checkout, `nx` available) | `nx run mast:test` / `nx run mast:run` / `nx run magic-ast:glossary` |
+| Meta-gates (bash; HALT on nonzero) | `tools/gate-preflight.sh` / `tools/gate-isolation.sh` / `tools/gate-fixture-immutability.sh` / `tools/gate-judge-verdict.sh` |
+| Gate self-tests (CI-safe) | `nx run mast:gate-test` (`tools/test/gates/run.sh`) |
 | Worker targeted test (worktree — `nx` UNavailable, no `node_modules`) | `dotnet test tests/magic-ast-tests/MagicAtlas.Ast.Tests.csproj --filter "FullyQualifiedName~<CardNameNoSpaces>" --nologo` |
 | Worker subagent / judge subagent definitions | [`.claude/agents/mast-worker.md`](../../agents/mast-worker.md) / [`.claude/agents/mast-judge.md`](../../agents/mast-judge.md) |
 | Two-phase fallback + authoring reference | [PIPELINE.md](PIPELINE.md) |

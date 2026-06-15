@@ -41,7 +41,7 @@ When invoked, you receive:
 2. **Scope**: a list of file paths to judge. Typically:
    - Modified or new fixtures under `tests/magic-ast-tests/Fixtures/HandParsedCards/`
    - New or modified AST node files under `libs/magic-ast/AST/`
-3. **Output path**: where to write the verdict report. Default: `docs/judgments/verdict-{YYYY-MM-DD}.md`. Suffix with `-N` if the file already exists for today.
+3. **Output path**: where to write the verdict. Default base: `docs/judgments/verdict-{YYYY-MM-DD}-{batch}` → write both `.json` (the gate input) and `.md` (the prose report). Suffix with `-N` if a file already exists for today.
 
 The orchestrator passes scope + output path explicitly in the dispatch prompt.
 
@@ -123,7 +123,45 @@ Anything that isn't PASS. Includes (non-exhaustive):
 
 ## Output format
 
-Write the verdict report to the specified path:
+You emit **two** artifacts: a machine-readable JSON verdict (the gate input) and a prose report
+(for humans). The JSON is not optional — it is what `tools/gate-judge-verdict.sh` consumes, and the
+orchestrator's HALT decision depends on it, not on anyone reading your prose.
+
+### Machine-readable verdict (REQUIRED — the gate input)
+
+Write `docs/judgments/verdict-{YYYY-MM-DD}-{batch}.json` (suffix to match the prose report's name).
+One entry per judged item, exactly this shape:
+
+```json
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/XLN/RuthlessKnave.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.111"],
+      "reason": "models Menace with MinimumBlockers: 2"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/SomeEffect.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 603.10"],
+      "reason": "bakes timing into the effect discriminator"
+    }
+  ]
+}
+```
+
+- `verdict` is exactly `"PASS"` or `"FAIL"` (no third tier, no other strings).
+- `target` is the file path (or `path#node` for a specific AST node) the verdict is about.
+- `citations` is the CR rule(s) you cross-referenced (may be empty if the modeling is correct and
+  cites nothing — a missing citation is not a FAIL).
+- `reason` is one phrase. The gate fails on ANY non-PASS, so every FAIL must appear here.
+- Emit one item for **every** judged target. An empty `items` array fails the gate (a judge that
+  judged nothing must not pass). The PASS items belong here too, not only the FAILs.
+
+### Prose report (for humans)
+
+Also write the prose verdict to the specified `.md` path:
 
 ```markdown
 # MAST judge — batch verdict
@@ -187,16 +225,16 @@ Bail and surface to the orchestrator (don't render a partial report) if:
 
 ## Closing
 
-After writing the verdict file, emit a short closing message (~100 words):
+After writing **both** verdict files (JSON + prose), emit a short closing message (~100 words):
 
-- Path to the verdict report.
+- Path to the JSON verdict (the gate input) and the prose report.
 - Counts: PASS / FAIL.
 - The single most-impactful FAIL with one-line description (if any).
 - Whether the orchestrator should proceed (`PROCEED`) or halt (`HALT`).
 
-**PROCEED iff FAIL count is 0.** Any FAIL halts the loop until the items are addressed and the judge re-renders.
+**PROCEED iff FAIL count is 0.** Any FAIL halts the loop until the items are addressed and the judge re-renders. Note the orchestrator does not act on your `PROCEED`/`HALT` word directly — it runs `tools/gate-judge-verdict.sh <verdict.json>` on your JSON and halts on a nonzero exit. Your words are for the human; the JSON is the gate. So the JSON must be complete and consistent with your prose.
 
-The orchestrator reads only this closing message + the verdict file; everything else stays in the file.
+The orchestrator reads this closing message + runs the gate on your JSON; the prose stays for humans.
 
 ## File quick reference
 
@@ -207,6 +245,8 @@ The orchestrator reads only this closing message + the verdict file; everything 
 | Current AST catalogue | `libs/magic-ast/GLOSSARY.md` |
 | MAST conventions | `libs/magic-ast/CONTRIBUTING.md` |
 | Engine-lens structural audit (background) | `docs/ast-engine-lens-audit.md` |
-| Verdict report (output) | `docs/judgments/verdict-{date}.md` |
+| Verdict JSON (output — the gate input) | `docs/judgments/verdict-{date}-{batch}.json` |
+| Verdict prose report (output — for humans) | `docs/judgments/verdict-{date}-{batch}.md` |
+| Verdict gate (orchestrator runs this on the JSON) | `tools/gate-judge-verdict.sh` |
 | Hand-parsed fixtures | `tests/magic-ast-tests/Fixtures/HandParsedCards/{set}/{card}.json` |
 | AST nodes | `libs/magic-ast/AST/**/*.cs` |

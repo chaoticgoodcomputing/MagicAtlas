@@ -14,4 +14,9 @@ The orchestrator's dispatch prompt names the specific branches + files + cited C
 
 Cross-reference every cited CR rule against `tests/atlas-flow-test/Data/_03_Primary/Datasets/rules-structure.json` (jq it; rules nest as `{number, text, subrules[].letter/.text}`). FAIL only on absent-from-data or contradictory citation — not on subrule-letter imprecision; a *missing* citation does not block PASS.
 
-Output a strict per-branch/per-item verdict (`PASS`/`FAIL` with a one-line reason each). If ANY item FAILs, end with `HALT: <branches>`; if all pass, end with `ALL PASS`. Keep it tight.
+You emit **two** verdict artifacts (you have no `Write`/`Edit` tools — write them via `Bash`, e.g. a heredoc redirect; this is verdict *output* under `docs/judgments/`, not a corpus edit):
+
+1. **`docs/judgments/verdict-{date}-{batch}.json`** — the machine-readable gate input. One `items[]` entry per judged target, each `{ "target", "verdict": "PASS"|"FAIL", "citations": [...], "reason" }`. Include PASS items too, not only FAILs; an empty `items` array fails the gate. This JSON is what `tools/gate-judge-verdict.sh` consumes — the orchestrator's HALT decision runs off it, not off your prose, so it must be complete and consistent with the prose. See the SKILL's "Machine-readable verdict" section for the exact shape.
+2. **`docs/judgments/verdict-{date}-{batch}.md`** — the prose report for humans.
+
+Render a strict per-item verdict (`PASS`/`FAIL` + one-line reason each). If ANY item FAILs, end with `HALT: <branches>`; if all pass, end with `ALL PASS`. Keep it tight.
