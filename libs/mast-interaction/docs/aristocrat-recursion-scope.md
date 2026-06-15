@@ -1,9 +1,23 @@
 # Aristocrat recursion (cast-from-graveyard) — SCOPE / design
 
-**Status:** 📐 **PROPOSED — pending ratification.** Design only. No engine/parser/schema code in this
-batch. Deliverable is this doc + `[Ignore]`-pinned acceptance tests
-(`tests/magic-ast-tests/Tests/Interaction/AristocratRecursionScopeTest.cs`) that pin two representative
-combos + a negative control to their predicted tiers and **skip** (suite stays green).
+**Status:** ✅ **BUILT (2026-06-15)** — graveyard-recursion arm implemented; interaction-judge-verified
+(`docs/judgments/verdict-2026-06-15-aristocrat-recursion.json`, PROCEED). All 3 acceptance pins are now
+LIVE and pass. **recall@(Green+Amber) 0.39 → 0.61** (all 7 Gravecrawler aristocrat combos reconstruct).
+
+> **Two corrections this doc got wrong (the build + judge fixed them; trust the verdict over the prose below):**
+> 1. **Gravecrawler recasts for `{B}`, not `{1}{B}`.** Its `alternativeCast` has no stated cost → cast for
+>    its own mana cost (CR 601.3e). Every "`{1}{B}` = 2 mana" / mana-shortfall claim below is **wrong**.
+> 2. **The Warren variants are AMBER for a *different* reason** than the mana shortfall claimed in
+>    Decision 4. With the true `{B}` cost, one Treasure fully pays the recast — **no mana shortfall**. The
+>    real floor is Warren Soultrader's **unfed `Pay 1 life` co-cost**: `ConjunctionHolds` requires it
+>    loop-fed, but there is no `(life, pay)` flow arm (only `(life, trigger)`), so `CoCostsSatisfied=false`
+>    → AMBER (CR 118.3/119.4 — life is a real resource MAST can't certify the loop refills). Sound AMBER,
+>    not a false negative, not Red.
+>
+> The GREEN (Gravecrawler + Pitiless Plunderer + Ashnod's Altar) **is a genuine infinite loop** (mana-positive:
+> Ashnod's `{C}{C}` + a Pitiless Treasure cover the single `{B}` each iteration, with a surplus Treasure).
+> It is a 7-hop cycle, so the product/bench `LengthBound=5` reads it AMBER while the engine + the unit pin
+> (unbounded `FindCycles`) tier it GREEN — making it product-visible is a separate `LengthBound` decision.
 
 **Companion reading:** `adding-a-flow-arm.md` (the projection↔connection split this feature must
 respect, + the four anti-patterns), `copy-inheritance-scope.md` (the structure this doc mirrors),

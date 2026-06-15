@@ -8,27 +8,27 @@ using MagicAST.Tests.Infrastructure;
 
 /// <summary>
 /// Aristocrat recursion (cast-from-graveyard) — ACCEPTANCE PINS (see
-/// <c>libs/mast-interaction/docs/aristocrat-recursion-scope.md</c>). All three pins are
-/// <c>[Ignore]</c>d: the graveyard-recursion arm is DESIGN-ONLY at this point (no engine/parser code),
-/// so they MUST skip — not fail — and the suite stays green. They define "aristocrat-recursion done."
+/// <c>libs/mast-interaction/docs/aristocrat-recursion-scope.md</c>). The graveyard-recursion arm is now
+/// BUILT and interaction-judge-verified; all three pins are LIVE (no <c>[Ignore]</c>) and pass.
 ///
 /// <para>The canonical loop: a free/cheap <b>sac outlet</b> sacrifices Gravecrawler → GC <b>dies</b> to
-/// the graveyard (death payoff fires) → GC is <b>recast from the graveyard</b> ({1}{B}, gated on "you
-/// control a Zombie" — GC is itself a Zombie) → GC <b>re-enters</b> → refuels the sac. The engine has no
-/// cast-from-graveyard arm today: <c>alternativeCast</c>/<c>FromZone:Graveyard</c> is coarse
-/// (<c>known-coarse-projections.json</c>, "no flow rule consumes it yet"), so the loop never closes.</para>
+/// the graveyard (death payoff fires) → GC is <b>recast from the graveyard</b> (for its own mana cost
+/// <b>{B}</b> — its <c>alternativeCast</c> states no cost, CR 601.3e — gated on "you control a Zombie";
+/// GC is itself a Zombie) → GC <b>re-enters</b> → refuels the sac.</para>
 ///
-/// <para>The three pins pin the SCOPE's central tiering call (scope §4):</para>
+/// <para>The three pins pin the SCOPE's central tiering call (scope §4), as corrected by the judge
+/// (<c>docs/judgments/verdict-2026-06-15-aristocrat-recursion.json</c>):</para>
 /// <list type="bullet">
-/// <item>Gravecrawler + Pitiless Plunderer + Ashnod's Altar → <b>GREEN</b>. Two mana sources cover the
-/// {1}{B} recast: Ashnod's {C}{C} pays the generic {1}; Pitiless's Treasure (<c>emit:mana:any</c>) pays
-/// the black {B} pip (CR 107.4 — colourless can't pay a coloured pip, but the Treasure's any-pool can).
-/// Mana-positive ⇒ §8 <c>ManaBalanced</c> + <c>ManaProductive</c> certify ⇒ GREEN.</item>
-/// <item>Warren Soultrader + Gravecrawler + Blood Artist → <b>AMBER</b>. The honest tier: Warren makes
-/// ONE Treasure per sac = 1 <c>any</c> mana, but the recast is {1}{B} = 2 mana, so the generic {1} is
-/// provably short at 1 mana/iter ⇒ §8 <c>ManaBalanced</c> floors it to AMBER even though the drain is a
-/// productive output. Earning GREEN later needs a §8 steady-state (Treasure-accumulation) argument or a
-/// second mana source — never an engine fudge (adding-a-flow-arm anti-pattern 2).</item>
+/// <item>Gravecrawler + Pitiless Plunderer + Ashnod's Altar → <b>GREEN</b>. A genuine infinite loop: the
+/// single <b>{B}</b> recast is paid by Pitiless's Treasure (<c>emit:mana:any</c>, CR 107.4), with
+/// Ashnod's {C}{C} pure surplus. Mana-positive ⇒ §8 <c>ManaBalanced</c> + <c>ManaProductive</c> ⇒ GREEN.
+/// (A 7-hop cycle: the engine's unbounded <c>FindCycles</c> here tiers it GREEN; the product/bench
+/// <c>LengthBound=5</c> can't reach it and reads it AMBER — a separate length-bound decision.)</item>
+/// <item>Warren Soultrader + Gravecrawler + Blood Artist → <b>AMBER</b>. NOT a mana shortfall (the {B}
+/// recast is fully paid by Warren's one Treasure). The honest floor is Warren's <b>unfed <c>Pay 1 life</c>
+/// co-cost</b>: §8 <c>ConjunctionHolds</c> needs it loop-fed, but there is no <c>(life, pay)</c> flow arm
+/// (only <c>(life, trigger)</c>), so <c>CoCostsSatisfied=false</c> → AMBER (CR 118.3/119.4 — life is a
+/// real resource MAST can't certify the loop refills). Sound AMBER, not a false negative.</item>
 /// <item>Gravecrawler with its cast-from-graveyard permission ABSENT + a free sac outlet → <b>NO
 /// cycle</b>. The false-positive guard (scope §4, layer i): the recursion arm fires ONLY on a real
 /// cast-from-graveyard permission. A dead creature with no recast permission stays dead — a naive
@@ -69,16 +69,16 @@ public class AristocratRecursionScopeTest
 
   /// <summary>
   /// LEAD GREEN COMBO (bench: Gravecrawler + Pitiless Plunderer + Ashnod's Altar, pop 32 582). Ashnod's
-  /// sacs GC for free → GC dies → Pitiless makes a Treasure → GC recast {1}{B} → re-enter → re-sac. The
-  /// recast's two-mana cost is covered by TWO sources: Ashnod's {C}{C} pays the generic {1}, the
-  /// Treasure's any-colour mana pays the black {B} pip. Mana-positive (a Treasure surplus accrues each
-  /// death) ⇒ §8 certifies infinite.
+  /// sacs GC for free → GC dies → Pitiless makes a Treasure → GC recast for <b>{B}</b> → re-enter →
+  /// re-sac. The single black pip is paid by the Treasure's any-colour mana (CR 107.4); Ashnod's {C}{C}
+  /// is pure surplus. Mana-positive (a Treasure surplus accrues each death) ⇒ §8 certifies infinite.
   ///
   /// <para>Target: <b>GREEN</b>. The per-colour balance (PortGraphEngine.ManaBalanced) genuinely covers
-  /// {1}{B}; the loop nets an unbounded resource (Treasures/mana) ⇒ ManaProductive holds. The §8-B
-  /// one-shot-self-removal carve-out must RETAIN the self-death cycle because the recast is a
-  /// self-<c>emit:returntobattlefield</c> (the dual of Persist/Undying). interaction-judge must PROCEED
-  /// on this GREEN — recast loops are a prime false-positive surface.</para>
+  /// the {B} recast; the loop nets an unbounded resource (Treasures/mana) ⇒ ManaProductive holds. The
+  /// §8-B one-shot-self-removal carve-out keys on the self-<c>emit:returntobattlefield</c> label (the
+  /// dual of Persist/Undying) — here it's inert (no self-LTB on the cycle) but wired correctly.
+  /// interaction-judge PROCEEDed on this GREEN — recast loops are a prime false-positive surface. Run via
+  /// unbounded <c>FindCycles</c> (the 7-hop loop exceeds the product LengthBound).</para>
   /// </summary>
   [Test]
   public void Gravecrawler_x_pitiless_x_ashnods_altar_reconstructs_green_mana_positive_recast()
@@ -115,19 +115,21 @@ public class AristocratRecursionScopeTest
 
   /// <summary>
   /// AMBER COMBO (bench: Warren Soultrader + Gravecrawler + Blood Artist, pop 38 733). Warren sacs GC
-  /// (Pay 1 life, Sacrifice another creature → ONE Treasure) → GC dies → Blood Artist drains → GC recast
-  /// {1}{B} → re-enter → re-sac. The honest tier is AMBER, not GREEN: Warren makes a single Treasure per
-  /// iteration = 1 any-colour mana, but the recast is {1}{B} = 2 mana, so the generic {1} is provably
-  /// unfed at 1 mana/iter. §8 ManaBalanced floors the provable shortfall regardless of the drain output.
+  /// (<b>Pay 1 life</b>, Sacrifice another creature → ONE Treasure) → GC dies → Blood Artist drains → GC
+  /// recast for {B} → re-enter → re-sac. The honest tier is AMBER, not GREEN — but NOT for a mana reason:
+  /// the {B} recast is fully paid by Warren's one Treasure (no shortfall). The floor is Warren's
+  /// <b>unfed <c>Pay 1 life</c> co-cost</b>: §8 <c>ConjunctionHolds</c> requires every co-cost sibling
+  /// loop-fed, and there is no <c>(life, pay)</c> flow arm (Blood Artist's <c>emit:life:gain</c> feeds a
+  /// life-TRIGGER, never a life-COST), so <c>CoCostsSatisfied=false</c>.
   ///
-  /// <para>Target: <b>AMBER</b>. The drain is a productive output, but a provable mana shortfall floors
-  /// the loop (PortGraphEngine.ManaBalanced — the same machinery that floors Chatterfang × Ruthless
-  /// Knave). This is the soundness-preserving call: the GREEN would have to be EARNED by a §8
-  /// steady-state argument (Treasures accumulate across iterations) or a parse sharpen, never fudged
+  /// <para>Target: <b>AMBER</b>. The drain is a productive output, but the loop can't certify it refills
+  /// the paid life each iteration (CR 118.3/119.4 — life is a real resource; MAST has no life-as-resource
+  /// ledger). Sound AMBER, not Red (the loop is structurally feasible), not a false negative. Earning
+  /// GREEN later needs a real <c>(life, pay)</c> arm or a life-ledger, never an engine fudge
   /// (adding-a-flow-arm anti-pattern 2). The Warren+Zulaport sibling (pop 34 860) is the same shape.</para>
   /// </summary>
   [Test]
-  public void Warren_x_gravecrawler_x_blood_artist_reconstructs_amber_mana_short_recast()
+  public void Warren_x_gravecrawler_x_blood_artist_reconstructs_amber_unfed_life_cocost()
   {
     var graphs = new[]
     {
@@ -150,7 +152,8 @@ public class AristocratRecursionScopeTest
     Assert.That(
       loop!.Tier,
       Is.EqualTo(CertaintyTier.Amber),
-      "1 Treasure/iter vs a {1}{B}=2 recast → provable {1} shortfall → §8 floors to AMBER (not a fudge to GREEN)"
+      "Warren's unfed 'Pay 1 life' co-cost (no (life,pay) arm) → ConjunctionHolds false → §8 floors to AMBER "
+        + "(the {B} recast itself is fully paid by the Treasure — not a mana shortfall, not a fudge to GREEN)"
     );
   }
 
