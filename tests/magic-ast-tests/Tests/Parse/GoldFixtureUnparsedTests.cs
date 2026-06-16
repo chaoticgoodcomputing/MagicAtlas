@@ -1,6 +1,7 @@
 namespace MagicAST.Tests.Tests;
 
 using System.Linq;
+using System.Text.Json;
 using MagicAST.Analysis;
 using MagicAST.Tests.Infrastructure;
 
@@ -11,39 +12,47 @@ using MagicAST.Tests.Infrastructure;
 /// anti-pattern the TDD loop forbids.
 ///
 /// <para>
-/// <see cref="KnownUnparsedGold"/> is a self-cleaning burn-down allowlist of the
-/// fixtures that predate this rule. The check is a ratchet: a fixture NOT on the
-/// list must be unparsed-free, and a fixture ON the list must STILL contain an
-/// unparsed node — so the moment one is hand-parsed properly, this test fails and
-/// forces its removal from the list. The list can only shrink; new violations
-/// are rejected outright.
+/// The exceptions are an explicit, NAMED whitelist — <c>Fixtures/whitelist-unparsed.json</c>, each entry
+/// a card + tag (debt|irreducible) + reason. A fixture NOT on the whitelist must be unparsed-free (new
+/// debt is rejected outright, loudly); a fixture ON it must STILL contain an unparsed node, so the moment
+/// one is hand-parsed properly this test fails and forces its removal. The whitelist holds only named,
+/// justified carve-outs and only shrinks — TARGET: empty (see <c>libs/magic-ast/docs/gold-burndown-plan.md</c>).
+/// De-ratcheted from the in-test <c>KnownUnparsedGold</c> HashSet 2026-06-16.
 /// </para>
 /// </summary>
 [TestFixture]
 public class GoldFixtureUnparsedTests
 {
-  private static readonly IReadOnlySet<string> KnownUnparsedGold = new HashSet<string>(
-    StringComparer.Ordinal
-  )
+  // The explicit unparsed whitelist (Fixtures/whitelist-unparsed.json) as the set of permitted card names.
+  private static readonly Lazy<IReadOnlySet<string>> KnownUnparsedGold = new(LoadUnparsedWhitelist);
+
+  private static IReadOnlySet<string> LoadUnparsedWhitelist()
   {
-    // Partial: structured abilities alongside an unparsed ability/effect. The
-    // 4 whole-card overfit fixtures (every ability unparsed) were deleted, not
-    // listed — they had zero structured content to preserve.
-    "BLB/WildcallSpree",
-    "DGM/WearTear",
-    "EOE/ChoraleoftheVoid",
-    "EOE/ElegyAcolyte",
-    "EOE/Hylderblade",
-    "EOE/PlasmaBolt",
-    "EOE/TragicTrajectory",
-    "LRW/WindbriskHeights",
-    "ONS/IxidorRealitySculptor",
-    "ORI/WhirlerRogue",
-    "SOM/PrecursorGolem",
-    "TSP/AspectOfMongoose",
-    "WHO/BillPotts",
-    "WOE/CandyTrail",
-  };
+    var path = System.IO.Path.Combine(
+      TestContext.CurrentContext.TestDirectory,
+      "Fixtures",
+      "whitelist-unparsed.json"
+    );
+    var set = new HashSet<string>(StringComparer.Ordinal);
+    if (!System.IO.File.Exists(path))
+    {
+      return set;
+    }
+
+    using var doc = JsonDocument.Parse(System.IO.File.ReadAllText(path));
+    if (doc.RootElement.TryGetProperty("entries", out var entries))
+    {
+      foreach (var e in entries.EnumerateArray())
+      {
+        if (e.TryGetProperty("card", out var c) && c.GetString() is { } name)
+        {
+          set.Add(name);
+        }
+      }
+    }
+
+    return set;
+  }
 
   [TestCaseSource(
     typeof(HandParsedTestCaseLoader),
@@ -55,13 +64,14 @@ public class GoldFixtureUnparsedTests
     var unparsed = ResidualWalker.CountUnparsed(testCase.GetOutput());
     var total = unparsed.Values.Sum();
 
-    if (KnownUnparsedGold.Contains(name))
+    if (KnownUnparsedGold.Value.Contains(name))
     {
       Assert.That(
         total,
         Is.GreaterThan(0),
-        $"'{name}' is on the KnownUnparsedGold burn-down list but no longer contains "
-          + "unparsed nodes. Remove it from the list — goal (b) now holds for this fixture."
+        $"'{name}' is on the unparsed whitelist (Fixtures/whitelist-unparsed.json) but no longer "
+          + "contains unparsed nodes. Remove its entry — goal (b) now holds for this fixture (the "
+          + "whitelist only shrinks)."
       );
       return;
     }
@@ -71,7 +81,9 @@ public class GoldFixtureUnparsedTests
       total,
       Is.EqualTo(0),
       $"Gold fixture '{name}' contains unparsed nodes [{detail}]. Gold must never assert a "
-        + "parse failure as truth (ADR 0001, goal b): hand-parse it properly, or remove the fixture."
+        + "parse failure as truth (ADR 0001, goal b): hand-parse it properly (or delete a synthetic "
+        + "fixture). Only if genuinely irreducible, add a justified entry to "
+        + "Fixtures/whitelist-unparsed.json — new debt is otherwise rejected outright."
     );
   }
 }

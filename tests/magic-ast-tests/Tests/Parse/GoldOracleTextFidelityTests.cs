@@ -133,17 +133,31 @@ public class GoldOracleTextFidelityTests
     return dict;
   }
 
-  // Loads a committed Fixtures/*.json allowlist (a flat JSON array of testCase.Name strings).
+  // Loads a committed Fixtures/*.json whitelist — { "entries": [ { "card": ..., "tag": ..., "reason": ... } ] }
+  // — and returns the set of card names. tag/reason are documentation for humans; the test keys on the
+  // names. (Replaced the old flat-array allowlist format when the gold ratchets were de-ratcheted.)
   private static HashSet<string> LoadFixtureNameSet(string fileName)
   {
     var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", fileName);
+    var set = new HashSet<string>(StringComparer.Ordinal);
     if (!File.Exists(path))
     {
-      return new HashSet<string>(StringComparer.Ordinal);
+      return set;
     }
 
-    var list = JsonSerializer.Deserialize<string[]>(File.ReadAllText(path)) ?? [];
-    return new HashSet<string>(list, StringComparer.Ordinal);
+    using var doc = JsonDocument.Parse(File.ReadAllText(path));
+    if (doc.RootElement.TryGetProperty("entries", out var entries))
+    {
+      foreach (var e in entries.EnumerateArray())
+      {
+        if (e.TryGetProperty("card", out var c) && c.GetString() is { } name)
+        {
+          set.Add(name);
+        }
+      }
+    }
+
+    return set;
   }
 
   // Trivial normalization only: line endings + surrounding whitespace. Everything else (reminder

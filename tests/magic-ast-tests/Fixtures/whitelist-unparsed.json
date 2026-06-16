@@ -1,0 +1,75 @@
+{
+  "_doc": "Explicit whitelist of golds permitted to carry an IUnparsed node (UnparsedAbility/UnparsedEffect). STATELESS INVARIANT (GoldFixtureUnparsedTests): any gold NOT listed here must be unparsed-free, else loud failure; a listed gold that no longer carries an unparsed node fails too (remove it). ADR-0001 goal (b): a gold must never assert a parse failure as truth. Each entry is a NAMED, justified carve-out (tag debt = slated for a burndown slice, see libs/magic-ast/docs/gold-burndown-plan.md; tag irreducible = permanent). De-ratcheted from the in-test KnownUnparsedGold HashSet 2026-06-16. TARGET: empty.",
+  "entries": [
+    {
+      "card": "BLB/WildcallSpree",
+      "tag": "debt",
+      "reason": "Slice 9 unparsed-static (Spree-cluster); corrupt Input.Name collides with FRF Wildcall \u2014 rename first"
+    },
+    {
+      "card": "DGM/WearTear",
+      "tag": "debt",
+      "reason": "Slice 9 unparsed-static (split // ClauseSplitter); corrupt Input (real Tear = destroy enchantment) \u2014 hand-correct first"
+    },
+    {
+      "card": "EOE/ChoraleoftheVoid",
+      "tag": "debt",
+      "reason": "Slice 8 unparsed-triggered (reanimate + sacrifice-unless-condition)"
+    },
+    {
+      "card": "EOE/ElegyAcolyte",
+      "tag": "debt",
+      "reason": "Slice 8 unparsed-triggered (plural combat-damage / draw-and-lose-life)"
+    },
+    {
+      "card": "EOE/Hylderblade",
+      "tag": "debt",
+      "reason": "Slice 8 unparsed-triggered (attach-to-target widening)"
+    },
+    {
+      "card": "EOE/PlasmaBolt",
+      "tag": "debt",
+      "reason": "Slice 9 unparsed-static (Void conditional alternate)"
+    },
+    {
+      "card": "EOE/TragicTrajectory",
+      "tag": "debt",
+      "reason": "Slice 9 unparsed-static (Void conditional alternate)"
+    },
+    {
+      "card": "LRW/WindbriskHeights",
+      "tag": "debt",
+      "reason": "Slice 9 unparsed-legacy (may-play-exiled-without-paying); stale Input"
+    },
+    {
+      "card": "ONS/IxidorRealitySculptor",
+      "tag": "debt",
+      "reason": "Slice 9 unparsed-legacy (turn-face-up effect); couples Slice 5 face-down"
+    },
+    {
+      "card": "ORI/WhirlerRogue",
+      "tag": "debt",
+      "reason": "Slice 4 unparsed-spell-loselife (tap-cost + can't-be-blocked grant)"
+    },
+    {
+      "card": "SOM/PrecursorGolem",
+      "tag": "debt",
+      "reason": "Slice 8E unparsed-triggered (reflexive CopyEffect{Target:It}); firability-sensitive"
+    },
+    {
+      "card": "TSP/AspectOfMongoose",
+      "tag": "debt",
+      "reason": "Slice 9 unparsed-legacy (regen-only); corrupt Input \u2014 re-point first"
+    },
+    {
+      "card": "WHO/BillPotts",
+      "tag": "debt",
+      "reason": "Slice 8E unparsed-triggered (reflexive copy); firability-sensitive"
+    },
+    {
+      "card": "WOE/CandyTrail",
+      "tag": "debt",
+      "reason": "Slice 4 unparsed-spell-loselife; corrupt Input (real = Food/Clue) \u2014 re-point first"
+    }
+  ]
+}
