@@ -468,6 +468,19 @@ public sealed class PortWalk
     }
     if (effectType == "copy")
     {
+      var copyTarget = Filter(e["Target"]?["Filter"]) ?? new ObjectFilter { CardTypes = ["creature"] };
+
+      // A SPELL-copy ("copy target instant or sorcery spell", Target.Zone:Stack — Dualcaster, Reiterate,
+      // Narset's Reversal) is a DIFFERENT resource from a permanent token-copy (CR 707.10 — a copy of a
+      // spell is put on the STACK, isn't cast, and carries no ETB/untap to graft onto a permanent loop).
+      // Project it FAITHFULLY but DISTINCTLY (emit:copy:spell, NON-NULL Subject = the copied-spell filter)
+      // so the copy-inheritance permanent graft (which keys on the bare emit:copy) never grafts a spell as a
+      // permanent. No flow arm consumes emit:copy:spell yet — the sound spell-copy refuel needs a
+      // copy-of-spell graft shape (sibling of copy-inheritance), STOP-and-reported for human review; this is
+      // the parse-layer prerequisite (PortLabel.SpellCopyEmit docstring; adding-a-flow-arm.md projection↔connection split).
+      if (copyTarget.Zone == MagicAST.AST.References.Zone.Stack)
+        return Port(card, PortLabel.SpellCopyEmit(copyTarget, _ontology), PortSide.Emit, subject: copyTarget);
+
       // Copy-token inheritance (copy-inheritance-scope.md, Decision 1/2 + §6 Track A): "create a token
       // that's a copy of target nonlegendary creature you control" (Kiki). The copy emit is projected
       // FAITHFULLY — a real label plus a NON-NULL Subject = the copy TARGET filter, the discriminator the
@@ -476,7 +489,6 @@ public sealed class PortWalk
       // unconditionally. The floor is {CardTypes:[creature]} — the broadest a copy can ever be — never
       // narrower-by-omission. The parsed modifications (abilityAdder:haste, supertypeRemover, …) ride as
       // CopyMods so the engine's graft pass can apply them to the cloned ports.
-      var copyTarget = Filter(e["Target"]?["Filter"]) ?? new ObjectFilter { CardTypes = ["creature"] };
       var mods = e["Modifications"]?.Deserialize<List<MagicAST.AST.Effects.TokenCopy.CopyModification>>(
         MagicAST.MagicASTJsonOptions.Strict
       );

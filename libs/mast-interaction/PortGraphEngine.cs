@@ -206,6 +206,9 @@ public sealed class PortGraphEngine
   /// </summary>
   private GraftResult GraftCopyInheritance(IReadOnlyList<PortGraph> graphs)
   {
+    // EXACT-match emit:copy (a permanent token-copy) — NOT a prefix: emit:copy:spell is a STACK spell-copy
+    // (CR 707.10) with no battlefield ports to graft, and must never enter the permanent graft path. Keep
+    // this an equality check; broadening it to StartsWith would wrongly graft a spell-copy as a permanent.
     var copies = graphs
       .SelectMany(g => g.Ports)
       .Where(p => p.Side == PortSide.Emit && p.Label == "emit:copy" && p.Subject is not null)
