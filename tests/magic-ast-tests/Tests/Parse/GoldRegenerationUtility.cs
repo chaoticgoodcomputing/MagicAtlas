@@ -111,30 +111,73 @@ public class GoldRegenerationUtility
     TestContext.Out.WriteLine(string.Join("\n", report));
   }
 
+  // name -> the gold Input (PascalCase 8-field shape). Primary source is the commander-legal-paper
+  // corpus (card-inputs.json); the full Scryfall bulk (oracle-cards.json) fills gaps for cards filtered
+  // OUT of the corpus (digital-only/Alchemy, non-commander) — the authoritative SUPERSET the fidelity
+  // test now validates against. Corpus wins on conflict (it is the exact text the parser consumes).
   private static Dictionary<string, JsonObject>? LoadCorpusInputs()
   {
-    var path = TestData.CardInputsPath;
-    if (!File.Exists(path))
-    {
-      return null;
-    }
-
     var dict = new Dictionary<string, JsonObject>(StringComparer.Ordinal);
-    var root = JsonNode.Parse(File.ReadAllText(path))!.AsArray();
-    foreach (var rec in root)
-    {
-      if (rec?["Input"] is not JsonObject input)
-      {
-        continue;
-      }
 
-      var name = input["Name"]?.ToString();
-      if (name is not null && !dict.ContainsKey(name))
+    var corpusPath = TestData.CardInputsPath;
+    if (File.Exists(corpusPath))
+    {
+      foreach (var rec in JsonNode.Parse(File.ReadAllText(corpusPath))!.AsArray())
       {
-        dict[name] = input;
+        if (rec?["Input"] is not JsonObject input)
+        {
+          continue;
+        }
+
+        var name = input["Name"]?.ToString();
+        if (name is not null && !dict.ContainsKey(name))
+        {
+          dict[name] = input;
+        }
       }
     }
 
-    return dict;
+    var bulkPath = TestData.OracleCardsPath;
+    if (File.Exists(bulkPath))
+    {
+      foreach (var rec in JsonNode.Parse(File.ReadAllText(bulkPath))!.AsArray())
+      {
+        var name = rec?["name"]?.ToString();
+        if (name is not null && !dict.ContainsKey(name)) // corpus wins
+        {
+          dict[name] = BulkToGoldInput(rec!.AsObject());
+        }
+      }
+    }
+
+    return dict.Count == 0 ? null : dict;
   }
+
+  // Maps a raw Scryfall bulk record (snake_case) onto the PascalCase gold Input shape the regenerator
+  // reads. Single-faced only (the 8 gold fields carry no faces) — adequate for corpus-absent normal
+  // cards; a DFC absent from the corpus would need the face-join handled here.
+  private static JsonObject BulkToGoldInput(JsonObject bulk)
+  {
+    var input = new JsonObject();
+    foreach (var (gold, snake) in BulkFieldMap)
+    {
+      if (bulk[snake] is JsonNode v)
+      {
+        input[gold] = v.DeepClone();
+      }
+    }
+    return input;
+  }
+
+  private static readonly (string Gold, string Snake)[] BulkFieldMap =
+  [
+    ("Name", "name"),
+    ("ManaCost", "mana_cost"),
+    ("TypeLine", "type_line"),
+    ("OracleText", "oracle_text"),
+    ("Power", "power"),
+    ("Toughness", "toughness"),
+    ("Colors", "colors"),
+    ("ColorIdentity", "color_identity"),
+  ];
 }

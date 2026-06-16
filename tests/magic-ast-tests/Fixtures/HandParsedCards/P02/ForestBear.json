@@ -3,7 +3,7 @@
     "Name": "Forest Bear",
     "ManaCost": "{1}{G}",
     "TypeLine": "Creature — Bear",
-    "OracleText": "When you control no Forests, sacrifice this creature.",
+    "OracleText": "",
     "Power": "2",
     "Toughness": "2",
     "Colors": [
@@ -25,33 +25,8 @@
       ]
     },
     "Oracle": {
-      "RawText": "When you control no Forests, sacrifice this creature.",
-      "Abilities": [
-        {
-          "Kind": "triggered",
-          "Trigger": {
-            "Timing": "When",
-            "Event": "ControlNoLandType",
-            "Filter": {
-              "CardTypes": [
-                "land"
-              ],
-              "Subtypes": [
-                "Forest"
-              ],
-              "Controller": "You"
-            }
-          },
-          "Effects": [
-            {
-              "EffectType": "sacrifice",
-              "Target": {
-                "Kind": "It"
-              }
-            }
-          ]
-        }
-      ]
+      "RawText": "",
+      "Abilities": []
     },
     "Attributes": [
       {
@@ -69,7 +44,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -87,13 +63,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

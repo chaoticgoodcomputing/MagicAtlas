@@ -2,10 +2,10 @@
   "Input": {
     "Name": "Hag of Noxious Nightmares",
     "ManaCost": "{2}{B}",
-    "TypeLine": "Creature — Human Warlock",
-    "OracleText": "When Hag of Noxious Nightmares enters, each opponent discards a card.\nWarlocks you control have menace.",
-    "Power": "3",
-    "Toughness": "3",
+    "TypeLine": "Creature — Hag Warlock",
+    "OracleText": "Warlocks you control have menace.",
+    "Power": "2",
+    "Toughness": "2",
     "Colors": [
       "B"
     ],
@@ -16,43 +16,18 @@
   "Output": {
     "Name": "Hag of Noxious Nightmares",
     "TypeLine": {
-      "Raw": "Creature — Human Warlock",
+      "Raw": "Creature — Hag Warlock",
       "Types": [
         "Creature"
       ],
       "Subtypes": [
-        "Human",
+        "Hag",
         "Warlock"
       ]
     },
     "Oracle": {
-      "RawText": "When Hag of Noxious Nightmares enters, each opponent discards a card.\nWarlocks you control have menace.",
+      "RawText": "Warlocks you control have menace.",
       "Abilities": [
-        {
-          "Kind": "triggered",
-          "Trigger": {
-            "Timing": "When",
-            "Event": "Enters",
-            "Filter": {
-              "CardTypes": [
-                "creature"
-              ],
-              "IsSelf": true
-            }
-          },
-          "Effects": [
-            {
-              "EffectType": "discardCards",
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Player": {
-                "Kind": "EachOpponent"
-              }
-            }
-          ]
-        },
         {
           "Kind": "static",
           "Effects": [
@@ -69,7 +44,6 @@
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Menace",
                 "Effects": [
                   {
                     "EffectType": "evasion",
@@ -80,7 +54,8 @@
                     },
                     "MinimumBlockers": 2
                   }
-                ]
+                ],
+                "KeywordSource": "Menace"
               }
             }
           ]
@@ -103,7 +78,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -121,13 +97,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]
