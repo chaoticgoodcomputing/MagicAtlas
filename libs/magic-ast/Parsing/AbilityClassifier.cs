@@ -1350,6 +1350,21 @@ public sealed class AbilityClassifier
         {
           hasNonManaCostVerb = true;
         }
+
+        // A leading "Tap …" / "Untap …" spelled out as a Word (not the {T}/{Q}
+        // symbol) is a cost verb when a colon follows — e.g. Whirler Rogue's
+        // "Tap two untapped artifacts you control: Target creature can't be
+        // blocked this turn." (CR 602.5 / 118.3 — tapping permanents as an
+        // activation cost). Scoped to the clause's first token so the same verb
+        // used imperatively inside an effect ("…, then tap target creature.")
+        // is not mistaken for a cost. The {T} symbol form is already covered by
+        // IsCostToken (TapSymbol/UntapSymbol).
+        if (i == 0
+          && (word.Equals("Tap", StringComparison.OrdinalIgnoreCase)
+            || word.Equals("Untap", StringComparison.OrdinalIgnoreCase)))
+        {
+          hasNonManaCostVerb = true;
+        }
       }
 
       // If we hit a trigger timing word, this isn't an activated ability

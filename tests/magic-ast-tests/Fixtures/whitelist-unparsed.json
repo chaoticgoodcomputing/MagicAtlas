@@ -47,11 +47,6 @@
       "reason": "Slice 9 unparsed-legacy (turn-face-up effect); couples Slice 5 face-down"
     },
     {
-      "card": "ORI/WhirlerRogue",
-      "tag": "debt",
-      "reason": "Slice 4 unparsed-spell-loselife (tap-cost + can't-be-blocked grant)"
-    },
-    {
       "card": "SOM/PrecursorGolem",
       "tag": "debt",
       "reason": "Slice 8E unparsed-triggered (reflexive CopyEffect{Target:It}); firability-sensitive"

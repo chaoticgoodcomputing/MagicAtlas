@@ -44,9 +44,6 @@
           "Effects": [
             {
               "EffectType": "createToken",
-              "Player": {
-                "Kind": "You"
-              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2
@@ -67,7 +64,6 @@
                 "Abilities": [
                   {
                     "Kind": "static",
-                    "KeywordSource": "Flying",
                     "Effects": [
                       {
                         "EffectType": "evasion",
@@ -87,35 +83,56 @@
                           ]
                         }
                       }
-                    ]
+                    ],
+                    "KeywordSource": "Flying"
                   }
                 ],
                 "IsCopy": false
+              },
+              "Player": {
+                "Kind": "You"
               }
             }
           ]
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 98,
-            "Length": 83
-          },
-          "RawText": "Tap two untapped artifacts you control: Target creature can't be blocked this turn.",
-          "Diagnostics": [
+          "Kind": "activated",
+          "Costs": [
             {
-              "Severity": "error",
-              "Message": "Spell ability parser couldn't recognise effect",
-              "Location": {
-                "Start": 98,
-                "Length": 83
+              "CostType": "tapPermanents",
+              "Filter": {
+                "CardTypes": [
+                  "artifact"
+                ],
+                "Controller": "You"
               },
-              "RawText": "Tap two untapped artifacts you control: Target creature can't be blocked this turn.",
-              "Pattern": "UnparsedSpell",
-              "LastAttemptedRule": "SpellAbilityParser.YouLoseLifeSpellRule",
-              "FailurePosition": 98
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
             }
-          ]
+          ],
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
         }
       ]
     },
@@ -141,7 +158,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -159,13 +177,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]
