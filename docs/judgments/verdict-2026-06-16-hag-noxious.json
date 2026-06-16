@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WOE/HagOfNoxiousNightmares.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.111", "CR 702.111b", "CR 509.1", "CR 109.5"],
+      "reason": "\"Warlocks you control have menace\" modeled as static gainAbility over Each / Subtypes:[Warlock] / Controller:You granting a static evasion ability with MinimumBlockers:2 and KeywordSource:Menace; no ExcludeSelf is correct since the card omits \"other\"; nothing dropped or added vs the one-line card"
+    }
+  ]
+}
