@@ -85,6 +85,37 @@ keys on `(label, version)`: a card whose projection changes dirties only the lab
 their cycle neighborhood — far tighter than the per-card neighborhood 07 currently bounds. This doc is
 the engine half; 07 owns the versioning/invalidation/atomic-swap half.
 
+## Copy recursion — the label-graph closure is the fixpoint (decided 2026-06-16)
+
+A copy that copies a copy is the recursion hazard. Two forms surface it:
+
+- **Interaction layer — spell-copy** (the deferred `alignment/spell-copy-arm` work). Narset's Reversal +
+  Reiterate each copy the *other's* spell (bench 11-3368): the copy-of-spell graft reproduces a
+  spell-copy that re-copies, unbounded if expanded eagerly. **Decision (project owner): handle via
+  Option B — two-layer label-graph closure.** The copy-of-spell arm is expressed as a label-level
+  `FlowFeasible` relation (`emit:copy:spell → resolve`), so the recursion becomes a **finite elementary
+  cycle in the bounded ~545-node label graph** (Layer 1's DFS already guards on-path revisits and
+  terminates). Layer 2 instantiates that one finite candidate over the real 2-card set and tiers it (the
+  AMBER target — Reiterate's `{3}` buyback co-cost — falls out of §8 balance). Infinite recursion is
+  *structurally impossible* because Layer 1 walks labels, never instances. No depth cap, no visited-set
+  bookkeeping in the graft — the engine this doc describes *is* the termination argument. (A depth
+  backstop stays available as defense-in-depth but is not the mechanism.)
+
+- **Parse layer — token-copy-of-self** (already resolved). Cards that make a token copy of *themselves*
+  are common — the **myriad** keyword is self-copy by definition (~35 cards), plus explicit self-name
+  copies (Jace Mirror Mage, Living Laser, Shredder), "copy of *this* creature" (Homunculus Horde, Giant
+  Adephage, Conclave Evangelist), and embalm/eternalize (Adorned Pouncer, Honored Hydra). The AST does
+  **not** inline-expand the copied object: `TokenDefinition.IsCopy = true` is a bounded **reference** to
+  the source (via the effect target / "it" / "this creature") plus the printed deltas ("except it's a
+  4/4 black Zombie"), never a clone of the source's abilities. So "where do we stop the AST parse" =
+  *at the copy boundary* — `IsCopy` is the fixpoint marker. Explicit token definitions (literal "a
+  Spirit with flying") are still inlined because they are bounded literal text; only **copies** are
+  references. (The self-reference source — "this card"/"it" — is presently captured as the
+  `OtherCharacteristic("this card")` free-text residual, a de-string-debt item, not a recursion risk.)
+
+Both layers share one principle: **a copy is a bounded reference, and recursion closes as a finite
+self-loop — never an inline expansion.**
+
 ## Next steps (when pursued)
 
 1. Refactor `FindCycles` adjacency to group by label (not `Identity`); emit candidate label-cycles.
