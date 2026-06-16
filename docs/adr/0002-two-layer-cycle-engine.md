@@ -2,7 +2,7 @@
 
 ## Status
 
-**Proposed (2026-06-16) — landed behind an equivalence gate on `alignment/two-layer-cycle-engine`, NOT merged.** The behaviour-preserving refactor itself is implemented and proven byte-identical to the reference engine (§The equivalence gate); the three numbered **decisions** below — the display cutoff `K`, the memoization/incremental-recompute policy, and the retire-or-keep call on the old `FindCycles` — are each marked **PROPOSED — pending human ratification**. Nothing on those three is decided here; this ADR proposes and records them for human review. The branch is held for that review and is not merged.
+**Accepted (2026-06-16) — ratified by the project owner and merged to `main` (ff from `alignment/two-layer-cycle-engine`).** The behaviour-preserving refactor is implemented and proven byte-identical to the reference engine (§The equivalence gate). The three numbered **decisions** below — the display cutoff `K`, the memoization/incremental-recompute policy, and the retire-or-keep call on the old `FindCycles` — are each **ACCEPTED** as the recorded direction. Two of the three (`K` migration of the bench/flow path, and the memoization implementation) remain DEFERRED in *enactment* — they ride ADR-0001 §5's trigger and the bench/flow display-path migration, not because the decision is open but because the build is sequenced — see each decision's "enactment" note. Nothing in this ADR's enactment changes engine behaviour beyond the equivalence-gated refactor already merged.
 
 This is the second ADR in the repo-root `docs/adr/` line ([0001](0001-versioning-and-incremental-recompute.md) is versioning-and-incremental-recompute). Like 0001, this line owns a **cross-cutting** decision: the label-cycle set is a derived index that 0001 versions, so the engine half (here) and the versioning half (0001) are deliberately complementary. The per-library ADR lines ([mast-interaction](../../libs/mast-interaction/docs/adr/) especially — [0001 the-interaction-line](../../libs/mast-interaction/docs/adr/0001-the-interaction-line.md), [0002 port-labels](../../libs/mast-interaction/docs/adr/0002-port-labels-are-deterministic-ast-projections.md)) continue to own decisions local to one library.
 
@@ -40,9 +40,9 @@ The refactor is only allowed to land if it is **behaviour-preserving**, so the p
 
 Three pinned decisions, each **PROPOSED — pending human ratification**. The refactor + equivalence gate above are implemented; these three are the calls left for humans.
 
-### 1. The display cutoff `K` (cards) — PROPOSED: `K = 5`, applied as a post-enumeration cards-based filter
+### 1. The display cutoff `K` (cards) — ACCEPTED: `K = 5`, applied as a post-enumeration cards-based filter
 
-**PROPOSED — pending human ratification.**
+**ACCEPTED (2026-06-16).** Enactment of the bench/flow display-path migration to `K` cards is DEFERRED (see "What is NOT proposed" below); the decision — cards-bound, `K=5` starting value — is ratified.
 
 The old hop-length bound is demoted to a **display/query filter measured in distinct CARDS, not hops** (`displayMaxLengthInCards` on `FindCyclesByLabelGraph`; default `int.MaxValue` = unbounded enumeration). The enumeration itself runs over the unbounded label graph; `K` filters the *instance* cycles afterward, keeping only those spanning ≤ `K` distinct cards. A test ([`CardsDisplayFilterTest`](../../tools/bench/MagicAtlas.Bench/CardsDisplayFilterTest.cs)) proves the bound is in cards: a multi-hop two-card cycle survives `K=2`; every cross-card cycle is dropped at `K=1`.
 
@@ -50,9 +50,9 @@ The old hop-length bound is demoted to a **display/query filter measured in dist
 - **Why `K = 5` proposed.** It is the cards-equivalent of the bench's current hop bound of 5 ([`ComboRecallRunner.LengthBound`](../../tools/bench/MagicAtlas.Bench/ComboRecallRunner.cs): *"a full sac→death→token→doubler→refuel loop spans five hops — the Ashnod's Altar × Pitiless × Chatterfang archetype"*). Five hops there ≈ a 3-card archetype, so `K=5` cards is **generous** — it never tightens today's reach and leaves headroom for larger combos as coverage grows. The number is a starting proposal, not a defended constant: humans should set it against the product's intended combo-size ceiling.
 - **What is NOT proposed.** Whether the bench/flow should switch its hop bound to this cards bound (today `ComboRecallRunner` still uses hop-5 and the equivalence tests compare the *unbounded* enumerations, isolating the engine refactor from the filter). Migrating the bench/flow display path to `K` cards is a follow-on, recorded under Decision 3's migration.
 
-### 2. Memoization / incremental-recompute policy — PROPOSED: the label-cycle set is the `(label, version)`-keyed derived index of ADR-0001, recomputed incrementally
+### 2. Memoization / incremental-recompute policy — ACCEPTED: the label-cycle set is the `(label, version)`-keyed derived index of ADR-0001, recomputed incrementally
 
-**PROPOSED — pending human ratification.**
+**ACCEPTED (2026-06-16).** The keying (`(label, version)`) and the memoize-Layer-1 / recompute-Layer-2-on-demand split are ratified. Enactment is DEFERRED to ADR-0001 §5's trigger (a full re-walk exceeding 10 min or the corpus exceeding 20k cards) — building it before the schema/`SchemaHash` stabilizes would churn.
 
 The label-cycle set (Layer 1's output) is **the** canonical derived index, built once per corpus version and queried many times, with incremental recompute keyed on `(label, version)` — exactly the index ADR-0001 §3 names. Concretely:
 
@@ -61,9 +61,9 @@ The label-cycle set (Layer 1's output) is **the** canonical derived index, built
 - **The equivalence test extends ADR-0001 §6.** The incremental-≡-from-scratch gate ADR-0001 §6 fixes is satisfied here by the same byte-identical machinery: a `(label, version)`-incremental recompute of the label-cycle set must equal a from-scratch enumeration, asserted on the sentinel set in CI.
 - **This decision is explicitly DEFERRED to ADR-0001's trigger (§5).** ADR-0001 is design-only until a full re-walk exceeds 10 min or the corpus exceeds 20k cards. This memoization policy lands **with** that initiative, not before — building it now, before the schema/`SchemaHash` stabilizes, would churn (ADR-0001's own rejected "implement now" option). What this ADR proposes is the *keying* (`(label, version)`) and the *memoize-Layer-1 / recompute-Layer-2-on-demand* split; the *when* stays bound to ADR-0001 §5.
 
-### 3. Retire or keep the old `FindCycles` — PROPOSED: KEEP as the equivalence oracle for now; retire only after a soak
+### 3. Retire or keep the old `FindCycles` — ACCEPTED: KEEP as the equivalence oracle for now; retire only after a soak
 
-**PROPOSED — pending human ratification.**
+**ACCEPTED (2026-06-16).** `FindCycles` is kept as the reference/oracle; retirement is gated on the soak + corpus-wide-equivalence bar below (the exact soak length and bar remain a future call, made when the soak completes — the keep-now-retire-after-soak direction is ratified).
 
 `FindCycles` (per-instance) is **kept** as the reference implementation and the equivalence oracle, **not retired in this branch**. The proposal for its eventual disposition:
 
@@ -87,10 +87,10 @@ The label-cycle set (Layer 1's output) is **the** canonical derived index, built
 - **Two equivalence tests are added** and run in CI on every batch — the sentinel-set half (mast-tests) and the bench-eligible-combos half (bench). Both are byte-identical-or-fail. A `CardsDisplayFilterTest` proves the display bound is in cards.
 - **The display bound is demoted to cards** (Decision 1); the enumeration is unbounded. Callers that want a bound pass `K` cards; the default is the full set.
 - **No incremental-recompute code lands here** (Decision 2 defers to ADR-0001 §5's trigger). What lands is the *engine shape* that makes the `(label, version)` keying possible.
-- **`FindCycles` is not retired** (Decision 3). The branch is held for human review of the three PROPOSED decisions and is **not merged**.
-- **Nothing on the three decisions is enacted** beyond what the equivalence-gated refactor needs. The artifact of this initiative is this document + the behaviour-preserving engine + the gate.
+- **`FindCycles` is not retired** (Decision 3). It stays as the equivalence oracle through the soak.
+- **The three decisions are ACCEPTED in direction; their enactment is sequenced** — Decision 1's bench/flow `K`-cards migration and Decision 2's memoization ride their respective triggers (the display-path migration and ADR-0001 §5). The merged artifact of this initiative is this document + the behaviour-preserving engine + the gate. The branch was ratified and fast-forward-merged to `main`.
 
-## Implementation status (this branch)
+## Implementation status (merged to `main`, 2026-06-16)
 
 - [x] Layer 1 — `LabelCycleHops` over the distinct-label graph, unbounded length.
 - [x] Layer 2 — `FindCyclesByLabelGraph` instantiate-and-tier over admissible instance edges; shared `EnumerateInstanceCycles`.
@@ -98,6 +98,6 @@ The label-cycle set (Layer 1's output) is **the** canonical derived index, built
 - [x] Equivalence gate — byte-identical tiers on the sentinel set AND the bench eligible combos. **Green.**
 - [x] Length-bound demoted to a cards-based display filter; proven by test.
 - [x] Full build + suite green (mast-tests, bench).
-- [ ] Decision 1 — ratify `K` (proposed 5 cards) and migrate the bench/flow display path. **PROPOSED.**
-- [ ] Decision 2 — ratify the `(label, version)` memoization policy; implement at ADR-0001 §5's trigger. **PROPOSED.**
-- [ ] Decision 3 — ratify keep-now-retire-after-soak; set the soak/corpus-wide bar. **PROPOSED.**
+- [x] Decision 1 — `K` (5 cards, cards-bound) **ratified**. Bench/flow display-path migration to `K` cards: enactment deferred to the display-path migration.
+- [x] Decision 2 — `(label, version)` memoization policy **ratified**. Implementation deferred to ADR-0001 §5's trigger.
+- [x] Decision 3 — keep-now-retire-after-soak **ratified**. Soak length / corpus-wide bar set when the soak completes.
