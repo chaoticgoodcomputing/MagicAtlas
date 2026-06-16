@@ -6,40 +6,52 @@
     "OracleText": "Scavenge {5}{G} ({5}{G}, Exile this card from your graveyard: Put a number of +1/+1 counters equal to this card's power on target creature. Scavenge only as a sorcery.)",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Drudge Beetle",
     "TypeLine": {
       "Raw": "Creature — Insect",
-      "Types": ["Creature"],
-      "Subtypes": ["Insect"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Insect"
+      ]
     },
     "Oracle": {
       "RawText": "Scavenge {5}{G} ({5}{G}, Exile this card from your graveyard: Put a number of +1/+1 counters equal to this card's power on target creature. Scavenge only as a sorcery.)",
       "Abilities": [
         {
           "Kind": "activated",
-          "KeywordSource": "Scavenge",
           "Costs": [
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 5 },
-                { "Kind": "colored", "Colors": ["G"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 5
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
               ]
             },
             {
               "CostType": "exile",
               "Filter": {
-                "CardTypes": ["card"],
-                "Characteristics": [
-                  {
-                    "CharacteristicType": "other",
-                    "Description": "this card"
-                  }
-                ]
+                "CardTypes": [
+                  "card"
+                ],
+                "IsSelf": true
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -54,7 +66,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "CounterType": "+1/+1",
@@ -65,8 +79,11 @@
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
           "IsManaAbility": false,
+          "KeywordSource": "Scavenge",
           "Reminder": {
             "Text": "({5}{G}, Exile this card from your graveyard: Put a number of +1/+1 counters equal to this card's power on target creature. Scavenge only as a sorcery.)"
           }
@@ -78,30 +95,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

@@ -26,12 +26,7 @@
           "CardTypes": [
             "card"
           ],
-          "Characteristics": [
-            {
-              "CharacteristicType": "other",
-              "Description": "this card"
-            }
-          ]
+          "IsSelf": true
         },
         "Quantity": {
           "QuantityType": "literal",

@@ -53,10 +53,7 @@ public sealed class EmbalmKeyword : IKeyword
           Filter = new ObjectFilter
           {
             CardTypes = ["card"],
-            Characteristics =
-            [
-              new OtherCharacteristic { Description = "this card" },
-            ],
+            IsSelf = true,
           },
           FromZone = Zone.Graveyard,
           Quantity = LiteralQuantity.Of(1),

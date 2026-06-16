@@ -29,17 +29,16 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Double strike",
           "Effects": [
             {
               "EffectType": "combatDamageTiming",
               "Timing": "Both"
             }
-          ]
+          ],
+          "KeywordSource": "Double strike"
         },
         {
           "Kind": "activated",
-          "KeywordSource": "Eternalize",
           "Costs": [
             {
               "CostType": "mana",
@@ -52,29 +51,20 @@
                   "Kind": "colored",
                   "Colors": [
                     "W"
-                  ],
-                  "IsPhyrexian": false,
-                  "IsSnow": false
+                  ]
                 },
                 {
                   "Kind": "colored",
                   "Colors": [
                     "W"
-                  ],
-                  "IsPhyrexian": false,
-                  "IsSnow": false
+                  ]
                 }
               ]
             },
             {
               "CostType": "exile",
               "Filter": {
-                "Characteristics": [
-                  {
-                    "CharacteristicType": "other",
-                    "Description": "this card"
-                  }
-                ]
+                "IsSelf": true
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -86,23 +76,23 @@
           "Effects": [
             {
               "EffectType": "createToken",
-              "Player": {
-                "Kind": "You"
-              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
               },
               "Token": {
-                "IsCopy": true,
+                "Power": "4",
+                "Toughness": "4",
                 "Colors": [
                   "B"
                 ],
-                "Power": "4",
-                "Toughness": "4",
                 "Subtypes": [
                   "Zombie"
-                ]
+                ],
+                "IsCopy": true
+              },
+              "Player": {
+                "Kind": "You"
               }
             }
           ],
@@ -110,6 +100,7 @@
             "OnlyAsSorcery"
           ],
           "IsManaAbility": false,
+          "KeywordSource": "Eternalize",
           "Reminder": {
             "Text": "({3}{W}{W}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a 4/4 black Zombie Cat with no mana cost. Eternalize only as a sorcery.)"
           }
@@ -129,9 +120,7 @@
             "Kind": "colored",
             "Colors": [
               "W"
-            ],
-            "IsPhyrexian": false,
-            "IsSnow": false
+            ]
           }
         ],
         "ManaValue": 2,
@@ -153,13 +142,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]

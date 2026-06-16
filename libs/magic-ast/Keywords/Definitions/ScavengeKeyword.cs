@@ -63,7 +63,7 @@ public sealed class ScavengeKeyword : IKeyword
           Filter = new ObjectFilter
           {
             CardTypes = ["card"],
-            Characteristics = [Characteristic.Other("this card")],
+            IsSelf = true,
           },
           Quantity = LiteralQuantity.Of(1),
           FromZone = Zone.Graveyard,

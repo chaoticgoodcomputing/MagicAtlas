@@ -50,18 +50,6 @@
       "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
     },
     {
-      "card": "AKH/AdornedPouncer",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
-      "card": "AKH/HonoredHydra",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "ALA/AkrasanSquire",
       "sink": "OtherCharacteristic",
       "tag": "debt",
@@ -716,22 +704,10 @@
       "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
-      "card": "RTR/DrudgeBeetle",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "RTR/RakdosDrake",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
-    },
-    {
-      "card": "RTR/TerrusWurm",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
       "card": "RatColony",

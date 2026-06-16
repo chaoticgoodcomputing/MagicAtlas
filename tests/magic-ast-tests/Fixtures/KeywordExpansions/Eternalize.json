@@ -33,12 +33,7 @@
       {
         "CostType": "exile",
         "Filter": {
-          "Characteristics": [
-            {
-              "CharacteristicType": "other",
-              "Description": "this card"
-            }
-          ]
+          "IsSelf": true
         },
         "Quantity": {
           "QuantityType": "literal",

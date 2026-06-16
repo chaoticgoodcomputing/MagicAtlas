@@ -30,17 +30,16 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Trample",
           "Effects": [
             {
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "KeywordSource": "Trample"
         },
         {
           "Kind": "activated",
-          "KeywordSource": "Embalm",
           "Costs": [
             {
               "CostType": "mana",
@@ -63,12 +62,7 @@
                 "CardTypes": [
                   "card"
                 ],
-                "Characteristics": [
-                  {
-                    "CharacteristicType": "other",
-                    "Description": "this card"
-                  }
-                ]
+                "IsSelf": true
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -80,21 +74,21 @@
           "Effects": [
             {
               "EffectType": "createToken",
-              "Player": {
-                "Kind": "You"
-              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
               },
               "Token": {
-                "IsCopy": true,
                 "Colors": [
                   "W"
                 ],
                 "Subtypes": [
                   "Zombie"
-                ]
+                ],
+                "IsCopy": true
+              },
+              "Player": {
+                "Kind": "You"
               }
             }
           ],
@@ -102,6 +96,7 @@
             "OnlyAsSorcery"
           ],
           "IsManaAbility": false,
+          "KeywordSource": "Embalm",
           "Reminder": {
             "Text": "({3}{G}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a white Zombie Snake Hydra with no mana cost. Embalm only as a sorcery.)"
           }
@@ -124,7 +119,8 @@
             ]
           }
         ],
-        "ManaValue": 6
+        "ManaValue": 6,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -142,13 +138,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "6",
-          "Value": 6
+          "Value": 6,
+          "Raw": "6"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "6",
-          "Value": 6
+          "Value": 6,
+          "Raw": "6"
         }
       }
     ]

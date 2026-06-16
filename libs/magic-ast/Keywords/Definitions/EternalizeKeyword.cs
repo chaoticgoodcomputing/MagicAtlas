@@ -52,10 +52,7 @@ public sealed class EternalizeKeyword : IKeyword
         {
           Filter = new ObjectFilter
           {
-            Characteristics =
-            [
-              new OtherCharacteristic { Description = "this card" },
-            ],
+            IsSelf = true,
           },
           FromZone = Zone.Graveyard,
           Quantity = LiteralQuantity.Of(1),
