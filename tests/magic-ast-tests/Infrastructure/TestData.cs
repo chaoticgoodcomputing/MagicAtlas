@@ -41,13 +41,14 @@ public static class TestData
     );
 
   /// <summary>
-  /// The raw Scryfall oracle-cards bulk seed in <c>_01_Raw/Datasets/External/</c> — committed (unlike
-  /// <see cref="CardInputsPath"/>, which is gitignored), so it is the artifact present on a fresh
-  /// checkout. It is a <b>partial/curated</b> seed, not the comprehensive Scryfall dump (some entries
-  /// are incomplete — e.g. an ETB line absent on <c>Hag of Noxious Nightmares</c>), so the fidelity
-  /// smoke test treats it as a <b>positive-only</b> validator: a gold that MATCHES it is authoritatively
-  /// validated, but a mismatch is NOT treated as definitive drift (it would false-fail correct golds).
-  /// See <see cref="MagicAST.Tests.Tests.GoldOracleTextFidelityTests"/>.
+  /// The full Scryfall oracle-cards bulk in <c>_01_Raw/Datasets/External/</c> — fetched + projected
+  /// verbatim by <c>FetchScryfallBulkStep</c> (the <c>MagicAstTriage</c> flow). Gitignored (like
+  /// <see cref="CardInputsPath"/>); NOT in version control — regenerate with
+  /// <c>dotnet run -- --flow MagicAstTriage</c>. It is the authoritative SUPERSET source: the corpus
+  /// (<see cref="CardInputsPath"/>) is only the commander-legal-paper subset, so a gold whose card is
+  /// filtered out of the corpus is validated against this full bulk instead — a mismatch is real drift
+  /// (gated by the quarantine, like corpus drift). See
+  /// <see cref="MagicAST.Tests.Tests.GoldOracleTextFidelityTests"/>.
   /// </summary>
   public static string OracleCardsPath =>
     Path.Combine(
