@@ -1,10 +1,10 @@
 {
   "CombosEligible": 33,
   "ReconstructedGreen": 5,
-  "ReconstructedAmber": 15,
-  "Missed": 13,
+  "ReconstructedAmber": 18,
+  "Missed": 10,
   "RecallAtGreen": 0.1515,
-  "RecallAtAmber": 0.6061,
+  "RecallAtAmber": 0.697,
   "Combos": [
     {
       "Id": "1090-2781",
@@ -13,8 +13,11 @@
         "Felidar Guardian",
         "Restoration Angel"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Felidar Guardian",
+        "Restoration Angel"
+      ]
     },
     {
       "Id": "11-3368",
@@ -358,8 +361,11 @@
         "Kiki-Jiki, Mirror Breaker",
         "Restoration Angel"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Kiki-Jiki, Mirror Breaker",
+        "Restoration Angel"
+      ]
     },
     {
       "Id": "618-1692",
@@ -378,8 +384,11 @@
         "Kiki-Jiki, Mirror Breaker",
         "Felidar Guardian"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Felidar Guardian",
+        "Kiki-Jiki, Mirror Breaker"
+      ]
     },
     {
       "Id": "618-4222--140",

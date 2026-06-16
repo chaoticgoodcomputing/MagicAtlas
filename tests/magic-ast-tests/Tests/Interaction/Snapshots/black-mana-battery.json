@@ -2,9 +2,9 @@
   "Name": "Black Mana Battery",
   "Ports": [
     {
-      "Identity": "Black Mana Battery::emit:composite",
+      "Identity": "Black Mana Battery::emit:counter:charge:self",
       "Card": "Black Mana Battery",
-      "Label": "emit:composite",
+      "Label": "emit:counter:charge:self",
       "Side": "Emit",
       "Quantity": 1,
       "Gated": false,
@@ -13,9 +13,9 @@
       "Subject": null
     },
     {
-      "Identity": "Black Mana Battery::emit:counter:charge:self",
+      "Identity": "Black Mana Battery::emit:mana:black",
       "Card": "Black Mana Battery",
-      "Label": "emit:counter:charge:self",
+      "Label": "emit:mana:black",
       "Side": "Emit",
       "Quantity": 1,
       "Gated": false,
@@ -64,18 +64,28 @@
     },
     {
       "From": "Black Mana Battery::pay:removecounters",
-      "To": "Black Mana Battery::emit:composite"
-    },
-    {
-      "From": "Black Mana Battery::tap:self",
-      "To": "Black Mana Battery::emit:composite"
+      "To": "Black Mana Battery::emit:mana:black"
     },
     {
       "From": "Black Mana Battery::tap:self",
       "To": "Black Mana Battery::emit:counter:charge:self"
+    },
+    {
+      "From": "Black Mana Battery::tap:self",
+      "To": "Black Mana Battery::emit:mana:black"
     }
   ],
   "DerivedEdges": [
+    {
+      "From": "Black Mana Battery::emit:mana:black",
+      "To": "Black Mana Battery::pay:mana",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
     {
       "From": "Black Mana Battery::pay:mana",
       "To": "Black Mana Battery::emit:counter:charge:self",
@@ -88,17 +98,7 @@
     },
     {
       "From": "Black Mana Battery::pay:removecounters",
-      "To": "Black Mana Battery::emit:composite",
-      "Provenance": "CardDefined",
-      "Family": "Flow",
-      "Overlap": "Overlaps",
-      "Reliability": "Yes",
-      "Tier": "Green",
-      "Reason": null
-    },
-    {
-      "From": "Black Mana Battery::tap:self",
-      "To": "Black Mana Battery::emit:composite",
+      "To": "Black Mana Battery::emit:mana:black",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
@@ -109,6 +109,16 @@
     {
       "From": "Black Mana Battery::tap:self",
       "To": "Black Mana Battery::emit:counter:charge:self",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Black Mana Battery::tap:self",
+      "To": "Black Mana Battery::emit:mana:black",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",

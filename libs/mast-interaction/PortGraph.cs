@@ -353,7 +353,38 @@ public sealed class PortWalk
   {
     if (effect is not JsonObject e)
       return;
-    if (e["EffectType"]?.ToString() == "replacement")
+    var effectType = e["EffectType"]?.ToString();
+
+    // A blink (flicker) is an exile-then-return-the-just-exiled action (CR 603.6e/400.7), stated as a
+    // `composite` of [exile, returnToBattlefield(ExiledWith:Self)], optionally wrapped in `optional`
+    // ("you may", CR 117.7). Recognise the WHOLE composite as one emit:blink (the re-entered permanent
+    // refuels its own ETB and re-enters untapped) BEFORE the generic optional/composite recursion, so the
+    // exile and return don't project as two opaque inert ports the blink arm can't read.
+    if (effectType is "optional" or "composite")
+    {
+      var inner = effectType == "optional" ? e["Inner"] : e;
+      if (BlinkPort(inner, card) is { } blink)
+      {
+        // The "you may" floors firability to AMBER (the controller may decline — a loop through it can't
+        // be certified infinite, ADR-0002 §8). Marked Gated so PortCycle.Firable floors it.
+        emits.Add(effectType == "optional" ? blink with { Gated = true } : blink);
+        return;
+      }
+      // Not a blink — recurse into the inner effect(s) so nested flow ports (a composite of token+mana)
+      // still project by totality (§4), carrying the optional's gate to each.
+      var gated = effectType == "optional";
+      foreach (var sub in InnerEffects(inner))
+      {
+        var before = emits.Count;
+        Effects(sub, card, keyword, manaCostSymbols, consumes, emits);
+        if (gated)
+          for (var i = before; i < emits.Count; i++)
+            emits[i] = emits[i] with { Gated = true };
+      }
+      return;
+    }
+
+    if (effectType == "replacement")
     {
       // Intercept side: the replaced event (ADR-0002 §3, CR 614). Scope rides only if the event carries it.
       var eventType = e["Event"]?["EventType"]?.ToString() ?? "event";
@@ -485,6 +516,63 @@ public sealed class PortWalk
       { } other => Port(card, $"emit:{other.ToLowerInvariant()}", PortSide.Emit),
       _ => null,
     };
+  }
+
+  /// <summary>
+  /// Recognise a <b>blink</b> (flicker): a <c>composite</c> whose effects are an <c>exile</c> of a target
+  /// permanent followed by a <c>returnToBattlefield</c> of the JUST-EXILED card (the linked
+  /// <c>ExiledWith:Self</c> reference, CR 406.6 / ADR 0004). The two ordered effects ARE one game action
+  /// — the permanent leaves and re-enters as a new object (CR 603.6e/400.7). Project a single
+  /// <c>emit:blink</c> carrying the EXILE TARGET filter as its NON-NULL Subject (the blinked permanent —
+  /// what re-enters; what the operator tiers the re-entry/renewal on). <c>null</c> when the effects are
+  /// not this exile-then-return-self pair (a plain exile, a reanimate-from-graveyard, an unrelated
+  /// composite) — those keep their own (coarse) projection, never a false blink.
+  /// </summary>
+  private PortNode? BlinkPort(JsonNode? inner, string card)
+  {
+    if (inner is not JsonObject c || c["EffectType"]?.ToString() != "composite")
+      return null;
+    if (c["Effects"] is not JsonArray effects)
+      return null;
+
+    JsonObject? exile = null;
+    JsonObject? ret = null;
+    foreach (var sub in effects)
+      switch ((sub as JsonObject)?["EffectType"]?.ToString())
+      {
+        case "exile":
+          exile ??= sub as JsonObject;
+          break;
+        case "returnToBattlefield":
+          ret ??= sub as JsonObject;
+          break;
+      }
+    if (exile is null || ret is null)
+      return null;
+
+    // The return must be of the just-exiled card (Zone:Exile + ExiledWith:Self) — this is what makes it a
+    // blink rather than a generic reanimation. Without this link the composite is some other exile+return.
+    var retFilter = ret["Target"]?["Filter"];
+    if (
+      retFilter?["Zone"]?.ToString() != "Exile"
+      || retFilter["ExiledWith"]?["Kind"]?.ToString() != "Self"
+    )
+      return null;
+
+    var blinked = Filter(exile["Target"]?["Filter"]);
+    if (blinked is null)
+      return null; // an under-specified blink target — no Subject to tier; don't manufacture a blink port
+
+    return Port(card, PortLabel.BlinkEmit(blinked, _ontology), PortSide.Emit, Qty(exile["Target"]?["Quantity"]), blinked);
+  }
+
+  /// <summary>The child effects of an <c>optional.Inner</c> or a <c>composite</c> (its <c>Effects</c>
+  /// array), for the generic non-blink recursion. A single non-composite inner is yielded as itself.</summary>
+  private static IEnumerable<JsonNode?> InnerEffects(JsonNode? inner)
+  {
+    if (inner is JsonObject o && o["EffectType"]?.ToString() == "composite" && o["Effects"] is JsonArray arr)
+      return arr;
+    return inner is null ? [] : [inner];
   }
 
   // --- helpers ---

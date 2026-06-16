@@ -104,16 +104,6 @@ public class CopyInheritanceScopeTest
   /// Subsumes it → graftable; the AMBER is soundly irreducible here, not a fudge.)</para>
   /// </summary>
   [Test]
-  [Ignore(
-    "BLOCKED on the blink arm (copy-inheritance-scope.md §2/§7/§8 — explicitly OUT OF SCOPE). "
-      + "Copy-inheritance DOES graft Restoration Angel's ports onto the copy, but Resto's only "
-      + "loop-closing ability is its OPTIONAL ETB blink (exile + returnToBattlefield) — there is no "
-      + "untap. With no untap there is no closing edge back to Kiki, so no cycle forms and the not-null "
-      + "assertion cannot pass. Closing it needs (a) PortWalk recursion into optional/composite to "
-      + "project the exile/returnToBattlefield ports AND (b) a blink flow arm — both the SEPARATE blink "
-      + "feature. Manufacturing any non-blink edge to satisfy the pin would be a false combo "
-      + "(adding-a-flow-arm anti-pattern). This pin un-ignores once the blink arm lands."
-  )]
   public void Kiki_x_restoration_angel_reconstructs_amber_pending_the_blink_arm()
   {
     var graphs = new[]

@@ -250,6 +250,15 @@ public sealed class PortGraphEngine
         foreach (var untap in graftGraph.Ports.Where(p => p.Side == PortSide.Emit && IsUntap(p.Label)))
           if (UntapReachesSource(untap) is { } reliability)
             closingEdges.Add(CloseUntapToTap(untap, copier, graphByCard, reliability));
+
+        // The blink closing hop (blink arm). An inherited BLINK on the copy (Kiki copies Restoration
+        // Angel / Felidar Guardian — the copy's ETB blinks a permanent) can blink the COPIER itself, which
+        // re-enters UNTAPPED (CR 603.6e/400.7), renewing the copier's tap — the dual of the inherited
+        // untap. Feasible iff the blinked filter admits a creature (the copier is a creature). The blink is
+        // Gated ("you may"), so the renewal is AMBER, never GREEN — soundly irreducible (the optional ETB).
+        foreach (var blink in graftGraph.Ports.Where(p => p.Side == PortSide.Emit && IsBlink(p.Label)))
+          if (BlinkReachesSource(blink) is { } reliability)
+            closingEdges.Add(CloseUntapToTap(blink, copier, graphByCard, reliability));
       }
     }
 
@@ -384,6 +393,30 @@ public sealed class PortGraphEngine
   private static bool IsUntap(string label) =>
     label == "emit:untap:self" || label == "emit:untap";
 
+  /// <summary>A blink (flicker) emit — <c>emit:blink[:...]</c> (the re-entered permanent's renewal hop).</summary>
+  private static bool IsBlink(string label) =>
+    label.StartsWith("emit:blink", StringComparison.Ordinal);
+
+  /// <summary>
+  /// The blink-arm dual of <see cref="UntapReachesSource"/> — does an inherited blink renew the tap-gated
+  /// copier? A blink whose blinked filter admits a creature can pick the creature copier (which then
+  /// re-enters UNTAPPED, CR 603.6e/400.7). A self-targeting blink (the copy blinking only ITSELF) renews
+  /// the copy, not the copier — excluded. A blink Gated by "you may" (every blink in scope is) yields
+  /// AMBER (the optional ETB can't be certified to fire), never GREEN — the soundness-preserving floor.
+  /// Returns the closing-edge reliability, or <c>null</c> when the blink can't reach a creature copier.
+  /// </summary>
+  private static Trilean? BlinkReachesSource(PortNode blink)
+  {
+    // A blink with no Subject (under-specified) targets any permanent → reaches a creature copier.
+    if (blink.Subject is null)
+      return blink.Gated ? Trilean.Unknown : Trilean.Yes;
+    if (blink.Subject.IsSelf == true)
+      return null; // a self-only blink renews the COPY, not the copier
+    if (!TargetAdmitsCreature(blink.Subject))
+      return null; // "blink target land" can't pick a creature copier — no renewal
+    return blink.Gated ? Trilean.Unknown : Trilean.Yes;
+  }
+
   /// <summary>
   /// Decision 4 — does an inherited untap reach the tap-gated copier, and at what reliability? An
   /// <b>unconditional</b> untap (not <see cref="PortNode.Gated"/>) renews the copier when it is either
@@ -466,6 +499,12 @@ public sealed class PortGraphEngine
       ("mana", "pay") => ResourceKind(consume.Label) == "mana" // mana refunds a mana cost…
         && ManaColorFeeds(ManaColor(emit.Label), ManaColor(consume.Label)), // …of a colour it can pay
       ("life", "trigger") => LifeFlowFeasible(emit, consume), // a life event feeds a same-direction life trigger (CR 119)
+      // Blink (CR 603.6e/400.7). A blinked permanent re-enters as a NEW object, so its ETB retriggers:
+      // emit:blink refuels an Enters-trigger whose entering filter is type-compatible with the blinked
+      // permanent (Felidar blinks Resto → Resto's ETB fires again). Feasibility only — AddRulesEdge's
+      // operator tiers the certainty on the Subjects (a blink of "a permanent" vs "this creature" enters
+      // → Intersects-Overlaps but not Subsumes → AMBER; the "you may" Gated floors it too).
+      ("blink", "etb") => BlinkSatisfiesEnter(emit, consume),
       // Aristocrat recursion (aristocrat-recursion-scope.md, Decision 2b). A creature re-entering the
       // battlefield via a cast-from-graveyard permission (emit:returntobattlefield:self) refuels a sac
       // whose fodder Subsumes it (the structural twin of (token, sac)), and feeds an ETB-trigger payoff
@@ -491,6 +530,35 @@ public sealed class PortGraphEngine
     // A sac/etb that requires a specific OTHER object (e.g. an artifact-Treasure sac) can't be the
     // re-entered creature; the operator prunes a Disjoint type in AddRulesEdge. Here we only confirm the
     // re-entered creature could BE the consume's target by type-compatibility (Subsumes/Intersects ≠ No).
+    return ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
+      != FilterRelation.Disjoint;
+  }
+
+  /// <summary>
+  /// A blinked permanent (emit:blink, Subject = the blinked filter) re-enters the battlefield as a NEW
+  /// object (CR 603.6e/400.7), so its Enters-trigger re-fires. Feasible iff the blinked filter is
+  /// type-compatible with the etb consume's entering filter (the blink could pick the permanent whose ETB
+  /// this is) — the structural twin of <see cref="TokenSatisfiesAtCreation"/>. Feasibility only:
+  /// <see cref="AddRulesEdge"/>'s Intersects/Subsumes on the Subjects sets GREEN vs AMBER (a blink of "a
+  /// permanent" only Intersects "this creature" enters ⇒ AMBER; a self-targeting blink could Subsume).
+  /// A consume scoped to a provably different type is pruned by the operator's Disjoint.
+  /// </summary>
+  private bool BlinkSatisfiesEnter(PortNode emit, PortNode consume)
+  {
+    if (emit.Subject is null || consume.Subject is null)
+      return true;
+    // A blink on a card never refuels that SAME card's "this creature enters" self-trigger
+    // (Subject.IsSelf): a self-only ETB fires only for THE source object, and the source can't legally be
+    // the target of its own blink (Felidar/Displacer "exile ANOTHER permanent", CR 109.5; Restoration's
+    // "non-Angel" excludes Resto-the-Angel). The operator's Intersects deliberately ignores the
+    // ExcludeSelf/IsSelf interplay (a runtime question) and an exclusion stated as a subtype (!Angel)
+    // against a bare self-ETB can't be witnessed — but feeding the blinker's OWN self-ETB is a structural
+    // self-blink, which the engine can't certify, so prune it (the dual of TokenSatisfiesAtCreation's
+    // :self guard; a false negative only on the rare genuine self-blinker, never a false positive). A
+    // blink of another permanent still refuels a DIFFERENT card's self-ETB (Felidar blinks Resto) — the
+    // real arm, and the inter-card hop the combos turn on.
+    if (consume.Subject.IsSelf == true && string.Equals(emit.Card, consume.Card, StringComparison.Ordinal))
+      return false;
     return ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
       != FilterRelation.Disjoint;
   }
@@ -1068,11 +1136,13 @@ public sealed class PortGraphEngine
       // certified the untap reaches the source (the disjunctive target test) and tiered the edge; here we
       // just confirm such a renewing hop is on the cycle. Covers both the inherited self-untap (4a, the
       // copy untapping itself when the engine treats the copy's tap as the copier's — n/a for Kiki) and
-      // the target-untap aimed at the tap-gated source (4b, Corridor Monitor → Kiki).
+      // the target-untap aimed at the tap-gated source (4b, Corridor Monitor → Kiki). The blink arm adds
+      // a third renewing kind: an inherited BLINK aimed at the copier (Kiki copies Restoration Angel /
+      // Felidar — the copy's optional ETB blinks Kiki, which re-enters untapped, CR 603.6e/400.7).
       var copyRenewed = cycle.Any(e =>
         e.Provenance == EdgeProvenance.RulesDefined
         && e.From.Side == PortSide.Emit
-        && IsUntap(e.From.Label)
+        && (IsUntap(e.From.Label) || IsBlink(e.From.Label))
         && string.Equals(e.From.Grafter, card, StringComparison.Ordinal) // a copy THIS card grafted
         && string.Equals(e.To.Card, card, StringComparison.Ordinal)
         && e.To.Label == "tap:self"

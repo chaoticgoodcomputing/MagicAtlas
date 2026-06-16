@@ -36,6 +36,8 @@ public static class PortWalkProjection
     "gainLife", // PortWalk.EmitPort — emit:life:gain:<scope> (life flow arm)
     "loseLife", // PortWalk.EmitPort — emit:life:loss:<scope> (life flow arm)
     "alternativeCast", // PortWalk.EmitPort — emit:returntobattlefield:self + pay:mana recast co-cost (aristocrat recursion, FromZone:Graveyard)
+    "optional", // PortWalk.Effects — "you may" wrapper: blink detection (gated emit:blink) + gated recursion into Inner (blink flow arm)
+    "composite", // PortWalk.Effects — blink detection (exile+returnToBattlefield(ExiledWith:Self) → emit:blink) + recursion into Effects (blink flow arm)
   };
 
   /// <summary><c>CostType</c> discriminators with a semantic projection (not the <c>pay:&lt;x&gt;</c> fallback).</summary>

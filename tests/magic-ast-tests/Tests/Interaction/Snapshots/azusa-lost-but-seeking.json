@@ -2,12 +2,12 @@
   "Name": "Azusa, Lost but Seeking",
   "Ports": [
     {
-      "Identity": "Azusa, Lost but Seeking::emit:optional",
+      "Identity": "Azusa, Lost but Seeking::emit:playadditionalland",
       "Card": "Azusa, Lost but Seeking",
-      "Label": "emit:optional",
+      "Label": "emit:playadditionalland",
       "Side": "Emit",
       "Quantity": 1,
-      "Gated": false,
+      "Gated": true,
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": null

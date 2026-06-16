@@ -75,6 +75,34 @@
       ]
     },
     {
+      "name": "Felidar Guardian x Restoration Angel (blink flow arm exemplar, AMBER)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/FelidarGuardian.json",
+          "card": "Felidar Guardian"
+        },
+        {
+          "path": "HandParsedCards/RestorationAngel.json",
+          "card": "Restoration Angel"
+        }
+      ]
+    },
+    {
+      "name": "Kiki-Jiki x Felidar Guardian (copy-inheritance + blink tap-renewal, AMBER)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/KikiJikiMirrorBreaker.json",
+          "card": "Kiki-Jiki, Mirror Breaker"
+        },
+        {
+          "path": "HandParsedCards/FelidarGuardian.json",
+          "card": "Felidar Guardian"
+        }
+      ]
+    },
+    {
       "name": "Blood Artist x Ruthless Knave",
       "kind": "combo",
       "cards": [
@@ -415,6 +443,16 @@
         {
           "path": "HandParsedCards/FelidarGuardian.json",
           "card": "Felidar Guardian"
+        }
+      ]
+    },
+    {
+      "name": "Restoration Angel",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/RestorationAngel.json",
+          "card": "Restoration Angel"
         }
       ]
     },

@@ -2,15 +2,15 @@
   "Name": "Felidar Guardian",
   "Ports": [
     {
-      "Identity": "Felidar Guardian::emit:optional",
+      "Identity": "Felidar Guardian::emit:blink:permanent",
       "Card": "Felidar Guardian",
-      "Label": "emit:optional",
+      "Label": "emit:blink:permanent",
       "Side": "Emit",
       "Quantity": 1,
-      "Gated": false,
+      "Gated": true,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=permanent|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf=True"
     },
     {
       "Identity": "Felidar Guardian::etb:creature:self",
@@ -27,13 +27,13 @@
   "CardDefinedEdges": [
     {
       "From": "Felidar Guardian::etb:creature:self",
-      "To": "Felidar Guardian::emit:optional"
+      "To": "Felidar Guardian::emit:blink:permanent"
     }
   ],
   "DerivedEdges": [
     {
       "From": "Felidar Guardian::etb:creature:self",
-      "To": "Felidar Guardian::emit:optional",
+      "To": "Felidar Guardian::emit:blink:permanent",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",

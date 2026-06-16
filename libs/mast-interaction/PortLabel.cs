@@ -142,6 +142,21 @@ public static class PortLabel
   /// </summary>
   public static string ReturnToBattlefieldEmit() => "emit:returntobattlefield:self";
 
+  /// <summary>
+  /// A <b>blink</b> (flicker) effect — "exile [target] permanent, then return that card to the
+  /// battlefield" (the linked exile-then-return, <c>ExiledWith:Self</c>). The returned object is a NEW
+  /// object (CR 603.6e / 400.7): it RE-ENTERS (its ETB retriggers) and re-enters UNTAPPED (discharging a
+  /// tap gate). Both flow consequences ride one label — the engine's blink arm connects it to an
+  /// <c>etb</c> consume (refueling an ETB-driven loop) and to a <c>tap:self</c> renewal (the dual of an
+  /// untap, copy-inheritance Decision 4). The blinked permanent's filter rides as the port Subject
+  /// (NON-NULL, never a scalar null-default GREEN — adding-a-flow-arm anti-pattern 3); the operator tiers
+  /// the re-entry/renewal on it ("the label names, the operator decides", ADR-0002 §7). The scope facet
+  /// (<c>self</c> when the card blinks ITSELF, else absent — a target permanent) distinguishes a
+  /// self-blink (Cloudshift on itself, n/a here) from blinking another permanent.
+  /// </summary>
+  public static string BlinkEmit(ObjectFilter blinked, TypeOntology ontology) =>
+    Join("emit", "blink", Subject(blinked, ontology), blinked.IsSelf == true ? "self" : null);
+
   // --- Life as a flowing resource (CR 119). ---------------------------------------------------
   // A life-gain/loss EFFECT is an emit; a "whenever [a player] gains/loses life" TRIGGER is a consume.
   // The flow arm (PortGraphEngine.FlowFeasible) connects same-direction pairs; the PLAYER axis — who

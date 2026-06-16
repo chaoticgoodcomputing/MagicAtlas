@@ -2,12 +2,12 @@
   "Name": "Boggart Harbinger",
   "Ports": [
     {
-      "Identity": "Boggart Harbinger::emit:optional",
+      "Identity": "Boggart Harbinger::emit:searchlibrary",
       "Card": "Boggart Harbinger",
-      "Label": "emit:optional",
+      "Label": "emit:searchlibrary",
       "Side": "Emit",
       "Quantity": 1,
-      "Gated": false,
+      "Gated": true,
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": null
@@ -27,13 +27,13 @@
   "CardDefinedEdges": [
     {
       "From": "Boggart Harbinger::etb:creature:self",
-      "To": "Boggart Harbinger::emit:optional"
+      "To": "Boggart Harbinger::emit:searchlibrary"
     }
   ],
   "DerivedEdges": [
     {
       "From": "Boggart Harbinger::etb:creature:self",
-      "To": "Boggart Harbinger::emit:optional",
+      "To": "Boggart Harbinger::emit:searchlibrary",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
