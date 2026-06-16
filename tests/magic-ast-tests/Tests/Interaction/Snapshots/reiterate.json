@@ -13,9 +13,9 @@
       "Subject": null
     },
     {
-      "Identity": "Reiterate::emit:copy",
+      "Identity": "Reiterate::emit:copy:spell:instant\u002Bsorcery",
       "Card": "Reiterate",
-      "Label": "emit:copy",
+      "Label": "emit:copy:spell:instant\u002Bsorcery",
       "Side": "Emit",
       "Quantity": 1,
       "Gated": false,

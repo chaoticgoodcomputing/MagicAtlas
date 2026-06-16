@@ -157,6 +157,32 @@ public static class PortLabel
   public static string BlinkEmit(ObjectFilter blinked, TypeOntology ontology) =>
     Join("emit", "blink", Subject(blinked, ontology), blinked.IsSelf == true ? "self" : null);
 
+  /// <summary>
+  /// A <b>spell-copy</b> effect — "copy target [instant or sorcery] spell" (Dualcaster Mage's ETB,
+  /// Reiterate, Narset's Reversal). CR 707.10: a copy of a spell is put on the stack and <em>isn't
+  /// cast</em>; it reproduces the copied spell's characteristics, modes, targets, and X. This is a
+  /// DIFFERENT resource from a token-copy of a permanent (<see cref="CreateTokenEmit"/> / the
+  /// <c>emit:copy</c> permanent path the copy-inheritance graft reads): the copied object lives on the
+  /// STACK, not the battlefield, so it carries no ETB/untap to graft onto the copier's permanent loop.
+  /// The label carries a distinct <c>:spell</c> resource facet so the copy-inheritance permanent graft
+  /// (which keys on the bare <c>emit:copy</c>) cleanly ignores it — a spell-copy must never be grafted
+  /// as a permanent. The copied-spell filter rides as the port Subject (NON-NULL, the
+  /// instant/sorcery-on-stack discriminator the operator would tier a future spell-copy arm on; never a
+  /// scalar null-default GREEN — adding-a-flow-arm anti-pattern 3).
+  ///
+  /// <para><b>No flow arm consumes this yet</b> (interaction-judge / human review pending): the sound
+  /// refuel for the bench spell-copy combos (Dualcaster × Ghostly Flicker, Dualcaster × Cackling
+  /// Counterpart, Reiterate × Narset's Reversal) is the copy <em>reproducing the copied spell's
+  /// effects</em> (a blink that re-flickers Dualcaster; a token-copy that re-makes Dualcaster; a
+  /// spell-copy that re-copies), which needs a copy-of-spell GRAFT shape (a sibling of copy-inheritance)
+  /// the corpus does not yet model — NOT an <c>emit:copy:spell → trigger:cast</c> arm, which CR 707.10
+  /// makes unsound (a copy isn't cast, so it can't feed a "whenever you cast" trigger). Projecting the
+  /// label faithfully and distinctly is the parse-layer prerequisite for that future arm (the
+  /// projection↔connection split, adding-a-flow-arm.md).</para>
+  /// </summary>
+  public static string SpellCopyEmit(ObjectFilter spell, TypeOntology ontology) =>
+    Join("emit", "copy", "spell", Subject(spell, ontology));
+
   // --- Life as a flowing resource (CR 119). ---------------------------------------------------
   // A life-gain/loss EFFECT is an emit; a "whenever [a player] gains/loses life" TRIGGER is a consume.
   // The flow arm (PortGraphEngine.FlowFeasible) connects same-direction pairs; the PLAYER axis — who

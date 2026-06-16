@@ -2,9 +2,9 @@
   "Name": "Dualcaster Mage",
   "Ports": [
     {
-      "Identity": "Dualcaster Mage::emit:copy",
+      "Identity": "Dualcaster Mage::emit:copy:spell:instant\u002Bsorcery",
       "Card": "Dualcaster Mage",
-      "Label": "emit:copy",
+      "Label": "emit:copy:spell:instant\u002Bsorcery",
       "Side": "Emit",
       "Quantity": 1,
       "Gated": false,
@@ -38,13 +38,13 @@
   "CardDefinedEdges": [
     {
       "From": "Dualcaster Mage::etb:creature:self",
-      "To": "Dualcaster Mage::emit:copy"
+      "To": "Dualcaster Mage::emit:copy:spell:instant\u002Bsorcery"
     }
   ],
   "DerivedEdges": [
     {
       "From": "Dualcaster Mage::etb:creature:self",
-      "To": "Dualcaster Mage::emit:copy",
+      "To": "Dualcaster Mage::emit:copy:spell:instant\u002Bsorcery",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
