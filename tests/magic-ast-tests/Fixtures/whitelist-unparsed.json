@@ -57,11 +57,6 @@
       "reason": "Slice 8E unparsed-triggered (reflexive CopyEffect{Target:It}); firability-sensitive"
     },
     {
-      "card": "TSP/AspectOfMongoose",
-      "tag": "debt",
-      "reason": "Slice 9 unparsed-legacy (regen-only); corrupt Input \u2014 re-point first"
-    },
-    {
       "card": "WHO/BillPotts",
       "tag": "debt",
       "reason": "Slice 8E unparsed-triggered (reflexive copy); firability-sensitive"

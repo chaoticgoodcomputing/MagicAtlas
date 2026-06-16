@@ -3,9 +3,7 @@
     "Name": "Aspect of Mongoose",
     "ManaCost": "{1}{G}",
     "TypeLine": "Enchantment — Aura",
-    "OracleText": "Enchant creature\nEnchanted creature can't be blocked by more than one creature.\n{2}{G}: Return Aspect of Mongoose to its owner's hand.",
-    "Power": null,
-    "Toughness": null,
+    "OracleText": "Enchant creature\nEnchanted creature has shroud. (It can't be the target of spells or abilities.)\nWhen this Aura is put into a graveyard from the battlefield, return it to its owner's hand.",
     "Colors": [
       "G"
     ],
@@ -25,11 +23,10 @@
       ]
     },
     "Oracle": {
-      "RawText": "Enchant creature\nEnchanted creature can't be blocked by more than one creature.\n{2}{G}: Return Aspect of Mongoose to its owner's hand.",
+      "RawText": "Enchant creature\nEnchanted creature has shroud. (It can't be the target of spells or abilities.)\nWhen this Aura is put into a graveyard from the battlefield, return it to its owner's hand.",
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Enchant",
           "Effects": [
             {
               "EffectType": "enchantRestriction",
@@ -39,50 +36,50 @@
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Enchant"
         },
         {
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "cantBeBlocked",
+              "EffectType": "gainAbility",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
               },
-              "MaxBlockers": 1
+              "GainedAbility": {
+                "Kind": "static",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Shroud"
+                  }
+                ],
+                "KeywordSource": "Shroud"
+              }
             }
           ]
         },
         {
-          "Kind": "activated",
-          "Costs": [
-            {
-              "CostType": "mana",
-              "Symbols": [
-                {
-                  "Kind": "generic",
-                  "GenericAmount": 2
-                },
-                {
-                  "Kind": "colored",
-                  "Colors": [
-                    "G"
-                  ]
-                }
-              ]
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "aura"
+              ],
+              "IsSelf": true
             }
-          ],
+          },
           "Effects": [
             {
-              "EffectType": "unparsed",
-              "SourceSpan": {
-                "Start": 87,
-                "Length": 47
-              },
-              "RawText": "Return Aspect of Mongoose to its owner's hand."
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "It"
+              }
             }
-          ],
-          "IsManaAbility": false
+          ]
         }
       ]
     },
@@ -102,7 +99,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
