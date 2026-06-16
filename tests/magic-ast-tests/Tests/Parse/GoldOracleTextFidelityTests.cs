@@ -21,13 +21,32 @@ using MagicAST.Tests.Infrastructure;
 /// (now matches) fails until removed from the list, and any gold NOT on the list must match — so no
 /// new drift can land. See <c>libs/mast-interaction/docs/interaction-refinement-round2.md</c>.
 /// </para>
+///
+/// <para>
+/// A gold whose card is ABSENT from the corpus cannot be validated against an authoritative source at
+/// all — the dangerous case, because such a gold parses green on pure self-consistency (wrong oracle
+/// text slips through). That hole is closed the same way as drift: golds on
+/// <c>Fixtures/fidelity-uncovered-allowlist.json</c> are the grandfathered current absentees, and any
+/// gold absent from the corpus that is NOT on the allowlist is a LOUD failure. The allowlist is a
+/// ratchet that only shrinks: once a gold's card appears in the corpus it must be removed (it now gets
+/// real validation), and no new absentee can land un-justified. Prefer making the card present in the
+/// corpus (so it gets real validation) over adding it to the allowlist.
+/// </para>
 /// </summary>
 [TestFixture]
 public class GoldOracleTextFidelityTests
 {
   // Name -> OracleText from the corpus the parser consumes; null when card-inputs.json is absent.
   private static readonly Lazy<Dictionary<string, string?>?> _corpus = new(LoadCorpus);
-  private static readonly Lazy<HashSet<string>> _quarantine = new(LoadQuarantine);
+  private static readonly Lazy<HashSet<string>> _quarantine = new(
+    () => LoadFixtureNameSet("oracle-text-quarantine.json")
+  );
+
+  // testCase.Name set of golds whose card is currently absent from the corpus and so cannot be
+  // validated — grandfathered, shrink-only (see class doc).
+  private static readonly Lazy<HashSet<string>> _uncoveredAllowlist = new(
+    () => LoadFixtureNameSet("fidelity-uncovered-allowlist.json")
+  );
 
   private static Dictionary<string, string?>? LoadCorpus()
   {
@@ -58,13 +77,10 @@ public class GoldOracleTextFidelityTests
     return dict;
   }
 
-  private static HashSet<string> LoadQuarantine()
+  // Loads a committed Fixtures/*.json allowlist (a flat JSON array of testCase.Name strings).
+  private static HashSet<string> LoadFixtureNameSet(string fileName)
   {
-    var path = Path.Combine(
-      TestContext.CurrentContext.TestDirectory,
-      "Fixtures",
-      "oracle-text-quarantine.json"
-    );
+    var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", fileName);
     if (!File.Exists(path))
     {
       return new HashSet<string>(StringComparer.Ordinal);
@@ -104,11 +120,32 @@ public class GoldOracleTextFidelityTests
 
     if (!corpus.TryGetValue(name, out var corpusText))
     {
-      Assert.Ignore(
-        $"'{name}' is not in the corpus (card-inputs.json) — cannot validate its oracle text."
+      // The card is absent from the corpus, so this gold cannot be validated against an authoritative
+      // source. That is exactly the dangerous case (wrong oracle text would slip through), so it is a
+      // LOUD failure — UNLESS the gold is on the grandfathered, shrink-only uncovered allowlist.
+      Assert.That(
+        _uncoveredAllowlist.Value.Contains(testCase.Name),
+        Is.True,
+        $"Gold '{testCase.Name}' card '{name}' is absent from the corpus (card-inputs.json), so its "
+          + "oracle text CANNOT be validated against an authoritative source — a wrong gold would slip "
+          + "through. Make the card present in the corpus (preferred — re-run the InteractionTriage "
+          + "flow / widen its card set so it gets real validation), or, only if truly unavoidable, add "
+          + "'"
+          + testCase.Name
+          + "' to Fixtures/fidelity-uncovered-allowlist.json (the allowlist only shrinks)."
       );
       return;
     }
+
+    // The card IS in the corpus now. If it is still on the uncovered allowlist, it gets real validation
+    // and must be removed — the allowlist is a ratchet that only shrinks.
+    Assert.That(
+      _uncoveredAllowlist.Value.Contains(testCase.Name),
+      Is.False,
+      $"'{testCase.Name}' is on the fidelity uncovered allowlist but its card '{name}' is now in the "
+        + "corpus and can be validated. Remove it from Fixtures/fidelity-uncovered-allowlist.json — the "
+        + "allowlist only shrinks."
+    );
 
     var matches = Norm(goldText) == Norm(corpusText);
     var quarantined = _quarantine.Value.Contains(testCase.Name);
