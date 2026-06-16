@@ -1,0 +1,37 @@
+{
+  "judgment": "mast-interaction blink (flicker) flow arm (alignment/blink-arm) — exile-then-return-self as one emit:blink; blink->etb refuel + blink->tap renewal; CR 400.7 new-object / 603.6a ETB retrigger",
+  "date": "2026-06-16",
+  "scope": "3 new combos reconstructed (Felidar Guardian x Restoration Angel; Kiki-Jiki x Felidar Guardian copy+blink; Kiki x Resto inferred); all new blink hops; 1 adversarial false-positive probe; READ-ONLY judgment on alignment/blink-arm vs HEAD",
+  "result": "PASS",
+  "summary": {
+    "pass": 3,
+    "fail": 0,
+    "concern": 0
+  },
+  "items": [
+    {
+      "target": "Felidar Guardian + Restoration Angel (bench 1090-2781, AMBER) — pure two-card blink, blink->etb arm",
+      "verdict": "PASS",
+      "reason": "AMBER is the honest, soundly-irreducible tier. Each card's ETB is 'you may exile ... then return that card' (oracle text confirmed in both ASTs: optional > composite[exile, returnToBattlefield(Zone:Exile, ExiledWith:Self)]). The optional floors the emit:blink to Gated=true. Cross-card hop Felidar::emit:blink:permanent -> Restoration::etb:creature:self: producer subject {CardTypes:[permanent], Controller:You, ExcludeSelf:true}; consumer {CardTypes:[creature], IsSelf:true}. Intersects = Overlaps (permanent ssumes creature, IsSelf/ExcludeSelf deliberately ignored by Intersects per ObjectFilterRelations L496-505). Subsumes = No, reason IsSelf: BoolSubsumes(sub.IsSelf=null, sup.IsSelf=true)=No — a blink of 'a permanent you control' does NOT guarantee it is THIS creature (Restoration). Overlaps+Reliability No -> AMBER (PortEdge.Tier L28-32). Doubly floored: cycle Firable=false (Gated) -> cycle AMBER. Genuinely retriggers the ETB per CR 400.7 (new object) + 603.6a (ETB checks all newcomers); the loop is structurally feasible but un-certifiable-infinite (the controller may decline). NOT a false GREEN."
+    },
+    {
+      "target": "Kiki-Jiki, Mirror Breaker + Felidar Guardian (bench 618-2781, AMBER) — copy-inheritance + blink->tap renewal (dual of inherited untap, Decision 4)",
+      "verdict": "PASS",
+      "reason": "AMBER honest on both sub-cycles. (1) blink->etb sub-cycle: copy-of-Felidar::emit:blink:permanent -> Felidar::etb:creature:self, Overlaps + Reliability No (IsSelf), AMBER — same logic as the pure pair. (2) blink->tap renewal: copy-of-Felidar::emit:blink:permanent -> Kiki::tap:self, Reliability Unknown, reason 'inherited untap is optional/conditional', AMBER. The grafted blink admits a creature (TargetAdmitsCreature: permanent admits creature), so it can pick the creature copier Kiki, which re-enters UNTAPPED (CR 400.7 new object enters untapped by default) renewing {T}. BlinkReachesSource returns Unknown because the blink is Gated (optional) -> AMBER, never GREEN. The self-only-blink exclusion (Subject.IsSelf) and the non-creature-target exclusion (TargetAdmitsCreature false) are sound false-negative guards (never false positives). Cycle Firable=false -> AMBER. The copy IS recognised (snapshot shows the grafted ports + closing hop), so this is a real reconstruction, correctly tiered AMBER by the optional ETB."
+    },
+    {
+      "target": "False-positive guard + adversarial probe — non-blink exile+return and irrelevant-permanent blink manufacture NO loop",
+      "verdict": "PASS",
+      "reason": "BlinkPort requires the return leg to carry Zone:Exile AND ExiledWith:Kind:Self (the linked just-exiled card, CR 406.6/ADR-0004). PROBE 1 (committed test): a composite that exiles a permanent then returns a creature FROM GRAVEYARD (Zone:Graveyard, no ExiledWith) projects ZERO emit:blink — a reanimation is not a blink, so it can never refuel an ETB or renew a tap. PROBE 2 (adversarial, irrelevant permanent): a blink whose Subject is a provably non-creature permanent ('blink target land') feeding a tap-renewal is rejected by TargetAdmitsCreature (CardTypes constrained to land -> false) -> no closing edge synthesized -> no loop. PROBE 3 (adversarial, type-disjoint etb): blink->etb is pruned by ObjectFilterRelations.Intersects when subjects are provably Disjoint (permanent vs non-permanent, CR 110.4); land vs creature stays AMBER (Overlaps, not GREEN) because a land creature can coexist (CR; e.g. Dryad Arbor) — admissible-not-provable, correctly AMBER. PROBE 4 (self-blink): a card's own self-ETB (consume.IsSelf, same Card) is pruned in BlinkSatisfiesEnter (the source can't legally target its own 'another permanent' blink, CR 109 'another') — a sound false-negative, never a false positive. An under-specified blink target (Filter null) yields NO blink port (no Subject to tier). All guards hold: zero manufactured combos."
+    }
+  ],
+  "concern": null,
+  "engine_soundness_notes": [
+    "ZERO new GREEN edges and ZERO new GREEN cycles across the entire branch: recall@Green 0.1515 -> 0.1515 (unchanged), recall@Amber 0.606 -> 0.697 (+3 combos). Every gain is AMBER — the arm does not fudge a green (adding-a-flow-arm anti-pattern 2 respected).",
+    "The only GREEN edges touching emit:blink are CardDefined (etb:creature:self -> emit:blink), GREEN by construction (the card's own causality, CR 603.6a); the Gated flag rides on the emit so the CYCLE floors to AMBER regardless — no GREEN leak.",
+    "Non-null Subject carried on every emit:blink (the blinked filter), never the scalar null-default GREEN of AddRulesEdge (adding-a-flow-arm anti-pattern 3 respected). A null-Subject blink falls back to Gated->Unknown in BlinkReachesSource, still AMBER.",
+    "Un-coarsening 'optional'/'composite' (removed from known-coarse-projections.json) is the correct parse-layer precision step: unrelated snapshots (boggart-harbinger etc.) now project meaningful inner ports (emit:searchlibrary, correctly Gated) instead of opaque emit:optional — benign, no new GREEN cycle in any unrelated snapshot.",
+    "CITATION NIT (non-blocking, does NOT change any tier): code comments and PortLabel doc cite 'CR 603.6e' for the ETB-retrigger/untap-on-reentry semantics. CR 603.6e in the ruleset is narrowly about Auras' leaves-the-battlefield triggers finding the new object; the substantive rules that actually license the tiers are CR 400.7 (zone change = new object, correctly cited alongside) and CR 603.6a (ETB abilities check all newcomers). The tiers are sound under the correct rules; recommend the comments cite 603.6a + 400.7. Routed as a doc-comment nit, not an engine fault.",
+    "Likewise '117.7' is cited for the 'you may' optional; in this ruleset 117.7 is 'in response to'. The optional/declinable semantics that floor to AMBER are sound (a 'you may' is genuinely optional); comment-citation nit only."
+  ]
+}
