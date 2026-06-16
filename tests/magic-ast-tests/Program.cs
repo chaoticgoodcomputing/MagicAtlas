@@ -4,6 +4,7 @@ using Flowthru.Hosting;
 using Flowthru.Step.Python;
 using MagicAtlas.Ast.Tests.Data;
 using MagicAtlas.Ast.Tests.Flows.InteractionTriage;
+using MagicAtlas.Ast.Tests.Flows.LabelCensus;
 using MagicAtlas.Ast.Tests.Flows.MagicAstSmoke;
 using MagicAtlas.Ast.Tests.Flows.MagicAstTriage;
 using Microsoft.Extensions.Configuration;
@@ -150,6 +151,16 @@ public class Program
         .WithDescription(
           "Fetches the Scryfall oracle-cards bulk, runs MagicAST over every card, and emits "
             + "Data/_08_Reporting/triage-report.json — the input artifact for the mast-tdd-loop skill."
+        );
+
+      flowthru
+        .RegisterFlow<Catalog>(
+          "PortLabelCensus",
+          catalog => LabelCensusFlow.Create(catalog, ontologyPath)
+        )
+        .WithDescription(
+          "Parses + PortWalk-projects every corpus card and aggregates the distinct port-label space → "
+            + "Data/_08_Reporting/port-label-census.json (diagnostic: the card:label ratio that sizes the two-layer cycle engine)."
         );
     });
   }

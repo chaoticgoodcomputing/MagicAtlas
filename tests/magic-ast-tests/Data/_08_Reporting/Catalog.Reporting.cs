@@ -57,6 +57,15 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/port-nodes.json")
       .Build());
 
+  /// <summary>The port-label census (diagnostic): distinct-label counts across the parsed corpus —
+  /// total + cycle-relevant + per-role + most-reused. Output of the <c>PortLabelCensus</c> flow; the
+  /// card:label ratio is the health metric for the two-layer cycle engine.</summary>
+  public IItem<PortLabelCensus> PortLabelCensus =>
+    CreateItem(() => Item.Of<PortLabelCensus>("PortLabelCensus")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/port-label-census.json")
+      .Build());
+
   /// <summary>The interaction-graph Plotly viz (label grammar | card-card expansion) — interactive HTML.</summary>
   public IItem<string> InteractionGraphHtml =>
     CreateItem(() => Item.Of<string>("InteractionGraphHtml")
