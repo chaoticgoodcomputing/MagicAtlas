@@ -714,19 +714,42 @@ public sealed class PortGraphEngine
   /// Elementary cycles over the materialised graph (each rooted at its lowest-identity port, surfaced
   /// once). A cycle is a candidate loop; its tier is the worst hop. (Same discipline as
   /// the original engine's <c>FindCycles</c>, over the new edge type.)
+  /// <para><b>The per-instance reference.</b> This enumerates over the per-card <c>Identity</c> graph
+  /// (one node per port instance). The two-layer engine (<see cref="FindCyclesByLabelGraph"/>) runs the
+  /// expensive enumeration over the distinct-<em>label</em> graph instead and instantiates per candidate
+  /// shape; it is gated to produce a <b>byte-identical</b> result to this method (the equivalence test).
+  /// This stays as the reference implementation per the two-layer design (next-steps §3 of
+  /// <c>docs/two-layer-cycle-engine.md</c>) — the ADR's retire/keep decision is deferred to humans.</para>
   /// </summary>
   public IReadOnlyList<PortCycle> FindCycles(
     IReadOnlyList<PortEdge> edges,
     int maxLength = int.MaxValue
+  ) => EnumerateInstanceCycles(edges, edges, maxLength);
+
+  /// <summary>
+  /// The shared per-instance elementary-cycle DFS (ADR-0002 §8). Enumerates over the
+  /// <paramref name="searchEdges"/> adjacency — the admissible edge set the caller hands it — while every
+  /// §8 floor/prune is computed against the FULL <paramref name="allEdges"/> set (co-costs, producers,
+  /// renewals can sit off the ring). The reference <see cref="FindCycles"/> passes <c>searchEdges ==
+  /// allEdges</c>; the two-layer engine passes the (provably-complete) subset of instance edges that lie on
+  /// a candidate label-cycle. Because the label graph is a sound over-approximation (every real instance
+  /// cycle projects to a closed label walk, so each of its instance edges' label-hop appears in some
+  /// candidate shape), restricting the search to that subset drops <b>no</b> instance cycle — the
+  /// equivalence guarantee. Each cycle is rooted at its lowest-identity node and surfaced once.
+  /// </summary>
+  private List<PortCycle> EnumerateInstanceCycles(
+    IReadOnlyList<PortEdge> searchEdges,
+    IReadOnlyList<PortEdge> allEdges,
+    int maxLength
   )
   {
-    var adjacency = edges
+    var adjacency = searchEdges
       .GroupBy(e => e.From.Identity)
       .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.Ordinal);
 
-    // §8 conjunction input: each cost's co-costs. (Whether a co-cost is "fed" is now decided per-cycle
-    // against the LOOP's own producers, not a corpus-global set — see ConjunctionHolds.)
-    var coCosts = CoCostMap(edges);
+    // §8 conjunction input: each cost's co-costs. Computed over the FULL edge set (a co-cost feeder may
+    // live off the ring); the search-edge restriction only narrows enumeration, never the §8 evidence.
+    var coCosts = CoCostMap(allEdges);
 
     var cycles = new List<PortCycle>();
     var path = new List<PortEdge>();
@@ -744,18 +767,18 @@ public sealed class PortGraphEngine
           path.Add(edge);
           var loop = path.ToList();
           if (
-            !IsOneShotSelfRemoval(loop, edges) // §8 "B": prune the structurally non-repeatable
+            !IsOneShotSelfRemoval(loop, allEdges) // §8 "B": prune the structurally non-repeatable
             && !BridgeFedByIncompatibleToken(loop) // §8: the loop's token can't satisfy the dies-trigger
-            && !CounterGateUnsatisfiable(loop, edges) // §8: a "had a counter" gate the loop can't re-satisfy
+            && !CounterGateUnsatisfiable(loop, allEdges) // §8: a "had a counter" gate the loop can't re-satisfy
           )
             cycles.Add(
               new PortCycle
               {
                 Edges = loop,
-                CoCostsSatisfied = ConjunctionHolds(loop, coCosts, edges),
-                Balanced = ManaBalanced(loop, coCosts, edges),
-                Productive = ManaProductive(loop, coCosts, edges),
-                TapRenewed = TapGatesRenewed(loop, edges),
+                CoCostsSatisfied = ConjunctionHolds(loop, coCosts, allEdges),
+                Balanced = ManaBalanced(loop, coCosts, allEdges),
+                Productive = ManaProductive(loop, coCosts, allEdges),
+                TapRenewed = TapGatesRenewed(loop, allEdges),
               }
             );
           path.RemoveAt(path.Count - 1);
@@ -783,6 +806,126 @@ public sealed class PortGraphEngine
       Dfs(start, start);
     }
     return cycles;
+  }
+
+  /// <summary>
+  /// The <b>two-layer</b> cycle engine (<c>docs/two-layer-cycle-engine.md</c>). The expensive elementary-
+  /// cycle enumeration runs over the DISTINCT cycle-relevant LABEL graph (Layer 1 — the bounded "atom"
+  /// set, ~hundreds of nodes, not the ~100k port instances), yielding candidate interaction SHAPES. Then
+  /// an instantiate-and-tier pass (Layer 2) materialises the concrete ports realising each candidate shape
+  /// and runs the operator + §8 to assign each cycle its tier — the precise, instance-dependent truth.
+  ///
+  /// <para><b>Layer 1 (candidate shapes).</b> Build adjacency over distinct labels (an edge <c>A→B</c>
+  /// exists iff some <see cref="PortEdge"/> goes from a label-A port to a label-B port — the kind/role
+  /// "could bond" relation), enumerate its elementary cycles. The label graph is bounded by the grammar,
+  /// so a <b>generous (unbounded) length</b> is used here — the cards-based bound is a display filter
+  /// (<paramref name="displayMaxLengthInCards"/>), applied to the instance cycles after Layer 2.</para>
+  ///
+  /// <para><b>Layer 2 (instantiate + tier).</b> Collect the admissible instance edges — those whose
+  /// <c>(From.Label → To.Label)</c> hop appears in <em>any</em> candidate label-cycle — and run the SAME
+  /// per-instance DFS (<see cref="EnumerateInstanceCycles"/>) over them. This is what makes the result
+  /// byte-identical to <see cref="FindCycles"/>: every real instance cycle projects to a closed label walk
+  /// covered by Layer 1, so its edges are all admissible, so the restricted DFS finds it; conversely no new
+  /// cycle appears because the DFS is the identical elementary-cycle finder. The display bound is applied
+  /// as a post-filter on the instance cycle's <b>distinct card count</b> (a cards-based filter, the design's
+  /// demotion of the old hop-length bound).</para>
+  /// </summary>
+  public IReadOnlyList<PortCycle> FindCyclesByLabelGraph(
+    IReadOnlyList<PortEdge> edges,
+    int displayMaxLengthInCards = int.MaxValue
+  )
+  {
+    // Layer 1: candidate label-cycle shapes over the distinct-label graph (small N, generous length).
+    var shapeHops = LabelCycleHops(edges);
+
+    // Layer 2a: the admissible instance edges — every edge whose label-hop participates in a candidate
+    // shape. A sound over-approximation of "edges that can lie on a real instance cycle" (the label graph
+    // is itself a sound over-approximation, two-layer-cycle-engine.md "Layer 1"), so restricting the
+    // instance DFS to these drops no instance cycle.
+    var admissible = edges.Where(e => shapeHops.Contains((e.From.Label, e.To.Label))).ToList();
+
+    // Layer 2b: instantiate + tier — the identical per-instance enumerator over the admissible subset,
+    // with every §8 floor still evidenced against the FULL edge set.
+    var cycles = EnumerateInstanceCycles(admissible, edges, int.MaxValue);
+
+    // Length-bound is now a cards-based DISPLAY filter (two-layer-cycle-engine.md §Complexity): keep only
+    // cycles spanning ≤ K distinct cards. Default int.MaxValue = no filter (the full enumeration).
+    if (displayMaxLengthInCards == int.MaxValue)
+      return cycles;
+    return cycles
+      .Where(c =>
+        c.Edges.SelectMany(e => new[] { e.From.Card, e.To.Card })
+          .Distinct(StringComparer.Ordinal)
+          .Count() <= displayMaxLengthInCards
+      )
+      .ToList();
+  }
+
+  /// <summary>
+  /// Layer 1 of the two-layer engine — enumerate elementary cycles over the DISTINCT-label graph and
+  /// return the set of label HOPS <c>(fromLabel, toLabel)</c> that appear on any candidate cycle. The
+  /// label graph groups the per-instance edges by their endpoints' <see cref="PortNode.Label"/> (the
+  /// "atoms", two-layer-cycle-engine.md): nodes = distinct labels, an edge <c>A→B</c> iff some instance
+  /// edge runs A→B. Bounded by the grammar (hundreds of nodes), so the enumeration runs with no length
+  /// cap. A self-loop label (A→A, a same-label hop) is its own one-node cycle and contributes the hop
+  /// <c>(A,A)</c>. The returned hop-set is the admissibility gate Layer 2 filters instance edges by.
+  /// </summary>
+  private static HashSet<(string From, string To)> LabelCycleHops(IReadOnlyList<PortEdge> edges)
+  {
+    // Distinct-label adjacency (deduped — the label graph is the atom graph, one node per label).
+    var labelAdj = edges
+      .GroupBy(e => e.From.Label, StringComparer.Ordinal)
+      .ToDictionary(
+        g => g.Key,
+        g => g.Select(e => e.To.Label).Distinct(StringComparer.Ordinal).OrderBy(l => l, StringComparer.Ordinal).ToList(),
+        StringComparer.Ordinal
+      );
+
+    var hops = new HashSet<(string, string)>();
+
+    // Self-loop labels (A→A) are one-node cycles; record their hop directly.
+    foreach (var e in edges)
+      if (string.Equals(e.From.Label, e.To.Label, StringComparison.Ordinal))
+        hops.Add((e.From.Label, e.To.Label));
+
+    // Elementary cycles over the label graph, rooted at each label's lowest-ordinal node (the same
+    // canonical-rooting discipline as the instance DFS), no length bound. Small N — the bounded atom set.
+    var path = new List<string>();
+    var onPath = new HashSet<string>(StringComparer.Ordinal);
+
+    void Dfs(string node, string start)
+    {
+      if (!labelAdj.TryGetValue(node, out var outs))
+        return;
+      foreach (var to in outs)
+      {
+        if (string.Equals(to, start, StringComparison.Ordinal))
+        {
+          // Closed an elementary label-cycle: record every hop on the ring (path = [start, …]; the
+          // closing hop is the last node back to start).
+          for (var i = 0; i < path.Count; i++)
+            hops.Add((path[i], i + 1 < path.Count ? path[i + 1] : start));
+        }
+        else if (string.CompareOrdinal(to, start) > 0 && !onPath.Contains(to))
+        {
+          path.Add(to);
+          onPath.Add(to);
+          Dfs(to, start);
+          onPath.Remove(to);
+          path.RemoveAt(path.Count - 1);
+        }
+      }
+    }
+
+    foreach (var start in labelAdj.Keys.OrderBy(k => k, StringComparer.Ordinal))
+    {
+      onPath.Clear();
+      onPath.Add(start);
+      path.Clear();
+      path.Add(start);
+      Dfs(start, start);
+    }
+    return hops;
   }
 
   /// <summary>
