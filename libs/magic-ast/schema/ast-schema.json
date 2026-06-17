@@ -515,6 +515,14 @@
           ]
         },
         {
+          "Type": "AddTypeEffect",
+          "Discriminator": "addType",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
           "Type": "AdditionalCastCostEffect",
           "Discriminator": "additionalCastCost",
           "IsUnparsed": false,
@@ -2062,5 +2070,5 @@
       ]
     }
   ],
-  "SchemaHash": "0bfe1306bd65ae8af8c5da6a9adae345fe4d164fc3a4d85ce574939ce25f56df"
+  "SchemaHash": "385d93b78f6cb3dcb2b6d276de9bba90e25117b6f24629c43c66010cce6bba4f"
 }
