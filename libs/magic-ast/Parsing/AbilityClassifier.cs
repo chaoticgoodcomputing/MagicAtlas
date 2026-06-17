@@ -532,8 +532,15 @@ public sealed class AbilityClassifier
     // covering all spells you cast. Intercept before StartsWithYouMaySpellInstruction
     // swallows it (parallels the "You may cast this spell as though it had flash"
     // and "You may cast this card from your graveyard" intercepts above).
+    //
+    // Also handles "You may cast noncreature spells as though they had flash." —
+    // Valley Floodcaller and similar cards that grant flash to noncreature spells
+    // only. Same static-permission semantics; routed to CastNoncreatureSpellsAsFlashRule.
     if (clause.RawText.TrimStart().StartsWith(
       "You may cast spells as though they had flash",
+      StringComparison.OrdinalIgnoreCase) ||
+      clause.RawText.TrimStart().StartsWith(
+      "You may cast noncreature spells as though they had flash",
       StringComparison.OrdinalIgnoreCase))
     {
       return new ClauseClassification
