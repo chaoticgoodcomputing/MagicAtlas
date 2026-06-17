@@ -1532,6 +1532,15 @@
           ]
         },
         {
+          "Type": "RevealUntilEffect",
+          "Discriminator": "revealUntil",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Player"
+          ]
+        },
+        {
           "Type": "RingTemptsEffect",
           "Discriminator": "ringTemptsYou",
           "IsUnparsed": false,
@@ -2033,5 +2042,5 @@
       ]
     }
   ],
-  "SchemaHash": "64e10e310c7cfff48fb9739984e829c2aeca61e972403f8668dd65f9aefce3c5"
+  "SchemaHash": "2002391df34aa476e57e4e494b2d8ddf26206531c67010451ed8f7f9edc2cee1"
 }

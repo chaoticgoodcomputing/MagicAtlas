@@ -224,6 +224,12 @@
       "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
+      "card": "LCI/NissaResurgentAnimist",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'this is the second time this ability has resolved this turn' is an ordinal ability-history predicate; no structured NthTimeAbilityResolvedCondition node exists yet"
+    },
+    {
       "card": "LCI/QuicksandWhirlpool",
       "sink": "OtherCondition",
       "tag": "debt",
