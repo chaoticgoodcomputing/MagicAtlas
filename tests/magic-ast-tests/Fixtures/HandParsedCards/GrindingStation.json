@@ -1,0 +1,100 @@
+{
+  "Input": {
+    "Name": "Grinding Station",
+    "ManaCost": "{2}",
+    "TypeLine": "Artifact",
+    "OracleText": "{T}, Sacrifice an artifact: Target player mills three cards.\nWhenever an artifact enters, you may untap this artifact.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Grinding Station",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "{T}, Sacrifice an artifact: Target player mills three cards.\nWhenever an artifact enters, you may untap this artifact.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["artifact"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "mill",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["player"]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["artifact"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "untap",
+                "Target": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

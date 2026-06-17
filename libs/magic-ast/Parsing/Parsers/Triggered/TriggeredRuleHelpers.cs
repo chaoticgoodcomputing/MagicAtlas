@@ -320,6 +320,22 @@ internal static class TriggeredRuleHelpers
       return new ObjectFilter { CardTypes = ["enchantment"], Controller = controller };
     }
 
+    // Artifact ETB triggers: "Whenever an artifact enters, ..." — the artifact type is CR 301
+    // (a card with "Artifact" on its type line). "an artifact" is "any artifact" (Rule 109),
+    // not a self-reference. "another artifact" excludes the source (ExcludeSelf, CR 109.5).
+    if (lower.Contains("an artifact") || lower.Contains("another artifact"))
+    {
+      var excludeSelf = lower.Contains("another artifact") ? (bool?)true : null;
+      return new ObjectFilter { CardTypes = ["artifact"], Controller = controller, ExcludeSelf = excludeSelf };
+    }
+
+    // Permanent ETB triggers: "Whenever a permanent enters, ..."
+    if (lower.Contains("a permanent") || lower.Contains("another permanent"))
+    {
+      var excludeSelf = lower.Contains("another permanent") ? (bool?)true : null;
+      return new ObjectFilter { CardTypes = ["permanent"], Controller = controller, ExcludeSelf = excludeSelf };
+    }
+
     // Self-by-name pattern, e.g. "When Denethor enters" / "Whenever Barrin dies".
     // Oracle text uses the card's own short name to refer to itself; treat this
     // as a self-reference resolved to a creature filter (matches the convention
