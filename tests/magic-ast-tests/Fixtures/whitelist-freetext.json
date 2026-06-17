@@ -242,6 +242,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "LTR/PeregrinTook",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
       "card": "M10/Falter",
       "sink": "OtherCharacteristic",
       "tag": "debt",
