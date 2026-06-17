@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/UDS/SquirmingMass.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.36", "CR 702.36b"],
+      "reason": "PB-3 type/color axis: Fear evasion 'artifact creatures and/or black creatures' free-text OtherCharacteristic entries restructured to CanBeBlockedBy CardTypes:[creature,artifact]+Colors:[B], faithful to CR 702.36b and byte-identical to sibling golds 9ED/RazortoothRats & 10E/SeveredLegion; no new residual, no regression (ability/effect/keyword/reminder preserved), removed from whitelist; no out-of-scope residual remains"
+    }
+  ]
+}

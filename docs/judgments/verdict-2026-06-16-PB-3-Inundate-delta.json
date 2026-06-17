@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Inundate.json",
+      "verdict": "PASS",
+      "citations": ["CR 105.1", "CR 105.2"],
+      "reason": "DELTA: 'nonblue' free-text residual structured as ExcludedColors:[\"U\"] (blue is a color per CR 105); co-occurring CardTypes:[creature] + Each-target preserved; whitelist entry removed; no new free-text/unparsed residual; only out-of-scope shape is verbatim Oracle.RawText (exempt)"
+    }
+  ]
+}

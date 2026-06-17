@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Disperse.json",
+      "verdict": "PASS",
+      "citations": ["CR 110.1", "CR 110.4"],
+      "reason": "PB-3 structured the 'nonland' qualifier on the returnToHand target: free-text Characteristics:[{other,'nonland'}] replaced by ExcludedCardTypes:['land'] alongside CardTypes:['permanent']; faithful to oracle 'Return target nonland permanent to its owner's hand', no new residual, no regression (returnToHand effect + target preserved); not in whitelist (correctly removed)."
+    }
+  ]
+}

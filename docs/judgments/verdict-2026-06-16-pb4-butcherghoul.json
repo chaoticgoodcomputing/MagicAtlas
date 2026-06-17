@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/INR/ButcherGhoul.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.92", "CR 603.10"],
+      "reason": "Undying intervening-if 'if it had no +1/+1 counters on it' routed via ConditionParser.Parse to TriggeringObjectCounterCondition{CounterType:'+1/+1', Present:false}, faithful to real oracle text; trigger/return/WithCounters/UnderControl preserved, no new residual, OtherCondition sink removed from whitelist."
+    }
+  ]
+}

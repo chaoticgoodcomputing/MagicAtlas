@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SHM/AvenSquire.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.83", "CR 506.5"],
+      "reason": "PB-3 delta: Exalted trigger's attacking-alone filter restructured from free-text OtherCharacteristic{Description:'attacking alone'} to CombatStateCharacteristic{State:AttackingAlone}, faithful to CR 506.5; both abilities (Flying evasion + Exalted +1/+1 trigger) preserved, no new residual, gold removed from whitelist-freetext.json"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SarythTheVipersFang.json",
+      "verdict": "PASS",
+      "citations": ["CR 110.5"],
+      "reason": "PB-3 delta: the two tapped/untapped anthem residuals structured to TappedStateCharacteristic{Tapped:true} (tapped->deathtouch) and {Tapped:false} (untapped->hexproof), faithful to real oracle; no new free-text introduced; abilities/ExcludeSelf preserved; the out-of-scope 'other' exclusion residual on each clause is Slice-6 debt left in place (expected), whitelist entry correctly retained"
+    }
+  ]
+}

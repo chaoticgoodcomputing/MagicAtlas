@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M14/PlanarCleansing.json",
+      "verdict": "PASS",
+      "citations": ["CR 110.1"],
+      "reason": "PB-3 slice structured the 'nonland' free-text residual (Characteristics[other/Description:'nonland']) into CardTypes:['permanent'] + ExcludedCardTypes:['land'], faithful to oracle 'Destroy all nonland permanents.'; destroy effect, Target.Kind:Each, and sibling permanent filter preserved; no new free-text/unparsed residual introduced; no out-of-scope residual remains on this gold"
+    }
+  ]
+}

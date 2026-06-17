@@ -1,0 +1,12 @@
+{
+  "slice": "PB-3 — structured-characteristic megaslice",
+  "mode": "delta",
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NEO/VilespawnSpider.json",
+      "verdict": "PASS",
+      "citations": ["CR 112.1", "CR 302.1"],
+      "reason": "PB-3 target residual structured: trigger filter free-text Characteristic{other,Description:'artifact'} replaced by CardTypes:['spell','artifact'] (canonical 'artifact spell' shape, matches KLD/FoundryInspector & SOM/HaltOrder); no new free-text/unparsed residual; both abilities (Reach static + Whenever-SpellCast surveil-1 trigger) preserved; remaining diff hunks are serialization-order/round-trip only; gold removed from whitelist-freetext.json as fully cleaned"
+    }
+  ]
+}

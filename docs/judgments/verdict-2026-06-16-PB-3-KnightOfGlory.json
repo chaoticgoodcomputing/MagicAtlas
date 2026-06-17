@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M13/KnightOfGlory.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "PB-3 delta: Exalted trigger filter residual {other,'attacking alone'} structured to {combatState, State: AttackingAlone} via existing CombatStateCharacteristic axis; faithful to real oracle text; no new free-text residual; protection + modifyPT abilities and sibling filters (creature/You) preserved; no out-of-scope residual remains"
+    }
+  ]
+}

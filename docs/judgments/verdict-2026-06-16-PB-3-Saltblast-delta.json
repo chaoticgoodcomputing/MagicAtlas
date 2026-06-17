@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Saltblast.json",
+      "verdict": "PASS",
+      "citations": ["CR 105.1"],
+      "reason": "DELTA PB-3: 'nonwhite' free-text residual (Characteristics:[{CharacteristicType:other,Description:nonwhite}]) structured to ExcludedColors:[\"W\"] on the destroy target filter — correct color-exclusion axis (Doom Blade pattern), faithful to real oracle 'Destroy target nonwhite permanent.'; sibling CardTypes:[permanent] preserved, no new free-text/unparsed residual, no dropped/inverted effect; not an S6-shared gold so full cleanup + whitelist removal is correct."
+    }
+  ]
+}

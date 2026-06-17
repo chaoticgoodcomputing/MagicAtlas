@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DKA/UndyingEvil.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.93", "CR 603.10"],
+      "reason": "InterveningIf on GainedAbility routed from free-text other to triggeringObjectCounter{CounterType:'+1/+1', Present:false}, faithful to CR 702.93a's 'if it had no +1/+1 counters on it'; all sibling nodes (Trigger{Dies}, returnToBattlefield, UnderControl{Owner}, WithCounters{+1/+1 x1}, KeywordSource:Undying, Duration) value-identical; removed from whitelist-freetext.json; no new residual; the only non-target diffs (Power/Toughness null-omission, Tapped:false non-nullable default) are serialization artifacts, not regressions"
+    }
+  ]
+}

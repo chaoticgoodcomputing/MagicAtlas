@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AVR/Vanishment.json",
+      "verdict": "PASS",
+      "citations": ["CR 110.1", "CR 300.1", "CR 702.94"],
+      "reason": "structured the 'nonland' exclusion residual on the target filter: free-text Characteristics[{other,nonland}] -> ExcludedCardTypes:[land] (canonical ObjectFilter pattern), faithful to oracle 'target nonland permanent'; CardTypes:[permanent] sibling, both abilities, miracle cost/keyword/reminder all preserved; no new free-text, no regression, no remaining out-of-scope residual"
+    }
+  ]
+}

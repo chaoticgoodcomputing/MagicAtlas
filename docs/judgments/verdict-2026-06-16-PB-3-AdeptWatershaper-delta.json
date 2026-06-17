@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AdeptWatershaper.json",
+      "verdict": "PASS",
+      "citations": ["CR 110.5"],
+      "reason": "PB-3 delta: the 'tapped' free-text residual ({CharacteristicType:other, Description:tapped}) is now structured TappedStateCharacteristic{Tapped:true}, faithful to 'Other tapped creatures you control have indestructible.' (CR 110.5 tapped/untapped status). The S6-shared 'other' exclusion residual is correctly left in place (Slice 6 debt) with its whitelist entry kept. No regression: gainAbility/Each/Indestructible ability preserved; remaining diffs (KeywordSource reorder, IsVariable:false, Value/Raw reorder) are regen canonicalization, not semantic change. No new out-of-scope residual introduced."
+    }
+  ]
+}

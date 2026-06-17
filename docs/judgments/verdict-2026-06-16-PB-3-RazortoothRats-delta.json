@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/9ED/RazortoothRats.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.36b"],
+      "reason": "Fear evasion residual structured: free-text Characteristics[{other:artifact},{other:black}] replaced by CardTypes:[creature,artifact] + Colors:[B], faithful to 'artifact creatures and/or black creatures' and matching the canonical Intimidate sibling; no new free-text/unparsed node, no dropped ability (static/evasion/KeywordSource/Reminder preserved), whitelist OtherCharacteristic debt entry removed"
+    }
+  ]
+}

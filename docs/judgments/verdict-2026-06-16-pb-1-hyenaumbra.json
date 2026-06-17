@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ROE/HyenaUmbra.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.89", "CR 702.89b", "CR 303.4", "CR 702.5"],
+      "reason": "DELTA PB-1: keyword rename Totem armor -> Umbra armor is ground-truth (CR 702.89 'Umbra Armor'; 702.89b: totem armor is the obsolete Oracle-updated name); no new free-text/unparsed residual introduced; all 3 abilities (Enchant, +1/+1 & first strike composite, Umbra armor) preserved with no regression"
+    }
+  ]
+}

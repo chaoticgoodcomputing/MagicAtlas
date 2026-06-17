@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ROE/LuminousWake.json",
+      "verdict": "PASS",
+      "citations": ["CR 303.4", "CR 702.5"],
+      "reason": "slice PB-1 structured the AttacksOrBlocks trigger filter's 'enchanted creature' from free-text Characteristic.Other(\"enchanted\") to the flat IsEnchanted:true axis (mirrors IsSelf/IsToken); oracle text matches Scryfall verbatim; gainLife 4 to You and creature CardTypes preserved; no new free-text/unparsed residual; whitelist OtherCharacteristic entry removed"
+    }
+  ]
+}

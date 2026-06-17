@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilter.cs#IsEnchanted",
+      "verdict": "PASS",
+      "citations": ["CR 303.4", "CR 303.4b", "CR 702.5"],
+      "reason": "flat bool axis for the Aura's attached permanent; CR 303.4b defines the attached object as 'enchanted'; mirrors IsSelf/IsToken"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/KeywordAbility.cs#UmbraArmor",
+      "verdict": "PASS",
+      "citations": ["CR 702.89", "CR 702.89b"],
+      "reason": "Umbra armor is the current Oracle keyword name (CR 702.89); totem armor is obsolete/renamed (CR 702.89b) — distinct member is faithful to the card's current wording"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantedPTAndGrantedAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 303.4", "CR 303.4e"],
+      "reason": "'gets +N/+M and has \"[ability]\"' decomposes to modifyPT + gainAbility on EnchantedOrEquipped; CR 303.4e: an Aura granting via 'has' confers the ability to the enchanted object"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ROE/LuminousWake.json",
+      "verdict": "PASS",
+      "citations": ["CR 303.4b"],
+      "reason": "AttacksOrBlocks trigger filter is now CardTypes:[creature]+IsEnchanted:true (the attached creature, CR 303.4b); gainLife 4 to You preserved; no OtherCharacteristic"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M14/UnhallowedPact.json",
+      "verdict": "PASS",
+      "citations": ["CR 303.4b"],
+      "reason": "Dies trigger filter is now CardTypes:[creature]+IsEnchanted:true; returnToBattlefield It UnderControl You preserved; no OtherCharacteristic"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ROE/BearUmbra.json",
+      "verdict": "PASS",
+      "citations": ["CR 303.4", "CR 303.4e", "CR 702.89", "CR 508"],
+      "reason": "+2/+2 (correct magnitude) + gainAbility on EnchantedOrEquipped whose GainedAbility is the triggered 'Whenever this creature (IsSelf) attacks, untap Each land Controller:You'; keyword Umbra armor (CR 702.89); no OtherCharacteristic, no unparsed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ROE/HyenaUmbra.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.89", "CR 702.89b"],
+      "reason": "collateral keyword re-point Totem armor -> Umbra armor (CR 702.89, current Oracle name); +1/+1 + first strike grant unchanged"
+    }
+  ]
+}

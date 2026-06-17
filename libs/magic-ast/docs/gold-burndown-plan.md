@@ -375,3 +375,21 @@ if (reliability.Value == Trilean.Unknown
 **Non-negotiable:** parser + carve-out land in the SAME commit, with the `mast-interaction` tier tests (canonical-combo asserts) run BEFORE and AFTER to catch any silent GREEN↔AMBER flip.
 
 **Slice-6-shared golds with the parser batch:** `AdeptWatershaper`, `SarythTheVipersFang` — both land in PB-3 (tapped/untapped axis) AND carry the `other`/`another` residual owned here. Regenerate them only after BOTH PB-3 and Slice 6 land (or co-group), so neither half leaves the other's residual.
+
+---
+
+## PB batch results (2026-06-16, delta-judge harness `wf_2fedae4b-9b4`)
+
+**All 5 slices committed, zero deferred** — the delta-judge + partial-commit harness resolved Run-1's coupling failure (the Mentor golds passed because PB-3 merged comparative+characteristic into one atomic regen). 50 golds regenerated.
+
+| Slice | Commit | Golds | Notes |
+|---|---|---|---|
+| PB-4 — Bucket A counter-gate | `c8d34e3b` | 7 | Persist/Undying intervening-if → `TriggeringObjectCounterCondition` |
+| PB-1 — aura IsEnchanted + BearUmbra | `f928203e` | 4 | `IsEnchanted` axis; BearUmbra re-derived (+2/+2, restored grant, Umbra armor) |
+| PB-5 — CandyTrail conjunction | `f37084cb` | 1 | re-point + "gain 3 life and draw a card" → two structured effects |
+| PB-6 — DisplacerKitten | `0ea242a6` | 3 | `noncreature` → ExcludedCardTypes; AbilityWord resolved |
+| PB-3 — structured-characteristic megaslice | `9eb241fd` | 35 | tapped/counter/type/color axes + merged comparative-power |
+
+**Whitelist delta (session):** freetext 149→100, unparsed 14→11, oracle-drift 87→81. Recall unchanged **5G/18A/10M**; full suite 4525 + bench 41 green (two-layer equivalence + tier tests pass).
+
+**Partial-commit carry-overs (PB-3 kept 3 entries):** `AdeptWatershaper`, `SarythTheVipersFang`, `AggressiveMammoth` — their characteristic/comparative axis is structured, but their `other`/`another` exclusion residual is left whitelisted for **Slice 6** to clean. This is the bridge: Slice 6 now lands on the 22-gold exclusion population (incl. these 3) on top of a structured-characteristic base.

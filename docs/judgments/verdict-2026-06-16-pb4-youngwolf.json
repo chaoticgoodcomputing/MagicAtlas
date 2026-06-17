@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/INR/YoungWolf.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.93a"],
+      "reason": "Slice routed the hardcoded Undying intervening-if through ConditionParser: InterveningIf changed from OtherCondition{Text:\"it had no +1/+1 counters on it\"} to TriggeringObjectCounterCondition{CounterType:\"+1/+1\",Present:false} on the spell ability, faithful to CR 702.93a; no new AST (discriminator already in Condition.cs); removed from whitelist-freetext.json; no new free-text/unparsed residual; Trigger/returnToBattlefield/WithCounters/UnderControl/IsSelf/KeywordSource semantically unchanged (added Tapped:false / IsVariable:false are inert default serializations)."
+    }
+  ]
+}

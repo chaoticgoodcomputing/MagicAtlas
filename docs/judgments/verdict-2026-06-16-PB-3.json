@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CMD/Ruination.json",
+      "verdict": "PASS",
+      "citations": ["CR 205.4a", "CR 205.4c"],
+      "reason": "structured-characteristic axis: 'nonbasic land' free-text {CharacteristicType:other,Description:nonbasic} replaced by CardTypes:[land]+ExcludedSupertypes:[Basic], faithful to CR 205.4c; no new free-text/unparsed residual; destroy/Each/land siblings preserved; removed from whitelist-freetext.json; no out-of-scope residual remains (not an S6-shared gold)"
+    }
+  ]
+}
