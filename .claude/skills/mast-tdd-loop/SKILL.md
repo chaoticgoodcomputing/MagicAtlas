@@ -53,7 +53,7 @@ Step 4   Judge novel-shape branches (per policy) → verdict JSON.
 Step 5   Merge by file-affinity order. NUnit gate after each merge group.
 Step 6   NUnit 100% green required (joint regressions surface here).  [CORE merge gate]
 Step 7   Regenerate GLOSSARY.md once on the integration branch, commit.
-Step 8   Re-run triage. GATE: nx run bench:recall (combo-recall ratchet — HALT if recall dropped).
+Step 8   Re-run triage. GATE: nx run bench:recall (per-combo expected-tier gate — HALT if any combo's tier drifts from its pin).
          Reap worktrees (nx run mast:worktree-clean). Report (incl. recall numbers). Loop or stop.
 ```
 
@@ -189,7 +189,7 @@ git add libs/magic-ast/schema/discriminator-baseline.json && git commit -m "chor
 
 Per-merge-group (not once at batch end) is the point: the lint reads the **merged source** directly, so it surfaces a concurrent duplicate/near-dup at the **first** merge that introduces it, not after the whole batch has landed (closing the concurrent-duplicate hole — initiative 02 #2). A hard fail (duplicate within a family) or an unexplained near-dup is an unconditional HALT — rename, or add a judge-reviewed entry to `libs/magic-ast/schema/discriminator-justifications.json` (`{name, near, reason}`). The same invariant is belt-and-braces in the core ring (`DiscriminatorUniquenessTests` in `nx run mast:test`) so anything that slips past the script still fails the suite. Uniqueness is **per-base, not global** — cross-base reuse (`untap` as Effect+Cost+ReplacementEvent) is legitimate.
 
-**Projection exhaustiveness (initiative 03) rides the core ring too.** `PortWalkExhaustivenessTests` (in `nx run mast:test`) fails if a new discriminator is neither projected by PortWalk nor in `libs/mast-interaction/known-coarse-projections.json` — so a batch that adds an effect/cost/trigger/restriction discriminator must make a projection decision (worker contract). `PortWalkSentinelSnapshotTest` snapshots the full pipeline (parse → ports → flow edges → cycle tiers) over ~56 sentinels; a cross-pillar regression (a node-shape change silently dropping a port) fails it — regenerate via its `[Explicit]` test and justify the diff in the commit.
+**Projection exhaustiveness (initiative 03) rides the core ring too.** `PortWalkExhaustivenessTests` (in `nx run mast:test`) fails if a new discriminator is neither projected by PortWalk nor named in the explicit whitelist `libs/mast-interaction/known-coarse-projections.json` (each coarse discriminator carries a justification) — so a batch that adds an effect/cost/trigger/restriction discriminator must make a projection decision (worker contract). `PortWalkSentinelSnapshotTest` snapshots the full pipeline (parse → ports → flow edges → cycle tiers) over ~56 sentinels; a cross-pillar regression (a node-shape change silently dropping a port) fails it — regenerate via its `[Explicit]` test and justify the diff in the commit.
 
 (`glossary:check` is deliberately NOT run per merge group: workers never regenerate `GLOSSARY.md`, so it is legitimately stale mid-batch and a `--check` would false-fail. GLOSSARY regen stays once at Step 7. The lint reads source, not the glossary, so it needs no fresh glossary to catch collisions.)
 
@@ -202,12 +202,12 @@ nx run magic-ast:glossary
 git add libs/magic-ast/GLOSSARY.md
 git commit -m "chore(mast): regenerate GLOSSARY after batch {date}"
 nx run mast:run            # refresh corpus-wide triage
-nx run bench:recall        # GATE: end-product combo-recall ratchet (initiative 04) — HALT if recall dropped
+nx run bench:recall        # GATE: per-combo expected-tier whitelist (initiative 04, de-ratcheted) — HALT if any combo's tier drifts from combo-expected-tiers.json
 git add tools/bench/MagicAtlas.Bench/bench-report.json  # commit if the gate advanced the baseline (a recall gain)
 nx run mast:worktree-clean # reap this batch's worktrees + merged agent branches
 ```
 
-**GATE — combo recall (initiative 04), Step 8.** `nx run bench:recall` re-runs the interaction engine over the eligible Commander Spellbook combos and **fails if recall@Green or recall@(Green+Amber) dropped vs the committed `bench-report.json`** — the only test that catches a batch silently *losing* interaction reconstruction (the end-product measure; parser-green ≠ product-green). A drop is an unconditional HALT: investigate the regression before looping. On a recall *gain* the ratchet rewrites the baseline itself — commit it. **Put the recall numbers (`combosEligible / Green / Amber / missed`) in the batch report**; the missed combos are the aligned worklist for the next pick (Step 1). (Free-text cleanliness — `GoldFreeTextWhitelistTests`, the de-ratcheted replacement for the old `DestringSinkRatchetTests` *count* baseline — rides the core ring in `nx run mast:test`: no gold may carry a free-text residual sink unless its exact `(card, sink)` pair is named on `tests/magic-ast-tests/Fixtures/whitelist-freetext.json`. Gates at Steps 5-6 automatically; no separate Step-8 call.)
+**GATE — combo expected-tier (initiative 04, de-ratcheted), Step 8.** `nx run bench:recall` runs the interaction engine over the eligible Commander Spellbook combos; **`ComboExpectedTierTest` fails if ANY eligible combo's reconstruction tier drifts from its explicit pin in `tools/bench/MagicAtlas.Bench/combo-expected-tiers.json`** — a loud, per-combo gate (the end-product measure; parser-green ≠ product-green). A REGRESSION (e.g. Green→Amber) is an unconditional HALT: investigate before looping. An IMPROVEMENT (e.g. Missed→Amber) also fails — **update that combo's pin** to lock the gain (a named edit, never a silent baseline rewrite). `bench-report.json` is now a derived report, not the gate. **Put the tier summary (`Green / Amber / missed`) in the batch report**; the missed combos are the aligned worklist for the next pick (Step 1). (Free-text cleanliness — `GoldFreeTextWhitelistTests`, the de-ratcheted replacement for the old `DestringSinkRatchetTests` *count* baseline — rides the core ring in `nx run mast:test`: no gold may carry a free-text residual sink unless its exact `(card, sink)` pair is named on `tests/magic-ast-tests/Fixtures/whitelist-freetext.json`. Gates at Steps 5-6 automatically; no separate Step-8 call.)
 
 **Reap worktrees every batch.** `nx run mast:worktree-clean` removes the batch's isolated worktrees (Claude only auto-removes *clean* ones; ours have commits) and deletes the now-**merged** `mast-tdd/*` + `worktree-agent-*` branches. Skipping this is how the pool reached 318 worktrees and forced the in-place-checkout fallback. For a **discarded** batch (branches unmerged), run `bash tools/clean-worktrees.sh --force` to also drop the unmerged branches.
 
@@ -261,7 +261,7 @@ Bail and escalate if any of these hold.
 - `gate-judge-verdict.sh` exits nonzero (any non-PASS verdict) — do not merge; surface the gate output + offending branches, remediate, re-judge, re-run the gate.
 - `gate-fixture-immutability.sh` exits nonzero (a worker edited an existing gold) — do not merge that branch; the worker should have STOPped. Investigate; if the gold genuinely needs changing, that is orchestrator back-prop, not worker work.
 - `gate-preflight.sh` exits nonzero before dispatch — clean up (`nx run mast:worktree-clean`) and re-run; do not dispatch into a polluted environment.
-- `nx run bench:recall` fails (combo recall@Green or @(Green+Amber) dropped vs baseline) — a batch silently lost interaction reconstruction. HALT; find which merged branch's node-shape/projection change dropped a cycle (the sentinel snapshot diff from initiative 03 usually localizes it); do not advance the baseline to paper over a real loss.
+- `ComboExpectedTierTest` fails (an eligible combo's tier drifted from its pin in `combo-expected-tiers.json`) — a REGRESSION means a batch silently lost interaction reconstruction. HALT; find which merged branch's node-shape/projection change dropped the cycle (the sentinel snapshot diff from initiative 03 usually localizes it); re-pin only genuine improvements, never a regression (that would paper over a real loss).
 - Two agents claim the same `AbilityKind` or discriminator string — serialize: land one, re-dispatch the other against the post-merge tree.
 - Two agents target the same hot parser file beyond its cap — serialize across batches.
 - Post-batch triage shows fewer total successes than pre-batch — roll back and investigate.
@@ -285,7 +285,7 @@ Bail and escalate if any of these hold.
 | Orchestrator merge-gate / triage / glossary (main checkout, `nx` available) | `nx run mast:test` / `nx run mast:run` / `nx run magic-ast:glossary` |
 | Meta-gates (bash; HALT on nonzero) | `tools/gate-preflight.sh` / `tools/gate-isolation.sh` / `tools/gate-fixture-immutability.sh` / `tools/gate-judge-verdict.sh` |
 | Gate self-tests (CI-safe) | `nx run mast:gate-test` (`tools/test/gates/run.sh`) |
-| Combo-recall bench + ratchet (end-product, Step 8) | `nx run bench:recall` (`tools/bench/MagicAtlas.Bench/`, baseline `bench-report.json`) |
+| Combo-recall bench + per-combo expected-tier gate (end-product, Step 8) | `nx run bench:recall` (`tools/bench/MagicAtlas.Bench/`; gate = `combo-expected-tiers.json`; `bench-report.json` = derived report) |
 | **Flow-arm reference pattern** (close a missed-combo family: project faithfully + connect in the engine) | [`libs/mast-interaction/docs/adding-a-flow-arm.md`](../../../libs/mast-interaction/docs/adding-a-flow-arm.md) |
 | Worker targeted test (worktree — `nx` UNavailable, no `node_modules`) | `dotnet test tests/magic-ast-tests/MagicAtlas.Ast.Tests.csproj --filter "FullyQualifiedName~<CardNameNoSpaces>" --nologo` |
 | Worker subagent / judge subagent definitions | [`.claude/agents/mast-worker.md`](../../agents/mast-worker.md) / [`.claude/agents/mast-judge.md`](../../agents/mast-judge.md) |
