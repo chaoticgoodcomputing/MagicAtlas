@@ -540,6 +540,12 @@
       "sink": "AbilityText",
       "tag": "irreducible",
       "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
+    },
+    {
+      "card": "ZEN/BloodchiefAscension",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets \u2014 'an opponent lost N+ life this turn' is a turn-scoped life-history predicate with no current HistoryCondition arm; requires a new quantity (LifeLostThisTurn by player) or HistoryCondition variant"
     }
   ]
 }
