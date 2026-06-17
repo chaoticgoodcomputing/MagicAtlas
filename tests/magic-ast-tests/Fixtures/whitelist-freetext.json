@@ -212,6 +212,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "IKO/LuminousBroodmoth",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
       "card": "KTK/AbzanSkycaptain",
       "sink": "OtherCondition",
       "tag": "debt",
