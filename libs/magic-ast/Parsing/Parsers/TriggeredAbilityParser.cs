@@ -86,13 +86,15 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return null;
     }
 
-    // Peel ability-word prefix ("Landfall — ", "Threshold — ", etc.) if present.
-    // Ability words (Rule 207.2c) have no rules meaning; the classifier already
-    // extracted the word into classification.AbilityWord. Strip the prefix from
-    // the raw text and token list so trigger-timing detection works generically
-    // across all ability words without per-word parser branches.
+    // Peel the em-dash prefix ("Landfall — ", "Threshold — ", "Avoidance — ", …)
+    // if present. The classifier extracted it onto classification.DashPrefix —
+    // a real CR 207.2c ability word (emitted as AbilityWord) OR a printed flavor
+    // label (PrintedLabel; mechanically inert, NOT emitted as an ability word).
+    // Strip the prefix from the raw text and token list so trigger-timing detection
+    // works generically; only a real ability word rides onto the output.
     string? abilityWord = classification.AbilityWord;
-    if (abilityWord is not null)
+    var dashPrefix = classification.DashPrefix;
+    if (dashPrefix is not null)
     {
       var emDashIndex = text.IndexOf('—');
       if (emDashIndex >= 0)

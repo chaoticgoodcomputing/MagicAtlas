@@ -50,7 +50,7 @@ public sealed class SpellAbilityParser : IAbilityParser
   {
     var (effectsText, instructions) = StripAbilityWordConditionalPreamble(
       clause.RawText,
-      classification.AbilityWord
+      classification.DashPrefix
     );
 
     var dispatch = TryParseEffects(effectsText);
@@ -80,14 +80,15 @@ public sealed class SpellAbilityParser : IAbilityParser
   }
 
   /// <summary>
-  /// Peels the "[AbilityWord] — If &lt;condition&gt;," preamble off a spell line.
+  /// Peels the "[Prefix] — If &lt;condition&gt;," preamble off a spell line, where
+  /// [Prefix] is a CR 207.2c ability word or a printed flavor label.
   /// </summary>
   private static (string EffectsText, IReadOnlyList<string>? Instructions) StripAbilityWordConditionalPreamble(
     string rawText,
-    string? abilityWord
+    string? dashPrefix
   )
   {
-    if (abilityWord is null)
+    if (dashPrefix is null)
     {
       return (rawText, null);
     }

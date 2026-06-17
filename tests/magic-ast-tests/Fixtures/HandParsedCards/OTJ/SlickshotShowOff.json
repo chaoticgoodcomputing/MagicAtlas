@@ -30,7 +30,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Flying",
           "Effects": [
             {
               "EffectType": "evasion",
@@ -50,17 +49,18 @@
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Flying"
         },
         {
           "Kind": "static",
-          "KeywordSource": "Haste",
           "Effects": [
             {
               "EffectType": "keywordAbility",
               "Keyword": "Haste"
             }
-          ]
+          ],
+          "KeywordSource": "Haste"
         },
         {
           "Kind": "triggered",
@@ -71,11 +71,8 @@
               "CardTypes": [
                 "spell"
               ],
-              "Characteristics": [
-                {
-                  "CharacteristicType": "other",
-                  "Description": "noncreature"
-                }
+              "ExcludedCardTypes": [
+                "creature"
               ],
               "Controller": "You"
             }
@@ -106,7 +103,6 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Plot",
           "Effects": [
             {
               "EffectType": "plot",
@@ -126,7 +122,11 @@
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Plot",
+          "Reminder": {
+            "Text": "(You may pay {1}{R} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)"
+          }
         }
       ]
     },
@@ -146,7 +146,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -164,13 +165,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

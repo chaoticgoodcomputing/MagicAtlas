@@ -3,9 +3,9 @@
     "Name": "Spellgorger Weird",
     "ManaCost": "{2}{R}",
     "TypeLine": "Creature — Weird",
-    "OracleText": "Whenever you cast a noncreature spell, put a +1/+1 counter on Spellgorger Weird.",
-    "Power": "1",
-    "Toughness": "1",
+    "OracleText": "Whenever you cast a noncreature spell, put a +1/+1 counter on this creature.",
+    "Power": "2",
+    "Toughness": "2",
     "Colors": [
       "R"
     ],
@@ -25,7 +25,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Whenever you cast a noncreature spell, put a +1/+1 counter on Spellgorger Weird.",
+      "RawText": "Whenever you cast a noncreature spell, put a +1/+1 counter on this creature.",
       "Abilities": [
         {
           "Kind": "triggered",
@@ -36,8 +36,8 @@
               "CardTypes": [
                 "spell"
               ],
-              "Characteristics": [
-                {"CharacteristicType": "other", "Description": "noncreature"}
+              "ExcludedCardTypes": [
+                "creature"
               ],
               "Controller": "You"
             }
@@ -74,7 +74,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -92,13 +93,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

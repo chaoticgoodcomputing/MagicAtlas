@@ -44,6 +44,12 @@ public sealed class SpellCastConditionRule : ITriggerConditionRule
     // Card-type qualifiers on the cast spell ("creature spell", "noncreature spell", etc.)
     var characteristics = new List<string>();
 
+    // "noncreature spell" — a "non&lt;type&gt;" negation is a structured exclusion,
+    // not a free-text characteristic: CR 110.5 / the existing ExcludedCardTypes axis.
+    // The spell-subset is "a spell that is not a creature", so it carries
+    // CardTypes=["spell"] (added below via hasAnyQualifier) + ExcludedCardTypes=["creature"].
+    var excludedCardTypes = new List<string>();
+
     // "instant or sorcery spell" — combined disjunction (Rule 700.4). Must be
     // detected before the per-word loop so both halves are captured.
     if (Regex.IsMatch(lower, @"\binstant\s+or\s+sorcery\s+spell\b"))
@@ -51,9 +57,13 @@ public sealed class SpellCastConditionRule : ITriggerConditionRule
       characteristics.Add("instant");
       characteristics.Add("sorcery");
     }
+    else if (Regex.IsMatch(lower, @"\bnoncreature\s+spell\b"))
+    {
+      excludedCardTypes.Add("creature");
+    }
     else
     {
-      foreach (var word in new[] { "creature", "noncreature", "instant", "sorcery", "artifact", "enchantment" })
+      foreach (var word in new[] { "creature", "instant", "sorcery", "artifact", "enchantment" })
       {
         if (Regex.IsMatch(lower, $@"\b{Regex.Escape(word)}\s+spell\b"))
         {
@@ -103,12 +113,14 @@ public sealed class SpellCastConditionRule : ITriggerConditionRule
 
     // Build filter. Suppress CardTypes=["spell"] when no qualifiers were detected
     // and the controller is non-You (matches RhysticStudy's gold).
-    var hasAnyQualifier = characteristics.Count > 0 || colors.Count > 0 || isMulticolored == true;
+    var hasAnyQualifier =
+      characteristics.Count > 0 || excludedCardTypes.Count > 0 || colors.Count > 0 || isMulticolored == true;
     IReadOnlyList<string>? cardTypes = hasAnyQualifier ? new List<string> { "spell" } : null;
 
     var filter = new ObjectFilter
     {
       CardTypes = cardTypes,
+      ExcludedCardTypes = excludedCardTypes.Count > 0 ? excludedCardTypes : null,
       Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
       Colors = colors.Count > 0 ? colors : null,
       IsMulticolored = isMulticolored,

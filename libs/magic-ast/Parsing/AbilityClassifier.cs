@@ -23,9 +23,26 @@ public sealed record ClauseClassification
   public required double Confidence { get; init; }
 
   /// <summary>
-  /// Optional ability word detected (e.g., "Landfall", "Revolt").
+  /// Optional ability word detected (e.g., "Landfall", "Revolt"). Only a real
+  /// CR 207.2c ability word lands here — it is emitted on the parsed ability's
+  /// <see cref="MagicAST.AST.Abilities.Ability.AbilityWord"/>.
   /// </summary>
   public string? AbilityWord { get; init; }
+
+  /// <summary>
+  /// A printed italic label that LOOKS like an ability word ("Word — …") but is
+  /// NOT a CR 207.2c ability word — it is the card's own flavor label (e.g.
+  /// Displacer Kitten's "Avoidance"), mechanically inert. Detected so the body
+  /// after the em-dash strips and classifies generically, but never emitted as a
+  /// CR <see cref="AbilityWord"/> (which would assert a non-existent ability word).
+  /// </summary>
+  public string? PrintedLabel { get; init; }
+
+  /// <summary>
+  /// The em-dash prefix to strip from the body, whether it is a real ability word
+  /// (<see cref="AbilityWord"/>) or a printed flavor label (<see cref="PrintedLabel"/>).
+  /// </summary>
+  public string? DashPrefix => AbilityWord ?? PrintedLabel;
 
   /// <summary>
   /// For loyalty abilities, the loyalty cost (+N, -N, or 0).
@@ -76,7 +93,6 @@ public sealed class AbilityClassifier
       "Unleash",
       "Radiance",
       "Rally",
-      "Avoidance",
       // Static/conditional ability words
       "Kinship",
       "Domain",
@@ -105,11 +121,50 @@ public sealed class AbilityClassifier
     };
 
   /// <summary>
-  /// Classifies a clause into an ability kind.
+  /// Printed italic labels that take the "Word — …" shape of an ability word but
+  /// are NOT CR 207.2c ability words — they are a single card's own flavor label,
+  /// mechanically inert. Detected so the body strips/classifies like an ability
+  /// word, but routed to <see cref="ClauseClassification.PrintedLabel"/> rather
+  /// than <see cref="ClauseClassification.AbilityWord"/> so the AST never asserts
+  /// a non-existent ability word.
+  /// </summary>
+  private static readonly HashSet<string> _printedLabels =
+    new(StringComparer.OrdinalIgnoreCase)
+    {
+      // Displacer Kitten's printed label; not on the CR 207.2c ability-word list.
+      "Avoidance",
+    };
+
+  /// <summary>
+  /// Classifies a clause into an ability kind. A detected "Word — …" prefix that
+  /// is a printed flavor label (not a CR 207.2c ability word) is re-homed off
+  /// <see cref="ClauseClassification.AbilityWord"/> onto
+  /// <see cref="ClauseClassification.PrintedLabel"/> so the AST never asserts a
+  /// non-existent ability word, while the body still strips and classifies
+  /// generically off <see cref="ClauseClassification.DashPrefix"/>.
   /// </summary>
   /// <param name="clause">The clause to classify.</param>
   /// <returns>The classification result.</returns>
   public ClauseClassification Classify(OracleClause clause)
+  {
+    var classification = ClassifyCore(clause);
+    if (IsPrintedLabel(classification.AbilityWord))
+    {
+      return classification with
+      {
+        AbilityWord = null,
+        PrintedLabel = classification.AbilityWord,
+      };
+    }
+    return classification;
+  }
+
+  /// <summary>
+  /// Core classification: routes a clause to an ability kind and threads the
+  /// detected em-dash prefix (real or flavor) on <see cref="ClauseClassification.AbilityWord"/>.
+  /// <see cref="Classify"/> post-processes the flavor case.
+  /// </summary>
+  private ClauseClassification ClassifyCore(OracleClause clause)
   {
     var tokens = clause.Tokens.ToList();
 
@@ -1175,13 +1230,24 @@ public sealed class AbilityClassifier
     }
 
     var prefix = clause.RawText[..emDashIndex].Trim();
-    if (_abilityWords.Contains(prefix))
+    // Both real ability words and printed flavor labels take the "Word \u2014 \u2026" shape
+    // and are detected here so the body strips/classifies generically. The public
+    // Classify wrapper re-homes a detected printed label off AbilityWord onto
+    // PrintedLabel (it is not a CR 207.2c ability word).
+    if (_abilityWords.Contains(prefix) || _printedLabels.Contains(prefix))
     {
       return prefix;
     }
 
     return null;
   }
+
+  /// <summary>
+  /// True when <paramref name="prefix"/> is a printed flavor label (not a CR
+  /// 207.2c ability word) \u2014 used by <see cref="Classify"/> to re-home it.
+  /// </summary>
+  private static bool IsPrintedLabel(string? prefix) =>
+    prefix is not null && _printedLabels.Contains(prefix);
 
   /// <summary>
   /// Tries to classify a clause as a loyalty ability.

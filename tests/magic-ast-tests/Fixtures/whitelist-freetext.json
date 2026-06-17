@@ -200,12 +200,6 @@
       "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
-      "card": "DisplacerKitten",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "Divert",
       "sink": "OtherCharacteristic",
       "tag": "debt",
@@ -590,12 +584,6 @@
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
     },
     {
-      "card": "OTJ/SlickshotShowOff",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "OTJ/VenomsacLagac",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -780,12 +768,6 @@
       "sink": "AbilityText",
       "tag": "debt",
       "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
-    },
-    {
-      "card": "WAR/SpellgorgerWeird",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
       "card": "WOE/RowdyResearch",
