@@ -1,0 +1,118 @@
+{
+  "Input": {
+    "Name": "Mystic Forge",
+    "ManaCost": "{4}",
+    "TypeLine": "Artifact",
+    "OracleText": "You may look at the top card of your library any time.\nYou may cast artifact spells and colorless spells from the top of your library.\n{T}, Pay 1 life: Exile the top card of your library.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Mystic Forge",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You may look at the top card of your library any time.\nYou may cast artifact spells and colorless spells from the top of your library.\n{T}, Pay 1 life: Exile the top card of your library.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "lookAtTopCardAnyTime"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "mayPlayFromLibrary",
+              "Cards": {
+                "CardTypes": [
+                  "artifact"
+                ],
+                "Zone": "Library",
+                "Controller": "You"
+              }
+            },
+            {
+              "EffectType": "mayPlayFromLibrary",
+              "Cards": {
+                "IsColorless": true,
+                "Zone": "Library",
+                "Controller": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "payLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Designated",
+                "Filter": {
+                  "CardTypes": [
+                    "card"
+                  ],
+                  "Zone": "Library",
+                  "Controller": "You",
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "top"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

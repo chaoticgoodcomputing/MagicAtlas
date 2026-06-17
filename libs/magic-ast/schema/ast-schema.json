@@ -509,12 +509,6 @@
           ]
         },
         {
-          "Type": "AdditionalCombatAndMainPhaseEffect",
-          "Discriminator": "additionalCombatAndMainPhase",
-          "IsUnparsed": false,
-          "Fields": []
-        },
-        {
           "Type": "AllMustBlockEffect",
           "Discriminator": "allMustBlock",
           "IsUnparsed": false,
@@ -1168,6 +1162,14 @@
         {
           "Type": "MayPlayFromGraveyardEffect",
           "Discriminator": "mayPlayFromGraveyard",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cards"
+          ]
+        },
+        {
+          "Type": "MayPlayFromLibraryEffect",
+          "Discriminator": "mayPlayFromLibrary",
           "IsUnparsed": false,
           "Fields": [
             "Cards"
@@ -2003,5 +2005,5 @@
       ]
     }
   ],
-  "SchemaHash": "62445b1bb361b2c9fd7d1ae30149c74799ac58d44afc0755e059437b8a2450ee"
+  "SchemaHash": "381e3658de3b4c1553730131bd2fb25a17c8e399cd1d77922d2676991a38b020"
 }

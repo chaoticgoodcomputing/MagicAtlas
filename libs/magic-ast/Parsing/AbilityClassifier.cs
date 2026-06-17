@@ -519,6 +519,29 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "You may cast [filter] spells from the top of your library." — Mystic Forge
+    // and similar play-from-library static permissions. Although "Cast" is in
+    // _spellInstructionVerbs (so StartsWithYouMaySpellInstruction would route it
+    // to the spell parser), "from the top of your library" marks this as a
+    // continuous static permission on the permanent (CR 604.2), not a one-shot
+    // resolution step. Intercept here before StartsWithYouMaySpellInstruction
+    // swallows it (parallels the "You may cast this card from your graveyard"
+    // intercept above).
+    if (clause.RawText.TrimStart().Contains(
+      "from the top of your library",
+      StringComparison.OrdinalIgnoreCase) &&
+      clause.RawText.TrimStart().StartsWith(
+      "You may cast",
+      StringComparison.OrdinalIgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.95,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "You may [spell-verb] ..." optional resolution-step phrasing on a spell
     // (Rule 117.7) — e.g., "You may discard a card. If you do, draw two cards."
     // (Abandon Attachments). The opening "You may" is a player-instruction frame

@@ -2,7 +2,6 @@
   "_doc": "Explicit named whitelist of PortWalk dispatch discriminators permitted to be COARSE \u2014 each carries a reason justifying why it has no semantic projection (it falls to an emit:/pay:/role label no flow rule reads). STATELESS INVARIANT (PortWalkExhaustivenessTests): every discriminator must be EITHER projected (PortWalkProjection) OR named here; a new one that is neither fails loudly. A name here that becomes projected, or that no longer exists, fails until removed. This is a list of NAMES, each justified \u2014 not a count and not a moving ratchet. The size is the interaction layer\u0027s known-blind-spot metric (see docs/scratch/alignment-session/03-portwalk-exhaustiveness-findings.md).",
   "effectType": {
     "adapt": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
-    "additionalCombatAndMainPhase": "turn-structure insertion (Aggravated Assault family \u2014 insert an additional combat + main phase into the turn) \u2014 no flow rule reads extra-phase scheduling yet; inert for interaction recall; conscious named carve-out",
     "additionalCastCost": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "allMustBlock": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "alternativePayment": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
@@ -80,7 +79,7 @@
     "loseType": "Theros God conditional creature-type loss (DevotionConditionalLoseCreatureTypeRule) \u2014 a layer-4 type-removing continuous effect; no flow rule reads type-loss yet; inert for interaction recall; conscious named carve-out",
     "mayPlayFromExile": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "mayPlayFromGraveyard": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
-    "mayPlayFromTopOfLibrary": "Bolas's Citadel play-from-top permission with pay-life alt cost \u2014 no flow rule reads top-of-library play permissions yet; conscious coarse carve-out",
+    "mayPlayFromLibrary": "baseline coarse fallback \u2014 Mystic Forge play-from-top permission; no flow rule reads library-cast permission yet; conscious named carve-out",
     "megamorph": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "mill": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "miracle": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
@@ -155,7 +154,6 @@
     "payLife": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "removeCounters": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "returnToHand": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
-    "selfMana": "Underworld Breach granted-escape cost reference \u2014 the card's own mana cost as the escape cost's mana half; no flow rule reads self-referential mana costs yet; conscious named carve-out",
     "tapPermanents": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "untap": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet"
   },

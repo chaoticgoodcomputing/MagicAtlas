@@ -242,6 +242,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "M20/MysticForge",
+      "sink": "OtherCharacteristic",
+      "tag": "irreducible",
+      "reason": "positional predicate 'top' (library top-card position) — no structured Position field on ObjectFilter; same residual category as BFZ/FathomFeeder and Ingest keyword expansion"
+    },
+    {
       "card": "LTR/PeregrinTook",
       "sink": "AbilityText",
       "tag": "irreducible",
