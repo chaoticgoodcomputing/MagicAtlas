@@ -274,14 +274,6 @@
           ]
         },
         {
-          "Type": "DiedThisWayCondition",
-          "Discriminator": "diedThisWay",
-          "IsUnparsed": false,
-          "Fields": [
-            "Reference"
-          ]
-        },
-        {
           "Type": "KeywordCostPaidCondition",
           "Discriminator": "keywordCostPaid",
           "IsUnparsed": false,
@@ -1540,6 +1532,15 @@
           ]
         },
         {
+          "Type": "RevealUntilEffect",
+          "Discriminator": "revealUntil",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Player"
+          ]
+        },
+        {
           "Type": "RingTemptsEffect",
           "Discriminator": "ringTemptsYou",
           "IsUnparsed": false,
@@ -2041,5 +2042,5 @@
       ]
     }
   ],
-  "SchemaHash": "7a9f3a502f9d5b2813caf7caca9c289a0e7e8b53db0e7806e66bf6a23b759812"
+  "SchemaHash": "2002391df34aa476e57e4e494b2d8ddf26206531c67010451ed8f7f9edc2cee1"
 }
