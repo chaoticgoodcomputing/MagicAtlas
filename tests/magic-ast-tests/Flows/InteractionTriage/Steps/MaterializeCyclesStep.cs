@@ -21,7 +21,7 @@ namespace MagicAtlas.Ast.Tests.Flows.InteractionTriage.Steps;
 [FlowthruStep]
 public static class MaterializeCyclesStep
 {
-  private const int LengthBound = 6;
+  private const int LengthBound = PortGraphEngine.DefaultReconstructionReach;
   private const int PerTierCap = 60;
 
   public static Func<

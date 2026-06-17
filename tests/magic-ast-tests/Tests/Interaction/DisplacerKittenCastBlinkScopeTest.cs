@@ -108,7 +108,11 @@ public class DisplacerKittenCastBlinkScopeTest
     };
     var engine = new PortGraphEngine(Ontology);
     var edges = WithUntapLandsManaEnabler(engine.Materialize(graphs));
-    var cycles = engine.FindCycles(edges);
+    // Bound to the product/bench reconstruction reach (6), not the unbounded default. This is the
+    // 6-hop cast-blink loop that motivated raising the reach 5→6; at the old bound 5 it was truncated,
+    // which is exactly why an unbounded scope test gave a false will-flip (adding-a-flow-arm.md
+    // anti-pattern 5). Mirroring the reach makes this test fail loudly if the loop ever exceeds it.
+    var cycles = engine.FindCycles(edges, PortGraphEngine.DefaultReconstructionReach);
 
     // The combo's elementary cycle: it threads Displacer Kitten's cast emit→trigger (this worker's arm) AND
     // the blink that re-enters Peregrine Drake (so it is genuinely the cast-blink loop, not a sub-cycle).

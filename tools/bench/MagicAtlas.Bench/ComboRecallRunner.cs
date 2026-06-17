@@ -58,11 +58,10 @@ public sealed record BenchReport
 /// </summary>
 public sealed class ComboRecallRunner
 {
-  // The flow's MaterializeCyclesStep uses length-bound 6 (the sac→death→token→doubler→refuel archetype
-  // spans five hops — Ashnod's Altar × Pitiless × Chatterfang — and the cast-recursion blink loop spans
-  // six — Displacer Kitten: emit:cast → trigger:cast → emit:blink → etb → emit:untap → pay:mana). Match
-  // it so the bench measures the same reconstruction reach the product viz shows.
-  private const int LengthBound = 6;
+  // The canonical reconstruction reach — single source of truth in PortGraphEngine. The flow's
+  // MaterializeCyclesStep references the same constant, so the bench measures exactly the reach the
+  // product viz shows (the 6-hop cast-recursion blink loop is the longest real cycle today).
+  private const int LengthBound = PortGraphEngine.DefaultReconstructionReach;
 
   private readonly GoldCorpus _corpus;
   private readonly PortWalk _walk;

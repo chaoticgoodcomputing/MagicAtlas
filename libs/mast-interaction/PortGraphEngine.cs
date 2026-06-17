@@ -127,6 +127,26 @@ public sealed record PortCycle
 /// </summary>
 public sealed class PortGraphEngine
 {
+  /// <summary>
+  /// The canonical cycle-reconstruction REACH — the maximum number of hops (edges) in an elementary
+  /// cycle the product reconstructs and reports. This is the single source of truth: the recall bench
+  /// (<c>ComboRecallRunner</c>), the product viz flow (<c>MaterializeCyclesStep</c>), and the flow-arm
+  /// scope tests all reference it so they cannot drift apart (a worker scope test that enumerates
+  /// <em>unbounded</em> can pass on a cycle longer than the product reconstructs — a false "will-flip";
+  /// see <c>docs/adding-a-flow-arm.md</c> anti-pattern 5).
+  /// <para>
+  /// Currently <b>6</b>: the longest real reconstructed loop is the 6-hop cast-recursion blink
+  /// (Displacer Kitten: emit:cast → trigger:cast → emit:blink → etb → emit:untap → pay:mana); the
+  /// 5-hop sac→death→token→doubler→refuel aristocrat loop and the full Ashnod×Ruthless×Chatterfang
+  /// 6-hop infinite also fit. Raising it is <b>soundness-safe</b> — longer cycles have more co-costs/§8
+  /// gates to clear, so they floor toward Amber, never toward a false GREEN — but at the per-combo
+  /// 2–3-card scale it finds nothing new past ~7 (cycle counts saturate; the bound is non-binding on
+  /// compute). The two-layer path (<see cref="FindCyclesByLabelGraph"/>) treats reach as a post-
+  /// enumeration display filter, not a search bound. (See the cycle-enumeration feasibility memo.)
+  /// </para>
+  /// </summary>
+  public const int DefaultReconstructionReach = 6;
+
   private readonly TypeOntology _ontology;
 
   public PortGraphEngine(TypeOntology ontology) => _ontology = ontology;

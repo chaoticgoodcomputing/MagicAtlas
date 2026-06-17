@@ -73,7 +73,9 @@ public class UntapLandsManaFlowArmScopeTest
       Walk("PeregrineDrake.json", "Peregrine Drake"),
     };
     var engine = new PortGraphEngine(Ontology);
-    var cycles = engine.FindCycles(engine.Materialize(graphs));
+    // Mirror the product/bench reconstruction reach — NOT the unbounded default — so this scope test can
+    // only assert a flip the product would actually reconstruct (adding-a-flow-arm.md anti-pattern 5).
+    var cycles = engine.FindCycles(engine.Materialize(graphs), PortGraphEngine.DefaultReconstructionReach);
 
     var loop = cycles.FirstOrDefault(c =>
       c.Edges.Any(e => e.From.Card.Contains("Ghostly", StringComparison.Ordinal))

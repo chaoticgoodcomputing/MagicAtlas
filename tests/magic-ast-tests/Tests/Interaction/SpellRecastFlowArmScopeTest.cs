@@ -96,7 +96,8 @@ public class SpellRecastFlowArmScopeTest
       Walk("M14", "Archaeomancer.json", "Archaeomancer"),
     };
     var engine = new PortGraphEngine(Ontology);
-    var cycles = engine.FindCycles(engine.Materialize(graphs));
+    // Bound to the product/bench reconstruction reach, not the unbounded default (anti-pattern 5).
+    var cycles = engine.FindCycles(engine.Materialize(graphs), PortGraphEngine.DefaultReconstructionReach);
 
     var loop = FindRecastLoop(cycles, "Archaeomancer");
     Assert.That(
@@ -126,7 +127,8 @@ public class SpellRecastFlowArmScopeTest
       Walk("GPT", "IzzetChronarch.json", "Izzet Chronarch"),
     };
     var engine = new PortGraphEngine(Ontology);
-    var cycles = engine.FindCycles(engine.Materialize(graphs));
+    // Bound to the product/bench reconstruction reach, not the unbounded default (anti-pattern 5).
+    var cycles = engine.FindCycles(engine.Materialize(graphs), PortGraphEngine.DefaultReconstructionReach);
 
     var loop = FindRecastLoop(cycles, "Izzet Chronarch");
     Assert.That(
