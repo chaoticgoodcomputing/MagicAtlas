@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Quirion Ranger",
+    "ManaCost": "{G}",
+    "TypeLine": "Creature — Elf Ranger",
+    "OracleText": "Return a Forest you control to its owner's hand: Untap target creature. Activate only once each turn.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Quirion Ranger",
+    "TypeLine": {
+      "Raw": "Creature — Elf Ranger",
+      "Types": ["Creature"],
+      "Subtypes": ["Elf", "Ranger"]
+    },
+    "Oracle": {
+      "RawText": "Return a Forest you control to its owner's hand: Untap target creature. Activate only once each turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "returnToHand",
+              "Target": {
+                "Kind": "Any",
+                "Filter": {
+                  "CardTypes": ["land"],
+                  "Subtypes": ["Forest"],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              }
+            }
+          ],
+          "Restrictions": ["OnlyOnceEachTurn"],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["G"],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}
