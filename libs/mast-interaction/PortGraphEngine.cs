@@ -165,6 +165,20 @@ public sealed class PortGraphEngine
         if (FlowFeasible(emit, consume))
           AddRulesEdge(edges, emit, consume, EdgeFamily.Flow);
 
+    // (2b) Untap-lands → mana (the mana-untap enabler). An "untap up to N lands" effect (Peregrine Drake)
+    // makes those lands available to tap for mana again — a free mana source that refunds a pay:mana cost
+    // (recast a flicker spell, activate again). This is the SHARED enabler the blink-etb-refuel and
+    // displacer-cast-blink families turn on. NOT routed through AddRulesEdge: a pay:mana consume has a
+    // null (scalar) Subject, which would hit the scalar null-default GREEN (adding-a-flow-arm
+    // anti-pattern 3) and FALSELY certify it. Instead each edge is tiered explicitly AMBER — the untapped
+    // lands' COLOURS and COUNT are unknown (the cards don't say which lands, "up to five" could be zero),
+    // so the engine can never certify they cover a specific coloured pip (CR 107.4). Soundly irreducible
+    // (NOT GREEN, NOT Red): the loop is structurally feasible but the mana is uncertain. The dual of the
+    // blink arm's optional-ETB floor.
+    foreach (var untap in emits.Where(p => IsLandUntap(p)))
+      foreach (var pay in consumes.Where(p => IsPayMana(p.Label)))
+        edges.Add(UntapLandsFeedsMana(untap, pay));
+
     // (3) Bridge — a sacrificed creature dies (CR 701.21a→700.4), feeding a dies-trigger.
     foreach (var sac in consumes.Where(p => Role(p.Label) == "sac"))
       foreach (var dies in consumes.Where(p => Role(p.Label) == "ltb" && p.Label.Contains(":to-graveyard")))
@@ -456,6 +470,47 @@ public sealed class PortGraphEngine
       || string.Equals(t, "permanent", StringComparison.OrdinalIgnoreCase)
     );
   }
+
+  /// <summary>
+  /// An untap emit that untaps <b>land(s)</b> — "untap up to five lands" (Peregrine Drake). Those lands
+  /// become a free mana source (they can be tapped for mana again, CR 305.4 / 605), which is what feeds
+  /// the mana-untap enabler arm (<c>emit:untap</c>(land) → <c>pay:mana</c>). Recognised by the untap
+  /// target Subject naming <c>land</c> (or <c>permanent</c>, which admits lands). A self-untap
+  /// (<c>emit:untap:self</c>, no Subject) or a creature-only untap is NOT a mana source — excluded, so the
+  /// arm never falsely manufactures mana from untapping a non-land. The disjunctive read mirrors
+  /// <see cref="TargetAdmitsCreature"/>.
+  /// </summary>
+  private static bool IsLandUntap(PortNode untap)
+  {
+    if (!IsUntap(untap.Label) || untap.Label == "emit:untap:self" || untap.Subject is null)
+      return false;
+    if (untap.Subject.CardTypes is not { Count: > 0 } types)
+      return false; // an unconstrained untap could be any permanent, but we won't claim mana without a land
+    return types.Any(t =>
+      string.Equals(t, "land", StringComparison.OrdinalIgnoreCase)
+      || string.Equals(t, "permanent", StringComparison.OrdinalIgnoreCase)
+    );
+  }
+
+  /// <summary>
+  /// The mana-untap enabler edge: an "untap N lands" emit feeds a <c>pay:mana</c> cost (the untapped lands
+  /// tap for mana to refund it). Tiered explicitly <b>AMBER</b> (Reliability=Unknown), never GREEN: the
+  /// lands' colours and exact count are unknown ("up to five lands" of unstated colour), so the engine
+  /// cannot certify they cover a specific coloured pip (CR 107.4) — the honest, soundness-preserving floor
+  /// (adding-a-flow-arm anti-pattern 2/3: never fudge a GREEN, never let the scalar null-default certify).
+  /// Overlaps (not Disjoint), so the hop participates in a cycle and floors it to AMBER.
+  /// </summary>
+  private static PortEdge UntapLandsFeedsMana(PortNode untap, PortNode pay) =>
+    new()
+    {
+      From = untap,
+      To = pay,
+      Provenance = EdgeProvenance.RulesDefined,
+      Family = EdgeFamily.Flow,
+      Overlap = FilterRelation.Overlaps,
+      Reliability = Trilean.Unknown,
+      Reason = "untapped lands' colours/count are unknown — can't certify they cover the cost (CR 107.4)",
+    };
 
   /// <summary>Synthesize the closing edge from the inherited untap to the copier's <c>tap:self</c> cost
   /// (Decision 4), tiered by the operator reliability the graft computed (GREEN when the untap is

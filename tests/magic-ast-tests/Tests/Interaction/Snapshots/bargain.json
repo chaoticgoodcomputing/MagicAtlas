@@ -22,9 +22,89 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Bargain::pay:mana",
+      "Card": "Bargain",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bargain::pay:mana:white",
+      "Card": "Bargain",
+      "Label": "pay:mana:white",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
     }
   ],
-  "CardDefinedEdges": [],
-  "DerivedEdges": [],
+  "CardDefinedEdges": [
+    {
+      "From": "Bargain::pay:mana:white",
+      "To": "Bargain::emit:drawcards"
+    },
+    {
+      "From": "Bargain::pay:mana:white",
+      "To": "Bargain::emit:life:gain:controlled"
+    },
+    {
+      "From": "Bargain::pay:mana",
+      "To": "Bargain::emit:drawcards"
+    },
+    {
+      "From": "Bargain::pay:mana",
+      "To": "Bargain::emit:life:gain:controlled"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Bargain::pay:mana:white",
+      "To": "Bargain::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bargain::pay:mana:white",
+      "To": "Bargain::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bargain::pay:mana",
+      "To": "Bargain::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bargain::pay:mana",
+      "To": "Bargain::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
   "Cycles": []
 }

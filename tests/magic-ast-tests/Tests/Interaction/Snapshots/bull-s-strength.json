@@ -33,9 +33,117 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": null
+    },
+    {
+      "Identity": "Bull\u0027s Strength::pay:mana",
+      "Card": "Bull\u0027s Strength",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bull\u0027s Strength::pay:mana:green",
+      "Card": "Bull\u0027s Strength",
+      "Label": "pay:mana:green",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
     }
   ],
-  "CardDefinedEdges": [],
-  "DerivedEdges": [],
+  "CardDefinedEdges": [
+    {
+      "From": "Bull\u0027s Strength::pay:mana:green",
+      "To": "Bull\u0027s Strength::emit:gainability"
+    },
+    {
+      "From": "Bull\u0027s Strength::pay:mana:green",
+      "To": "Bull\u0027s Strength::emit:untap"
+    },
+    {
+      "From": "Bull\u0027s Strength::pay:mana:green",
+      "To": "Bull\u0027s Strength::modify:pt"
+    },
+    {
+      "From": "Bull\u0027s Strength::pay:mana",
+      "To": "Bull\u0027s Strength::emit:gainability"
+    },
+    {
+      "From": "Bull\u0027s Strength::pay:mana",
+      "To": "Bull\u0027s Strength::emit:untap"
+    },
+    {
+      "From": "Bull\u0027s Strength::pay:mana",
+      "To": "Bull\u0027s Strength::modify:pt"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Bull\u0027s Strength::pay:mana:green",
+      "To": "Bull\u0027s Strength::emit:gainability",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bull\u0027s Strength::pay:mana:green",
+      "To": "Bull\u0027s Strength::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bull\u0027s Strength::pay:mana:green",
+      "To": "Bull\u0027s Strength::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bull\u0027s Strength::pay:mana",
+      "To": "Bull\u0027s Strength::emit:gainability",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bull\u0027s Strength::pay:mana",
+      "To": "Bull\u0027s Strength::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bull\u0027s Strength::pay:mana",
+      "To": "Bull\u0027s Strength::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
   "Cycles": []
 }

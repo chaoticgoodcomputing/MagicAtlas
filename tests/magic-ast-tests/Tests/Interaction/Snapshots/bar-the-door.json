@@ -11,9 +11,61 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": null
+    },
+    {
+      "Identity": "Bar the Door::pay:mana",
+      "Card": "Bar the Door",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bar the Door::pay:mana:white",
+      "Card": "Bar the Door",
+      "Label": "pay:mana:white",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
     }
   ],
-  "CardDefinedEdges": [],
-  "DerivedEdges": [],
+  "CardDefinedEdges": [
+    {
+      "From": "Bar the Door::pay:mana:white",
+      "To": "Bar the Door::modify:pt"
+    },
+    {
+      "From": "Bar the Door::pay:mana",
+      "To": "Bar the Door::modify:pt"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Bar the Door::pay:mana:white",
+      "To": "Bar the Door::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bar the Door::pay:mana",
+      "To": "Bar the Door::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
   "Cycles": []
 }

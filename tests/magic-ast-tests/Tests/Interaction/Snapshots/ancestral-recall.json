@@ -11,9 +11,36 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": null
+    },
+    {
+      "Identity": "Ancestral Recall::pay:mana:blue",
+      "Card": "Ancestral Recall",
+      "Label": "pay:mana:blue",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
     }
   ],
-  "CardDefinedEdges": [],
-  "DerivedEdges": [],
+  "CardDefinedEdges": [
+    {
+      "From": "Ancestral Recall::pay:mana:blue",
+      "To": "Ancestral Recall::emit:drawcards"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Ancestral Recall::pay:mana:blue",
+      "To": "Ancestral Recall::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
   "Cycles": []
 }

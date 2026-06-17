@@ -22,9 +22,61 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": null
+    },
+    {
+      "Identity": "Bring Down::pay:mana",
+      "Card": "Bring Down",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 3,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bring Down::pay:mana:white",
+      "Card": "Bring Down",
+      "Label": "pay:mana:white",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
     }
   ],
-  "CardDefinedEdges": [],
-  "DerivedEdges": [],
+  "CardDefinedEdges": [
+    {
+      "From": "Bring Down::pay:mana:white",
+      "To": "Bring Down::emit:destroy"
+    },
+    {
+      "From": "Bring Down::pay:mana",
+      "To": "Bring Down::emit:destroy"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Bring Down::pay:mana:white",
+      "To": "Bring Down::emit:destroy",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bring Down::pay:mana",
+      "To": "Bring Down::emit:destroy",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
   "Cycles": []
 }
