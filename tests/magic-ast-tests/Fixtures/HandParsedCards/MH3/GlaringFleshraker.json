@@ -1,0 +1,169 @@
+{
+  "Input": {
+    "Name": "Glaring Fleshraker",
+    "ManaCost": "{2}{C}",
+    "TypeLine": "Creature — Eldrazi Drone",
+    "OracleText": "Whenever you cast a colorless spell, create a 0/1 colorless Eldrazi Spawn creature token with \"Sacrifice this token: Add {C}.\"\nWhenever another colorless creature you control enters, this creature deals 1 damage to each opponent.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Glaring Fleshraker",
+    "TypeLine": {
+      "Raw": "Creature — Eldrazi Drone",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Eldrazi",
+        "Drone"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever you cast a colorless spell, create a 0/1 colorless Eldrazi Spawn creature token with \"Sacrifice this token: Add {C}.\"\nWhenever another colorless creature you control enters, this creature deals 1 damage to each opponent.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell"
+              ],
+              "IsColorless": true,
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "0",
+                "Toughness": "1",
+                "Colors": [
+                  "C"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Eldrazi",
+                  "Spawn"
+                ],
+                "Abilities": [
+                  {
+                    "Kind": "activated",
+                    "Costs": [
+                      {
+                        "CostType": "sacrifice",
+                        "Filter": {
+                          "CardTypes": [
+                            "creature"
+                          ],
+                          "IsSelf": true
+                        },
+                        "Quantity": {
+                          "QuantityType": "literal",
+                          "Value": 1
+                        }
+                      }
+                    ],
+                    "Effects": [
+                      {
+                        "EffectType": "addMana",
+                        "Mana": "{C}",
+                        "AnyColor": false,
+                        "AnyType": false,
+                        "OfChosenColor": false
+                      }
+                    ],
+                    "IsManaAbility": true
+                  }
+                ],
+                "IsCopy": false
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsColorless": true,
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Source": {
+                "Kind": "Self"
+              },
+              "Target": {
+                "Kind": "EachOpponent"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{C}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colorless"
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
