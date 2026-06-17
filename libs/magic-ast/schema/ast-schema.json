@@ -1168,6 +1168,14 @@
           ]
         },
         {
+          "Type": "MayPlayFromLibraryEffect",
+          "Discriminator": "mayPlayFromLibrary",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cards"
+          ]
+        },
+        {
           "Type": "MegamorphEffect",
           "Discriminator": "megamorph",
           "IsUnparsed": false,
@@ -1997,5 +2005,5 @@
       ]
     }
   ],
-  "SchemaHash": "b28ead682ff0122025dbefefc9649e5ab0ed15814a5d32bbdf775977f9a7317f"
+  "SchemaHash": "381e3658de3b4c1553730131bd2fb25a17c8e399cd1d77922d2676991a38b020"
 }
