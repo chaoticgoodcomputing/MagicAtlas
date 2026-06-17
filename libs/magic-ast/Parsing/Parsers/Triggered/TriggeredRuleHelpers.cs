@@ -192,7 +192,10 @@ internal static class TriggeredRuleHelpers
       "reach" => new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach },
       "lifelink" => new MagicAST.AST.Effects.Damage.LifelinkEffect(),
       "indestructible" => new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible },
-      "deathtouch" => null,
+      // Deathtouch: any nonzero damage from this source destroys the damaged creature.
+      // CR 702.2. MAST records keyword presence as a KeywordAbilityEffect (ADR 0006);
+      // the damage-to-destroy semantics are engine territory.
+      "deathtouch" => new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch },
       _ => null,
     };
     if (effect is null)
@@ -208,6 +211,7 @@ internal static class TriggeredRuleHelpers
       "reach" => KeywordAbility.Reach,
       "lifelink" => KeywordAbility.Lifelink,
       "indestructible" => KeywordAbility.Indestructible,
+      "deathtouch" => KeywordAbility.Deathtouch,
       _ => null,
     };
     return new StaticAbility { Effects = [effect], KeywordSource = keywordSource };
