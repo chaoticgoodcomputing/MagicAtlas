@@ -1404,15 +1404,23 @@ public sealed class AbilityClassifier
       }
 
       // Track non-mana cost verbs (Rule 701.9 Discard, Rule 701.21 Sacrifice,
-      // Rule 122 Remove counters). These appear as Word tokens before the colon
-      // and are unambiguously costs rather than effect verbs because they precede
-      // the colon separator.
+      // Rule 122 Remove counters, Rule 118 Pay life). These appear as Word tokens
+      // before the colon and are unambiguously costs rather than effect verbs
+      // because they precede the colon separator.
       if (token.Kind == OracleToken.Word)
       {
         var word = token.ToStringValue();
         if (word.Equals("Sacrifice", StringComparison.OrdinalIgnoreCase)
           || word.Equals("Discard", StringComparison.OrdinalIgnoreCase)
           || word.Equals("Remove", StringComparison.OrdinalIgnoreCase))
+        {
+          hasNonManaCostVerb = true;
+        }
+
+        // "Pay N life" — a life-payment cost (Rule 118.9: "Pay N life" appears
+        // before the colon of an activated ability). Scoped to the clause's first
+        // token so "Pay" inside an effect clause is not mistaken for a cost verb.
+        if (i == 0 && word.Equals("Pay", StringComparison.OrdinalIgnoreCase))
         {
           hasNonManaCostVerb = true;
         }

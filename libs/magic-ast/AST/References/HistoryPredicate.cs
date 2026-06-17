@@ -61,6 +61,25 @@ public sealed record CrewedPredicate : HistoryPredicate
 }
 
 /// <summary>
+/// "cast by [caster] this turn" — a spell was placed on the stack by the
+/// named controller during the current turn. Used to count spells in a
+/// <see cref="CountQuantity"/> for effects like Aetherflux Reservoir's
+/// "you gain 1 life for each spell you've cast this turn" (CR 601 — casting
+/// a spell places it on the stack; "this turn" bounds the window to the
+/// current turn's actions). The Caster axis identifies who cast them;
+/// usually <see cref="ControllerFilter.You"/> but may be Any for storm-like
+/// shapes.
+/// </summary>
+[HistoryPredicateKind("castThisTurn")]
+public sealed record CastThisTurnPredicate : HistoryPredicate
+{
+  /// <summary>
+  /// Who cast the spells being counted.
+  /// </summary>
+  public required ControllerFilter Caster { get; init; }
+}
+
+/// <summary>
 /// Escape hatch for backward-looking predicates that don't yet have a
 /// structured shape — carries only the literal oracle phrase. Use sparingly;
 /// prefer a structured concrete predicate when the shape recurs.
