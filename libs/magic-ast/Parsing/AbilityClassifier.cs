@@ -1503,6 +1503,17 @@ public sealed class AbilityClassifier
         {
           hasNonManaCostVerb = true;
         }
+
+        // A leading "Return …" is a return-to-hand cost when a colon follows —
+        // e.g. Quirion Ranger's "Return a Forest you control to its owner's hand:
+        // Untap target creature." (CR 602 — return-to-hand is a valid activation
+        // cost; Grinning Ignus is the canonical self-bounce form). Scoped to
+        // the clause's first token so "Return target creature to its owner's hand."
+        // (no colon — spell effect) is not mistaken for an activated ability cost.
+        if (i == 0 && word.Equals("Return", StringComparison.OrdinalIgnoreCase))
+        {
+          hasNonManaCostVerb = true;
+        }
       }
 
       // If we hit a trigger timing word, this isn't an activated ability
