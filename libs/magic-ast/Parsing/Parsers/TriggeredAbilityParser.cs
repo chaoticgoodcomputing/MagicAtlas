@@ -600,6 +600,22 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return new List<Effect> { lifeLost };
     }
 
+    // Trigger-aware "that many" antecedent: "that player mills that many cards" under a
+    // LosesLife trigger means the opponent mills cards equal to the life lost
+    // (CR 119.3 / CR 701.17). The identical surface text appears on combat-damage
+    // triggers (Crosstown Courier, Captain Nghathrod) where "that many" is the damage
+    // dealt — so this rule MUST NOT be in the generic reflection-discovered pool
+    // (ThatPlayerMillsThatManyRule carries no [TriggeredRule]). Guard on LosesLife
+    // exactly, mirroring YouGainThatMuchLifeLostRule above.
+    if (
+      trigger.Event is EventOccurrence { Event: TriggerEvent.LosesLife }
+      && new Triggered.Rules.ThatPlayerMillsThatManyRule().TryMatch(trimmed, out var millLost)
+      && millLost is not null
+    )
+    {
+      return new List<Effect> { millLost };
+    }
+
     var opponentExileThenExile = TryParseOpponentExileCreatureThenExileGraveyardCard(trimmed);
     if (opponentExileThenExile is not null)
     {
