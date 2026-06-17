@@ -106,6 +106,16 @@ public enum ManaSymbolKind
   /// <summary>Snow mana: {S}</summary>
   [JsonStringEnumMemberName("snow")]
   Snow,
+
+  /// <summary>
+  /// Colorless-hybrid mana: {C/W}, {C/U}, {C/B}, {C/R}, {C/G}. Can be paid with
+  /// either one colorless mana or one mana of the paired color. See Ulalek, Fused
+  /// Atrocity and other Eldrazi from Magic Origins / Oath of the Gatewatch.
+  /// CR 107.4c: a colorless-hybrid mana symbol is paid with one colorless mana or
+  /// one mana of the specified color.
+  /// </summary>
+  [JsonStringEnumMemberName("colorlessHybrid")]
+  ColorlessHybrid,
 }
 
 /// <summary>
