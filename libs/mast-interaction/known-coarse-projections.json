@@ -188,6 +188,7 @@
     "SearchesLibrary": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "Surveils": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "TokenCreated": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "TapsForMana": "Forsaken Monument: 'whenever you tap a permanent for {C}' \u2014 mana-doubling trigger (CR 605.1a); no flow rule reads this event yet, TriggerCondition.ProducedMana carries the {C} qualifier",
     "Transforms": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "TurnedFaceUp": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet"
   },
