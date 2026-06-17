@@ -7,8 +7,8 @@ using MagicAST.AST.Triggers;
 /// <summary>
 /// "Whenever you attack with [Name] and another [qualifier] creature" (Merry shape) —
 /// models the companion-attack trigger (Rule 508). Emits <see cref="TriggerEvent.Attacks"/>
-/// with a companion-creature filter carrying the "another" characteristic plus any
-/// supertype qualifier.
+/// with a companion-creature filter carrying the structured ExcludeSelf self-exclusion
+/// plus any supertype qualifier.
 /// </summary>
 [TriggerConditionRule(Priority = 988)]
 public sealed class AttackWithAndAnotherConditionRule : ITriggerConditionRule
@@ -37,7 +37,6 @@ public sealed class AttackWithAndAnotherConditionRule : ITriggerConditionRule
     // Build companion-creature filter. "legendary" maps to Supertypes;
     // unrecognised qualifiers fall through to null (bail).
     List<string>? supertypes = null;
-    List<string>? characteristics = null;
 
     if (!string.IsNullOrWhiteSpace(adjText))
     {
@@ -59,9 +58,8 @@ public sealed class AttackWithAndAnotherConditionRule : ITriggerConditionRule
       }
     }
 
-    // "another" is a characteristic exclusion (excludes the source creature).
-    characteristics = ["another"];
-
+    // "another" excludes the source creature — the structured ExcludeSelf
+    // self-exclusion (CR 109.5), not a free-text characteristic.
     return new TriggerCondition
     {
       Timing = timing,
@@ -70,7 +68,7 @@ public sealed class AttackWithAndAnotherConditionRule : ITriggerConditionRule
       {
         Supertypes = supertypes,
         Controller = ControllerFilter.You,
-        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
+        ExcludeSelf = true,
       },
     };
   }

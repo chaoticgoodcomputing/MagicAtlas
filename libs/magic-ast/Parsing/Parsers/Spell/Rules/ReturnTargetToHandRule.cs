@@ -184,10 +184,9 @@ public sealed class ReturnTargetToHandRule : ISpellRule
     var targetText = m.Groups["target"].Value.ToLowerInvariant();
 
     var characteristics = new List<string>();
-    if (targetText.StartsWith("another "))
-    {
-      characteristics.Add("other");
-    }
+    // "another <type>" — self-exclusion (CR 109.5). Carried on the structured
+    // ExcludeSelf axis rather than a free-text characteristic.
+    bool? excludeSelf = targetText.StartsWith("another ") ? true : (bool?)null;
 
     var nonMatch = Regex.Match(targetText, @"\b(non\w+)\b");
     if (nonMatch.Success)
@@ -225,6 +224,7 @@ public sealed class ReturnTargetToHandRule : ISpellRule
           {
             CardTypes = cardTypes,
             Controller = controller,
+            ExcludeSelf = excludeSelf,
           },
           characteristics
         ),

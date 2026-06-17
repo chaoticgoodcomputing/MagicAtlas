@@ -4,7 +4,7 @@
     "ManaCost": "{2}{G}{G}",
     "TypeLine": "Legendary Creature — Snake Shaman",
     "OracleText": "Other Snake creatures you control get +0/+1.\nShamans you control have \"{T}: Add {G}{G}.\"",
-    "Power": "2",
+    "Power": "1",
     "Toughness": "3",
     "Colors": [
       "G"
@@ -46,9 +46,7 @@
                     "Snake"
                   ],
                   "Controller": "You",
-                  "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"}
-                  ]
+                  "ExcludeSelf": true
                 }
               },
               "PowerModifier": {
@@ -87,7 +85,8 @@
                   {
                     "EffectType": "addMana",
                     "Mana": "{G}{G}",
-                    "AnyColor": false
+                    "AnyColor": false,
+                    "OfChosenColor": false
                   }
                 ],
                 "IsManaAbility": true
@@ -119,7 +118,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -137,13 +137,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 1,
+          "Raw": "1"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         }
       }
     ]

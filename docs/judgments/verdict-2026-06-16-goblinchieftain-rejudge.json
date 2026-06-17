@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M10/GoblinChieftain.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 109.2", "CR 702.10"],
+      "reason": "Re-judge of prior FAIL: re-pointed to authoritative oracle text; conjunction 'get +1/+1 and have haste' now ONE static ability with two effects (modifyPT + gainAbility Haste) over the SAME {creature,Goblin,You,ExcludeSelf:true} filter (CR 611.3 single continuous effect); free-text Characteristics:['other'] replaced by structured ExcludeSelf:true (CR 109.2); own Haste preserved with reminder text; zero unparsed nodes; off oracle-text-quarantine and whitelist-unparsed. No new discriminator introduced, so no projection decision required."
+    }
+  ]
+}

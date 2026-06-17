@@ -48,7 +48,7 @@ public sealed class TribalAnthemModifyPTRule : IStaticRule
               CardTypes = ["creature"],
               Subtypes = [subtype],
               Controller = controller,
-              Characteristics = [Characteristic.Other("other")],
+              ExcludeSelf = true,
             },
           },
           PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),

@@ -30,13 +30,13 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Vigilance",
           "Effects": [
             {
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "KeywordSource": "Vigilance"
         },
         {
           "Kind": "static",
@@ -53,23 +53,18 @@
                     "Warrior"
                   ],
                   "Controller": "You",
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "other"
-                    }
-                  ]
+                  "ExcludeSelf": true
                 }
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Vigilance",
                 "Effects": [
                   {
                     "EffectType": "keywordAbility",
                     "Keyword": "Vigilance"
                   }
-                ]
+                ],
+                "KeywordSource": "Vigilance"
               }
             }
           ]
@@ -92,7 +87,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -110,13 +106,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

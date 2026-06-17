@@ -52,12 +52,7 @@
                     "creature"
                   ],
                   "Controller": "You",
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "other"
-                    }
-                  ]
+                  "ExcludeSelf": true
                 }
               },
               "GainedAbility": {

@@ -3,7 +3,7 @@
     "Name": "Goblin Chieftain",
     "ManaCost": "{1}{R}{R}",
     "TypeLine": "Creature — Goblin",
-    "OracleText": "Haste\nOther Goblins you control get +1/+1.\nGoblins you control have haste.",
+    "OracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)\nOther Goblin creatures you control get +1/+1 and have haste.",
     "Power": "2",
     "Toughness": "2",
     "Colors": [
@@ -25,17 +25,20 @@
       ]
     },
     "Oracle": {
-      "RawText": "Haste\nOther Goblins you control get +1/+1.\nGoblins you control have haste.",
+      "RawText": "Haste (This creature can attack and {T} as soon as it comes under your control.)\nOther Goblin creatures you control get +1/+1 and have haste.",
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Haste",
           "Effects": [
             {
               "EffectType": "keywordAbility",
               "Keyword": "Haste"
             }
-          ]
+          ],
+          "KeywordSource": "Haste",
+          "Reminder": {
+            "Text": "(This creature can attack and {T} as soon as it comes under your control.)"
+          }
         },
         {
           "Kind": "static",
@@ -52,12 +55,7 @@
                     "Goblin"
                   ],
                   "Controller": "You",
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "other"
-                    }
-                  ]
+                  "ExcludeSelf": true
                 }
               },
               "PowerModifier": {
@@ -68,32 +66,31 @@
                 "QuantityType": "literal",
                 "Value": 1
               }
-            }
-          ]
-        },
-        {
-          "Kind": "static",
-          "Effects": [
+            },
             {
               "EffectType": "gainAbility",
               "Target": {
                 "Kind": "Each",
                 "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Subtypes": [
                     "Goblin"
                   ],
-                  "Controller": "You"
+                  "Controller": "You",
+                  "ExcludeSelf": true
                 }
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Haste",
                 "Effects": [
                   {
                     "EffectType": "keywordAbility",
                     "Keyword": "Haste"
                   }
-                ]
+                ],
+                "KeywordSource": "Haste"
               }
             }
           ]
@@ -122,7 +119,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -140,13 +138,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

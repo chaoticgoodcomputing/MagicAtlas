@@ -696,6 +696,22 @@ public sealed class PortGraphEngine
       reliability = ObjectFilterRelations.Subsumes(from.Subject, to.Subject, _ontology);
     }
 
+    // Cross-card ExcludeSelf carve-out (Slice 6). An "other"/"another" self-exclusion
+    // (sup.ExcludeSelf=true) only omits the sup's OWN source object. When `from` and `to` are
+    // DIFFERENT cards, the `from` object can never BE that excluded self, so the exclusion imposes
+    // no real constraint — promote the lone-ExcludeSelf Unknown to Yes. Same-card stays Unknown (the
+    // `from` object could be the excluded self). Surgical: Subsumes returns Reason=="ExcludeSelf" only
+    // when every other axis already subsumed, so this fires for nothing else. The operator-tier twin
+    // of the same-card guard at BlinkSatisfiesEnter.
+    if (
+      reliability.Value == Trilean.Unknown
+      && reliability.Reason == "ExcludeSelf"
+      && !string.Equals(from.Card, to.Card, StringComparison.Ordinal)
+    )
+    {
+      reliability = new SubsumeMatch(Trilean.Yes);
+    }
+
     if (overlap.Relation == FilterRelation.Disjoint)
       return; // the prune — no edge
 

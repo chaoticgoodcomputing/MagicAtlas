@@ -43,11 +43,8 @@
                     "creature"
                   ],
                   "Controller": "You",
+                  "ExcludeSelf": true,
                   "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "other"
-                    },
                     {
                       "CharacteristicType": "tapped",
                       "Tapped": true
@@ -80,11 +77,8 @@
                     "creature"
                   ],
                   "Controller": "You",
+                  "ExcludeSelf": true,
                   "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "other"
-                    },
                     {
                       "CharacteristicType": "tapped",
                       "Tapped": false

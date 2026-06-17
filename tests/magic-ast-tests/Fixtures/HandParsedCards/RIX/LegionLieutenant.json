@@ -7,12 +7,12 @@
     "Power": "2",
     "Toughness": "2",
     "Colors": [
-      "W",
-      "B"
+      "B",
+      "W"
     ],
     "ColorIdentity": [
-      "W",
-      "B"
+      "B",
+      "W"
     ]
   },
   "Output": {
@@ -45,12 +45,7 @@
                     "Vampire"
                   ],
                   "Controller": "You",
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "other"
-                    }
-                  ]
+                  "ExcludeSelf": true
                 }
               },
               "PowerModifier": {
@@ -84,13 +79,14 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
         "Colors": [
-          "W",
-          "B"
+          "B",
+          "W"
         ]
       },
       {
@@ -104,13 +100,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

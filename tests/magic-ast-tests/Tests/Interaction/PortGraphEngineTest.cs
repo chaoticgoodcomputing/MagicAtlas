@@ -1140,4 +1140,79 @@ public class PortGraphEngineTest
       );
     }
   }
+
+  // Slice 6 — the cross-card ExcludeSelf carve-out in AddRulesEdge. An "other creatures you control"
+  // consumer (ExcludeSelf=true, CR 109.5) is fed by a creature producer. CROSS-CARD the produced object
+  // is a different card's object — never the consumer's own excluded source (CR 400.7 / 111 / 707.2) — so
+  // subsumption holds and the edge promotes Unknown → Yes (GREEN). SAME-CARD the produced object could BE
+  // the excluded self, so reliability stays Unknown (AMBER). Guards the carve-out, which the bench cannot
+  // exercise today (no eligible combo routes through a cross-card ExcludeSelf edge — it is precautionary).
+  [Test]
+  public void Cross_card_exclude_self_promotes_reliability_to_yes_same_card_stays_unknown()
+  {
+    ObjectFilter Creatures(bool other) =>
+      new()
+      {
+        CardTypes = ["creature"],
+        Controller = ControllerFilter.You,
+        ExcludeSelf = other ? true : (bool?)null,
+      };
+
+    PortNode Producer(string card) =>
+      new()
+      {
+        Card = card,
+        Label = "emit:token:creature:controlled",
+        Side = PortSide.Emit,
+        Identity = $"{card}::emit",
+        Subject = Creatures(other: false),
+      };
+    PortNode OtherConsumer(string card) =>
+      new()
+      {
+        Card = card,
+        Label = "sac:creature:controlled",
+        Side = PortSide.Consume,
+        Identity = $"{card}::sac",
+        Subject = Creatures(other: true), // "OTHER creatures you control"
+      };
+
+    var engine = new PortGraphEngine(Ontology);
+
+    // Cross-card: A's creature producer feeds B's "other creatures you control" consumer. The exclusion
+    // omits only B's own source object, never A's → subsumption holds → reliability promoted to Yes.
+    var cross = engine.Materialize(
+      new[]
+      {
+        new PortGraph { Ports = [Producer("A")] },
+        new PortGraph { Ports = [OtherConsumer("B")] },
+      }
+    );
+    var crossEdge = cross.FirstOrDefault(e =>
+      e.From.Card == "A" && e.To.Card == "B" && e.Provenance == EdgeProvenance.RulesDefined
+    );
+    Assert.That(crossEdge, Is.Not.Null, "a rules flow edge from A's creature producer to B's other-creature consumer");
+    Assert.That(
+      crossEdge!.Reliability,
+      Is.EqualTo(Trilean.Yes),
+      "cross-card ExcludeSelf imposes no constraint (CR 109.5) → the carve-out promotes reliability to Yes (GREEN)"
+    );
+
+    // Same-card: the produced object could be the consumer's own excluded source → NOT promoted.
+    var same = engine.Materialize(
+      new[] { new PortGraph { Ports = [Producer("A"), OtherConsumer("A")] } }
+    );
+    var sameEdge = same.FirstOrDefault(e =>
+      e.From.Label.StartsWith("emit", StringComparison.Ordinal)
+      && e.To.Label.StartsWith("sac", StringComparison.Ordinal)
+      && e.Provenance == EdgeProvenance.RulesDefined
+    );
+    Assert.That(sameEdge, Is.Not.Null);
+    Assert.That(
+      sameEdge!.Reliability,
+      Is.EqualTo(Trilean.Unknown),
+      "same-card ExcludeSelf could bite (the source could be the excluded self) → stays Unknown (AMBER)"
+    );
+    Assert.That(sameEdge.Reason, Is.EqualTo("ExcludeSelf"));
+  }
 }

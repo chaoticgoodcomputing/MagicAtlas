@@ -16,7 +16,7 @@ using MagicAST.AST.References;
 ///
 /// Example oracle text: "Other creatures you control with flying get +1/+0."
 ///   → ObjectFilter { CardTypes: ["creature"], Controller: You,
-///                    Characteristics: ["other", "flying"] }
+///                    ExcludeSelf: true, Characteristics: ["flying"] }
 /// </summary>
 [StaticRule(Priority = 971)]
 public sealed class WithKeywordAnthemModifyPTRule : IStaticRule
@@ -58,7 +58,8 @@ public sealed class WithKeywordAnthemModifyPTRule : IStaticRule
             {
               CardTypes = ["creature"],
               Controller = ControllerFilter.You,
-              Characteristics = [Characteristic.Other("other"), Characteristic.FromLabel(kw)],
+              ExcludeSelf = true,
+              Characteristics = [Characteristic.FromLabel(kw)],
             },
           },
           PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),

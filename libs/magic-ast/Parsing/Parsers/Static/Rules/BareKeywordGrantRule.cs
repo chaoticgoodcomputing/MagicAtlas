@@ -24,7 +24,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
   );
 
   // Arm 3: "Other <filter> [you control] have <keyword>." — "Other" prefix signals
-  // the exclusion-of-self qualifier (Characteristics: ["other"]). The optional
+  // the exclusion-of-self qualifier (ExcludeSelf = true). The optional
   // "you control" group <ctrl> is captured separately so it can be stitched back
   // onto <filter> before passing to ParseLordPTFilter (which strips it and sets
   // Controller = ControllerFilter.You). Without "you control" the grant applies to
@@ -163,8 +163,8 @@ public sealed class BareKeywordGrantRule : IStaticRule
 
     // Arm 3: "Other <filter> [you control] have <keyword>." — lord-grants-keyword
     // with the "Other" exclusion-of-self prefix (Rule 613.1c). The "Other" qualifier
-    // maps to Characteristics: ["other"] on the filter, matching the convention used
-    // by TryParseTribalAnthemModifyPT and TryParseLordPTBuff. Filter parsing is
+    // maps to ExcludeSelf = true on the filter, matching the convention used
+    // by TribalAnthemModifyPTRule and LordPTBuffRule. Filter parsing is
     // delegated to ParseLordPTFilter (isOther: true) which handles the full range
     // of filter shapes: bare "creatures", "[Subtype] creatures", two-word subtype
     // (e.g. "Goblin Warrior creatures"), bare plural subtype, "[Color] creatures",
@@ -386,9 +386,11 @@ public sealed class BareKeywordGrantRule : IStaticRule
   {
     var text = filterText.Trim();
 
-    // "Other " qualifier on the oracle line → record as a Characteristics
-    // entry so the AST preserves the exclusion-of-self semantics.
-    IReadOnlyList<string>? characteristics = isOther ? ["other"] : null;
+    // "Other " qualifier on the oracle line → set the structured ExcludeSelf
+    // self-exclusion (CR 109.5 "another"), folded onto every returned filter
+    // below. Any co-occurring axis predicates still ride on `characteristics`.
+    bool? excludeSelf = isOther ? true : (bool?)null;
+    IReadOnlyList<string>? characteristics = null;
 
     // Peel optional controller suffix — "you control" or "your opponents control".
     ControllerFilter? controller = null;
@@ -421,6 +423,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         CardTypes = ["creature"],
         Colors = [colorCode],
         Controller = controller,
+        ExcludeSelf = excludeSelf,
         Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
@@ -433,6 +436,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
       {
         CardTypes = ["artifact", "creature"],
         Controller = controller,
+        ExcludeSelf = excludeSelf,
         Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
@@ -457,6 +461,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         {
           CardTypes = ["creature"],
           Controller = controller,
+          ExcludeSelf = excludeSelf,
           Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
         };
       }
@@ -473,6 +478,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
       {
         CardTypes = ["creature"],
         Controller = controller,
+        ExcludeSelf = excludeSelf,
         Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
       };
     }
@@ -488,6 +494,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
       {
         CardTypes = ["creature"],
         Controller = controller,
+        ExcludeSelf = excludeSelf,
         Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
       };
     }
@@ -509,6 +516,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
           CardTypes = ["creature"],
           Subtypes = [subtype1, subtype2],
           Controller = controller,
+          ExcludeSelf = excludeSelf,
           Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
         };
       }
@@ -528,6 +536,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         CardTypes = ["creature"],
         Subtypes = [subtype],
         Controller = controller,
+        ExcludeSelf = excludeSelf,
         Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
@@ -539,6 +548,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
       {
         CardTypes = ["creature"],
         Controller = controller,
+        ExcludeSelf = excludeSelf,
         Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
@@ -554,6 +564,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
         CardTypes = isOther ? (IReadOnlyList<string>?)["creature"] : null,
         Subtypes = [subtype],
         Controller = controller,
+        ExcludeSelf = excludeSelf,
         Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }

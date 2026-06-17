@@ -1,0 +1,142 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AdeptWatershaper.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other tapped creatures you control' -> ExcludeSelf:true with tapped:true + Controller:You preserved; gainAbility(Indestructible) intact"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AggressiveMammoth.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other creatures you control have trample' -> ExcludeSelf:true + Controller:You; self-Trample static + reminder intact; gainAbility(Trample) preserved"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BenalishMarshal.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other creatures you control get +1/+1' -> ExcludeSelf:true + Controller:You; PowerModifier/ToughnessModifier +1/+1 preserved"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/C16/RavosSoultender.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other creatures you control get +1/+1' -> ExcludeSelf:true + Controller:You; flying static + upkeep return + partner untouched"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CHK/SachiDaughterOfSeshiro.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other Snake creatures you control get +0/+1' -> ExcludeSelf:true + Subtypes:[Snake] + Controller:You preserved; Power 2->1 is the authoritative Scryfall errata value"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DTK/StormwingDragon.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'put a +1/+1 counter on each other Dragon creature you control' -> ExcludeSelf:true + Subtypes:[Dragon] + Controller:You; CounterType +1/+1 preserved"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FelhidePetrifier.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other Minotaur creatures you control have deathtouch' -> ExcludeSelf:true + Subtypes:[Minotaur]; gainAbility GainedAbility(Deathtouch) preserved"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/HeraldOfDromoka.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other Warrior creatures you control have vigilance' -> ExcludeSelf:true + Subtypes:[Warrior]; gainAbility GainedAbility(Vigilance) preserved"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LCI/RegalImperiosaur.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other Dinosaurs you control get +1/+1' -> ExcludeSelf:true + Subtypes:[Dinosaur] + Controller:You preserved"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MH1/KingOfThePride.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other Cats you control get +2/+1' -> ExcludeSelf:true + tribal-lord CardTypes:[creature] + Subtypes:[Cat] preserved; +2/+1 modifiers correct"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/RIX/LegionLieutenant.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other Vampires you control get +1/+1' -> ExcludeSelf:true + Subtypes:[Vampire] + Controller:You preserved"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/RatColony.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'+1/+0 for each other Rat you control' -> ExcludeSelf:true inside CountOf of PowerModifier (comparative count); Target:Self, ToughnessModifier literal 0 correct"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SarythTheVipersFang.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "all 3 abilities self-exclude: tapped->deathtouch, untapped->hexproof (tapped/untapped axes preserved), and activated 'untap another target creature or land' ExcludeSelf:true"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/UltramarinesHonourGuard.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other creatures you control get +1/+1' -> ExcludeSelf:true + Controller:You; Squad static + enters-token trigger untouched"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WindstormDrake.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'Other creatures you control with flying get +1/+0' -> ExcludeSelf:true with keyword:Flying characteristic preserved; +1/+0 modifiers correct"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M21/BarrinTolarianArchmage.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'return up to one other target creature or planeswalker' -> returnToHand Target ExcludeSelf:true, CardTypes:[creature,planeswalker], 'up to' via optional wrapper"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M21/NiambiEsteemedSpeaker.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'return another target creature you control' -> returnToHand Target ExcludeSelf:true + Controller:You; optional + IfYouDo gainLife(derived ManaValue) preserved"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MOM/LivingTotem.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'put a +1/+1 counter on another target creature' -> putCounters Target ExcludeSelf:true, CounterType +1/+1, Count 1; optional wrapper + Convoke preserved"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LTR/MerryEsquireOfRohan.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "'attack with Merry and another legendary creature' -> Attacks trigger filter Supertypes:[Legendary] + Controller:You + ExcludeSelf:true; haste + equipped-first-strike untouched"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M10/GoblinChieftain.json",
+      "verdict": "FAIL",
+      "citations": ["CR 109.2", "CR 109.5"],
+      "reason": "anthem line 'Other Goblin creatures you control get +1/+1 and have haste' regressed to Kind:unparsed in Output.Oracle.Abilities; the ExcludeSelf/Other-Goblin concept is entirely absent (gold lost prior structured modifyPT+gainAbility); unparsed node forbidden in gold per SKILL"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CN2/GrenzoSRuffians.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2"],
+      "reason": "correctly OUT of scope: 'each other opponent' is a player filter (Target.Kind:EachOpponent), not ObjectFilter self-exclusion; retained on whitelist-freetext with accurate re-tag"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ExpeditionRaptor.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.2"],
+      "reason": "correctly OUT of scope: 'other target creatures' inside support 2 (SupportTriggeredRule); free-text 'other' deliberately retained on whitelist-freetext with accurate re-tag"
+    },
+    {
+      "target": "libs/mast-interaction/PortGraphEngine.cs#ExcludeSelf-projection",
+      "verdict": "PASS",
+      "citations": ["CR 109.5"],
+      "reason": "projection decision (init-03) is semantic not coarse: PortLabel.Exclusion projects ExcludeSelf->':another', operator gates it via ObjectFilterRelations Reason=='ExcludeSelf', cross-card carve-out promotes lone-ExcludeSelf Unknown->Yes; NOT parked in known-coarse-projections.json"
+    }
+  ]
+}

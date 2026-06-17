@@ -30,7 +30,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Squad",
           "Effects": [
             {
               "EffectType": "additionalCastCost",
@@ -49,13 +48,13 @@
               }
             }
           ],
+          "KeywordSource": "Squad",
           "Reminder": {
             "Text": "(As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)"
           }
         },
         {
           "Kind": "triggered",
-          "KeywordSource": "Squad",
           "Trigger": {
             "Timing": "When",
             "Event": "Enters"
@@ -67,18 +66,19 @@
           "Effects": [
             {
               "EffectType": "createToken",
-              "Player": {
-                "Kind": "You"
-              },
               "Count": {
                 "QuantityType": "keywordCostPaidCount",
                 "Keyword": "Squad"
               },
               "Token": {
                 "IsCopy": true
+              },
+              "Player": {
+                "Kind": "You"
               }
             }
-          ]
+          ],
+          "KeywordSource": "Squad"
         },
         {
           "Kind": "static",
@@ -92,9 +92,7 @@
                     "creature"
                   ],
                   "Controller": "You",
-                  "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "other"}
-                  ]
+                  "ExcludeSelf": true
                 }
               },
               "PowerModifier": {
@@ -126,7 +124,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -144,13 +143,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

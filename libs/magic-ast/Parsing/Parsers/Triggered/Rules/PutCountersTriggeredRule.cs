@@ -124,13 +124,12 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
           CardTypes = ["creature"],
           Subtypes = [subtype],
           Controller = ControllerFilter.You,
-          Characteristics = [Characteristic.Other("other")],
+          ExcludeSelf = true,
         },
       };
     }
     else if (lower.Contains("target creature you control"))
     {
-      var characteristics = hasAnother ? new[] { "another" } : null;
       target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
@@ -138,20 +137,19 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
         {
           CardTypes = ["creature"],
           Controller = ControllerFilter.You,
-          Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
+          ExcludeSelf = hasAnother ? true : (bool?)null,
         },
       };
     }
     else if (lower.Contains("target creature"))
     {
-      var characteristics = hasAnother ? new[] { "another" } : null;
       target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
+          ExcludeSelf = hasAnother ? true : (bool?)null,
         },
       };
     }

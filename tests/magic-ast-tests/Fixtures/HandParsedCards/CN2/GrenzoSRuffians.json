@@ -29,10 +29,6 @@
       "Abilities": [
         {
           "Kind": "triggered",
-          "KeywordSource": "Melee",
-          "Reminder": {
-            "Text": "(Whenever this creature attacks, it gets +1/+1 until end of turn for each opponent you attacked this combat.)"
-          },
           "Trigger": {
             "Timing": "Whenever",
             "Event": "Attacks",
@@ -64,7 +60,11 @@
                 }
               }
             }
-          ]
+          ],
+          "KeywordSource": "Melee",
+          "Reminder": {
+            "Text": "(Whenever this creature attacks, it gets +1/+1 until end of turn for each opponent you attacked this combat.)"
+          }
         },
         {
           "Kind": "triggered",
@@ -124,7 +124,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -142,13 +143,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

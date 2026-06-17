@@ -212,11 +212,6 @@
       "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
     },
     {
-      "card": "M10/GoblinChieftain",
-      "tag": "debt",
-      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
-    },
-    {
       "card": "M13/LeylineOfTheVoid",
       "tag": "debt",
       "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"

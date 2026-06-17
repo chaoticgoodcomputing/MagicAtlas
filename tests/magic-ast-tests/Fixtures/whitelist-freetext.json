@@ -56,18 +56,6 @@
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
     },
     {
-      "card": "AdeptWatershaper",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
-      "card": "AggressiveMammoth",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "BFZ/FathomFeeder",
       "sink": "OtherCharacteristic",
       "tag": "debt",
@@ -80,24 +68,6 @@
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
     },
     {
-      "card": "BenalishMarshal",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
-      "card": "C16/RavosSoultender",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
-      "card": "CHK/SachiDaughterOfSeshiro",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "CMR/SailorOfMeans",
       "sink": "AbilityText",
       "tag": "debt",
@@ -107,7 +77,7 @@
       "card": "CN2/GrenzoSRuffians",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "out of slice scope: 'each other opponent' is a player-filter mechanic (DealsThatMuchDamageToEachOtherOpponent), not an ObjectFilter self-exclusion"
     },
     {
       "card": "CN2/MarchesasEmissary",
@@ -126,12 +96,6 @@
       "sink": "Instructions",
       "tag": "debt",
       "reason": "deferred adjunct: may-pay-cost structuring (out of current slice scope)"
-    },
-    {
-      "card": "DTK/StormwingDragon",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
       "card": "DaggersailAeronaut",
@@ -209,16 +173,10 @@
       "card": "ExpeditionRaptor",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "out of slice scope: 'other target creatures' inside support N (SupportTriggeredRule) — separate mechanic, not migrated this slice"
     },
     {
       "card": "FRF/SavingGrasp",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
-      "card": "FelhidePetrifier",
       "sink": "OtherCharacteristic",
       "tag": "debt",
       "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
@@ -234,12 +192,6 @@
       "sink": "AbilityText",
       "tag": "debt",
       "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
-    },
-    {
-      "card": "HeraldOfDromoka",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
       "card": "HollowTrees",
@@ -272,12 +224,6 @@
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
     },
     {
-      "card": "LCI/RegalImperiosaur",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "LCI/WarrenSoultrader",
       "sink": "AbilityText",
       "tag": "debt",
@@ -285,12 +231,6 @@
     },
     {
       "card": "LRW/GaddockTeeg",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
-      "card": "LTR/MerryEsquireOfRohan",
       "sink": "OtherCharacteristic",
       "tag": "debt",
       "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
@@ -308,12 +248,6 @@
       "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
-      "card": "M10/GoblinChieftain",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "M12/CarnageWurm",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -321,27 +255,9 @@
     },
     {
       "card": "M21/BarrinTolarianArchmage",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
-      "card": "M21/BarrinTolarianArchmage",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
-    },
-    {
-      "card": "M21/NiambiEsteemedSpeaker",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
-      "card": "MH1/KingOfThePride",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
       "card": "MH2/AcademyManufactor",
@@ -369,12 +285,6 @@
     },
     {
       "card": "MIR/MtendaHerder",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
-      "card": "MOM/LivingTotem",
       "sink": "OtherCharacteristic",
       "tag": "debt",
       "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
@@ -446,12 +356,6 @@
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
     },
     {
-      "card": "RIX/LegionLieutenant",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "RIX/PitilessPlunderer",
       "sink": "AbilityText",
       "tag": "debt",
@@ -482,12 +386,6 @@
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
     },
     {
-      "card": "RatColony",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "RoadOfReturn",
       "sink": "OtherCharacteristic",
       "tag": "debt",
@@ -510,12 +408,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
-    },
-    {
-      "card": "SarythTheVipersFang",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
       "card": "TDC/TranscendentDragon",
@@ -572,12 +464,6 @@
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
     },
     {
-      "card": "UltramarinesHonourGuard",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "VOW/BloodServitor",
       "sink": "AbilityText",
       "tag": "debt",
@@ -588,12 +474,6 @@
       "sink": "OtherHistoryPredicate",
       "tag": "debt",
       "reason": "deferred adjunct: history-predicate structuring (out of current slice scope)"
-    },
-    {
-      "card": "WindstormDrake",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
       "card": "XLN/RuthlessKnave",

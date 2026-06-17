@@ -577,7 +577,7 @@ internal static class StaticRuleHelpers
     }
     if (isOther)
     {
-      filter = filter with { Characteristics = [Characteristic.Other("other")] };
+      filter = filter with { ExcludeSelf = true };
     }
     return filter;
   }

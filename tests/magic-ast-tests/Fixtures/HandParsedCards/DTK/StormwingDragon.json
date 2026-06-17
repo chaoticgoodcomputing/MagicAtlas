@@ -29,7 +29,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Flying",
           "Effects": [
             {
               "EffectType": "evasion",
@@ -49,24 +48,21 @@
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Flying"
         },
         {
           "Kind": "static",
-          "KeywordSource": "First strike",
           "Effects": [
             {
               "EffectType": "combatDamageTiming",
               "Timing": "First"
             }
-          ]
+          ],
+          "KeywordSource": "First strike"
         },
         {
           "Kind": "static",
-          "KeywordSource": "Megamorph",
-          "Reminder": {
-            "Text": "(You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its megamorph cost and put a +1/+1 counter on it.)"
-          },
           "Effects": [
             {
               "EffectType": "megamorph",
@@ -92,7 +88,11 @@
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Megamorph",
+          "Reminder": {
+            "Text": "(You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its megamorph cost and put a +1/+1 counter on it.)"
+          }
         },
         {
           "Kind": "triggered",
@@ -118,12 +118,7 @@
                     "Dragon"
                   ],
                   "Controller": "You",
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "other"
-                    }
-                  ]
+                  "ExcludeSelf": true
                 }
               },
               "CounterType": "+1/+1",
@@ -152,7 +147,8 @@
             ]
           }
         ],
-        "ManaValue": 6
+        "ManaValue": 6,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -170,13 +166,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         }
       }
     ]

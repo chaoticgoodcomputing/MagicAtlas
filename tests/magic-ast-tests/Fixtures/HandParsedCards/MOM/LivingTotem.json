@@ -30,7 +30,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Convoke",
           "Effects": [
             {
               "EffectType": "alternativePayment",
@@ -44,7 +43,11 @@
               },
               "ColorMustMatchMana": true
             }
-          ]
+          ],
+          "KeywordSource": "Convoke",
+          "Reminder": {
+            "Text": "(Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)"
+          }
         },
         {
           "Kind": "triggered",
@@ -69,12 +72,7 @@
                     "CardTypes": [
                       "creature"
                     ],
-                    "Characteristics": [
-                      {
-                        "CharacteristicType": "other",
-                        "Description": "another"
-                      }
-                    ]
+                    "ExcludeSelf": true
                   }
                 },
                 "CounterType": "+1/+1",
@@ -104,7 +102,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -122,13 +121,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         }
       }
     ]

@@ -52,7 +52,7 @@ public sealed class SupertypeAnthemAndKeywordGrantRule : IStaticRule
   // supertype vocabulary below. Both P/T sides require an explicit '+' sign (anthems
   // use signed notation). The keyword runs to end-of-clause (letters and spaces only).
   private static readonly Regex _supertypeAnthemKeywordPattern = new(
-    @"^\s*(?<sup>[A-Z][a-z]+)\s+creatures\s+(?<ctrl>you\s+control|your\s+opponents\s+control)\s+get\s+\+(?<p>\d+)/\+(?<t>\d+)\s+and\s+have\s+(?<kw>[A-Za-z][A-Za-z\s]*?)\s*\.?\s*$",
+    @"^\s*(?<other>Other\s+)?(?<noun>[A-Z][a-z]+)\s+creatures\s+(?<ctrl>you\s+control|your\s+opponents\s+control)\s+get\s+\+(?<p>\d+)/\+(?<t>\d+)\s+and\s+have\s+(?<kw>[A-Za-z][A-Za-z\s]*?)\s*\.?\s*$",
     RegexOptions.Compiled
   );
 
@@ -80,13 +80,14 @@ public sealed class SupertypeAnthemAndKeywordGrantRule : IStaticRule
       return null;
     }
 
-    var supertype = match.Groups["sup"].Value;
-    if (!_oracleSubjectSupertypes.Contains(supertype))
-    {
-      // A capitalised noun that is not a recognised supertype — decline so a
-      // subtype-subject anthem isn't misencoded as a supertype filter.
-      return null;
-    }
+    // The qualifying noun is either a recognised supertype (Commander/Legendary/…) → Supertypes
+    // filter, or a creature subtype (Goblin, Vampire, …) → Subtypes filter. A leading "Other"
+    // (CR 109.2) excludes the source object → ExcludeSelf. The subtype branch is the
+    // keyword-conjunction sibling of TribalAnthemModifyPTRule (which handles the bare "[Subtype]
+    // creatures get +N/+N" anthem with NO "and have <kw>" conjunction).
+    var noun = match.Groups["noun"].Value;
+    var isOther = match.Groups["other"].Success;
+    var isSupertype = _oracleSubjectSupertypes.Contains(noun);
 
     var keyword = match.Groups["kw"].Value.Trim();
     var grantedAbility = StaticRuleHelpers.MapKeywordToStaticAbility(keyword);
@@ -104,16 +105,21 @@ public sealed class SupertypeAnthemAndKeywordGrantRule : IStaticRule
     var power = int.Parse(match.Groups["p"].Value);
     var toughness = int.Parse(match.Groups["t"].Value);
 
-    // Both effects share the same supertype-filtered subject. A fresh ObjectReference
-    // is built per effect (records are immutable; the two filters are value-equal).
+    IReadOnlyList<string>? supertypes = isSupertype ? [noun] : null;
+    IReadOnlyList<string>? subtypes = isSupertype ? null : [noun];
+
+    // Both effects share the same filtered subject. A fresh ObjectReference is built per effect
+    // (records are immutable; the two filters are value-equal).
     ObjectReference Subject() => new()
     {
       Kind = ObjectReferenceKind.Each,
       Filter = new ObjectFilter
       {
         CardTypes = ["creature"],
-        Supertypes = [supertype],
+        Supertypes = supertypes,
+        Subtypes = subtypes,
         Controller = controller,
+        ExcludeSelf = isOther ? true : (bool?)null,
       },
     };
 

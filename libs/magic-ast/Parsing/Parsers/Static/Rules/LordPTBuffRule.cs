@@ -10,8 +10,8 @@ public sealed class LordPTBuffRule : IStaticRule
 {
   // Pattern: optional "Other " or "All " prefix, then a filter noun-phrase,
   // then "get"/"gets", then [+-]N/[+-]N. Anchored; does not match mid-sentence.
-  // The named group "other" fires when "Other " is present; used to populate
-  // ObjectFilter.Characteristics: ["other"] on the resulting filter.
+  // The named group "other" fires when "Other " is present; used to set
+  // ObjectFilter.ExcludeSelf = true on the resulting filter (CR 109.5 "another").
   private static readonly Regex _lordPTBuffPattern = new(
     @"^\s*(?:(?<other>Other)\s+|All\s+)?(?<filter>\S.+?)\s+gets?\s+(?<psign>[+\-])(?<p>\d+)/(?<tsign>[+\-])(?<t>\d+)\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
@@ -94,9 +94,11 @@ public sealed class LordPTBuffRule : IStaticRule
   {
     var text = filterText.Trim();
 
-    // "Other " qualifier on the oracle line → record as a Characteristics
-    // entry so the AST preserves the exclusion-of-self semantics.
-    IReadOnlyList<string>? characteristics = isOther ? ["other"] : null;
+    // "Other " qualifier on the oracle line → set the structured ExcludeSelf
+    // self-exclusion (CR 109.5 "another"), folded onto every returned filter
+    // below. Any co-occurring axis predicates still ride on `characteristics`.
+    bool? excludeSelf = isOther ? true : (bool?)null;
+    IReadOnlyList<string>? characteristics = null;
 
     // Peel optional controller suffix — "you control" or "your opponents control".
     // The suffix determines whether the filter applies to the active player's
@@ -135,6 +137,7 @@ public sealed class LordPTBuffRule : IStaticRule
           CardTypes = ["creature"],
           Colors = [colorCode],
           Controller = controller,
+          ExcludeSelf = excludeSelf,
         },
         characteristics
       );
@@ -153,6 +156,7 @@ public sealed class LordPTBuffRule : IStaticRule
         {
           CardTypes = ["artifact", "creature"],
           Controller = controller,
+          ExcludeSelf = excludeSelf,
         },
         characteristics
       );
@@ -163,9 +167,8 @@ public sealed class LordPTBuffRule : IStaticRule
     // State-based or token-status modifier immediately before "creatures". These are
     // game-state predicates (Rule 109.3 for tapped/untapped, Rule 111 for token,
     // Rule 508 for attacking), not subtypes, so they ride on Characteristics rather
-    // than Subtypes or CardTypes. The modifier word is appended to any existing
-    // characteristics (e.g. the "other" characteristic set by isOther) so the
-    // combined filter is accurate.
+    // than Subtypes or CardTypes. The self-exclusion (isOther) is carried separately
+    // by ExcludeSelf, so only the predicate word lands on Characteristics here.
     foreach (var (prefix, characteristic) in new[]
     {
       ("tapped creature", "tapped"),
@@ -187,6 +190,7 @@ public sealed class LordPTBuffRule : IStaticRule
           {
             CardTypes = ["creature"],
             Controller = controller,
+            ExcludeSelf = excludeSelf,
           },
           chars
         );
@@ -210,6 +214,7 @@ public sealed class LordPTBuffRule : IStaticRule
         {
           CardTypes = ["creature"],
           Controller = controller,
+          ExcludeSelf = excludeSelf,
         },
         chars
       );
@@ -230,6 +235,7 @@ public sealed class LordPTBuffRule : IStaticRule
       {
         CardTypes = ["creature"],
         Controller = controller,
+        ExcludeSelf = excludeSelf,
         Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
       };
     }
@@ -257,6 +263,7 @@ public sealed class LordPTBuffRule : IStaticRule
           CardTypes = ["creature"],
           Subtypes = [subtype1, subtype2],
           Controller = controller,
+          ExcludeSelf = excludeSelf,
           Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
         };
       }
@@ -282,6 +289,7 @@ public sealed class LordPTBuffRule : IStaticRule
         CardTypes = ["creature"],
         Subtypes = [subtype],
         Controller = controller,
+        ExcludeSelf = excludeSelf,
         Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
@@ -293,6 +301,7 @@ public sealed class LordPTBuffRule : IStaticRule
       {
         CardTypes = ["creature"],
         Controller = controller,
+        ExcludeSelf = excludeSelf,
         Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }
@@ -319,6 +328,7 @@ public sealed class LordPTBuffRule : IStaticRule
         CardTypes = isOther ? (IReadOnlyList<string>?)["creature"] : null,
         Subtypes = [subtype],
         Controller = controller,
+        ExcludeSelf = excludeSelf,
         Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
       };
     }

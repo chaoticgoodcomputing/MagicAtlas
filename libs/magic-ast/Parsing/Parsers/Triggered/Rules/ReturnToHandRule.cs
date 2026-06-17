@@ -34,14 +34,12 @@ public sealed class ReturnToHandRule : ITriggeredRule
       || lower.StartsWith("you may ")
       || Regex.IsMatch(lower, @"return\s+up\s+to\s+");
     var characteristics = new List<string>();
-    if (lower.Contains("another target"))
-    {
-      characteristics.Add("another");
-    }
-    else if (Regex.IsMatch(lower, @"\bother\s+target\b"))
-    {
-      characteristics.Add("other");
-    }
+    // "another target" / "other target" — self-exclusion (CR 109.5). Carried on the
+    // structured ExcludeSelf axis rather than a free-text characteristic.
+    bool? excludeSelf =
+      lower.Contains("another target") || Regex.IsMatch(lower, @"\bother\s+target\b")
+        ? true
+        : (bool?)null;
 
     // Capture any "non<X>" qualifier that precedes a card-type token.
     // e.g. "target nonland permanent" → characteristics: ["nonland"]
@@ -79,6 +77,7 @@ public sealed class ReturnToHandRule : ITriggeredRule
       CardTypes = cardTypes,
       Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
       Controller = controller,
+      ExcludeSelf = excludeSelf,
     };
 
     // Targeted phrasing ("return target X") → ObjectReferenceKind.Target.

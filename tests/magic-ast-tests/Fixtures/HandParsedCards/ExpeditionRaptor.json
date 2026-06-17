@@ -11,10 +11,6 @@
     ],
     "ColorIdentity": [
       "W"
-    ],
-    "Keywords": [
-      "Flying",
-      "Support"
     ]
   },
   "Output": {
@@ -124,7 +120,8 @@
             ]
           }
         ],
-        "ManaValue": 5
+        "ManaValue": 5,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -142,13 +139,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]
