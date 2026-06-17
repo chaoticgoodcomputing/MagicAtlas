@@ -1,0 +1,176 @@
+{
+  "Input": {
+    "Name": "Heliod, Sun-Crowned",
+    "ManaCost": "{2}{W}",
+    "TypeLine": "Legendary Enchantment Creature — God",
+    "OracleText": "Indestructible\nAs long as your devotion to white is less than five, Heliod isn't a creature.\nWhenever you gain life, put a +1/+1 counter on target creature or enchantment you control.\n{1}{W}: Another target creature gains lifelink until end of turn.",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Heliod, Sun-Crowned",
+    "TypeLine": {
+      "Raw": "Legendary Enchantment Creature — God",
+      "Supertypes": ["Legendary"],
+      "Types": ["Enchantment", "Creature"],
+      "Subtypes": ["God"]
+    },
+    "Oracle": {
+      "RawText": "Indestructible\nAs long as your devotion to white is less than five, Heliod isn't a creature.\nWhenever you gain life, put a +1/+1 counter on target creature or enchantment you control.\n{1}{W}: Another target creature gains lifelink until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Indestructible",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Indestructible"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "loseType",
+              "Subject": {
+                "Kind": "Self"
+              },
+              "LostType": "creature",
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "quantityComparison",
+                  "Left": {
+                    "QuantityType": "devotion",
+                    "Colors": ["W"]
+                  },
+                  "Operator": "LessThan",
+                  "Right": {
+                    "QuantityType": "literal",
+                    "Value": 5
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "GainsLife",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature", "enchantment"],
+                  "Controller": "You"
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": ["W"]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "ExcludeSelf": true
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Lifelink",
+                "Effects": [
+                  {
+                    "EffectType": "lifelink"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        }
+      }
+    ]
+  }
+}

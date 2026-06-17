@@ -128,6 +128,23 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
         },
       };
     }
+    else if (lower.Contains("target creature or enchantment you control"))
+    {
+      // "put a +1/+1 counter on target creature or enchantment you control" — disjunctive
+      // type filter: the target may be any creature or enchantment the controller controls.
+      // CardTypes as a list covers the disjunction (CR 205.2); "or" in oracle text maps to
+      // a multi-element CardTypes filter, consistent with the existing multi-type ObjectFilter
+      // convention (e.g. "artifact or creature", "creature or land").
+      target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature", "enchantment"],
+          Controller = ControllerFilter.You,
+        },
+      };
+    }
     else if (lower.Contains("target creature you control"))
     {
       target = new ObjectReference

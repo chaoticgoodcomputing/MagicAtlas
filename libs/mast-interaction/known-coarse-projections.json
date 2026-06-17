@@ -76,6 +76,7 @@
     "lookAtCards": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "lookAtTopCardAnyTime": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "loseAbility": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "loseType": "Theros God conditional creature-type loss (DevotionConditionalLoseCreatureTypeRule) \u2014 a layer-4 type-removing continuous effect; no flow rule reads type-loss yet; inert for interaction recall; conscious named carve-out",
     "mayPlayFromExile": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "mayPlayFromGraveyard": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "megamorph": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",

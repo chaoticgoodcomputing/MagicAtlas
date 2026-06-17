@@ -62,6 +62,34 @@ public sealed class GainAbilityEffectRule : IActivatedEffectRule
       }
     }
 
+    // Pattern: "Another target creature gains [keyword] until end of turn" — the source
+    // permanent itself is excluded (ExcludeSelf = true, per CR 109.5: "another" excludes
+    // the source object). Matched before the plain "Target creature" branch so the
+    // "Another" prefix is consumed here rather than falling through to the subtype branch.
+    var anotherTargetCreatureGainsMatch = Regex.Match(
+      effectText,
+      @"^Another\s+target\s+creature\s+gains?\s+(?<kw>[a-z]+(?:\s+(?!until|for|as\b)[a-z]+)?)\s+until\s+end\s+of\s+turn$",
+      RegexOptions.IgnoreCase
+    );
+    if (anotherTargetCreatureGainsMatch.Success)
+    {
+      var anotherKeyword = anotherTargetCreatureGainsMatch.Groups["kw"].Value.ToLowerInvariant().Trim();
+      var anotherAbility = ActivatedRuleHelpers.BuildGrantedKeywordAbility(anotherKeyword);
+      if (anotherAbility is not null)
+      {
+        return new GainAbilityEffect
+        {
+          Target = new ObjectReference
+          {
+            Kind = ObjectReferenceKind.Target,
+            Filter = new ObjectFilter { CardTypes = ["creature"], ExcludeSelf = true },
+          },
+          GainedAbility = anotherAbility,
+          Duration = UntilTimeDuration.EndOfTurn,
+        };
+      }
+    }
+
     // Pattern: "Target creature [you control] gains [keyword] until end of turn".
     // The optional "you control" group narrows the target's controller axis
     // (ObjectFilter.Controller = You). Without it the regex would reject
