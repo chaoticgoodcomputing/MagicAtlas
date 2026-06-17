@@ -1,15 +1,27 @@
 namespace MagicAST.Parsing.Parsers.Activated.Rules;
 
+using System.Text.RegularExpressions;
 using MagicAST.AST.Costs;
+using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 
 /// <summary>
 /// Sacrifice cost: "Sacrifice another creature", "Sacrifice X Squirrels", etc.
-/// Reuses the shared <see cref="ActivatedRuleHelpers.ParseSacrificePattern"/>.
+/// Reuses the shared <see cref="ActivatedRuleHelpers.ParseSacrificePattern"/> for most
+/// patterns; handles "nonland permanent(s)" directly before delegating.
 /// </summary>
 [ActivatedCostRule(Priority = 999)]
 public sealed class SacrificeCostRule : IActivatedCostRule
 {
+  // Matches "Sacrifice N nonland permanents" — the "nonland permanents" (plural)
+  // pattern does not route through ParseSacrificePattern correctly because the shared
+  // helper's \bpermanent\b word-boundary regex does not match "permanents" (the 's'
+  // breaks the word boundary). Handle it directly here, then delegate the rest.
+  private static readonly Regex _nonlandPermanentPattern = new(
+    @"^Sacrifice\s+(?<count>one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+nonland\s+permanents?$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   public Cost? TryMatch(string costText)
   {
     costText = costText.Trim();
@@ -18,6 +30,32 @@ public sealed class SacrificeCostRule : IActivatedCostRule
     if (!lower.StartsWith("sacrifice"))
     {
       return null;
+    }
+
+    // Early intercept: "Sacrifice N nonland permanents" (Bolas's Citadel, WAR).
+    // CR 205.3a: land is a card type; "nonland" excludes it via ExcludedCardTypes.
+    // Must run BEFORE ParseSacrificePattern because that helper uses \bpermanent\b
+    // which does not match the plural "permanents", causing it to misparse "ten" as
+    // a subtype name.
+    var nonlandMatch = _nonlandPermanentPattern.Match(costText);
+    if (nonlandMatch.Success)
+    {
+      var rawCount = nonlandMatch.Groups["count"].Value.ToLowerInvariant();
+      int count = rawCount switch
+      {
+        "one" => 1, "two" => 2, "three" => 3, "four" => 4, "five" => 5,
+        "six" => 6, "seven" => 7, "eight" => 8, "nine" => 9, "ten" => 10,
+        _ => int.Parse(rawCount),
+      };
+      return new SacrificeCost
+      {
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["permanent"],
+          ExcludedCardTypes = ["land"],
+        },
+        Quantity = LiteralQuantity.Of(count),
+      };
     }
 
     var (quantity, filter) = ActivatedRuleHelpers.ParseSacrificePattern(costText);
