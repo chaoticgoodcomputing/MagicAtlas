@@ -1527,6 +1527,15 @@
           ]
         },
         {
+          "Type": "SetCardTypesEffect",
+          "Discriminator": "setCardTypes",
+          "IsUnparsed": false,
+          "Fields": [
+            "CardTypes",
+            "Subject"
+          ]
+        },
+        {
           "Type": "ShuffleEffect",
           "Discriminator": "shuffle",
           "IsUnparsed": false,
@@ -1968,5 +1977,5 @@
       ]
     }
   ],
-  "SchemaHash": "2c17c947cb8b74df8bb9468f574771547806ed38dbf7dd0bd39aea247160dbea"
+  "SchemaHash": "8c8814aedef9dedd9f5322ea8a438f35b2da3ce7409da571418f74052af0865c"
 }
