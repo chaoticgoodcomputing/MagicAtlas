@@ -1,0 +1,129 @@
+{
+  "Input": {
+    "Name": "Bloodchief Ascension",
+    "ManaCost": "{B}",
+    "TypeLine": "Enchantment",
+    "OracleText": "At the beginning of each end step, if an opponent lost 2 or more life this turn, you may put a quest counter on this enchantment. (Damage causes loss of life.)\nWhenever a card is put into an opponent's graveyard from anywhere, if this enchantment has three or more quest counters on it, you may have that player lose 2 life. If you do, you gain 2 life.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Bloodchief Ascension",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of each end step, if an opponent lost 2 or more life this turn, you may put a quest counter on this enchantment. (Damage causes loss of life.)\nWhenever a card is put into an opponent's graveyard from anywhere, if this enchantment has three or more quest counters on it, you may have that player lose 2 life. If you do, you gain 2 life.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "an opponent lost 2 or more life this turn"
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "putCounters",
+                "Target": {
+                  "Kind": "Self"
+                },
+                "CounterType": "quest",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                }
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "Damage causes loss of life."
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "PutIntoGraveyard",
+            "Filter": {
+              "CardTypes": ["card"],
+              "Controller": "Opponent"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "quantityComparison",
+            "Left": {
+              "QuantityType": "counterCount",
+              "CounterType": "quest",
+              "On": {
+                "Kind": "Self"
+              }
+            },
+            "Operator": "GreaterThanOrEqual",
+            "Right": {
+              "QuantityType": "literal",
+              "Value": 3
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "loseLife",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                },
+                "Player": {
+                  "Kind": "ThatPlayer"
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "gainLife",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}

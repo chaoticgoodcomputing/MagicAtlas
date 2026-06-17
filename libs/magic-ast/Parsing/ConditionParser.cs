@@ -2,6 +2,7 @@ namespace MagicAST.Parsing;
 
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 
 /// <summary>
@@ -71,6 +72,19 @@ public static class ConditionParser
     @"^it\s+had\s+(?:(?<neg>no)|a|an|one|\d+)\s+(?<counter>[+\-]?\d+/[+\-]?\d+)\s+counters?\s+on\s+it$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+  /// <summary>
+  /// "this enchantment has three or more quest counters on it" — a counter-count threshold
+  /// predicate gating an ability on the source permanent's own counter accumulation
+  /// (Bloodchief Ascension's quest-counter gate; CR 122.1: a counter is a marker placed
+  /// on an object; the count threshold is an engine-resolved integer). Structured to a
+  /// <see cref="QuantityComparisonCondition"/> whose left operand is a
+  /// <see cref="CounterCountQuantity"/> on <see cref="ObjectReferenceKind.Self"/> and
+  /// whose right operand is the literal threshold — reference-not-resolution (ADR 0004).
+  /// </summary>
+  private static readonly Regex SelfCounterThreshold = new(
+    @"^this\s+\w+\s+has\s+(?<count>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+or\s+(?<dir>more|fewer)\s+(?<type>[\w\-]+)\s+counters?\s+on\s+it$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
   /// <summary>Parse a condition phrase; never throws — unrecognised phrases become a residual.</summary>
   public static Condition Parse(string phrase)
   {
@@ -125,6 +139,30 @@ public static class ConditionParser
       {
         Filter = filter,
         Count = Quant(hm.Groups["quant"].Value, hm.Groups["dir"].Value),
+      };
+    }
+
+    if (SelfCounterThreshold.Match(body) is { Success: true } sct)
+    {
+      var counterType = sct.Groups["type"].Value.ToLowerInvariant();
+      var thresholdValue = NumberWords.TryGetValue(sct.Groups["count"].Value, out var tv)
+        ? tv
+        : int.Parse(sct.Groups["count"].Value);
+      var op = sct.Groups["dir"].Value.ToLowerInvariant() switch
+      {
+        "more" => ComparisonOperator.GreaterThanOrEqual,
+        "fewer" => ComparisonOperator.LessThanOrEqual,
+        _ => ComparisonOperator.GreaterThanOrEqual,
+      };
+      return new QuantityComparisonCondition
+      {
+        Left = new CounterCountQuantity
+        {
+          CounterType = counterType,
+          On = ObjectReference.Self(),
+        },
+        Operator = op,
+        Right = new LiteralQuantity { Value = thresholdValue },
       };
     }
 
