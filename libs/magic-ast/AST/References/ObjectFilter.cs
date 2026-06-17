@@ -213,6 +213,19 @@ public sealed record ObjectFilter
   public bool? IsEnchanted { get; init; }
 
   /// <summary>
+  /// "equipped creature" — the creature this Equipment is currently attached to (CR 301.5 /
+  /// 702.6). An Equipment's "equipped creature" refers to the permanent it is attached to,
+  /// not an arbitrary creature. Flat boolean axis parallel to <see cref="IsEnchanted"/>:
+  /// where IsEnchanted restricts to the Aura's attached permanent, IsEquipped restricts to
+  /// the Equipment's attached permanent. Used in trigger filters ("whenever equipped creature
+  /// deals combat damage") to distinguish the source Equipment's host from any creature.
+  /// Distinct from <see cref="ObjectReferenceKind.EnchantedOrEquipped"/> at the reference
+  /// level — this is the filter-level predicate.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsEquipped { get; init; }
+
+  /// <summary>
   /// Additional characteristic constraints beyond the structured axes above —
   /// a keyword-ability requirement (<see cref="KeywordCharacteristic"/>) or the
   /// typed residual (<see cref="OtherCharacteristic"/>) for shapes not yet

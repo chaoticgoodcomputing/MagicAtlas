@@ -301,6 +301,15 @@ internal static class TriggeredRuleHelpers
       return new ObjectFilter { CardTypes = ["creature"], IsEnchanted = true };
     }
 
+    // "equipped creature" — the creature to which this Equipment is currently attached.
+    // Rule 301.5 / 702.6: an Equipment's "equipped creature" refers to the permanent it's
+    // attached to. The attachment is recorded on the structured IsEquipped axis (mirrors
+    // IsEnchanted); the card type remains "creature" per the oracle text.
+    if (Regex.IsMatch(lower, @"\bequipped\s+creature\b"))
+    {
+      return new ObjectFilter { CardTypes = ["creature"], IsEquipped = true };
+    }
+
     if (lower.Contains("a creature") || lower.Contains("another creature"))
     {
       return new ObjectFilter { CardTypes = ["creature"], Controller = controller };
