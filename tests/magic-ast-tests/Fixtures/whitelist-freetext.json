@@ -434,6 +434,12 @@
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
+      "card": "TDM/EnduringTenacity",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets \u2014 'it was a creature' is a last-known-information type predicate (LKI on card type at dies-trigger look-back time, CR 603.10); no TriggeringObjectTypeCondition node exists yet"
+    },
+    {
       "card": "TLA/ForecastingFortuneTeller",
       "sink": "AbilityText",
       "tag": "irreducible",

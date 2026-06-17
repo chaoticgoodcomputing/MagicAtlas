@@ -1,0 +1,127 @@
+{
+  "Input": {
+    "Name": "Enduring Tenacity",
+    "ManaCost": "{2}{B}{B}",
+    "TypeLine": "Enchantment Creature — Snake Glimmer",
+    "OracleText": "Whenever you gain life, target opponent loses that much life.\nWhen Enduring Tenacity dies, if it was a creature, return it to the battlefield under its owner's control. It's an enchantment. (It's not a creature.)",
+    "Power": "4",
+    "Toughness": "3",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Enduring Tenacity",
+    "TypeLine": {
+      "Raw": "Enchantment Creature — Snake Glimmer",
+      "Types": ["Enchantment", "Creature"],
+      "Subtypes": ["Snake", "Glimmer"]
+    },
+    "Oracle": {
+      "RawText": "Whenever you gain life, target opponent loses that much life.\nWhen Enduring Tenacity dies, if it was a creature, return it to the battlefield under its owner's control. It's an enchantment. (It's not a creature.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "GainsLife",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "LifeGained"
+              },
+              "Player": {
+                "Kind": "Opponent"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "it was a creature"
+          },
+          "Effects": [
+            {
+              "EffectType": "returnToBattlefield",
+              "Target": {
+                "Kind": "It"
+              },
+              "Tapped": false,
+              "UnderControl": {
+                "Kind": "Owner"
+              }
+            },
+            {
+              "EffectType": "setCardTypes",
+              "Subject": {
+                "Kind": "It"
+              },
+              "CardTypes": ["enchantment"]
+            }
+          ],
+          "Reminder": {
+            "Text": "It's not a creature."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
