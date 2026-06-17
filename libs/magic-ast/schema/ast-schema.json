@@ -290,6 +290,16 @@
           ]
         },
         {
+          "Type": "QuantityComparisonCondition",
+          "Discriminator": "quantityComparison",
+          "IsUnparsed": false,
+          "Fields": [
+            "Left",
+            "Operator",
+            "Right"
+          ]
+        },
+        {
           "Type": "TriggeringObjectCounterCondition",
           "Discriminator": "triggeringObjectCounter",
           "IsUnparsed": false,
@@ -721,6 +731,15 @@
           "IsUnparsed": false,
           "Fields": [
             "Effects"
+          ]
+        },
+        {
+          "Type": "ConditionalEffect",
+          "Discriminator": "conditional",
+          "IsUnparsed": false,
+          "Fields": [
+            "Condition",
+            "Then"
           ]
         },
         {
@@ -1293,6 +1312,15 @@
           ]
         },
         {
+          "Type": "OracleTopLookEffect",
+          "Discriminator": "oracleTopLook",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Player"
+          ]
+        },
+        {
           "Type": "OverloadEffect",
           "Discriminator": "overload",
           "IsUnparsed": false,
@@ -1688,6 +1716,14 @@
           "Fields": [
             "Cost"
           ]
+        },
+        {
+          "Type": "WinTheGameEffect",
+          "Discriminator": "winTheGame",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
         }
       ]
     },
@@ -1813,6 +1849,14 @@
           ]
         },
         {
+          "Type": "DevotionQuantity",
+          "Discriminator": "devotion",
+          "IsUnparsed": false,
+          "Fields": [
+            "Colors"
+          ]
+        },
+        {
           "Type": "KeywordCostPaidCountQuantity",
           "Discriminator": "keywordCostPaidCount",
           "IsUnparsed": false,
@@ -1924,5 +1968,5 @@
       ]
     }
   ],
-  "SchemaHash": "a6e1398c81d297b6ac2b545392d131e009b27d942c46940d3bf4e97da13e9a53"
+  "SchemaHash": "2c17c947cb8b74df8bb9468f574771547806ed38dbf7dd0bd39aea247160dbea"
 }
