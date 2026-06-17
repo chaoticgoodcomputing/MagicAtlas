@@ -1,0 +1,101 @@
+{
+  "Input": {
+    "Name": "Heat Shimmer",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Create a token that's a copy of target creature, except it has haste and \"At the beginning of the end step, exile this token.\"",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Heat Shimmer",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Create a token that's a copy of target creature, except it has haste and \"At the beginning of the end step, exile this token.\"",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "Modifications": [
+                {
+                  "ModificationType": "abilityAdder",
+                  "AbilityText": "haste"
+                },
+                {
+                  "ModificationType": "triggeredAbilityAdder",
+                  "Ability": {
+                    "Trigger": {
+                      "Timing": "At",
+                      "Event": {
+                        "Part": "End",
+                        "Edge": "Beginning"
+                      }
+                    },
+                    "Effects": [
+                      {
+                        "EffectType": "exile",
+                        "Target": {
+                          "Kind": "Self"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
+    ]
+  }
+}

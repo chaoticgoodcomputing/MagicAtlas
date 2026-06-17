@@ -1,6 +1,7 @@
 namespace MagicAST.AST.Effects.TokenCopy;
 
 using System.Text.Json.Serialization;
+using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.Serialization;
 using MagicAST.Serialization.DiscriminatorAttributes;
@@ -74,4 +75,25 @@ public sealed record SupertypeRemover : CopyModification
   /// Supertypes removed from the copy (e.g. "Legendary").
   /// </summary>
   public required IReadOnlyList<string> Supertypes { get; init; }
+}
+
+/// <summary>
+/// "except it has [triggered/activated/static ability]" — adds a fully-structured
+/// triggered or other complex ability to the copy token (CR 707.2 copiable values).
+/// Used when the "except" clause is a quoted triggered ability such as
+/// <c>"At the beginning of the end step, exile this token."</c> (Heat Shimmer,
+/// Twinflame) — a full triggered ability whose structure is rules-meaningful and
+/// therefore cannot be held as free text in <see cref="AbilityAdder.AbilityText"/>.
+/// Rule CR 707.2: "when copying an object, the copy acquires the copiable values
+/// of the original object's characteristics … abilities listed in the definition
+/// of that object" — an "except it has [ability]" clause overrides the printed
+/// abilities the token would otherwise inherit.
+/// </summary>
+[CopyModificationKind("triggeredAbilityAdder")]
+public sealed record TriggeredAbilityAdder : CopyModification
+{
+  /// <summary>
+  /// The structured triggered ability added to the copy token.
+  /// </summary>
+  public required TriggeredAbility Ability { get; init; }
 }
