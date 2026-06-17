@@ -5,16 +5,26 @@ using MagicAST.AST.References;
 using MagicAST.AST.Triggers;
 
 /// <summary>
-/// "you tap a permanent for {C}" / "a player taps a permanent for {C}" — trigger condition
-/// for the mana-doubling shape on Forsaken Monument (ZNR) and similar colorless-mana doublers.
+/// Trigger condition for "tap a [nonland] permanent for [mana/{C}]" shapes.
+///
+/// Handles two variants:
+/// <list type="bullet">
+///   <item>
+///     Specific-symbol: "you tap a permanent for {C}" (Forsaken Monument) — the produced mana
+///     symbol is recorded in <see cref="TriggerCondition.ProducedMana"/>. Controller: You when
+///     "you tap"; Any when "a player taps".
+///   </item>
+///   <item>
+///     Any-mana: "you tap a nonland permanent for mana" (Kinnan, Bonder Prodigy) — the trigger
+///     fires on any mana production by tapping a nonland permanent. No specific symbol is
+///     recorded (<see cref="TriggerCondition.ProducedMana"/> is null). The nonland qualifier is
+///     expressed as <c>ExcludedCardTypes: ["land"]</c> on the filter.
+///   </item>
+/// </list>
 ///
 /// Rule 605.1a: An activated ability is a mana ability if it could add mana to a player's mana
-/// pool when it resolves and it doesn't require a target. Tapping a permanent that produces {C}
-/// is such an ability; this rule encodes the trigger that fires when that activation occurs.
-///
-/// The produced mana symbol is recorded in <see cref="TriggerCondition.ProducedMana"/> ({C}),
-/// and the tapped permanent filter (CardTypes: ["permanent"], Controller: You for "you tap")
-/// is recorded in <see cref="TriggerCondition.Filter"/>.
+/// pool when it resolves and it doesn't require a target. Tapping a permanent for mana is such
+/// an ability; this rule encodes the trigger that fires when that activation occurs.
 /// </summary>
 [TriggerConditionRule(Priority = 994)]
 public sealed class TapForManaConditionRule : ITriggerConditionRule
@@ -29,6 +39,13 @@ public sealed class TapForManaConditionRule : ITriggerConditionRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // "you tap a nonland permanent for mana" — Kinnan, Bonder Prodigy shape.
+  // No specific mana symbol; the nonland qualifier excludes lands. ProducedMana is null.
+  private static readonly Regex _tapNonlandForAnyManaPattern = new(
+    @"\b(?<subject>you|a\s+player)\s+tap[s]?\s+a\s+nonland\s+permanent\s+for\s+mana\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   public TriggerCondition? Match(string triggerText, string lower, TriggerTiming timing)
   {
     if (!lower.Contains("tap") || !lower.Contains("permanent"))
@@ -36,30 +53,54 @@ public sealed class TapForManaConditionRule : ITriggerConditionRule
       return null;
     }
 
+    // Try specific-symbol variant first (Forsaken Monument shape).
     var m = _tapForManaPattern.Match(triggerText.Trim());
-    if (!m.Success)
+    if (m.Success)
     {
-      return null;
+      var subject = m.Groups["subject"].Value.Trim();
+      var mana = m.Groups["mana"].Value.ToUpperInvariant();
+
+      // "you tap" → Controller: You; "a player taps" → Controller: Any
+      var controller = subject.Equals("you", System.StringComparison.OrdinalIgnoreCase)
+        ? ControllerFilter.You
+        : ControllerFilter.Any;
+
+      return new TriggerCondition
+      {
+        Timing = timing,
+        Event = TriggerEvent.TapsForMana,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["permanent"],
+          Controller = controller,
+        },
+        ProducedMana = mana,
+      };
     }
 
-    var subject = m.Groups["subject"].Value.Trim();
-    var mana = m.Groups["mana"].Value.ToUpperInvariant();
-
-    // "you tap" → Controller: You; "a player taps" → Controller: Any
-    var controller = subject.Equals("you", System.StringComparison.OrdinalIgnoreCase)
-      ? ControllerFilter.You
-      : ControllerFilter.Any;
-
-    return new TriggerCondition
+    // Try any-mana nonland variant (Kinnan, Bonder Prodigy shape).
+    var n = _tapNonlandForAnyManaPattern.Match(triggerText.Trim());
+    if (n.Success)
     {
-      Timing = timing,
-      Event = TriggerEvent.TapsForMana,
-      Filter = new ObjectFilter
+      var subject = n.Groups["subject"].Value.Trim();
+      var controller = subject.Equals("you", System.StringComparison.OrdinalIgnoreCase)
+        ? ControllerFilter.You
+        : ControllerFilter.Any;
+
+      return new TriggerCondition
       {
-        CardTypes = ["permanent"],
-        Controller = controller,
-      },
-      ProducedMana = mana,
-    };
+        Timing = timing,
+        Event = TriggerEvent.TapsForMana,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["permanent"],
+          ExcludedCardTypes = ["land"],
+          Controller = controller,
+        },
+        // ProducedMana is null — the trigger fires for any mana type.
+      };
+    }
+
+    return null;
   }
 }

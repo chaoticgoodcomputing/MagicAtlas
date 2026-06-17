@@ -21,6 +21,18 @@ public sealed record AddManaEffect : Effect
   public bool AnyColor { get; init; }
 
   /// <summary>
+  /// For "add one mana of any type that permanent produced" (Kinnan, Bonder Prodigy) —
+  /// the produced mana's type is determined by the mana type the triggering permanent just
+  /// produced. Distinct from <see cref="AnyColor"/> (freely chosen from the five colors):
+  /// AnyType means the mana mirrors the specific type actually produced by the tap event.
+  /// Includes colorless ({C}), making it strictly broader than <see cref="AnyColor"/>.
+  /// CR 106.1: "Mana is the primary resource in the game. Players spend mana to pay costs,
+  /// usually when casting spells and activating abilities." The mana types are W, U, B, R,
+  /// G, and C (colorless).
+  /// </summary>
+  public bool AnyType { get; init; }
+
+  /// <summary>
   /// For "add one mana of the chosen color" (Coldsteel Heart, Shimmerdrift Vale,
   /// Thriving lands) — the produced mana's color is the color CHOSEN as this
   /// permanent entered, the consumer side of a CR 607 linked ability whose producer
