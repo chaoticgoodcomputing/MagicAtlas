@@ -237,6 +237,8 @@ tests pass **and** it committed on its branch. Delta-scope discipline (from v2):
 target axis/residual; leaving another axis's residual + its whitelist entry is correct. Revert-on-fail
 leaves a clean tree; defer-and-continue means a bad worker never blocks the wave.
 
+**Parser workers — `Input` is pre-seeded & authoritative; author only `Output` + parser.** The orchestrator seeds each card's gold `Input` from the corpus via `tools/seed-gold-input.py` (Step 2) and hands it to the worker **verbatim**. The worker MUST copy that `Input` exactly into its gold — never paraphrase the OracleText, add a reminder the real card lacks, or alter P/T/cost — and then author the `Output` AST + parser to match. The reason this is orchestrator-seeded rather than worker-transcribed: `GoldOracleTextFidelityTests` (Input vs corpus) **cannot run in a worktree** (the gitignored corpus is absent → it skips), so a worker-transcribed Input drifts undetected through both the worker's own suite run *and* the judge, surfacing only at the orchestrator's post-merge CORE gate — after the parser was built against the wrong text (the Maddening-Cacophony reminder + Peregrin-Took P/T failures). Seeding from corpus on main moves the fidelity gate *before* dispatch.
+
 **Interaction flow-arm workers — mirror the product reconstruction reach.** A worktree can't run the
 corpus bench, so an interaction worker proves its arm with a scope test (Walk golds → `Materialize` →
 `FindCycles` → assert tier). It MUST call `FindCycles(edges, LengthBound)` with the **same bound the
