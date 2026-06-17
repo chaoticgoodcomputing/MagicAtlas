@@ -421,6 +421,12 @@
           ]
         },
         {
+          "Type": "SelfManaCost",
+          "Discriminator": "selfMana",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "TapCost",
           "Discriminator": "tap",
           "IsUnparsed": false,
@@ -1997,5 +2003,5 @@
       ]
     }
   ],
-  "SchemaHash": "b28ead682ff0122025dbefefc9649e5ab0ed15814a5d32bbdf775977f9a7317f"
+  "SchemaHash": "8ca096b0ad363c84cc084636f241145b56ea69150f412ec31b9b59001751ff55"
 }
