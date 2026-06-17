@@ -107,6 +107,13 @@ public enum ObjectReferenceKind
   /// <summary>"that creature" / "the blocking creature" — the creature named by the trigger condition (e.g. Flanking's "becomes blocked by a creature without flanking" → the blocking creature). Creature analogue of <see cref="ThatPlayer"/>; refers back to the object the trigger's Filter identified, not the ability's own source (which is <see cref="Self"/>/<see cref="It"/>).</summary>
   ThatCreature,
 
+  /// <summary>"that ability" — the activated or triggered ability on the stack named by an
+  /// <see cref="MagicAST.AST.Triggers.TriggerEvent.AbilityActivated"/> trigger (CR 113 — an ability is an
+  /// object once on the stack). Ability analogue of <see cref="ThatPlayer"/>/<see cref="ThatCreature"/>;
+  /// the copy target for Rings of Brighthearth's "copy that ability". A linked back-reference (ADR 0004),
+  /// not a threaded binding.</summary>
+  TriggeringAbility,
+
   /// <summary>"each other player" - all players except the controller</summary>
   EachOtherPlayer,
 

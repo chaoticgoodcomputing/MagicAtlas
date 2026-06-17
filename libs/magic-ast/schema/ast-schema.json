@@ -308,6 +308,14 @@
           ]
         },
         {
+          "Type": "TriggeringAbilityIsManaCondition",
+          "Discriminator": "triggeringAbilityIsMana",
+          "IsUnparsed": false,
+          "Fields": [
+            "IsManaAbility"
+          ]
+        },
+        {
           "Type": "TriggeringObjectCounterCondition",
           "Discriminator": "triggeringObjectCounter",
           "IsUnparsed": false,
@@ -2084,5 +2092,5 @@
       ]
     }
   ],
-  "SchemaHash": "95e2cbf95a8cb271fad365138caac7abffb34909f8453c82d84a4238b5f9db71"
+  "SchemaHash": "ceab0f69e83402a1ced711995906ed27a16e6c48d82411e0227c75dbb41b9a5f"
 }

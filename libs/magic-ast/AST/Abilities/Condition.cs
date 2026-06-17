@@ -117,6 +117,22 @@ public sealed record QuantityComparisonCondition : Condition
 }
 
 /// <summary>
+/// "if it isn't a mana ability" / "if it's a mana ability" — an intervening-if (CR 603.4) on an
+/// <see cref="MagicAST.AST.Triggers.TriggerEvent.AbilityActivated"/> trigger that gates on whether the
+/// triggering ability is a mana ability (CR 605.1: a mana ability is an activated/triggered ability that
+/// could add mana, doesn't target, and isn't a loyalty ability). The structured form of Rings of
+/// Brighthearth's "if it isn't a mana ability" — NOT a free-text <see cref="OtherCondition"/> residual.
+/// <see cref="IsManaAbility"/> carries the polarity: <c>false</c> = "isn't a mana ability".
+/// </summary>
+[ConditionKind("triggeringAbilityIsMana")]
+public sealed record TriggeringAbilityIsManaCondition : Condition
+{
+  /// <summary>Whether the condition requires the triggering ability TO BE a mana ability. <c>false</c>
+  /// encodes the "isn't a mana ability" form (Rings of Brighthearth); <c>true</c> the affirmative.</summary>
+  public required bool IsManaAbility { get; init; }
+}
+
+/// <summary>
 /// Typed residual for a condition that does not yet have a structured variant —
 /// carries the literal oracle phrase. A deferral, not a destination (ADR 0001):
 /// counted by the residual-debt metric, structured when the shape recurs.
