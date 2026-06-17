@@ -67,32 +67,67 @@ corpus cards containing "activate an ability" and confirm none are mislabeled.
 **Note:** This card is the strongest argument for the `FANOUT §1.4` `[QualifierAxis]`/trigger-condition
 reflection registry — the overfit hazard is structural, not a worker mistake.
 
-## The One Ring (58 combos)
+## The One Ring (58 combos) — DEFERRED 2026-06-17: blocked on a parser-infrastructure ticket
 
-> When this enters, if you cast it, you gain protection from everything until your next turn.
-> {T}: Add a burden counter on The One Ring, then draw a card for each burden counter on it.
+> Indestructible
+> When The One Ring enters, if you cast it, you gain protection from everything until your next turn.
 > At the beginning of your upkeep, you lose 1 life for each burden counter on The One Ring.
+> {T}: Put a burden counter on The One Ring, then draw a card for each burden counter on The One Ring.
 
-**Gold Output shape:** three abilities —
-1. ETB triggered with an **intervening-if "if you cast it"** → `GainAbility(ProtectionFromEverything)` to
-   You, `Duration: UntilYourNextTurn`.
-2. Activated `{T}:` → `[PutCounterEffect(burden, on Self), DrawCardsEffect(Count: CountQuantity over
-   burden counters on Self)]`.
-3. Upkeep triggered → `LoseLifeEffect(Count: CountQuantity over burden counters on Self)`.
+**STATUS (2026-06-17):** Investigated end-to-end (corpus-seeded Input + actual-parser diff). Three of the
+four abilities are clean new-file work; the **ETB trigger is blocked on a shared parser-infrastructure gap**
+(self-by-name reference type for a NON-creature), so the card is **deferred to that infra ticket** rather
+than force-fit (forcing it would mislabel the artifact as a creature — a false-correctness the judge guards
+against). Indestructible already parses. The exact surfaces, verified against the AST + the live parser:
 
-**New surfaces (3, small):**
-1. **"if you cast it" intervening-if** — a cast-this-object condition (akin to the merged
-   `CastThisTurnPredicate` from Aetherflux, but a boolean intervening-if on the ETB). New `ConditionKind`
-   or reuse the cast-history predicate. CR 603.4.
-2. **Protection from everything** — a `ProtectionEffect`/`GainAbility` with an "everything" quality (CR
-   702.16 protection). Likely a new keyword-ability variant `Protection { From: Everything }`.
-3. **Burden-counter count** — `PutCounterEffect` with a custom counter name "burden" + `CountQuantity`
-   over named counters on Self (the counter-count quantity machinery exists; confirm a named-counter
-   filter). The draw/lose-life scaling reuse existing `DrawCardsEffect.Count` / `LoseLifeEffect` with the
-   count quantity.
+1. **ETB triggered** — `When The One Ring enters, if you cast it, you gain protection from everything until
+   your next turn.` Gold: `Trigger{Enters, Filter:{IsSelf:true}}`, `InterveningIf:{castThisObject}`,
+   `Effects:[ GainAbilityEffect{ Target:{You}, GainedAbility: StaticAbility{Protection,
+   ProtectionEffect{From:[{Everything}]}}, Duration: UntilTime YourNextTurn } ]`.
+   - ✅ **`ProtectionEffect` + `ProtectionQualityKind.Everything` already exist**; `GainAbilityEffect`
+     (`Target`+`GainedAbility`+`Duration`) exists; `Duration.YourNextTurn` exists; `ObjectReferenceKind.You`
+     exists. So "you gain protection from everything until your next turn" is a clean new-file `[TriggeredRule]`
+     (player-gains-protection-with-duration).
+   - ✅ "if you cast it" intervening-if → a new `[ConditionKind("castThisObject")]` boolean Condition + a
+     `ConditionParser` arm. Small, new-file-ish (one AST node + one arm). CR 603.4.
+   - ⛔ **BLOCKER — the trigger's self filter.** "When The One Ring enters" is a self-by-NAME reference.
+     The parser resolves self-by-name via `TriggeredRuleHelpers.IsSelfByNameTrigger` / the self-by-name
+     branch of `ParseObjectFilter`, which **hardcodes `CardTypes:["creature"]`** (the parser has no type-line
+     access at that layer — `OracleParser.Parse(oracleText)` takes only text). For The One Ring (a pure
+     Artifact) that yields a wrong `{creature, IsSelf}` filter. The fix is to make self-by-name **type-aware**
+     (default creature; use the card's actual type when it has NO creature type — which leaves every existing
+     creature/artifact-creature self-by-name gold UNCHANGED, verified regression-safe: no pure-non-creature
+     self-by-name gold relies on the creature filter today). But the plumbing is **infrastructure**: the type
+     would have to thread `CardParser → OracleParser → ParseTriggerCondition → ITriggerConditionRule.Match
+     (~100 rules) → ParseObjectFilter`, i.e. an interface change across the whole condition-rule registry, or
+     ambient parser state (concurrency-risky given `ParseCorpusStep`'s `AsParallel` note). That is a flagged
+     Stop-condition (`OracleParser`/shared-helper infra) with corpus-wide blast radius (every self-by-name
+     trigger reprojects) → re-parse + re-judge + corpus-edge-diff carve-outs. **It is its own ticket, not a
+     batch/Phase-A slice.** (Note: existing non-creature self-ETB golds — Pirate's Cutlass, Bramble Armor,
+     Ripclaw Wrangler — dodge this because they use "this Equipment/Vehicle enters", the `this [subtype]`
+     path, not the by-name path.)
 
-**Note:** `protection from everything` likely recurs (Sphere of Safety-adjacent, etc.), so the protection
-surface is reusable beyond this card.
+2. **Upkeep triggered** — `you lose 1 life for each burden counter on The One Ring.` Gold:
+   `LoseLifeEffect{ Player:{You}, Amount: CounterCountQuantity{CounterType:"burden", On:{Self}} }`.
+   ✅ All nodes exist (`LoseLifeEffect{Amount,Player}`, `CounterCountQuantity{CounterType,On}`); needs one
+   new-file `[TriggeredRule]` for "you lose N life for each [counter] counter on [self]".
+
+3. **Activated `{T}:`** — `Put a burden counter on The One Ring, then draw a card for each burden counter on
+   The One Ring.` Gold: composite `[ PutCountersEffect{Target:{Self}, CounterType:"burden", Count: literal 1},
+   DrawCardsEffect{ Player:{You}, Count: CounterCountQuantity{CounterType:"burden", On:{Self}} } ]`.
+   ✅ All nodes exist (`PutCountersEffect{Target,CounterType,Count}` supports the named "burden" counter via
+   its string `CounterType`). The current parser PARTIALLY parses this — it drops the put-counter clause and
+   mis-scales the draw to literal 1 — so it needs a new-file activated rule (the "put a [named] counter on
+   [self], then draw a card for each [named] counter on [self]" composite).
+
+**Why deferred, not landed:** the gold is all-or-nothing (a gold may carry no `IUnparsed`), so all four
+abilities must parse cleanly to land it. Surfaces (1-effect), (2), (3) are tractable new-file rules, but the
+ETB trigger's correct self-filter requires the type-awareness infra above. Landing #1's effect/condition +
+#2 + #3 without the trigger fix can't produce a valid gold. **Next step: do the self-by-name-type infra
+ticket (regression-safe per the analysis above), then The One Ring is a clean ~4-rule slice.**
+
+**Note:** `protection from everything` (CR 702.16) is reusable beyond this card; `CounterCountQuantity` over a
+named counter is the reusable scaling primitive (Serum-Core Chimera "oil counter", etc.).
 
 ## Carried FAILs (simpler — orchestrator fixes, branches preserved)
 
