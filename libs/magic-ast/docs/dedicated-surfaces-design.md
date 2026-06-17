@@ -129,6 +129,43 @@ ticket (regression-safe per the analysis above), then The One Ring is a clean ~4
 **Note:** `protection from everything` (CR 702.16) is reusable beyond this card; `CounterCountQuantity` over a
 named counter is the reusable scaling primitive (Serum-Core Chimera "oil counter", etc.).
 
+### JUDGE REVIEW (2026-06-17) — design validated; the heavy infra ticket is NOT strictly required
+
+A rules judge (web + local CR) reviewed the rationale + design against CR and Scryfall/Gatherer rulings.
+Verdict highlights:
+
+1. **Citation fix:** the self-reference rule is **CR 201.5** ("text that refers to the object it's on by
+   name means just that particular object…"), not CR 201.4 (which is "choose a card name"). The in-code
+   comment at `ParseObjectFilter` (self-by-name branch) mis-cites 201.4 → fix to 201.5 when the slice lands.
+   CR 707.10b reinforces: a copy's by-name self-reference tracks its own source.
+
+2. **The owner's copy-semantics point is CORRECT and *confirms* the `IsSelf` model (not a gap).** By-name
+   and by-type self-references both denote the SOURCE object; a copy's by-name ETB refers to the copy and
+   fires on the copy's entry (CR 707.2 + 201.5); the legend rule (CR 704.5j, an SBA at CR 704.3) does NOT
+   suppress an already-triggered ETB (CR 603.2/603.3). Modeling the trigger as `IsSelf:true` (+ the engine's
+   separate "copy of X" node materialization) is exactly what makes "both ETBs fire" fall out correctly.
+   Modeling by-name as a name-broadcast (non-self) filter would be a RULES ERROR.
+
+3. **`castThisObject` intervening-if is correct + necessary.** A copy/reanimated/blinked entry is NOT
+   "cast" (CR 601 vs 603; CR 707.10), so for those entries the ETB triggers but the "if you cast it"
+   intervening-if FAILS (CR 603.4) → no protection. `IsSelf` and `castThisObject` are orthogonal and both
+   correct; only the cast-from-hand entry grants protection.
+
+4. **The deferral diagnosis is right, but the "infra-required" framing is OVERSTATED.** Since `IsSelf` is
+   what the interaction engine actually gates on, the type label on a *self* filter is largely descriptive
+   for reconstruction — it is NOT what bridges triggers. So a **scoped, regression-safe fix lands The One
+   Ring without the corpus-wide type-threading infra:** make the by-name self-filter **omit the wrong
+   `creature` type** for the non-creature case (or post-correct it in `CardParser`, which already has the
+   type line). Existing creature golds keep `["creature"]`; no pure-non-creature self-by-name gold relies on
+   the creature label (verified), so the scoped change is gold-regression-safe. The full
+   `CardParser → OracleParser → ITriggerConditionRule` type-threading remains the right *general* solution
+   (Stop-condition flag stands), but it is NOT a prerequisite to land this card correctly.
+
+**Updated plan:** The One Ring is landable as a focused slice = (a) the scoped by-name self-filter
+type-correction (omit creature for non-creatures), (b) the `castThisObject` ConditionKind + ConditionParser
+arm, (c) the player-gains-protection-with-duration `[TriggeredRule]`, (d) the lose-life-per-counter
+`[TriggeredRule]`, (e) the burden-counter put-then-draw activated rule. All AST nodes already exist.
+
 ## Carried FAILs (simpler — orchestrator fixes, branches preserved)
 
 - **Hapatra, Vizier of Poisons** (`mast-tdd/parse-hapatra-vizier`): gold clean; the shared
