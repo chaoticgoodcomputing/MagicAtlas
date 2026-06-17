@@ -53,6 +53,17 @@ public sealed class CostReductionForEachRule : IStaticRule
         },
       };
     }
+    // "creature on the battlefield" — Blasphemous Act's sweeper-discount:
+    // CR 400.1 defines the battlefield as the zone where permanents exist;
+    // this phrase selects all creature permanents currently in play.
+    else if (filterPhrase == "creature on the battlefield")
+    {
+      perObject = new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Zone = Zone.Battlefield,
+      };
+    }
 
     if (perObject is null)
     {
