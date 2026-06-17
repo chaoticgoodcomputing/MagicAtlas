@@ -350,6 +350,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "PIP/NukaColaVendingMachine",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
       "card": "PouncingLynx",
       "sink": "OtherCondition",
       "tag": "debt",
