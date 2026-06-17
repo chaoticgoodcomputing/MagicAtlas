@@ -348,6 +348,14 @@
           ]
         },
         {
+          "Type": "TriggeredAbilityAdder",
+          "Discriminator": "triggeredAbilityAdder",
+          "IsUnparsed": false,
+          "Fields": [
+            "Ability"
+          ]
+        },
+        {
           "Type": "TypeAdder",
           "Discriminator": "typeAdder",
           "IsUnparsed": false,
@@ -512,6 +520,14 @@
             "AnyType",
             "Mana",
             "OfChosenColor"
+          ]
+        },
+        {
+          "Type": "AddTypeEffect",
+          "Discriminator": "addType",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
           ]
         },
         {
@@ -2068,5 +2084,5 @@
       ]
     }
   ],
-  "SchemaHash": "34143001f077328bbaf562515696d2e07c9029e9ffdca5dc1cfdc50e71ba83cc"
+  "SchemaHash": "95e2cbf95a8cb271fad365138caac7abffb34909f8453c82d84a4238b5f9db71"
 }
