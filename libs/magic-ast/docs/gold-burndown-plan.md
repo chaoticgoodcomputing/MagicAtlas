@@ -215,3 +215,163 @@ The `mast-judge` gate FAILS a regenerated gold if **any** rules-meaningful free-
 
 ### Process refinement for the next run
 Group slices by **gold-set**, not by axis (so a multi-residual gold is fully cleaned in one atomic slice), **or** loosen the judge to "this slice structured its axis correctly and introduced no new residual" (delta-judge) rather than "whole gold residual-free." Slices 1/4/0 committed precisely because their golds were single-concern.
+
+---
+
+## Parser batch (revised, gold-set-grouped)
+
+Revision of the deferred Run-1 work (Slices 2/3/5 + folded-in CandyTrail/Bucket-A/BearUmbra/DisplacerKitten), re-cut for the **delta-judge** harness. Operating contract assumed for every slice below: *a slice need only correctly structure ITS axis on its golds and introduce no NEW residual; it need not clean residuals owned by OTHER axes — but coupled axes landing on the SAME gold are grouped into ONE atomic slice.* All facts below were re-verified against live Scryfall (`/cards/named?exact=`) and the actual gold/parser files on 2026-06-16 — not from memory or the earlier sections.
+
+**Excludes Slice 6 (`another`→`ExcludeSelf`)**, co-designed by a human. Every gold in the sets below that ALSO carries an `other`/`another` exclusion residual is flagged inline as **[S6-SHARED]** and consolidated in the "Slice-6-shared golds" roster at the end, so the two batches can be sequenced (land these slices first; Slice 6 then rebases and regens the shared golds) or co-grouped.
+
+### Verified ground-truth corrections to the earlier sections
+- **Mentor set is 3 golds, not the names the Run-1 note implies.** The real Mentor-keyword golds are `GRN/HammerDropper`, `GRN/BargingSergeant`, `GRN/BladeInstructor` — each carries BOTH `attacking` (structured-characteristic) AND `with power less than this creature's power` (comparative-power). `CSP/ResplendentMentor` is **NOT** a Mentor card (it only has "Mentor" in its *name*; it is a white-creature anthem) — exclude it. `AggressiveMammoth` carries `other` + `with power less than this creature's power` but **no `attacking`**; its power-comparison is real but it is Slice-6-coupled, not Mentor-coupled.
+- **BearUmbra gold is wrong on four axes** (Scryfall: `Enchantment — Aura`, `+2/+2`, grants `"Whenever this creature attacks, untap all lands you control."`, keyword `Umbra armor`). The gold has `+3/+3`; drops the grant entirely (encodes the untap as a *self* triggered ability on the Aura instead of a granted ability on the enchanted creature); inverts the self-reference ("Whenever **the enchanted creature** attacks" should be the granted ability's own "this creature"); and uses the obsolete keyword `Totem armor` (renamed `Umbra armor`). Needs a genuine re-derive, not just `IsEnchanted`.
+- **Bucket A golds carry ONLY the InterveningIf residual** (`OtherCondition{"it had no ±1/±1 counters on it"}`) — verified: zero `OtherCharacteristic`, zero other `OtherCondition`. They are single-concern → each fully cleans in this one slice. The `ConditionParser.TriggeringObjectCounter` regex **already matches** both `"it had no -1/-1 counters on it"` and `"it had no +1/+1 counters on it"` (confirmed by running it); the gates are hardcoded `OtherCondition` at three producer sites, never routed through the parser.
+- **CandyTrail** real text (Scryfall): `Artifact — Food Clue`; `"When this artifact enters, scry 2."` + `"{2}, {T}, Sacrifice this artifact: You gain 3 life and draw a card."` The gold's Input is a *fabricated* Bargain/Food-sorcery body (corrupt) and the body is `unparsed`. The re-point + parse must produce **two** structured effects from "You gain 3 life and draw a card" (effect-conjunction), or the re-point silently drops the gain-3-life conjunct.
+- **DisplacerKitten**: real text is `"Avoidance — Whenever you cast a noncreature spell, …"`. The gold already encodes `AbilityWord: "Avoidance"` but leaves `noncreature` as an `OtherCharacteristic` residual. "Avoidance" is **not** a real CR ability word (CR 207.2c list) — it is the card's own italic flavor label; the encoding issue is whether to keep `AbilityWord` at all and whether `noncreature` is structured. See Slice PB-6.
+
+---
+
+### Slice ordering / shared-code serialization (within this batch)
+
+Serialize on shared files; the second writer to a file rebases + re-regens:
+- `ObjectFilter.cs` (`Comparison` record) — **PB-2** only writer in this batch.
+- `Characteristic.cs` (new variants) — **PB-3** only writer.
+- `TriggeredRuleHelpers.ParseObjectFilter` / `StaticRuleHelpers` / `SpellRuleHelpers` / `ActivatedRuleHelpers` (the qualifier→axis mapping) — **PB-3** only writer in this batch (Slice 6 also writes here later → land PB-3 first).
+- `ConditionParser.cs` — **PB-4** (Bucket A) is leaf/additive (no new arm needed — regex already matches), and **PB-5** (CandyTrail) doesn't touch it. No collision inside the batch.
+
+Recommended land order: **PB-4 → PB-1 → PB-5 → PB-6 → PB-2 → PB-3** (single-concern/leaf first; the coupled comparative+characteristic megaslice PB-3 last because it is the broadest `*RuleHelpers` edit and Slice 6 must rebase on it).
+
+---
+
+### Slice PB-4 — Persist/Undying counter-gate → structured `TriggeringObjectCounterCondition` (Bucket A)
+- **Gold set (7):** `CSP/PutridGoblin`, `DKA/StranglerootGeist`, `DKA/UndyingEvil`, `INR/ButcherGhoul`, `INR/YoungWolf`, `MOR/GravelgillAxeshark`, `SHM/SafeholdElite`.
+- **Parser change:** route the three hardcoded gates through the *existing* `ConditionParser.Parse` (or directly construct `TriggeringObjectCounterCondition`):
+  1. `libs/magic-ast/Keywords/Definitions/PersistKeyword.cs` — `InterveningIf = new OtherCondition { Text = InterveningIfText }` → `InterveningIf = ConditionParser.Parse(InterveningIfText)` (the const is `"it had no -1/-1 counters on it"`).
+  2. `libs/magic-ast/Keywords/Definitions/UndyingKeyword.cs` — same swap, text `"it had no +1/+1 counters on it"` (covers ButcherGhoul, YoungWolf, StranglerootGeist's Undying).
+  3. `libs/magic-ast/Parsing/Parsers/Spell/Rules/TargetCreatureGainsKeywordRule.cs` (L194, the `"undying"` arm of `MapKeywordToStaticAbility`) — same swap (covers UndyingEvil, the granted-ability spell).
+- **Structured AST target:** `TriggeringObjectCounterCondition { CounterType: "-1/-1"|"+1/+1", Present: false }`. (Persist → `-1/-1`; Undying → `+1/+1`.)
+- **Dependencies/ordering:** none inside this batch. Land first (lowest risk, leaf change, no new AST/schema). `ConditionParser.cs` itself needs **no** new arm — only the producers change.
+- **Per-gold judge checklist:**
+  - `InterveningIf` is `triggeringObjectCounter` with `Present=false` and the correct polarity (Persist=`-1/-1`, Undying=`+1/+1`) — CR 702.79a / 702.93a.
+  - The `returnToBattlefield` effect, `WithCounters`, `UnderControl=Owner`, `Trigger{When,Dies}` and (for the creatures) `IsSelf=true` are **byte-identical** to before (only the `InterveningIf` node changed).
+  - UndyingEvil: the gate sits on the **GainedAbility** (the granted Undying), not on the spell ability; the spell's `gainAbility` target/duration are unchanged.
+  - No new `OtherCondition`/`OtherCharacteristic` introduced; no gold leaves an `IUnparsed`.
+  - Remove all 7 from `whitelist-freetext.json` (sink `OtherCondition`).
+- **[S6-SHARED]:** none.
+
+### Slice PB-1 — aura `IsEnchanted` (+ BearUmbra full re-derive)
+- **Gold set (3):** `ROE/LuminousWake`, `M14/UnhallowedPact`, `ROE/BearUmbra`. (These are the only golds carrying `OtherCharacteristic{"enchanted"}`.)
+- **Parser change:**
+  - New flat `bool? IsEnchanted` on `ObjectFilter.cs` (mirrors `IsSelf`/`IsToken`; doc it as "the object enchanted by this Aura, CR 303.4 / 702.5"). Route the one qualifier branch in `TriggeredRuleHelpers.ParseObjectFilter` (and any static path that emits `Other("enchanted")`) to set `IsEnchanted=true` instead of appending the residual.
+  - **BearUmbra re-derive (Input is wrong — re-point Input THEN code):** correct `Input.OracleText` to the Scryfall text: `Enchant creature\nEnchanted creature gets +2/+2 and has "Whenever this creature attacks, untap all lands you control."\nUmbra armor (…)`. The corrected parse must produce: (a) `modifyPT +2/+2` on `EnchantedOrEquipped`; (b) a **`gainAbility`** effect on `Target:{EnchantedOrEquipped}` whose `GainedAbility` is the *triggered* ability `Whenever {this creature, IsSelf} attacks → untap Each {land, Controller:You}` (the self-reference is the granted ability's own source per CR 109/702, NOT a separate "the enchanted creature" filter); (c) keyword `Umbra armor` (not the obsolete `Totem armor`). Reuse the GorgonsHead/GuardDuty `gainAbility`-on-Aura precedent (those grant a *static* keyword; BearUmbra grants a *triggered* ability — same effect node, triggered `GainedAbility`).
+- **Structured AST target:** `ObjectFilter.IsEnchanted=true` (LuminousWake, UnhallowedPact, and BearUmbra's modifyPT/gainAbility targets); BearUmbra additionally: correct magnitude, restored `gainAbility` grant, corrected keyword enum.
+- **Dependencies/ordering:** writes `TriggeredRuleHelpers.ParseObjectFilter` — must land **before PB-3** (which rewrites the qualifier→axis mapping in the same method); PB-3 rebases. Independent of PB-4.
+- **Per-gold judge checklist:**
+  - LuminousWake / UnhallowedPact: the former `Other("enchanted")` is now `IsEnchanted=true`; all sibling axes (controller, types, the aura's other effects) byte-identical; no new residual.
+  - BearUmbra: PT is **+2/+2** (CR check vs Scryfall); the `gainAbility` grant of the untap-lands triggered ability is **present** and correctly attached to the enchanted creature; the granted trigger's self-reference resolves to the *granted ability's* source (IsSelf), not to the Aura; keyword is `Umbra armor`; Input was re-pointed (not deleted). No `OtherCharacteristic{"enchanted"}` remains.
+  - Remove all 3 from `whitelist-freetext.json` (sink `OtherCharacteristic`).
+- **[S6-SHARED]:** none.
+
+### Slice PB-5 — CandyTrail re-point + effect-conjunction ("gain N life and draw a card")
+- **Gold set (1):** `WOE/CandyTrail`.
+- **Parser change:**
+  - **Re-point Input first** (corrupt): set `Input.TypeLine = "Artifact — Food Clue"` and `Input.OracleText = "When this artifact enters, scry 2.\n{2}, {T}, Sacrifice this artifact: You gain 3 life and draw a card."` (Scryfall-exact). Then regen.
+  - Parser: ensure the activated-ability effect body `"You gain 3 life and draw a card"` parses as **two** structured effects (a `gainLife{3}` + a `drawCards{1}`) joined by an effect-conjunction, not as one residual. This is the load-bearing fix called out in Run-1: the naive re-point drops the gain-3-life conjunct. Locate the conjunction split in the activated/spell effect pipeline (the `... and ...` effect splitter); add the `gain N life and draw a card` arm if the existing splitter doesn't already cover the verb pair. The ETB `scry 2` and the activated cost (`{2},{T},Sacrifice this`) are already-covered shapes.
+- **Structured AST target:** an activated ability with cost `{2},{T},Sacrifice(this)` and a composite/two-element effect list `[gainLife 3, drawCards 1]`; plus the ETB `scry 2` triggered ability. **Zero `IUnparsed`.**
+- **Dependencies/ordering:** independent; touches the effect-conjunction splitter (not shared with PB-2/PB-3/PB-4 in this batch). Land after PB-4 for risk-ordering only.
+- **Per-gold judge checklist:**
+  - Input re-pointed to the real Food/Clue card (type line + both lines), not deleted.
+  - The sac-ability produces BOTH `gainLife 3` AND `drawCards 1` — the gain-life conjunct is **not** dropped (the explicit Run-1 failure mode).
+  - Cost is `{2}` + `{T}` + `Sacrifice this artifact`; ETB `scry 2` present.
+  - Remove `WOE/CandyTrail` from `whitelist-unparsed.json` (the unparsed node is gone) — and confirm it introduced no `OtherCondition`/`OtherCharacteristic`.
+- **[S6-SHARED]:** none.
+
+### Slice PB-6 — DisplacerKitten AbilityWord encoding
+- **Gold set (1):** `DisplacerKitten`.
+- **Diagnosis (verified):** real text `"Avoidance — Whenever you cast a noncreature spell, …"`. "Avoidance" is **not** a CR 207.2c ability word (it is the card's printed italic label, mechanically inert). The gold encodes it as `AbilityWord: "Avoidance"` and leaves `noncreature` as `OtherCharacteristic{"noncreature"}`. Two coupled defects on the one gold, so grouped:
+  1. **AbilityWord:** decide the encoding. Recommended: drop the `AbilityWord` field for non-CR labels (ability words are reminder-grouping only and carry no rules meaning, CR 207.2c) **or** structure it as a flavor/printed label distinct from the typed `AbilityWord` enum if the schema reserves `AbilityWord` for real ability words. The delta-judge must confirm the choice does not assert a false CR ability word.
+  2. **`noncreature`:** structure as `CardTypes:["spell"]` + `ExcludedCardTypes:["creature"]` (the existing non-`<type>` negation axis), removing the `OtherCharacteristic` residual.
+- **Parser change:** the spell-cast trigger filter producer for `"noncreature spell"` → emit `ExcludedCardTypes:["creature"]` (reuse the existing non-type negation path); adjust the AbilityWord handling per the decision above. Confirm against `WAR/SpellgorgerWeird`, `OTJ/SlickshotShowOff`, `ZEN/SpellPierce` which carry the same `noncreature` residual (they are NOT in this slice's gold set — but verify the shared producer change doesn't regress them; if it cleans them too, that is a bonus, remove them from the whitelist as well).
+- **Structured AST target:** trigger filter `{CardTypes:["spell"], ExcludedCardTypes:["creature"], Controller:You}`; AbilityWord per decision.
+- **Dependencies/ordering:** touches a spell-cast-trigger filter producer — light overlap risk with PB-3's mapping extraction; land before PB-3 OR fold the `noncreature` producer change into PB-3 if they touch the same method (verify at implementation time). Independent of PB-1/PB-2/PB-4/PB-5.
+- **Per-gold judge checklist:**
+  - `noncreature` is structured as `CardTypes:["spell"]`+`ExcludedCardTypes:["creature"]`; no `OtherCharacteristic` remains.
+  - The AbilityWord encoding decision does not assert a non-existent CR ability word; the trigger event/effects (exile-then-return composite, `ExiledWith:Self`, `UnderControl:Owner`) are unchanged.
+  - Remove `DisplacerKitten` from `whitelist-freetext.json` (sink `OtherCharacteristic`).
+- **[S6-SHARED]:** none.
+
+### Slice PB-2 — comparative `PowerComparison` ("with power less than this creature's power") — **see PB-3 (merged)**
+This was the standalone "Slice 3" axis. Because **every** gold that carries `with power less than this creature's power` ALSO carries a structured-characteristic residual on the **same** gold (the 3 Mentor golds carry `attacking`; AggressiveMammoth carries `other`), there is no gold where the comparative axis lands alone *and* leaves the gold clean. Per the grouping contract, **PB-2 is merged into PB-3** for the Mentor golds. The `Comparison`-record extension itself (the shared substrate) is specced here and lands as part of PB-3:
+- **Parser change (substrate):** extend the `Comparison` record in `ObjectFilter.cs` so the RHS can be relative-to-an-object, not just a literal int. Make `Value` nullable (`int?`) and add `ObjectReference? RelativeTo` (+ optional `RelativeCharacteristic` for the "power" axis), so "power less than this creature's power" → `PowerComparison { Operator: LessThan, RelativeTo: ObjectReference.Self(), RelativeCharacteristic: Power }`. **Audit all ~12 literal-int `Comparison` consumers** (grep: `SoulshiftKeyword`, `SearchLibraryToBattlefieldEffectRule`, `CounterSpellRule`, `DestroyTargetWithFilterRule`, `ExileTargetQualifiedRule`, `CantBeCastRestrictionRule`, `SpellRuleHelpers`, `ObjectFilterRelations`, plus `Count` in `CountCondition`) — they must serialize **byte-identically** (`RelativeTo`/nullable `Value` absent via `WhenWritingNull`).
+- **Producers:** `MentorKeyword.cs` (replace `Characteristic.Other("with power less than this creature's power")` with a `PowerComparison` on the target filter); and the comparative branch in `CantBeBlockedRule.cs` (the existing relative-power convention the Mentor doc cites). Update `ast-schema.json` `Comparison` def + any `SchemaExportTests` snapshot.
+
+### Slice PB-3 — structured-characteristic megaslice (attacking / tapped / untapped / type / color / +1+1-counter) **+ merged comparative-power** (the gold-set-grouped atomic slice)
+This is the consolidated slice the Run-1 retro demanded: it owns BOTH the structured-characteristic axis AND the comparative-power axis, so the Mentor golds — which carry both — are fully cleaned in ONE atomic regen.
+
+- **Gold set.** Partitioned by which structurable axis they carry (all currently `OtherCharacteristic` debt). Golds whose ONLY residual is the structured-characteristic axis are fully cleaned here; golds that ALSO carry an `other`/`another` exclusion are **[S6-SHARED]** (this slice cleans their characteristic axis; Slice 6 cleans the exclusion — regen the shared gold only after BOTH land, or co-group).
+
+  - **Mentor (attacking + comparative-power, both owned here):** `GRN/HammerDropper`, `GRN/BargingSergeant`, `GRN/BladeInstructor`.
+  - **`tapped`:** `10E/Vengeance`, `Galestrike`, `AdeptWatershaper` **[S6-SHARED]** (`other tapped`), `SarythTheVipersFang` **[S6-SHARED]** (`other tapped` + `other untapped` — needs a `tapped:false`/`untapped` representation).
+  - **`attacking` (combat-state, already-structurable via `CombatStateCharacteristic`):** `MBS/GoblinWardriver` (carries `attacking`×2; its `ExcludeSelf` is ALREADY structured → NOT S6-shared anymore).
+  - **`attacking alone`:** `ALA/AkrasanSquire`, `M13/KnightOfGlory`, `QasaliPridemage`, `SHM/AvenSquire` (note: `CombatState.AttackingAlone` already exists — these may already be structurable via `Characteristic.FromLabel`; verify they aren't already clean before including).
+  - **type axes** (`artifact`/`token`/`nonland`/`nonbasic`/`noncreature`/`instant`/`sorcery` etc., via `CardTypes`/`ExcludedCardTypes`/`ExcludedSupertypes`/`IsToken`): `10E/Fear` **[S6? no]**, `10E/SeveredLegion`, `9ED/RazortoothRats`, `UDS/SquirmingMass` (each `['artifact','black']` → `CardTypes`+`Colors`), `AVR/Vanishment`/`Disperse`/`M14/PlanarCleansing`/`M15/VoidSnare`/`MB6/KickedBounce` (`nonland`), `CMD/Ruination` (`nonbasic`→`ExcludedSupertypes:["Basic"]`), `DTK/VirulentPlague`/`GTC/IllnessInTheRanks` (`token`→`IsToken`), `NEO/VilespawnSpider` (`artifact`), `M14/YoungPyromancer` (`instant`/`sorcery`), `OTJ/SlickshotShowOff`/`WAR/SpellgorgerWeird`/`ZEN/SpellPierce` (`noncreature` — shared producer with PB-6; sequence/fold accordingly).
+  - **color axes** (`black`/`nonblack`/`nonblue`/`nonwhite`/`shares a color` → `Colors`/`ExcludedColors`/`SharesColorWith`): `DoomBlade` (`nonblack`), `GPT/Frazzle`/`Inundate` (`nonblue`), `Saltblast` (`nonwhite`), `M13/KrenkosEnforcer` (`artifact`+`shares a color`).
+  - **`+1/+1` counter axis** (`with a +1/+1 counter` → new `CounterCharacteristic`): `CrownedCeratok`, `SapphireDrake`.
+
+  *(Golds with residuals OUTSIDE these five axes — e.g. `BFZ/FathomFeeder` `top`/`that player's`, `LRW/GaddockTeeg` `{X} in mana cost`, `THS/TritonFortuneHunter` `targeting this creature`, `RoadOfReturn` `your commander`, `M10/Falter`/`MIR/*` flanking/flying-without — are OUT of this slice's axes; leave their residual and keep them whitelisted. Per the delta-judge contract this slice need not clean them.)*
+
+- **Parser change:**
+  - **Extract ONE shared qualifier→axis helper first** (the mapping is duplicated across `SpellRuleHelpers`, `StaticRuleHelpers`, `TriggeredRuleHelpers`, `ActivatedRuleHelpers`), then route all call sites through it. This is the single edit that collapses ~40 scattered touches into one fix.
+  - New `Characteristic` variants in `Characteristic.cs`: `TappedStateCharacteristic { bool Tapped }` (covers `tapped` AND `untapped`; CR 110.5) and `CounterCharacteristic { string CounterType, Comparison? }` (covers `with a +1/+1 counter`). Extend `Characteristic.FromLabel` to map `tapped`/`untapped`/`with a +1/+1 counter`.
+  - New `ObjectFilter` axis `ExcludedColors` (for `nonblack`/`nonblue`/`nonwhite`); reuse existing `Colors`, `CardTypes`, `ExcludedCardTypes`, `ExcludedSupertypes`, `IsToken`, `SharesColorWith`, and the existing `CombatStateCharacteristic`.
+  - **Merge PB-2:** land the `Comparison.RelativeTo` substrate + `MentorKeyword`/`CantBeBlockedRule` producers here (so the Mentor golds get attacking→`CombatStateCharacteristic` AND lesser-power→`PowerComparison` in the same regen).
+  - **Schema:** add discriminator kinds `tapped`, `counter` to the `Characteristic` `PolymorphicReflectionConverter`; every exhaustive `switch` over `CharacteristicKind` in `libs/mast-interaction` must learn them or silently drop (CR 110.5/122 filter predicates — not engine actions, so no firability change, but confirm consumers don't try to *evaluate* the new typed node). Regenerate `SchemaExportTests` snapshot.
+- **Structured AST target:** per axis — `CombatStateCharacteristic{Attacking}`; `TappedStateCharacteristic{Tapped:true/false}`; `CardTypes`/`ExcludedCardTypes`/`ExcludedSupertypes`/`IsToken`; `Colors`/`ExcludedColors`/`SharesColorWith`; `CounterCharacteristic{"+1/+1"}`; and (Mentor) `PowerComparison{LessThan, RelativeTo:Self, RelativeCharacteristic:Power}`.
+- **Dependencies/ordering:** land **after PB-1** (both touch `TriggeredRuleHelpers.ParseObjectFilter`; PB-1 first, PB-3 rebases) and **after PB-6** (or fold the `noncreature` producer into PB-3). Land **before Slice 6** — Slice 6 writes the same `Characteristics`-emission sites and must rebase; regen the **[S6-SHARED]** golds only after Slice 6 also lands.
+- **Per-gold judge checklist (apply per gold, delta-scoped):**
+  - **Mentor ×3:** `attacking` → `CombatStateCharacteristic{Attacking}` AND `with power less than this creature's power` → `PowerComparison{LessThan, RelativeTo:Self, RelativeCharacteristic:Power}` — BOTH structured, the gold is fully residual-free (no `OtherCharacteristic` left). CR 702.134.
+  - **tapped/untapped golds:** `tapped`→`TappedStateCharacteristic{Tapped:true}`, `untapped`→`{Tapped:false}` (Saryth must distinguish its two anthem clauses). For `AdeptWatershaper`/`SarythTheVipersFang` the `other`/`another` residual MAY remain (Slice 6 owns it) — the delta-judge passes the *characteristic* delta and confirms only that NO NEW residual was added.
+  - **type/color golds:** correct axis (`ExcludedCardTypes`/`ExcludedSupertypes`/`IsToken`/`Colors`/`ExcludedColors`), no over-application (e.g. `nonbasic`→`ExcludedSupertypes:["Basic"]`, NOT `ExcludedCardTypes`), siblings preserved (`['artifact','black']` → BOTH `CardTypes:["artifact"]` and `Colors:["B"]`).
+  - **counter golds:** `with a +1/+1 counter` → `CounterCharacteristic{"+1/+1"}`.
+  - No gold gains a new `IUnparsed`/`OtherCondition`; schema snapshot regenerated; `mast-interaction` `CharacteristicKind` switches updated (no silent drop). Remove fully-cleaned golds from `whitelist-freetext.json`; leave S6-shared golds whitelisted until Slice 6 lands.
+- **[S6-SHARED] within this slice:** `AdeptWatershaper`, `SarythTheVipersFang`. (Mentor golds and `MBS/GoblinWardriver` are NOT shared — Mentor carries no exclusion residual; GoblinWardriver's exclusion is already structured.)
+
+---
+
+### Slice-6-shared golds (roster for sequencing with the human-designed `ExcludeSelf` batch)
+
+Golds in THIS batch's sets that ALSO carry an `other`/`another` exclusion residual owned by Slice 6 (regen the shared gold only after both Slice 6 and the owning slice here land):
+
+- `AdeptWatershaper` (PB-3: `tapped`; S6: `other`)
+- `SarythTheVipersFang` (PB-3: `tapped`/`untapped`; S6: `other`×2 on the anthem clauses — note its activated arm already has structured `ExcludeSelf`)
+
+For completeness, the **full Slice-6 gold population** (22 golds carrying an `other`/`another` exclusion residual, for the human's batch — only the two above intersect this batch's sets): `AdeptWatershaper`, `AggressiveMammoth`, `BenalishMarshal`, `C16/RavosSoultender`, `CHK/SachiDaughterOfSeshiro`, `CN2/GrenzoSRuffians`, `DTK/StormwingDragon`, `ExpeditionRaptor`, `FelhidePetrifier`, `HeraldOfDromoka`, `LCI/RegalImperiosaur`, `LTR/MerryEsquireOfRohan`, `M10/GoblinChieftain`, `M21/BarrinTolarianArchmage`, `M21/NiambiEsteemedSpeaker`, `MH1/KingOfThePride`, `MOM/LivingTotem`, `RIX/LegionLieutenant`, `RatColony`, `SarythTheVipersFang`, `UltramarinesHonourGuard`, `WindstormDrake`. (`AggressiveMammoth` additionally carries the comparative-power residual — if Slice 6 does not structure that, the comparative substrate from PB-3 should be applied to it in whichever batch regens it, to avoid two divergent relational-comparison designs.)
+
+---
+
+## Slice 6 — another → ExcludeSelf (RATIFIED design, 2026-06-16)
+
+The entangled slice — done HANDS-ON (not in the autonomous batch), AFTER the parser batch lands (it must rebase on PB-3, which structures the tapped/untapped axis on the shared golds).
+
+**Parser half** (~22 golds, all real, all fix): route "other"/"another" to structured `ObjectFilter.ExcludeSelf=true` instead of `OtherCharacteristic("other")` free-text:
+- `StaticRuleHelpers.ClassifyTypeNounPhrase` — the central peel.
+- `LordPTBuffRule` + `BareKeywordGrantRule` — carry `isOther` separately, append `ExcludeSelf=true` (stop seeding the characteristics string list).
+- `TribalAnthemModifyPTRule` + `WithKeywordAnthemModifyPTRule` — replace `Other("other")`, keep the kw characteristic.
+- Trigger/target path (Barrin, Merry, Niambi, Living Totem) — a shared `TryPeelSelfExclusion` detector.
+
+**The entanglement (verified in code):** structured `ExcludeSelf=true` makes `ObjectFilterRelations.Subsumes` return `Unknown("ExcludeSelf")` via `SupUndecidedAxis` (`ObjectFilterRelations.cs:564,827`) — but ONLY when every other axis already subsumed. `PortGraphEngine.AddRulesEdge` (`PortGraphEngine.cs:696,710`) stamps that as the edge tier → canonical anthem/bounce/counter combos demote GREEN→AMBER. `Intersects` already ignores `ExcludeSelf` (`ObjectFilterRelations.cs:499–505`) and stays untouched.
+
+**The fix — RATIFIED: cross-card carve-out** in `AddRulesEdge`, right after the `Subsumes` call (line ~696):
+```csharp
+if (reliability.Value == Trilean.Unknown
+    && reliability.Reason == "ExcludeSelf"
+    && from.Card != to.Card)
+    reliability = new SubsumeMatch(Trilean.Yes);
+```
+`ExcludeSelf` only excludes the sup's own source object; cross-card the `from` object is a different card, so the exclusion imposes no constraint → subsumption holds → GREEN restored. Same-card stays `Unknown` (correct). Surgical: keys on `Reason == "ExcludeSelf"`, so it fires only when self-exclusion is the sole doubt. The operator-tier twin of the engine's existing same-card guards. (Rejected: card-aware inside `Subsumes` — that filter operator stays pure/card-unaware.)
+
+**Non-negotiable:** parser + carve-out land in the SAME commit, with the `mast-interaction` tier tests (canonical-combo asserts) run BEFORE and AFTER to catch any silent GREEN↔AMBER flip.
+
+**Slice-6-shared golds with the parser batch:** `AdeptWatershaper`, `SarythTheVipersFang` — both land in PB-3 (tapped/untapped axis) AND carry the `other`/`another` residual owned here. Regenerate them only after BOTH PB-3 and Slice 6 land (or co-group), so neither half leaves the other's residual.
