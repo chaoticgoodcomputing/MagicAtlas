@@ -446,6 +446,12 @@
       "reason": "may-pay-cost effort structuring \u2014 deferred adjunct"
     },
     {
+      "card": "RingsOfBrighthearth",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring \u2014 deferred adjunct (same as Nim Deathmantle/Ulalek; the ConditionalPayEffect.Cost carries the structured {2})"
+    },
+    {
       "card": "SPM/HotDogCart",
       "sink": "AbilityText",
       "tag": "irreducible",

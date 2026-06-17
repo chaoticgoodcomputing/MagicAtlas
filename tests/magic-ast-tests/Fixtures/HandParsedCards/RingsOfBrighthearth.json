@@ -1,0 +1,78 @@
+{
+  "Input": {
+    "Name": "Rings of Brighthearth",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "Whenever you activate an ability, if it isn't a mana ability, you may pay {2}. If you do, copy that ability. You may choose new targets for the copy.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Rings of Brighthearth",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "Whenever you activate an ability, if it isn't a mana ability, you may pay {2}. If you do, copy that ability. You may choose new targets for the copy.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "AbilityActivated",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "triggeringAbilityIsMana",
+            "IsManaAbility": false
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    { "Kind": "generic", "GenericAmount": 2 }
+                  ]
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "copy",
+                "Target": {
+                  "Kind": "TriggeringAbility"
+                },
+                "MayChooseNewTargets": true
+              }
+            }
+          ],
+          "Instructions": ["you may pay {2}"]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

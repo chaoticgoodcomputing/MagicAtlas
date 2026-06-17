@@ -85,6 +85,18 @@ public static class ConditionParser
     @"^this\s+\w+\s+has\s+(?<count>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+or\s+(?<dir>more|fewer)\s+(?<type>[\w\-]+)\s+counters?\s+on\s+it$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+  /// <summary>
+  /// "it isn't a mana ability" / "it's a mana ability" — the triggering-ability mana-ability
+  /// gate on a <see cref="MagicAST.AST.Triggers.TriggerEvent.AbilityActivated"/> trigger
+  /// (Rings of Brighthearth's intervening-if; CR 605.1 — a mana ability is an activated/triggered
+  /// ability that could add mana, doesn't target, and isn't a loyalty ability). Structured to a
+  /// <see cref="MagicAST.AST.Abilities.TriggeringAbilityIsManaCondition"/> rather than left as a
+  /// free-text <see cref="OtherCondition"/> residual; the <c>neg</c> group carries the polarity.
+  /// </summary>
+  private static readonly Regex ManaAbilityGate = new(
+    @"^it(?:'s|\s+is|\s+(?<neg>isn't|is\s+not))\s+a\s+mana\s+ability$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
   /// <summary>Parse a condition phrase; never throws — unrecognised phrases become a residual.</summary>
   public static Condition Parse(string phrase)
   {
@@ -164,6 +176,13 @@ public static class ConditionParser
         Operator = op,
         Right = new LiteralQuantity { Value = thresholdValue },
       };
+    }
+
+    if (ManaAbilityGate.Match(body) is { Success: true } mag)
+    {
+      // The negation group fires only for "isn't"/"is not"; the affirmative
+      // ("it's"/"it is a mana ability") leaves it empty → IsManaAbility = true.
+      return new TriggeringAbilityIsManaCondition { IsManaAbility = !mag.Groups["neg"].Success };
     }
 
     return new OtherCondition { Text = verbatim };
