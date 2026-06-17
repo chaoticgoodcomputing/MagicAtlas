@@ -1,0 +1,106 @@
+{
+  "Input": {
+    "Name": "Retraction Helix",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Until end of turn, target creature gains \"{T}: Return target nonland permanent to its owner's hand.\"",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Retraction Helix",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Until end of turn, target creature gains \"{T}: Return target nonland permanent to its owner's hand.\"",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "tap"
+                  }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "returnToHand",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": [
+                          "permanent"
+                        ],
+                        "ExcludedCardTypes": [
+                          "land"
+                        ]
+                      }
+                    }
+                  }
+                ],
+                "IsManaAbility": false
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
