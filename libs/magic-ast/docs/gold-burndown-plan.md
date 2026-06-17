@@ -187,3 +187,31 @@ Every slice follows the same gated cycle; **no ratchet tolerance — all gates g
 6. **Commit** — one slice per commit; agents commit, humans push-sign (per `git pushsigned` workflow). Update `libs/magic-ast/schema/destring-worklist.json` for honesty (documentation, not gated).
 
 **Entangled slices (6, 7, 8E) additionally require human design sign-off in step 1** — the engine carve-out / reference-not-resolution contract is specced and reviewed *with* the parser change, never after.
+
+---
+
+## Run 1 results (2026-06-16, autonomous workflow `wf_a4a109bd-ace`)
+
+**Committed (green + judge-PASS), HEAD now at the Slice-4 commit:**
+- **Slice 0** — `TSP/AspectOfMongoose` re-pointed (drift + unparsed entries cleared). `1f256700`
+- **Slice 1** — self-reference `IsSelf`: AdornedPouncer, HonoredHydra, DrudgeBeetle, TerrusWurm. `56e62caf`
+- **Slice 4** — Whirler Rogue unparsed cleared. `07f34f7f`
+
+**Deferred (judge-FAIL → reverted clean → continued):** Slices 2, 3, 5.
+
+### The key structural learning: the whole-gold judge + whole-slice revert fights multi-residual golds
+The `mast-judge` gate FAILS a regenerated gold if **any** rules-meaningful free-text residual remains — even when the slice's own change was correct. Many golds carry residuals spanning **multiple** slices, so a single axis-slice cannot produce a fully-clean gold for them:
+
+- **Slice 3 ⇄ Slice 5 are coupled through Mentor cards** (HammerDropper, BargingSergeant, BladeInstructor): each carries BOTH "lesser power" (Slice 3's `PowerComparison`) AND "attacking" (Slice 5's combat-state). The judge confirmed **both slices' actual changes were correct/improvements**, but each leaves the other's residual → FAIL. They must land **together** (regenerate the shared golds only after both axes are structured), or the judge must be scoped to slice-delta correctness rather than whole-gold purity.
+- **Slice 2 surfaced a pre-existing badly-wrong gold** — `ROE/BearUmbra`: gold has +3/+3 (real +2/+2), drops the gainAbility grant of "untap all lands", inverts a self-reference, uses an obsolete keyword. Needs a real re-derive, not just `IsEnchanted` (which dragged the otherwise-fine slice to a revert on one gold).
+- **Slice 5** also failed `DisplacerKitten` (an `AbilityWord` encoding issue) alongside the Mentor coupling.
+
+### Deferred parser work (folds into the Slice 6+ batch, needs engagement)
+- `WOE/CandyTrail` — re-point drops the "gain 3 life" conjunct of "gain 3 life and draw a card" → effect-conjunction parsing.
+- **Bucket A** (7 Persist/Undying counter-gates) — keyword-path → `TriggeringObjectCounterCondition` wiring.
+- `ROE/BearUmbra` — multi-defect re-derive (magnitude + gainAbility-grant + self-ref).
+- **Mentor set** (Slice 3+5 coupled) — land combat-state + `PowerComparison` together, regen shared golds once.
+- `DisplacerKitten` — `AbilityWord` encoding.
+
+### Process refinement for the next run
+Group slices by **gold-set**, not by axis (so a multi-residual gold is fully cleaned in one atomic slice), **or** loosen the judge to "this slice structured its axis correctly and introduced no new residual" (delta-judge) rather than "whole gold residual-free." Slices 1/4/0 committed precisely because their golds were single-concern.
