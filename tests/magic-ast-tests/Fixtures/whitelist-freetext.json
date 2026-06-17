@@ -422,6 +422,12 @@
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
+      "card": "SOM/NimDeathmantle",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring \u2014 deferred adjunct"
+    },
+    {
       "card": "SPM/HotDogCart",
       "sink": "AbilityText",
       "tag": "irreducible",

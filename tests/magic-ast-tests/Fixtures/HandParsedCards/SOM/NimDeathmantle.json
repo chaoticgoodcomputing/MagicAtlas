@@ -1,0 +1,195 @@
+{
+  "Input": {
+    "Name": "Nim Deathmantle",
+    "ManaCost": "{2}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "Equipped creature gets +2/+2, has intimidate, and is a black Zombie. (A creature with intimidate can't be blocked except by artifact creatures and/or creatures that share a color with it.)\nWhenever a nontoken creature is put into your graveyard from the battlefield, you may pay {4}. If you do, return that card to the battlefield and attach this Equipment to it.\nEquip {4}",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Nim Deathmantle",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature gets +2/+2, has intimidate, and is a black Zombie. (A creature with intimidate can't be blocked except by artifact creatures and/or creatures that share a color with it.)\nWhenever a nontoken creature is put into your graveyard from the battlefield, you may pay {4}. If you do, return that card to the battlefield and attach this Equipment to it.\nEquip {4}",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Intimidate",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": [
+                        "creature",
+                        "artifact"
+                      ],
+                      "SharesColorWith": {
+                        "Kind": "Self"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "EffectType": "changeColor",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "Colors": [
+                "B"
+              ]
+            },
+            {
+              "EffectType": "changeSubtype",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "Subtypes": [
+                "Zombie"
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsToken": false,
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 4
+                    }
+                  ]
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "returnToBattlefield",
+                    "Target": {
+                      "Kind": "It"
+                    }
+                  },
+                  {
+                    "EffectType": "attach",
+                    "Target": {
+                      "Kind": "It"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "Instructions": [
+            "you may pay {4}"
+          ]
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 4
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
