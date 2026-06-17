@@ -192,6 +192,14 @@ public sealed class AddManaEffectRule : IActivatedEffectRule
     RegexOptions.Compiled | RegexOptions.IgnoreCase
   );
 
+  // S6 — "{G} for each [Subtype] on the battlefield" (Priest of Titania and similar).
+  // Counts ALL permanents of the named subtype on the battlefield, regardless of controller.
+  // CR 605.1a: the enclosing {T}: Add ... ability is a mana ability (no target, could add mana).
+  private static readonly Regex ForEachSubtypeOnBattlefield = new(
+    @"^(?<mana>(?:\{[^}]+\})+)\s+for\s+each\s+(?<subtype>[A-Z][a-zA-Z'-]+)\s+on\s+the\s+battlefield$",
+    RegexOptions.Compiled
+  );
+
   /// <summary>
   /// Parses the counter-driven scaling-mana shapes (ADR 0009 S1–S5) from the
   /// post-"Add " mana text. Returns null for non-scaling text so the caller keeps
@@ -287,6 +295,28 @@ public sealed class AddManaEffectRule : IActivatedEffectRule
           BaseQuantity = VariableQuantity.X,
           Operation = "add",
           Operand = 1,
+        },
+      };
+    }
+
+    // S6 — "{G} for each [Subtype] on the battlefield" (Priest of Titania).
+    // Counts ALL permanents of the named creature subtype on the battlefield across
+    // all players — no Controller filter because "on the battlefield" is unrestricted.
+    // CR 605.1a: mana ability — no target, could add mana, not a loyalty ability.
+    var s6 = ForEachSubtypeOnBattlefield.Match(manaText);
+    if (s6.Success)
+    {
+      return new AddManaEffect
+      {
+        Mana = s6.Groups["mana"].Value,
+        AnyColor = false,
+        Amount = new CountQuantity
+        {
+          CountOf = new ObjectFilter
+          {
+            Subtypes = [s6.Groups["subtype"].Value],
+            Zone = Zone.Battlefield,
+          },
         },
       };
     }
