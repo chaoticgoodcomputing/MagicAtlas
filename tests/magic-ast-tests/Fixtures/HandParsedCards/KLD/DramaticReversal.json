@@ -1,0 +1,66 @@
+{
+  "Input": {
+    "Name": "Dramatic Reversal",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Untap all nonland permanents you control.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Dramatic Reversal",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Untap all nonland permanents you control.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["permanent"],
+                  "ExcludedCardTypes": ["land"],
+                  "Controller": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
