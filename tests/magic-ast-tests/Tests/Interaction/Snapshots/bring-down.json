@@ -2,6 +2,17 @@
   "Name": "Bring Down",
   "Ports": [
     {
+      "Identity": "Bring Down::cast:spell:self",
+      "Card": "Bring Down",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
       "Identity": "Bring Down::emit:alternativepayment",
       "Card": "Bring Down",
       "Label": "emit:alternativepayment",
@@ -48,6 +59,10 @@
   ],
   "CardDefinedEdges": [
     {
+      "From": "Bring Down::cast:spell:self",
+      "To": "Bring Down::emit:destroy"
+    },
+    {
       "From": "Bring Down::pay:mana:white",
       "To": "Bring Down::emit:destroy"
     },
@@ -57,6 +72,16 @@
     }
   ],
   "DerivedEdges": [
+    {
+      "From": "Bring Down::cast:spell:self",
+      "To": "Bring Down::emit:destroy",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
     {
       "From": "Bring Down::pay:mana:white",
       "To": "Bring Down::emit:destroy",

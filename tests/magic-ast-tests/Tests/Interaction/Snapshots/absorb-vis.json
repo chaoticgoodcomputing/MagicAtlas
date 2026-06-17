@@ -2,6 +2,17 @@
   "Name": "Absorb Vis",
   "Ports": [
     {
+      "Identity": "Absorb Vis::cast:spell:self",
+      "Card": "Absorb Vis",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
       "Identity": "Absorb Vis::emit:life:gain:controlled",
       "Card": "Absorb Vis",
       "Label": "emit:life:gain:controlled",
@@ -59,6 +70,14 @@
   ],
   "CardDefinedEdges": [
     {
+      "From": "Absorb Vis::cast:spell:self",
+      "To": "Absorb Vis::emit:life:gain:controlled"
+    },
+    {
+      "From": "Absorb Vis::cast:spell:self",
+      "To": "Absorb Vis::emit:life:loss"
+    },
+    {
       "From": "Absorb Vis::pay:mana:black",
       "To": "Absorb Vis::emit:life:gain:controlled"
     },
@@ -76,6 +95,26 @@
     }
   ],
   "DerivedEdges": [
+    {
+      "From": "Absorb Vis::cast:spell:self",
+      "To": "Absorb Vis::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Absorb Vis::cast:spell:self",
+      "To": "Absorb Vis::emit:life:loss",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
     {
       "From": "Absorb Vis::pay:mana:black",
       "To": "Absorb Vis::emit:life:gain:controlled",

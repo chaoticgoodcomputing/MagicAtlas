@@ -2,6 +2,17 @@
   "Name": "Reiterate",
   "Ports": [
     {
+      "Identity": "Reiterate::cast:spell:self",
+      "Card": "Reiterate",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
       "Identity": "Reiterate::emit:additionalcastcost",
       "Card": "Reiterate",
       "Label": "emit:additionalcastcost",
@@ -70,6 +81,10 @@
   ],
   "CardDefinedEdges": [
     {
+      "From": "Reiterate::cast:spell:self",
+      "To": "Reiterate::emit:copy:spell:instant\u002Bsorcery"
+    },
+    {
       "From": "Reiterate::pay:mana:red",
       "To": "Reiterate::emit:copy:spell:instant\u002Bsorcery"
     },
@@ -83,6 +98,26 @@
     }
   ],
   "DerivedEdges": [
+    {
+      "From": "Reiterate::cast:spell:self",
+      "To": "Reiterate::emit:copy:spell:instant\u002Bsorcery",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Reiterate::emit:returntohand",
+      "To": "Reiterate::cast:spell:self",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
     {
       "From": "Reiterate::pay:mana:red",
       "To": "Reiterate::emit:copy:spell:instant\u002Bsorcery",

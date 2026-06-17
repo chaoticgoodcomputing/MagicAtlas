@@ -2,6 +2,17 @@
   "Name": "Inspirit",
   "Ports": [
     {
+      "Identity": "Inspirit::cast:spell:self",
+      "Card": "Inspirit",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
       "Identity": "Inspirit::emit:untap",
       "Card": "Inspirit",
       "Label": "emit:untap",
@@ -48,6 +59,14 @@
   ],
   "CardDefinedEdges": [
     {
+      "From": "Inspirit::cast:spell:self",
+      "To": "Inspirit::emit:untap"
+    },
+    {
+      "From": "Inspirit::cast:spell:self",
+      "To": "Inspirit::modify:pt"
+    },
+    {
       "From": "Inspirit::pay:mana:white",
       "To": "Inspirit::emit:untap"
     },
@@ -65,6 +84,26 @@
     }
   ],
   "DerivedEdges": [
+    {
+      "From": "Inspirit::cast:spell:self",
+      "To": "Inspirit::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Inspirit::cast:spell:self",
+      "To": "Inspirit::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
     {
       "From": "Inspirit::pay:mana:white",
       "To": "Inspirit::emit:untap",

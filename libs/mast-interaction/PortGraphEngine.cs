@@ -569,8 +569,32 @@ public sealed class PortGraphEngine
       // (Essence Warden / Suture Priest). Feasibility only — AddRulesEdge's operator tiers the certainty.
       ("returntobattlefield", "sac") => RecastSatisfies(emit, consume),
       ("returntobattlefield", "etb") => RecastSatisfies(emit, consume),
+      // Spell-recursion → recast (CR 601.2). An instant/sorcery returned to hand
+      // (emit:returntohand:spell, Archaeomancer/Izzet Chronarch's ETB returning Ghostly Flicker) can be
+      // recast, re-firing its effects: it refuels the spell's cast:spell consume, re-driving the spell's
+      // blink/effect emits. Feasibility only — AddRulesEdge's operator tiers GREEN vs AMBER on the
+      // Subjects (the returned {instant,sorcery} graveyard filter vs the cast spell's {instant,sorcery}
+      // self-type). A returned filter type-incompatible with the cast spell is pruned by the operator.
+      ("returntohand", "cast") => SpellRecursionSatisfiesCast(emit, consume),
       _ => false,
     };
+
+  /// <summary>
+  /// A spell-recursion emit (emit:returntohand:spell, Subject = the returned instant/sorcery filter)
+  /// satisfies a cast:spell consume (Subject = the spell's {instant,sorcery} self-type) when the two are
+  /// type-compatible — the returned card COULD be the spell being recast (Archaeomancer returns "an instant
+  /// or sorcery"; Ghostly Flicker IS an instant). The structural twin of <see cref="RecastSatisfies"/>:
+  /// feasibility only (Intersects ≠ Disjoint); <see cref="AddRulesEdge"/>'s operator sets the tier on the
+  /// Subjects. A returned filter that provably can't be the cast spell's type is pruned by the operator's
+  /// Disjoint.
+  /// </summary>
+  private bool SpellRecursionSatisfiesCast(PortNode emit, PortNode consume)
+  {
+    if (emit.Subject is null || consume.Subject is null)
+      return true;
+    return ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
+      != FilterRelation.Disjoint;
+  }
 
   /// <summary>
   /// A re-entered creature (emit:returntobattlefield:self) satisfies a consume whose fodder/entering

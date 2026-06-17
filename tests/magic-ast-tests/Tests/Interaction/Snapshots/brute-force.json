@@ -2,6 +2,17 @@
   "Name": "Brute Force",
   "Ports": [
     {
+      "Identity": "Brute Force::cast:spell:self",
+      "Card": "Brute Force",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
       "Identity": "Brute Force::modify:pt",
       "Card": "Brute Force",
       "Label": "modify:pt",
@@ -26,11 +37,25 @@
   ],
   "CardDefinedEdges": [
     {
+      "From": "Brute Force::cast:spell:self",
+      "To": "Brute Force::modify:pt"
+    },
+    {
       "From": "Brute Force::pay:mana:red",
       "To": "Brute Force::modify:pt"
     }
   ],
   "DerivedEdges": [
+    {
+      "From": "Brute Force::cast:spell:self",
+      "To": "Brute Force::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
     {
       "From": "Brute Force::pay:mana:red",
       "To": "Brute Force::modify:pt",

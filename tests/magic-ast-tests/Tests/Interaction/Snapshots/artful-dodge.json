@@ -2,6 +2,17 @@
   "Name": "Artful Dodge",
   "Ports": [
     {
+      "Identity": "Artful Dodge::cast:spell:self",
+      "Card": "Artful Dodge",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
       "Identity": "Artful Dodge::emit:cantbeblocked",
       "Card": "Artful Dodge",
       "Label": "emit:cantbeblocked",
@@ -37,6 +48,10 @@
   ],
   "CardDefinedEdges": [
     {
+      "From": "Artful Dodge::cast:spell:self",
+      "To": "Artful Dodge::emit:cantbeblocked"
+    },
+    {
       "From": "Artful Dodge::pay:mana:blue",
       "To": "Artful Dodge::emit:cantbeblocked"
     },
@@ -46,6 +61,16 @@
     }
   ],
   "DerivedEdges": [
+    {
+      "From": "Artful Dodge::cast:spell:self",
+      "To": "Artful Dodge::emit:cantbeblocked",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
     {
       "From": "Artful Dodge::pay:mana:blue",
       "To": "Artful Dodge::emit:cantbeblocked",

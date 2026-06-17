@@ -2,6 +2,17 @@
   "Name": "Acrobatic Leap",
   "Ports": [
     {
+      "Identity": "Acrobatic Leap::cast:spell:self",
+      "Card": "Acrobatic Leap",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
       "Identity": "Acrobatic Leap::emit:gainability",
       "Card": "Acrobatic Leap",
       "Label": "emit:gainability",
@@ -48,6 +59,18 @@
   ],
   "CardDefinedEdges": [
     {
+      "From": "Acrobatic Leap::cast:spell:self",
+      "To": "Acrobatic Leap::emit:gainability"
+    },
+    {
+      "From": "Acrobatic Leap::cast:spell:self",
+      "To": "Acrobatic Leap::emit:untap"
+    },
+    {
+      "From": "Acrobatic Leap::cast:spell:self",
+      "To": "Acrobatic Leap::modify:pt"
+    },
+    {
       "From": "Acrobatic Leap::pay:mana:white",
       "To": "Acrobatic Leap::emit:gainability"
     },
@@ -61,6 +84,36 @@
     }
   ],
   "DerivedEdges": [
+    {
+      "From": "Acrobatic Leap::cast:spell:self",
+      "To": "Acrobatic Leap::emit:gainability",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Acrobatic Leap::cast:spell:self",
+      "To": "Acrobatic Leap::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Acrobatic Leap::cast:spell:self",
+      "To": "Acrobatic Leap::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
     {
       "From": "Acrobatic Leap::pay:mana:white",
       "To": "Acrobatic Leap::emit:gainability",

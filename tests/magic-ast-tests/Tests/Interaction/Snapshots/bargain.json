@@ -2,6 +2,17 @@
   "Name": "Bargain",
   "Ports": [
     {
+      "Identity": "Bargain::cast:spell:self",
+      "Card": "Bargain",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
       "Identity": "Bargain::emit:drawcards",
       "Card": "Bargain",
       "Label": "emit:drawcards",
@@ -48,6 +59,14 @@
   ],
   "CardDefinedEdges": [
     {
+      "From": "Bargain::cast:spell:self",
+      "To": "Bargain::emit:drawcards"
+    },
+    {
+      "From": "Bargain::cast:spell:self",
+      "To": "Bargain::emit:life:gain:controlled"
+    },
+    {
       "From": "Bargain::pay:mana:white",
       "To": "Bargain::emit:drawcards"
     },
@@ -65,6 +84,26 @@
     }
   ],
   "DerivedEdges": [
+    {
+      "From": "Bargain::cast:spell:self",
+      "To": "Bargain::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bargain::cast:spell:self",
+      "To": "Bargain::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
     {
       "From": "Bargain::pay:mana:white",
       "To": "Bargain::emit:drawcards",
