@@ -1,0 +1,146 @@
+{
+  "Input": {
+    "Name": "Vorinclex, Monstrous Raider",
+    "ManaCost": "{4}{G}{G}",
+    "TypeLine": "Legendary Creature — Phyrexian Praetor",
+    "OracleText": "Trample, haste\nIf you would put one or more counters on a permanent or player, put twice that many of each of those kinds of counters on that permanent or player instead.\nIf an opponent would put one or more counters on a permanent or player, they put half that many of each of those kinds of counters on that permanent or player instead, rounded down.",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Vorinclex, Monstrous Raider",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Phyrexian Praetor",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Praetor"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Trample, haste\nIf you would put one or more counters on a permanent or player, put twice that many of each of those kinds of counters on that permanent or player instead.\nIf an opponent would put one or more counters on a permanent or player, they put half that many of each of those kinds of counters on that permanent or player instead, rounded down.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ],
+          "KeywordSource": "Trample"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
+            }
+          ],
+          "KeywordSource": "Haste"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "counterPlacement",
+                "MinimumQuantity": 1,
+                "Controller": {
+                  "Kind": "You"
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Modifier": {
+                "Type": "double"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "counterPlacement",
+                "MinimumQuantity": 1,
+                "Controller": {
+                  "Kind": "Opponent"
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Modifier": {
+                "Type": "halveRoundDown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        }
+      }
+    ]
+  }
+}
