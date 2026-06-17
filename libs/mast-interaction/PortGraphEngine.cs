@@ -557,6 +557,14 @@ public sealed class PortGraphEngine
       ("mana", "pay") => ResourceKind(consume.Label) == "mana" // mana refunds a mana cost…
         && ManaColorFeeds(ManaColor(emit.Label), ManaColor(consume.Label)), // …of a colour it can pay
       ("life", "trigger") => LifeFlowFeasible(emit, consume), // a life event feeds a same-direction life trigger (CR 119)
+      // Cast-recursion (Displacer Kitten family). A RE-CAST spell (emit:cast — a noncreature permanent that
+      // bounced itself to hand and is cast again, CR 601) feeds a "whenever you cast a [noncreature] spell"
+      // trigger (CR 603.2) whose watched-spell filter is type-compatible. Feasibility only — AddRulesEdge's
+      // operator tiers the certainty on the Subjects (a bare "a spell" recast vs a "NONcreature spell"
+      // trigger → Intersects-Overlaps but not Subsumes → AMBER), and the recast's pay:mana co-cost floors
+      // the loop via §8 when the loop can't refill it. A copy of a spell (emit:copy:spell) is deliberately
+      // NOT this arm — CR 707.10 makes a copy uncast, so it never feeds a cast trigger (SpellCopyEmit docs).
+      ("cast", "trigger") => CastSatisfiesTrigger(emit, consume),
       // Blink (CR 603.6e/400.7). A blinked permanent re-enters as a NEW object, so its ETB retriggers:
       // emit:blink refuels an Enters-trigger whose entering filter is type-compatible with the blinked
       // permanent (Felidar blinks Resto → Resto's ETB fires again). Feasibility only — AddRulesEdge's
@@ -641,6 +649,24 @@ public sealed class PortGraphEngine
     // real arm, and the inter-card hop the combos turn on.
     if (consume.Subject.IsSelf == true && string.Equals(emit.Card, consume.Card, StringComparison.Ordinal))
       return false;
+    return ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
+      != FilterRelation.Disjoint;
+  }
+
+  /// <summary>
+  /// A re-cast spell (<c>emit:cast</c>) feeds a spell-cast trigger (<c>trigger:cast</c>, CR 603.2) iff the
+  /// consume is genuinely a CAST trigger (resource kind <c>cast</c> — NOT a same-role life/other trigger
+  /// the tuple <c>("cast","trigger")</c> could otherwise reach) and the recast spell's filter is
+  /// type-compatible with the watched-spell filter (Intersects ≠ Disjoint). Feasibility only — the operator
+  /// tiers GREEN vs AMBER on the Subjects (a bare "a spell" recast against a "NONcreature spell" trigger is
+  /// Overlaps-but-not-Subsumes → AMBER), and the recast's <c>pay:mana</c> co-cost floors the loop via §8.
+  /// </summary>
+  private bool CastSatisfiesTrigger(PortNode emit, PortNode consume)
+  {
+    if (ResourceKind(consume.Label) != "cast")
+      return false; // a non-cast trigger of the same role token — not this arm
+    if (emit.Subject is null || consume.Subject is null)
+      return true;
     return ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
       != FilterRelation.Disjoint;
   }

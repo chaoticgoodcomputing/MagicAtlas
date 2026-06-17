@@ -37,6 +37,7 @@ public static class PortWalkProjection
     "loseLife", // PortWalk.EmitPort — emit:life:loss:<scope> (life flow arm)
     "returnToHand", // PortWalk.EmitPort — emit:returntohand:spell (instant/sorcery from graveyard → recast, spell-recast arm) OR coarse emit:returntohand (a bounce, no arm reads)
     "alternativeCast", // PortWalk.EmitPort — emit:returntobattlefield:self + pay:mana recast co-cost (aristocrat recursion, FromZone:Graveyard)
+    "returnToHand", // PortWalk.EmitPort — emit:cast (self-bounce → recast a noncreature spell, Displacer Kitten cast-trigger arm) + pay:mana recast co-cost. Only Target:Self bounces project the cast emit; a non-self return stays coarse.
     "optional", // PortWalk.Effects — "you may" wrapper: blink detection (gated emit:blink) + gated recursion into Inner (blink flow arm)
     "composite", // PortWalk.Effects — blink detection (exile+returnToBattlefield(ExiledWith:Self) → emit:blink) + recursion into Effects (blink flow arm)
   };
@@ -57,6 +58,7 @@ public static class PortWalkProjection
     "Enters", // PortWalk.Trigger — EntersTrigger label
     "GainsLife", // PortWalk.Trigger — trigger:life:gain:<scope> (life flow arm)
     "LosesLife", // PortWalk.Trigger — trigger:life:loss:<scope> (life flow arm)
+    "SpellCast", // PortWalk.Trigger — trigger:cast:<spell>:<scope> (Displacer Kitten cast-trigger arm), Subject = the watched (noncreature) spell filter
   };
 
   /// <summary>Restriction values treated as HARD firability gates (ADR-0002 §8). Everything else is a

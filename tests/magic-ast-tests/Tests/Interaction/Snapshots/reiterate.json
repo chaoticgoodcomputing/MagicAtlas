@@ -24,6 +24,17 @@
       "Subject": null
     },
     {
+      "Identity": "Reiterate::emit:cast:spell",
+      "Card": "Reiterate",
+      "Label": "emit:cast:spell",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=spell|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
       "Identity": "Reiterate::emit:copy:spell:instant\u002Bsorcery",
       "Card": "Reiterate",
       "Label": "emit:copy:spell:instant\u002Bsorcery",
@@ -33,17 +44,6 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
-    },
-    {
-      "Identity": "Reiterate::emit:returntohand",
-      "Card": "Reiterate",
-      "Label": "emit:returntohand",
-      "Side": "Emit",
-      "Quantity": 1,
-      "Gated": false,
-      "TapGated": false,
-      "RequiresCounter": null,
-      "Subject": null
     },
     {
       "Identity": "Reiterate::pay:mana",
@@ -86,7 +86,15 @@
     },
     {
       "From": "Reiterate::pay:mana:red",
+      "To": "Reiterate::emit:cast:spell"
+    },
+    {
+      "From": "Reiterate::pay:mana:red",
       "To": "Reiterate::emit:copy:spell:instant\u002Bsorcery"
+    },
+    {
+      "From": "Reiterate::pay:mana",
+      "To": "Reiterate::emit:cast:spell"
     },
     {
       "From": "Reiterate::pay:mana",
@@ -94,7 +102,7 @@
     },
     {
       "From": "Reiterate::replace:zonechange",
-      "To": "Reiterate::emit:returntohand"
+      "To": "Reiterate::emit:cast:spell"
     }
   ],
   "DerivedEdges": [
@@ -109,9 +117,9 @@
       "Reason": null
     },
     {
-      "From": "Reiterate::emit:returntohand",
-      "To": "Reiterate::cast:spell:self",
-      "Provenance": "RulesDefined",
+      "From": "Reiterate::pay:mana:red",
+      "To": "Reiterate::emit:cast:spell",
+      "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
       "Reliability": "Yes",
@@ -130,6 +138,16 @@
     },
     {
       "From": "Reiterate::pay:mana",
+      "To": "Reiterate::emit:cast:spell",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Reiterate::pay:mana",
       "To": "Reiterate::emit:copy:spell:instant\u002Bsorcery",
       "Provenance": "CardDefined",
       "Family": "Flow",
@@ -140,7 +158,7 @@
     },
     {
       "From": "Reiterate::replace:zonechange",
-      "To": "Reiterate::emit:returntohand",
+      "To": "Reiterate::emit:cast:spell",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",

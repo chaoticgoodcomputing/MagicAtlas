@@ -13,26 +13,26 @@
       "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
     },
     {
-      "Identity": "Dragon\u0027s Claw::spellcast:spell",
+      "Identity": "Dragon\u0027s Claw::trigger:cast:spell",
       "Card": "Dragon\u0027s Claw",
-      "Label": "spellcast:spell",
+      "Label": "trigger:cast:spell",
       "Side": "Consume",
       "Quantity": 1,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=spell|subtypes=|supertypes=|controller=Any|isToken=|isSelf=|excludeSelf="
     }
   ],
   "CardDefinedEdges": [
     {
-      "From": "Dragon\u0027s Claw::spellcast:spell",
+      "From": "Dragon\u0027s Claw::trigger:cast:spell",
       "To": "Dragon\u0027s Claw::emit:life:gain:controlled"
     }
   ],
   "DerivedEdges": [
     {
-      "From": "Dragon\u0027s Claw::spellcast:spell",
+      "From": "Dragon\u0027s Claw::trigger:cast:spell",
       "To": "Dragon\u0027s Claw::emit:life:gain:controlled",
       "Provenance": "CardDefined",
       "Family": "Flow",
