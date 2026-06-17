@@ -191,7 +191,7 @@ public sealed class TargetCreatureGainsKeywordRule : ISpellRule
           Event = TriggerEvent.Dies,
           Filter = new ObjectFilter { CardTypes = ["creature"] },
         },
-        InterveningIf = new OtherCondition { Text = "it had no +1/+1 counters on it" },
+        InterveningIf = ConditionParser.Parse("it had no +1/+1 counters on it"),
         Effects =
         [
           new ReturnToBattlefieldEffect

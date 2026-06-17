@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Butcher Ghoul",
     "ManaCost": "{1}{B}",
-    "TypeLine": "Creature \u2014 Zombie",
+    "TypeLine": "Creature — Zombie",
     "OracleText": "Undying (When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)",
     "Power": "1",
     "Toughness": "1",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Butcher Ghoul",
     "TypeLine": {
-      "Raw": "Creature \u2014 Zombie",
+      "Raw": "Creature — Zombie",
       "Types": [
         "Creature"
       ],
@@ -29,7 +29,6 @@
       "Abilities": [
         {
           "Kind": "triggered",
-          "KeywordSource": "Undying",
           "Trigger": {
             "Timing": "When",
             "Event": "Dies",
@@ -41,8 +40,9 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "it had no +1/+1 counters on it"
+            "ConditionType": "triggeringObjectCounter",
+            "CounterType": "+1/+1",
+            "Present": false
           },
           "Effects": [
             {
@@ -50,6 +50,7 @@
               "Target": {
                 "Kind": "It"
               },
+              "Tapped": false,
               "UnderControl": {
                 "Kind": "Owner"
               },
@@ -62,6 +63,7 @@
               }
             }
           ],
+          "KeywordSource": "Undying",
           "Reminder": {
             "Text": "(When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)"
           }
@@ -84,7 +86,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -102,13 +105,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]

@@ -30,7 +30,6 @@
       "Abilities": [
         {
           "Kind": "triggered",
-          "KeywordSource": "Persist",
           "Trigger": {
             "Timing": "When",
             "Event": "Dies",
@@ -42,8 +41,9 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "it had no -1/-1 counters on it"
+            "ConditionType": "triggeringObjectCounter",
+            "CounterType": "-1/-1",
+            "Present": false
           },
           "Effects": [
             {
@@ -64,6 +64,7 @@
               }
             }
           ],
+          "KeywordSource": "Persist",
           "Reminder": {
             "Text": "(When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)"
           }
@@ -86,7 +87,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -104,13 +106,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

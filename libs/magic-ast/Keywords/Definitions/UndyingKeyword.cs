@@ -6,6 +6,7 @@ using MagicAST.AST.Effects.ZoneChange;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 using MagicAST.AST.Triggers;
+using MagicAST.Parsing;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
@@ -70,7 +71,7 @@ public sealed class UndyingKeyword : IKeyword
         // sacrifice does not subsume it (operator returns No → bridge falls to Amber, not GREEN).
         Filter = new ObjectFilter { CardTypes = ["creature"], IsSelf = true },
       },
-      InterveningIf = new OtherCondition { Text = "it had no +1/+1 counters on it" },
+      InterveningIf = ConditionParser.Parse("it had no +1/+1 counters on it"),
       Effects =
       [
         new ReturnToBattlefieldEffect

@@ -4,8 +4,6 @@
     "ManaCost": "{B}",
     "TypeLine": "Instant",
     "OracleText": "Target creature gains undying until end of turn. (When it dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)",
-    "Power": null,
-    "Toughness": null,
     "Colors": [
       "B"
     ],
@@ -39,7 +37,6 @@
               },
               "GainedAbility": {
                 "Kind": "triggered",
-                "KeywordSource": "Undying",
                 "Trigger": {
                   "Timing": "When",
                   "Event": "Dies",
@@ -50,8 +47,9 @@
                   }
                 },
                 "InterveningIf": {
-                  "ConditionType": "other",
-                  "Text": "it had no +1/+1 counters on it"
+                  "ConditionType": "triggeringObjectCounter",
+                  "CounterType": "+1/+1",
+                  "Present": false
                 },
                 "Effects": [
                   {
@@ -59,6 +57,7 @@
                     "Target": {
                       "Kind": "It"
                     },
+                    "Tapped": false,
                     "UnderControl": {
                       "Kind": "Owner"
                     },
@@ -70,7 +69,8 @@
                       }
                     }
                   }
-                ]
+                ],
+                "KeywordSource": "Undying"
               },
               "Duration": {
                 "DurationType": "untilTime",

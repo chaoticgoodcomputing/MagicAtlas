@@ -13,8 +13,9 @@
       }
     },
     "InterveningIf": {
-      "ConditionType": "other",
-      "Text": "it had no -1/-1 counters on it"
+      "ConditionType": "triggeringObjectCounter",
+      "CounterType": "-1/-1",
+      "Present": false
     },
     "Effects": [
       {

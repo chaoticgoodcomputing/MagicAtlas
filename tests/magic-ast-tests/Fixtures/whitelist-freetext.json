@@ -158,12 +158,6 @@
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
     },
     {
-      "card": "CSP/PutridGoblin",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
-    },
-    {
       "card": "CrownedCeratok",
       "sink": "OtherCharacteristic",
       "tag": "debt",
@@ -180,18 +174,6 @@
       "sink": "Instructions",
       "tag": "debt",
       "reason": "deferred adjunct: may-pay-cost structuring (out of current slice scope)"
-    },
-    {
-      "card": "DKA/StranglerootGeist",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
-    },
-    {
-      "card": "DKA/UndyingEvil",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
     },
     {
       "card": "DTK/StormwingDragon",
@@ -369,18 +351,6 @@
     },
     {
       "card": "HollowTrees",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
-    },
-    {
-      "card": "INR/ButcherGhoul",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
-    },
-    {
-      "card": "INR/YoungWolf",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
@@ -578,12 +548,6 @@
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
     },
     {
-      "card": "MOR/GravelgillAxeshark",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
-    },
-    {
       "card": "MRD/LeoninDenGuard",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -726,12 +690,6 @@
       "sink": "OtherCharacteristic",
       "tag": "debt",
       "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
-      "card": "SHM/SafeholdElite",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
     },
     {
       "card": "SPM/HotDogCart",
