@@ -4,57 +4,57 @@
     {
       "card": "BLB/WildcallSpree",
       "tag": "debt",
-      "reason": "Slice 9 unparsed-static (Spree-cluster); corrupt Input.Name collides with FRF Wildcall \u2014 rename first"
+      "reason": "PB-8 unparsed grammar gap"
     },
     {
       "card": "DGM/WearTear",
       "tag": "debt",
-      "reason": "Slice 9 unparsed-static (split // ClauseSplitter); corrupt Input (real Tear = destroy enchantment) \u2014 hand-correct first"
+      "reason": "PB-8 unparsed grammar gap"
     },
     {
       "card": "EOE/ChoraleoftheVoid",
       "tag": "debt",
-      "reason": "Slice 8 unparsed-triggered (reanimate + sacrifice-unless-condition)"
+      "reason": "PB-8 unparsed grammar gap"
     },
     {
       "card": "EOE/ElegyAcolyte",
       "tag": "debt",
-      "reason": "Slice 8 unparsed-triggered (plural combat-damage / draw-and-lose-life)"
+      "reason": "PB-8 unparsed grammar gap"
     },
     {
       "card": "EOE/Hylderblade",
       "tag": "debt",
-      "reason": "Slice 8 unparsed-triggered (attach-to-target widening)"
+      "reason": "PB-8 unparsed grammar gap"
     },
     {
       "card": "EOE/PlasmaBolt",
       "tag": "debt",
-      "reason": "Slice 9 unparsed-static (Void conditional alternate)"
+      "reason": "PB-8 unparsed grammar gap"
     },
     {
       "card": "EOE/TragicTrajectory",
       "tag": "debt",
-      "reason": "Slice 9 unparsed-static (Void conditional alternate)"
+      "reason": "PB-8 unparsed grammar gap"
     },
     {
       "card": "LRW/WindbriskHeights",
       "tag": "debt",
-      "reason": "Slice 9 unparsed-legacy (may-play-exiled-without-paying); stale Input"
+      "reason": "PB-8 unparsed grammar gap"
     },
     {
       "card": "ONS/IxidorRealitySculptor",
       "tag": "debt",
-      "reason": "Slice 9 unparsed-legacy (turn-face-up effect); couples Slice 5 face-down"
+      "reason": "PB-8 unparsed grammar gap"
     },
     {
       "card": "SOM/PrecursorGolem",
       "tag": "debt",
-      "reason": "Slice 8E unparsed-triggered (reflexive CopyEffect{Target:It}); firability-sensitive"
+      "reason": "PB-8 unparsed grammar gap"
     },
     {
       "card": "WHO/BillPotts",
       "tag": "debt",
-      "reason": "Slice 8E unparsed-triggered (reflexive copy); firability-sensitive"
+      "reason": "PB-8 unparsed grammar gap"
     }
   ]
 }

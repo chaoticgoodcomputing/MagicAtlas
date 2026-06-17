@@ -419,3 +419,44 @@ Remaining for full gold stability: the **long-tail disposition** — residuals n
 (FathomFeeder `top`, GaddockTeeg `{X} in cost`, flanking, …), the remaining unparsed grammar gaps
 (Chorale/Elegy/Hylderblade/Precursor/Bill), and the adjunct sinks (`AbilityText` 18 / `Instructions` 3 /
 `OtherHistoryPredicate` 1) → each gets a slice or a justified `irreducible` tag.
+
+---
+
+## Long-tail disposition (2026-06-16)
+
+Every residual whitelist entry is now tagged `debt` (→ a named slice) or `irreducible` (justified). Result:
+**68 debt across 3 slices + 23 irreducible floor.**
+
+### Debt (68 → 3 slices)
+- **PB-7 — structured conditions (45 `OtherCondition`).** ENTANGLED: the reference-not-resolution engine
+  contract (the engine evaluates the condition against live state via the keyword's linked ability, not a
+  pre-baked bool). Families: LTB-event ("a nonland permanent left the battlefield"), control-duration
+  ("came under your control since…"), tapped-state ("this artifact/land remains/is tapped", "it's
+  untapped"), turn-phase ("during your turn"), keyword-state (saddled, city's blessing), this-turn-event
+  ("an opponent lost life", "you discarded this card", "you attacked"), spell-count, enchanted-color,
+  targeting. Needs human co-design of the condition-evaluation contract (like Slice 6's carve-out).
+- **PB-8 — unparsed grammar gaps (11).** Triggered: ChoraleoftheVoid, ElegyAcolyte, Hylderblade,
+  PrecursorGolem, BillPotts (Precursor/Bill are the entangled reflexive-`CopyEffect{Target:It}` shape —
+  ties to the copy-recursion fixpoint). Static: PlasmaBolt, TragicTrajectory (Void conditional-alternate),
+  WildcallSpree (Spree cluster; corrupt-Input rename), WearTear (split `//`; corrupt-Input). Legacy:
+  WindbriskHeights (may-play-exiled-without-paying), IxidorRealitySculptor (turn-face-up effect).
+- **PB-9 — misc structured-characteristic (12 `OtherCharacteristic`).** Mechanical: keyword-absence
+  ("withoutFlanking"), disjunctive-type ("creature or Vehicle card"), ownership ("you own"), self-ref
+  ("this permanent" → IsSelf).
+
+### Irreducible floor (23, tagged + justified — the stable end state after PB-7/8/9)
+- **`AbilityText` (15)** — recursive parsing of token / granted-ability bodies; a separate de-string
+  initiative, not a quick slice.
+- **`Instructions` (3)** — may-pay-cost effort structuring (deferred adjunct).
+- **`OtherHistoryPredicate` (1)** — bespoke history predicate (deferred adjunct).
+- **4 `OtherCharacteristic`** — out-of-scope/positional with no clean structured node: GrenzoSRuffians
+  ("each other opponent" player filter), ExpeditionRaptor ("support N other target"), and positional
+  "top" / "that player's" / "single target" predicates.
+
+### Out of scope of this disposition
+The **`oracle-text-quarantine` (80 drift golds)** is a SEPARATE track — gold-input text fidelity
+(the gold-fidelity-cleanup worklist), not a parser-output cleanliness invariant. Re-pointing each may
+expose parser gaps (as GoblinChieftain did), so it is its own initiative.
+
+**Target after PB-7/8/9 land:** the free-text + unparsed whitelists shrink from 91 → the **23 irreducible
+floor**, all named + justified — a stable, minimal end state for the larger TDD loops.

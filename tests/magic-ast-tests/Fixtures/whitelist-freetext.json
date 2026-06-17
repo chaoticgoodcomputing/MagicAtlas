@@ -4,482 +4,482 @@
     {
       "card": "2X2/ManaVault",
       "sink": "Instructions",
-      "tag": "debt",
-      "reason": "deferred adjunct: may-pay-cost structuring (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring \u2014 deferred adjunct"
     },
     {
       "card": "2X2/ManaVault",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "5DN/BrittleEffigy",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "AFR/UnexpectedWindfall",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "ALA/Deathgreeter",
       "sink": "Instructions",
-      "tag": "debt",
-      "reason": "deferred adjunct: may-pay-cost structuring (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring \u2014 deferred adjunct"
     },
     {
       "card": "ATQ/Endoskeleton",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "ATQ/SpiritShield",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "ATQ/TawnossWeaponry",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "AVR/Wingcrafter",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "BFZ/FathomFeeder",
       "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "tag": "irreducible",
+      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) \u2014 no clean structured node"
     },
     {
       "card": "BNG/SnakeOfTheGoldenGrove",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "CMR/SailorOfMeans",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "CN2/GrenzoSRuffians",
       "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "out of slice scope: 'each other opponent' is a player-filter mechanic (DealsThatMuchDamageToEachOtherOpponent), not an ObjectFilter self-exclusion"
+      "tag": "irreducible",
+      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) \u2014 no clean structured node"
     },
     {
       "card": "CN2/MarchesasEmissary",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "DFT/BroodheartEngine",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "DKA/SpellSnuff",
       "sink": "Instructions",
-      "tag": "debt",
-      "reason": "deferred adjunct: may-pay-cost structuring (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring \u2014 deferred adjunct"
     },
     {
       "card": "DaggersailAeronaut",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "Divert",
       "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "tag": "irreducible",
+      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) \u2014 no clean structured node"
     },
     {
       "card": "ELD/FierceWitchstalker",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "ELD/FortifyingProvisions",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "EMA/GiantTortoise",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "EOE/ElegyAcolyte",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "EOE/InsatiableSkittermaw",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "EOE/InterceptorMechan",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "EOE/KavaronSkywarden",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "EOE/VoidforgedTitan",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "EVE/GiftOfTheDeity",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "ElectrosBolt",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "ExpeditionRaptor",
       "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "out of slice scope: 'other target creatures' inside support N (SupportTriggeredRule) — separate mechanic, not migrated this slice"
+      "tag": "irreducible",
+      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) \u2014 no clean structured node"
     },
     {
       "card": "FRF/SavingGrasp",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "FreshFacedRecruit",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "HelmOfTheHost",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "HollowTrees",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "ISD/VillagersOfEstwaldHowlpackOfEstwald",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "KTK/AbzanSkycaptain",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "KikiJikiMirrorBreaker",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "LCI/QuicksandWhirlpool",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "LCI/WarrenSoultrader",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "LRW/GaddockTeeg",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "LTR/MerryEsquireOfRohan",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "M10/Falter",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "M12/CarnageWurm",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "M21/BarrinTolarianArchmage",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "MH2/AcademyManufactor",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "MID/HopefulInitiate",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "MIR/BenalishCavalry",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "MIR/BurningShieldAskari",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "MIR/MtendaHerder",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "MOM/MentalModulation",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "MRD/LeoninDenGuard",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "NEO/CrackOpen",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "OGW/ContainmentMembrane",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "ONS/IxidorRealitySculptor",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "OTJ/AlacrianJaguar",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "OTJ/DracosaurAuxiliary",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "OTJ/MercilessHarlequin",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "OTJ/VenomsacLagac",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "PouncingLynx",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "RIX/DuskCharger",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "RIX/PitilessPlunderer",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "RIX/SkymarcharAspirant",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "RIX/StormFleetSwashbuckler",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "RNA/SpikewheelAcrobat",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "RTR/RakdosDrake",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "RoadOfReturn",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "SPM/HotDogCart",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "STX/FurycalmSnarl",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "STX/NecroblossomSnarl",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "TDC/TranscendentDragon",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "THS/TritonFortuneHunter",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "TLA/ForecastingFortuneTeller",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "TSP/Stingscourger",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "TheDeathOfGwenStacy",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "TirelessProvisioner",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "ULG/AlbinoTroll",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "USG/GoblinWarBuggy",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "USG/ViashinoOutrider",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "VOW/BloodServitor",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
       "card": "WOE/RowdyResearch",
       "sink": "OtherHistoryPredicate",
-      "tag": "debt",
-      "reason": "deferred adjunct: history-predicate structuring (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "bespoke history predicate \u2014 deferred adjunct"
     },
     {
       "card": "XLN/RuthlessKnave",
       "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "deferred adjunct: token-reminder / keyword-enum migration (out of current slice scope)"
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     }
   ]
 }
