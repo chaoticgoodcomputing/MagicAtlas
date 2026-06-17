@@ -62,6 +62,16 @@ public sealed record TokenDefinition
   /// </summary>
   public bool IsCopy { get; init; }
 
+  /// <summary>
+  /// True when the token enters the battlefield tapped (e.g. "create a tapped Treasure token" —
+  /// CR 110.6b: "A token enters the battlefield under the control of the player who created it."
+  /// CR 305.9 / 302.6: a permanent can be instructed to enter tapped by an effect). Null (omitted
+  /// in JSON) when the token enters normally (untapped). Distinct from the permanent's current
+  /// tapped state at resolution: this is a declarative entry modifier, not a tap action.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? EntersTapped { get; init; }
+
   // Factory methods for common tokens
   public static TokenDefinition Treasure() =>
     new()
@@ -69,6 +79,15 @@ public sealed record TokenDefinition
       Types = ["artifact"],
       Subtypes = ["Treasure"],
       AbilityText = ["{T}, Sacrifice this artifact: Add one mana of any color."],
+    };
+
+  public static TokenDefinition TappedTreasure() =>
+    new()
+    {
+      Types = ["artifact"],
+      Subtypes = ["Treasure"],
+      AbilityText = ["{T}, Sacrifice this artifact: Add one mana of any color."],
+      EntersTapped = true,
     };
 
   public static TokenDefinition Food() =>
