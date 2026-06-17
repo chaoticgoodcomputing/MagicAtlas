@@ -3,34 +3,42 @@
     "Name": "Deadeye Navigator",
     "ManaCost": "{4}{U}{U}",
     "TypeLine": "Creature — Spirit",
-    "OracleText": "Soulbond (You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)\nAs long as Deadeye Navigator is paired with another creature, each of those creatures has “{1}{U}: Exile this creature, then return it to the battlefield under your control.”",
+    "OracleText": "Soulbond (You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)\nAs long as Deadeye Navigator is paired with another creature, each of those creatures has \"{1}{U}: Exile this creature, then return it to the battlefield under your control.\"",
     "Power": "5",
     "Toughness": "5",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Deadeye Navigator",
     "TypeLine": {
       "Raw": "Creature — Spirit",
-      "Types": ["Creature"],
-      "Subtypes": ["Spirit"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spirit"
+      ]
     },
     "Oracle": {
-      "RawText": "Soulbond (You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)\nAs long as Deadeye Navigator is paired with another creature, each of those creatures has “{1}{U}: Exile this creature, then return it to the battlefield under your control.”",
+      "RawText": "Soulbond (You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)\nAs long as Deadeye Navigator is paired with another creature, each of those creatures has \"{1}{U}: Exile this creature, then return it to the battlefield under your control.\"",
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Soulbond",
-          "Reminder": {
-            "Text": "(You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)"
-          },
           "Effects": [
             {
               "EffectType": "keywordAbility",
               "Keyword": "Soulbond"
             }
-          ]
+          ],
+          "KeywordSource": "Soulbond",
+          "Reminder": {
+            "Text": "(You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)"
+          }
         },
         {
           "Kind": "static",
@@ -52,7 +60,9 @@
                       },
                       {
                         "Kind": "colored",
-                        "Colors": ["U"]
+                        "Colors": [
+                          "U"
+                        ]
                       }
                     ]
                   }
@@ -69,10 +79,10 @@
                     "Target": {
                       "Kind": "Designated",
                       "Filter": {
-                        "Zone": "Exile",
                         "ExiledWith": {
                           "Kind": "Self"
-                        }
+                        },
+                        "Zone": "Exile"
                       }
                     },
                     "Tapped": false,
@@ -106,11 +116,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 6,
@@ -118,11 +132,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

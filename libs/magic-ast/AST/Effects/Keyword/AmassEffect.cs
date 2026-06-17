@@ -5,10 +5,10 @@ using MagicAST.AST.Quantities;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
-/// "Amass [Subtype] N" keyword action (CR 701.45a).
+/// "Amass [Subtype] N" keyword action (CR 701.47a).
 ///
 /// <para>
-/// CR 701.45a: "Amass [subtype] N means 'Either put N +1/+1 counters on an Army
+/// CR 701.47a: "Amass [subtype] N means 'Either put N +1/+1 counters on an Army
 /// you control, or create a 0/0 black [Subtype] Army creature token, then put N
 /// +1/+1 counters on it.'"
 /// </para>
@@ -30,14 +30,14 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 public sealed record AmassEffect : Effect
 {
   /// <summary>
-  /// The N value: number of +1/+1 counters placed on the amassed Army (CR 701.45a).
+  /// The N value: number of +1/+1 counters placed on the amassed Army (CR 701.47a).
   /// </summary>
   public required Quantity Count { get; init; }
 
   /// <summary>
   /// The creature subtype of the Army token created (e.g., "Orcs").
   /// Null for legacy Amass printings that do not specify a subtype.
-  /// CR 701.45a: the army token is a "0/0 black [Subtype] Army creature token".
+  /// CR 701.47a: the army token is a "0/0 black [Subtype] Army creature token".
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? ArmySubtype { get; init; }

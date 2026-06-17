@@ -9,7 +9,7 @@ using MagicAST.AST.Quantities;
 /// "amass [Subtype] N" / "amass N" — the Amass keyword action as a triggered effect.
 ///
 /// <para>
-/// CR 701.45a: "Amass [subtype] N means 'Either put N +1/+1 counters on an Army
+/// CR 701.47a: "Amass [subtype] N means 'Either put N +1/+1 counters on an Army
 /// you control, or create a 0/0 black [Subtype] Army creature token, then put N
 /// +1/+1 counters on it.'"
 /// </para>
