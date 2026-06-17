@@ -1,0 +1,117 @@
+{
+  "Input": {
+    "Name": "Jeska's Will",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Choose one. If you control a commander as you cast this spell, you may choose both instead.\n• Add {R} for each card in target opponent's hand.\n• Exile the top three cards of your library. You may play them this turn.",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Jeska's Will",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Choose one. If you control a commander as you cast this spell, you may choose both instead.\n• Add {R} for each card in target opponent's hand.\n• Exile the top three cards of your library. You may play them this turn.",
+      "Abilities": [
+        {
+          "Kind": "modal",
+          "ModeSelection": {
+            "Minimum": 1,
+            "Maximum": 1,
+            "ConditionalOverride": {
+              "Condition": {
+                "ConditionType": "count",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Supertypes": ["Commander"],
+                  "Controller": "You"
+                },
+                "Count": {
+                  "Operator": "GreaterThanOrEqual",
+                  "Value": 1
+                }
+              },
+              "Selection": {
+                "Minimum": 1,
+                "Maximum": 2
+              }
+            }
+          },
+          "Modes": [
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "addMana",
+                    "Mana": "{R}",
+                    "Amount": {
+                      "QuantityType": "count",
+                      "CountOf": {
+                        "CardTypes": ["card"],
+                        "Zone": "Hand",
+                        "Controller": "Target"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "impulse",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 3
+                    },
+                    "RestDestination": "RemainExiled",
+                    "Duration": {
+                      "DurationType": "untilTime",
+                      "Until": {
+                        "Part": "Turn",
+                        "Edge": "End"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "AllowDuplicates": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}
