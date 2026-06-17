@@ -151,6 +151,20 @@ public sealed class PortWalk
       Trigger(ability["Trigger"], card, consumes);
       foreach (var cost in ability["Costs"] as JsonArray ?? [])
         Costs(cost, card, consumes);
+
+      // A SPELL ability (an instant/sorcery's one-shot effect, CR 601) is cast by paying its mana cost,
+      // and the spell then produces its effects (CR 601.2f→608) — so the card's own mana cost is a
+      // pay:mana CO-COST that DRIVES the spell's emits, exactly like the aristocrat-recursion recast
+      // co-cost (PortGraph.cs:432). The faithful parse-layer truth: "this spell costs {N} to cast" is
+      // what the card says, and casting is the cause of the effect. Threading it as a consume is what
+      // lets a self-refueling spell loop close — a flicker spell (Ghostly Flicker) blinks a permanent
+      // whose ETB refunds the mana to recast it (the mana-untap blink family) — and feeds the §8 mana
+      // balance the same machinery already runs for activated/recast abilities. A spell with no mana cost
+      // (an alternative-only card) simply adds no consume.
+      if (string.Equals(ability["Kind"]?.ToString(), "spell", StringComparison.Ordinal))
+        foreach (var (label, quantity) in SpellCastCost(manaCostSymbols))
+          consumes.Add(Port(card, label, PortSide.Consume, quantity));
+
       foreach (var effect in ability["Effects"] as JsonArray ?? [])
         Effects(effect, card, keyword, manaCostSymbols, consumes, emits);
 
@@ -722,6 +736,23 @@ public sealed class PortWalk
     if (node is not JsonArray)
       return [];
     var symbols = node.Deserialize<List<ManaSymbol>>(MagicAST.MagicASTJsonOptions.Strict) ?? [];
+    return PortLabel.PayMana(symbols);
+  }
+
+  /// <summary>
+  /// A SPELL ability's cast cost (CR 601.2f) — the card's own mana cost, threaded in via
+  /// <paramref name="manaCostSymbols"/>, projected as per-colour <c>pay:mana[:colour]</c> consumes via
+  /// <see cref="PortLabel.PayMana"/> (the same per-pip shape as an activated mana cost). These DRIVE the
+  /// spell's emits (every consume drives every emit, §5), so a self-refueling spell loop (a flicker spell
+  /// re-cast by the mana its blink target's ETB refunds) closes, and the §8 per-colour balance can floor
+  /// it. Empty when the card carries no mana-cost attribute (an alternative-only / X-only card) — never
+  /// invents a cost.
+  /// </summary>
+  private static IReadOnlyList<(string Label, int Quantity)> SpellCastCost(JsonNode? manaCostSymbols)
+  {
+    if (manaCostSymbols is not JsonArray)
+      return [];
+    var symbols = manaCostSymbols.Deserialize<List<ManaSymbol>>(MagicAST.MagicASTJsonOptions.Strict) ?? [];
     return PortLabel.PayMana(symbols);
   }
 

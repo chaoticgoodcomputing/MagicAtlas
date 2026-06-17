@@ -22,9 +22,89 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": "cardTypes=|subtypes=|supertypes=|controller=Opponent|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Tithe::pay:mana",
+      "Card": "Blood Tithe",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 3,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Blood Tithe::pay:mana:black",
+      "Card": "Blood Tithe",
+      "Label": "pay:mana:black",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
     }
   ],
-  "CardDefinedEdges": [],
-  "DerivedEdges": [],
+  "CardDefinedEdges": [
+    {
+      "From": "Blood Tithe::pay:mana:black",
+      "To": "Blood Tithe::emit:life:gain:controlled"
+    },
+    {
+      "From": "Blood Tithe::pay:mana:black",
+      "To": "Blood Tithe::emit:life:loss:opponent"
+    },
+    {
+      "From": "Blood Tithe::pay:mana",
+      "To": "Blood Tithe::emit:life:gain:controlled"
+    },
+    {
+      "From": "Blood Tithe::pay:mana",
+      "To": "Blood Tithe::emit:life:loss:opponent"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Blood Tithe::pay:mana:black",
+      "To": "Blood Tithe::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Tithe::pay:mana:black",
+      "To": "Blood Tithe::emit:life:loss:opponent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Tithe::pay:mana",
+      "To": "Blood Tithe::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Tithe::pay:mana",
+      "To": "Blood Tithe::emit:life:loss:opponent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
   "Cycles": []
 }

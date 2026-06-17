@@ -11,9 +11,36 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": null
+    },
+    {
+      "Identity": "Boomerang::pay:mana:blue",
+      "Card": "Boomerang",
+      "Label": "pay:mana:blue",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
     }
   ],
-  "CardDefinedEdges": [],
-  "DerivedEdges": [],
+  "CardDefinedEdges": [
+    {
+      "From": "Boomerang::pay:mana:blue",
+      "To": "Boomerang::emit:returntohand"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Boomerang::pay:mana:blue",
+      "To": "Boomerang::emit:returntohand",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
   "Cycles": []
 }

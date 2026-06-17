@@ -33,9 +33,64 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": null
+    },
+    {
+      "Identity": "Acrobatic Leap::pay:mana:white",
+      "Card": "Acrobatic Leap",
+      "Label": "pay:mana:white",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
     }
   ],
-  "CardDefinedEdges": [],
-  "DerivedEdges": [],
+  "CardDefinedEdges": [
+    {
+      "From": "Acrobatic Leap::pay:mana:white",
+      "To": "Acrobatic Leap::emit:gainability"
+    },
+    {
+      "From": "Acrobatic Leap::pay:mana:white",
+      "To": "Acrobatic Leap::emit:untap"
+    },
+    {
+      "From": "Acrobatic Leap::pay:mana:white",
+      "To": "Acrobatic Leap::modify:pt"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Acrobatic Leap::pay:mana:white",
+      "To": "Acrobatic Leap::emit:gainability",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Acrobatic Leap::pay:mana:white",
+      "To": "Acrobatic Leap::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Acrobatic Leap::pay:mana:white",
+      "To": "Acrobatic Leap::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
   "Cycles": []
 }

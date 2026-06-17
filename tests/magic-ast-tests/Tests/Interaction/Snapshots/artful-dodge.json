@@ -38,10 +38,24 @@
   "CardDefinedEdges": [
     {
       "From": "Artful Dodge::pay:mana:blue",
+      "To": "Artful Dodge::emit:cantbeblocked"
+    },
+    {
+      "From": "Artful Dodge::pay:mana:blue",
       "To": "Artful Dodge::emit:returntobattlefield:self"
     }
   ],
   "DerivedEdges": [
+    {
+      "From": "Artful Dodge::pay:mana:blue",
+      "To": "Artful Dodge::emit:cantbeblocked",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
     {
       "From": "Artful Dodge::pay:mana:blue",
       "To": "Artful Dodge::emit:returntobattlefield:self",
