@@ -104,14 +104,17 @@ public class Program
 
       // HTTP storage medium: lets the Commander Spellbook variants.json dump load as a plain https://
       // catalog item (CsbVariantsRaw → FetchCombos). The conditional-GET disk cache means a fresh
-      // clone fetches the ~510 MB dump once and reuses it for 24h — no manual curl, ever.
+      // clone fetches the ~510 MB dump once and reuses it WITHOUT any network round-trip for the MaxAge
+      // window; only after that does it revalidate (a cheap conditional GET → 304 unless CSB actually
+      // changed). CSB combos churn slowly, so the window is WEEKLY — we do not re-pull (or even
+      // re-validate) the 510 MB dump more than once a week. Bump down only if a combo refresh is urgent.
       flowthru.UseHttp(http =>
       {
         http.UserAgent = "MagicAtlas-MAST/0.1";
         http.Cache = new HttpCacheOptions
         {
           Directory = Path.Combine(dataPath, "_01_Raw", "Datasets", "External", ".http-cache"),
-          MaxAge = TimeSpan.FromHours(24),
+          MaxAge = TimeSpan.FromDays(7),
         };
       });
 
