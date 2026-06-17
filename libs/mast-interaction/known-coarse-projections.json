@@ -3,6 +3,7 @@
   "effectType": {
     "adapt": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "additionalCastCost": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "additionalCombatAndMainPhase": "no semantic projection yet \u2014 coarse fallback no flow rule consumes; explicit named carve-out",
     "allMustBlock": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "alternativePayment": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "amplify": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
@@ -80,6 +81,7 @@
     "mayPlayFromExile": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "mayPlayFromGraveyard": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "mayPlayFromLibrary": "baseline coarse fallback \u2014 Mystic Forge play-from-top permission; no flow rule reads library-cast permission yet; conscious named carve-out",
+    "mayPlayFromTopOfLibrary": "no semantic projection yet \u2014 coarse fallback no flow rule consumes; explicit named carve-out",
     "megamorph": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "mill": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "miracle": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
@@ -154,6 +156,7 @@
     "payLife": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "removeCounters": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "returnToHand": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "selfMana": "no semantic projection yet \u2014 coarse fallback no flow rule consumes; explicit named carve-out",
     "tapPermanents": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "untap": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet"
   },

@@ -421,6 +421,12 @@
           ]
         },
         {
+          "Type": "SelfManaCost",
+          "Discriminator": "selfMana",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "TapCost",
           "Discriminator": "tap",
           "IsUnparsed": false,
@@ -507,6 +513,12 @@
           "Fields": [
             "AdditionalCost"
           ]
+        },
+        {
+          "Type": "AdditionalCombatAndMainPhaseEffect",
+          "Discriminator": "additionalCombatAndMainPhase",
+          "IsUnparsed": false,
+          "Fields": []
         },
         {
           "Type": "AllMustBlockEffect",
@@ -1173,6 +1185,14 @@
           "IsUnparsed": false,
           "Fields": [
             "Cards"
+          ]
+        },
+        {
+          "Type": "MayPlayFromTopOfLibraryEffect",
+          "Discriminator": "mayPlayFromTopOfLibrary",
+          "IsUnparsed": false,
+          "Fields": [
+            "Actions"
           ]
         },
         {
@@ -2005,5 +2025,5 @@
       ]
     }
   ],
-  "SchemaHash": "381e3658de3b4c1553730131bd2fb25a17c8e399cd1d77922d2676991a38b020"
+  "SchemaHash": "273175a3d35bd1d5f2c92753bf863dc6fa98420e62b7c628c03a1c3d85657c04"
 }
