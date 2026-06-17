@@ -274,6 +274,14 @@
           ]
         },
         {
+          "Type": "DiedThisWayCondition",
+          "Discriminator": "diedThisWay",
+          "IsUnparsed": false,
+          "Fields": [
+            "Reference"
+          ]
+        },
+        {
           "Type": "KeywordCostPaidCondition",
           "Discriminator": "keywordCostPaid",
           "IsUnparsed": false,
@@ -2033,5 +2041,5 @@
       ]
     }
   ],
-  "SchemaHash": "64e10e310c7cfff48fb9739984e829c2aeca61e972403f8668dd65f9aefce3c5"
+  "SchemaHash": "7a9f3a502f9d5b2813caf7caca9c289a0e7e8b53db0e7806e66bf6a23b759812"
 }

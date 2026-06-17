@@ -41,4 +41,15 @@ public sealed record CopyEffect : Effect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public bool? MayChooseNewTargets { get; init; }
+
+  /// <summary>
+  /// The player who creates the copy tokens (CR 111.2). When null, the implicit
+  /// creator is the ability's controller ("you"). Cards that name a different
+  /// creator — "its controller creates two tokens that are copies" (Saw in Half)
+  /// — carry an explicit <see cref="ObjectReference"/> here (e.g.
+  /// <see cref="ObjectReferenceKind.Controller"/>). Parallels
+  /// <see cref="MagicAST.AST.Effects.TokenCopy.CreateTokenEffect.Player"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? Player { get; init; }
 }
