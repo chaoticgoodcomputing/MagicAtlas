@@ -1,0 +1,142 @@
+{
+  "Input": {
+    "Name": "Deadeye Navigator",
+    "ManaCost": "{4}{U}{U}",
+    "TypeLine": "Creature — Spirit",
+    "OracleText": "Soulbond (You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)\nAs long as Deadeye Navigator is paired with another creature, each of those creatures has “{1}{U}: Exile this creature, then return it to the battlefield under your control.”",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Deadeye Navigator",
+    "TypeLine": {
+      "Raw": "Creature — Spirit",
+      "Types": ["Creature"],
+      "Subtypes": ["Spirit"]
+    },
+    "Oracle": {
+      "RawText": "Soulbond (You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)\nAs long as Deadeye Navigator is paired with another creature, each of those creatures has “{1}{U}: Exile this creature, then return it to the battlefield under your control.”",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Soulbond",
+          "Reminder": {
+            "Text": "(You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Soulbond"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "BothPaired"
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "mana",
+                    "Symbols": [
+                      {
+                        "Kind": "generic",
+                        "GenericAmount": 1
+                      },
+                      {
+                        "Kind": "colored",
+                        "Colors": ["U"]
+                      }
+                    ]
+                  }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "exile",
+                    "Target": {
+                      "Kind": "Self"
+                    }
+                  },
+                  {
+                    "EffectType": "returnToBattlefield",
+                    "Target": {
+                      "Kind": "Designated",
+                      "Filter": {
+                        "Zone": "Exile",
+                        "ExiledWith": {
+                          "Kind": "Self"
+                        }
+                      }
+                    },
+                    "Tapped": false,
+                    "UnderControl": {
+                      "Kind": "You"
+                    }
+                  }
+                ],
+                "IsManaAbility": false
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "other",
+                  "Text": "Deadeye Navigator is paired with another creature"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        }
+      }
+    ]
+  }
+}
