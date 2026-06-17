@@ -509,6 +509,12 @@
           ]
         },
         {
+          "Type": "AdditionalCombatAndMainPhaseEffect",
+          "Discriminator": "additionalCombatAndMainPhase",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "AllMustBlockEffect",
           "Discriminator": "allMustBlock",
           "IsUnparsed": false,
@@ -1997,5 +2003,5 @@
       ]
     }
   ],
-  "SchemaHash": "b28ead682ff0122025dbefefc9649e5ab0ed15814a5d32bbdf775977f9a7317f"
+  "SchemaHash": "62445b1bb361b2c9fd7d1ae30149c74799ac58d44afc0755e059437b8a2450ee"
 }
