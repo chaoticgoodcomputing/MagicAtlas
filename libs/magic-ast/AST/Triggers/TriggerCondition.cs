@@ -67,6 +67,40 @@ public sealed record TriggerCondition
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public bool? ExceptFirstDrawStep { get; init; }
+
+  /// <summary>
+  /// The specific counter type that must be placed for a <see cref="TriggerEvent.CounterPlaced"/>
+  /// or <see cref="TriggerEvent.CounterRemoved"/> event to match — e.g. <c>"-1/-1"</c>
+  /// for Nest of Scarabs ("whenever you put one or more -1/-1 counters on a creature").
+  /// Null when the trigger fires on any counter type.
+  ///
+  /// <para>
+  /// CR 122.1: "A counter is a marker placed on an object or player that modifies its
+  /// characteristics and/or interacts with a rule or effect." The counter type is a named
+  /// quality of the counter ("+1/+1", "-1/-1", "charge", "loyalty", etc.). This field
+  /// narrows the event match so that only counter-placement events involving the stated type
+  /// trigger the ability — a <see cref="TriggerEvent.CounterPlaced"/> trigger without this
+  /// field fires on any counter type (e.g. "+1/+1 or charge counters").
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public string? CounterType { get; init; }
+
+  /// <summary>
+  /// The minimum number of counters that must be placed in the triggering event for
+  /// a <see cref="TriggerEvent.CounterPlaced"/> (or <see cref="TriggerEvent.CounterRemoved"/>)
+  /// event to match — e.g. <c>1</c> for Nest of Scarabs ("one or more -1/-1 counters").
+  /// Null when no minimum-quantity qualifier appears in the oracle text (which typically means
+  /// any single counter placement triggers).
+  ///
+  /// <para>
+  /// "One or more" in oracle text is a CR 122.1 quantity constraint on the event: the ability
+  /// fires whenever the triggering action places at least this many counters in a single
+  /// event. Descriptive only; the per-event count is engine territory.
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? MinimumCount { get; init; }
 }
 
 /// <summary>

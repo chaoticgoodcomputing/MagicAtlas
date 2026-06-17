@@ -43,6 +43,8 @@ public sealed class PutNegativeCountersOnCreatureConditionRule : ITriggerConditi
     {
       Timing = timing,
       Event = TriggerEvent.CounterPlaced,
+      CounterType = "-1/-1",
+      MinimumCount = 1,
       Filter = new ObjectFilter
       {
         CardTypes = ["creature"],

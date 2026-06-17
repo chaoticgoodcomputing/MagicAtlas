@@ -23,6 +23,8 @@
           "Trigger": {
             "Timing": "Whenever",
             "Event": "CounterPlaced",
+            "CounterType": "-1/-1",
+            "MinimumCount": 1,
             "Filter": {
               "CardTypes": ["creature"]
             }
