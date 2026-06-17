@@ -421,6 +421,12 @@
           ]
         },
         {
+          "Type": "SelfManaCost",
+          "Discriminator": "selfMana",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "TapCost",
           "Discriminator": "tap",
           "IsUnparsed": false,
@@ -1165,14 +1171,6 @@
           "IsUnparsed": false,
           "Fields": [
             "Cards"
-          ]
-        },
-        {
-          "Type": "MayPlayFromTopOfLibraryEffect",
-          "Discriminator": "mayPlayFromTopOfLibrary",
-          "IsUnparsed": false,
-          "Fields": [
-            "Actions"
           ]
         },
         {
@@ -2005,5 +2003,5 @@
       ]
     }
   ],
-  "SchemaHash": "6a0308370e3d60d5195887bba367e66c89a92aca569c9506bcc1e66f6d2b80da"
+  "SchemaHash": "8ca096b0ad363c84cc084636f241145b56ea69150f412ec31b9b59001751ff55"
 }
