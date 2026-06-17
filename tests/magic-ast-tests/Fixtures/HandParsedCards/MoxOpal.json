@@ -1,0 +1,78 @@
+{
+  "Input": {
+    "Name": "Mox Opal",
+    "ManaCost": "{0}",
+    "TypeLine": "Legendary Artifact",
+    "OracleText": "Metalcraft — {T}: Add one mana of any color. Activate only if you control three or more artifacts.",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Mox Opal",
+    "TypeLine": {
+      "Raw": "Legendary Artifact",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Metalcraft — {T}: Add one mana of any color. Activate only if you control three or more artifacts.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "AbilityWord": "Metalcraft",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "",
+              "AnyColor": true
+            }
+          ],
+          "ActivationCondition": {
+            "ConditionType": "count",
+            "Filter": {
+              "CardTypes": [
+                "artifact"
+              ],
+              "Controller": "You"
+            },
+            "Count": {
+              "Operator": "GreaterThanOrEqual",
+              "Value": 3
+            }
+          },
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{0}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 0
+          }
+        ],
+        "ManaValue": 0
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

@@ -34,6 +34,17 @@ public sealed record ActivatedAbility : Ability
   public IReadOnlyList<ActivationRestriction>? Restrictions { get; init; }
 
   /// <summary>
+  /// A structured game-state predicate that must be true to activate this ability.
+  /// "Activate only if [condition]" — e.g., "Activate only if you control three or
+  /// more artifacts" (Mox Opal / Metalcraft). Uses the same <see cref="Condition"/>
+  /// union as <see cref="MagicAST.AST.Abilities.StaticAbility.Condition"/> so the
+  /// count-gate is structured, not free-texted into <see cref="Restrictions"/>.
+  /// CR 602.5c (activation restrictions in oracle text).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Condition? ActivationCondition { get; init; }
+
+  /// <summary>
   /// True if this is a mana ability (doesn't use the stack).
   /// Rule 605
   /// </summary>

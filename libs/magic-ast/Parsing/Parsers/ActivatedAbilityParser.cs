@@ -80,6 +80,20 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       text = text[1..^1].Trim();
     }
 
+    // Peel the em-dash prefix ("Metalcraft — ", …) if the classifier detected an
+    // ability word or printed label. The label is mechanically inert (CR 207.2c) but
+    // its "Word — " prefix must be stripped before cost/effect splitting, otherwise
+    // the text before the colon includes the label and the cost parse fails.
+    var dashPrefix = classification.DashPrefix;
+    if (dashPrefix is not null)
+    {
+      var emDashIndex = text.IndexOf('—');
+      if (emDashIndex >= 0)
+      {
+        text = text[(emDashIndex + 1)..].TrimStart();
+      }
+    }
+
     // Find the colon that separates cost from effect
     var colonIndex = text.IndexOf(':');
     if (colonIndex < 0)
@@ -112,7 +126,9 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     // effectPart before effect parsing. These are not effects — they constrain
     // when the ability can be activated (Rule 602.5). Stripping them prevents
     // TryParseMultiEffectSentences from failing when it encounters them.
-    var restrictions = ExtractActivationRestrictions(ref effectPart);
+    // Also extracts "Activate only if [condition]" into a structured Condition
+    // (ADR 0007 — conditions are one union; CR 602.5c).
+    var restrictions = ExtractActivationRestrictions(ref effectPart, out var activationCondition);
 
     // Parse effects
     var effects = ParseEffects(effectPart);
@@ -136,6 +152,7 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
         Costs = costs,
         Effects = [unparsedEffect],
         Restrictions = restrictions,
+        ActivationCondition = activationCondition,
         IsManaAbility = false,
         LoyaltyCost = classification.LoyaltyCost,
         AbilityWord = classification.AbilityWord,
@@ -151,26 +168,40 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       Costs = costs,
       Effects = effects,
       Restrictions = restrictions,
+      ActivationCondition = activationCondition,
       IsManaAbility = isManaAbility,
       LoyaltyCost = classification.LoyaltyCost,
       AbilityWord = classification.AbilityWord,
     };
   }
 
+  // Anchored regex for "Activate only if [condition]." — must start at the
+  // beginning of the candidate sentence (after trimming) so it cannot match
+  // a substring of a longer clause.
+  private static readonly Regex _activateOnlyIfPattern = new(
+    @"^[Aa]ctivate\s+(?:this\s+ability\s+)?only\s+if\s+(?<cond>.+?)\.?\s*$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
   /// <summary>
   /// Strips trailing "Activate only as a sorcery." / "Activate only once each turn." /
-  /// etc. sentences from <paramref name="effectPart"/> and returns the parsed
-  /// <see cref="ActivationRestriction"/> list (null if none found). Modifies
-  /// <paramref name="effectPart"/> in-place to remove the extracted sentences.
+  /// "Activate only if [condition]." sentences from <paramref name="effectPart"/> and
+  /// returns the parsed <see cref="ActivationRestriction"/> list (null if none found).
+  /// Also extracts "Activate only if [condition]" into a structured
+  /// <see cref="MagicAST.AST.Abilities.Condition"/> via <paramref name="activationCondition"/>
+  /// (ADR 0007; CR 602.5c). Modifies <paramref name="effectPart"/> in-place to remove
+  /// the extracted sentences.
   /// </summary>
   private static IReadOnlyList<ActivationRestriction>? ExtractActivationRestrictions(
-    ref string effectPart
+    ref string effectPart,
+    out Condition? activationCondition
   )
   {
     var restrictions = new List<ActivationRestriction>();
+    activationCondition = null;
 
-    // Greedily strip "Activate only as ..." sentences from the end of effectPart.
-    // These always appear after the real effect sentence(s).
+    // Greedily strip "Activate only as ..." / "Activate only if ..." sentences
+    // from the end of effectPart. These always appear after the real effect sentence(s).
     string? remaining = effectPart;
     while (remaining is not null)
     {
@@ -189,6 +220,17 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
         prefix = null;
       }
 
+      // Try "Activate only if [condition]" first — it produces a structured Condition,
+      // not an ActivationRestriction enum value.
+      var ifMatch = _activateOnlyIfPattern.Match(candidate);
+      if (ifMatch.Success)
+      {
+        var conditionPhrase = ifMatch.Groups["cond"].Value.Trim();
+        activationCondition = ConditionParser.Parse(conditionPhrase);
+        remaining = prefix;
+        continue;
+      }
+
       var restriction = TryParseActivationRestriction(candidate);
       if (restriction is null)
       {
@@ -198,14 +240,14 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       remaining = prefix;
     }
 
-    if (restrictions.Count == 0)
+    if (restrictions.Count == 0 && activationCondition is null)
     {
       return null;
     }
 
     restrictions.Reverse(); // restore original order (we iterated from the end)
     effectPart = remaining ?? string.Empty;
-    return restrictions;
+    return restrictions.Count > 0 ? restrictions : null;
   }
 
   /// <summary>
