@@ -2,7 +2,6 @@
   "Keyword": "Mentor",
   "Expected": {
     "Kind": "triggered",
-    "KeywordSource": "Mentor",
     "Trigger": {
       "Timing": "Whenever",
       "Event": "Attacks",
@@ -23,14 +22,17 @@
             ],
             "Characteristics": [
               {
-                "CharacteristicType": "other",
-                "Description": "attacking"
-              },
-              {
-                "CharacteristicType": "other",
-                "Description": "with power less than this creature's power"
+                "CharacteristicType": "combatState",
+                "State": "Attacking"
               }
-            ]
+            ],
+            "PowerComparison": {
+              "Operator": "LessThan",
+              "RelativeTo": {
+                "Kind": "Self"
+              },
+              "RelativeCharacteristic": "Power"
+            }
           }
         },
         "CounterType": "+1/+1",
@@ -39,6 +41,7 @@
           "Value": 1
         }
       }
-    ]
+    ],
+    "KeywordSource": "Mentor"
   }
 }

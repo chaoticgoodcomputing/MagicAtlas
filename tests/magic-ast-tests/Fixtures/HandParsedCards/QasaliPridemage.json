@@ -6,35 +6,44 @@
     "OracleText": "Exalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)\n{1}, Sacrifice this creature: Destroy target artifact or enchantment.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["G", "W"],
-    "ColorIdentity": ["G", "W"],
-    "Keywords": ["Exalted"],
-    "Id": "a103646d-b363-4896-a48f-0527d746587e",
-    "Layout": "normal"
+    "Colors": [
+      "G",
+      "W"
+    ],
+    "ColorIdentity": [
+      "G",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Qasali Pridemage",
     "TypeLine": {
       "Raw": "Creature — Cat Wizard",
-      "Types": ["Creature"],
-      "Subtypes": ["Cat", "Wizard"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "Exalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)\n{1}, Sacrifice this creature: Destroy target artifact or enchantment.",
       "Abilities": [
         {
           "Kind": "triggered",
-          "KeywordSource": "Exalted",
           "Trigger": {
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "Controller": "You",
               "Characteristics": [
                 {
-                  "CharacteristicType": "other",
-                  "Description": "attacking alone"
+                  "CharacteristicType": "combatState",
+                  "State": "AttackingAlone"
                 }
               ]
             }
@@ -61,7 +70,11 @@
                 }
               }
             }
-          ]
+          ],
+          "KeywordSource": "Exalted",
+          "Reminder": {
+            "Text": "(Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)"
+          }
         },
         {
           "Kind": "activated",
@@ -69,13 +82,18 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 1 }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
               ]
             },
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "IsSelf": true
               },
               "Quantity": {
@@ -90,9 +108,13 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact", "enchantment"]
+                  "CardTypes": [
+                    "artifact",
+                    "enchantment"
+                  ]
                 }
-              }
+              },
+              "CantBeRegenerated": false
             }
           ],
           "IsManaAbility": false
@@ -104,24 +126,48 @@
         "Kind": "manaCost",
         "Raw": "{G}{W}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G", "W"]
+        "Colors": [
+          "G",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G", "W"]
+        "ColorIdentity": [
+          "W",
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
       }
     ]
   }

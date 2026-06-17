@@ -86,12 +86,14 @@ public sealed class ReturnTargetToHandRule : ISpellRule
         Target = new ObjectReference
         {
           Kind = ObjectReferenceKind.Each,
-          Filter = new ObjectFilter
-          {
-            CardTypes = [cardType],
-            Colors = colors,
-            Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
-          },
+          Filter = QualifierAxisMapper.Apply(
+            new ObjectFilter
+            {
+              CardTypes = [cardType],
+              Colors = colors,
+            },
+            characteristics
+          ),
         },
       };
       return true;
@@ -143,13 +145,15 @@ public sealed class ReturnTargetToHandRule : ISpellRule
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter
-        {
-          CardTypes = [typeWord],
-          Colors = targetColors,
-          Characteristics = targetCharacteristics.Count > 0 ? targetCharacteristics.Select(Characteristic.FromLabel).ToList() : null,
-          Controller = controller,
-        },
+        Filter = QualifierAxisMapper.Apply(
+          new ObjectFilter
+          {
+            CardTypes = [typeWord],
+            Colors = targetColors,
+            Controller = controller,
+          },
+          targetCharacteristics
+        ),
       }}, isOptional);
     return true;
   }
@@ -216,12 +220,14 @@ public sealed class ReturnTargetToHandRule : ISpellRule
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter
-        {
-          CardTypes = cardTypes,
-          Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
-          Controller = controller,
-        },
+        Filter = QualifierAxisMapper.Apply(
+          new ObjectFilter
+          {
+            CardTypes = cardTypes,
+            Controller = controller,
+          },
+          characteristics
+        ),
       }}, isOptional);
     return true;
   }

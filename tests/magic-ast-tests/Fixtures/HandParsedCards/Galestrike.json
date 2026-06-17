@@ -4,8 +4,6 @@
     "ManaCost": "{2}{U}",
     "TypeLine": "Instant",
     "OracleText": "Return target tapped creature to its owner's hand.\nDraw a card.",
-    "Power": null,
-    "Toughness": null,
     "Colors": [
       "U"
     ],
@@ -36,7 +34,10 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "tapped"}
+                    {
+                      "CharacteristicType": "tapped",
+                      "Tapped": true
+                    }
                   ]
                 }
               }
@@ -76,7 +77,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

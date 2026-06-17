@@ -1,11 +1,11 @@
 {
   "Input": {
     "Name": "Goblin Wardriver",
-    "ManaCost": "{1}{R}",
+    "ManaCost": "{R}{R}",
     "TypeLine": "Creature — Goblin Warrior",
-    "OracleText": "Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)\nBattle cry",
+    "OracleText": "Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)",
     "Power": "2",
-    "Toughness": "1",
+    "Toughness": "2",
     "Colors": [
       "R"
     ],
@@ -26,11 +26,10 @@
       ]
     },
     "Oracle": {
-      "RawText": "Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)\nBattle cry",
+      "RawText": "Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)",
       "Abilities": [
         {
           "Kind": "triggered",
-          "KeywordSource": "Battle cry",
           "Trigger": {
             "Timing": "Whenever",
             "Event": "Attacks",
@@ -52,8 +51,8 @@
                   "ExcludeSelf": true,
                   "Characteristics": [
                     {
-                      "CharacteristicType": "other",
-                      "Description": "attacking"
+                      "CharacteristicType": "combatState",
+                      "State": "Attacking"
                     }
                   ]
                 }
@@ -75,68 +74,23 @@
               }
             }
           ],
+          "KeywordSource": "Battle cry",
           "Reminder": {
             "Text": "(Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)"
           }
-        },
-        {
-          "Kind": "triggered",
-          "KeywordSource": "Battle cry",
-          "Trigger": {
-            "Timing": "Whenever",
-            "Event": "Attacks",
-            "Filter": {
-              "CardTypes": [
-                "creature"
-              ]
-            }
-          },
-          "Effects": [
-            {
-              "EffectType": "modifyPT",
-              "Target": {
-                "Kind": "Each",
-                "Filter": {
-                  "CardTypes": [
-                    "creature"
-                  ],
-                  "ExcludeSelf": true,
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "attacking"
-                    }
-                  ]
-                }
-              },
-              "PowerModifier": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "ToughnessModifier": {
-                "QuantityType": "literal",
-                "Value": 0
-              },
-              "Duration": {
-                "DurationType": "untilTime",
-                "Until": {
-                  "Part": "Turn",
-                  "Edge": "End"
-                }
-              }
-            }
-          ]
         }
       ]
     },
     "Attributes": [
       {
         "Kind": "manaCost",
-        "Raw": "{1}{R}",
+        "Raw": "{R}{R}",
         "Symbols": [
           {
-            "Kind": "generic",
-            "GenericAmount": 1
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
@@ -145,7 +99,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -163,13 +118,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

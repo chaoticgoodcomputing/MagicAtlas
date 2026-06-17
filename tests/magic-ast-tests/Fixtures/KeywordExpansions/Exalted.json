@@ -2,7 +2,6 @@
   "Keyword": "Exalted",
   "Expected": {
     "Kind": "triggered",
-    "KeywordSource": "Exalted",
     "Trigger": {
       "Timing": "Whenever",
       "Event": "Attacks",
@@ -13,8 +12,8 @@
         "Controller": "You",
         "Characteristics": [
           {
-            "CharacteristicType": "other",
-            "Description": "attacking alone"
+            "CharacteristicType": "combatState",
+            "State": "AttackingAlone"
           }
         ]
       }
@@ -41,6 +40,7 @@
           }
         }
       }
-    ]
+    ],
+    "KeywordSource": "Exalted"
   }
 }

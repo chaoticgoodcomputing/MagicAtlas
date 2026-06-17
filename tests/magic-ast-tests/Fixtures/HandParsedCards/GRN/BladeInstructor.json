@@ -30,7 +30,6 @@
       "Abilities": [
         {
           "Kind": "triggered",
-          "KeywordSource": "Mentor",
           "Trigger": {
             "Timing": "Whenever",
             "Event": "Attacks",
@@ -51,14 +50,17 @@
                   ],
                   "Characteristics": [
                     {
-                      "CharacteristicType": "other",
-                      "Description": "attacking"
-                    },
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "with power less than this creature's power"
+                      "CharacteristicType": "combatState",
+                      "State": "Attacking"
                     }
-                  ]
+                  ],
+                  "PowerComparison": {
+                    "Operator": "LessThan",
+                    "RelativeTo": {
+                      "Kind": "Self"
+                    },
+                    "RelativeCharacteristic": "Power"
+                  }
                 }
               },
               "CounterType": "+1/+1",
@@ -68,6 +70,7 @@
               }
             }
           ],
+          "KeywordSource": "Mentor",
           "Reminder": {
             "Text": "(Whenever this creature attacks, put a +1/+1 counter on target attacking creature with lesser power.)"
           }
@@ -90,7 +93,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -108,13 +112,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]

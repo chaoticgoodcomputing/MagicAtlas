@@ -53,6 +53,12 @@ public abstract record Characteristic
         State = CombatState.AttackingOrBlocking,
       },
       "attacking alone" => new CombatStateCharacteristic { State = CombatState.AttackingAlone },
+      "tapped" => new TappedStateCharacteristic { Tapped = true },
+      "untapped" => new TappedStateCharacteristic { Tapped = false },
+      "with a +1/+1 counter" or "with a +1/+1 counter on it" => new CounterCharacteristic
+      {
+        CounterType = "+1/+1",
+      },
       _ => new OtherCharacteristic { Description = label },
     };
 
@@ -109,6 +115,42 @@ public enum CombatState
 
   /// <summary>Attacking alone — attacking with no other attacker (e.g. "can't attack alone" companions).</summary>
   AttackingAlone,
+}
+
+/// <summary>
+/// A tapped/untapped state constraint — "tapped creature" (Vengeance, CR 110.5a) or
+/// "untapped creature" (Saryth). The state predicate the <see cref="Characteristic"/>
+/// doc calls out as a first-class carve-out from the <see cref="OtherCharacteristic"/>
+/// residual. Describes what the oracle text says (the object is tapped, or untapped);
+/// the actual tap status is engine territory (CR 701.21 / 110.5).
+/// </summary>
+[CharacteristicKind("tapped")]
+public sealed record TappedStateCharacteristic : Characteristic
+{
+  /// <summary><c>true</c> for "tapped", <c>false</c> for "untapped".</summary>
+  public required bool Tapped { get; init; }
+}
+
+/// <summary>
+/// A counter constraint — the filtered object must have a counter of a given kind,
+/// e.g. "creature with a +1/+1 counter on it" (Crowned Ceratok, Sapphire Drake;
+/// CR 122). The counter-presence predicate carved out of the
+/// <see cref="OtherCharacteristic"/> residual. With no <see cref="Count"/> the
+/// constraint is mere presence ("a counter"); a <see cref="Count"/> comparison
+/// constrains how many ("two or more +1/+1 counters").
+/// </summary>
+[CharacteristicKind("counter")]
+public sealed record CounterCharacteristic : Characteristic
+{
+  /// <summary>The counter kind, as printed — e.g. <c>"+1/+1"</c>, <c>"charge"</c> (CR 122.1).</summary>
+  public required string CounterType { get; init; }
+
+  /// <summary>
+  /// Optional constraint on the number of such counters ("two or more +1/+1 counters").
+  /// Null means mere presence ("a +1/+1 counter").
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Comparison? Count { get; init; }
 }
 
 /// <summary>

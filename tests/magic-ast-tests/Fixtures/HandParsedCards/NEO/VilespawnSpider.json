@@ -31,13 +31,13 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Reach",
           "Effects": [
             {
               "EffectType": "keywordAbility",
               "Keyword": "Reach"
             }
-          ]
+          ],
+          "KeywordSource": "Reach"
         },
         {
           "Kind": "triggered",
@@ -46,13 +46,8 @@
             "Event": "SpellCast",
             "Filter": {
               "CardTypes": [
-                "spell"
-              ],
-              "Characteristics": [
-                {
-                  "CharacteristicType": "other",
-                  "Description": "artifact"
-                }
+                "spell",
+                "artifact"
               ],
               "Controller": "You"
             }
@@ -87,7 +82,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -107,13 +103,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         }
       }
     ]

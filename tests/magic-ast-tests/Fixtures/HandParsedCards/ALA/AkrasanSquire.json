@@ -17,7 +17,6 @@
     "Name": "Akrasan Squire",
     "TypeLine": {
       "Raw": "Creature — Human Soldier",
-      "Supertypes": [],
       "Types": [
         "Creature"
       ],
@@ -31,7 +30,6 @@
       "Abilities": [
         {
           "Kind": "triggered",
-          "KeywordSource": "Exalted",
           "Trigger": {
             "Timing": "Whenever",
             "Event": "Attacks",
@@ -42,8 +40,8 @@
               "Controller": "You",
               "Characteristics": [
                 {
-                  "CharacteristicType": "other",
-                  "Description": "attacking alone"
+                  "CharacteristicType": "combatState",
+                  "State": "AttackingAlone"
                 }
               ]
             }
@@ -70,7 +68,11 @@
                 }
               }
             }
-          ]
+          ],
+          "KeywordSource": "Exalted",
+          "Reminder": {
+            "Text": "(Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)"
+          }
         }
       ]
     },
@@ -86,7 +88,8 @@
             ]
           }
         ],
-        "ManaValue": 1
+        "ManaValue": 1,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -104,13 +107,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]

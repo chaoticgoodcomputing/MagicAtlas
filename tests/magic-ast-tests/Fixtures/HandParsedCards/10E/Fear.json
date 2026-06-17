@@ -4,8 +4,6 @@
     "ManaCost": "{B}{B}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant creature (Target a creature as you cast this. This card enters attached to that creature.)\nEnchanted creature has fear. (It can't be blocked except by artifact creatures and/or black creatures.)",
-    "Power": null,
-    "Toughness": null,
     "Colors": [
       "B"
     ],
@@ -29,7 +27,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Enchant",
           "Effects": [
             {
               "EffectType": "enchantRestriction",
@@ -39,7 +36,8 @@
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Enchant"
         },
         {
           "Kind": "static",
@@ -51,27 +49,21 @@
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Fear",
                 "Effects": [
                   {
                     "EffectType": "evasion",
                     "CanBeBlockedBy": {
                       "CardTypes": [
-                        "creature"
+                        "creature",
+                        "artifact"
                       ],
-                      "Characteristics": [
-                        {
-                          "CharacteristicType": "other",
-                          "Description": "artifact"
-                        },
-                        {
-                          "CharacteristicType": "other",
-                          "Description": "black"
-                        }
+                      "Colors": [
+                        "B"
                       ]
                     }
                   }
-                ]
+                ],
+                "KeywordSource": "Fear"
               }
             }
           ]
@@ -96,7 +88,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

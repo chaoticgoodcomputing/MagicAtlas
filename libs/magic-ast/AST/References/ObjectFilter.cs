@@ -108,6 +108,18 @@ public sealed record ObjectFilter
   public IReadOnlyList<string>? Colors { get; init; }
 
   /// <summary>
+  /// Colors EXCLUDED by a "non[color]" qualifier — e.g. "nonblack creature"
+  /// → <c>CardTypes=["creature"]</c> + <c>ExcludedColors=["B"]</c> (Doom Blade),
+  /// "nonblue spell" (Frazzle). Parallel negation axis to <see cref="Colors"/>,
+  /// mirroring <see cref="ExcludedCardTypes"/> over <see cref="CardTypes"/>: a
+  /// filter matches only objects that have none of these colors (CR 105.1).
+  /// Distinct from <see cref="IsColorless"/> ("no colors at all"): a nonblack
+  /// object may still be colored, just not black.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? ExcludedColors { get; init; }
+
+  /// <summary>
   /// Relational color axis: filters to objects that share a color with a referenced
   /// object. Conspire's "two untapped creatures you control that each share a color with
   /// it" (CR 702.78a), where the reference is the spell with conspire
@@ -342,13 +354,63 @@ public enum ControllerFilter
 }
 
 /// <summary>
-/// A numeric comparison.
+/// A numeric comparison. The right-hand side is either a printed literal
+/// (<see cref="Value"/>) or a relative reference to another object's characteristic
+/// (<see cref="RelativeTo"/> + <see cref="RelativeCharacteristic"/>) — e.g.
+/// "power less than this creature's power" (Mentor, CR 702.134) compares against the
+/// source object's power, not a static int. Exactly one side is populated: literal
+/// consumers set <see cref="Value"/> and leave the relative axes null (serialized
+/// byte-identically — the relative fields are omitted via WhenWritingNull); relative
+/// consumers set <see cref="RelativeTo"/>/<see cref="RelativeCharacteristic"/> and
+/// leave <see cref="Value"/> null.
 /// </summary>
 public sealed record Comparison
 {
   public required ComparisonOperator Operator { get; init; }
 
-  public required int Value { get; init; }
+  /// <summary>
+  /// The printed integer right-hand side ("power 4 or greater"). Null when the
+  /// comparison is relative to another object's characteristic — see
+  /// <see cref="RelativeTo"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? Value { get; init; }
+
+  /// <summary>
+  /// The object whose characteristic the comparison is made against, when the
+  /// right-hand side is relative rather than a literal — "power less than this
+  /// creature's power" → <c>RelativeTo = ObjectReference.Self()</c> (CR 702.134
+  /// Mentor; the relative-power evasion convention). Null for literal-int
+  /// comparisons (the common case), so they serialize unchanged.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? RelativeTo { get; init; }
+
+  /// <summary>
+  /// Which characteristic of <see cref="RelativeTo"/> the comparison reads —
+  /// e.g. <see cref="RelativeCharacteristic.Power"/> for "power less than this
+  /// creature's power". Null for literal-int comparisons.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public RelativeCharacteristic? RelativeCharacteristic { get; init; }
+}
+
+/// <summary>
+/// Which characteristic of a referenced object a relative <see cref="Comparison"/>
+/// reads — the "[object]'s power" / "[object]'s toughness" axis a relative threshold
+/// compares against (CR 702.134 Mentor compares the target's power to the source's power).
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum RelativeCharacteristic
+{
+  /// <summary>The referenced object's power ("power less than this creature's power").</summary>
+  Power,
+
+  /// <summary>The referenced object's toughness.</summary>
+  Toughness,
+
+  /// <summary>The referenced object's mana value.</summary>
+  ManaValue,
 }
 
 /// <summary>

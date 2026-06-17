@@ -46,21 +46,21 @@
                       "Description": "other"
                     },
                     {
-                      "CharacteristicType": "other",
-                      "Description": "tapped"
+                      "CharacteristicType": "tapped",
+                      "Tapped": true
                     }
                   ]
                 }
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Indestructible",
                 "Effects": [
                   {
                     "EffectType": "keywordAbility",
                     "Keyword": "Indestructible"
                   }
-                ]
+                ],
+                "KeywordSource": "Indestructible"
               }
             }
           ]
@@ -83,7 +83,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -101,13 +102,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         }
       }
     ]

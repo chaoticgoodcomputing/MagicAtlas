@@ -48,9 +48,9 @@ public sealed class BareKeywordGrantRule : IStaticRule
 
   // Arm 5: "Each creature you control with a +1/+1 counter on it has <keyword>."
   // Matches the lord-grants-keyword pattern where the subject filter is augmented
-  // by the "+1/+1 counter" predicate. The counter characteristic is stored verbatim
-  // as Characteristics: ["with a +1/+1 counter"] on the ObjectFilter, consistent with
-  // how "tapped"/"untapped" predicates are encoded on the lord-PT filter shapes.
+  // by the "+1/+1 counter" predicate. The counter constraint is structured as a
+  // CounterCharacteristic{"+1/+1"} (CR 122) via Characteristic.FromLabel, consistent with
+  // how "tapped"/"untapped" predicates are structured on the lord-PT filter shapes.
   // "Each" (universal quantifier) signals the Each-kinded ObjectReference; the
   // "you control" clause sets Controller = You. The trailing reminder text is stripped
   // before matching so lines like "...has trample. (It can deal excess...)" still match.
@@ -209,9 +209,9 @@ public sealed class BareKeywordGrantRule : IStaticRule
 
     // Arm 5: "Each creature you control with a +1/+1 counter on it has <keyword>."
     // Lord-grants-keyword where the subject filter carries a counter predicate.
-    // Encodes the "+1/+1 counter on it" condition as Characteristics: ["with a +1/+1 counter"]
-    // on the filter, consistent with how "tapped"/"untapped" predicates are stored
-    // in the lord-PT filter shapes (ParseLordPTFilter). The Each-kinded reference plus
+    // Structures the "+1/+1 counter on it" condition as CounterCharacteristic{"+1/+1"}
+    // (CR 122) on the filter, consistent with how "tapped"/"untapped" predicates are
+    // structured in the lord-PT filter shapes (ParseLordPTFilter). The Each-kinded reference plus
     // Controller = You mirrors the filter-arm shape from TryParseLordPTBuff.
     var counterKeywordMatch = _eachCreatureWithCounterKeywordPattern.Match(rawText);
     if (counterKeywordMatch.Success)
@@ -235,7 +235,7 @@ public sealed class BareKeywordGrantRule : IStaticRule
               {
                 CardTypes = ["creature"],
                 Controller = ControllerFilter.You,
-                Characteristics = [Characteristic.Other("with a +1/+1 counter")],
+                Characteristics = [Characteristic.FromLabel("with a +1/+1 counter")],
               },
             },
             GainedAbility = counterGranted,

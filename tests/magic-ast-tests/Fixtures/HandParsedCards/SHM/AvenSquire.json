@@ -17,7 +17,6 @@
     "Name": "Aven Squire",
     "TypeLine": {
       "Raw": "Creature — Bird Soldier",
-      "Supertypes": [],
       "Types": [
         "Creature"
       ],
@@ -31,7 +30,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Flying",
           "Effects": [
             {
               "EffectType": "evasion",
@@ -51,11 +49,11 @@
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Flying"
         },
         {
           "Kind": "triggered",
-          "KeywordSource": "Exalted",
           "Trigger": {
             "Timing": "Whenever",
             "Event": "Attacks",
@@ -66,8 +64,8 @@
               "Controller": "You",
               "Characteristics": [
                 {
-                  "CharacteristicType": "other",
-                  "Description": "attacking alone"
+                  "CharacteristicType": "combatState",
+                  "State": "AttackingAlone"
                 }
               ]
             }
@@ -94,7 +92,11 @@
                 }
               }
             }
-          ]
+          ],
+          "KeywordSource": "Exalted",
+          "Reminder": {
+            "Text": "(Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)"
+          }
         }
       ]
     },
@@ -114,7 +116,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -132,13 +135,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]

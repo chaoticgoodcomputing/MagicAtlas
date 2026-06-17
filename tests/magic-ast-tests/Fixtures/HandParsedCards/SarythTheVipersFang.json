@@ -49,8 +49,8 @@
                       "Description": "other"
                     },
                     {
-                      "CharacteristicType": "other",
-                      "Description": "tapped"
+                      "CharacteristicType": "tapped",
+                      "Tapped": true
                     }
                   ]
                 }
@@ -86,8 +86,8 @@
                       "Description": "other"
                     },
                     {
-                      "CharacteristicType": "other",
-                      "Description": "untapped"
+                      "CharacteristicType": "tapped",
+                      "Tapped": false
                     }
                   ]
                 }

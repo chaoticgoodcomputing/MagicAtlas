@@ -4,8 +4,6 @@
     "ManaCost": "{U}",
     "TypeLine": "Instant",
     "OracleText": "Counter target noncreature spell unless its controller pays {2}.",
-    "Power": null,
-    "Toughness": null,
     "Colors": [
       "U"
     ],
@@ -37,11 +35,8 @@
                     "CardTypes": [
                       "spell"
                     ],
-                    "Characteristics": [
-                      {
-                        "CharacteristicType": "other",
-                        "Description": "noncreature"
-                      }
+                    "ExcludedCardTypes": [
+                      "creature"
                     ]
                   }
                 }

@@ -346,7 +346,7 @@ internal static class StaticRuleHelpers
       },
       // Intimidate: can't be blocked except by artifact creatures and/or creatures
       // sharing a color. Rule 702.13. Mirrors Fear (702.36) but with the color-share
-      // predicate instead of the fixed black-color predicate.
+      // predicate (SharesColorWith=Self) instead of the fixed black Colors entry.
       "intimidate" => new StaticAbility
       {
         KeywordSource = KeywordAbility.Intimidate,
@@ -354,8 +354,8 @@ internal static class StaticRuleHelpers
         {
           CanBeBlockedBy = new ObjectFilter
           {
-            CardTypes = ["creature"],
-            Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("shares a color")],
+            CardTypes = ["creature", "artifact"],
+            SharesColorWith = ObjectReference.Self(),
           },
         }],
       },
@@ -382,9 +382,9 @@ internal static class StaticRuleHelpers
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }],
       },
       // Fear: can't be blocked except by artifact creatures and/or black creatures.
-      // Rule 702.36. Mirrors Intimidate (702.13) but with a fixed black-color predicate
-      // instead of the color-share predicate. EvasionEffect with CanBeBlockedBy carrying
-      // Characteristics: ["artifact", "black"].
+      // Rule 702.36. Mirrors Intimidate (702.13) but with a fixed black Colors entry
+      // instead of the color-share predicate. EvasionEffect with CanBeBlockedBy structuring
+      // the artifact type (CardTypes) and the black color (Colors).
       "fear" => new StaticAbility
       {
         KeywordSource = KeywordAbility.Fear,
@@ -392,8 +392,8 @@ internal static class StaticRuleHelpers
         {
           CanBeBlockedBy = new ObjectFilter
           {
-            CardTypes = ["creature"],
-            Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("black")],
+            CardTypes = ["creature", "artifact"],
+            Colors = ["B"],
           },
         }],
       },

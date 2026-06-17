@@ -4,16 +4,20 @@
     "ManaCost": "{1}{U}",
     "TypeLine": "Instant",
     "OracleText": "Return target nonland permanent to its owner's hand.",
-    "Power": null,
-    "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Disperse",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Return target nonland permanent to its owner's hand.",
@@ -26,8 +30,12 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["permanent"],
-                  "Characteristics": [{"CharacteristicType": "other", "Description": "nonland"}]
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "ExcludedCardTypes": [
+                    "land"
+                  ]
                 }
               }
             }
@@ -40,13 +48,32 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}",
         "Symbols": [
-          {"Kind": "generic", "GenericAmount": 1},
-          {"Kind": "colored", "Colors": ["U"]}
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
-      {"Kind": "colors", "Colors": ["U"]},
-      {"Kind": "colorIdentity", "ColorIdentity": ["U"]}
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
     ]
   }
 }

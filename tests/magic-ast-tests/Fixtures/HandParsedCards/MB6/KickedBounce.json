@@ -26,7 +26,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Kicker",
           "Effects": [
             {
               "EffectType": "additionalCastCost",
@@ -40,10 +39,15 @@
                     }
                   ]
                 },
-                "IsOptional": true
+                "IsOptional": true,
+                "Repeatable": false
               }
             }
-          ]
+          ],
+          "KeywordSource": "Kicker",
+          "Reminder": {
+            "Text": "(You may pay an additional {2} as you cast this spell.)"
+          }
         },
         {
           "Kind": "spell",
@@ -56,11 +60,8 @@
                   "CardTypes": [
                     "permanent"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "nonland"
-                    }
+                  "ExcludedCardTypes": [
+                    "land"
                   ]
                 }
               }
@@ -99,7 +100,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

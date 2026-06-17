@@ -129,13 +129,15 @@ public sealed class LordPTBuffRule : IStaticRule
       {
         return null;
       }
-      return new ObjectFilter
-      {
-        CardTypes = ["creature"],
-        Colors = [colorCode],
-        Controller = controller,
-        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
-      };
+      return QualifierAxisMapper.Apply(
+        new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Colors = [colorCode],
+          Controller = controller,
+        },
+        characteristics
+      );
     }
 
     // --- Shape: "artifact creatures" — both card types (Rule 205.2) ---
@@ -146,12 +148,14 @@ public sealed class LordPTBuffRule : IStaticRule
     if (text.Equals("artifact creatures", StringComparison.OrdinalIgnoreCase) ||
         text.Equals("artifact creature", StringComparison.OrdinalIgnoreCase))
     {
-      return new ObjectFilter
-      {
-        CardTypes = ["artifact", "creature"],
-        Controller = controller,
-        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
-      };
+      return QualifierAxisMapper.Apply(
+        new ObjectFilter
+        {
+          CardTypes = ["artifact", "creature"],
+          Controller = controller,
+        },
+        characteristics
+      );
     }
 
     // --- Shape: "tapped creatures" / "untapped creatures" / "nontoken creatures" /
@@ -178,12 +182,14 @@ public sealed class LordPTBuffRule : IStaticRule
         var chars = characteristics is null
           ? (IReadOnlyList<string>)[characteristic]
           : [..characteristics, characteristic];
-        return new ObjectFilter
-        {
-          CardTypes = ["creature"],
-          Controller = controller,
-          Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
-        };
+        return QualifierAxisMapper.Apply(
+          new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Controller = controller,
+          },
+          chars
+        );
       }
     }
 
@@ -199,12 +205,14 @@ public sealed class LordPTBuffRule : IStaticRule
       var chars = characteristics is null
         ? (IReadOnlyList<string>)["token"]
         : [..characteristics, "token"];
-      return new ObjectFilter
-      {
-        CardTypes = ["creature"],
-        Controller = controller,
-        Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
-      };
+      return QualifierAxisMapper.Apply(
+        new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Controller = controller,
+        },
+        chars
+      );
     }
 
     // --- Shape: "Face-down creatures" — characteristic filter (Rule 707, face-down permanents) ---

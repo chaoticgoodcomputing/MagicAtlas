@@ -227,6 +227,14 @@
           ]
         },
         {
+          "Type": "CounterCharacteristic",
+          "Discriminator": "counter",
+          "IsUnparsed": false,
+          "Fields": [
+            "CounterType"
+          ]
+        },
+        {
           "Type": "KeywordCharacteristic",
           "Discriminator": "keyword",
           "IsUnparsed": false,
@@ -240,6 +248,14 @@
           "IsUnparsed": false,
           "Fields": [
             "Description"
+          ]
+        },
+        {
+          "Type": "TappedStateCharacteristic",
+          "Discriminator": "tapped",
+          "IsUnparsed": false,
+          "Fields": [
+            "Tapped"
           ]
         }
       ]
@@ -1900,5 +1916,5 @@
       ]
     }
   ],
-  "SchemaHash": "7abde6ac2d8b0771fa7d3b6502bdef50fee1b1629da09ab88aec696fbdb33ed9"
+  "SchemaHash": "1c0669a858692fedb5b57ed72efe97c097c5e1be7a8974d635a0ec95a571edfd"
 }

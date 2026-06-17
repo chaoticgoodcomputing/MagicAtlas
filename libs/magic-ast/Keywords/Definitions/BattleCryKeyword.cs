@@ -22,12 +22,12 @@ using static MagicAST.Keywords.Definitions.KeywordCombinators;
 ///   Trigger:{ Timing:Whenever, Event:Attacks, Filter:{CardTypes:["creature"]} },
 ///   Effects:[ ModifyPTEffect{ Target:{Kind:Each,
 ///     Filter:{CardTypes:["creature"], ExcludeSelf:true,
-///             Characteristics:[Other("attacking")]}},
+///             Characteristics:[CombatStateCharacteristic{Attacking}]}},
 ///     PowerModifier:+1, ToughnessModifier:+0, Duration:untilEndOfTurn } ] }.
 ///
 /// "Other" is encoded as ExcludeSelf=true on the ObjectFilter (CR 109.5, same as
-/// Champion/Soulbond). "Attacking" is a state predicate without a first-class
-/// ObjectFilter field, carried as an OtherCharacteristic residual per ADR 0001.
+/// Champion/Soulbond). "Attacking" is the combat-state predicate
+/// CombatStateCharacteristic{Attacking} (CR 508).
 /// </summary>
 [Keyword]
 public sealed class BattleCryKeyword : IKeyword
@@ -65,7 +65,7 @@ public sealed class BattleCryKeyword : IKeyword
               ExcludeSelf = true,
               Characteristics =
               [
-                Characteristic.Other("attacking"),
+                Characteristic.InCombat(CombatState.Attacking),
               ],
             },
           },

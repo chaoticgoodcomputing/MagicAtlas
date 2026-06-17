@@ -101,12 +101,18 @@ public static class ObjectFilterRelations
     if (a is null || b is null)
       return FilterRelation.Overlaps;
 
+    // A relative comparison ("power less than this creature's power") has no printed
+    // integer to reduce to a numeric window — its right-hand side resolves against
+    // another object at runtime (CR 702.134). Co-satisfiability is undecidable here.
+    if (a.Value is null || b.Value is null)
+      return FilterRelation.Overlaps;
+
     long lo = long.MinValue,
       hi = long.MaxValue;
     var excluded = new HashSet<long>();
     foreach (var c in new[] { a, b })
     {
-      long v = c.Value;
+      long v = c.Value.Value;
       switch (c.Operator)
       {
         case ComparisonOperator.LessThan:
@@ -608,6 +614,11 @@ public static class ObjectFilterRelations
       return Trilean.No;
     if (sub.Operator == ComparisonOperator.NotEqual || sup.Operator == ComparisonOperator.NotEqual)
       return Trilean.Unknown;
+    // A relative comparison ("less than this creature's power") has no printed integer
+    // window — its threshold resolves against another object at runtime (CR 702.134), so
+    // interval containment is undecidable.
+    if (sub.Value is null || sup.Value is null)
+      return Trilean.Unknown;
     var (slo, shi) = Range(sub);
     var (plo, phi) = Range(sup);
     return plo <= slo && shi <= phi ? Trilean.Yes : Trilean.No;
@@ -616,11 +627,11 @@ public static class ObjectFilterRelations
   private static (long Lo, long Hi) Range(Comparison c) =>
     c.Operator switch
     {
-      ComparisonOperator.LessThan => (long.MinValue, (long)c.Value - 1),
-      ComparisonOperator.LessThanOrEqual => (long.MinValue, c.Value),
-      ComparisonOperator.GreaterThan => ((long)c.Value + 1, long.MaxValue),
-      ComparisonOperator.GreaterThanOrEqual => (c.Value, long.MaxValue),
-      ComparisonOperator.Equal => (c.Value, c.Value),
+      ComparisonOperator.LessThan => (long.MinValue, (long)c.Value! - 1),
+      ComparisonOperator.LessThanOrEqual => (long.MinValue, c.Value!.Value),
+      ComparisonOperator.GreaterThan => ((long)c.Value! + 1, long.MaxValue),
+      ComparisonOperator.GreaterThanOrEqual => (c.Value!.Value, long.MaxValue),
+      ComparisonOperator.Equal => (c.Value!.Value, c.Value!.Value),
       _ => (long.MinValue, long.MaxValue),
     };
 
@@ -806,6 +817,19 @@ public static class ObjectFilterRelations
             sub.Characteristics?.OfType<CombatStateCharacteristic>()
               .Any(s => RolesSubset(s.State, cs.State)) ?? false;
           result = Kleene.And(result, implied ? Trilean.Yes : Trilean.No);
+          break;
+        case TappedStateCharacteristic ts:
+          var hasTapState =
+            sub.Characteristics?.OfType<TappedStateCharacteristic>().Any(s => s.Tapped == ts.Tapped)
+            ?? false;
+          result = Kleene.And(result, hasTapState ? Trilean.Yes : Trilean.No);
+          break;
+        case CounterCharacteristic cc:
+          var hasCounter =
+            sub.Characteristics?.OfType<CounterCharacteristic>()
+              .Any(s => string.Equals(s.CounterType, cc.CounterType, StringComparison.OrdinalIgnoreCase))
+            ?? false;
+          result = Kleene.And(result, hasCounter ? Trilean.Yes : Trilean.No);
           break;
       }
     return result;

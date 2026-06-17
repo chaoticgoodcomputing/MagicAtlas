@@ -4,16 +4,20 @@
     "ManaCost": "{3}{U}",
     "TypeLine": "Instant",
     "OracleText": "Counter target nonblue spell.",
-    "Power": null,
-    "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Frazzle",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Counter target nonblue spell.",
@@ -26,8 +30,12 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["spell"],
-                  "Characteristics": [{"CharacteristicType": "other", "Description": "nonblue"}]
+                  "CardTypes": [
+                    "spell"
+                  ],
+                  "ExcludedColors": [
+                    "U"
+                  ]
                 }
               }
             }
@@ -40,18 +48,31 @@
         "Kind": "manaCost",
         "Raw": "{3}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

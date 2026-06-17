@@ -10,9 +10,10 @@ using static MagicAST.Keywords.Definitions.KeywordCombinators;
 /// <summary>
 /// Intimidate: This creature can't be blocked except by artifact creatures and/or
 /// creatures that share a color with it.
-/// Rule 702.13. EvasionEffect with CanBeBlockedBy covering the artifact-type and
-/// shares-a-color predicates; mirrors Fear (702.36) but substitutes the color-share
-/// predicate for the fixed black-color predicate.
+/// Rule 702.13. EvasionEffect with CanBeBlockedBy structuring the artifact type
+/// (CardTypes) and the shares-a-color predicate (SharesColorWith = the source object,
+/// Self); mirrors Fear (702.36) but substitutes the relational color-share axis for the
+/// fixed black Colors entry.
 /// </summary>
 [Keyword]
 public sealed class IntimidateKeyword : IKeyword
@@ -35,8 +36,8 @@ public sealed class IntimidateKeyword : IKeyword
         {
           CanBeBlockedBy = new ObjectFilter
           {
-            CardTypes = ["creature"],
-            Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("shares a color")],
+            CardTypes = ["creature", "artifact"],
+            SharesColorWith = ObjectReference.Self(),
           },
         }],
       },
@@ -53,8 +54,8 @@ public sealed class IntimidateKeyword : IKeyword
       {
         CanBeBlockedBy = new ObjectFilter
         {
-          CardTypes = ["creature"],
-          Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("shares a color")],
+          CardTypes = ["creature", "artifact"],
+          SharesColorWith = ObjectReference.Self(),
         },
       }],
       Reminder = reminder,

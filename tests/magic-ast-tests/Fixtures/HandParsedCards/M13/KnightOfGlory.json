@@ -17,7 +17,6 @@
     "Name": "Knight of Glory",
     "TypeLine": {
       "Raw": "Creature — Human Knight",
-      "Supertypes": [],
       "Types": [
         "Creature"
       ],
@@ -31,7 +30,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Protection",
           "Effects": [
             {
               "EffectType": "protection",
@@ -42,11 +40,14 @@
                 }
               ]
             }
-          ]
+          ],
+          "KeywordSource": "Protection",
+          "Reminder": {
+            "Text": "(This creature can't be blocked, targeted, dealt damage, or enchanted by anything black.)"
+          }
         },
         {
           "Kind": "triggered",
-          "KeywordSource": "Exalted",
           "Trigger": {
             "Timing": "Whenever",
             "Event": "Attacks",
@@ -57,8 +58,8 @@
               "Controller": "You",
               "Characteristics": [
                 {
-                  "CharacteristicType": "other",
-                  "Description": "attacking alone"
+                  "CharacteristicType": "combatState",
+                  "State": "AttackingAlone"
                 }
               ]
             }
@@ -85,7 +86,11 @@
                 }
               }
             }
-          ]
+          ],
+          "KeywordSource": "Exalted",
+          "Reminder": {
+            "Text": "(Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)"
+          }
         }
       ]
     },
@@ -105,7 +110,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -123,13 +129,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]

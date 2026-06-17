@@ -21,14 +21,14 @@ using static MagicAST.Keywords.Definitions.KeywordCombinators;
 ///   Trigger:{ Timing:Whenever, Event:Attacks, Filter:{CardTypes:["creature"]} },
 ///   Effects:[ PutCountersEffect{ Target:{Kind:Target,
 ///     Filter:{CardTypes:["creature"],
-///             Characteristics:[Other("attacking"),
-///                              Other("with power less than this creature's power")]}},
+///             Characteristics:[CombatStateCharacteristic{Attacking}],
+///             PowerComparison:{LessThan, RelativeTo:Self, RelativeCharacteristic:Power}}},
 ///     CounterType:"+1/+1", Count:1 } ] }.
 ///
-/// "Attacking" and "with power less than this creature's power" are relative/state
-/// predicates that do not yet have first-class ObjectFilter fields, so they are
-/// carried as OtherCharacteristic residuals per the ADR 0001 free-text doctrine
-/// and the existing CantBeBlockedRule convention (CantBeBlockedRule.cs line 168).
+/// "Attacking" is the combat-state predicate (CombatStateCharacteristic, CR 508).
+/// "With power less than this creature's power" is a relative power comparison
+/// against the source object (PowerComparison with RelativeTo=Self), matching the
+/// CantBeBlockedRule relative-power convention.
 /// </summary>
 [Keyword]
 public sealed class MentorKeyword : IKeyword
@@ -64,9 +64,14 @@ public sealed class MentorKeyword : IKeyword
               CardTypes = ["creature"],
               Characteristics =
               [
-                Characteristic.Other("attacking"),
-                Characteristic.Other("with power less than this creature's power"),
+                Characteristic.InCombat(CombatState.Attacking),
               ],
+              PowerComparison = new Comparison
+              {
+                Operator = ComparisonOperator.LessThan,
+                RelativeTo = ObjectReference.Self(),
+                RelativeCharacteristic = RelativeCharacteristic.Power,
+              },
             },
           },
           CounterType = "+1/+1",

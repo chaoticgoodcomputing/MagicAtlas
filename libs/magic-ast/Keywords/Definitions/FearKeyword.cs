@@ -10,8 +10,10 @@ using static MagicAST.Keywords.Definitions.KeywordCombinators;
 /// <summary>
 /// Fear: This creature can't be blocked except by artifact creatures and/or black creatures.
 /// Rule 702.36. MAST records keyword presence; the evasion semantics are expressed via
-/// EvasionEffect with a Characteristics-stretch ObjectFilter covering both the artifact
-/// type and the black color qualifier.
+/// EvasionEffect with an ObjectFilter structuring the artifact type (CardTypes) and the
+/// black color (Colors). The "artifact creatures and/or black creatures" disjunction is
+/// modelled as one filter carrying both axes (the same simplification the prior free-text
+/// list used), per the slice spec's artifact→CardTypes + black→Colors mapping.
 /// </summary>
 [Keyword]
 public sealed class FearKeyword : IKeyword
@@ -34,8 +36,8 @@ public sealed class FearKeyword : IKeyword
         {
           CanBeBlockedBy = new ObjectFilter
           {
-            CardTypes = ["creature"],
-            Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("black")],
+            CardTypes = ["creature", "artifact"],
+            Colors = ["B"],
           },
         }],
       },
@@ -52,8 +54,8 @@ public sealed class FearKeyword : IKeyword
       {
         CanBeBlockedBy = new ObjectFilter
         {
-          CardTypes = ["creature"],
-          Characteristics = [Characteristic.Other("artifact"), Characteristic.Other("black")],
+          CardTypes = ["creature", "artifact"],
+          Colors = ["B"],
         },
       }],
       Reminder = reminder,

@@ -29,7 +29,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Flying",
           "Effects": [
             {
               "EffectType": "evasion",
@@ -49,7 +48,8 @@
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Flying"
         },
         {
           "Kind": "static",
@@ -65,15 +65,14 @@
                   "Controller": "You",
                   "Characteristics": [
                     {
-                      "CharacteristicType": "other",
-                      "Description": "with a +1/+1 counter"
+                      "CharacteristicType": "counter",
+                      "CounterType": "+1/+1"
                     }
                   ]
                 }
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Flying",
                 "Effects": [
                   {
                     "EffectType": "evasion",
@@ -93,7 +92,8 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "KeywordSource": "Flying"
               }
             }
           ]
@@ -116,7 +116,8 @@
             ]
           }
         ],
-        "ManaValue": 6
+        "ManaValue": 6,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -134,13 +135,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         }
       }
     ]

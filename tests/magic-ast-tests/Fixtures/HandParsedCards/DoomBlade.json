@@ -4,16 +4,20 @@
     "ManaCost": "{1}{B}",
     "TypeLine": "Instant",
     "OracleText": "Destroy target nonblack creature.",
-    "Power": null,
-    "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Doom Blade",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy target nonblack creature.",
@@ -26,10 +30,15 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Characteristics": [{"CharacteristicType": "other", "Description": "nonblack"}]
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "ExcludedColors": [
+                    "B"
+                  ]
                 }
-              }
+              },
+              "CantBeRegenerated": false
             }
           ]
         }
@@ -40,18 +49,31 @@
         "Kind": "manaCost",
         "Raw": "{1}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

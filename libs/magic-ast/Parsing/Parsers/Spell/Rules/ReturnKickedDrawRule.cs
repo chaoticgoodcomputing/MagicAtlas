@@ -98,11 +98,10 @@ public sealed class ReturnKickedDrawRule : ISpellRule, IMultiSpellRule
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter
-        {
-          CardTypes = [typeWord],
-          Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
-        },
+        Filter = QualifierAxisMapper.Apply(
+          new ObjectFilter { CardTypes = [typeWord] },
+          characteristics
+        ),
       },
     };
 

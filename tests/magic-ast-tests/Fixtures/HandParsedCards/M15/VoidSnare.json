@@ -4,8 +4,6 @@
     "ManaCost": "{U}",
     "TypeLine": "Sorcery",
     "OracleText": "Return target nonland permanent to its owner's hand.",
-    "Power": null,
-    "Toughness": null,
     "Colors": [
       "U"
     ],
@@ -35,8 +33,8 @@
                   "CardTypes": [
                     "permanent"
                   ],
-                  "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "nonland"}
+                  "ExcludedCardTypes": [
+                    "land"
                   ]
                 }
               }
@@ -57,7 +55,8 @@
             ]
           }
         ],
-        "ManaValue": 1
+        "ManaValue": 1,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

@@ -117,15 +117,17 @@ public sealed class SpellCastConditionRule : ITriggerConditionRule
       characteristics.Count > 0 || excludedCardTypes.Count > 0 || colors.Count > 0 || isMulticolored == true;
     IReadOnlyList<string>? cardTypes = hasAnyQualifier ? new List<string> { "spell" } : null;
 
-    var filter = new ObjectFilter
-    {
-      CardTypes = cardTypes,
-      ExcludedCardTypes = excludedCardTypes.Count > 0 ? excludedCardTypes : null,
-      Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
-      Colors = colors.Count > 0 ? colors : null,
-      IsMulticolored = isMulticolored,
-      Controller = controller,
-    };
+    var filter = QualifierAxisMapper.Apply(
+      new ObjectFilter
+      {
+        CardTypes = cardTypes,
+        ExcludedCardTypes = excludedCardTypes.Count > 0 ? excludedCardTypes : null,
+        Colors = colors.Count > 0 ? colors : null,
+        IsMulticolored = isMulticolored,
+        Controller = controller,
+      },
+      characteristics
+    );
 
     return new TriggerCondition
     {

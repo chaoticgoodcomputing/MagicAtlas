@@ -29,13 +29,13 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Trample",
           "Effects": [
             {
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "KeywordSource": "Trample"
         },
         {
           "Kind": "static",
@@ -51,21 +51,21 @@
                   "Controller": "You",
                   "Characteristics": [
                     {
-                      "CharacteristicType": "other",
-                      "Description": "with a +1/+1 counter"
+                      "CharacteristicType": "counter",
+                      "CounterType": "+1/+1"
                     }
                   ]
                 }
               },
               "GainedAbility": {
                 "Kind": "static",
-                "KeywordSource": "Trample",
                 "Effects": [
                   {
                     "EffectType": "keywordAbility",
                     "Keyword": "Trample"
                   }
-                ]
+                ],
+                "KeywordSource": "Trample"
               }
             }
           ]
@@ -88,7 +88,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -106,13 +107,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "3",
-          "Value": 3
+          "Value": 3,
+          "Raw": "3"
         }
       }
     ]

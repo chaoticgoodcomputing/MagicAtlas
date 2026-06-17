@@ -2,7 +2,6 @@
   "Keyword": "Battle cry",
   "Expected": {
     "Kind": "triggered",
-    "KeywordSource": "Battle cry",
     "Trigger": {
       "Timing": "Whenever",
       "Event": "Attacks",
@@ -24,8 +23,8 @@
             "ExcludeSelf": true,
             "Characteristics": [
               {
-                "CharacteristicType": "other",
-                "Description": "attacking"
+                "CharacteristicType": "combatState",
+                "State": "Attacking"
               }
             ]
           }
@@ -46,6 +45,7 @@
           }
         }
       }
-    ]
+    ],
+    "KeywordSource": "Battle cry"
   }
 }

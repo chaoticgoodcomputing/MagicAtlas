@@ -205,27 +205,31 @@ internal static class SpellRuleHelpers
     // Determine whether the main noun is a card type or a subtype.
     if (DestroyCardTypeMap.TryGetValue(noun, out var singularType))
     {
-      return new ObjectFilter
-      {
-        CardTypes = [singularType],
-        Colors = colors,
-        IsColorless = isColorless,
-        IsMulticolored = isMulticolored,
-        Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
-      };
+      return QualifierAxisMapper.Apply(
+        new ObjectFilter
+        {
+          CardTypes = [singularType],
+          Colors = colors,
+          IsColorless = isColorless,
+          IsMulticolored = isMulticolored,
+        },
+        characteristics
+      );
     }
 
     // Not a card type → treat as a subtype (e.g., "Spirit", "Human").
     // Color + subtype combinations are theoretically possible but rare; we support
     // them here for completeness.
-    return new ObjectFilter
-    {
-      Subtypes = [noun],
-      Colors = colors,
-      IsColorless = isColorless,
-      IsMulticolored = isMulticolored,
-      Characteristics = characteristics?.Select(Characteristic.FromLabel).ToList(),
-    };
+    return QualifierAxisMapper.Apply(
+      new ObjectFilter
+      {
+        Subtypes = [noun],
+        Colors = colors,
+        IsColorless = isColorless,
+        IsMulticolored = isMulticolored,
+      },
+      characteristics
+    );
   }
 
   /// <summary>
@@ -249,32 +253,20 @@ internal static class SpellRuleHelpers
     var characteristics = new List<string>();
     var cardTypes = new List<string> { "spell" };
 
-    // non<color> predicates (nonblue, nonred, …) → Characteristics (open-ended set)
+    // non<color> predicates (nonblue, nonred, …) — routed via QualifierAxisMapper below
+    // to ExcludedColors.
     if (!string.IsNullOrWhiteSpace(nonColorWord))
     {
       characteristics.Add(nonColorWord.ToLowerInvariant());
     }
 
-    // Card-type qualifier:
-    //   - "instant", "sorcery", "creature" → Characteristics (spell-subset semantics)
-    //   - "noncreature" → Characteristics
-    //   - "artifact", "land", "enchantment", "permanent" → additional CardType
+    // Card-type qualifier — all routed via QualifierAxisMapper below:
+    //   - "instant", "sorcery", "creature" → CardTypes (spell-subset, e.g. ["spell","instant"])
+    //   - "noncreature" → ExcludedCardTypes
+    //   - "artifact", "land", "enchantment", "permanent" → CardTypes
     if (!string.IsNullOrWhiteSpace(cardTypeWord))
     {
-      var lower = cardTypeWord.ToLowerInvariant();
-      switch (lower)
-      {
-        case "instant":
-        case "sorcery":
-        case "creature":
-        case "noncreature":
-          characteristics.Add(lower);
-          break;
-        default:
-          // Orthogonal card type: artifact, land, enchantment, permanent, etc.
-          cardTypes.Add(lower);
-          break;
-      }
+      characteristics.Add(cardTypeWord.ToLowerInvariant());
     }
 
     List<string>? colors = null;
@@ -298,14 +290,16 @@ internal static class SpellRuleHelpers
       isMulticolored ??= mappedMulticolored;
     }
 
-    return new ObjectFilter
-    {
-      CardTypes = cardTypes,
-      Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
-      Colors = colors,
-      IsColorless = isColorless,
-      IsMulticolored = isMulticolored,
-      ManaValueComparison = manaValueComparison,
-    };
+    return QualifierAxisMapper.Apply(
+      new ObjectFilter
+      {
+        CardTypes = cardTypes,
+        Colors = colors,
+        IsColorless = isColorless,
+        IsMulticolored = isMulticolored,
+        ManaValueComparison = manaValueComparison,
+      },
+      characteristics
+    );
   }
 }

@@ -20,13 +20,13 @@ using static MagicAST.Keywords.Definitions.KeywordCombinators;
 /// MAST shape (ADR 0003 decomposition): TriggeredAbility{ KeywordSource:"Exalted",
 ///   Trigger:{ Timing:Whenever, Event:Attacks,
 ///             Filter:{CardTypes:["creature"], Controller:You,
-///                     Characteristics:[Other("attacking alone")]} },
+///                     Characteristics:[CombatStateCharacteristic{AttackingAlone}]} },
 ///   Effects:[ ModifyPTEffect{ Target:{Kind:ThatCreature},
 ///                             PowerModifier:+1, ToughnessModifier:+1,
 ///                             Duration:untilEndOfTurn } ] }.
 ///
-/// "attacks alone" is a state predicate with no first-class ObjectFilter field,
-/// carried as an OtherCharacteristic residual per ADR 0001 (Mentor precedent).
+/// "attacks alone" is the combat-state predicate CombatStateCharacteristic{AttackingAlone}
+/// (CR 508, the attacking-alone role).
 /// The trigger subject is "a creature you control" (not this creature): Exalted
 /// triggers off ANY of the controller's creatures attacking alone. "that creature"
 /// maps to ObjectReferenceKind.ThatCreature — the creature named by the trigger's
@@ -58,7 +58,7 @@ public sealed class ExaltedKeyword : IKeyword
           Controller = ControllerFilter.You,
           Characteristics =
           [
-            Characteristic.Other("attacking alone"),
+            Characteristic.InCombat(CombatState.AttackingAlone),
           ],
         },
       },

@@ -4,16 +4,20 @@
     "ManaCost": "{3}{W}{W}",
     "TypeLine": "Sorcery",
     "OracleText": "Destroy target nonwhite permanent.",
-    "Power": null,
-    "Toughness": null,
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Saltblast",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy target nonwhite permanent.",
@@ -26,10 +30,15 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["permanent"],
-                  "Characteristics": [{"CharacteristicType": "other", "Description": "nonwhite"}]
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "ExcludedColors": [
+                    "W"
+                  ]
                 }
-              }
+              },
+              "CantBeRegenerated": false
             }
           ]
         }
@@ -40,19 +49,37 @@
         "Kind": "manaCost",
         "Raw": "{3}{W}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
-        "ManaValue": 5
+        "ManaValue": 5,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

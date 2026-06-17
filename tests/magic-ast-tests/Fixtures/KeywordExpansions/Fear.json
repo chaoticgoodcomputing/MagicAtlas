@@ -8,17 +8,11 @@
         "EffectType": "evasion",
         "CanBeBlockedBy": {
           "CardTypes": [
-            "creature"
+            "creature",
+            "artifact"
           ],
-          "Characteristics": [
-            {
-              "CharacteristicType": "other",
-              "Description": "artifact"
-            },
-            {
-              "CharacteristicType": "other",
-              "Description": "black"
-            }
+          "Colors": [
+            "B"
           ]
         }
       }

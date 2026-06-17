@@ -33,9 +33,7 @@
                   "CardTypes": [
                     "creature"
                   ],
-                  "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "token"}
-                  ]
+                  "IsToken": true
                 }
               },
               "PowerModifier": {
@@ -67,7 +65,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

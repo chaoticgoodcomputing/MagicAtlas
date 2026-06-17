@@ -4,17 +4,20 @@
     "ManaCost": "{3}{W}{W}{W}",
     "TypeLine": "Sorcery",
     "OracleText": "Destroy all nonland permanents.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": [],
-    "Id": "e3a7c1d5-9b4f-4e8a-b2c6-7d1f3a5e9b2c",
-    "Layout": "normal"
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Planar Cleansing",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy all nonland permanents.",
@@ -27,10 +30,15 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["permanent"],
-                  "Characteristics": [{"CharacteristicType": "other", "Description": "nonland"}]
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "ExcludedCardTypes": [
+                    "land"
+                  ]
                 }
-              }
+              },
+              "CantBeRegenerated": false
             }
           ]
         }
@@ -41,20 +49,43 @@
         "Kind": "manaCost",
         "Raw": "{3}{W}{W}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
-        "ManaValue": 6
+        "ManaValue": 6,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

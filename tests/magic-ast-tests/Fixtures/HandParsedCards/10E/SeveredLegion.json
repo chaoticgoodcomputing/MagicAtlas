@@ -29,24 +29,24 @@
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Fear",
-          "Reminder": {
-            "Text": "(This creature can't be blocked except by artifact creatures and/or black creatures.)"
-          },
           "Effects": [
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
                 "CardTypes": [
-                  "creature"
+                  "creature",
+                  "artifact"
                 ],
-                "Characteristics": [
-                  {"CharacteristicType": "other", "Description": "artifact"},
-                  {"CharacteristicType": "other", "Description": "black"}
+                "Colors": [
+                  "B"
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Fear",
+          "Reminder": {
+            "Text": "(This creature can't be blocked except by artifact creatures and/or black creatures.)"
+          }
         }
       ]
     },
@@ -72,7 +72,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -90,13 +91,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

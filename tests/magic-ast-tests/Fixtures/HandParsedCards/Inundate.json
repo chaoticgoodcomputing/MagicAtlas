@@ -4,8 +4,6 @@
     "ManaCost": "{3}{U}{U}{U}",
     "TypeLine": "Sorcery",
     "OracleText": "Return all nonblue creatures to their owners' hands.",
-    "Power": null,
-    "Toughness": null,
     "Colors": [
       "U"
     ],
@@ -35,8 +33,8 @@
                   "CardTypes": [
                     "creature"
                   ],
-                  "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "nonblue"}
+                  "ExcludedColors": [
+                    "U"
                   ]
                 }
               }
@@ -73,7 +71,8 @@
             ]
           }
         ],
-        "ManaValue": 6
+        "ManaValue": 6,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

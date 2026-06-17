@@ -2,17 +2,6 @@
   "Name": "Aggressive Mammoth",
   "Ports": [
     {
-      "Identity": "Aggressive Mammoth::emit:cantbeblocked",
-      "Card": "Aggressive Mammoth",
-      "Label": "emit:cantbeblocked",
-      "Side": "Emit",
-      "Quantity": 1,
-      "Gated": false,
-      "TapGated": false,
-      "RequiresCounter": null,
-      "Subject": null
-    },
-    {
       "Identity": "Aggressive Mammoth::emit:gainability",
       "Card": "Aggressive Mammoth",
       "Label": "emit:gainability",

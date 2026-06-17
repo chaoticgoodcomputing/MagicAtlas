@@ -4,16 +4,20 @@
     "ManaCost": "{4}{U}",
     "TypeLine": "Instant",
     "OracleText": "Put target nonland permanent on top of its owner's library.\nMiracle {U} (You may cast this card for its miracle cost when you draw it if it's the first card you drew this turn.)",
-    "Power": null,
-    "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Vanishment",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Put target nonland permanent on top of its owner's library.\nMiracle {U} (You may cast this card for its miracle cost when you draw it if it's the first card you drew this turn.)",
@@ -26,8 +30,12 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["permanent"],
-                  "Characteristics": [{"CharacteristicType": "other", "Description": "nonland"}]
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "ExcludedCardTypes": [
+                    "land"
+                  ]
                 }
               }
             }
@@ -35,10 +43,6 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Miracle",
-          "Reminder": {
-            "Text": "(You may cast this card for its miracle cost when you draw it if it's the first card you drew this turn.)"
-          },
           "Effects": [
             {
               "EffectType": "miracle",
@@ -47,12 +51,18 @@
                 "Symbols": [
                   {
                     "Kind": "colored",
-                    "Colors": ["U"]
+                    "Colors": [
+                      "U"
+                    ]
                   }
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Miracle",
+          "Reminder": {
+            "Text": "(You may cast this card for its miracle cost when you draw it if it's the first card you drew this turn.)"
+          }
         }
       ]
     },
@@ -67,18 +77,25 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
-        "ManaValue": 5
+        "ManaValue": 5,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

@@ -146,12 +146,11 @@ public sealed class CantBeBlockedRule : IStaticRule
 
     // Relative-power-threshold variant: "Creatures with power less than [CardName]'s
     // power can't block it." — Rule 509.1b. The comparison value is self-referential
-    // (the source creature's own power), not a printed integer, so it cannot be
-    // expressed on ObjectFilter.PowerComparison (which requires a static int).
-    // Stored as Characteristics: ["with power less than this creature's power"] to
-    // preserve the oracle predicate exactly. "[CardName]'s" is the standard oracle
-    // self-reference (Rule 201.4); "this creature's" is the pronoun variant — both
-    // forms are matched by the non-greedy .+? prefix.
+    // (the source creature's own power), not a printed integer, so it is expressed as a
+    // relative PowerComparison: LessThan, RelativeTo the source object (Self), reading
+    // its Power. "[CardName]'s" is the standard oracle self-reference (Rule 201.4);
+    // "this creature's" is the pronoun variant — both forms are matched by the
+    // non-greedy .+? prefix.
     if (_cantBeBlockedByRelativePowerPattern.IsMatch(clause.RawText))
     {
       return
@@ -165,7 +164,12 @@ public sealed class CantBeBlockedRule : IStaticRule
               BlockedByFilter = new ObjectFilter
               {
                 CardTypes = ["creature"],
-                Characteristics = [Characteristic.Other("with power less than this creature's power")],
+                PowerComparison = new Comparison
+                {
+                  Operator = ComparisonOperator.LessThan,
+                  RelativeTo = ObjectReference.Self(),
+                  RelativeCharacteristic = RelativeCharacteristic.Power,
+                },
               },
             },
           ],

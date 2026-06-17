@@ -35,17 +35,9 @@
             "Event": "SpellCast",
             "Filter": {
               "CardTypes": [
-                "spell"
-              ],
-              "Characteristics": [
-                {
-                  "CharacteristicType": "other",
-                  "Description": "instant"
-                },
-                {
-                  "CharacteristicType": "other",
-                  "Description": "sorcery"
-                }
+                "spell",
+                "instant",
+                "sorcery"
               ],
               "Controller": "You"
             }
@@ -53,9 +45,6 @@
           "Effects": [
             {
               "EffectType": "createToken",
-              "Player": {
-                "Kind": "You"
-              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
@@ -73,6 +62,9 @@
                   "Elemental"
                 ],
                 "IsCopy": false
+              },
+              "Player": {
+                "Kind": "You"
               }
             }
           ]
@@ -95,7 +87,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -113,13 +106,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]

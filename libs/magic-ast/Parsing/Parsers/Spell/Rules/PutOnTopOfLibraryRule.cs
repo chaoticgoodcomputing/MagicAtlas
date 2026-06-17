@@ -71,13 +71,15 @@ public sealed class PutOnTopOfLibraryRule : ISpellRule
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter
-        {
-          CardTypes = [typeWord],
-          Colors = colors,
-          Characteristics = characteristics.Count > 0 ? characteristics.Select(Characteristic.FromLabel).ToList() : null,
-          Controller = controller,
-        },
+        Filter = QualifierAxisMapper.Apply(
+          new ObjectFilter
+          {
+            CardTypes = [typeWord],
+            Colors = colors,
+            Controller = controller,
+          },
+          characteristics
+        ),
       },
     };
     return true;
