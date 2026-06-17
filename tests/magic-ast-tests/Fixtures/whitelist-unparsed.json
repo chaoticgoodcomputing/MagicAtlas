@@ -55,11 +55,6 @@
       "card": "WHO/BillPotts",
       "tag": "debt",
       "reason": "Slice 8E unparsed-triggered (reflexive copy); firability-sensitive"
-    },
-    {
-      "card": "WOE/CandyTrail",
-      "tag": "debt",
-      "reason": "Slice 4 unparsed-spell-loselife; corrupt Input (real = Food/Clue) \u2014 re-point first"
     }
   ]
 }

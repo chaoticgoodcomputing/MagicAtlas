@@ -402,11 +402,6 @@
       "reason": "gold oracle text drifts from authoritative Scryfall \u2014 re-point to the real card (gold-fidelity cleanup)"
     },
     {
-      "card": "WOE/CandyTrail",
-      "tag": "debt",
-      "reason": "gold oracle text drifts from authoritative Scryfall \u2014 re-point to the real card (gold-fidelity cleanup)"
-    },
-    {
       "card": "WTH/Aboroth",
       "tag": "debt",
       "reason": "gold oracle text drifts from authoritative Scryfall \u2014 re-point to the real card (gold-fidelity cleanup)"
