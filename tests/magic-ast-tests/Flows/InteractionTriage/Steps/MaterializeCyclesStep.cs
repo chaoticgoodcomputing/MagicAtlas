@@ -10,18 +10,24 @@ namespace MagicAtlas.Ast.Tests.Flows.InteractionTriage.Steps;
 /// The reconstructed cycles, computed in C# via the direct MAST APIs (<c>PortGraphEngine.FindCycles</c>)
 /// rather than re-derived in Python from the flat edges — so the viz renders the engine's
 /// <b>cycle-level verdict</b> (the worst hop floored by §8 firability + the multi-cost conjunction),
-/// which a per-edge export cannot express. Bounded to length ≤6 — the sac→death→token→doubler→refuel
-/// archetype (Ashnod's Altar × Pitiless × Chatterfang) spans five hops, and the cast-recursion blink loop
-/// (Displacer Kitten: emit:cast → trigger:cast → emit:blink → etb → emit:untap → pay:mana → emit:cast)
-/// spans six, so the reconstruction reach is 6 hops (still tractable at corpus scale; cf. the GPU-Johnson
-/// note in docs if reach must grow further). Single-card loops dropped (no 1-card combo exists in MTG), deduped by node set, ranked
+/// which a per-edge export cannot express. Bounded to length ≤5. NOTE the reach here is DELIBERATELY
+/// lower than the per-combo bench's <see cref="PortGraphEngine.DefaultReconstructionReach"/> (=6): this
+/// step enumerates cycles over the whole-corpus UNION graph (every parse-ready card at once), where
+/// cycle enumeration is exponential in the length bound — length 6 over the union is intractable (minutes+),
+/// while length 6 over a 2-3 card bench combo is trivial. So the two reaches are scoped to their graph
+/// size: 6 for the tiny per-combo bench, 5 for the large union viz (the cast-recursion blink loop that
+/// motivated reach 6 is a per-combo reconstruction, reflected in the bench, not the union viz). This is
+/// exactly the graph-size × reach cost the cycle-enumeration feasibility memo describes
+/// (libs/mast-interaction/docs/cycle-enumeration-acceleration.md). Single-card loops dropped (no 1-card combo exists in MTG), deduped by node set, ranked
 /// GREEN-verdict-first then shortest, and PER-TIER display-capped (verified/partial/derived each capped
 /// so all three appear — partial + derived each far exceed a flat cap). One <see cref="CycleEdgeRow"/> per hop.
 /// </summary>
 [FlowthruStep]
 public static class MaterializeCyclesStep
 {
-  private const int LengthBound = PortGraphEngine.DefaultReconstructionReach;
+  // Union-graph reach: stays at 5 (length 6 over the whole-corpus union is intractable). The per-combo
+  // bench uses PortGraphEngine.DefaultReconstructionReach (=6); see the class doc for why they differ.
+  private const int LengthBound = 5;
   private const int PerTierCap = 60;
 
   public static Func<

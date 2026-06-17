@@ -29,7 +29,7 @@ public static class MaterializeCardEdgesStep
       IEnumerable<ParseRecord> Records,
       IEnumerable<MastCardInput> CardInputs
     ),
-    IEnumerable<CardEdgeRow>
+    (IEnumerable<CardEdgeRow> Edges, PortGraphMetrics Metrics)
   > Create(string ontologyPath) =>
     inputs =>
     {
@@ -40,7 +40,7 @@ public static class MaterializeCardEdgesStep
         ontologyPath
       );
 
-      return edges
+      var rows = edges
         .Select(e => new CardEdgeRow
         {
           FromCard = e.From.Card,
@@ -53,6 +53,11 @@ public static class MaterializeCardEdgesStep
           Reason = e.Reason ?? "",
         })
         .ToList();
+
+      // Emit the port-graph census alongside the edges (same materialization, no second pass) so the
+      // quick node/edge overview lands with CardEdges — before the expensive MaterializeCycles step,
+      // which is intractable at union scale (the metric itself quantifies why: a dense ~10^5-edge graph).
+      return (rows, PortGraphMetricsCensus.Compute(rows));
     };
 
   /// <summary>The flowing resource, read off the source label: <c>emit:&lt;kind&gt;</c> → the kind; a sac source bridges to a death.</summary>

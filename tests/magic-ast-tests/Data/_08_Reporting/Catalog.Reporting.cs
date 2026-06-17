@@ -66,6 +66,15 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/port-label-census.json")
       .Build());
 
+  /// <summary>Port-graph size/shape overview: node + edge counts of the materialized union interaction
+  /// graph (and their tier/family/resource split). A quick read of how big + dense the reconstruction
+  /// graph is; complements <see cref="PortLabelCensus"/> (whole-corpus label vocabulary).</summary>
+  public IItem<PortGraphMetrics> PortGraphMetrics =>
+    CreateItem(() => Item.Of<PortGraphMetrics>("PortGraphMetrics")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/port-graph-metrics.json")
+      .Build());
+
   /// <summary>The interaction-graph Plotly viz (label grammar | card-card expansion) — interactive HTML.</summary>
   public IItem<string> InteractionGraphHtml =>
     CreateItem(() => Item.Of<string>("InteractionGraphHtml")

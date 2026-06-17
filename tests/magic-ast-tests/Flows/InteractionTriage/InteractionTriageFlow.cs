@@ -60,17 +60,22 @@ public static class InteractionTriageFlow
           outputs: catalog.LabelEdges
         );
 
-        // Card-level graph (right viz subplot): engine edges materialized over parse-ready combos.
+        // Card-level graph (right viz subplot): engine edges materialized over parse-ready combos. Emits
+        // TWO outputs from the one materialization: the flat edge export AND a quick port-graph census
+        // (node/edge counts + tier/family/resource split → port-graph-metrics.json). The census lands
+        // here, with CardEdges — BEFORE the union-scale MaterializeCycles step, which is intractable at
+        // current corpus size (the census quantifies why: a dense ~10^5-edge graph).
         pipeline.AddStep<
           IEnumerable<Combo>,
           IEnumerable<ParseRecord>,
           IEnumerable<MastCardInput>,
-          IEnumerable<CardEdgeRow>
+          IEnumerable<CardEdgeRow>,
+          PortGraphMetrics
         >(
           label: "MaterializeCardEdges",
           transform: MaterializeCardEdgesStep.Create(ontologyPath),
           inputs: (catalog.Combos, catalog.ParseRecords, catalog.CardInputs),
-          outputs: catalog.CardEdges
+          outputs: (catalog.CardEdges, catalog.PortGraphMetrics)
         );
 
         // Reconstructed cycles (right viz subplot): computed in C# by the engine, with cycle-level
