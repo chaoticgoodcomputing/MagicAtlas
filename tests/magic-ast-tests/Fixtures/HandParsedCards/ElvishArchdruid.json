@@ -1,0 +1,140 @@
+{
+  "Input": {
+    "Name": "Elvish Archdruid",
+    "ManaCost": "{1}{G}{G}",
+    "TypeLine": "Creature — Elf Druid",
+    "OracleText": "Other Elf creatures you control get +1/+1.\n{T}: Add {G} for each Elf you control.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Elvish Archdruid",
+    "TypeLine": {
+      "Raw": "Creature — Elf Druid",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Druid"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Other Elf creatures you control get +1/+1.\n{T}: Add {G} for each Elf you control.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Elf"
+                  ],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{G}",
+              "AnyColor": false,
+              "Amount": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "Subtypes": [
+                    "Elf"
+                  ],
+                  "Controller": "You",
+                  "Zone": "Battlefield"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
