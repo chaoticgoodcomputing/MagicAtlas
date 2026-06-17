@@ -1141,6 +1141,15 @@
           ]
         },
         {
+          "Type": "LoseTypeEffect",
+          "Discriminator": "loseType",
+          "IsUnparsed": false,
+          "Fields": [
+            "LostType",
+            "Subject"
+          ]
+        },
+        {
           "Type": "MayPlayFromExileEffect",
           "Discriminator": "mayPlayFromExile",
           "IsUnparsed": false,
@@ -1968,5 +1977,5 @@
       ]
     }
   ],
-  "SchemaHash": "2c17c947cb8b74df8bb9468f574771547806ed38dbf7dd0bd39aea247160dbea"
+  "SchemaHash": "8671fc4d0d0cf2b6a1e57dc2d6042f4b6b38494c899d308a0a79af6f56ee999f"
 }
