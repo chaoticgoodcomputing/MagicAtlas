@@ -55,6 +55,16 @@ public sealed record TimingModificationEffect : Effect
   public Condition? Condition { get; init; }
 
   /// <summary>
+  /// How long this timing modification lasts when it is a duration-bounded grant
+  /// (CR 611.2) — e.g. Teferi, Time Raveler's +1: "Until your next turn, you may
+  /// cast sorcery spells as though they had flash." Null for permanent static
+  /// abilities (Vedalken Orrery — the grant persists as long as the permanent is
+  /// on the battlefield, per CR 604.2, so no explicit duration is stated).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Duration? Duration { get; init; }
+
+  /// <summary>
   /// Consequence if the modified timing is used.
   /// e.g., Armor of Thorns: "sacrifice it at the beginning of the next cleanup step"
   /// </summary>
