@@ -274,6 +274,14 @@
           ]
         },
         {
+          "Type": "DiedThisWayCondition",
+          "Discriminator": "diedThisWay",
+          "IsUnparsed": false,
+          "Fields": [
+            "Reference"
+          ]
+        },
+        {
           "Type": "KeywordCostPaidCondition",
           "Discriminator": "keywordCostPaid",
           "IsUnparsed": false,
@@ -719,6 +727,12 @@
           "Fields": [
             "Spell"
           ]
+        },
+        {
+          "Type": "ChooseCardTypeEffect",
+          "Discriminator": "chooseCardType",
+          "IsUnparsed": false,
+          "Fields": []
         },
         {
           "Type": "ChooseColorEffect",
@@ -2042,5 +2056,5 @@
       ]
     }
   ],
-  "SchemaHash": "2002391df34aa476e57e4e494b2d8ddf26206531c67010451ed8f7f9edc2cee1"
+  "SchemaHash": "e05b5e65d0ae3cadc76b74ed23d87fec9bce85203da29d578bc5c66a4f443438"
 }
