@@ -80,6 +80,33 @@ public sealed record CastThisTurnPredicate : HistoryPredicate
 }
 
 /// <summary>
+/// "cards put into [player's] graveyard from [zone] this turn" — a backward-
+/// looking count predicate for the Fraying Sanity family (CR 701.17 mill;
+/// "At the beginning of each end step, enchanted player mills X cards, where X
+/// is the number of cards put into their graveyard from anywhere this turn").
+/// Counts objects that were moved into the named player's graveyard during the
+/// current turn window.
+///
+/// <para>
+/// CR 406.6 (graveyard zone); CR 400.1 (zones); "from anywhere" in oracle text
+/// encodes <c>Zone.Anywhere</c> on <see cref="FromZone"/> (null means unqualified,
+/// which is any zone by default but distinct from the explicit "from anywhere"
+/// qualifier).
+/// </para>
+/// </summary>
+[HistoryPredicateKind("putIntoGraveyardThisTurn")]
+public sealed record PutIntoGraveyardThisTurnPredicate : HistoryPredicate
+{
+  /// <summary>
+  /// The source zone restriction — which zone the cards must have come from.
+  /// Null when the oracle text does not qualify the source zone.
+  /// <c>Zone.Anywhere</c> for the explicit "from anywhere" qualifier on Fraying Sanity.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Zone? FromZone { get; init; }
+}
+
+/// <summary>
 /// Escape hatch for backward-looking predicates that don't yet have a
 /// structured shape — carries only the literal oracle phrase. Use sparingly;
 /// prefer a structured concrete predicate when the shape recurs.

@@ -1852,6 +1852,12 @@
           "Fields": [
             "Description"
           ]
+        },
+        {
+          "Type": "PutIntoGraveyardThisTurnPredicate",
+          "Discriminator": "putIntoGraveyardThisTurn",
+          "IsUnparsed": false,
+          "Fields": []
         }
       ]
     },
@@ -2062,5 +2068,5 @@
       ]
     }
   ],
-  "SchemaHash": "0bfe1306bd65ae8af8c5da6a9adae345fe4d164fc3a4d85ce574939ce25f56df"
+  "SchemaHash": "34143001f077328bbaf562515696d2e07c9029e9ffdca5dc1cfdc50e71ba83cc"
 }
