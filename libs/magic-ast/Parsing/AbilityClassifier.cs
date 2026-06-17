@@ -420,6 +420,31 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Each opponent can cast spells only any time they could cast a sorcery." —
+    // a declarative permanent static that restricts the timing window in which
+    // opponents may cast spells (Teferi, Time Raveler; Rule 116.1b: you can cast
+    // an instant at any time you could cast a sorcery, but a sorcery only during
+    // your own main phase while the stack is empty). This is a continuous
+    // static effect (CR 611.1) that modifies the rules of the game — NOT an
+    // imperative spell-resolution step. Without this intercept the generic
+    // "Each opponent ..." → Spell route below mis-routes it to the spell parser
+    // where it falls through to UnparsedAbility.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Each\s+opponent\s+can\s+cast\s+spells\s+only\s+any\s+time\s+they\s+could\s+cast\s+a\s+sorcery",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.97,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Each player ..." / "Each opponent ..." instructional sentences on the
     // spell (Rule 113.3a) — life-loss, discard prompts, etc. Static doesn't
     // fit; the text is an imperative resolution step.
