@@ -1,0 +1,92 @@
+{
+  "Input": {
+    "Name": "Mana Geyser",
+    "ManaCost": "{3}{R}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Add {R} for each tapped land your opponents control.",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Mana Geyser",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Add {R} for each tapped land your opponents control.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{R}",
+              "AnyColor": false,
+              "Amount": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "Zone": "Battlefield",
+                  "Controller": "Opponent",
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "tapped",
+                      "Tapped": true
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
+    ]
+  }
+}
