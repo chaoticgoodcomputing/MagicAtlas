@@ -3,6 +3,7 @@ namespace MagicAST.AST.Effects.Resource;
 using System.Text.Json.Serialization;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects.Traits;
+using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
@@ -29,6 +30,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// <para>The <c>IsOptional</c> flag is always <c>true</c> for this effect:
 /// "you may pay" is the canonical form; there is no forced-pay variant at the
 /// triggered-ability level modelled by this type.</para>
+///
+/// <para>When the paying player is not the ability's controller (e.g. Smothering
+/// Tithe — "that player may pay {2}") the <see cref="Player"/> field names the
+/// payer explicitly. Null means the ability's controller pays (the implicit
+/// "you" default — CR 117.3).</para>
 /// </summary>
 [OracleEffect("conditionalPay")]
 public sealed record ConditionalPayEffect : Effect
@@ -39,4 +45,14 @@ public sealed record ConditionalPayEffect : Effect
   /// accommodates life costs, discard costs, etc.
   /// </summary>
   public required Cost Cost { get; init; }
+
+  /// <summary>
+  /// The player who may pay the cost. Null (omitted in JSON) means the
+  /// ability's controller ("you"). Explicit when oracle text names a
+  /// different payer — e.g. "that player may pay {2}" (Smothering Tithe)
+  /// where the payer is the opponent who drew the card
+  /// (<see cref="ObjectReferenceKind.ThatPlayer"/>).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? Player { get; init; }
 }

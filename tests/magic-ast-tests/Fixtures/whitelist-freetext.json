@@ -458,6 +458,12 @@
       "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
+      "card": "SmotheringTithe",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative (Treasure token ability text)"
+    },
+    {
       "card": "STX/FurycalmSnarl",
       "sink": "OtherCondition",
       "tag": "debt",

@@ -1,0 +1,114 @@
+{
+  "Input": {
+    "Name": "Smothering Tithe",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Whenever an opponent draws a card, that player may pay {2}. If the player doesn't, you create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Smothering Tithe",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever an opponent draws a card, that player may pay {2}. If the player doesn't, you create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DrawsCard",
+            "Filter": {
+              "Controller": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    }
+                  ]
+                },
+                "Player": {
+                  "Kind": "ThatPlayer"
+                }
+              },
+              "IfYouDoNot": {
+                "EffectType": "createToken",
+                "Player": {
+                  "Kind": "You"
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Token": {
+                  "Types": [
+                    "artifact"
+                  ],
+                  "Subtypes": [
+                    "Treasure"
+                  ],
+                  "IsCopy": false,
+                  "AbilityText": [
+                    "{T}, Sacrifice this artifact: Add one mana of any color."
+                  ]
+                }
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\""
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}
