@@ -158,6 +158,41 @@ public static class PortLabel
     Join("emit", "blink", Subject(blinked, ontology), blinked.IsSelf == true ? "self" : null);
 
   /// <summary>
+  /// A <b>spell-recursion</b> emit — "return target instant or sorcery card from your graveyard to your
+  /// hand" (Archaeomancer / Izzet Chronarch / Mnemonic Wall's ETB; Snapback, Call to the Netherworld for
+  /// other-zone variants). The returned instant/sorcery goes to HAND, where it can be <b>recast</b> (CR
+  /// 601.2 — "to cast a spell is to take it from where it is, usually the hand"). That recast re-fires the
+  /// spell's effects, so this emit refuels a <c>cast:spell</c> consume (the spell-recast flow arm): the
+  /// spell-recursion → recast → spell-effect loop the Ghostly Flicker × Archaeomancer / Izzet Chronarch
+  /// combos turn on. Distinct from a battlefield <b>bounce</b> (Boomerang's "return target permanent to
+  /// hand" — a creature/permanent to its owner's hand): a bounce projects the coarse <see cref="ReturnToHandEmit"/>
+  /// no arm reads, because returning a permanent to hand re-CASTS a creature/permanent (a re-entry, not a
+  /// spell-effect re-fire) — only an instant/sorcery returned to a castable zone is a spell-recast enabler.
+  /// The returned-card filter (the instant/sorcery the operator tiers the recast on) rides as the port
+  /// Subject (NON-NULL — never the scalar null-default GREEN, adding-a-flow-arm anti-pattern 3).
+  /// </summary>
+  public static string SpellRecursionEmit(ObjectFilter returned, TypeOntology ontology) =>
+    Join("emit", "returntohand", "spell", Subject(returned, ontology));
+
+  /// <summary>The coarse <c>returnToHand</c> emit for a non-spell-recursion bounce (a permanent to hand) —
+  /// an explicit, stable label no flow arm reads (a bounce is not a spell-recast). Carries the bounced
+  /// filter as the Subject when present (faithful; never a fudged label, anti-pattern 3).</summary>
+  public static string ReturnToHandEmit(ObjectFilter? bounced, TypeOntology ontology) =>
+    bounced is null ? "emit:returntohand" : Join("emit", "returntohand", Subject(bounced, ontology));
+
+  /// <summary>
+  /// A <b>cast</b> consume — an instant/sorcery spell being cast (CR 601.2). A <c>Kind:spell</c> ability is
+  /// the spell's on-cast effect; casting it re-fires those effects. The cast consume is what a spell-recast
+  /// refuels: a <see cref="SpellRecursionEmit"/> returns the instant/sorcery to hand, and casting it from
+  /// hand drives the spell's effects again (the card-defined consume→emit edges). The spell's own
+  /// self-type — an instant or sorcery on the stack — rides as the port Subject (NON-NULL; the operator
+  /// tiers the recast on it, against the returned-card filter). The card type isn't threaded into the walk,
+  /// so the Subject is the broadest faithful spell type, <c>{instant, sorcery}</c> self — never a fudged
+  /// label or a scalar null-default GREEN (adding-a-flow-arm anti-pattern 3).
+  /// </summary>
+  public static string CastConsume() => "cast:spell:self";
+
+  /// <summary>
   /// A <b>spell-copy</b> effect — "copy target [instant or sorcery] spell" (Dualcaster Mage's ETB,
   /// Reiterate, Narset's Reversal). CR 707.10: a copy of a spell is put on the stack and <em>isn't
   /// cast</em>; it reproduces the copied spell's characteristics, modes, targets, and X. This is a

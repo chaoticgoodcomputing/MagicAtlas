@@ -154,6 +154,20 @@ public sealed class PortWalk
       foreach (var effect in ability["Effects"] as JsonArray ?? [])
         Effects(effect, card, keyword, manaCostSymbols, consumes, emits);
 
+      // Spell-recast (CR 601.2): a `Kind:spell` ability is the on-cast effect of an instant/sorcery — its
+      // effects fire because the spell was CAST. Project a cast:spell:self consume (NON-NULL spell-type
+      // Subject) so a spell-recursion emit (Archaeomancer returning Ghostly Flicker to hand) can refuel
+      // the recast, re-firing the spell's effects (the spell-recast flow arm). Only when the ability has a
+      // flow emit (an inert spell has no loop to enable); the recast carries the card's OWN mana cost as a
+      // pay:mana co-cost (threaded via manaCostSymbols, the same source the aristocrat recast reads) so the
+      // §8 mana-balance floors the loop honestly when the recast mana isn't refunded.
+      if (string.Equals(ability["Kind"]?.ToString(), "spell", StringComparison.Ordinal) && emits.Count > 0)
+      {
+        consumes.Add(Port(card, PortLabel.CastConsume(), PortSide.Consume, subject: SpellSelf));
+        foreach (var (label, quantity) in RecastManaCost(null, manaCostSymbols))
+          consumes.Add(Port(card, label, PortSide.Consume, quantity));
+      }
+
       // Firability (§8): a hard-gated ability marks all its ports Gated; a tap ability marks them
       // TapGated (the dischargeable rate limit). Done before the edges are built so they reference the
       // marked port objects.
@@ -433,6 +447,19 @@ public sealed class PortWalk
         consumes.Add(Port(card, label, PortSide.Consume, quantity));
       return Port(card, PortLabel.ReturnToBattlefieldEmit(), PortSide.Emit, subject: self);
     }
+    if (effectType == "returnToHand")
+    {
+      // "Return target [card] to [its owner's] hand." Two distinct shapes:
+      //  - SPELL-RECURSION (Archaeomancer/Izzet Chronarch): an instant/sorcery card returned FROM A
+      //    GRAVEYARD to hand → it can be recast (CR 601.2), re-firing its effects. Project the recursion
+      //    emit:returntohand:spell the spell-recast arm reads, Subject = the returned-card filter.
+      //  - BOUNCE (Boomerang): a battlefield permanent to its owner's hand → NOT a spell-recast (a creature
+      //    recast is a re-entry, not a spell-effect re-fire). Coarse emit:returntohand no arm reads.
+      var returned = Filter(e["Target"]?["Filter"]);
+      if (returned is not null && IsSpellRecursion(returned))
+        return Port(card, PortLabel.SpellRecursionEmit(returned, _ontology), PortSide.Emit, subject: returned);
+      return Port(card, PortLabel.ReturnToHandEmit(returned, _ontology), PortSide.Emit, subject: returned);
+    }
     if (effectType == "createToken")
     {
       var token = TokenFilter(e["Token"], e["Player"]);
@@ -578,6 +605,22 @@ public sealed class PortWalk
     return Port(card, PortLabel.BlinkEmit(blinked, _ontology), PortSide.Emit, Qty(exile["Target"]?["Quantity"]), blinked);
   }
 
+  /// <summary>
+  /// A <b>spell-recursion</b> return-to-hand (vs a battlefield bounce): the returned card is an
+  /// <b>instant or sorcery</b> (a spell card) drawn from a NON-battlefield zone (a graveyard — the
+  /// canonical Archaeomancer case — or exile/library; never the battlefield, where instants/sorceries
+  /// can't exist). Returning it to hand makes it recastable (CR 601.2), re-firing its effects. A bounce
+  /// (Boomerang's "return target permanent to hand", Zone:Battlefield or no instant/sorcery type) is NOT
+  /// this — it re-casts a creature/permanent, not a spell effect — so it keeps the coarse projection.
+  /// </summary>
+  private static bool IsSpellRecursion(ObjectFilter returned) =>
+    returned.CardTypes is { } types
+    && types.Any(t =>
+      string.Equals(t, "instant", StringComparison.OrdinalIgnoreCase)
+      || string.Equals(t, "sorcery", StringComparison.OrdinalIgnoreCase)
+    )
+    && returned.Zone != Zone.Battlefield;
+
   /// <summary>The child effects of an <c>optional.Inner</c> or a <c>composite</c> (its <c>Effects</c>
   /// array), for the generic non-blink recursion. A single non-composite inner is yielded as itself.</summary>
   private static IEnumerable<JsonNode?> InnerEffects(JsonNode? inner)
@@ -682,6 +725,16 @@ public sealed class PortWalk
   /// scalar null-default GREEN in <see cref="PortGraphEngine"/>; tiers as a sound AMBER against a
   /// controller-scoped trigger.</summary>
   private static readonly ObjectFilter AnyPlayer = new() { CardTypes = ["player"] };
+
+  /// <summary>The cast consume's Subject — "this instant or sorcery spell" (CR 601.2). The card type is
+  /// not threaded into the walk, so this is the broadest faithful spell type (a Kind:spell ability is an
+  /// instant/sorcery on-cast effect); NON-NULL so the spell-recast arm never hits the scalar null-default
+  /// GREEN (adding-a-flow-arm anti-pattern 3). IsSelf marks it the spell's own identity.</summary>
+  private static readonly ObjectFilter SpellSelf = new()
+  {
+    CardTypes = ["instant", "sorcery"],
+    IsSelf = true,
+  };
 
   private static ObjectFilter PlayerFilter(JsonNode? player) =>
     player?["Kind"]?.ToString() switch

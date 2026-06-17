@@ -2,6 +2,17 @@
   "Name": "Allied Reinforcements",
   "Ports": [
     {
+      "Identity": "Allied Reinforcements::cast:spell:self",
+      "Card": "Allied Reinforcements",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
       "Identity": "Allied Reinforcements::emit:token:creature:ally\u002Bknight:controlled",
       "Card": "Allied Reinforcements",
       "Label": "emit:token:creature:ally\u002Bknight:controlled",
@@ -11,9 +22,75 @@
       "TapGated": false,
       "RequiresCounter": null,
       "Subject": "cardTypes=creature|subtypes=Ally,Knight|supertypes=|controller=You|isToken=True|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Allied Reinforcements::pay:mana",
+      "Card": "Allied Reinforcements",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 3,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Allied Reinforcements::pay:mana:white",
+      "Card": "Allied Reinforcements",
+      "Label": "pay:mana:white",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
     }
   ],
-  "CardDefinedEdges": [],
-  "DerivedEdges": [],
+  "CardDefinedEdges": [
+    {
+      "From": "Allied Reinforcements::cast:spell:self",
+      "To": "Allied Reinforcements::emit:token:creature:ally\u002Bknight:controlled"
+    },
+    {
+      "From": "Allied Reinforcements::pay:mana:white",
+      "To": "Allied Reinforcements::emit:token:creature:ally\u002Bknight:controlled"
+    },
+    {
+      "From": "Allied Reinforcements::pay:mana",
+      "To": "Allied Reinforcements::emit:token:creature:ally\u002Bknight:controlled"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Allied Reinforcements::cast:spell:self",
+      "To": "Allied Reinforcements::emit:token:creature:ally\u002Bknight:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Allied Reinforcements::pay:mana:white",
+      "To": "Allied Reinforcements::emit:token:creature:ally\u002Bknight:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Allied Reinforcements::pay:mana",
+      "To": "Allied Reinforcements::emit:token:creature:ally\u002Bknight:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
   "Cycles": []
 }
