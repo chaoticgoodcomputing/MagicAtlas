@@ -421,12 +421,6 @@
           ]
         },
         {
-          "Type": "SelfManaCost",
-          "Discriminator": "selfMana",
-          "IsUnparsed": false,
-          "Fields": []
-        },
-        {
           "Type": "TapCost",
           "Discriminator": "tap",
           "IsUnparsed": false,
@@ -513,6 +507,12 @@
           "Fields": [
             "AdditionalCost"
           ]
+        },
+        {
+          "Type": "AdditionalCombatAndMainPhaseEffect",
+          "Discriminator": "additionalCombatAndMainPhase",
+          "IsUnparsed": false,
+          "Fields": []
         },
         {
           "Type": "AllMustBlockEffect",
@@ -2003,5 +2003,5 @@
       ]
     }
   ],
-  "SchemaHash": "8ca096b0ad363c84cc084636f241145b56ea69150f412ec31b9b59001751ff55"
+  "SchemaHash": "62445b1bb361b2c9fd7d1ae30149c74799ac58d44afc0755e059437b8a2450ee"
 }
