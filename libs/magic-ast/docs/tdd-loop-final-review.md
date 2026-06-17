@@ -1,6 +1,16 @@
 # mast-tdd-loop — final-tweaks review (2026-06-17)
 
-*Independent 4-dimension review against the 7-batch + flow-arm-trial failure evidence. Verdict: one NECESSARY tweak (the corpus-edge-diff gate), the rest high-value/optional. Defense-in-depth tweaks 4/5/6 already landed (worker contract anchor+sibling-sweep+byte-for-byte, SKILL 2-strike defer, seed non-ASCII WARN).*
+*Independent 4-dimension review against the 7-batch + flow-arm-trial failure evidence. Verdict: one NECESSARY tweak (the corpus-edge-diff gate), the rest high-value/optional.*
+
+> **STATUS 2026-06-17 — tweaks 1, 2, 4, 5, 6 LANDED.** The NECESSARY gate (#1) + its NX-target prereq (#2)
+> are built + verified (no-change PASS / synthetic-overfit HALT / dispatched-target PASS) + wired into
+> SKILL Step 0 (baseline snapshot) and Step 8 (the gate): `tools/gate-corpus-edge-diff.sh` +
+> `tools/corpus-edge-signatures.py` + `nx run mast:interaction-triage` (slices to ClassifyCombos +
+> MaterializeCardEdges, excluding the intractable cycle tail) + the named carve-out
+> `tests/magic-ast-tests/Fixtures/edge-diff-expected.json`. Defense-in-depth #4/#5/#6 landed earlier
+> (worker-contract anchor+sibling-sweep+byte-for-byte, SKILL 2-strike defer, seed non-ASCII WARN). Only #3
+> (merge-rule split) + #7 (optional `.gitattributes merge=union`) remain — pure ergonomics; the suite
+> already fails a bad generated-artifact merge red, so neither is a safety gap.*
 
 All claims verified. The bench recall gate is per-combo (independent of the union cycle enumeration), and card-edges.json is emitted at MaterializeCardEdges, which runs before the intractable MaterializeCycles tail — so Dimension 1's proposed gate is generable at the existing timeout-bounded stage.
 

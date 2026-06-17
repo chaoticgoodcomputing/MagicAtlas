@@ -40,8 +40,11 @@ Read these first — five minutes, saves hours.
 ## The cycle (orchestrator)
 
 ```
-Step 0   Pre-flight: confirm execute mode + worktree base + refresh triage.
+Step 0   Pre-flight: confirm execute mode + worktree base + refresh triage (nx run mast:interaction-triage).
          GATE: bash tools/gate-preflight.sh — HALT on nonzero.
+         BASELINE: snapshot the corpus-edge signatures of the just-triaged tree —
+         tools/corpus-edge-signatures.py tests/.../Data/_08_Reporting/card-edges.json > /tmp/edge-base-{batch}.json
+         (the Step-8 overfit gate diffs against this).
 Step 1   Pick N families from triage. A family = (pattern, lastAttemptedRule) cluster
          with 1-3 fixtures sharing one parser failure point. Respect hot-file caps.
 Step 2   Brief each family inline → docs/judgments/briefing-{date}.md (rules facts).
@@ -57,13 +60,21 @@ Step 4   Judge novel-shape branches (per policy) → verdict JSON.
 Step 5   Merge by file-affinity order. NUnit gate after each merge group.
 Step 6   NUnit 100% green required (joint regressions surface here).  [CORE merge gate]
 Step 7   Regenerate GLOSSARY.md once on the integration branch, commit.
-Step 8   Re-run triage. GATE: nx run bench:recall (per-combo expected-tier gate — HALT if any combo's tier drifts from its pin).
+Step 8   Re-run triage: nx run mast:interaction-triage (fast slice — worklist + card-edges + port-graph-metrics; NO slow viz tail).
+         GATE: bash tools/gate-corpus-edge-diff.sh /tmp/edge-base-{batch}.json tests/.../Data/_08_Reporting/card-edges.json "<dispatched-card-names,csv>"
+               — HALT if a NON-target card's interaction footprint changed (the OVERFIT/sibling-mislabel class — the #1 recurring FAIL, else invisible to the worker suite + the 33-combo bench). A legitimate cross-card reprojection is a named entry in tests/magic-ast-tests/Fixtures/edge-diff-expected.json, never silent.
+         GATE: nx run bench:recall (per-combo expected-tier gate — HALT if any combo's tier drifts from its pin).
          Reap worktrees (nx run mast:worktree-clean). Report (incl. recall numbers). Loop or stop.
 ```
 
-**Deterministic gates (the loop's safety floor).** Four meta-gates convert former agent *promises*
+**Deterministic gates (the loop's safety floor).** Five meta-gates convert former agent *promises*
 into nonzero exit codes; a nonzero exit is an **unconditional HALT** with the gate's output quoted
-in the batch report. They run only inside the live loop (they need ephemeral state — a base sha, a
+in the batch report. The fifth, `gate-corpus-edge-diff.sh` (Step 8), is the overfit defense: it diffs
+the per-card port-projection signatures of `card-edges.json` (the ~2,900-card union graph) between the
+batch base and the merged tip, HALTing if any NON-dispatched card's interaction footprint changed —
+mechanizing the sibling-mislabel sweep the judge did by hand (the #1 recurring FAIL class, invisible to
+the worker suite — siblings have no golds — and to the 33-combo bench). It complements, never replaces,
+the mast-judge. They run only inside the live loop (they need ephemeral state — a base sha, a
 branch, the worktree pool, a verdict file), so they are bash, not NUnit, and never run in CI. The
 *core* ring (`nx run mast:test` — gold fidelity, no-unparsed, round-trip) is the snapshot check and
 is what CI runs; the meta-gates are the transition check. See
