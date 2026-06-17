@@ -34,6 +34,13 @@ public sealed class AddManaRule : ITriggeredRule
       effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new AddManaEffect { Mana = string.Empty, AnyColor = true}, isOptional);
       return true;
     }
+    // "one mana of any type that permanent produced" — Kinnan, Bonder Prodigy: the added mana
+    // mirrors the type produced by the triggering tap event (may be W, U, B, R, G, or C).
+    if (Regex.IsMatch(manaText, @"^one\s+mana\s+of\s+any\s+type\s+that\s+permanent\s+produced$", RegexOptions.IgnoreCase))
+    {
+      effect = MagicAST.AST.Effects.Core.EffectWrap.Optional(new AddManaEffect { Mana = string.Empty, AnyType = true }, isOptional);
+      return true;
+    }
     if (string.IsNullOrWhiteSpace(manaText) || !manaText.Contains('{'))
     {
       return false;

@@ -495,6 +495,7 @@
           "IsUnparsed": false,
           "Fields": [
             "AnyColor",
+            "AnyType",
             "Mana",
             "OfChosenColor"
           ]
@@ -1622,6 +1623,16 @@
           ]
         },
         {
+          "Type": "TopLookPutOntoBattlefieldEffect",
+          "Discriminator": "topLookPutOntoBattlefield",
+          "IsUnparsed": false,
+          "Fields": [
+            "CardFilter",
+            "Count",
+            "Player"
+          ]
+        },
+        {
           "Type": "ToxicEffect",
           "Discriminator": "toxic",
           "IsUnparsed": false,
@@ -1968,5 +1979,5 @@
       ]
     }
   ],
-  "SchemaHash": "2c17c947cb8b74df8bb9468f574771547806ed38dbf7dd0bd39aea247160dbea"
+  "SchemaHash": "ca1bb78136691177934219b71976193c66b29a411ecaa9a10777eba86087f089"
 }
