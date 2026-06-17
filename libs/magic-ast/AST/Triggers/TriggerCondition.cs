@@ -26,6 +26,15 @@ public sealed record TriggerCondition
   public ObjectFilter? Filter { get; init; }
 
   /// <summary>
+  /// The mana symbol produced when this trigger fires — used for "whenever you tap a permanent
+  /// for {C}" triggers (CR 605.1a) where the trigger event is <see cref="TriggerEvent.TapsForMana"/>
+  /// and the produced mana constrains which tapping events match. Null for all other trigger events.
+  /// Follows the same mana-symbol-string convention as <see cref="MagicAST.AST.Effects.Resource.AddManaEffect.Mana"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public string? ProducedMana { get; init; }
+
+  /// <summary>
   /// Optional ordinal qualifier selecting which occurrence of the trigger event
   /// (counted within the window described by <see cref="PerTurn"/>) actually fires
   /// the ability. e.g. "you draw your <i>second</i> card each turn" → <c>Ordinal = 2</c>.
@@ -246,6 +255,16 @@ public enum TriggerEvent
   /// dual-event semantics are engine territory.
   /// </summary>
   EntersOrHauntedCreatureDies,
+
+  /// <summary>
+  /// A player taps a permanent as part of activating a mana ability that produces a specific mana
+  /// type (e.g. "Whenever you tap a permanent for {C}"). CR 605.1a: an activated ability is a mana
+  /// ability if it could add mana to a player's mana pool when it resolves and doesn't require a
+  /// target. The companion field <see cref="TriggerCondition.ProducedMana"/> carries the mana symbol
+  /// ({C} for colorless mana) so the trigger can be distinguished from tapping for any other type.
+  /// Distinct from <see cref="BecomesTapped"/> (which fires on any tapping, regardless of mana context).
+  /// </summary>
+  TapsForMana,
 
   /// <summary>Unrecognized trigger event</summary>
   Other,
