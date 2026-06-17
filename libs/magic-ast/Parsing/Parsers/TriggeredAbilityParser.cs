@@ -172,6 +172,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return null;
     }
 
+    // Compound-trigger: if a TriggerConditionRule left a pending additional trigger
+    // (e.g. EntersAndOpponentDrawsNotFirstConditionRule for Orcish Bowmasters), read
+    // and clear it so the TriggeredAbility can carry both conditions (CR 603.2).
+    var additionalTrigger = Triggered.Rules.EntersAndOpponentDrawsNotFirstConditionRule.PendingAdditionalTrigger;
+    Triggered.Rules.EntersAndOpponentDrawsNotFirstConditionRule.PendingAdditionalTrigger = null;
+
     // Same intervening-if shape, but with the condition still sitting at the
     // head of the effect half (e.g., when the split landed on a different
     // comma). Strip it off and assign to interveningIf if not already set.
@@ -198,6 +204,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return new TriggeredAbility
       {
         Trigger = trigger,
+        AdditionalTrigger = additionalTrigger,
         InterveningIf = interveningIf,
         Effects = [modalEffect],
         AbilityWord = abilityWord,
@@ -224,6 +231,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     return new TriggeredAbility
     {
       Trigger = trigger,
+      AdditionalTrigger = additionalTrigger,
       InterveningIf = interveningIf,
       Effects = effects,
       Instructions = ExtractInstructions(effectPart, effects),

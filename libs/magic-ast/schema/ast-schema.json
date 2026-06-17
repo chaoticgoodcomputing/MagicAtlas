@@ -534,6 +534,14 @@
           ]
         },
         {
+          "Type": "AmassEffect",
+          "Discriminator": "amass",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count"
+          ]
+        },
+        {
           "Type": "AmplifyEffect",
           "Discriminator": "amplify",
           "IsUnparsed": false,
@@ -1997,5 +2005,5 @@
       ]
     }
   ],
-  "SchemaHash": "b28ead682ff0122025dbefefc9649e5ab0ed15814a5d32bbdf775977f9a7317f"
+  "SchemaHash": "1b39e9895e6e71947e511051cb374bfd087c13d373b58d07b5a5f6465484b12a"
 }

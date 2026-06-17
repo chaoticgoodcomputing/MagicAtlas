@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "Orcish Bowmasters",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Orc Archer",
+    "OracleText": "Flash\nWhen this creature enters and whenever an opponent draws a card except the first one they draw in each of their draw steps, this creature deals 1 damage to any target. Then amass Orcs 1.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Orcish Bowmasters",
+    "TypeLine": {
+      "Raw": "Creature — Orc Archer",
+      "Types": ["Creature"],
+      "Subtypes": ["Orc", "Archer"]
+    },
+    "Oracle": {
+      "RawText": "Flash\nWhen this creature enters and whenever an opponent draws a card except the first one they draw in each of their draw steps, this creature deals 1 damage to any target. Then amass Orcs 1.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flash",
+          "Effects": [
+            {
+              "EffectType": "timingModification",
+              "Modification": "Grant",
+              "Timing": "Instant"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "AdditionalTrigger": {
+            "Timing": "Whenever",
+            "Event": "DrawsCard",
+            "Filter": {
+              "Controller": "Opponent"
+            },
+            "ExceptFirstDrawStep": true
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Source": {
+                "Kind": "Self"
+              },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": {
+                "Kind": "AnyTarget"
+              }
+            },
+            {
+              "EffectType": "amass",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ArmySubtype": "Orcs"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
