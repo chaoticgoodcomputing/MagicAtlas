@@ -81,6 +81,14 @@ public enum DerivedKind
   DamageDealt,
   LifeGained,
   LifeLost,
+  /// <summary>
+  /// The number of counters placed by the triggering event — "that many" in
+  /// "create that many tokens" under a <see cref="MagicAST.AST.Triggers.TriggerEvent.CounterPlaced"/>
+  /// trigger (Nest of Scarabs: "whenever you put one or more -1/-1 counters on a creature,
+  /// create that many 1/1 black Insect creature tokens"). CR 122.1 — counters are markers
+  /// placed on an object; the count placed in a single event is the antecedent of "that many".
+  /// </summary>
+  CountersPlaced,
   Other,
 }
 
