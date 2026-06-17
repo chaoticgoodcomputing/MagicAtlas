@@ -5,10 +5,14 @@ using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.References;
+using MagicAST.Parsing.Parsers;
+using MagicAST.Parsing.Tokens;
+using Superpower.Model;
 
 [StaticRule(Priority = 968)]
 public sealed class AsLongAsStaticGrantRule : IStaticRule
 {
+  private readonly OracleTokenizer _tokenizer = new();
   // Leading form: "As long as <cond>, it/this creature [gets|has] <effect>."
   // <cond> is everything between "As long as " and the comma; <effect> is the
   // subject-led clause after the comma. Named "leading" because the condition
@@ -57,6 +61,17 @@ public sealed class AsLongAsStaticGrantRule : IStaticRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // Soulbond quoted-activated leading form:
+  // "As long as <cond>, each of those creatures has "<body>"."
+  // Handles the Soulbond paired-grant shape (Rule 702.95) where the granted ability
+  // is a quoted activated ability rather than a bare keyword — e.g. Deadeye Navigator's
+  // "{1}{U}: Exile this creature, then return it to the battlefield under your control."
+  // Matches both straight ("...") and curly (“...”) double quotes.
+  private static readonly Regex _asLongAsSoulbondQuotedActivatedPattern = new(
+    "^\\s*As\\s+long\\s+as\\s+(?<cond>[^,]+),\\s*each\\s+of\\s+those\\s+creatures\\s+has\\s+[\"“](?<body>[^\"”]+)[\"”]\\.?\\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   // Strips " as long as <cond>." from the end. The "main" group is everything
   // before the suffix; "cond" is the condition body without the trailing period.
   private static readonly Regex _asLongAsSuffixPattern = new(
@@ -102,6 +117,34 @@ public sealed class AsLongAsStaticGrantRule : IStaticRule
               Target = new ObjectReference { Kind = ObjectReferenceKind.BothPaired },
               GainedAbility = soulbondGrantedAbility,
               Duration = soulbondDuration,
+            }],
+          },
+        ];
+      }
+    }
+
+    // Soulbond quoted-activated leading form:
+    // "As long as <cond>, each of those creatures has "<quoted activated ability>"."
+    // Handles Deadeye Navigator's paired-grant shape (Rule 702.95) where each creature
+    // in the pair gains a quoted activated ability (not just a bare keyword).
+    var soulbondQuotedMatch = _asLongAsSoulbondQuotedActivatedPattern.Match(clause.RawText);
+    if (soulbondQuotedMatch.Success)
+    {
+      var quotedCond = soulbondQuotedMatch.Groups["cond"].Value.Trim();
+      var quotedBody = soulbondQuotedMatch.Groups["body"].Value.Trim();
+      var quotedDuration = new AsLongAsDuration { Condition = MagicAST.Parsing.ConditionParser.Parse(quotedCond) };
+      var quotedGrantedAbility = TryParseGrantedActivatedBody(quotedBody);
+      if (quotedGrantedAbility != null)
+      {
+        return
+        [
+          new StaticAbility
+          {
+            Effects = [new GainAbilityEffect
+            {
+              Target = new ObjectReference { Kind = ObjectReferenceKind.BothPaired },
+              GainedAbility = quotedGrantedAbility,
+              Duration = quotedDuration,
             }],
           },
         ];
@@ -290,5 +333,34 @@ public sealed class AsLongAsStaticGrantRule : IStaticRule
     }
 
     return null;
+  }
+
+  /// <summary>
+  /// Hands a quoted activated-ability body off to <see cref="ActivatedAbilityParser"/>.
+  /// Mirrors <see cref="GrantedAbilityRule.TryParseGrantedBody"/> — used for the
+  /// Soulbond quoted-activated form where the paired-grant body is a quoted activated
+  /// ability (e.g. Deadeye Navigator's "{1}{U}: Exile this creature, then return it to
+  /// the battlefield under your control.").
+  /// </summary>
+  private Ability? TryParseGrantedActivatedBody(string body)
+  {
+    var tokenResult = _tokenizer.TryTokenize(body);
+    var tokens = tokenResult.HasValue
+      ? tokenResult.Value
+      : new TokenList<OracleToken>([]);
+
+    var innerClause = new OracleClause
+    {
+      Tokens = tokens,
+      RawText = body,
+      SourceSpan = new MagicAST.AST.TextSpan(0, body.Length),
+    };
+    var innerClassification = new ClauseClassification
+    {
+      Kind = AbilityKind.Activated,
+      Confidence = 1.0,
+    };
+
+    return new ActivatedAbilityParser().TryParse(innerClause, innerClassification);
   }
 }

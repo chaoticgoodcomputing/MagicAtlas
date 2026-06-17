@@ -50,6 +50,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "AVR/DeadeyeNavigator",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'X is paired with another creature' Soulbond state has no structured PairedWithCondition node yet (same family as AVR/Wingcrafter)"
+    },
+    {
       "card": "AVR/Wingcrafter",
       "sink": "OtherCondition",
       "tag": "debt",
