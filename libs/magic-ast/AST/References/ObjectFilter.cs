@@ -309,6 +309,11 @@ public enum ChosenCharacteristicKind
 
   /// <summary>"of the chosen color" — the color chosen (Paradise Plume, Thriving lands).</summary>
   Color,
+
+  /// <summary>"of the chosen type" where the type is a card type (artifact, creature, enchantment, instant, or sorcery)
+  /// chosen as the permanent entered — the structured consumer of a CR 607 linked ability whose producer is a
+  /// <see cref="MagicAST.AST.Effects.Keyword.ChooseCardTypeEffect"/> (e.g. Cloud Key).</summary>
+  CardType,
 }
 
 /// <summary>

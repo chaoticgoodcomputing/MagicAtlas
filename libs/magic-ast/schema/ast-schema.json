@@ -721,6 +721,12 @@
           ]
         },
         {
+          "Type": "ChooseCardTypeEffect",
+          "Discriminator": "chooseCardType",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "ChooseColorEffect",
           "Discriminator": "chooseColor",
           "IsUnparsed": false,
@@ -2033,5 +2039,5 @@
       ]
     }
   ],
-  "SchemaHash": "64e10e310c7cfff48fb9739984e829c2aeca61e972403f8668dd65f9aefce3c5"
+  "SchemaHash": "d7585b90eefd22c82efc1156592056f4aea37bad70750d16e8ae068b6260517c"
 }
