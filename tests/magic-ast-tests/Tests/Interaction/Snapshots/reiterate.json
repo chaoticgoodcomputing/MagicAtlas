@@ -13,6 +13,17 @@
       "Subject": null
     },
     {
+      "Identity": "Reiterate::emit:cast:spell",
+      "Card": "Reiterate",
+      "Label": "emit:cast:spell",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=spell|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
       "Identity": "Reiterate::emit:copy:spell:instant\u002Bsorcery",
       "Card": "Reiterate",
       "Label": "emit:copy:spell:instant\u002Bsorcery",
@@ -24,11 +35,22 @@
       "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
     },
     {
-      "Identity": "Reiterate::emit:returntohand",
+      "Identity": "Reiterate::pay:mana",
       "Card": "Reiterate",
-      "Label": "emit:returntohand",
-      "Side": "Emit",
+      "Label": "pay:mana",
+      "Side": "Consume",
       "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Reiterate::pay:mana:red",
+      "Card": "Reiterate",
+      "Label": "pay:mana:red",
+      "Side": "Consume",
+      "Quantity": 2,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
@@ -48,14 +70,42 @@
   ],
   "CardDefinedEdges": [
     {
+      "From": "Reiterate::pay:mana:red",
+      "To": "Reiterate::emit:cast:spell"
+    },
+    {
+      "From": "Reiterate::pay:mana",
+      "To": "Reiterate::emit:cast:spell"
+    },
+    {
       "From": "Reiterate::replace:zonechange",
-      "To": "Reiterate::emit:returntohand"
+      "To": "Reiterate::emit:cast:spell"
     }
   ],
   "DerivedEdges": [
     {
+      "From": "Reiterate::pay:mana:red",
+      "To": "Reiterate::emit:cast:spell",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Reiterate::pay:mana",
+      "To": "Reiterate::emit:cast:spell",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
       "From": "Reiterate::replace:zonechange",
-      "To": "Reiterate::emit:returntohand",
+      "To": "Reiterate::emit:cast:spell",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",

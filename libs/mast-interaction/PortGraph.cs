@@ -301,6 +301,12 @@ public sealed class PortWalk
       consumes.Add(Port(card, PortLabel.LifeGainTrigger(filter), PortSide.Consume, subject: filter ?? AnyPlayer));
     else if (ev == "LosesLife")
       consumes.Add(Port(card, PortLabel.LifeLossTrigger(filter), PortSide.Consume, subject: filter ?? AnyPlayer));
+    else if (ev == "SpellCast")
+      // "Whenever you cast a [noncreature] spell" (CR 603.2) — consumes a spell-cast event (Displacer
+      // Kitten). The watched-spell filter (its `!creature` exclusion, controller) rides as the subject so
+      // the cast flow arm tiers the connection by spell-type (ADR-0002 §7). Non-null (broadest "a spell"
+      // when unqualified) — a cast event is type-scoped, never a null-default-GREEN scalar.
+      consumes.Add(Port(card, PortLabel.CastTrigger(filter ?? AnySpell, _ontology), PortSide.Consume, subject: filter ?? AnySpell));
     else
       // Coarse fallback (totality): the event name as the role, plus the subject if any.
       consumes.Add(Port(card, Coarse(ev, filter), PortSide.Consume));
@@ -432,6 +438,26 @@ public sealed class PortWalk
       foreach (var (label, quantity) in RecastManaCost(e["Cost"], manaCostSymbols))
         consumes.Add(Port(card, label, PortSide.Consume, quantity));
       return Port(card, PortLabel.ReturnToBattlefieldEmit(), PortSide.Emit, subject: self);
+    }
+    if (
+      effectType == "returnToHand"
+      && string.Equals(e["Target"]?["Kind"]?.ToString(), "Self", StringComparison.OrdinalIgnoreCase)
+    )
+    {
+      // Cast-recursion (Displacer Kitten family). A noncreature permanent that returns ITSELF to hand
+      // ({mana}: "Return this Aura to its owner's hand" — Mourning/Conviction) becomes a card in hand that
+      // is RE-CAST as a spell, and that cast genuinely fires a "whenever you cast a spell" trigger
+      // (CR 601/603.2 — distinct from a spell-COPY, uncast per CR 707.10). Project the recast FAITHFULLY as
+      // emit:cast with a NON-NULL Subject = the recast spell's filter (broadest "a spell" — the card type
+      // is not threaded into the walk, so the operator tiers the trigger's `!creature` exclusion as a sound
+      // AMBER, never a null-default GREEN — anti-pattern 3). Attach the card's OWN mana cost as the recast
+      // pay:mana CO-COST (the structural twin of the aristocrat recast), so §8 mana-balance floors a loop
+      // whose recast mana it can't itself refill (the lands Peregrine untaps are an outside-the-loop
+      // enabler) — the honest AMBER. The bounce-to-hand of a creature carries a creature-spell Subject the
+      // operator prunes/floors against a noncreature-spell trigger; no false combo manufactured.
+      foreach (var (label, quantity) in RecastManaCost(null, manaCostSymbols))
+        consumes.Add(Port(card, label, PortSide.Consume, quantity));
+      return Port(card, PortLabel.CastEmit(AnySpell, _ontology), PortSide.Emit, subject: AnySpell);
     }
     if (effectType == "createToken")
     {
@@ -682,6 +708,13 @@ public sealed class PortWalk
   /// scalar null-default GREEN in <see cref="PortGraphEngine"/>; tiers as a sound AMBER against a
   /// controller-scoped trigger.</summary>
   private static readonly ObjectFilter AnyPlayer = new() { CardTypes = ["player"] };
+
+  /// <summary>The broadest cast-spell subject (CR 601) — a NON-null floor (CardTypes:[spell], you control)
+  /// so a cast trigger / recast emit never hits the scalar null-default GREEN in <see cref="PortGraphEngine"/>
+  /// (adding-a-flow-arm anti-pattern 3). Used when the watched/recast spell's type is unqualified (a bare
+  /// "whenever you cast a spell") or not threaded into the walk (a self-bounce recast); the operator tiers
+  /// the trigger's `!creature` exclusion against it as a sound AMBER until a parse-layer sharpen earns more.</summary>
+  private static readonly ObjectFilter AnySpell = new() { CardTypes = ["spell"], Controller = ControllerFilter.You };
 
   private static ObjectFilter PlayerFilter(JsonNode? player) =>
     player?["Kind"]?.ToString() switch

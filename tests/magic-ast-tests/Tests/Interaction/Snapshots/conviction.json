@@ -2,20 +2,20 @@
   "Name": "Conviction",
   "Ports": [
     {
-      "Identity": "Conviction::emit:enchantrestriction",
+      "Identity": "Conviction::emit:cast:spell",
       "Card": "Conviction",
-      "Label": "emit:enchantrestriction",
+      "Label": "emit:cast:spell",
       "Side": "Emit",
       "Quantity": 1,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=spell|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
     },
     {
-      "Identity": "Conviction::emit:returntohand",
+      "Identity": "Conviction::emit:enchantrestriction",
       "Card": "Conviction",
-      "Label": "emit:returntohand",
+      "Label": "emit:enchantrestriction",
       "Side": "Emit",
       "Quantity": 1,
       "Gated": false,
@@ -28,6 +28,17 @@
       "Card": "Conviction",
       "Label": "modify:pt",
       "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Conviction::pay:mana",
+      "Card": "Conviction",
+      "Label": "pay:mana",
+      "Side": "Consume",
       "Quantity": 1,
       "Gated": false,
       "TapGated": false,
@@ -49,13 +60,27 @@
   "CardDefinedEdges": [
     {
       "From": "Conviction::pay:mana:white",
-      "To": "Conviction::emit:returntohand"
+      "To": "Conviction::emit:cast:spell"
+    },
+    {
+      "From": "Conviction::pay:mana",
+      "To": "Conviction::emit:cast:spell"
     }
   ],
   "DerivedEdges": [
     {
       "From": "Conviction::pay:mana:white",
-      "To": "Conviction::emit:returntohand",
+      "To": "Conviction::emit:cast:spell",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Conviction::pay:mana",
+      "To": "Conviction::emit:cast:spell",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",

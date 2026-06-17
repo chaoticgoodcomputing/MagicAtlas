@@ -183,6 +183,38 @@ public static class PortLabel
   public static string SpellCopyEmit(ObjectFilter spell, TypeOntology ontology) =>
     Join("emit", "copy", "spell", Subject(spell, ontology));
 
+  // --- Casting a spell as a flowing event (CR 601 / 603.2). -----------------------------------
+  // A "whenever you cast a [noncreature] spell" TRIGGER is a consume; a RE-CAST of a bounced-to-hand
+  // spell (a noncreature permanent that returns ITSELF to hand and is recast — Displacer Kitten ×
+  // Mourning/Conviction) is the matching emit. The flow arm (PortGraphEngine.FlowFeasible) connects an
+  // emit:cast of a spell to a trigger:cast whose watched-spell filter is type-compatible. The
+  // discriminating spell filter — the card-type axis ("a spell", "a NONcreature spell" via the trigger's
+  // ExcludedCardTypes) — rides as the port Subject so the OPERATOR tiers the connection (ADR-0002 §7: the
+  // label names the broad role, the operator decides certainty). The label carries only the coarse
+  // subject/scope; the negation (`!creature`) lives in the Subject, never the label.
+
+  /// <summary>A "whenever you cast a [noncreature] spell" trigger (CR 603.2) — consumes a spell-cast
+  /// event. The watched-spell filter rides as the NON-NULL port Subject (the `!creature` exclusion the
+  /// operator tiers on); never a scalar null-default GREEN (adding-a-flow-arm anti-pattern 3).</summary>
+  public static string CastTrigger(ObjectFilter spell, TypeOntology ontology) =>
+    Join("trigger", "cast", Subject(spell, ontology) ?? "spell", Scope(spell), Exclusion(spell));
+
+  /// <summary>
+  /// A RE-CAST of a spell (CR 601) — the matching emit a <see cref="CastTrigger"/> consumes. A
+  /// noncreature permanent that returns ITSELF to hand (a self-bounce, <c>returnToHand</c> of
+  /// <c>Self</c>) becomes a card in hand that can be cast again as a spell — and that cast genuinely fires
+  /// a "whenever you cast a spell" trigger (unlike a spell-COPY, which CR 707.10 makes uncast; see
+  /// <see cref="SpellCopyEmit"/>). The recast carries the card's OWN mana cost as a <c>pay:mana</c>
+  /// co-cost (attached at the projection, mirroring the aristocrat recast — <see cref="ReturnToBattlefieldEmit"/>),
+  /// so the §8 mana balance floors a loop whose recast mana the loop can't itself refill (Displacer Kitten ×
+  /// Mourning: the {1}{B} recast is paid by lands Peregrine Drake untaps — an enabler outside the
+  /// reconstructed loop — so the loop is mana-unbalanced and tiers AMBER, never a fudged GREEN). The
+  /// recast-spell filter (the card cast again — broadest "a spell" when the card type is not threaded into
+  /// the walk) rides as the NON-NULL port Subject; the operator tiers the cast↔trigger type-compatibility.
+  /// </summary>
+  public static string CastEmit(ObjectFilter spell, TypeOntology ontology) =>
+    Join("emit", "cast", Subject(spell, ontology) ?? "spell");
+
   // --- Life as a flowing resource (CR 119). ---------------------------------------------------
   // A life-gain/loss EFFECT is an emit; a "whenever [a player] gains/loses life" TRIGGER is a consume.
   // The flow arm (PortGraphEngine.FlowFeasible) connects same-direction pairs; the PLAYER axis — who
