@@ -11,9 +11,31 @@ under fan-out: unanchored-regex overfit, then free-text residual).
 > Whenever you activate an ability, if it isn't a mana ability, you may pay {2}. If you do, copy that
 > ability. You may choose new targets for the copy.
 
-**Reuses (verified present):** `ConditionalPayEffect` ("you may pay [cost]. If you do, [IfYouDo]" — see
-`Deathgreeter`, `Nim Deathmantle`) and `CopyEffect` (which already has `MayChooseNewTargets: bool?` and a
-`Target: ObjectReference`).
+**BUILD STATUS (2026-06-17):** Increment 1 **DONE + committed** — the 2 new AST surfaces landed
+(`TriggeringAbilityIsManaCondition` + `ObjectReferenceKind.TriggeringAbility`; `TriggerEvent.AbilityActivated`
+already existed). Compiles, schema regenerated, suite green. **Remaining:** the gold + the anchored parser
+rule (the FAIL-prone piece — both prior attempts died on unanchored-regex overfit + free-text intervening-if).
+The exact gold is now fully specified below (the `OptionalEffect{Inner: conditionalPay, IfYouDo}` wrapper is
+the Nim-Deathmantle pattern, judge-verified), so the rule is the only open work.
+
+**Reuses (verified present):** `ConditionalPayEffect` is wrapped by `OptionalEffect` — the canonical
+"you may pay [cost]. If you do, [Y]" shape is `OptionalEffect { Inner: ConditionalPayEffect{Cost}, IfYouDo: Y }`
+(see `Nim Deathmantle`, judge-PASS). `CopyEffect` already has `MayChooseNewTargets: bool?` + `Target`.
+
+**Exact gold Output (use verbatim):**
+```
+TriggeredAbility {
+  Trigger:       { Timing: Whenever, Event: AbilityActivated, Filter: { Controller: You } },
+  InterveningIf: { ConditionType: triggeringAbilityIsMana, IsManaAbility: false },
+  Effects: [ OptionalEffect {
+      Inner:   ConditionalPayEffect { Cost: { CostType: mana, Symbols: [{ Kind: generic, GenericAmount: 2 }] } },
+      IfYouDo: CopyEffect { Target: { Kind: TriggeringAbility }, MayChooseNewTargets: true } } ]
+}
+```
+Remaining rule work: an ANCHORED trigger-condition rule for "you activate an ability" → `AbilityActivated`
+(+ `Controller: You`), the intervening-if "if it isn't a mana ability" → the new condition, and the
+optional-conditional-pay-then-copy effect. Verify no mislabel across the 11 "activate an ability" corpus
+cards. (Superseded outline below kept for context.)
 
 **Gold Output shape:**
 ```
