@@ -29,8 +29,8 @@ Out of scope:
 
 | File | Purpose |
 |---|---|
-| `tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` | 730 indexed MTG terms with brief definitions and rule citations. Query with `jq '.terms.{Term}'`. |
-| `tests/atlas-flow-test/Data/_03_Primary/Datasets/rules-structure.json` | Full Comprehensive Rules, hierarchical (`sections → subsections → rules → subrules`). Query a rule by number (e.g., 702.111): `jq '.sections[].subsections[] \| select(.number == 702) \| .rules[] \| select(.number == "702.111")'`. |
+| `libs/mtg-rules/Data/_03_Primary/Datasets/glossary.json` | 730 indexed MTG terms with brief definitions and rule citations. Query with `jq '.terms.{Term}'`. |
+| `libs/mtg-rules/Data/_03_Primary/Datasets/rules-structure.json` | Full Comprehensive Rules, hierarchical (`sections → subsections → rules → subrules`). Query a rule by number (e.g., 702.111): `jq '.sections[].subsections[] \| select(.number == 702) \| .rules[] \| select(.number == "702.111")'`. |
 | `libs/magic-ast/GLOSSARY.md` | Current AST node catalogue, for cross-referencing what the AST claims to model. |
 | `libs/magic-ast/CONTRIBUTING.md` | MAST conventions (discriminator casing, attribute patterns, descriptive-not-executive principle). |
 
@@ -241,8 +241,8 @@ The orchestrator reads this closing message + runs the gate on your JSON; the pr
 
 | Concern | Path |
 |---|---|
-| MTG Comprehensive Rules glossary | `tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` |
-| MTG Comprehensive Rules structure | `tests/atlas-flow-test/Data/_03_Primary/Datasets/rules-structure.json` |
+| MTG Comprehensive Rules glossary | `libs/mtg-rules/Data/_03_Primary/Datasets/glossary.json` |
+| MTG Comprehensive Rules structure | `libs/mtg-rules/Data/_03_Primary/Datasets/rules-structure.json` |
 | Current AST catalogue | `libs/magic-ast/GLOSSARY.md` |
 | MAST conventions | `libs/magic-ast/CONTRIBUTING.md` |
 | Engine-lens structural audit (background) | `docs/ast-engine-lens-audit.md` |

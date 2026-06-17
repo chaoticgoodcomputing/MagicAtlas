@@ -12,7 +12,7 @@ The orchestrator's dispatch prompt names the specific branches + files + cited C
 - `git diff <baseSha>..<branch> -- <paths>`
 - `git show <branch>:<fixture path>`
 
-Cross-reference every cited CR rule against `tests/atlas-flow-test/Data/_03_Primary/Datasets/rules-structure.json` (jq it; rules nest as `{number, text, subrules[].letter/.text}`). FAIL only on absent-from-data or contradictory citation — not on subrule-letter imprecision; a *missing* citation does not block PASS.
+Cross-reference every cited CR rule against `libs/mtg-rules/Data/_03_Primary/Datasets/rules-structure.json` (jq it; rules nest as `{number, text, subrules[].letter/.text}`). FAIL only on absent-from-data or contradictory citation — not on subrule-letter imprecision; a *missing* citation does not block PASS.
 
 **Projection decision (initiative 03):** if a branch adds a new discriminator (effect/cost type, trigger event, restriction), confirm its PortWalk projection decision is present AND sensible — a semantic projection (`PortGraph` case + `PortWalkProjection` entry) or a justified `known-coarse-projections.json` entry. The ratchet enforces presence; you FAIL only an *insensible* choice (something a flow rule would clearly want, parked as coarse). Emit this as its own `items[]` verdict for the branch.
 

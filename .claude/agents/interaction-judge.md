@@ -38,8 +38,8 @@ The discriminator: *can the printed text + the CR decide it?* If yes and the ope
 
 | File | Purpose |
 |---|---|
-| `tests/atlas-flow-test/Data/_03_Primary/Datasets/rules-structure.json` | Full Comprehensive Rules, hierarchical (`sections → subsections → rules → subrules`). Query a rule: `jq '.sections[].subsections[] \| select(.number == 205) \| .rules[] \| select(.number == "205.3")'`. |
-| `tests/atlas-flow-test/Data/_03_Primary/Datasets/glossary.json` | Indexed MTG terms with definitions + rule cites. `jq '.terms.{Term}'`. |
+| `libs/mtg-rules/Data/_03_Primary/Datasets/rules-structure.json` | Full Comprehensive Rules, hierarchical (`sections → subsections → rules → subrules`). Query a rule: `jq '.sections[].subsections[] \| select(.number == 205) \| .rules[] \| select(.number == "205.3")'`. |
+| `libs/mtg-rules/Data/_03_Primary/Datasets/glossary.json` | Indexed MTG terms with definitions + rule cites. `jq '.terms.{Term}'`. |
 | `tests/magic-ast-tests/Data/_01_Raw/Datasets/Curated/type-ontology.json` | The derived type ontology the operator consumes (subtype pools, permanent partition, colors), vendored from `mtg-rules`. Confirms what the operator *can* know. |
 | `docs/scratch/mast-objectfilter-intersects-subsumes.md` | The operator spec — the per-axis Intersects/Subsumes contract and the certainty semantics. |
 | `libs/magic-ast/AST/References/ObjectFilter.cs` | The filter axes and the `ControllerFilter` values (which controllers are runtime-chosen). |
