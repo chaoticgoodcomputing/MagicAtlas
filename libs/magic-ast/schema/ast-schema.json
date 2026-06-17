@@ -348,6 +348,14 @@
           ]
         },
         {
+          "Type": "TriggeredAbilityAdder",
+          "Discriminator": "triggeredAbilityAdder",
+          "IsUnparsed": false,
+          "Fields": [
+            "Ability"
+          ]
+        },
+        {
           "Type": "TypeAdder",
           "Discriminator": "typeAdder",
           "IsUnparsed": false,
@@ -2070,5 +2078,5 @@
       ]
     }
   ],
-  "SchemaHash": "385d93b78f6cb3dcb2b6d276de9bba90e25117b6f24629c43c66010cce6bba4f"
+  "SchemaHash": "36e49bd4c5ea7e9751a3b96a1e31d65e630b5acd107c3d3b6b3d8405701c1432"
 }

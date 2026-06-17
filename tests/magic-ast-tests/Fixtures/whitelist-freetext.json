@@ -200,6 +200,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "HeatShimmer",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 haste keyword in AbilityAdder CopyModification"
+    },
+    {
       "card": "HelmOfTheHost",
       "sink": "AbilityText",
       "tag": "irreducible",
