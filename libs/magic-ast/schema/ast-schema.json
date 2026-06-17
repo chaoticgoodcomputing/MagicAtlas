@@ -290,6 +290,16 @@
           ]
         },
         {
+          "Type": "QuantityComparisonCondition",
+          "Discriminator": "quantityComparison",
+          "IsUnparsed": false,
+          "Fields": [
+            "Left",
+            "Operator",
+            "Right"
+          ]
+        },
+        {
           "Type": "TriggeringObjectCounterCondition",
           "Discriminator": "triggeringObjectCounter",
           "IsUnparsed": false,
@@ -721,6 +731,15 @@
           "IsUnparsed": false,
           "Fields": [
             "Effects"
+          ]
+        },
+        {
+          "Type": "ConditionalEffect",
+          "Discriminator": "conditional",
+          "IsUnparsed": false,
+          "Fields": [
+            "Condition",
+            "Then"
           ]
         },
         {
@@ -1293,6 +1312,15 @@
           ]
         },
         {
+          "Type": "OracleTopLookEffect",
+          "Discriminator": "oracleTopLook",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Player"
+          ]
+        },
+        {
           "Type": "OverloadEffect",
           "Discriminator": "overload",
           "IsUnparsed": false,
@@ -1688,6 +1716,14 @@
           "Fields": [
             "Cost"
           ]
+        },
+        {
+          "Type": "WinTheGameEffect",
+          "Discriminator": "winTheGame",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
         }
       ]
     },
@@ -1805,6 +1841,14 @@
           ]
         },
         {
+          "Type": "DevotionQuantity",
+          "Discriminator": "devotion",
+          "IsUnparsed": false,
+          "Fields": [
+            "Colors"
+          ]
+        },
+        {
           "Type": "KeywordCostPaidCountQuantity",
           "Discriminator": "keywordCostPaidCount",
           "IsUnparsed": false,
@@ -1916,5 +1960,5 @@
       ]
     }
   ],
-  "SchemaHash": "1c0669a858692fedb5b57ed72efe97c097c5e1be7a8974d635a0ec95a571edfd"
+  "SchemaHash": "d2b1dbd43333654c7e4d26dee410aeb20f5a6ae86f64d5e0207f88b166f4be49"
 }

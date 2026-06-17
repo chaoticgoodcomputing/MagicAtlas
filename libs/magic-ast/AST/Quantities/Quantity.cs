@@ -76,10 +76,34 @@ public enum DerivedKind
   LifeTotal,
   CardsInHand,
   CardsInGraveyard,
+  /// <summary>The number of cards in a player's library. CR 401.1 (the library zone).</summary>
+  CardsInLibrary,
   DamageDealt,
   LifeGained,
   LifeLost,
   Other,
+}
+
+/// <summary>
+/// A quantity equal to the player's devotion to a specific color — the number of mana symbols
+/// of that color among mana costs of permanents that player controls.
+///
+/// <para>
+/// CR 700.5a: "A player's 'devotion to [color]' is the number of mana symbols of that color
+/// among the mana costs of permanents that player controls." MAST records the color identifier
+/// (e.g. "U" for blue) without pre-resolving the count; the engine evaluates it against game
+/// state (ADR 0004: reference-not-resolution).
+/// </para>
+/// </summary>
+[OracleQuantity("devotion")]
+public sealed record DevotionQuantity : Quantity
+{
+  /// <summary>
+  /// The color being counted toward devotion — one of the standard MTG color codes
+  /// ("W", "U", "B", "R", "G"). For multi-color devotion (e.g. "devotion to green and blue"),
+  /// this field lists all counted colors (e.g. ["G", "U"]).
+  /// </summary>
+  public required IReadOnlyList<string> Colors { get; init; }
 }
 
 /// <summary>

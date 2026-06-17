@@ -2,6 +2,7 @@ namespace MagicAST.AST.Abilities;
 
 using System.Text.Json.Serialization;
 using MagicAST.AST;
+using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 using MagicAST.Serialization;
 using MagicAST.Serialization.DiscriminatorAttributes;
@@ -88,6 +89,31 @@ public sealed record TriggeringObjectCounterCondition : Condition
 
   /// <summary>True for "had a [counter]" (≥1 present); false for "had no [counters]" (0 present).</summary>
   public required bool Present { get; init; }
+}
+
+/// <summary>
+/// "if X is greater than or equal to [quantity]" — a condition that compares two
+/// <see cref="Quantity"/> values. Covers the Thassa's Oracle win-condition shape:
+/// "If X is greater than or equal to the number of cards in your library, you win
+/// the game." (where X is the devotion-derived look count).
+///
+/// <para>
+/// CR 700.5 (devotion); MAST records the comparison as written; the engine resolves
+/// both operands against game state (ADR 0004: reference-not-resolution). Neither
+/// operand is pre-evaluated.
+/// </para>
+/// </summary>
+[ConditionKind("quantityComparison")]
+public sealed record QuantityComparisonCondition : Condition
+{
+  /// <summary>The left-hand quantity operand (e.g., the variable X = devotion to blue).</summary>
+  public required Quantity Left { get; init; }
+
+  /// <summary>The comparison operator.</summary>
+  public required ComparisonOperator Operator { get; init; }
+
+  /// <summary>The right-hand quantity operand (e.g., cards in your library).</summary>
+  public required Quantity Right { get; init; }
 }
 
 /// <summary>

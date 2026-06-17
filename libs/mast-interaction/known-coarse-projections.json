@@ -31,6 +31,7 @@
     "chooseCreatureType": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "combatDamageTiming": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "commanderDesignation": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "conditional": "Thassa's Oracle if-then gate \u2014 no flow rule consumes in-ability conditional branching yet; coarse conscious carve-out",
     "conditionalPay": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "costIncrease": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "costReduction": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
@@ -94,6 +95,7 @@
     "offspring": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "openAttraction": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "openingHand": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "oracleTopLook": "Thassa's Oracle look-and-reorder effect \u2014 no flow rule consumes library top-look yet; coarse conscious carve-out",
     "overload": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "pair": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "partner": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
@@ -138,7 +140,8 @@
     "unparsed": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "vanishing": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "warp": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
-    "webSlinging": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet"
+    "webSlinging": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "winTheGame": "absolute win effect \u2014 no flow rule needs to propagate win conditions yet; coarse conscious carve-out"
   },
   "costType": {
     "composite": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
