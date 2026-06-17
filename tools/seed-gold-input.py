@@ -105,6 +105,9 @@ def main(argv):
                 print(f"  Colors: {i.get('Colors')}  ColorIdentity: {i.get('ColorIdentity')}")
                 print(f"  OracleText (AUTHORITATIVE — use verbatim in the gold Input, do not paraphrase):")
                 print("    " + (i.get("OracleText") or "").replace("\n", "\n    "))
+                non_ascii = sorted({c for c in (i.get("OracleText") or "") if ord(c) > 127})
+                if non_ascii:
+                    print(f"  !! non-ASCII chars present {[hex(ord(c)) for c in non_ascii]} — brief the worker to copy BYTE-FOR-BYTE (do not fold curly quotes/dashes to ASCII; a substitution fails the post-merge fidelity gate).")
 
     if missing:
         print(f"\nFAIL: {len(missing)} card(s) missing from corpus+bulk: {missing}", file=sys.stderr)
