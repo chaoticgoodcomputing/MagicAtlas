@@ -237,6 +237,18 @@ tests pass **and** it committed on its branch. Delta-scope discipline (from v2):
 target axis/residual; leaving another axis's residual + its whitelist entry is correct. Revert-on-fail
 leaves a clean tree; defer-and-continue means a bad worker never blocks the wave.
 
+**Interaction flow-arm workers — mirror the product reconstruction reach.** A worktree can't run the
+corpus bench, so an interaction worker proves its arm with a scope test (Walk golds → `Materialize` →
+`FindCycles` → assert tier). It MUST call `FindCycles(edges, LengthBound)` with the **same bound the
+product/bench uses** (`MaterializeCyclesStep` / `ComboRecallRunner`, currently **6**), never the
+unbounded `FindCycles(edges)` default — otherwise a cycle *longer* than the product reconstructs passes
+the scope test and reports `green:true`, but the combo never flips in the orchestrator's bench (a false
+"will-flip" the interaction-judge won't catch — it judges soundness, not reach). The fan-out trial hit
+this exactly: a 6-hop Displacer cast-blink arm passed an unbounded scope test but only flipped after a
+deliberate 5→6 bound bump. If a worker's loop legitimately needs a longer reach than the current bound,
+that is an orchestrator-level product decision (raise `LengthBound` + re-verify the corpus), **not**
+something a worker silently assumes via an unbounded scope test.
+
 ### 3.3 Delta-judge fan-out (Opus judges)
 
 After a worker reports green, the orchestrator fans out **per-gold delta-judges** exactly as v2: one

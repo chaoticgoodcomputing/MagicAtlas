@@ -48,9 +48,13 @@ connections live in the engine. A flow arm is always the latter.
 
 ## Gate sequence (all must hold — this is the safety net)
 
-- `PortWalkExhaustivenessTests` (03 ratchet) **shrinks** — the new discriminators left the allowlist.
+- `PortWalkExhaustivenessTests` passes — the new fine discriminators are **removed** from the named
+  coarse-projection whitelist (`known-coarse-projections.json`), never left coarse (de-ratcheted: an
+  explicit named whitelist, not a shrinking count).
 - `PortWalkSentinelSnapshotTest` regenerated with a justified diff (tier/label changes are *expected*).
-- `nx run bench:recall` — recall **did not decrease** (it rose; the ratchet advanced the baseline).
+- `nx run bench:recall` — the per-combo expected-tier gate holds: any combo that flips is a **reviewed
+  pin edit** in `combo-expected-tiers.json` (the gate is loud on *any* drift, improvement or
+  regression — de-ratcheted from the old aggregate moving baseline).
 - **`interaction-judge` PROCEED** — every new GREEN is genuinely reliable (the false-positive guard),
   every AMBER soundly irreducible. A GREEN it can't justify is a FAIL: stop.
 - `nx run mast:test` green.
@@ -77,8 +81,20 @@ connections live in the engine. A flow arm is always the latter.
    Always carry a **non-null** Subject (life uses `PlayerFilter` + the `AnyPlayer` floor). This was the
    subtle bug caught while building this arm; the judge confirmed the fix.
 4. **Don't leave the discriminator coarse.** If you add the arm but skip step 2, the emit still
-   projects `emit:<x>` and no arm matches — silent zero recall, and the 03 ratchet will flag the
-   unprojected discriminator.
+   projects `emit:<x>` and no arm matches — silent zero recall, and the 03 exhaustiveness gate will
+   flag the unprojected discriminator (it must be removed from the `known-coarse-projections.json`
+   whitelist, not left coarse).
+5. **Don't let the worker's scope test diverge from the product's reconstruction reach.** A worktree
+   can't run the corpus bench, so a flow-arm worker proves its arm with a *scope test* (Walk the combo
+   golds → `Materialize` → `FindCycles` → assert the cycle's tier). Call
+   `FindCycles(edges, LengthBound)` with the **same bound the product uses** (`MaterializeCyclesStep`
+   and `ComboRecallRunner`, currently **6**) — NOT the unbounded `FindCycles(edges)` default. An
+   unbounded enumeration finds cycles *longer* than the product ever reconstructs, so a 7+-hop loop
+   passes the scope test while the combo never flips in the bench — a false "will-flip" signal the
+   tier-judge will **not** catch (it judges soundness, not reach). *Surfaced by the fan-out trial:* the
+   Displacer cast-blink arm's **6-hop** loop passed an unbounded scope test but only flipped once the
+   bound was deliberately raised 5→6 (a reviewed product-reach decision), because at bound 5 it was
+   truncated. Mirror the bound, or the scope test lies about coverage.
 
 ## Files (the life arm, to copy from)
 
