@@ -348,14 +348,6 @@
           ]
         },
         {
-          "Type": "TriggeredAbilityAdder",
-          "Discriminator": "triggeredAbilityAdder",
-          "IsUnparsed": false,
-          "Fields": [
-            "Ability"
-          ]
-        },
-        {
           "Type": "TypeAdder",
           "Discriminator": "typeAdder",
           "IsUnparsed": false,
@@ -520,14 +512,6 @@
             "AnyType",
             "Mana",
             "OfChosenColor"
-          ]
-        },
-        {
-          "Type": "AddTypeEffect",
-          "Discriminator": "addType",
-          "IsUnparsed": false,
-          "Fields": [
-            "Target"
           ]
         },
         {
@@ -1868,6 +1852,12 @@
           "Fields": [
             "Description"
           ]
+        },
+        {
+          "Type": "PutIntoGraveyardThisTurnPredicate",
+          "Discriminator": "putIntoGraveyardThisTurn",
+          "IsUnparsed": false,
+          "Fields": []
         }
       ]
     },
@@ -2078,5 +2068,5 @@
       ]
     }
   ],
-  "SchemaHash": "36e49bd4c5ea7e9751a3b96a1e31d65e630b5acd107c3d3b6b3d8405701c1432"
+  "SchemaHash": "34143001f077328bbaf562515696d2e07c9029e9ffdca5dc1cfdc50e71ba83cc"
 }
