@@ -1,0 +1,134 @@
+{
+  "Input": {
+    "Name": "Hullbreaker Horror",
+    "ManaCost": "{5}{U}{U}",
+    "TypeLine": "Creature — Kraken Horror",
+    "OracleText": "Flash\nThis spell can't be countered.\nWhenever you cast a spell, choose up to one —\n• Return target spell you don't control to its owner's hand.\n• Return target nonland permanent to its owner's hand.",
+    "Power": "7",
+    "Toughness": "8",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Hullbreaker Horror",
+    "TypeLine": {
+      "Raw": "Creature — Kraken Horror",
+      "Types": ["Creature"],
+      "Subtypes": ["Kraken", "Horror"]
+    },
+    "Oracle": {
+      "RawText": "Flash\nThis spell can't be countered.\nWhenever you cast a spell, choose up to one —\n• Return target spell you don't control to its owner's hand.\n• Return target nonland permanent to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flash",
+          "Effects": [
+            {
+              "EffectType": "timingModification",
+              "Modification": "Grant",
+              "Timing": "Instant"
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "cantBeCountered"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "modal",
+              "ModeSelection": {
+                "Minimum": 0,
+                "Maximum": 1
+              },
+              "Modes": [
+                {
+                  "Ability": {
+                    "Kind": "spell",
+                    "Effects": [
+                      {
+                        "EffectType": "returnToHand",
+                        "Target": {
+                          "Kind": "Target",
+                          "Filter": {
+                            "CardTypes": ["spell"],
+                            "Controller": "Opponent",
+                            "Zone": "Stack"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Ability": {
+                    "Kind": "spell",
+                    "Effects": [
+                      {
+                        "EffectType": "returnToHand",
+                        "Target": {
+                          "Kind": "Target",
+                          "Filter": {
+                            "CardTypes": ["permanent"],
+                            "ExcludedCardTypes": ["land"]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "AllowDuplicates": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{U}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 5 },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "8",
+          "Value": 8
+        }
+      }
+    ]
+  }
+}
