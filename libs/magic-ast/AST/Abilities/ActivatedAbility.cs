@@ -56,6 +56,12 @@ public enum ActivationRestriction
   /// <summary>"Activate only as a sorcery"</summary>
   OnlyAsSorcery,
 
+  /// <summary>"Activate only as an instant" — CR 602.5a: you can activate an ability any time you
+  /// could cast an instant unless the ability's text states otherwise. "Activate only as an instant"
+  /// is the inverse of "Activate only as a sorcery": the ability can be activated at instant speed
+  /// (during any player's turn, in response to spells/abilities). CR numbers per orchestrator brief.</summary>
+  OnlyAsInstant,
+
   /// <summary>"Activate only during your turn"</summary>
   OnlyDuringYourTurn,
 

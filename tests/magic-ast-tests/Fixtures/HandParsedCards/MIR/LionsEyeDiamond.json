@@ -1,0 +1,88 @@
+{
+  "Input": {
+    "Name": "Lion's Eye Diamond",
+    "ManaCost": "{0}",
+    "TypeLine": "Artifact",
+    "OracleText": "Discard your hand, Sacrifice this artifact: Add three mana of any one color. Activate only as an instant.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Lion's Eye Diamond",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Discard your hand, Sacrifice this artifact: Add three mana of any one color. Activate only as an instant.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "discard",
+              "Filter": {
+                "CardTypes": ["card"]
+              },
+              "Quantity": {
+                "QuantityType": "derived",
+                "DerivedFrom": "CardsInHand"
+              }
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["artifact"],
+                "IsSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "",
+              "AnyColor": true,
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              }
+            }
+          ],
+          "Restrictions": [
+            "OnlyAsInstant"
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{0}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 0
+          }
+        ],
+        "ManaValue": 0
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

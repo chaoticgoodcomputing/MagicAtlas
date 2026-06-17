@@ -77,6 +77,45 @@ public sealed class AddManaEffectRule : IActivatedEffectRule
       };
     }
 
+    // "N mana of any one color" / "N mana of any color" where N is a word-number
+    // (e.g. "three mana of any one color" — Lion's Eye Diamond). The count is a
+    // fixed literal (not a variable), AnyColor=true encodes the free choice of color.
+    // Rule 106.4: "When an effect instructs a player to add mana, that mana goes into
+    // a player's mana pool." "Any one color" means a single free choice of W/U/B/R/G.
+    var nAnyColorMatch = Regex.Match(
+      manaText,
+      @"^(?<word>one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+mana\s+of\s+any(?:\s+one)?\s+color$",
+      RegexOptions.IgnoreCase
+    );
+    if (nAnyColorMatch.Success)
+    {
+      var wordRaw = nAnyColorMatch.Groups["word"].Value;
+      int count = wordRaw.ToLowerInvariant() switch
+      {
+        "one" => 1,
+        "two" => 2,
+        "three" => 3,
+        "four" => 4,
+        "five" => 5,
+        "six" => 6,
+        "seven" => 7,
+        "eight" => 8,
+        "nine" => 9,
+        "ten" => 10,
+        _ when int.TryParse(wordRaw, out var n) => n,
+        _ => 0,
+      };
+      if (count > 0)
+      {
+        return new AddManaEffect
+        {
+          Mana = string.Empty,
+          AnyColor = true,
+          Amount = LiteralQuantity.Of(count),
+        };
+      }
+    }
+
     // "one mana of the chosen color" — the produced color is the color chosen as
     // this permanent entered (CR 607 linked consumer; producer is the "As this
     // enters, choose a color" ChooseColorEffect). Captured STRUCTURALLY via the

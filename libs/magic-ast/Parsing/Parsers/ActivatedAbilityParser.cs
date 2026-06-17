@@ -231,6 +231,12 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     {
       return ActivationRestriction.OnlyAsSorcery;
     }
+    // CR 602.5a: by default activated abilities can be activated any time you could cast an instant;
+    // "Activate only as an instant" is an explicit instant-speed restriction (Lion's Eye Diamond).
+    if (lower == "activate only as an instant" || lower == "activate this ability only as an instant")
+    {
+      return ActivationRestriction.OnlyAsInstant;
+    }
     if (lower.Contains("activate only during your turn") || lower.Contains("activate this ability only during your turn"))
     {
       return ActivationRestriction.OnlyDuringYourTurn;

@@ -196,6 +196,7 @@
     "TurnedFaceUp": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet"
   },
   "restriction": {
+    "OnlyAsInstant": "timing restriction (CR 602.5a \u2014 already at instant speed by default; this explicit marker is inert for intra-turn loop firability gating) \u2014 no flow rule consumes it yet",
     "OnlyAsSorcery": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "OnlyDuringYourTurn": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "Other": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet"
