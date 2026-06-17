@@ -21,6 +21,28 @@ public sealed record TriggeredAbility : Ability
   public required TriggerCondition Trigger { get; init; }
 
   /// <summary>
+  /// An additional trigger condition that ALSO fires this ability — the "and" branch
+  /// of a compound "When A and whenever B" trigger (e.g., Orcish Bowmasters:
+  /// "When this creature enters and whenever an opponent draws a card …").
+  ///
+  /// <para>
+  /// CR 603.2: a triggered ability triggers whenever its event occurs. When oracle
+  /// text specifies two disjoint events with "and" or "or", both events can fire
+  /// the same ability. <see cref="Trigger"/> carries the primary condition;
+  /// <see cref="AdditionalTrigger"/> carries the secondary condition. Both share
+  /// the same <see cref="Effects"/> list — that is the defining property of a
+  /// compound trigger versus two separate triggered abilities.
+  /// </para>
+  ///
+  /// <para>
+  /// Null for the vast majority of triggered abilities that have exactly one trigger
+  /// condition. Serialized only when present.
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public TriggerCondition? AdditionalTrigger { get; init; }
+
+  /// <summary>
   /// Optional "intervening if" clause that must be true for the ability to trigger.
   /// Rule 603.4: "When/Whenever/At [trigger event], if [condition], [effect]."
   /// </summary>

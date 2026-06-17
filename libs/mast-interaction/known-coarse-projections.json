@@ -2,6 +2,7 @@
   "_doc": "Explicit named whitelist of PortWalk dispatch discriminators permitted to be COARSE \u2014 each carries a reason justifying why it has no semantic projection (it falls to an emit:/pay:/role label no flow rule reads). STATELESS INVARIANT (PortWalkExhaustivenessTests): every discriminator must be EITHER projected (PortWalkProjection) OR named here; a new one that is neither fails loudly. A name here that becomes projected, or that no longer exists, fails until removed. This is a list of NAMES, each justified \u2014 not a count and not a moving ratchet. The size is the interaction layer\u0027s known-blind-spot metric (see docs/scratch/alignment-session/03-portwalk-exhaustiveness-findings.md).",
   "effectType": {
     "adapt": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "amass": "Amass keyword action (CR 701.45a) \u2014 counter placement on Army tokens; no flow rule reads Amass yet; consciously inert for interaction recall",
     "additionalCastCost": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "additionalCombatAndMainPhase": "no semantic projection yet \u2014 coarse fallback no flow rule consumes; explicit named carve-out",
     "allMustBlock": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",

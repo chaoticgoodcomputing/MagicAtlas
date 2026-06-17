@@ -56,6 +56,17 @@ public sealed record TriggerCondition
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public bool? PerTurn { get; init; }
+
+  /// <summary>
+  /// True when this draw trigger excludes the first card drawn in each of the
+  /// triggering player's draw steps — the "except the first one they draw in each
+  /// of their draw steps" qualifier on Orcish Bowmasters (CR 121.1: "a player draws
+  /// a card"; CR 603.2: each matching draw event fires the ability, but this
+  /// qualifier narrows the match to non-first-draw-step draws). Descriptive only;
+  /// the per-step first-draw exclusion is engine territory.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? ExceptFirstDrawStep { get; init; }
 }
 
 /// <summary>
