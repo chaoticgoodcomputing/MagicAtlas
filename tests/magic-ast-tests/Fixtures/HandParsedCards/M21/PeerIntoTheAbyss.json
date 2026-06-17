@@ -1,0 +1,90 @@
+{
+  "Input": {
+    "Name": "Peer into the Abyss",
+    "ManaCost": "{4}{B}{B}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Target player draws cards equal to half the number of cards in their library and loses half their life. Round up each time.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Peer into the Abyss",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Target player draws cards equal to half the number of cards in their library and loses half their life. Round up each time.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "count",
+                  "CountOf": {
+                    "CardTypes": ["card"],
+                    "Zone": "Library",
+                    "Controller": "Target"
+                  }
+                },
+                "Operation": "half",
+                "Rounding": "up"
+              },
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["player"]
+                }
+              }
+            },
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "derived",
+                  "DerivedFrom": "LifeTotal"
+                },
+                "Operation": "half",
+                "Rounding": "up"
+              },
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["player"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{B}{B}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["B"] },
+          { "Kind": "colored", "Colors": ["B"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}
