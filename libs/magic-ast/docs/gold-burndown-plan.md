@@ -393,3 +393,29 @@ if (reliability.Value == Trilean.Unknown
 **Whitelist delta (session):** freetext 149→100, unparsed 14→11, oracle-drift 87→81. Recall unchanged **5G/18A/10M**; full suite 4525 + bench 41 green (two-layer equivalence + tier tests pass).
 
 **Partial-commit carry-overs (PB-3 kept 3 entries):** `AdeptWatershaper`, `SarythTheVipersFang`, `AggressiveMammoth` — their characteristic/comparative axis is structured, but their `other`/`another` exclusion residual is left whitelisted for **Slice 6** to clean. This is the bridge: Slice 6 now lands on the 22-gold exclusion population (incl. these 3) on top of a structured-characteristic base.
+
+---
+
+## Slice 6 — LANDED (2026-06-16, commit dd4fd542, hands-on)
+
+`another→ExcludeSelf` parser sweep (8 emission sites + StaticRuleHelpers central peel) + the
+cross-card firability carve-out in `PortGraphEngine.AddRulesEdge`. **22 golds** migrated to structured
+`ExcludeSelf`, all `mast-judge` PASS; carve-out `interaction-judge` PASS.
+
+- **Carve-out is PRECAUTIONARY, not load-bearing (corrected premise).** 2-phase test: recall is
+  5G/18A/10M *with or without* it — no eligible-33 combo routes through a cross-card `ExcludeSelf` edge
+  (the 22 ExcludeSelf golds are anthem/utility creatures, not combo pieces). It prevents a *future* silent
+  GREEN→AMBER demotion, and is rules-proven sound (CR 109.2 / 400.7 / 111 / 707.2 — no false GREEN across
+  token/copy-graft/multi-instance identity). Guarded by `PortGraphEngineTest` (cross-card→Yes, same-card→Unknown).
+- **GoblinChieftain conjunction RESOLVED, not deferred.** Its authoritative "Other Goblin creatures … get
+  +1/+1 and have haste" exposed a modifyPT+gainAbility conjunction gap; `SupertypeAnthemAndKeywordGrantRule`
+  generalized from supertype-only to also handle "Other [Subtype] creatures … and have <kw>" (ExcludeSelf).
+- **2 golds out-of-scope** (kept whitelisted, re-tagged): `GrenzoSRuffians` ("each other opponent" player
+  filter), `ExpeditionRaptor` ("support N … other target creatures").
+
+Session whitelist totals after Slice 6: **freetext 149→80, unparsed 14→11, quarantine 87→80.**
+
+Remaining for full gold stability: the **long-tail disposition** — residuals no slice owns
+(FathomFeeder `top`, GaddockTeeg `{X} in cost`, flanking, …), the remaining unparsed grammar gaps
+(Chorale/Elegy/Hylderblade/Precursor/Bill), and the adjunct sinks (`AbilityText` 18 / `Instructions` 3 /
+`OtherHistoryPredicate` 1) → each gets a slice or a justified `irreducible` tag.
