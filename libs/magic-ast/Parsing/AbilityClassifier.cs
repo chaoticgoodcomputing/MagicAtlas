@@ -1417,6 +1417,15 @@ public sealed class AbilityClassifier
           hasNonManaCostVerb = true;
         }
 
+        // "Exile <filter>:" is an exile-as-cost activated ability (Food Chain,
+        // Scavenge; CR 118.8a: exile is a cost action when it precedes the colon).
+        // Scoped to the clause's first token so "Exile target creature." in an
+        // effect body is not mistaken for a cost verb.
+        if (i == 0 && word.Equals("Exile", StringComparison.OrdinalIgnoreCase))
+        {
+          hasNonManaCostVerb = true;
+        }
+
         // "Pay N life" — a life-payment cost (Rule 118.9: "Pay N life" appears
         // before the colon of an activated ability). Scoped to the clause's first
         // token so "Pay" inside an effect clause is not mistaken for a cost verb.
