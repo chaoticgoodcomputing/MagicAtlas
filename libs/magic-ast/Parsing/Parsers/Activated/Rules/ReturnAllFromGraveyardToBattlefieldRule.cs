@@ -7,8 +7,8 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// "Return all [type] cards from your graveyard to the battlefield [tapped]."
-/// Mass land-recursion pattern — e.g. Aftermath Analyst's activated ability.
-/// CR 701 (zone change); CR 400.1 (zones); "tapped" modifier (CR 110.6).
+/// Mass-recursion pattern — e.g. Aftermath Analyst's activated ability.
+/// CR 701 (zone change); CR 400.1 (zones); the optional "tapped" entering status is CR 110.5b.
 /// Anchored on "Return all" prefix so it cannot match sibling single-target rules.
 /// </summary>
 [ActivatedEffectRule(Priority = 989)]
@@ -19,6 +19,15 @@ public sealed class ReturnAllFromGraveyardToBattlefieldRule : IActivatedEffectRu
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // The card types (CR 300.1 / 205.2a) that can be returned to the battlefield. Only a single,
+  // recognized card-type word maps cleanly; a subtype-qualified phrase ("Zombie creature") or an
+  // unrecognized word would corrupt CardTypes, so we bail rather than mislabel (the prior default
+  // branch dumped the raw captured phrase straight into CardTypes — a latent sibling-mislabel).
+  private static readonly HashSet<string> ReturnableCardTypes = new(StringComparer.OrdinalIgnoreCase)
+  {
+    "land", "creature", "artifact", "enchantment", "planeswalker", "permanent",
+  };
+
   public Effect? TryMatch(string effectText)
   {
     var trimmed = effectText.Trim().TrimEnd('.');
@@ -28,34 +37,27 @@ public sealed class ReturnAllFromGraveyardToBattlefieldRule : IActivatedEffectRu
       return null;
     }
 
-    var typeRaw = m.Groups["type"].Value.Trim().ToLowerInvariant();
-    var tapped = m.Groups["tapped"].Success;
-
-    // Map recognized type words to card type. Currently only "land" is needed but
-    // the rule is written generically so it degrades gracefully for future shapes.
-    // "land" is a card type (CR 205.3a); keep as-is in CardTypes.
-    var filter = typeRaw switch
+    var typeRaw = m.Groups["type"].Value.Trim();
+    if (!ReturnableCardTypes.Contains(typeRaw))
     {
-      "land" => new ObjectFilter
-      {
-        CardTypes = ["land"],
-        Zone = Zone.Graveyard,
-        Controller = ControllerFilter.You,
-      },
-      _ => new ObjectFilter
-      {
-        CardTypes = [typeRaw],
-        Zone = Zone.Graveyard,
-        Controller = ControllerFilter.You,
-      },
-    };
+      // Not a recognized single card type (subtype-qualified or unrelated) — let another rule
+      // handle it rather than writing a malformed CardTypes entry.
+      return null;
+    }
+
+    var tapped = m.Groups["tapped"].Success;
 
     return new ReturnToBattlefieldEffect
     {
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Each,
-        Filter = filter,
+        Filter = new ObjectFilter
+        {
+          CardTypes = [typeRaw.ToLowerInvariant()],
+          Zone = Zone.Graveyard,
+          Controller = ControllerFilter.You,
+        },
       },
       Tapped = tapped,
     };

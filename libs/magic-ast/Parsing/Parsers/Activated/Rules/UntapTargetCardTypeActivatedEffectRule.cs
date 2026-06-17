@@ -12,9 +12,9 @@ using MagicAST.AST.References;
 /// <see cref="UntapEffectRule"/> (Priority 994 > 993) so card-type words are routed
 /// here and do not land in <c>Subtypes</c> on the generic rule.
 ///
-/// CR 108.2: card types (artifact, creature, enchantment, instant, land, planeswalker,
-/// sorcery, battle, conspiracy, dungeon) are distinct from subtypes. "Forest" is a
-/// land subtype; "creature" is a card type.
+/// CR 300.1 / 205.2a: the card types (artifact, creature, enchantment, instant, land,
+/// planeswalker, sorcery, battle, …) are distinct from subtypes (CR 205.3 / 205.3i). "Forest"
+/// is a land subtype; "creature" is a card type.
 /// </summary>
 [ActivatedEffectRule(Priority = 994)]
 public sealed class UntapTargetCardTypeActivatedEffectRule : IActivatedEffectRule
