@@ -1696,6 +1696,14 @@
       "DiscriminatorKey": "PredicateType",
       "Types": [
         {
+          "Type": "CastThisTurnPredicate",
+          "Discriminator": "castThisTurn",
+          "IsUnparsed": false,
+          "Fields": [
+            "Caster"
+          ]
+        },
+        {
           "Type": "CrewedPredicate",
           "Discriminator": "crewed",
           "IsUnparsed": false,
@@ -1916,5 +1924,5 @@
       ]
     }
   ],
-  "SchemaHash": "1c0669a858692fedb5b57ed72efe97c097c5e1be7a8974d635a0ec95a571edfd"
+  "SchemaHash": "a6e1398c81d297b6ac2b545392d131e009b27d942c46940d3bf4e97da13e9a53"
 }
