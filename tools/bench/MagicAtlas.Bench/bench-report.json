@@ -1,10 +1,10 @@
 {
   "CombosEligible": 33,
   "ReconstructedGreen": 5,
-  "ReconstructedAmber": 18,
-  "Missed": 10,
+  "ReconstructedAmber": 20,
+  "Missed": 8,
   "RecallAtGreen": 0.1515,
-  "RecallAtAmber": 0.697,
+  "RecallAtAmber": 0.7576,
   "Combos": [
     {
       "Id": "1090-2781",
@@ -133,8 +133,11 @@
         "Peregrine Drake",
         "Archaeomancer"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Archaeomancer",
+        "Ghostly Flicker"
+      ]
     },
     {
       "Id": "1987-3277-3821",
@@ -144,8 +147,11 @@
         "Peregrine Drake",
         "Izzet Chronarch"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Ghostly Flicker",
+        "Izzet Chronarch"
+      ]
     },
     {
       "Id": "2034-2577-4871",

@@ -45,7 +45,7 @@
         "Mourning"
       ],
       "expectedTier": "Missed",
-      "reason": "no spanning cycle reconstructs the interaction over the combo's gold ASTs (engine blind spot)"
+      "reason": "the (cast,trigger) cast-blink flow arm IS merged and sound (interaction-judge PASS), but the cast-blink loop is a 6-edge cycle (emit:cast -> trigger:cast -> emit:blink -> etb -> emit:untap -> pay:mana -> emit:cast) that exceeds the bench/product LengthBound of 5 hops; reconstructs at Amber only at bound>=6. Characterized length-bound residual, NOT an engine blind spot"
     },
     {
       "id": "1170-3821-6058",
@@ -55,7 +55,7 @@
         "Conviction"
       ],
       "expectedTier": "Missed",
-      "reason": "no spanning cycle reconstructs the interaction over the combo's gold ASTs (engine blind spot)"
+      "reason": "the (cast,trigger) cast-blink flow arm IS merged and sound (interaction-judge PASS), but the cast-blink loop is a 6-edge cycle (emit:cast -> trigger:cast -> emit:blink -> etb -> emit:untap -> pay:mana -> emit:cast) that exceeds the bench/product LengthBound of 5 hops; reconstructs at Amber only at bound>=6. Characterized length-bound residual, NOT an engine blind spot"
     },
     {
       "id": "1385-2577-5670",
@@ -102,8 +102,8 @@
         "Peregrine Drake",
         "Archaeomancer"
       ],
-      "expectedTier": "Missed",
-      "reason": "no spanning cycle reconstructs the interaction over the combo's gold ASTs (engine blind spot)"
+      "expectedTier": "Amber",
+      "reason": "spell-recast flow arm (emit:returntohand:spell -> cast:spell:self) reconstructs the 4-edge blink->ETB-return-instant refuel cycle; doubly-floored AMBER (Subsumes=No on IsSelf for the recast spell + the recast's unfed mana co-cost, CR 601.2/110.4) - interaction-judge PASS"
     },
     {
       "id": "1987-3277-3821",
@@ -112,8 +112,8 @@
         "Peregrine Drake",
         "Izzet Chronarch"
       ],
-      "expectedTier": "Missed",
-      "reason": "no spanning cycle reconstructs the interaction over the combo's gold ASTs (engine blind spot)"
+      "expectedTier": "Amber",
+      "reason": "spell-recast flow arm (emit:returntohand:spell -> cast:spell:self) reconstructs the 4-edge blink->ETB-return-instant refuel cycle; doubly-floored AMBER (Subsumes=No on IsSelf for the recast spell + the recast's unfed mana co-cost, CR 601.2/110.4) - interaction-judge PASS"
     },
     {
       "id": "2034-2577-4871",
