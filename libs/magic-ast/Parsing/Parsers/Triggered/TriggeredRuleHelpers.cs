@@ -292,13 +292,13 @@ internal static class TriggeredRuleHelpers
     }
 
     // "enchanted creature" — the creature to which this Aura is currently attached.
-    // Rule 303.4c: an Aura's "enchanted [type]" refers to the permanent it's attached to.
-    // The "enchanted" characteristic is recorded as a Characteristics entry on the filter;
-    // the card type remains "creature" per the oracle text. This is descriptive — MAST
-    // records the oracle word, not a resolved attachment reference.
+    // Rule 303.4c / 702.5: an Aura's "enchanted [type]" refers to the permanent it's
+    // attached to. The attachment is recorded on the structured IsEnchanted axis (mirrors
+    // IsSelf/IsToken); the card type remains "creature" per the oracle text. This is
+    // descriptive — MAST records the oracle word, not a resolved attachment reference.
     if (Regex.IsMatch(lower, @"\bthe\s+enchanted\s+creature\b") || Regex.IsMatch(lower, @"\benchanted\s+creature\b"))
     {
-      return new ObjectFilter { CardTypes = ["creature"], Characteristics = [Characteristic.Other("enchanted")] };
+      return new ObjectFilter { CardTypes = ["creature"], IsEnchanted = true };
     }
 
     if (lower.Contains("a creature") || lower.Contains("another creature"))

@@ -482,9 +482,20 @@ public enum KeywordAbility
   /// <summary>TakeInitiative (CR 702).</summary>
   TakeInitiative,
 
-  /// <summary>Totem armor (CR 702).</summary>
+  /// <summary>Totem armor (CR 702.89) — the obsolete name, retained for cards still printed with it.</summary>
   [JsonStringEnumMemberName("Totem armor")]
   TotemArmor,
+
+  /// <summary>
+  /// Umbra armor (CR 702.89) — the current Oracle name for the keyword formerly
+  /// printed as "totem armor". Per CR 702.89 the comp-rules glossary lists "Totem
+  /// Armor (Obsolete)" as renamed to "Umbra Armor", and the Oracle reference updates
+  /// the text of older cards to "umbra armor". A distinct enum member (rather than
+  /// reusing <see cref="TotemArmor"/>) so the recorded keyword matches the card's
+  /// current Oracle wording faithfully.
+  /// </summary>
+  [JsonStringEnumMemberName("Umbra armor")]
+  UmbraArmor,
 
   /// <summary>Toxic (CR 702).</summary>
   Toxic,

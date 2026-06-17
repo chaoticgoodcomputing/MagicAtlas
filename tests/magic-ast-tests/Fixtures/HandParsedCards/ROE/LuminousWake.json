@@ -4,32 +4,40 @@
     "ManaCost": "{2}{W}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant creature\nWhenever enchanted creature attacks or blocks, you gain 4 life.",
-    "Power": null,
-    "Toughness": null,
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Luminous Wake",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nWhenever enchanted creature attacks or blocks, you gain 4 life.",
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Enchant",
           "Effects": [
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Enchant"
         },
         {
           "Kind": "triggered",
@@ -37,8 +45,10 @@
             "Timing": "Whenever",
             "Event": "AttacksOrBlocks",
             "Filter": {
-              "CardTypes": ["creature"],
-              "Characteristics": [{"CharacteristicType": "other", "Description": "enchanted"}]
+              "CardTypes": [
+                "creature"
+              ],
+              "IsEnchanted": true
             }
           },
           "Effects": [
@@ -61,18 +71,31 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

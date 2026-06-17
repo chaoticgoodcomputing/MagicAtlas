@@ -3,9 +3,7 @@
     "Name": "Bear Umbra",
     "ManaCost": "{2}{G}{G}",
     "TypeLine": "Enchantment — Aura",
-    "OracleText": "Enchant creature\nEnchanted creature gets +3/+3.\nWhenever the enchanted creature attacks, untap all lands you control.\nTotem armor (If enchanted creature would be destroyed, instead remove all damage from it and destroy this Aura.)",
-    "Power": null,
-    "Toughness": null,
+    "OracleText": "Enchant creature\nEnchanted creature gets +2/+2 and has \"Whenever this creature attacks, untap all lands you control.\"\nUmbra armor (If enchanted creature would be destroyed, instead remove all damage from it and destroy this Aura.)",
     "Colors": [
       "G"
     ],
@@ -25,11 +23,10 @@
       ]
     },
     "Oracle": {
-      "RawText": "Enchant creature\nEnchanted creature gets +3/+3.\nWhenever the enchanted creature attacks, untap all lands you control.\nTotem armor (If enchanted creature would be destroyed, instead remove all damage from it and destroy this Aura.)",
+      "RawText": "Enchant creature\nEnchanted creature gets +2/+2 and has \"Whenever this creature attacks, untap all lands you control.\"\nUmbra armor (If enchanted creature would be destroyed, instead remove all damage from it and destroy this Aura.)",
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Enchant",
           "Effects": [
             {
               "EffectType": "enchantRestriction",
@@ -39,68 +36,78 @@
                 ]
               }
             }
-          ]
+          ],
+          "KeywordSource": "Enchant"
         },
         {
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "modifyPT",
-              "Target": {
-                "Kind": "EnchantedOrEquipped"
-              },
-              "PowerModifier": {
-                "QuantityType": "literal",
-                "Value": 3
-              },
-              "ToughnessModifier": {
-                "QuantityType": "literal",
-                "Value": 3
-              }
-            }
-          ]
-        },
-        {
-          "Kind": "triggered",
-          "Trigger": {
-            "Timing": "Whenever",
-            "Event": "Attacks",
-            "Filter": {
-              "CardTypes": [
-                "creature"
-              ],
-              "Characteristics": [
+              "EffectType": "composite",
+              "Effects": [
                 {
-                  "CharacteristicType": "other",
-                  "Description": "enchanted"
+                  "EffectType": "modifyPT",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  }
+                },
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "GainedAbility": {
+                    "Kind": "triggered",
+                    "Trigger": {
+                      "Timing": "Whenever",
+                      "Event": "Attacks",
+                      "Filter": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "IsSelf": true
+                      }
+                    },
+                    "Effects": [
+                      {
+                        "EffectType": "untap",
+                        "Target": {
+                          "Kind": "Each",
+                          "Filter": {
+                            "CardTypes": [
+                              "land"
+                            ],
+                            "Controller": "You"
+                          }
+                        }
+                      }
+                    ]
+                  }
                 }
               ]
             }
-          },
-          "Effects": [
-            {
-              "EffectType": "untap",
-              "Target": {
-                "Kind": "Each",
-                "Filter": {
-                  "CardTypes": [
-                    "land"
-                  ],
-                  "Controller": "You"
-                }
-              }
-            }
           ]
         },
         {
           "Kind": "static",
-          "KeywordSource": "Totem armor",
           "Effects": [
             {
               "EffectType": "keywordAbility",
-              "Keyword": "Totem armor"
+              "Keyword": "Umbra armor"
             }
-          ]
+          ],
+          "KeywordSource": "Umbra armor",
+          "Reminder": {
+            "Text": "(If enchanted creature would be destroyed, instead remove all damage from it and destroy this Aura.)"
+          }
         }
       ]
     },
@@ -126,7 +133,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

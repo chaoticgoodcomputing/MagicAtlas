@@ -8,12 +8,15 @@ using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
 
 /// <summary>
-/// Totem armor (oracle text: "Umbra armor"): If enchanted creature would be destroyed,
+/// Umbra armor (oracle text: "Umbra armor"): If enchanted creature would be destroyed,
 /// instead remove all damage from it and destroy this Aura.
-/// Rule 702.102. The oracle text uses "Umbra armor" while the comp-rules name is
-/// "totem armor". MAST records keyword presence using the comp-rules discriminator
-/// "Totem armor"; the replacement-effect semantics are engine territory.
-/// Multi-word keyword; mirrors LivingWeapon.
+/// Rule 702.89. "Umbra armor" is the current Oracle name; "totem armor" is the obsolete
+/// prior name (CR 702.89: the older text was renamed). MAST records keyword presence
+/// using the discriminator that matches the card's current Oracle wording —
+/// <see cref="KeywordAbility.UmbraArmor"/> — distinct from the obsolete
+/// <see cref="KeywordAbility.TotemArmor"/> the literal "totem armor" combinator emits.
+/// The replacement-effect semantics are engine territory. Multi-word keyword; mirrors
+/// LivingWeapon.
 /// </summary>
 [Keyword]
 public sealed class UmbraArmorKeyword : IKeyword
@@ -31,8 +34,8 @@ public sealed class UmbraArmorKeyword : IKeyword
     from reminder in OptionalReminder
     select (Ability)new StaticAbility
     {
-      KeywordSource = KeywordAbility.TotemArmor,
-      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.TotemArmor }],
+      KeywordSource = KeywordAbility.UmbraArmor,
+      Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.UmbraArmor }],
       Reminder = reminder,
     }
   );

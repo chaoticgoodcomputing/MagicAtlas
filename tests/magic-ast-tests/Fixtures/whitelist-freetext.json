@@ -452,12 +452,6 @@
       "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
-      "card": "M14/UnhallowedPact",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
       "card": "M14/YoungPyromancer",
       "sink": "OtherCharacteristic",
       "tag": "debt",
@@ -654,18 +648,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "OtherCondition structured buckets (Slice 0/7) + unparsed-triggered Void moves"
-    },
-    {
-      "card": "ROE/BearUmbra",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
-    },
-    {
-      "card": "ROE/LuminousWake",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "structured-characteristic / ExcludeSelf / self-ref / aura / comparative-PT slices"
     },
     {
       "card": "RTR/RakdosDrake",

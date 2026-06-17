@@ -187,6 +187,20 @@ public sealed record ObjectFilter
   public bool? IsSelf { get; init; }
 
   /// <summary>
+  /// "enchanted [type]" — the object this Aura is currently attached to (CR 303.4 /
+  /// 702.5). An Aura's "enchanted creature" refers to the permanent it enchants, not
+  /// an arbitrary object of that type. Flat boolean axis mirroring <see cref="IsSelf"/>
+  /// and <see cref="IsToken"/>: where IsSelf restricts to the source object and
+  /// ExcludeSelf omits it, IsEnchanted restricts to the Aura's attached permanent.
+  /// Distinct from <see cref="ObjectReferenceKind.EnchantedOrEquipped"/> at the reference
+  /// level — this is the filter-level predicate, so a trigger/effect filter
+  /// ("whenever enchanted creature attacks") honestly names the attached object rather
+  /// than carrying it as a free-text characteristic.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsEnchanted { get; init; }
+
+  /// <summary>
   /// Additional characteristic constraints beyond the structured axes above —
   /// a keyword-ability requirement (<see cref="KeywordCharacteristic"/>) or the
   /// typed residual (<see cref="OtherCharacteristic"/>) for shapes not yet
