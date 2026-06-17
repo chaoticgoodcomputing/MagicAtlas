@@ -26,8 +26,19 @@ using MagicAST.AST.References;
 /// top N cards of their library into their graveyard." The player mills cards equal
 /// to the amount of life lost in the triggering event.
 /// </para>
+///
+/// <para>
+/// This rule carries NO <c>[TriggeredRule]</c> attribute — it must NOT enter the
+/// reflection-discovered generic effect pool. The identical surface text "that player
+/// mills that many cards" appears on combat-damage triggers (Crosstown Courier,
+/// Captain Nghathrod) where "that many" is the damage dealt (<see cref="DerivedKind.DamageDealt"/>),
+/// not life lost. Dispatching this rule for any trigger event would mislabel those
+/// cards. Instead, <see cref="MagicAST.Parsing.Parsers.TriggeredAbilityParser"/>
+/// dispatches to it directly only when the resolved trigger event is
+/// <see cref="MagicAST.AST.Triggers.TriggerEvent.LosesLife"/> — mirroring
+/// <see cref="YouGainThatMuchLifeLostRule"/>.
+/// </para>
 /// </summary>
-[TriggeredRule]
 public sealed class ThatPlayerMillsThatManyRule : ITriggeredRule
 {
   private static readonly Regex _pattern = new(
