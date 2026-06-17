@@ -1,6 +1,9 @@
 namespace MagicAST.Parsing.Parsers;
 
+using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
 
 /// <summary>
 /// Parser for modal abilities ("Choose one —", "Choose two —", "Choose one or both —").
@@ -8,6 +11,15 @@ using MagicAST.AST.Abilities;
 /// on <see cref="OracleClause.ModalOptions"/>; this parser interprets the header
 /// text to derive a <see cref="ModeSelection"/> and dispatches each option clause
 /// back through the classifier+registry to parse the option body.
+///
+/// <para>
+/// Also handles the commander-conditional mode-expansion pattern:
+/// "Choose one. If you control a commander as you cast this spell, you may
+/// choose both instead." — a <see cref="ModeSelection"/> with base <c>ChooseOne</c>
+/// and a <see cref="ModeSelectionOverride"/> whose condition is a
+/// <see cref="CountCondition"/> filtering Commander-supertype creatures you control.
+/// CR 903 (Commander format), MAST describes the condition as written.
+/// </para>
 /// </summary>
 [OracleAbilityParser(AbilityKind.Modal)]
 public sealed class ModalAbilityParser : IAbilityParser
@@ -87,12 +99,49 @@ public sealed class ModalAbilityParser : IAbilityParser
     ];
   }
 
+  // "Choose one. If you control a commander as you cast this spell, you may choose both instead."
+  // Captures the base "choose one" and the conditional "choose both" override.
+  private static readonly Regex _commanderChooseBothOverride = new(
+    @"^choose\s+one\s*\.\s+if\s+you\s+control\s+a\s+commander\s+as\s+you\s+cast\s+this\s+spell,\s+you\s+may\s+choose\s+both\s+instead",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   /// <summary>
   /// Maps the modal header text to a <see cref="ModeSelection"/>.
   /// </summary>
   private static ModeSelection? TryParseModeSelection(string headerText)
   {
-    var lower = headerText.ToLowerInvariant();
+    var lower = headerText.ToLowerInvariant().Trim();
+
+    // "Choose one. If you control a commander as you cast this spell, you may
+    // choose both instead." — base ChooseOne with a conditional override that
+    // upgrades to ChooseOneOrBoth when you control a Commander-supertype creature.
+    // CR 903 (Commander format); the condition is a CountCondition over Commander
+    // creatures you control.
+    if (_commanderChooseBothOverride.IsMatch(lower))
+    {
+      return ModeSelection.ChooseOne() with
+      {
+        ConditionalOverride = new ModeSelectionOverride
+        {
+          Condition = new CountCondition
+          {
+            Filter = new ObjectFilter
+            {
+              CardTypes = ["creature"],
+              Supertypes = ["Commander"],
+              Controller = ControllerFilter.You,
+            },
+            Count = new Comparison
+            {
+              Operator = ComparisonOperator.GreaterThanOrEqual,
+              Value = 1,
+            },
+          },
+          Selection = ModeSelection.ChooseOneOrBoth(),
+        },
+      };
+    }
 
     if (lower.StartsWith("choose one or both"))
     {
