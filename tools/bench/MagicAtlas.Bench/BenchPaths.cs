@@ -34,6 +34,14 @@ public static class BenchPaths
   public static string BaselineReportPath =>
     Path.Combine(RepoRoot, "tools", "bench", "MagicAtlas.Bench", "bench-report.json");
 
+  /// <summary>
+  /// The explicit per-combo expected-tier whitelist — the GATE for the combo-recall test (it replaced the
+  /// moving-baseline ratchet). Resolved in the SOURCE tree (like <see cref="BaselineReportPath"/>), since
+  /// it is the version-controlled contract the test asserts against, not a build artifact.
+  /// </summary>
+  public static string ExpectedTiersPath =>
+    Path.Combine(RepoRoot, "tools", "bench", "MagicAtlas.Bench", "combo-expected-tiers.json");
+
   private static string RepoRoot
   {
     get

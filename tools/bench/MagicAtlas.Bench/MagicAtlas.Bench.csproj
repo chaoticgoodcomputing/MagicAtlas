@@ -43,6 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- The explicit per-combo expected-tier whitelist — the combo-recall GATE. Read from the source
+         tree by the test (BenchPaths.ExpectedTiersPath), so it is listed here for IDE/build visibility
+         only, not copied to output. -->
+    <None Include="combo-expected-tiers.json" />
     <!-- The pinned, checksummed Spellbook combo snapshot + the committed baseline report. -->
     <None Include="Data/**/*.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="Data/**/*.sha256" CopyToOutputDirectory="PreserveNewest" />

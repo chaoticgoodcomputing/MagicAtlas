@@ -2,11 +2,12 @@ using MagicAtlas.Bench;
 
 // Combo-recall benchmark CLI (alignment initiative 04, Track A).
 //
-//   dotnet run                 → run the bench and PRINT the report (does not touch the baseline)
-//   dotnet run -- --write      → run the bench and WRITE bench-report.json (the committed baseline)
+//   dotnet run                 → run the bench and PRINT the report (does not touch the report file)
+//   dotnet run -- --write      → run the bench and WRITE bench-report.json (the derived report artifact)
 //
-// The NUnit ratchet (ComboRecallRatchetTest) is the gate: it asserts recall never decreases vs the
-// committed baseline, and updates the baseline when recall increases.
+// bench-report.json is a DERIVED REPORT, not the gate. The gate is the NUnit ComboExpectedTierTest: it
+// asserts each eligible combo's CURRENT reconstruction tier equals the tier explicitly pinned for it on
+// combo-expected-tiers.json (a loud, per-combo, stateless whitelist — no moving aggregate baseline).
 
 var write = args.Contains("--write");
 
