@@ -1,0 +1,135 @@
+{
+  "Input": {
+    "Name": "Tandem Lookout",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Creature — Human Scout",
+    "OracleText": "Soulbond (You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)\nAs long as Tandem Lookout is paired with another creature, each of those creatures has \"Whenever this creature deals damage to an opponent, draw a card.\"",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Tandem Lookout",
+    "TypeLine": {
+      "Raw": "Creature — Human Scout",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Scout"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Soulbond (You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)\nAs long as Tandem Lookout is paired with another creature, each of those creatures has \"Whenever this creature deals damage to an opponent, draw a card.\"",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Soulbond",
+          "Reminder": {
+            "Text": "(You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Soulbond"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "BothPaired"
+              },
+              "GainedAbility": {
+                "Kind": "triggered",
+                "Trigger": {
+                  "Timing": "Whenever",
+                  "Event": "DealsDamageToOpponent",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "IsSelf": true
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "drawCards",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "other",
+                  "Text": "Tandem Lookout is paired with another creature"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}

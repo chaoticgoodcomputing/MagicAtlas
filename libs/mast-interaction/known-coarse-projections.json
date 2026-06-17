@@ -182,6 +182,7 @@
     "DealsCombatDamageToCreature": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "DealsCombatDamageToPlayer": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "DealsDamage": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "DealsDamageToOpponent": "Tandem Lookout / Soulbond damage-draw family \u2014 opponent-specific any-damage trigger (Rule 102.2 + 120); no flow rule consumes it yet; consciously inert for interaction recall",
     "DiscardsCard": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "DrawsCard": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "EntersOrDies": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
