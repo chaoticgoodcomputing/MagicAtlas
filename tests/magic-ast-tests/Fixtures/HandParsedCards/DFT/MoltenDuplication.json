@@ -1,0 +1,130 @@
+{
+  "Input": {
+    "Name": "Molten Duplication",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Create a token that's a copy of target artifact or creature you control, except it's an artifact in addition to its other types. It gains haste until end of turn. Sacrifice it at the beginning of the next end step.",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Molten Duplication",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Create a token that's a copy of target artifact or creature you control, except it's an artifact in addition to its other types. It gains haste until end of turn. Sacrifice it at the beginning of the next end step.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "artifact",
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "Modifications": [
+                {
+                  "ModificationType": "typeAdder",
+                  "CardTypes": [
+                    "artifact"
+                  ]
+                }
+              ]
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "It"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Haste",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Haste"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            },
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "At",
+                  "Event": {
+                    "Part": "End",
+                    "Edge": "Beginning",
+                    "When": "Next"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "sacrifice",
+                    "Target": {
+                      "Kind": "It"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
+    ]
+  }
+}
