@@ -1984,6 +1984,12 @@
       "DiscriminatorKey": "EventType",
       "Types": [
         {
+          "Type": "AbilityTriggerEvent",
+          "Discriminator": "abilityTrigger",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CounterPlacementEvent",
           "Discriminator": "counterPlacement",
           "IsUnparsed": false,
@@ -2056,5 +2062,5 @@
       ]
     }
   ],
-  "SchemaHash": "e05b5e65d0ae3cadc76b74ed23d87fec9bce85203da29d578bc5c66a4f443438"
+  "SchemaHash": "0bfe1306bd65ae8af8c5da6a9adae345fe4d164fc3a4d85ce574939ce25f56df"
 }
