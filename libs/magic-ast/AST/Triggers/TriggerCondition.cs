@@ -183,6 +183,16 @@ public enum TriggerEvent
   /// <summary>A source deals damage (any damage, not only combat) — Rule 120</summary>
   DealsDamage,
 
+  /// <summary>
+  /// A creature deals any damage (combat or non-combat) to an opponent specifically
+  /// (not to any player, creature, or planeswalker). Rule 120 (dealing damage);
+  /// Rule 102.2 (opponent = player not on controller's team). Distinct from
+  /// <see cref="DealsCombatDamageToPlayer"/> (combat-only) and <see cref="DealsDamage"/>
+  /// (any damage, unspecified recipient). Used for oracle text such as
+  /// "Whenever this creature deals damage to an opponent, [effect]."
+  /// </summary>
+  DealsDamageToOpponent,
+
   // Damage triggers
   /// <summary>Damage is dealt</summary>
   DamageDealt,

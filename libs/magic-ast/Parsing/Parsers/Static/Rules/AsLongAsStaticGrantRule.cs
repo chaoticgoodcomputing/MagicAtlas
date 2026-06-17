@@ -336,11 +336,11 @@ public sealed class AsLongAsStaticGrantRule : IStaticRule
   }
 
   /// <summary>
-  /// Hands a quoted activated-ability body off to <see cref="ActivatedAbilityParser"/>.
-  /// Mirrors <see cref="GrantedAbilityRule.TryParseGrantedBody"/> — used for the
-  /// Soulbond quoted-activated form where the paired-grant body is a quoted activated
-  /// ability (e.g. Deadeye Navigator's "{1}{U}: Exile this creature, then return it to
-  /// the battlefield under your control.").
+  /// Hands a quoted ability body off to the appropriate parser. Tries
+  /// <see cref="ActivatedAbilityParser"/> first (for costs-colon-effects shapes
+  /// like Deadeye Navigator), then falls back to <see cref="TriggeredAbilityParser"/>
+  /// (for triggered-ability shapes like Tandem Lookout's
+  /// "Whenever this creature deals damage to an opponent, draw a card.").
   /// </summary>
   private Ability? TryParseGrantedActivatedBody(string body)
   {
@@ -355,12 +355,26 @@ public sealed class AsLongAsStaticGrantRule : IStaticRule
       RawText = body,
       SourceSpan = new MagicAST.AST.TextSpan(0, body.Length),
     };
-    var innerClassification = new ClauseClassification
+
+    // Try activated first (the historical shape for this method).
+    var activatedClassification = new ClauseClassification
     {
       Kind = AbilityKind.Activated,
       Confidence = 1.0,
     };
+    var activated = new ActivatedAbilityParser().TryParse(innerClause, activatedClassification);
+    if (activated is not null)
+    {
+      return activated;
+    }
 
-    return new ActivatedAbilityParser().TryParse(innerClause, innerClassification);
+    // Fall back to triggered (e.g. "Whenever this creature deals damage to an opponent,
+    // draw a card." — Tandem Lookout's Soulbond paired-grant shape).
+    var triggeredClassification = new ClauseClassification
+    {
+      Kind = AbilityKind.Triggered,
+      Confidence = 1.0,
+    };
+    return new TriggeredAbilityParser().TryParse(innerClause, triggeredClassification);
   }
 }
