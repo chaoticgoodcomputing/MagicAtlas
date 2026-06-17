@@ -44,8 +44,8 @@
         "Peregrine Drake",
         "Mourning"
       ],
-      "expectedTier": "Missed",
-      "reason": "the (cast,trigger) cast-blink flow arm IS merged and sound (interaction-judge PASS), but the cast-blink loop is a 6-edge cycle (emit:cast -> trigger:cast -> emit:blink -> etb -> emit:untap -> pay:mana -> emit:cast) that exceeds the bench/product LengthBound of 5 hops; reconstructs at Amber only at bound>=6. Characterized length-bound residual, NOT an engine blind spot"
+      "expectedTier": "Amber",
+      "reason": "the (cast,trigger) cast-blink flow arm reconstructs the 6-edge loop (emit:cast -> trigger:cast -> emit:blink -> etb -> emit:untap -> pay:mana -> emit:cast) at LengthBound>=6; doubly-floored AMBER (Overlaps-not-Subsumes on the blink + cast hops, and the recast mana co-cost fed by Peregrine's untapped lands whose colours/count are unknown, CR 107.4) - interaction-judge PASS"
     },
     {
       "id": "1170-3821-6058",
@@ -54,8 +54,8 @@
         "Peregrine Drake",
         "Conviction"
       ],
-      "expectedTier": "Missed",
-      "reason": "the (cast,trigger) cast-blink flow arm IS merged and sound (interaction-judge PASS), but the cast-blink loop is a 6-edge cycle (emit:cast -> trigger:cast -> emit:blink -> etb -> emit:untap -> pay:mana -> emit:cast) that exceeds the bench/product LengthBound of 5 hops; reconstructs at Amber only at bound>=6. Characterized length-bound residual, NOT an engine blind spot"
+      "expectedTier": "Amber",
+      "reason": "the (cast,trigger) cast-blink flow arm reconstructs the 6-edge loop (emit:cast -> trigger:cast -> emit:blink -> etb -> emit:untap -> pay:mana -> emit:cast) at LengthBound>=6; doubly-floored AMBER (Overlaps-not-Subsumes on the blink + cast hops, and the recast mana co-cost fed by Peregrine's untapped lands whose colours/count are unknown, CR 107.4) - interaction-judge PASS"
     },
     {
       "id": "1385-2577-5670",
@@ -132,8 +132,8 @@
         "Ruthless Knave",
         "Ashnod's Altar"
       ],
-      "expectedTier": "Amber",
-      "reason": "engine reconstructs a spanning cycle but its best certified tier is Amber (conditional)"
+      "expectedTier": "Green",
+      "reason": "at LengthBound>=6 the full 6-hop aristocrat loop reconstructs (Ashnod mana -> Ruthless Knave pay -> Treasure -> Chatterfang Squirrel -> sac to Ashnod -> mana); certified infinite, net +1 Treasure / 0 Squirrels / 0 mana per iteration. The {B} pip is paid by a loop-produced Treasure (any mana, CR 107.4c), not by Ashnod's colorless (which the per-colour balance would floor to Amber). Two interaction-judges PASS (net-positivity + edge-reliability); matches Commander Spellbook ground truth"
     },
     {
       "id": "2511-2577-4871",

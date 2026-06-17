@@ -10,16 +10,18 @@ namespace MagicAtlas.Ast.Tests.Flows.InteractionTriage.Steps;
 /// The reconstructed cycles, computed in C# via the direct MAST APIs (<c>PortGraphEngine.FindCycles</c>)
 /// rather than re-derived in Python from the flat edges — so the viz renders the engine's
 /// <b>cycle-level verdict</b> (the worst hop floored by §8 firability + the multi-cost conjunction),
-/// which a per-edge export cannot express. Bounded to length ≤5 — a full sac→death→token→doubler→refuel
-/// loop spans five hops (the Ashnod's Altar × Pitiless × Chatterfang archetype), still ~3s at corpus
-/// scale. Single-card loops dropped (no 1-card combo exists in MTG), deduped by node set, ranked
+/// which a per-edge export cannot express. Bounded to length ≤6 — the sac→death→token→doubler→refuel
+/// archetype (Ashnod's Altar × Pitiless × Chatterfang) spans five hops, and the cast-recursion blink loop
+/// (Displacer Kitten: emit:cast → trigger:cast → emit:blink → etb → emit:untap → pay:mana → emit:cast)
+/// spans six, so the reconstruction reach is 6 hops (still tractable at corpus scale; cf. the GPU-Johnson
+/// note in docs if reach must grow further). Single-card loops dropped (no 1-card combo exists in MTG), deduped by node set, ranked
 /// GREEN-verdict-first then shortest, and PER-TIER display-capped (verified/partial/derived each capped
 /// so all three appear — partial + derived each far exceed a flat cap). One <see cref="CycleEdgeRow"/> per hop.
 /// </summary>
 [FlowthruStep]
 public static class MaterializeCyclesStep
 {
-  private const int LengthBound = 5;
+  private const int LengthBound = 6;
   private const int PerTierCap = 60;
 
   public static Func<

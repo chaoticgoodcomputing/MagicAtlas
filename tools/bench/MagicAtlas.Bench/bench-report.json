@@ -1,10 +1,10 @@
 {
   "CombosEligible": 33,
-  "ReconstructedGreen": 5,
-  "ReconstructedAmber": 20,
-  "Missed": 8,
-  "RecallAtGreen": 0.1515,
-  "RecallAtAmber": 0.7576,
+  "ReconstructedGreen": 6,
+  "ReconstructedAmber": 21,
+  "Missed": 6,
+  "RecallAtGreen": 0.1818,
+  "RecallAtAmber": 0.8182,
   "Combos": [
     {
       "Id": "1090-2781",
@@ -63,8 +63,12 @@
         "Peregrine Drake",
         "Mourning"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Displacer Kitten",
+        "Mourning",
+        "Peregrine Drake"
+      ]
     },
     {
       "Id": "1170-3821-6058",
@@ -74,8 +78,12 @@
         "Peregrine Drake",
         "Conviction"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Conviction",
+        "Displacer Kitten",
+        "Peregrine Drake"
+      ]
     },
     {
       "Id": "1385-2577-5670",
@@ -175,8 +183,9 @@
         "Ruthless Knave",
         "Ashnod's Altar"
       ],
-      "Outcome": "Amber",
+      "Outcome": "Green",
       "CycleCards": [
+        "Ashnod's Altar",
         "Chatterfang, Squirrel General",
         "Ruthless Knave"
       ]

@@ -58,10 +58,11 @@ public sealed record BenchReport
 /// </summary>
 public sealed class ComboRecallRunner
 {
-  // The flow's MaterializeCyclesStep uses length-bound 5 (a full sac→death→token→doubler→refuel loop
-  // spans five hops — the Ashnod's Altar × Pitiless × Chatterfang archetype). Match it so the bench
-  // measures the same reconstruction reach the product viz shows.
-  private const int LengthBound = 5;
+  // The flow's MaterializeCyclesStep uses length-bound 6 (the sac→death→token→doubler→refuel archetype
+  // spans five hops — Ashnod's Altar × Pitiless × Chatterfang — and the cast-recursion blink loop spans
+  // six — Displacer Kitten: emit:cast → trigger:cast → emit:blink → etb → emit:untap → pay:mana). Match
+  // it so the bench measures the same reconstruction reach the product viz shows.
+  private const int LengthBound = 6;
 
   private readonly GoldCorpus _corpus;
   private readonly PortWalk _walk;
