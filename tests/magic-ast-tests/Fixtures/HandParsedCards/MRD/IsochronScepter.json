@@ -1,0 +1,127 @@
+{
+  "Input": {
+    "Name": "Isochron Scepter",
+    "TypeLine": "Artifact",
+    "ManaCost": "{2}",
+    "OracleText": "Imprint — When this artifact enters, you may exile an instant card with mana value 2 or less from your hand.\n{2}, {T}: You may copy the exiled card. If you do, you may cast the copy without paying its mana cost.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Isochron Scepter",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Imprint — When this artifact enters, you may exile an instant card with mana value 2 or less from your hand.\n{2}, {T}: You may copy the exiled card. If you do, you may cast the copy without paying its mana cost.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "AbilityWord": "Imprint",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "artifact"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "exile",
+                "Target": {
+                  "Kind": "Any",
+                  "Filter": {
+                    "CardTypes": [
+                      "instant"
+                    ],
+                    "ManaValueComparison": {
+                      "Operator": "LessThanOrEqual",
+                      "Value": 2
+                    },
+                    "Controller": "You",
+                    "Zone": "Hand"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
+              ]
+            },
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "copy",
+                "Target": {
+                  "Kind": "Any",
+                  "Filter": {
+                    "Zone": "Exile",
+                    "ExiledWith": {
+                      "Kind": "Self"
+                    }
+                  }
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "optional",
+                "Inner": {
+                  "EffectType": "castWithoutPaying",
+                  "Target": {
+                    "Kind": "It"
+                  }
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
