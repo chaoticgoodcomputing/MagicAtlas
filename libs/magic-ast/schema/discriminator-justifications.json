@@ -33,5 +33,10 @@
     "name": "count",
     "near": "countersRemovedThisWay",
     "reason": "Distinct quantities: 'count' is a generic object/filter count; 'countersRemovedThisWay' is a linked back-reference to counters removed by the same effect (CR 607-style linkage). Different."
+  },
+  {
+    "name": "conditional",
+    "near": "conditionalPay",
+    "reason": "Distinct effects sharing only the 'conditional' prefix. 'conditional' (ConditionalEffect) is an effect-level 'If [condition], [effect]' gate checked mid-ability-resolution (fires AFTER the preceding effects). 'conditionalPay' (ConditionalPayEffect) is the 'you may pay [cost]' optional-cost effect (CR 117.7), wrapped by OptionalEffect with its consequent on IfYouDo. Different concepts (a state gate vs an optional payment); not sprawl. Pre-existing pair surfaced when the lint first ran post-batch-8."
   }
 ]
