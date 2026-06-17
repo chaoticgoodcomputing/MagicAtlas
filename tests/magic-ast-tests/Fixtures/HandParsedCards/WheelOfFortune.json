@@ -1,0 +1,64 @@
+{
+  "Input": {
+    "Name": "Wheel of Fortune",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Each player discards their hand, then draws seven cards.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Wheel of Fortune",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Each player discards their hand, then draws seven cards.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "discardCards",
+              "Count": { "QuantityType": "derived", "DerivedFrom": "CardsInHand" },
+              "Player": { "Kind": "EachPlayer" },
+              "Random": false
+            },
+            {
+              "EffectType": "drawCards",
+              "Count": { "QuantityType": "literal", "Value": 7 },
+              "Player": { "Kind": "EachPlayer" }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}
