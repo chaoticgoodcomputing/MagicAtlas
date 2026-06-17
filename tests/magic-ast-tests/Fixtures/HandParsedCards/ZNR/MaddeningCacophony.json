@@ -3,24 +3,27 @@
     "Name": "Maddening Cacophony",
     "ManaCost": "{1}{U}",
     "TypeLine": "Sorcery",
-    "OracleText": "Kicker {3}{U} (You may pay an additional {3}{U} as you cast this spell.)\nEach opponent mills eight cards. If this spell was kicked, instead each opponent mills half their library, rounded up.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Kicker", "Mill"],
-    "Layout": "normal"
+    "OracleText": "Kicker {3}{U}\nEach opponent mills eight cards. If this spell was kicked, instead each opponent mills half their library, rounded up.",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Maddening Cacophony",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
-      "RawText": "Kicker {3}{U} (You may pay an additional {3}{U} as you cast this spell.)\nEach opponent mills eight cards. If this spell was kicked, instead each opponent mills half their library, rounded up.",
+      "RawText": "Kicker {3}{U}\nEach opponent mills eight cards. If this spell was kicked, instead each opponent mills half their library, rounded up.",
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Kicker",
           "Effects": [
             {
               "EffectType": "additionalCastCost",
@@ -34,7 +37,9 @@
                     },
                     {
                       "Kind": "colored",
-                      "Colors": ["U"]
+                      "Colors": [
+                        "U"
+                      ]
                     }
                   ]
                 },
@@ -43,9 +48,7 @@
               }
             }
           ],
-          "Reminder": {
-            "Text": "(You may pay an additional {3}{U} as you cast this spell.)"
-          }
+          "KeywordSource": "Kicker"
         },
         {
           "Kind": "spell",
@@ -64,15 +67,17 @@
               "EffectType": "mill",
               "Count": {
                 "QuantityType": "calculated",
-                "Operation": "half",
                 "BaseQuantity": {
                   "QuantityType": "count",
                   "CountOf": {
-                    "CardTypes": ["card"],
-                    "Zone": "Library",
-                    "Controller": "Opponent"
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "Controller": "Opponent",
+                    "Zone": "Library"
                   }
                 },
+                "Operation": "half",
                 "Rounding": "up"
               },
               "Player": {
@@ -98,7 +103,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -106,11 +113,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }
