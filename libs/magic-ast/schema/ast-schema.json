@@ -1548,6 +1548,15 @@
           ]
         },
         {
+          "Type": "PutFromHandOntoBattlefieldEffect",
+          "Discriminator": "putFromHandOntoBattlefield",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Tapped"
+          ]
+        },
+        {
           "Type": "PutOnTopOfLibraryEffect",
           "Discriminator": "putOnTopOfLibrary",
           "IsUnparsed": false,
@@ -2152,5 +2161,5 @@
       ]
     }
   ],
-  "SchemaHash": "6859621695374064ba30c74868f351d4230581ceb8185c68a9c69cc86a4b6ee4"
+  "SchemaHash": "1d315752484dfd7169cc1e84160814d3357fa2d20b9e27e785f57d766ea69306"
 }

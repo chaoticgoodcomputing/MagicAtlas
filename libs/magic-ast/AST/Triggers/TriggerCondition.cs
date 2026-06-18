@@ -146,6 +146,18 @@ public enum TriggerEvent
   Attacks,
 
   /// <summary>
+  /// A creature attacks an opponent specifically (not a planeswalker or battle).
+  /// CR 508.1b: if the game allows attacking multiple players, the active player
+  /// announces which player each creature is attacking. "Whenever [creature]
+  /// attacks an opponent" fires only when the declared attack target is a player
+  /// who is an opponent (CR 102.2), not a planeswalker or battle they control.
+  /// Distinct from <see cref="Attacks"/> (generic attack, any legal target) — the
+  /// opponent-specificity is a named part of the oracle text and a cluster axis
+  /// (e.g. Kaalia of the Vast). CR 508 (Declare Attackers Step).
+  /// </summary>
+  AttacksAnOpponent,
+
+  /// <summary>
   /// A creature is exerted by its controller (CR 701.43 — Exert keyword action).
   /// "When you do" after "you may exert [this creature] as it attacks" fires on this
   /// event. The linked ability (CR 607.2h) uses this trigger event to match the
