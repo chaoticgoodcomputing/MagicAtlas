@@ -197,6 +197,11 @@ public enum KeywordAbility
   /// <summary>Exalted (CR 702).</summary>
   Exalted,
 
+  /// <summary>Exert (CR 701.43) — keyword action. An optional cost to attack that
+  /// causes the creature not to untap during its controller's next untap step.
+  /// Linked with a "When you do" triggered ability on the same card (CR 607.2h).</summary>
+  Exert,
+
   /// <summary>Exploit (CR 702).</summary>
   Exploit,
 
