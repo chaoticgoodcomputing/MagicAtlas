@@ -40,7 +40,8 @@
               "CardTypes": [
                 "creature"
               ],
-              "Controller": "You"
+              "Controller": "You",
+              "ExcludeSelf": true
             }
           },
           "Effects": [

@@ -316,7 +316,23 @@ internal static class TriggeredRuleHelpers
 
     if (lower.Contains("a creature") || lower.Contains("another creature"))
     {
-      return new ObjectFilter { CardTypes = ["creature"], Controller = controller };
+      // "another creature" excludes the source (CR 109.5) — mirrors the "another artifact"
+      // ExcludeSelf convention below. "a creature" is unrestricted (no exclusion).
+      //
+      // Guard 1: "this creature or another creature" (Blood Artist) reaches this path only
+      // after failing the "this creature" self-reference loop above (because "another" is
+      // present, selfOnly is false and IsSelf is null — see line 288). That shape already
+      // returned from the self-type loop, so it never reaches here.
+      //
+      // Guard 2: "<Name> or another creature you control" (Zulaport Cutthroat) — a disjunction
+      // with a self-by-name. "or another" in the text signals that the trigger covers the
+      // source itself (via the name clause) AND other creatures — do NOT set ExcludeSelf.
+      // "Zulaport Cutthroat or another creature you control dies" means ANY creature you
+      // control, including the source. Only set ExcludeSelf when the "another" is unconditional
+      // (no self-name disjunction partner, i.e. no "or another" phrase).
+      var isDisjunction = lower.Contains("or another creature");
+      var excludeSelf = (!isDisjunction && lower.Contains("another creature")) ? (bool?)true : null;
+      return new ObjectFilter { CardTypes = ["creature"], Controller = controller, ExcludeSelf = excludeSelf };
     }
 
     if (lower.Contains("a land") || lower.Contains("another land"))
