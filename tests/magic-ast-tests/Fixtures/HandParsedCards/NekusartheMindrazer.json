@@ -1,0 +1,127 @@
+{
+  "Input": {
+    "Name": "Nekusar, the Mindrazer",
+    "ManaCost": "{2}{U}{B}{R}",
+    "TypeLine": "Legendary Creature — Zombie Wizard",
+    "OracleText": "At the beginning of each player's draw step, that player draws an additional card.\nWhenever an opponent draws a card, Nekusar deals 1 damage to that player.",
+    "Power": "2",
+    "Toughness": "4",
+    "Colors": [
+      "B",
+      "R",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "R",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Nekusar, the Mindrazer",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Zombie Wizard",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Zombie", "Wizard"]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of each player's draw step, that player draws an additional card.\nWhenever an opponent draws a card, Nekusar deals 1 damage to that player.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Draw",
+              "Edge": "Beginning"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "ThatPlayer"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DrawsCard",
+            "Filter": {
+              "Controller": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Source": {
+                "Kind": "Self"
+              },
+              "Target": {
+                "Kind": "ThatPlayer"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{B}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "R", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U", "B", "R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
