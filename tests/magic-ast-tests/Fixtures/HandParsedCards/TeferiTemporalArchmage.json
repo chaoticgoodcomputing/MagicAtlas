@@ -1,0 +1,155 @@
+{
+  "Input": {
+    "Name": "Teferi, Temporal Archmage",
+    "ManaCost": "{4}{U}{U}",
+    "TypeLine": "Legendary Planeswalker — Teferi",
+    "OracleText": "+1: Look at the top two cards of your library. Put one of them into your hand and the other on the bottom of your library.\n−1: Untap up to four target permanents.\n−10: You get an emblem with “You may activate loyalty abilities of planeswalkers you control on any player’s turn any time you could cast an instant.”\nTeferi, Temporal Archmage can be your commander.",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Teferi, Temporal Archmage",
+    "TypeLine": {
+      "Raw": "Legendary Planeswalker — Teferi",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Planeswalker"
+      ],
+      "Subtypes": [
+        "Teferi"
+      ]
+    },
+    "Oracle": {
+      "RawText": "+1: Look at the top two cards of your library. Put one of them into your hand and the other on the bottom of your library.\n−1: Untap up to four target permanents.\n−10: You get an emblem with “You may activate loyalty abilities of planeswalkers you control on any player’s turn any time you could cast an instant.”\nTeferi, Temporal Archmage can be your commander.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "impulse",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "RestDestination": "BottomOfLibrary"
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": 1
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Target",
+                "Quantity": {
+                  "QuantityType": "upTo",
+                  "Maximum": 4,
+                  "Minimum": 0
+                },
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": -1
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "createEmblem",
+              "Emblem": {
+                "Abilities": [
+                  {
+                    "Kind": "static",
+                    "Effects": [
+                      {
+                        "EffectType": "timingModification",
+                        "Modification": "Grant",
+                        "Timing": "Instant",
+                        "WhoseTurn": "AnyTurn",
+                        "AppliesTo": {
+                          "Kind": "objectActivatedAbility",
+                          "PermanentFilter": {
+                            "CardTypes": [
+                              "planeswalker"
+                            ],
+                            "Controller": "You"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": -10
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "commanderDesignation"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
