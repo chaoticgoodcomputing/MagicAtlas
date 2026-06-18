@@ -32,6 +32,12 @@
       "reason": "recursive token/granted-ability body parsing \u2014 Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
     },
     {
+      "card": "ApproachoftheSecondSun",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "compound cast-history gate ('cast from your hand AND cast another named spell this game') \u2014 two novel condition shapes (CastFromZoneCondition + NamedSpellCastHistoryCondition) with no recurring peer; PB-7 structured-condition buckets"
+    },
+    {
       "card": "ALA/Deathgreeter",
       "sink": "Instructions",
       "tag": "irreducible",

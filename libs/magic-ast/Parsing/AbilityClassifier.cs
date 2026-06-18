@@ -932,6 +932,28 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "If this spell was cast from your hand and you've cast another spell named …" —
+    // Approach of the Second Sun's self-conditional win pattern. The "If this spell
+    // was cast from [zone]" preamble introduces a spell-resolution conditional
+    // (CR 601.2 — casting from hand; CR 104.2b — effect may say you win the game).
+    // Without this interception the classifier defaults to Static and the
+    // StaticAbilityParser stalls ("Static ability parser not yet implemented").
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*If\s+this\s+spell\s+was\s+cast\s+from\s+your\s+hand\b",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Creatures target player/opponent controls gain [keyword] until end of turn." —
     // spell-resolution keyword grant to all creatures owned by a targeted player or
     // opponent (e.g. Savage Alliance mode 1). The "target player/opponent" marks this

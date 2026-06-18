@@ -119,6 +119,7 @@
     "proliferate": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "protection": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "prototype": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "putIntoLibraryAtPosition": "zone-change to Nth-from-top position (CR 401.7) \u2014 library insertion with ordinal; no flow rule reads positional library insertions yet; consciously inert for interaction recall",
     "putOnTopOfLibrary": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "recover": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "regenerate": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
