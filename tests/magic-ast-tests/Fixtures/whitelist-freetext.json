@@ -104,6 +104,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "CombatCelebrant",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'hasn't been exerted this turn' is a per-turn history predicate; no HistoryCondition arm exists yet"
+    },
+    {
       "card": "DFT/BroodheartEngine",
       "sink": "OtherCharacteristic",
       "tag": "debt",

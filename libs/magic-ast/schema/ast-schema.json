@@ -559,6 +559,12 @@
           "Fields": []
         },
         {
+          "Type": "AdditionalCombatPhaseEffect",
+          "Discriminator": "additionalCombatPhase",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "AllMustBlockEffect",
           "Discriminator": "allMustBlock",
           "IsUnparsed": false,
@@ -1021,6 +1027,12 @@
             "First",
             "Second"
           ]
+        },
+        {
+          "Type": "ExertEffect",
+          "Discriminator": "exert",
+          "IsUnparsed": false,
+          "Fields": []
         },
         {
           "Type": "ExileEffect",
@@ -2121,5 +2133,5 @@
       ]
     }
   ],
-  "SchemaHash": "ad168ec7aceca8340f0084c30bd50f69f856ba06b1c1f3bd945c26ffa1a35a33"
+  "SchemaHash": "7ea8f93a735cb4ca9f2a1c65613926ba925acee1eb60ef005f59deb970e28304"
 }

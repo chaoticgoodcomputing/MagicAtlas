@@ -145,6 +145,14 @@ public enum TriggerEvent
   /// <summary>A creature attacks</summary>
   Attacks,
 
+  /// <summary>
+  /// A creature is exerted by its controller (CR 701.43 — Exert keyword action).
+  /// "When you do" after "you may exert [this creature] as it attacks" fires on this
+  /// event. The linked ability (CR 607.2h) uses this trigger event to match the
+  /// specific exert action that triggered it.
+  /// </summary>
+  Exerted,
+
   /// <summary>A creature blocks</summary>
   Blocks,
 
