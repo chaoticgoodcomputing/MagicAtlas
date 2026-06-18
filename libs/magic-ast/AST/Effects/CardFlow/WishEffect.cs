@@ -12,7 +12,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// from either outside the game (sideboard) or exile and puts it into their hand.
 ///
 /// <para>
-/// CR 400.11b: "Some effects bring cards into a game from outside the game. Those
+/// CR 400.11: "Some effects bring cards into a game from outside the game. Those
 /// cards remain in the game until the game ends, their owner leaves the game, or a
 /// rule or effect removes them from the game, whichever comes first." The two source
 /// zones (outside game and exile) are stated explicitly on the card; this node
@@ -65,7 +65,7 @@ public sealed record WishEffect : Effect
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum WishSource
 {
-  /// <summary>"from outside the game" — the player's sideboard (CR 400.11a).</summary>
+  /// <summary>"from outside the game" — the player's sideboard (CR 400.11).</summary>
   [JsonStringEnumMemberName("outsideGame")]
   OutsideGame,
 

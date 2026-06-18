@@ -11,7 +11,7 @@ using MagicAST.AST.References;
 ///
 /// <para>
 /// The "with the greatest power among creatures that player controls" qualifier is a
-/// comparative game-state predicate (CR 700.4 — relative power among a player's
+/// comparative game-state predicate (no dedicated CR — comparative relative power among a player's
 /// creatures) with no first-class ObjectFilter axis. It is carried as an
 /// <see cref="OtherCharacteristic"/> residual on the sacrificed-creature filter per
 /// the ADR 0001 free-text doctrine: the type-honest home for "not yet structured".

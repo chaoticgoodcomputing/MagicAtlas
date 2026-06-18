@@ -11,7 +11,7 @@ using MagicAST.AST.References;
 /// token-copy effect found on cards such as Ondu Spiritdancer.
 ///
 /// <para>
-/// The pronoun "it" is a back-reference (CR 113.8b) to the object named by the
+/// The pronoun "it" is a back-reference to the object named by the
 /// trigger condition — the entering enchantment. MAST models this as
 /// <see cref="ObjectReferenceKind.It"/>, consistent with other "copy it" rules
 /// such as <see cref="CopyTriggeringSpellTriggeredRule"/>.

@@ -163,7 +163,8 @@
     "webSlinging": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "winTheGame": "absolute win effect — no flow rule needs to propagate win conditions yet; coarse conscious carve-out",
     "gainAbilitiesFromExiledCards": "ability-set grant from exiled creature cards (CR 613.1f layer-6) — grants dynamic activated abilities; no interaction flow rule reads exiled-card ability grants yet; consciously inert for interaction recall",
-    "wish": "Karn, the Great Creator −2 / Glittering Wish family (CR 400.11b: retrieve from outside game or exile to hand) — sideboard retrieval; no interaction flow rule reads wish-retrieval events yet; consciously inert for interaction recall"
+    "wish": "Karn, the Great Creator −2 / Glittering Wish family (CR 400.11b: retrieve from outside game or exile to hand) — sideboard retrieval; no interaction flow rule reads wish-retrieval events yet; consciously inert for interaction recall",
+    "repeat": "repeat/loop control-flow effect — no interaction flow rule consumes iterative repetition yet; consciously inert for recall"
   },
   "costType": {
     "composite": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
@@ -224,7 +225,8 @@
     "Transforms": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "TurnedFaceUp": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "DealsDamageToOpponents": "Malcolm, Keen-Eyed Navigator group-damage trigger — fires when one or more creatures of a named subtype deal damage to multiple opponents simultaneously (Rule 120.1 + 102.2, plural 'your opponents'); no flow rule consumes it yet; consciously inert for interaction recall",
-    "EntersOrAttacks": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet"
+    "EntersOrAttacks": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "CastOrCopySpell": "cast-or-copy-a-spell trigger (CR 707.10 copy / 601 cast) — no flow rule reads the cast-or-copy disjunct yet; consciously inert for recall"
   },
   "restriction": {
     "OnlyAsInstant": "timing restriction (CR 602.5a — already at instant speed by default; this explicit marker is inert for intra-turn loop firability gating) — no flow rule consumes it yet",

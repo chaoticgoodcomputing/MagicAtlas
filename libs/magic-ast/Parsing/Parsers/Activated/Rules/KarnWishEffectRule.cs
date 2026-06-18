@@ -11,7 +11,7 @@ using MagicAST.AST.References;
 /// face-up artifact card you own in exile. Put that card into your hand." —
 /// Karn, the Great Creator's −2 loyalty ability. The controller optionally
 /// retrieves an artifact card they own from outside the game (sideboard,
-/// CR 400.11a) or from face-up exile (CR 406) and puts it into their hand.
+/// CR 400.11) or from face-up exile (CR 406) and puts it into their hand.
 ///
 /// <para>
 /// Modelled as an <see cref="OptionalEffect"/> whose
@@ -24,7 +24,7 @@ using MagicAST.AST.References;
 /// qualify). Putting the card into hand is the inherent outcome of the Wish
 /// action and is recorded in the <see cref="WishEffect"/> node itself — the
 /// separate "Put that card into your hand." sentence is consumed as part of the
-/// same semantic unit (CR 400.11b).
+/// same semantic unit (CR 400.11).
 /// </para>
 ///
 /// <para>
@@ -36,7 +36,7 @@ using MagicAST.AST.References;
 /// </para>
 ///
 /// <para>
-/// CR 400.11b: cards brought into the game from outside the game remain until the
+/// CR 400.11: cards brought into the game from outside the game remain until the
 /// game ends, the owner leaves, or a rule removes them.
 /// </para>
 /// </summary>
@@ -68,7 +68,7 @@ public sealed class KarnWishEffectRule : IActivatedEffectRule, IMultiActivatedEf
       return false;
     }
 
-    // CR 400.11b: bringing a card from outside the game (sideboard) into hand.
+    // CR 400.11: bringing a card from outside the game (sideboard) into hand.
     // CR 406: exile zone; face-up qualifier applies to the exile branch.
     var wishEffect = new WishEffect
     {

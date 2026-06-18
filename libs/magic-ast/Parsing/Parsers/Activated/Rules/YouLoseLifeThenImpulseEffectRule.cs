@@ -23,7 +23,7 @@ using MagicAST.AST.References;
 ///   <item><see cref="LoseLifeEffect"/> — the controller loses N life.</item>
 ///   <item><see cref="ImpulseEffect"/> — look at top M, put one in hand, rest to graveyard.</item>
 /// </list>
-/// CR 119.3 (lose life); CR 701.12 (look); CR 701.9 (discard/graveyard).
+/// CR 119.3 (lose life); CR 701.9 (discard/graveyard).
 /// </para>
 ///
 /// <para>

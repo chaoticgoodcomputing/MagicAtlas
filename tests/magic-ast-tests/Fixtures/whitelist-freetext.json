@@ -449,7 +449,7 @@
       "card": "ProfessorOnyx",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic — 'with the greatest power among creatures that player controls' is a comparative game-state predicate (CR 700.4); no MaxStatFilter or RelativePowerFilter node exists yet"
+      "reason": "PB-9 misc structured-characteristic — 'with the greatest power among creatures that player controls' is a comparative game-state predicate (no dedicated CR); no MaxStatFilter or RelativePowerFilter node exists yet"
     },
     {
       "card": "RIX/DuskCharger",

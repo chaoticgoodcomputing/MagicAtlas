@@ -1125,6 +1125,16 @@
           ]
         },
         {
+          "Type": "GainAbilitiesFromExiledCardsEffect",
+          "Discriminator": "gainAbilitiesFromExiledCards",
+          "IsUnparsed": false,
+          "Fields": [
+            "AbilityKind",
+            "SourceFilter",
+            "Target"
+          ]
+        },
+        {
           "Type": "GainAbilityEffect",
           "Discriminator": "gainAbility",
           "IsUnparsed": false,
@@ -1638,6 +1648,15 @@
           ]
         },
         {
+          "Type": "RepeatEffect",
+          "Discriminator": "repeat",
+          "IsUnparsed": false,
+          "Fields": [
+            "AdditionalTimes",
+            "Inner"
+          ]
+        },
+        {
           "Type": "ReplacementEffect",
           "Discriminator": "replacement",
           "IsUnparsed": false,
@@ -1955,6 +1974,15 @@
           "Fields": [
             "Player"
           ]
+        },
+        {
+          "Type": "WishEffect",
+          "Discriminator": "wish",
+          "IsUnparsed": false,
+          "Fields": [
+            "CardFilter",
+            "Sources"
+          ]
         }
       ]
     },
@@ -2197,6 +2225,12 @@
           "Fields": []
         },
         {
+          "Type": "SpellCopyEvent",
+          "Discriminator": "spellCopy",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "TokenCreationEvent",
           "Discriminator": "tokenCreation",
           "IsUnparsed": false,
@@ -2217,5 +2251,5 @@
       ]
     }
   ],
-  "SchemaHash": "8a25384df9a862c767ffa5cb795e0c2fcae259c3848e780f29133335e40ceda2"
+  "SchemaHash": "15583f71bfe5ce6f26cb2f1f9ff7111d44acbe010cc76a463c26a6eb10abd63f"
 }

@@ -22,32 +22,31 @@ using MagicAST.AST.Triggers;
 [TriggerConditionRule(Priority = 975)]
 public sealed class YouCreateTokenConditionRule : ITriggerConditionRule
 {
-  // Non-anchored: the trigger text passed in includes the timing word ("Whenever"),
-  // so an anchored pattern would never match. Instead, match the body phrase with
-  // word boundaries so we do not fire on a compound like
-  // "you create a token for each opponent dealt damage" (a different shape).
-  // The terminal \b ensures "token" is not a prefix of a longer word, and the
-  // negative lookahead (?!\s+for\s) guards the "for each" compound (which produces
-  // a different CreateThatManyTreasureTokensRule shape). "tokens" (plural) is allowed
-  // for future pluralised oracle forms even though the Rosie Cotton text is singular.
+  // Strip the leading timing word, then require the body to be EXACTLY "you create a token".
+  // ANCHORED (^…$) on the stripped body so a disjunctive/compound trigger is NOT matched as a
+  // substring: Tchotchke Elemental's "you create a token OR put a counter OR a sticker on another
+  // permanent" is a three-way trigger disjunction — firing on the bare "you create a token" piece
+  // would silently DROP the counter/sticker disjuncts (CR 603.2 trigger-event accuracy). Such a
+  // compound has no faithful single-event shape here, so it correctly falls through to unparsed.
+  private static readonly Regex _timingPrefix = new(
+    @"^(?:when(?:ever)?|at)\s+",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   private static readonly Regex _pattern = new(
-    @"\byou\s+create\s+a\s+tokens?\b(?!\s+for\b)",
+    @"^you\s+create\s+an?\s+tokens?$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
   public TriggerCondition? Match(string triggerText, string lower, TriggerTiming timing)
   {
-    if (!lower.Contains("create"))
+    if (!lower.Contains("create") || !lower.Contains("token"))
     {
       return null;
     }
 
-    if (!lower.Contains("token"))
-    {
-      return null;
-    }
-
-    if (!_pattern.IsMatch(lower))
+    var body = _timingPrefix.Replace(triggerText.Trim(), string.Empty).Trim();
+    if (!_pattern.IsMatch(body))
     {
       return null;
     }
