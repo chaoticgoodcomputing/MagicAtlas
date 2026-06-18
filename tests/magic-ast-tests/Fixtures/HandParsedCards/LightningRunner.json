@@ -1,0 +1,163 @@
+{
+  "Input": {
+    "Name": "Lightning Runner",
+    "ManaCost": "{3}{R}{R}",
+    "TypeLine": "Creature — Human Warrior",
+    "OracleText": "Double strike, haste\nWhenever this creature attacks, you get {E}{E} (two energy counters), then you may pay eight {E}. If you pay, untap all creatures you control, and after this phase, there is an additional combat phase.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Lightning Runner",
+    "TypeLine": {
+      "Raw": "Creature — Human Warrior",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Double strike, haste\nWhenever this creature attacks, you get {E}{E} (two energy counters), then you may pay eight {E}. If you pay, untap all creatures you control, and after this phase, there is an additional combat phase.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Double strike",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "Both"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Haste",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "gainEnergy",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            },
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "payEnergy",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 8
+                  }
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "untap",
+                    "Target": {
+                      "Kind": "Each",
+                      "Filter": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "Controller": "You"
+                      }
+                    }
+                  },
+                  {
+                    "EffectType": "additionalCombatPhase"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

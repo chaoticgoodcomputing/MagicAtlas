@@ -786,6 +786,18 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return multiToken;
     }
 
+    // "you get {E}+ (reminder), then you may pay N {E}. If you pay, untap all creatures
+    // you control, and after this phase, there is an additional combat phase." —
+    // Lightning Runner / Blaster Hulk energy-gain-then-conditional-combat pattern.
+    // Must be tried before the sentence bundle splitter because ". If" triggers
+    // the sentence splitter but the two sentences only make sense as a paired unit.
+    // CR 107.14 (energy counters); CR 500.8 (adding phases); CR 701.26 (untap).
+    var gainEnergyThenCombat = TryParseGainEnergyThenMayPayEnergyUntapAllControlledAndAdditionalCombat(trimmed);
+    if (gainEnergyThenCombat is not null)
+    {
+      return gainEnergyThenCombat;
+    }
+
     // Multi-sentence effect bundle: "Sentence one. Sentence two." — split on
     // ". " followed by an uppercase letter (the same heuristic the SpellAbilityParser
     // uses). Each sentence is dispatched through the single-rule loop independently.
@@ -1336,6 +1348,109 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       {
         Amount = new CountQuantity { CountOf = filter },
         Player = ObjectReference.You(),
+      },
+    };
+  }
+
+  /// <summary>
+  /// "you get {E}+ (optional reminder), then you may pay N {E}. If you pay, untap all
+  /// creatures you control, and after this phase, there is an additional combat phase." —
+  /// Lightning Runner / energy-gain-then-conditional-combat pattern (CR 107.14 energy;
+  /// CR 500.8 adding phases; CR 701.26 untap; CR 702.4 double strike).
+  ///
+  /// <para>
+  /// Returns a flat two-element list so the triggered ability carries both effects at
+  /// the top level rather than wrapped in a superfluous CompositeEffect:
+  /// <list type="bullet">
+  ///   <item><see cref="GainEnergyEffect"/> — the immediate energy gain.</item>
+  ///   <item><see cref="OptionalEffect"/> wrapping <see cref="ConditionalPayEffect"/>
+  ///   with an <see cref="OptionalEffect.IfYouDo"/> of
+  ///   <see cref="CompositeEffect"/>([untap all creatures you control,
+  ///   <see cref="AdditionalCombatPhaseEffect"/>]).</item>
+  /// </list>
+  /// </para>
+  ///
+  /// <para>
+  /// Pattern is anchored (^...$). The ". If you pay" sentence boundary would mislead
+  /// <see cref="TryParseSentenceBundleEffects"/> into splitting the two halves and
+  /// failing to parse each in isolation; this dedicated handler must be tried first.
+  /// "If you pay" is the oracle phrasing for energy-cost optionals (distinct from
+  /// mana-optional "If you do" — same semantics, CR 117.3).
+  /// </para>
+  /// </summary>
+  private static readonly Regex _gainEnergyThenCombatPattern = new(
+    @"^you\s+get\s+(?<gain>(?:\{E\}\s*)+)(?:\([^)]*\)\s*)?[,\s]+then\s+you\s+may\s+pay\s+(?<amount>(?:one|two|three|four|five|six|seven|eight|nine|ten|\d+))\s+\{E\}\s*\.\s*If\s+you\s+pay,\s+untap\s+all\s+creatures\s+you\s+control,?\s+and\s+after\s+this\s+phase,\s+there\s+is\s+an\s+additional\s+combat\s+phase\.?$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  private static readonly Regex _energySymbolForCombat = new(@"\{E\}", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  private static IReadOnlyList<Effect>? TryParseGainEnergyThenMayPayEnergyUntapAllControlledAndAdditionalCombat(string effectText)
+  {
+    var m = _gainEnergyThenCombatPattern.Match(effectText.Trim());
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    var gainCount = _energySymbolForCombat.Matches(m.Groups["gain"].Value).Count;
+    if (gainCount <= 0)
+    {
+      return null;
+    }
+
+    var rawAmount = m.Groups["amount"].Value.ToLowerInvariant().Trim();
+    int payAmount = rawAmount switch
+    {
+      "one"   => 1,
+      "two"   => 2,
+      "three" => 3,
+      "four"  => 4,
+      "five"  => 5,
+      "six"   => 6,
+      "seven" => 7,
+      "eight" => 8,
+      "nine"  => 9,
+      "ten"   => 10,
+      _       => int.TryParse(rawAmount, out var n) ? n : 0,
+    };
+    if (payAmount <= 0)
+    {
+      return null;
+    }
+
+    // "untap all creatures you control" — each creature the ability controller controls.
+    // CR 701.26 (untap); CR 302 (creatures).
+    var untapTarget = new ObjectReference
+    {
+      Kind = ObjectReferenceKind.Each,
+      Filter = new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Controller = ControllerFilter.You,
+      },
+    };
+
+    var ifYouDo = new CompositeEffect
+    {
+      Effects =
+      [
+        new UntapEffect { Target = untapTarget },
+        new AdditionalCombatPhaseEffect(),
+      ],
+    };
+
+    return new List<Effect>
+    {
+      new GainEnergyEffect
+      {
+        Amount = LiteralQuantity.Of(gainCount),
+        Player = ObjectReference.You(),
+      },
+      new OptionalEffect
+      {
+        Inner = new ConditionalPayEffect { Cost = new PayEnergyCost { Amount = LiteralQuantity.Of(payAmount) } },
+        IfYouDo = ifYouDo,
       },
     };
   }
