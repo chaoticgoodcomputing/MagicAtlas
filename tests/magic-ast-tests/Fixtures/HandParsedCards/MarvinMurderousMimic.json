@@ -1,0 +1,92 @@
+{
+  "Input": {
+    "Name": "Marvin, Murderous Mimic",
+    "ManaCost": "{2}",
+    "TypeLine": "Legendary Artifact Creature — Toy",
+    "OracleText": "Marvin has all activated abilities of creatures you control that don’t have the same name as this creature.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Marvin, Murderous Mimic",
+    "TypeLine": {
+      "Raw": "Legendary Artifact Creature — Toy",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Toy"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Marvin has all activated abilities of creatures you control that don’t have the same name as this creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "hasAllAbilitiesOfControlledCreatures",
+              "Subject": {
+                "Kind": "Self"
+              },
+              "AbilityKind": "activated",
+              "SourceFilter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Controller": "You",
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "don't have the same name as this creature"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
