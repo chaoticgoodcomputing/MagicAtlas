@@ -1056,6 +1056,14 @@
           "Fields": []
         },
         {
+          "Type": "DoubleLifeTotalEffect",
+          "Discriminator": "doubleLifeTotal",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
           "Type": "DrawCardsEffect",
           "Discriminator": "drawCards",
           "IsUnparsed": false,
@@ -2356,5 +2364,5 @@
       ]
     }
   ],
-  "SchemaHash": "3e51330ae31470f53f423d0d1aa0ce18d3768f1ffb25f8087ccef0df62426c6e"
+  "SchemaHash": "e822e4eda51b4a0521bd16333c8cf840092dbc6a07ad6ed2fb3bd6d3df6834bf"
 }

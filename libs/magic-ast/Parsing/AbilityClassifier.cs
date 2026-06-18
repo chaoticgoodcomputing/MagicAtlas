@@ -1067,6 +1067,27 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Double target [filter]'s life total." — Beacon of Immortality's doubling
+    // keyword action (CR 701.10d). A one-shot imperative spell-resolution instruction
+    // (Rule 113.3a), not a declarative static. "Double" alone is not added to
+    // _spellInstructionVerbs because "Double strike" (the keyword) also starts with
+    // "Double " — the targeted form is distinguished by the "target" qualifier.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Double\s+target\s+",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Ability-word conditional spell-effect: "[AbilityWord] — If <condition>,
     // <spell-verb> …". The ability word itself (e.g. "Fateful hour", Rule 702.95)
     // has no rules meaning — it gates an otherwise normal spell-resolution

@@ -58,6 +58,7 @@
     "discardCards": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "disguise": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "doesntUntap": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "doubleLifeTotal": "CR 701.10d life-total doubling (Beacon of Immortality) — no interaction flow rule reads life-total doubling events yet; consciously inert for recall, pending life-flow arm expansion",
     "drawCards": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "dredge": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "emerge": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
