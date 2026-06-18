@@ -1,0 +1,153 @@
+{
+  "Input": {
+    "Name": "The Great Henge",
+    "ManaCost": "{7}{G}{G}",
+    "TypeLine": "Legendary Artifact",
+    "OracleText": "This spell costs {X} less to cast, where X is the greatest power among creatures you control.\n{T}: Add {G}{G}. You gain 2 life.\nWhenever a nontoken creature you control enters, put a +1/+1 counter on it and draw a card.",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "The Great Henge",
+    "TypeLine": {
+      "Raw": "Legendary Artifact",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This spell costs {X} less to cast, where X is the greatest power among creatures you control.\n{T}: Add {G}{G}. You gain 2 life.\nWhenever a nontoken creature you control enters, put a +1/+1 counter on it and draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "Other",
+                "Source": "the greatest power among creatures you control"
+              },
+              "BasedOn": "the greatest power among creatures you control"
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{G}{G}",
+              "AnyColor": false,
+              "AnyType": false,
+              "OfChosenColor": false
+            },
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsToken": false,
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "putCounters",
+                  "Target": {
+                    "Kind": "It"
+                  },
+                  "CounterType": "+1/+1",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                },
+                {
+                  "EffectType": "drawCards",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{7}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 7
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 9,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
