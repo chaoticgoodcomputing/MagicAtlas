@@ -118,6 +118,7 @@
     "payLife": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "payLifeForColoredMana": "K'rrik, Son of Yawgmoth static permission (CR 107.4f analogue) — substitutes 2 life per {B} symbol in any cost the controller pays; no interaction flow rule reads colored-mana-for-life substitution permissions yet; consciously inert for interaction recall",
     "playAdditionalLand": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "playWithTopRevealed": "CR 701.18c / 401.5-6 continuous game-modification requiring the controller to keep the top card of their library revealed; no interaction flow rule reads library-visibility grants yet; consciously inert for interaction recall (Oracle of Mul Daya)",
     "plot": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "preventDamage": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "preventable": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",

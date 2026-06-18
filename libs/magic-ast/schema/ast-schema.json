@@ -1593,6 +1593,12 @@
           "Fields": []
         },
         {
+          "Type": "PlayWithTopRevealedEffect",
+          "Discriminator": "playWithTopRevealed",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "PlotEffect",
           "Discriminator": "plot",
           "IsUnparsed": false,
@@ -2323,5 +2329,5 @@
       ]
     }
   ],
-  "SchemaHash": "3553306b481a4c8e5a0e23588691b58a59fd7e9ef52366e78e2235a51c4e1723"
+  "SchemaHash": "fe5b4ea25121ec85a01d1d1f6d9b6036fefe85e0b0a35e2a1d6c8c5b6cbb0d38"
 }
