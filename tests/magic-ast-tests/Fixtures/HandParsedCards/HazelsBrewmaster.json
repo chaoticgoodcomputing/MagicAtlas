@@ -1,0 +1,180 @@
+{
+  "Input": {
+    "Name": "Hazel's Brewmaster",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Creature — Squirrel Warlock",
+    "OracleText": "Menace\nWhenever this creature enters or attacks, exile up to one target card from a graveyard and create a Food token.\nFoods you control have all activated abilities of all creature cards exiled with this creature.",
+    "Power": "3",
+    "Toughness": "4",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Hazel's Brewmaster",
+    "TypeLine": {
+      "Raw": "Creature — Squirrel Warlock",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Squirrel",
+        "Warlock"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Menace\nWhenever this creature enters or attacks, exile up to one target card from a graveyard and create a Food token.\nFoods you control have all activated abilities of all creature cards exiled with this creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ]
+              },
+              "MinimumBlockers": 2
+            }
+          ],
+          "KeywordSource": "Menace"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "EntersOrAttacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "exile",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": [
+                        "card"
+                      ],
+                      "Zone": "Graveyard"
+                    },
+                    "Quantity": {
+                      "QuantityType": "upTo",
+                      "Maximum": 1,
+                      "Minimum": 0
+                    }
+                  }
+                },
+                {
+                  "EffectType": "createToken",
+                  "Player": {
+                    "Kind": "You"
+                  },
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Token": {
+                    "Types": [
+                      "artifact"
+                    ],
+                    "Subtypes": [
+                      "Food"
+                    ],
+                    "AbilityText": [
+                      "{2}, {T}, Sacrifice this artifact: You gain 3 life."
+                    ],
+                    "IsCopy": false
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbilitiesFromExiledCards",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "Subtypes": [
+                    "Food"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "AbilityKind": "activated",
+              "SourceFilter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Zone": "Exile",
+                "ExiledWith": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}

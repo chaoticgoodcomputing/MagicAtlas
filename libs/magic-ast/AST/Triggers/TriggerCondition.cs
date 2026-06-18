@@ -344,6 +344,15 @@ public enum TriggerEvent
   EntersOrDies,
 
   /// <summary>
+  /// A creature enters the battlefield or attacks (combined trigger).
+  /// Oracle form: "Whenever this creature enters or attacks, [effect]."
+  /// Both the ETB zone-change and the attack declaration (CR 508) share a single
+  /// triggered ability; the ability triggers on whichever event occurs.
+  /// Rule 603 (triggered abilities): the event fires on either matching game event.
+  /// </summary>
+  EntersOrAttacks,
+
+  /// <summary>
   /// The controlling player transitions to controlling no lands of a given basic-land subtype
   /// (e.g., "When you control no Islands"). Rule 603 triggered ability; the Filter carries the
   /// land subtype (Subtypes=["Island"]) and controller (You).
