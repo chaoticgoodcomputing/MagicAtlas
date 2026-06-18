@@ -899,12 +899,30 @@ public sealed class PortGraphEngine
     var path = new List<PortEdge>();
     var onPath = new HashSet<string>(StringComparer.Ordinal);
 
+    // Progress heartbeat for the whole-corpus UNION enumeration (exponential, historically a silent
+    // multi-hour stall — see cycle-enumeration-acceleration.md). Gated on graph size so the per-combo
+    // bench (tiny 2-3 card graphs, < the threshold) is silent and unaffected. Emitted on stderr so it
+    // never pollutes the flow's stdout data stream.
+    var bigGraph = adjacency.Count > 1000;
+    var sw = bigGraph ? System.Diagnostics.Stopwatch.StartNew() : null;
+    long steps = 0;
+    long nextStepLog = 5_000_000;
+    string currentStart = "";
+
     void Dfs(string nodeId, string startId)
     {
       if (!adjacency.TryGetValue(nodeId, out var outgoing))
         return;
       foreach (var edge in outgoing)
       {
+        if (sw is not null && ++steps >= nextStepLog)
+        {
+          nextStepLog += 5_000_000;
+          Console.Error.WriteLine(
+            $"[FindCycles] …{steps / 1_000_000}M edge-steps, {cycles.Count} cycles, "
+              + $"{sw.Elapsed.TotalSeconds:F0}s (at start node {currentStart})"
+          );
+        }
         var toId = edge.To.Identity;
         if (toId == startId)
         {
@@ -942,13 +960,33 @@ public sealed class PortGraphEngine
       }
     }
 
-    foreach (var start in adjacency.Keys.OrderBy(k => k, StringComparer.Ordinal))
+    var startNodes = adjacency.Keys.OrderBy(k => k, StringComparer.Ordinal).ToList();
+    if (sw is not null)
+      Console.Error.WriteLine(
+        $"[FindCycles] enumerating cycles ≤{maxLength} over {startNodes.Count} start nodes / "
+          + $"{searchEdges.Count} edges (heartbeat every 5M edge-steps)…"
+      );
+    var startsDone = 0;
+    foreach (var start in startNodes)
     {
+      currentStart = start;
       onPath.Clear();
       onPath.Add(start);
       path.Clear();
       Dfs(start, start);
+      // Per-start-node heartbeat too, so a single high-degree node that blows up the DFS still shows
+      // forward motion between its intra-DFS step-logs (and a stall pins the exact culprit node).
+      if (sw is not null && ++startsDone % 1000 == 0)
+        Console.Error.WriteLine(
+          $"[FindCycles] {startsDone}/{startNodes.Count} start nodes done, "
+            + $"{cycles.Count} cycles, {steps / 1_000_000}M steps, {sw.Elapsed.TotalSeconds:F0}s"
+        );
     }
+    if (sw is not null)
+      Console.Error.WriteLine(
+        $"[FindCycles] done: {cycles.Count} cycles, {steps / 1_000_000}M edge-steps, "
+          + $"{sw.Elapsed.TotalSeconds:F0}s"
+      );
     return cycles;
   }
 
