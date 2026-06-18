@@ -78,6 +78,24 @@ public sealed record SupertypeRemover : CopyModification
 }
 
 /// <summary>
+/// "except it's [color] in addition to its other colors" — adds one or more colors
+/// to the copy without removing its existing colors (CR 105.3: "If an effect gives
+/// an object a new color, the new color replaces all previous colors … unless the
+/// effect said the object became that color 'in addition' to its other colors.").
+/// Distinct from a color-replacement modification: this node signals the additive
+/// "in addition" form, so the copy keeps every color the original had plus the
+/// named colors. Colors are encoded as single-letter codes (W/U/B/R/G).
+/// </summary>
+[CopyModificationKind("colorAdder")]
+public sealed record ColorAdder : CopyModification
+{
+  /// <summary>
+  /// Colors added to the copy, e.g. ["B"] for "black in addition to its other colors".
+  /// </summary>
+  public required IReadOnlyList<string> Colors { get; init; }
+}
+
+/// <summary>
 /// "except it has [triggered/activated/static ability]" — adds a fully-structured
 /// triggered or other complex ability to the copy token (CR 707.2 copiable values).
 /// Used when the "except" clause is a quoted triggered ability such as
