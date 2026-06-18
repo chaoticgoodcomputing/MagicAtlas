@@ -46,7 +46,11 @@ public sealed class SelfLoyaltyAbilityInstantTimingStaticRule : IStaticRule
   // [Name] is a word-sequence (possibly multi-word) ending before "on any player's".
   // Apostrophe and curly apostrophe allowed (u+2019).
   private static readonly Regex _pattern = new(
-    @"^\s*You\s+may\s+activate\s+loyalty\s+abilities\s+of\s+\S.+?\s+on\s+any\s+player['']s\s+turn\s+any\s+time\s+you\s+could\s+cast\s+an\s+instant\.?\s*$",
+    // Name slot CANNOT span "you control": that excludes the collective sibling form ("...loyalty
+    // abilities of planeswalkers you control...") which is a DIFFERENT scope (each planeswalker you
+    // control), not a self-reference. Only a self-name ("Teferi, Master of Time" — no "you control")
+    // matches here and licenses the IsSelf:true output.
+    @"^\s*You\s+may\s+activate\s+loyalty\s+abilities\s+of\s+(?:(?!\byou\s+control\b).)+?\s+on\s+any\s+player['']s\s+turn\s+any\s+time\s+you\s+could\s+cast\s+an\s+instant\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
