@@ -518,6 +518,12 @@
       "reason": "recursive token/granted-ability body parsing \u2014 Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
     },
     {
+      "card": "SelvalaHeartoftheWilds",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'its power is greater than each other creature's power' is a relative-maximum-power comparison (no structured GreatestPowerCondition node exists yet; the predicate spans the full set of creatures rather than a single comparator)"
+    },
+    {
       "card": "SPM/HotDogCart",
       "sink": "AbilityText",
       "tag": "irreducible",
