@@ -13,17 +13,19 @@ using MagicAST.AST.References;
 /// the symbols to derive the literal amount.
 /// </summary>
 /// <remarks>
-/// Reminder text (e.g., "(two energy counters)") is stripped by
-/// <c>TriggeredAbilityParser.ExtractTrailingReminder</c> upstream, so this rule
-/// only sees the bare "you get {E}+" effect.
+/// Reminder text (e.g., "(two energy counters)") may appear inline (mid-sentence)
+/// or may have been stripped by <c>TriggeredAbilityParser.ExtractTrailingReminder</c>
+/// upstream. This rule accepts an optional trailing parenthetical reminder so it can
+/// match both the bare form and the inline-reminder form without losing the effect.
 /// </remarks>
 [TriggeredRule]
 public sealed class GainEnergyTriggeredRule : ITriggeredRule
 {
-  // Allow whitespace between the {E} repetitions — the corpus is consistent but
-  // an over-tight regex would reject reasonable variants.
+  // Allow whitespace between the {E} repetitions, and tolerate an optional
+  // trailing parenthetical reminder "(two energy counters)" that appears inline
+  // when the effect is part of a multi-sentence triggered ability body.
   private static readonly Regex EnergyEffectRegex = new(
-    @"^you\s+get\s+(?<symbols>(?:\{E\}\s*)+)$",
+    @"^you\s+get\s+(?<symbols>(?:\{E\}\s*)+)(?:\s*\([^)]*\))?$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

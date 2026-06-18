@@ -1,0 +1,206 @@
+{
+  "Input": {
+    "Name": "Satya, Aetherflux Genius",
+    "ManaCost": "{1}{U}{R}{W}",
+    "TypeLine": "Legendary Creature — Human Artificer",
+    "OracleText": "Menace, haste\nWhenever Satya attacks, create a tapped and attacking token that's a copy of up to one other target nontoken creature you control. You get {E}{E} (two energy counters). At the beginning of the next end step, sacrifice that token unless you pay an amount of {E} equal to its mana value.",
+    "Power": "3",
+    "Toughness": "5",
+    "Colors": [
+      "R",
+      "U",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "U",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Satya, Aetherflux Genius",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Artificer",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Artificer"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Menace, haste\nWhenever Satya attacks, create a tapped and attacking token that's a copy of up to one other target nontoken creature you control. You get {E}{E} (two energy counters). At the beginning of the next end step, sacrifice that token unless you pay an amount of {E} equal to its mana value.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ]
+              },
+              "MinimumBlockers": 2
+            }
+          ],
+          "KeywordSource": "Menace"
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Haste",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "IsToken": false,
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                },
+                "Quantity": {
+                  "QuantityType": "upTo",
+                  "Maximum": 1,
+                  "Minimum": 0
+                }
+              }
+            },
+            {
+              "EffectType": "gainEnergy",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            },
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "At",
+                  "Event": {
+                    "Part": "End",
+                    "Edge": "Beginning",
+                    "When": "Next"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "preventable",
+                    "Inner": {
+                      "EffectType": "sacrifice",
+                      "Target": {
+                        "Kind": "It"
+                      }
+                    },
+                    "Unless": {
+                      "Player": {
+                        "Kind": "You"
+                      },
+                      "Cost": {
+                        "CostType": "payEnergy",
+                        "Amount": {
+                          "QuantityType": "derived",
+                          "DerivedFrom": "ManaValue"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}{R}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "U",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "U",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        }
+      }
+    ]
+  }
+}
