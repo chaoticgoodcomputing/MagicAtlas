@@ -3,7 +3,7 @@
     "Name": "Ugin, the Ineffable",
     "ManaCost": "{6}",
     "TypeLine": "Legendary Planeswalker — Ugin",
-    "OracleText": "Colorless spells you cast cost {2} less to cast.\n+1: Exile the top card of your library face down and look at it. Create a 2/2 colorless Spirit creature token. When that token leaves the battlefield, put the exiled card into your hand.\n−3: Destroy target permanent that’s one or more colors.",
+    "OracleText": "Colorless spells you cast cost {2} less to cast.\n+1: Exile the top card of your library face down and look at it. Create a 2/2 colorless Spirit creature token. When that token leaves the battlefield, put the exiled card into your hand.\n−3: Destroy target permanent that's one or more colors.",
     "Colors": [],
     "ColorIdentity": []
   },
@@ -22,7 +22,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Colorless spells you cast cost {2} less to cast.\n+1: Exile the top card of your library face down and look at it. Create a 2/2 colorless Spirit creature token. When that token leaves the battlefield, put the exiled card into your hand.\n−3: Destroy target permanent that’s one or more colors.",
+      "RawText": "Colorless spells you cast cost {2} less to cast.\n+1: Exile the top card of your library face down and look at it. Create a 2/2 colorless Spirit creature token. When that token leaves the battlefield, put the exiled card into your hand.\n−3: Destroy target permanent that's one or more colors.",
       "Abilities": [
         {
           "Kind": "static",

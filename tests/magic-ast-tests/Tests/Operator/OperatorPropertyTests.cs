@@ -146,9 +146,18 @@ public class OperatorPropertyTests
     || f.ExcludeSelf == true
     || f.Characteristics is not null
     || IsRuntimeChosen(f.Controller)
-    || IsRuntimeChosen(f.Owner);
+    || IsRuntimeChosen(f.Owner)
+    // A power/toughness/mana-value Comparison whose bound is RUNTIME-RELATIVE (RelativeTo set,
+    // e.g. "mana value N or less, where N is [It]'s power" — Kodama of the East Tree) floors to
+    // Unknown for f⊆f, so it is a relational axis exempt from provable reflexivity, like the above.
+    || IsRelativeComparison(f.PowerComparison)
+    || IsRelativeComparison(f.ToughnessComparison)
+    || IsRelativeComparison(f.ManaValueComparison);
 
   /// <summary>True for controllers whose referent is chosen at runtime (not the determinable You/Opponent/Any).</summary>
   private static bool IsRuntimeChosen(ControllerFilter? c) =>
     c is ControllerFilter.Target or ControllerFilter.ThatPlayer or ControllerFilter.EnchantedPlayer;
+
+  /// <summary>True for a Comparison whose operand is decided at runtime (RelativeTo set).</summary>
+  private static bool IsRelativeComparison(Comparison? c) => c is { RelativeTo: not null };
 }

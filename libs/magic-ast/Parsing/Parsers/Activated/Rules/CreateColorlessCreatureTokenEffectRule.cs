@@ -30,9 +30,16 @@ using MagicAST.AST.References;
 [ActivatedEffectRule(Priority = 985)]
 public sealed class CreateColorlessCreatureTokenEffectRule : IActivatedEffectRule
 {
+  // The subtype group rejects intervening CARD-TYPE words (artifact/enchantment/land) via negative
+  // lookahead so it cannot swallow them: "colorless Thopter artifact creature token" then fails the
+  // "<subtype> creature" anchor and falls through to unparsed (the base behavior) rather than being
+  // mislabeled as a creature-only token with subtype "Thopter artifact". Only a pure colorless
+  // creature token ("colorless Spirit creature token" — Ugin) matches.
   private static readonly Regex _pattern = new(
     @"^\s*Create\s+(?<count>a|an|X|Y|Z|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+"
-    + @"(?<power>\d+)/(?<toughness>\d+)\s+colorless\s+(?<subtype>[A-Za-z]+(?:\s+[A-Za-z]+)*)\s+creature\s+tokens?\s*$",
+    + @"(?<power>\d+)/(?<toughness>\d+)\s+colorless\s+"
+    + @"(?<subtype>(?:(?!(?:artifact|enchantment|land|creature)\b)[A-Za-z]+)(?:\s+(?:(?!(?:artifact|enchantment|land|creature)\b)[A-Za-z]+))*)"
+    + @"\s+creature\s+tokens?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
