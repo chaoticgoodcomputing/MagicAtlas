@@ -107,6 +107,17 @@ public static class ConditionParser
     @"^you\s+cast\s+it$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+  /// <summary>
+  /// "there are four or more card types among cards in your graveyard" — the Delirium
+  /// mechanic's activation gate (CR 207.2c: Delirium is an ability word with no special
+  /// rules meaning; the condition is the diversity-count predicate). Structured to a
+  /// <see cref="CardTypeDiversityCondition"/> rather than left as a free-text residual.
+  /// Covers both "your graveyard" (Owner=You) and "a graveyard" (Owner=null) forms.
+  /// </summary>
+  private static readonly Regex CardTypeDiversity = new(
+    @"^there\s+(?:are|is)\s+(?<quant>a|an|\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer))?\s+card\s+types?\s+among\s+cards?\s+in\s+(?<zone>your\s+graveyard|a\s+graveyard|your\s+hand|your\s+library)$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
   /// <summary>Parse a condition phrase; never throws — unrecognised phrases become a residual.</summary>
   public static Condition Parse(string phrase)
   {
@@ -122,14 +133,22 @@ public static class ConditionParser
 
     if (ThereAre.Match(body) is { Success: true } tm)
     {
-      var filter = NounToFilter(tm.Groups["noun"].Value.Trim()) with
+      // Guard: "card types among cards in your graveyard" is a distinct-type-count
+      // predicate (e.g. Delirium), NOT an object count. The noun contains " among "
+      // which signals we are counting type-diversity, not objects. Fall through to
+      // OtherCondition so a structurally wrong CountCondition isn't emitted.
+      var nounRaw = tm.Groups["noun"].Value.Trim();
+      if (!nounRaw.Contains(" among ", StringComparison.OrdinalIgnoreCase))
       {
-        Zone = ZoneOf(tm.Groups["zone"].Value),
-        Controller = tm.Groups["zone"].Value.Contains("your", StringComparison.OrdinalIgnoreCase)
-          ? ControllerFilter.You
-          : null,
-      };
-      return new CountCondition { Filter = filter, Count = Quant(tm.Groups["quant"].Value, tm.Groups["dir"].Value) };
+        var filter = NounToFilter(nounRaw) with
+        {
+          Zone = ZoneOf(tm.Groups["zone"].Value),
+          Controller = tm.Groups["zone"].Value.Contains("your", StringComparison.OrdinalIgnoreCase)
+            ? ControllerFilter.You
+            : null,
+        };
+        return new CountCondition { Filter = filter, Count = Quant(tm.Groups["quant"].Value, tm.Groups["dir"].Value) };
+      }
     }
 
     if (WasKicked.IsMatch(body))
@@ -198,6 +217,22 @@ public static class ConditionParser
     if (CastThisObject.IsMatch(body))
     {
       return new CastThisObjectCondition();
+    }
+
+    if (CardTypeDiversity.Match(body) is { Success: true } ctd)
+    {
+      var zone = ctd.Groups["zone"].Value.Trim().ToLowerInvariant();
+      var zoneEnum = zone.Contains("graveyard") ? Zone.Graveyard
+        : zone.Contains("hand") ? Zone.Hand
+        : zone.Contains("library") ? Zone.Library
+        : Zone.Anywhere;
+      var owner = zone.Contains("your") ? (ControllerFilter?)ControllerFilter.You : null;
+      return new CardTypeDiversityCondition
+      {
+        Count = Quant(ctd.Groups["quant"].Value, ctd.Groups["dir"].Value),
+        Zone = zoneEnum,
+        Owner = owner,
+      };
     }
 
     return new OtherCondition { Text = verbatim };

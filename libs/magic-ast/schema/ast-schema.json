@@ -265,6 +265,16 @@
       "DiscriminatorKey": "ConditionType",
       "Types": [
         {
+          "Type": "CardTypeDiversityCondition",
+          "Discriminator": "cardTypeDiversity",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Owner",
+            "Zone"
+          ]
+        },
+        {
           "Type": "CastThisObjectCondition",
           "Discriminator": "castThisObject",
           "IsUnparsed": false,
@@ -641,6 +651,15 @@
           "IsUnparsed": false,
           "Fields": [
             "Player"
+          ]
+        },
+        {
+          "Type": "BecomesCopyEffect",
+          "Discriminator": "becomesCopy",
+          "IsUnparsed": false,
+          "Fields": [
+            "CopyTarget",
+            "Subject"
           ]
         },
         {
@@ -2098,5 +2117,5 @@
       ]
     }
   ],
-  "SchemaHash": "4ed4de40c4e295d7b5b783f4925a690c73942755152f29a56d45076bf6e1583e"
+  "SchemaHash": "6444f44e3bdd3b1ac6598d5a9c1e1725919a9dc08de1f14b79265d8220aee887"
 }
