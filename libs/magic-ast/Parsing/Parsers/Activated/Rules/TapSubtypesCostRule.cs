@@ -131,15 +131,12 @@ public sealed class TapSubtypesCostRule : IActivatedCostRule
     if (word.Equals("Merfolk", StringComparison.OrdinalIgnoreCase))  return "Merfolk";
     if (word.Equals("Sheep", StringComparison.OrdinalIgnoreCase))    return "Sheep";
     if (word.Equals("Fish", StringComparison.OrdinalIgnoreCase))     return "Fish";
-    // Regular "-ies" plurals (e.g. "Faeries" → "Faerie" is NOT "-ies", but "Berries" would be)
-    if (word.EndsWith("ies", StringComparison.OrdinalIgnoreCase) && word.Length > 4)
-    {
-      // "Faeries" ends in "ies" but singular is "Faerie", not "Faery" — keep as-is.
-      // Only strip -ies → -y for true -y singulars. For safety, don't transform here.
-      return word;
-    }
+    // MTG creature subtypes that END in "ies" pluralise as +s, NOT the English -ies→-y rule:
+    // "Zombie"→"Zombies", "Faerie"→"Faeries". So they fall through to the regular -s strip below
+    // ("Zombies"→"Zombie"), which is correct. (A true -ies→-y subtype like "Ally"→"Allies" does not
+    // occur as a tap-cost subtype; the earlier explicit-irregulars table covers the real exceptions.)
     // Regular "-s" plural: strip trailing 's' if present and length > 2.
-    // "Vampires" → "Vampire", "Goblins" → "Goblin", "Elves" (handled above).
+    // "Vampires" → "Vampire", "Goblins" → "Goblin", "Zombies" → "Zombie", "Elves" (handled above).
     if (word.Length > 2 && word.EndsWith('s') && !word.EndsWith("ss", StringComparison.OrdinalIgnoreCase))
     {
       return word[..^1];

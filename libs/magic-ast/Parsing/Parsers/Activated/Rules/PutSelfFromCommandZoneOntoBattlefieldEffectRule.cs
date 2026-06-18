@@ -16,7 +16,7 @@ using MagicAST.AST.References;
 /// <see cref="ObjectReferenceKind.Self"/> source zone <see cref="Zone.CommandZone"/>.
 /// The use of <see cref="ReturnToBattlefieldEffect"/> (rather than a dedicated node)
 /// is intentional — both graveryard-reanimate and command-zone activate share the
-/// "move from [zone] to battlefield" action (CR 701.7); the <c>Filter.Zone</c>
+/// "move from [zone] to battlefield" action (CR 400.7); the <c>Filter.Zone</c>
 /// discriminates the source zone for clustering (command-zone put vs. graveyard
 /// reanimate vs. hand put).
 /// </para>

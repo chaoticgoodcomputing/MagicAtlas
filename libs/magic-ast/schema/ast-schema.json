@@ -380,6 +380,14 @@
           ]
         },
         {
+          "Type": "ColorAdder",
+          "Discriminator": "colorAdder",
+          "IsUnparsed": false,
+          "Fields": [
+            "Colors"
+          ]
+        },
+        {
           "Type": "PowerToughnessOverride",
           "Discriminator": "powerToughnessOverride",
           "IsUnparsed": false,
@@ -761,6 +769,15 @@
           ]
         },
         {
+          "Type": "BlightEffect",
+          "Discriminator": "blight",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount",
+            "Player"
+          ]
+        },
+        {
           "Type": "BlockAdditionalEffect",
           "Discriminator": "blockAdditional",
           "IsUnparsed": false,
@@ -1071,6 +1088,14 @@
           "Discriminator": "doesntUntap",
           "IsUnparsed": false,
           "Fields": []
+        },
+        {
+          "Type": "DoubleLifeTotalEffect",
+          "Discriminator": "doubleLifeTotal",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
         },
         {
           "Type": "DrawCardsEffect",
@@ -2373,5 +2398,5 @@
       ]
     }
   ],
-  "SchemaHash": "2f6984b1d1668acf953a10f9dd8a524bc9a36cd7388af15b56b5aabd88b61c8f"
+  "SchemaHash": "ab0edee5e67eb499353dcd1be432191bda67f31ee07bbb9aacbc6c1c7c972129"
 }

@@ -13,12 +13,12 @@ using MagicAST.AST.References;
 /// <para>
 /// Rule 701.24c: "If an effect would cause a player to shuffle one or more specific
 /// objects into a library, that library is shuffled even if none of those objects
-/// are in the zone they're expected to be in." Rule 701.19 governs shuffle.
+/// are in the zone they're expected to be in." Rule 701.24 governs shuffle.
 /// </para>
 ///
 /// <para>
 /// MAST maps the card-name self-reference to <see cref="ObjectReferenceKind.Self"/>
-/// (the card itself; CR 109.8). The owner-shuffles mechanic is an inherent part of
+/// (the card itself; CR 201.5). The owner-shuffles mechanic is an inherent part of
 /// the zone-change (CR 701.24). Emits a single <see cref="ShuffleIntoLibraryEffect"/>
 /// with <c>Target = Self</c>.
 /// </para>

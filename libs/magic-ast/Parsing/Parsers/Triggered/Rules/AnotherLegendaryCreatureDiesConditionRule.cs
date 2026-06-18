@@ -22,8 +22,9 @@ using MagicAST.AST.Triggers;
 /// </para>
 ///
 /// <para>
-/// The "another" qualifier (CR 109.5 — "another" excludes the named object itself)
-/// maps to <see cref="ObjectFilter.ExcludeSelf"/> = true, consistent with the
+/// The "another" qualifier ("another" = any object other than this source; plain-language
+/// English, no dedicated CR rule number in the bundled data) maps to
+/// <see cref="ObjectFilter.ExcludeSelf"/> = true, consistent with the
 /// DiesConditionRule and AnotherSubtypeEntersConditionRule conventions.
 /// </para>
 ///
@@ -36,7 +37,8 @@ using MagicAST.AST.Triggers;
 ///
 /// <para>
 /// Rule citations: CR 603.2 (triggered ability), CR 205.4 (Legendary supertype),
-/// CR 109.5 ("another" exclusion), CR 700.4 ("dies" → moved to graveyard from battlefield).
+/// CR 700.4 ("dies" → moved to graveyard from battlefield). ("another" is plain-language
+/// exclusion — no dedicated CR rule — modeled on the ExcludeSelf axis.)
 /// </para>
 /// </summary>
 [TriggerConditionRule(Priority = 994)]

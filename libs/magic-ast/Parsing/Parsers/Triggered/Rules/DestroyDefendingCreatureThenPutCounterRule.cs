@@ -20,7 +20,7 @@ using MagicAST.AST.References;
 ///   <item>
 ///     <see cref="DestroyEffect"/> targeting a <see cref="ObjectReferenceKind.Target"/>
 ///     creature with <see cref="ControllerFilter.DefendingPlayer"/> — "destroy
-///     target creature defending player controls" (CR 701.7: destroy means put the
+///     target creature defending player controls" (CR 701.8: destroy means put the
 ///     permanent into its owner's graveyard; CR 508.1b: the defending player is
 ///     whoever is being attacked).
 ///   </item>
@@ -64,7 +64,7 @@ public sealed class DestroyDefendingCreatureThenPutCounterRule : ITriggeredRule
     }
 
     // "destroy target creature defending player controls" —
-    // CR 701.7: destroy = put into owner's graveyard; CR 508.1b: defending player.
+    // CR 701.8: destroy = put into owner's graveyard; CR 508.1b: defending player.
     var destroyEffect = new DestroyEffect
     {
       Target = new ObjectReference
