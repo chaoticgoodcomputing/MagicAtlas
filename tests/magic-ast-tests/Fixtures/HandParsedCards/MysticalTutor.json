@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Mystical Tutor",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Search your library for an instant or sorcery card, reveal it, then shuffle and put that card on top.",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Mystical Tutor",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Search your library for an instant or sorcery card, reveal it, then shuffle and put that card on top.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "searchLibrary",
+              "Filter": {
+                "CardTypes": [
+                  "instant",
+                  "sorcery"
+                ]
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Destination": "TopOfLibrary",
+              "Revealed": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
