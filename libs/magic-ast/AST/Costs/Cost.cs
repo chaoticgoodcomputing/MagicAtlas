@@ -202,6 +202,19 @@ public sealed record ReturnToHandCost : Cost
 public sealed record ForageCost : Cost;
 
 /// <summary>
+/// "Pay N {E}" — pay N energy counters as an activation cost. Rule 107.14: The energy
+/// symbol is {E}; each represents one energy counter. "Pay eight {E}" removes eight
+/// energy counters from the activating player. MAST records the verb + count; the
+/// player-state bookkeeping (removing the counters) is engine territory.
+/// </summary>
+[OracleCost("payEnergy")]
+public sealed record PayEnergyCost : Cost
+{
+  /// <summary>How many energy counters ({E}) must be paid.</summary>
+  public required Quantity Amount { get; init; }
+}
+
+/// <summary>
 /// "Unattach [card name]" — the activation cost of undetaching a specifically named
 /// Equipment from the creature it is currently attached to. Unlike the parameterless
 /// <see cref="MagicAST.AST.Effects.Modification.UnattachEffect"/> (the effect of
