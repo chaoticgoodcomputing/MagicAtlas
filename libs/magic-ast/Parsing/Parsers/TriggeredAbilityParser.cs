@@ -109,8 +109,21 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
-    // Parse trigger timing (When/Whenever/At)
-    var triggerTiming = ParseTriggerTiming(tokens[0].Kind);
+    // Parse trigger timing (When/Whenever/At).
+    // "As this creature/permanent transforms into [Name]" uses "As" instead of "When"
+    // but is semantically a triggered event (CR 603.6d — the transform-into shape).
+    // "As" doesn't have a dedicated OracleToken, so intercept via raw-text prefix
+    // before the token-based path runs.
+    TriggerTiming? triggerTiming;
+    if (text.StartsWith("As this creature transforms into ", StringComparison.OrdinalIgnoreCase)
+        || text.StartsWith("As this permanent transforms into ", StringComparison.OrdinalIgnoreCase))
+    {
+      triggerTiming = TriggerTiming.When;
+    }
+    else
+    {
+      triggerTiming = ParseTriggerTiming(tokens[0].Kind);
+    }
     if (triggerTiming == null)
     {
       return null;
@@ -578,6 +591,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       "proliferate",
       "remove",
       "sacrifice",
+      "you get",
     ];
     foreach (var s in starters)
     {
@@ -695,6 +709,18 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     if (loseGainLifeWhereX is not null)
     {
       return loseGainLifeWhereX;
+    }
+
+    // "target opponent loses N life and you gain N life. If this is the [ordinal] time
+    // this ability has resolved this turn, transform [Name]." — drain + conditional
+    // self-transform composite. The drain is a two-element [loseLife, gainLife] pair
+    // and the conditional wraps an OtherCondition (the nth-time counting is engine
+    // bookkeeping) around a TransformEffect(Self). Must be tried BEFORE the bare-drain
+    // TryParseTargetOpponentLoseAndYouGainLife so the trailing conditional isn't dropped.
+    var drainThenConditionalTransform = TryParseDrainThenNthTimeTransformSelf(trimmed);
+    if (drainThenConditionalTransform is not null)
+    {
+      return drainThenConditionalTransform;
     }
 
     var targetOpponentLoseYouGain = TryParseTargetOpponentLoseAndYouGainLife(trimmed);
@@ -1004,6 +1030,63 @@ public sealed class TriggeredAbilityParser : IAbilityParser
             ExcludedCardTypes = ["land"],
           },
         },
+      },
+    };
+  }
+
+  /// <summary>
+  /// Drain + conditional self-transform composite: "target opponent loses N life and
+  /// you gain N life. If this is the [ordinal] time this ability has resolved this
+  /// turn, transform [Name]." — Sephiroth, Fabled SOLDIER's second triggered ability.
+  ///
+  /// <para>
+  /// Produces a flat three-element list: [loseLife(Opponent, N), gainLife(You, N),
+  /// conditional(OtherCondition, transform(Self))]. The "nth-time" counting is engine
+  /// bookkeeping; the condition is an <see cref="OtherCondition"/> residual whose
+  /// <c>Text</c> carries the literal condition phrase. The transform target is
+  /// <see cref="ObjectReferenceKind.Self"/> (named by reference: "transform [Name]"
+  /// where [Name] refers to the source permanent — CR 201.5 self-reference).
+  /// CR 119.3 (life totals); CR 603.2 (trigger event); CR 701.28 (transform).
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseDrainThenNthTimeTransformSelf(string effectText)
+  {
+    // "target opponent loses N life and you gain N life. If this is the [ordinal] time
+    // this ability has resolved this turn, transform [Name]."
+    var match = Regex.Match(
+      effectText,
+      @"^target\s+opponent\s+loses\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life\s+and\s+you\s+gain\s+(?<gain>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life\.\s*If\s+(?<cond>[^,]+),\s*transform\s+\S+.*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    static int ParseAmount(string raw) => raw.ToLowerInvariant() switch
+    {
+      "one" => 1, "two" => 2, "three" => 3, "four" => 4, "five" => 5,
+      "six" => 6, "seven" => 7, "eight" => 8, "nine" => 9, "ten" => 10,
+      _ => int.Parse(raw),
+    };
+    var loseAmount = ParseAmount(match.Groups["amount"].Value);
+    var gainAmount = ParseAmount(match.Groups["gain"].Value);
+    var condText = match.Groups["cond"].Value.Trim();
+    return new List<Effect>
+    {
+      new LoseLifeEffect
+      {
+        Amount = LiteralQuantity.Of(loseAmount),
+        Player = new ObjectReference { Kind = ObjectReferenceKind.Opponent },
+      },
+      new GainLifeEffect
+      {
+        Amount = LiteralQuantity.Of(gainAmount),
+        Player = ObjectReference.You(),
+      },
+      new ConditionalEffect
+      {
+        Condition = new OtherCondition { Text = condText },
+        Then = new TransformEffect { Target = ObjectReference.Self() },
       },
     };
   }

@@ -518,6 +518,12 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
+      "card": "SephirothFabledSOLDIERSephirothOneWingedAngel",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'this is the fourth time this ability has resolved this turn' is an ordinal ability-history predicate; no structured NthTimeAbilityResolvedCondition node exists yet (same family as LCI/NissaResurgentAnimist)"
+    },
+    {
       "card": "SmotheringTithe",
       "sink": "AbilityText",
       "tag": "irreducible",

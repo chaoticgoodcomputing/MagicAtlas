@@ -1,0 +1,394 @@
+{
+  "Input": {
+    "Name": "Sephiroth, Fabled SOLDIER // Sephiroth, One-Winged Angel",
+    "TypeLine": "Legendary Creature — Human Avatar Soldier // Legendary Creature — Angel Nightmare Avatar",
+    "ColorIdentity": [
+      "B"
+    ],
+    "Layout": "transform",
+    "CardFaces": [
+      {
+        "Name": "Sephiroth, Fabled SOLDIER",
+        "ManaCost": "{2}{B}",
+        "TypeLine": "Legendary Creature — Human Avatar Soldier",
+        "OracleText": "Whenever Sephiroth enters or attacks, you may sacrifice another creature. If you do, draw a card.\nWhenever another creature dies, target opponent loses 1 life and you gain 1 life. If this is the fourth time this ability has resolved this turn, transform Sephiroth.",
+        "Power": "3",
+        "Toughness": "3",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Name": "Sephiroth, One-Winged Angel",
+        "ManaCost": "",
+        "TypeLine": "Legendary Creature — Angel Nightmare Avatar",
+        "OracleText": "Flying\nSuper Nova — As this creature transforms into Sephiroth, One-Winged Angel, you get an emblem with “Whenever a creature dies, target opponent loses 1 life and you gain 1 life.”\nWhenever Sephiroth attacks, you may sacrifice any number of other creatures. If you do, draw that many cards.",
+        "Power": "5",
+        "Toughness": "5",
+        "Colors": [
+          "B"
+        ]
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Sephiroth, Fabled SOLDIER // Sephiroth, One-Winged Angel",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Avatar Soldier // Legendary Creature — Angel Nightmare Avatar",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Avatar",
+        "Soldier",
+        "//",
+        "Legendary",
+        "Creature",
+        "—",
+        "Angel",
+        "Nightmare",
+        "Avatar"
+      ]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "layout",
+        "Layout": "transform"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Sephiroth, Fabled SOLDIER",
+        "TypeLine": {
+          "Raw": "Legendary Creature — Human Avatar Soldier",
+          "Supertypes": [
+            "Legendary"
+          ],
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Human",
+            "Avatar",
+            "Soldier"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Whenever Sephiroth enters or attacks, you may sacrifice another creature. If you do, draw a card.\nWhenever another creature dies, target opponent loses 1 life and you gain 1 life. If this is the fourth time this ability has resolved this turn, transform Sephiroth.",
+          "Abilities": [
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "Whenever",
+                "Event": "EntersOrAttacks",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "IsSelf": true
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "optional",
+                  "Inner": {
+                    "EffectType": "sacrifice",
+                    "Target": {
+                      "Kind": "Any",
+                      "Filter": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "ExcludeSelf": true
+                      }
+                    }
+                  },
+                  "IfYouDo": {
+                    "EffectType": "drawCards",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "Whenever",
+                "Event": "Dies",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "loseLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "Opponent"
+                  }
+                },
+                {
+                  "EffectType": "gainLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                },
+                {
+                  "EffectType": "conditional",
+                  "Condition": {
+                    "ConditionType": "other",
+                    "Text": "this is the fourth time this ability has resolved this turn"
+                  },
+                  "Then": {
+                    "EffectType": "transform",
+                    "Target": {
+                      "Kind": "Self"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{2}{B}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "B"
+                ]
+              }
+            ],
+            "ManaValue": 3,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 3,
+              "Raw": "3"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 3,
+              "Raw": "3"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Sephiroth, One-Winged Angel",
+        "TypeLine": {
+          "Raw": "Legendary Creature — Angel Nightmare Avatar",
+          "Supertypes": [
+            "Legendary"
+          ],
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Angel",
+            "Nightmare",
+            "Avatar"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Flying\nSuper Nova — As this creature transforms into Sephiroth, One-Winged Angel, you get an emblem with “Whenever a creature dies, target opponent loses 1 life and you gain 1 life.”\nWhenever Sephiroth attacks, you may sacrifice any number of other creatures. If you do, draw that many cards.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "evasion",
+                  "CanBeBlockedBy": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Characteristics": [
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Flying"
+                      },
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Reach"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "KeywordSource": "Flying"
+            },
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "When",
+                "Event": "Transforms",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "IsSelf": true
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "createEmblem",
+                  "Emblem": {
+                    "Abilities": [
+                      {
+                        "Kind": "triggered",
+                        "Trigger": {
+                          "Timing": "Whenever",
+                          "Event": "Dies",
+                          "Filter": {
+                            "CardTypes": [
+                              "creature"
+                            ]
+                          }
+                        },
+                        "Effects": [
+                          {
+                            "EffectType": "loseLife",
+                            "Amount": {
+                              "QuantityType": "literal",
+                              "Value": 1
+                            },
+                            "Player": {
+                              "Kind": "Opponent"
+                            }
+                          },
+                          {
+                            "EffectType": "gainLife",
+                            "Amount": {
+                              "QuantityType": "literal",
+                              "Value": 1
+                            },
+                            "Player": {
+                              "Kind": "You"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "Whenever",
+                "Event": "Attacks",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "IsSelf": true
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "optional",
+                  "Inner": {
+                    "EffectType": "sacrifice",
+                    "Target": {
+                      "Kind": "Any",
+                      "Filter": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "ExcludeSelf": true
+                      }
+                    },
+                    "Count": {
+                      "QuantityType": "anyAmount"
+                    }
+                  },
+                  "IfYouDo": {
+                    "EffectType": "drawCards",
+                    "Count": {
+                      "QuantityType": "derived",
+                      "DerivedFrom": "Other"
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "colors",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 5,
+              "Raw": "5"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 5,
+              "Raw": "5"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
