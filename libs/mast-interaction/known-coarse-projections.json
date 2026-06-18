@@ -178,6 +178,7 @@
     "returnToHand": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "selfMana": "no semantic projection yet — coarse fallback no flow rule consumes; explicit named carve-out",
     "tapPermanents": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "unattachNamed": "KHM Toralf's Hammer 'Unattach Toralf's Hammer' inline activation cost (CR 702.6a Equip / CR 701.35 Unattach keyword-action) — the Equipment detaches from the equipped creature as part of paying the cost; no flow rule reads named-unattach costs yet; consciously inert for interaction recall",
     "untap": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet"
   },
   "triggerEvent": {
@@ -229,7 +230,8 @@
     "TurnedFaceUp": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "DealsDamageToOpponents": "Malcolm, Keen-Eyed Navigator group-damage trigger — fires when one or more creatures of a named subtype deal damage to multiple opponents simultaneously (Rule 120.1 + 102.2, plural 'your opponents'); no flow rule consumes it yet; consciously inert for interaction recall",
     "EntersOrAttacks": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
-    "CastOrCopySpell": "cast-or-copy-a-spell trigger (CR 707.10 copy / 601 cast) — no flow rule reads the cast-or-copy disjunct yet; consciously inert for recall"
+    "CastOrCopySpell": "cast-or-copy-a-spell trigger (CR 707.10 copy / 601 cast) — no flow rule reads the cast-or-copy disjunct yet; consciously inert for recall",
+    "ExcessNoncombatDamageDealt": "KHM Toralf, God of Fury excess-noncombat-damage trigger (CR 120.10 — fires when noncombat damage dealt to a creature or planeswalker exceeds lethal damage or loyalty); no flow rule reads excess-damage events yet; consciously inert for interaction recall"
   },
   "restriction": {
     "OnlyAsInstant": "timing restriction (CR 602.5a — already at instant speed by default; this explicit marker is inert for intra-turn loop firability gating) — no flow rule consumes it yet",

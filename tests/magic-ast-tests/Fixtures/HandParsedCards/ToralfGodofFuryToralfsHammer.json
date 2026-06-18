@@ -1,0 +1,356 @@
+{
+  "Input": {
+    "Name": "Toralf, God of Fury // Toralf's Hammer",
+    "TypeLine": "Legendary Creature — God // Legendary Artifact — Equipment",
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Trample",
+      "Equip"
+    ],
+    "Id": "22a6a5f1-1405-4efb-af3e-e1f58d664e99",
+    "Layout": "modal_dfc",
+    "CardFaces": [
+      {
+        "Name": "Toralf, God of Fury",
+        "ManaCost": "{2}{R}{R}",
+        "TypeLine": "Legendary Creature — God",
+        "OracleText": "Trample\nWhenever a creature or planeswalker an opponent controls is dealt excess noncombat damage, Toralf deals damage equal to the excess to any target other than that permanent.",
+        "Power": "5",
+        "Toughness": "4",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Name": "Toralf's Hammer",
+        "ManaCost": "{1}{R}",
+        "TypeLine": "Legendary Artifact — Equipment",
+        "OracleText": "Equipped creature has \"{1}{R}, {T}, Unattach Toralf's Hammer: It deals 3 damage to any target. Return Toralf's Hammer to its owner's hand.\"\nEquipped creature gets +3/+0 as long as it's legendary.\nEquip {1}{R}",
+        "Power": null,
+        "Toughness": null,
+        "Colors": [
+          "R"
+        ]
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Toralf, God of Fury // Toralf's Hammer",
+    "TypeLine": {
+      "Raw": "Legendary Creature — God // Legendary Artifact — Equipment",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "God",
+        "//",
+        "Legendary",
+        "Artifact",
+        "—",
+        "Equipment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "layout",
+        "Layout": "modal_dfc"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Toralf, God of Fury",
+        "TypeLine": {
+          "Raw": "Legendary Creature — God",
+          "Supertypes": [
+            "Legendary"
+          ],
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "God"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Trample\nWhenever a creature or planeswalker an opponent controls is dealt excess noncombat damage, Toralf deals damage equal to the excess to any target other than that permanent.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "keywordAbility",
+                  "Keyword": "Trample"
+                }
+              ],
+              "KeywordSource": "Trample"
+            },
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "Whenever",
+                "Event": "ExcessNoncombatDamageDealt",
+                "Filter": {
+                  "CardTypes": [
+                    "creature",
+                    "planeswalker"
+                  ],
+                  "Controller": "Opponent"
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "dealDamage",
+                  "Amount": {
+                    "QuantityType": "derived",
+                    "DerivedFrom": "DamageDealt"
+                  },
+                  "Target": {
+                    "Kind": "AnyTarget"
+                  },
+                  "Source": {
+                    "Kind": "Self"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{2}{R}{R}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "R"
+                ]
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "R"
+                ]
+              }
+            ],
+            "ManaValue": 4,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 5,
+              "Raw": "5"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 4,
+              "Raw": "4"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Toralf's Hammer",
+        "TypeLine": {
+          "Raw": "Legendary Artifact — Equipment",
+          "Supertypes": [
+            "Legendary"
+          ],
+          "Types": [
+            "Artifact"
+          ],
+          "Subtypes": [
+            "Equipment"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Equipped creature has \"{1}{R}, {T}, Unattach Toralf's Hammer: It deals 3 damage to any target. Return Toralf's Hammer to its owner's hand.\"\nEquipped creature gets +3/+0 as long as it's legendary.\nEquip {1}{R}",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "GainedAbility": {
+                    "Kind": "activated",
+                    "Costs": [
+                      {
+                        "CostType": "mana",
+                        "Symbols": [
+                          {
+                            "Kind": "generic",
+                            "GenericAmount": 1
+                          },
+                          {
+                            "Kind": "colored",
+                            "Colors": [
+                              "R"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "CostType": "tap"
+                      },
+                      {
+                        "CostType": "unattachNamed",
+                        "CardName": "Toralf's Hammer"
+                      }
+                    ],
+                    "Effects": [
+                      {
+                        "EffectType": "dealDamage",
+                        "Amount": {
+                          "QuantityType": "literal",
+                          "Value": 3
+                        },
+                        "Target": {
+                          "Kind": "AnyTarget"
+                        },
+                        "Source": {
+                          "Kind": "Self"
+                        }
+                      },
+                      {
+                        "EffectType": "returnToHand",
+                        "Target": {
+                          "Kind": "Self"
+                        }
+                      }
+                    ],
+                    "IsManaAbility": false
+                  }
+                }
+              ]
+            },
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "modifyPT",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 3
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 0
+                  },
+                  "Duration": {
+                    "DurationType": "asLongAs",
+                    "Condition": {
+                      "ConditionType": "other",
+                      "Text": "it's legendary"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "Kind": "activated",
+              "Costs": [
+                {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 1
+                    },
+                    {
+                      "Kind": "colored",
+                      "Colors": [
+                        "R"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Effects": [
+                {
+                  "EffectType": "attach",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Controller": "You"
+                    }
+                  }
+                }
+              ],
+              "Restrictions": [
+                "OnlyAsSorcery"
+              ],
+              "IsManaAbility": false,
+              "KeywordSource": "Equip"
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{1}{R}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "R"
+                ]
+              }
+            ],
+            "ManaValue": 2,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": [
+              "R"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -200,3 +200,29 @@ public sealed record ReturnToHandCost : Cost
 /// </summary>
 [OracleCost("forage")]
 public sealed record ForageCost : Cost;
+
+/// <summary>
+/// "Unattach [card name]" — the activation cost of undetaching a specifically named
+/// Equipment from the creature it is currently attached to. Unlike the parameterless
+/// <see cref="MagicAST.AST.Effects.Modification.UnattachEffect"/> (the effect of
+/// unattaching), this is a cost paid as part of activating an ability (KHM Toralf's
+/// Hammer: "{1}{R}, {T}, Unattach Toralf's Hammer: It deals 3 damage to any target.
+/// Return Toralf's Hammer to its owner's hand."). The named Equipment must be detached
+/// from the equipped creature before the ability resolves.
+///
+/// <para>
+/// Rule 201.4: "If an object's oracle text refers to the object it's applying to by
+/// name, that reference applies to any object with that name." The card name
+/// <see cref="CardName"/> is retained verbatim from oracle text; the engine resolves
+/// which physical permanent is being referred to.
+/// </para>
+/// </summary>
+[OracleCost("unattachNamed")]
+public sealed record UnattachNamedCost : Cost
+{
+  /// <summary>
+  /// The printed name of the Equipment to unattach, verbatim from oracle text
+  /// (e.g. "Toralf's Hammer"). CR 201.4 — self-reference by card name.
+  /// </summary>
+  public required string CardName { get; init; }
+}

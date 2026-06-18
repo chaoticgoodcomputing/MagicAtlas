@@ -596,6 +596,12 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
+      "card": "ToralfGodofFuryToralfsHammer",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'it’s legendary' is a supertype-presence predicate on the equipped creature; no IsLegendary/SuptertypeCondition arm exists yet in ConditionParser"
+    },
+    {
       "card": "UlalekFusedAtrocity",
       "sink": "Instructions",
       "tag": "irreducible",

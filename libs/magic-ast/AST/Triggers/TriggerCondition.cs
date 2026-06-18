@@ -254,6 +254,20 @@ public enum TriggerEvent
   /// <summary>A creature is dealt damage</summary>
   CreatureDealtDamage,
 
+  /// <summary>
+  /// A creature or planeswalker is dealt excess noncombat damage — i.e., noncombat
+  /// damage that exceeds the amount needed to destroy or reduce the target to 0 loyalty
+  /// (CR 120.10). Fires on the triggering permanent controlled by the specified controller
+  /// (Filter carries the card types and Controller). Toralf, God of Fury is the paradigm
+  /// card: "Whenever a creature or planeswalker an opponent controls is dealt excess
+  /// noncombat damage, …" (KHM). CR 120.10 (verbatim): "Some triggered abilities check
+  /// whether a permanent has been dealt excess damage. These abilities check after the
+  /// permanent has been dealt damage by one or more sources. If those sources together
+  /// dealt an amount of damage to a creature greater than lethal damage, excess damage
+  /// equal to the difference was dealt to that creature."
+  /// </summary>
+  ExcessNoncombatDamageDealt,
+
   // Life triggers
   /// <summary>A player gains life</summary>
   GainsLife,
