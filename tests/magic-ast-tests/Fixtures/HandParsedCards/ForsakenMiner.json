@@ -1,0 +1,129 @@
+{
+  "Input": {
+    "Name": "Forsaken Miner",
+    "ManaCost": "{B}",
+    "TypeLine": "Creature \u2014 Skeleton Rogue",
+    "OracleText": "This creature can't block.\nWhenever you commit a crime, you may pay {B}. If you do, return this card from your graveyard to the battlefield. (Targeting opponents, anything they control, and/or cards in their graveyards is a crime.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Forsaken Miner",
+    "TypeLine": {
+      "Raw": "Creature \u2014 Skeleton Rogue",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Skeleton",
+        "Rogue"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature can't block.\nWhenever you commit a crime, you may pay {B}. If you do, return this card from your graveyard to the battlefield. (Targeting opponents, anything they control, and/or cards in their graveyards is a crime.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBlock"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "CommitsACrime",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "colored",
+                      "Colors": [
+                        "B"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "returnToBattlefield",
+                "Target": {
+                  "Kind": "Self",
+                  "Filter": {
+                    "Controller": "You",
+                    "Zone": "Graveyard"
+                  }
+                },
+                "Tapped": false
+              }
+            }
+          ],
+          "Instructions": [
+            "you may pay {B}"
+          ],
+          "Reminder": {
+            "Text": "Targeting opponents, anything they control, and/or cards in their graveyards is a crime."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

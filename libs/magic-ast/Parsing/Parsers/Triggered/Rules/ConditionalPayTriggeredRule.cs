@@ -47,6 +47,7 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
   private static readonly ScryTriggeredRule _scryRule = new();
   private static readonly SurveilTriggeredRule _surveilRule = new();
   private static readonly EachOpponentLosesLifeTriggeredRule _eachOpponentLosesLifeRule = new();
+  private static readonly ReturnSelfFromGraveyardToBattlefieldRule _returnSelfFromGraveyardRule = new();
 
   // ── Pattern 1: "you may pay {COST}. If you do, [effect]" ──────────────
   // The cost is one or more {X} symbols; the consequent effect is everything
@@ -127,6 +128,8 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
     if (_surveilRule.TryMatch(text, out var surveil) && surveil is not null) return surveil;
     if (_eachOpponentLosesLifeRule.TryMatch(text, out var oppLose) && oppLose is not null)
       return oppLose;
+    if (_returnSelfFromGraveyardRule.TryMatch(text, out var returnSelf) && returnSelf is not null)
+      return returnSelf;
 
     // No match: return null so the caller (TryMatch) rejects the whole text
     // rather than emitting a partially-parsed effect. The dispatcher will
