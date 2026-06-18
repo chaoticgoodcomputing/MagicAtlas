@@ -584,6 +584,14 @@
       "DiscriminatorKey": "EffectType",
       "Types": [
         {
+          "Type": "AbundanceRevealEffect",
+          "Discriminator": "abundanceReveal",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
           "Type": "ActivateLoyaltyAbilityAsThoughEffect",
           "Discriminator": "activateLoyaltyAbilityAsThough",
           "IsUnparsed": false,
@@ -2365,5 +2373,5 @@
       ]
     }
   ],
-  "SchemaHash": "9b7ded138df4b7c202d4ae5f998c4c5f49c9b11c4297af32a48454cb5a217917"
+  "SchemaHash": "2f6984b1d1668acf953a10f9dd8a524bc9a36cd7388af15b56b5aabd88b61c8f"
 }
