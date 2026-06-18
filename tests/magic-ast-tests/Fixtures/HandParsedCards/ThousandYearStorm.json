@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Thousand-Year Storm",
+    "ManaCost": "{4}{U}{R}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Whenever you cast an instant or sorcery spell, copy it for each other instant and sorcery spell you've cast before it this turn. You may choose new targets for the copies.",
+    "Colors": [
+      "R",
+      "U"
+    ],
+    "ColorIdentity": [
+      "R",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Thousand-Year Storm",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever you cast an instant or sorcery spell, copy it for each other instant and sorcery spell you've cast before it this turn. You may choose new targets for the copies.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell",
+                "instant",
+                "sorcery"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "It"
+              },
+              "Count": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "CardTypes": [
+                    "spell",
+                    "instant",
+                    "sorcery"
+                  ],
+                  "Controller": "You",
+                  "ExcludeSelf": true,
+                  "History": {
+                    "PredicateType": "castThisTurn",
+                    "Caster": "You"
+                  }
+                }
+              },
+              "MayChooseNewTargets": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{U}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "R"
+        ]
+      }
+    ]
+  }
+}
