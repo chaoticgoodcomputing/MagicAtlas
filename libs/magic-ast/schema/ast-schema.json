@@ -1656,6 +1656,14 @@
           ]
         },
         {
+          "Type": "PhaseOutEffect",
+          "Discriminator": "phaseOut",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
           "Type": "PlayAdditionalLandEffect",
           "Discriminator": "playAdditionalLand",
           "IsUnparsed": false,
@@ -2398,5 +2406,5 @@
       ]
     }
   ],
-  "SchemaHash": "ab0edee5e67eb499353dcd1be432191bda67f31ee07bbb9aacbc6c1c7c972129"
+  "SchemaHash": "38240f68892a63670d8d5c63b3289283b4a79e49ddea87b48b80438ef70d5b2b"
 }
