@@ -1,0 +1,101 @@
+{
+  "Input": {
+    "Name": "Twinning Staff",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "If you would copy a spell one or more times, instead copy it that many times plus an additional time. You may choose new targets for the additional copy.\n{7}, {T}: Copy target instant or sorcery spell you control. You may choose new targets for the copy.",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Twinning Staff",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If you would copy a spell one or more times, instead copy it that many times plus an additional time. You may choose new targets for the additional copy.\n{7}, {T}: Copy target instant or sorcery spell you control. You may choose new targets for the copy.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "spellCopy",
+                "MinimumQuantity": 1,
+                "Controller": {
+                  "Kind": "You"
+                }
+              },
+              "OriginalEventOccurs": true,
+              "Modifier": {
+                "Type": "plusOne",
+                "MayChooseNewTargets": true
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 7
+                }
+              ]
+            },
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "instant",
+                    "sorcery"
+                  ],
+                  "Zone": "Stack",
+                  "Controller": "You"
+                }
+              },
+              "MayChooseNewTargets": true
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
