@@ -133,6 +133,17 @@ public sealed record TriggeringAbilityIsManaCondition : Condition
 }
 
 /// <summary>
+/// "if you cast it" — an intervening-if (CR 603.4) on a self ETB trigger that gates on whether the
+/// source object entered the battlefield by being CAST (CR 601), as opposed to being created by a
+/// copy effect, reanimated, blinked, or otherwise put onto the battlefield (CR 707.10 — a copy isn't
+/// cast). The structured form of The One Ring's "if you cast it" — NOT a free-text
+/// <see cref="OtherCondition"/> residual. A marker (no fields): the affirmative "you cast it" is the
+/// only form; a copy/reanimate entry fails this gate so the consequent (the protection) does not apply.
+/// </summary>
+[ConditionKind("castThisObject")]
+public sealed record CastThisObjectCondition : Condition;
+
+/// <summary>
 /// Typed residual for a condition that does not yet have a structured variant —
 /// carries the literal oracle phrase. A deferral, not a destination (ADR 0001):
 /// counted by the residual-debt metric, structured when the shape recurs.

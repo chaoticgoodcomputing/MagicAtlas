@@ -97,6 +97,16 @@ public static class ConditionParser
     @"^it(?:'s|\s+is|\s+(?<neg>isn't|is\s+not))\s+a\s+mana\s+ability$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+  /// <summary>
+  /// "you cast it" — the cast-this-object intervening-if (CR 603.4) on a self ETB trigger. The One
+  /// Ring's "When this enters, if you cast it, …": gates the consequent on the source having entered
+  /// by being cast (CR 601) rather than copied/reanimated (CR 707.10). Structured to
+  /// <see cref="CastThisObjectCondition"/> rather than left as a free-text residual.
+  /// </summary>
+  private static readonly Regex CastThisObject = new(
+    @"^you\s+cast\s+it$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
   /// <summary>Parse a condition phrase; never throws — unrecognised phrases become a residual.</summary>
   public static Condition Parse(string phrase)
   {
@@ -183,6 +193,11 @@ public static class ConditionParser
       // The negation group fires only for "isn't"/"is not"; the affirmative
       // ("it's"/"it is a mana ability") leaves it empty → IsManaAbility = true.
       return new TriggeringAbilityIsManaCondition { IsManaAbility = !mag.Groups["neg"].Success };
+    }
+
+    if (CastThisObject.IsMatch(body))
+    {
+      return new CastThisObjectCondition();
     }
 
     return new OtherCondition { Text = verbatim };

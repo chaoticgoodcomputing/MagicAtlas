@@ -353,9 +353,12 @@ internal static class TriggeredRuleHelpers
     // Oracle text uses the card's own short name to refer to itself; treat this
     // as a self-reference resolved to a creature filter (matches the convention
     // already used for "this creature" — MAST describes what the text says).
+    // The "creature" type here is a DEFAULT: this layer has no type line, so a
+    // non-creature self-by-name (e.g. The One Ring, an Artifact) is retyped to its
+    // actual type downstream by SelfReferenceTypeCorrector in CardParser (CR 201.5).
     if (IsSelfByNameTrigger(text))
     {
-      // CR 201.4: a card naming itself refers to THAT object — a self-reference, exactly like "this
+      // CR 201.5: a card naming itself refers to THAT object — a self-reference, exactly like "this
       // creature" (§6). Mark IsSelf so "When Elenda dies" → ltb:creature:to-graveyard:self, not the
       // generic ltb:creature; without it a cross-card sacrifice false-bridges to the self-death
       // trigger (the interaction judge harness caught this on the Elenda loops). Self-ONLY, guarded

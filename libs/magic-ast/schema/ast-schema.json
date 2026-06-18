@@ -265,6 +265,12 @@
       "DiscriminatorKey": "ConditionType",
       "Types": [
         {
+          "Type": "CastThisObjectCondition",
+          "Discriminator": "castThisObject",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CountCondition",
           "Discriminator": "count",
           "IsUnparsed": false,
@@ -2092,5 +2098,5 @@
       ]
     }
   ],
-  "SchemaHash": "ceab0f69e83402a1ced711995906ed27a16e6c48d82411e0227c75dbb41b9a5f"
+  "SchemaHash": "4ed4de40c4e295d7b5b783f4925a690c73942755152f29a56d45076bf6e1583e"
 }

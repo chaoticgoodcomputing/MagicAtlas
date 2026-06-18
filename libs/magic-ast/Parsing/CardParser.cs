@@ -44,6 +44,10 @@ public sealed class CardParser
     var oracleResult = _oracleParser.Parse(input.OracleText);
     diagnostics.AddRange(oracleResult.Diagnostics);
 
+    // Correct the self-by-name reference type now that the type line is known (the oracle parser
+    // has no type-line access, so its self-by-name branch hardcodes "creature"). CR 201.5.
+    var correctedOracle = SelfReferenceTypeCorrector.Correct(oracleResult.Output, typeLine);
+
     // Extract attributes
     var attributes = _attributeExtractor.Extract(input);
 
@@ -67,7 +71,7 @@ public sealed class CardParser
     {
       Name = input.Name,
       TypeLine = typeLine,
-      Oracle = oracleResult.Output,
+      Oracle = correctedOracle,
       Attributes = attributes,
       Faces = faces,
     };
@@ -104,7 +108,7 @@ public sealed class CardParser
     {
       Name = faceInput.Name,
       TypeLine = typeLine,
-      Oracle = oracleResult.Output,
+      Oracle = SelfReferenceTypeCorrector.Correct(oracleResult.Output, typeLine),
       Attributes = attributes,
     };
 
