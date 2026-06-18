@@ -1548,6 +1548,15 @@
           ]
         },
         {
+          "Type": "PutIntoLibraryAtPositionEffect",
+          "Discriminator": "putIntoLibraryAtPosition",
+          "IsUnparsed": false,
+          "Fields": [
+            "Card",
+            "Position"
+          ]
+        },
+        {
           "Type": "PutOnTopOfLibraryEffect",
           "Discriminator": "putOnTopOfLibrary",
           "IsUnparsed": false,
@@ -2152,5 +2161,5 @@
       ]
     }
   ],
-  "SchemaHash": "6859621695374064ba30c74868f351d4230581ceb8185c68a9c69cc86a4b6ee4"
+  "SchemaHash": "d29a6d2a81aac7c447dadd86020472eaa952859f419c324603c019fe3a8a403a"
 }

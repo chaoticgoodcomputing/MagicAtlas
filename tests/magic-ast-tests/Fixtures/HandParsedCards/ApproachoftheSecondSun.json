@@ -1,0 +1,100 @@
+{
+  "Input": {
+    "Name": "Approach of the Second Sun",
+    "ManaCost": "{6}{W}",
+    "TypeLine": "Sorcery",
+    "OracleText": "If this spell was cast from your hand and you've cast another spell named Approach of the Second Sun this game, you win the game. Otherwise, put Approach of the Second Sun into its owner's library seventh from the top and you gain 7 life.",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Approach of the Second Sun",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If this spell was cast from your hand and you've cast another spell named Approach of the Second Sun this game, you win the game. Otherwise, put Approach of the Second Sun into its owner's library seventh from the top and you gain 7 life.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "this spell was cast from your hand and you've cast another spell named Approach of the Second Sun this game"
+              },
+              "Then": {
+                "EffectType": "winTheGame",
+                "Player": {
+                  "Kind": "You"
+                }
+              },
+              "Else": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "putIntoLibraryAtPosition",
+                    "Card": {
+                      "Kind": "Self"
+                    },
+                    "Position": 7
+                  },
+                  {
+                    "EffectType": "gainLife",
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 7
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{6}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 6
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 7,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}
