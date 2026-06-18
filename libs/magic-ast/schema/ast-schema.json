@@ -559,6 +559,12 @@
           "Fields": []
         },
         {
+          "Type": "AdditionalCombatPhaseEffect",
+          "Discriminator": "additionalCombatPhase",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "AllMustBlockEffect",
           "Discriminator": "allMustBlock",
           "IsUnparsed": false,
@@ -2098,5 +2104,5 @@
       ]
     }
   ],
-  "SchemaHash": "4ed4de40c4e295d7b5b783f4925a690c73942755152f29a56d45076bf6e1583e"
+  "SchemaHash": "227fc8f1b3e1ab521b7f4e83caf5bb11a27a168291577835c6c0b07696a65d13"
 }
