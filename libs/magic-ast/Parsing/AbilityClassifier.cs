@@ -532,6 +532,25 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "You may cast this card from exile." — an unconditional cast-from-exile
+    // permission (Eternal Scourge, CR 601.3e). Same static-permission semantics
+    // as the graveyard form above. Also covers the combined form "You may cast
+    // this card from your graveyard or from exile." (Squee, the Immortal) which
+    // begins with this prefix. Intercept before StartsWithYouMaySpellInstruction
+    // swallows it (parallels the "You may cast this card from your graveyard"
+    // intercept above).
+    if (clause.RawText.TrimStart().StartsWith(
+      "You may cast this card from exile",
+      StringComparison.OrdinalIgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.95,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "You may cast spells as though they had flash." — Vedalken Orrery and
     // similar global flash-grant static abilities (CR 702.8a: "Flash is a static
     // ability … 'Flash' means 'You may play this card any time you could cast an
