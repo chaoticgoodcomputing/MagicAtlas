@@ -147,6 +147,12 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
         SourceSpan = effectSpan,
         RawText = effectPart,
       };
+      // CR 702.177a: inject OnlyOnce for Exhaust abilities even when the effect is unparsed.
+      if (classification.AbilityWord?.Equals("Exhaust", StringComparison.OrdinalIgnoreCase) == true)
+      {
+        var existing = restrictions ?? [];
+        restrictions = [..existing, ActivationRestriction.OnlyOnce];
+      }
       return new ActivatedAbility
       {
         Costs = costs,
@@ -161,6 +167,16 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
 
     // Determine if this is a mana ability
     var isManaAbility = IsManaAbility(costs, effects);
+
+    // CR 702.177a: "Exhaust — [Cost]: [Effect]" means "[Cost]: [Effect]. Activate only once."
+    // The "Activate only once" restriction is implied by the keyword and not printed as a
+    // separate "Activate only …" sentence in the oracle text, so ExtractActivationRestrictions
+    // cannot see it. Inject it here when the AbilityWord identifies this as an Exhaust ability.
+    if (classification.AbilityWord?.Equals("Exhaust", StringComparison.OrdinalIgnoreCase) == true)
+    {
+      var existing = restrictions ?? [];
+      restrictions = [..existing, ActivationRestriction.OnlyOnce];
+    }
 
     // Build the activated ability
     return new ActivatedAbility

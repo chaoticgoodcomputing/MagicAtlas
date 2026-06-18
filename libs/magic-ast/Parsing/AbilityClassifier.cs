@@ -118,6 +118,10 @@ public sealed class AbilityClassifier
       "Adventure",
       // EOE (Edge of Eternities) ability words
       "Void",
+      // Exhaust (CR 702.177): a special kind of activated ability. "Exhaust — [Cost]:
+      // [Effect]" means "[Cost]: [Effect]. Activate only once." The prefix is stripped
+      // and the ability word emitted so the parser can inject the OnlyOnce restriction.
+      "Exhaust",
     };
 
   /// <summary>

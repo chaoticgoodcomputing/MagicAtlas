@@ -82,6 +82,12 @@ public enum ActivationRestriction
   /// <summary>"Activate only if you control no untapped lands"</summary>
   OnlyIfNoUntappedLands,
 
+  /// <summary>"Activate only once." — the Exhaust keyword constraint (CR 702.177a:
+  /// "'Exhaust — [Cost]: [Effect]' means '[Cost]: [Effect]. Activate only once.'"
+  /// Unlike <see cref="OnlyOnceEachTurn"/> (which resets each turn), an ability with
+  /// this restriction can never be activated again once used.</summary>
+  OnlyOnce,
+
   /// <summary>Other restriction captured as raw text</summary>
   Other,
 }
