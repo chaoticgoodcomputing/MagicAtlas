@@ -118,6 +118,8 @@ public sealed class AbilityClassifier
       "Adventure",
       // EOE (Edge of Eternities) ability words
       "Void",
+      // Bloom Tender / Eventide ability word (CR 207.2c list)
+      "Vivid",
     };
 
   /// <summary>
