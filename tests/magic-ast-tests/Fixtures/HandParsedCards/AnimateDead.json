@@ -1,0 +1,185 @@
+{
+  "Input": {
+    "Name": "Animate Dead",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature card in a graveyard\nWhen this Aura enters, if it's on the battlefield, it loses \"enchant creature card in a graveyard\" and gains \"enchant creature put onto the battlefield with this Aura.\" Return enchanted creature card to the battlefield under your control and attach this Aura to it. When this Aura leaves the battlefield, that creature's controller sacrifices it.\nEnchanted creature gets -1/-0.",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Animate Dead",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature card in a graveyard\nWhen this Aura enters, if it's on the battlefield, it loses \"enchant creature card in a graveyard\" and gains \"enchant creature put onto the battlefield with this Aura.\" Return enchanted creature card to the battlefield under your control and attach this Aura to it. When this Aura leaves the battlefield, that creature's controller sacrifices it.\nEnchanted creature gets -1/-0.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Zone": "Graveyard"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "aura"
+              ],
+              "IsSelf": true
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "it's on the battlefield"
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "loseAbility",
+                  "Target": {
+                    "Kind": "Self"
+                  },
+                  "AbilityText": "enchant creature card in a graveyard"
+                },
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "Self"
+                  },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "KeywordSource": "Enchant",
+                    "Effects": [
+                      {
+                        "EffectType": "enchantRestriction",
+                        "LegalTargets": {
+                          "CardTypes": [
+                            "creature"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "EffectType": "returnToBattlefield",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "UnderControl": {
+                    "Kind": "You"
+                  }
+                },
+                {
+                  "EffectType": "attach",
+                  "Target": {
+                    "Kind": "It"
+                  }
+                }
+              ]
+            },
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "When",
+                  "Event": "LeavesTheBattlefield",
+                  "Filter": {
+                    "CardTypes": [
+                      "aura"
+                    ],
+                    "IsSelf": true
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "sacrifice",
+                    "Target": {
+                      "Kind": "It"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": -1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

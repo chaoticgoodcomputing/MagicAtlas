@@ -80,6 +80,18 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "AnimateDead",
+      "sink": "AbilityText",
+      "tag": "debt",
+      "reason": "PB-9 LoseAbilityEffect residual — 'enchant creature card in a graveyard' is an ability text reference (the ability being removed is named verbatim); no structured ability-scope node yet"
+    },
+    {
+      "card": "AnimateDead",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'it's on the battlefield' is a self-zone check (ZoneSelfCondition shape not yet structured)"
+    },
+    {
       "card": "BFZ/FathomFeeder",
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
