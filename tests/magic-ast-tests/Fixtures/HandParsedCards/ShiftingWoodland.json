@@ -1,0 +1,141 @@
+{
+  "Input": {
+    "Name": "Shifting Woodland",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "This land enters tapped unless you control a Forest.\n{T}: Add {G}.\nDelirium — {2}{G}{G}: This land becomes a copy of target permanent card in your graveyard until end of turn. Activate only if there are four or more card types among cards in your graveyard.",
+    "Colors": [],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Shifting Woodland",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": [
+        "Land"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This land enters tapped unless you control a Forest.\n{T}: Add {G}.\nDelirium — {2}{G}{G}: This land becomes a copy of target permanent card in your graveyard until end of turn. Activate only if there are four or more card types among cards in your graveyard.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "When": "asThisEnters",
+          "Condition": {
+            "ConditionType": "count",
+            "Filter": {
+              "Subtypes": [
+                "Forest"
+              ],
+              "Controller": "You"
+            },
+            "Count": {
+              "Operator": "GreaterThanOrEqual",
+              "Value": 1
+            }
+          }
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{G}",
+              "AnyColor": false
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "activated",
+          "AbilityWord": "Delirium",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "becomesCopy",
+              "Subject": {
+                "Kind": "Self"
+              },
+              "CopyTarget": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Controller": "You",
+                  "Zone": "Graveyard"
+                }
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "ActivationCondition": {
+            "ConditionType": "cardTypeDiversity",
+            "Count": {
+              "Operator": "GreaterThanOrEqual",
+              "Value": 4
+            },
+            "Zone": "Graveyard",
+            "Owner": "You"
+          },
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
