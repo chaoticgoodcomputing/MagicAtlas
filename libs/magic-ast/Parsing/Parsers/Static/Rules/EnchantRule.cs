@@ -25,7 +25,7 @@ public sealed class EnchantRule : IStaticRule
       return null;
     }
 
-    var descriptor = match.Groups["descriptor"].Value.Trim().ToLowerInvariant();
+    var descriptor = match.Groups["descriptor"].Value.Trim();
     if (descriptor.Length == 0)
     {
       return null;
@@ -53,15 +53,17 @@ public sealed class EnchantRule : IStaticRule
   private static ObjectFilter? BuildEnchantFilter(string descriptor)
   {
     // Strip leading "a "/"an " articles that appear in some printings.
+    // `descriptor` is the original-case phrase from the oracle text (not lowercased);
+    // we lowercase only for comparisons so OtherCharacteristic can preserve oracle casing.
     var d = Regex.Replace(descriptor, @"^(?:a|an)\s+", "", RegexOptions.IgnoreCase).Trim();
 
     ControllerFilter? controller = null;
-    if (d.EndsWith(" you control"))
+    if (d.EndsWith(" you control", StringComparison.OrdinalIgnoreCase))
     {
       controller = ControllerFilter.You;
       d = d[..^" you control".Length].Trim();
     }
-    else if (d.EndsWith(" an opponent controls"))
+    else if (d.EndsWith(" an opponent controls", StringComparison.OrdinalIgnoreCase))
     {
       controller = ControllerFilter.Opponent;
       d = d[..^" an opponent controls".Length].Trim();
@@ -70,28 +72,50 @@ public sealed class EnchantRule : IStaticRule
     // "Enchant player" (CR 702.5) — a player is not an object/card type
     // (CR 109 vs CR 102), so the legal-target descriptor lands on the
     // EntityType axis rather than CardTypes.
-    if (d == "player")
+    if (d.Equals("player", StringComparison.OrdinalIgnoreCase))
     {
       return new ObjectFilter { EntityType = "player", Controller = controller };
     }
 
     // Simple-noun shape: "creature", "land", "permanent", "artifact", "enchantment".
-    var simpleTypes = new[] { "creature", "land", "permanent", "artifact", "enchantment", "planeswalker" };
+    var simpleTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+      "creature", "land", "permanent", "artifact", "enchantment", "planeswalker",
+    };
     if (simpleTypes.Contains(d))
     {
-      return new ObjectFilter { CardTypes = [d], Controller = controller };
+      return new ObjectFilter { CardTypes = [d.ToLowerInvariant()], Controller = controller };
     }
 
     // Disjunctive type shape: "typeA or typeB" (e.g. "artifact or creature").
-    // Both halves must be recognised simple types.
-    var orMatch = Regex.Match(d, @"^(?<a>[a-z]+)\s+or\s+(?<b>[a-z]+)$", RegexOptions.IgnoreCase);
+    // Both halves must be recognised simple card types for the structured encoding.
+    var orMatch = Regex.Match(d, @"^(?<a>[A-Za-z]+)\s+or\s+(?<b>[A-Za-z]+)$", RegexOptions.IgnoreCase);
     if (orMatch.Success)
     {
       var typeA = orMatch.Groups["a"].Value;
       var typeB = orMatch.Groups["b"].Value;
       if (simpleTypes.Contains(typeA) && simpleTypes.Contains(typeB))
       {
-        return new ObjectFilter { CardTypes = [typeA, typeB], Controller = controller };
+        return new ObjectFilter
+        {
+          CardTypes = [typeA.ToLowerInvariant(), typeB.ToLowerInvariant()],
+          Controller = controller,
+        };
+      }
+
+      // Mixed card-type / subtype disjunction: "creature or Vehicle", "creature or Equipment",
+      // etc. — one half is a recognised card-type noun, the other is a subtype (not a simple
+      // card-type noun). ObjectFilter has no cross-axis OR field, so the full phrase is
+      // captured as an OtherCharacteristic residual (ADR 0001 free-text doctrine), consistent
+      // with the "creature or Vehicle card" encoding in BroodheartEngine.
+      // The oracle phrase is preserved verbatim (original case from the descriptor).
+      if (simpleTypes.Contains(typeA) || simpleTypes.Contains(typeB))
+      {
+        return new ObjectFilter
+        {
+          Characteristics = [Characteristic.Other(d)],
+          Controller = controller,
+        };
       }
     }
 
