@@ -171,7 +171,9 @@
     "gainAbilitiesFromExiledCards": "ability-set grant from exiled creature cards (CR 613.1f layer-6) — grants dynamic activated abilities; no interaction flow rule reads exiled-card ability grants yet; consciously inert for interaction recall",
     "wish": "Karn, the Great Creator −2 / Glittering Wish family (CR 400.11b: retrieve from outside game or exile to hand) — sideboard retrieval; no interaction flow rule reads wish-retrieval events yet; consciously inert for interaction recall",
     "repeat": "repeat/loop control-flow effect — no interaction flow rule consumes iterative repetition yet; consciously inert for recall",
-    "takeExtraTurn": "take-extra-turn effect (CR 720) — no flow rule reads extra-turn grants yet; consciously inert for recall"
+    "takeExtraTurn": "take-extra-turn effect (CR 720) — no flow rule reads extra-turn grants yet; consciously inert for recall",
+    "mayCastTargetFromGraveyard": "one-shot cast-from-graveyard permission (CR 601/608) — recursion enabler; no flow rule projects graveyard-cast grants yet, consciously inert for recall",
+    "cantCastAdditionalSpellsThisTurn": "per-turn cast restriction (CR 608) — a limiter, not an emit/consume; no flow rule reads it, consciously inert"
   },
   "costType": {
     "composite": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
