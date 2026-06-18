@@ -1,0 +1,225 @@
+{
+  "Input": {
+    "Name": "Ratadrabik of Urborg",
+    "ManaCost": "{2}{W}{B}",
+    "TypeLine": "Legendary Creature — Zombie Wizard",
+    "OracleText": "Vigilance, ward {2}\nOther Zombies you control have vigilance.\nWhenever another legendary creature you control dies, create a token that's a copy of that creature, except it's not legendary and it's a 2/2 black Zombie in addition to its other colors and types.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "B",
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Ratadrabik of Urborg",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Zombie Wizard",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie",
+        "Wizard"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Vigilance, ward {2}\nOther Zombies you control have vigilance.\nWhenever another legendary creature you control dies, create a token that's a copy of that creature, except it's not legendary and it's a 2/2 black Zombie in addition to its other colors and types.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Vigilance",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Vigilance"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Ward",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesTarget",
+            "Filter": {
+              "Controller": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": {
+                  "Kind": "It"
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "ThatPlayer"
+                },
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Zombie"
+                  ],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Vigilance",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Vigilance"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Supertypes": [
+                "Legendary"
+              ],
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "ThatCreature"
+              },
+              "Modifications": [
+                {
+                  "ModificationType": "supertypeRemover",
+                  "Supertypes": [
+                    "Legendary"
+                  ]
+                },
+                {
+                  "ModificationType": "powerToughnessOverride",
+                  "Power": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "Toughness": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  }
+                },
+                {
+                  "ModificationType": "colorAdder",
+                  "Colors": [
+                    "B"
+                  ]
+                },
+                {
+                  "ModificationType": "typeAdder",
+                  "Subtypes": [
+                    "Zombie"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
