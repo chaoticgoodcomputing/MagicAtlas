@@ -260,6 +260,12 @@
       "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
+      "card": "MasterofCruelties",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets \u2014 'attacks a player and isn't blocked' is a compound attack-target + unblocked-state predicate; no structured AttacksPlayerAndIsntBlockedCondition node exists yet"
+    },
+    {
       "card": "LCI/NissaResurgentAnimist",
       "sink": "OtherCondition",
       "tag": "debt",

@@ -1408,6 +1408,14 @@
           ]
         },
         {
+          "Type": "NoCombatDamageEffect",
+          "Discriminator": "noCombatDamage",
+          "IsUnparsed": false,
+          "Fields": [
+            "Source"
+          ]
+        },
+        {
           "Type": "NoMaxHandSizeEffect",
           "Discriminator": "noMaxHandSize",
           "IsUnparsed": false,
@@ -1680,6 +1688,15 @@
           "Fields": [
             "CardTypes",
             "Subject"
+          ]
+        },
+        {
+          "Type": "SetLifeTotalEffect",
+          "Discriminator": "setLifeTotal",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player",
+            "Total"
           ]
         },
         {
@@ -2152,5 +2169,5 @@
       ]
     }
   ],
-  "SchemaHash": "6859621695374064ba30c74868f351d4230581ceb8185c68a9c69cc86a4b6ee4"
+  "SchemaHash": "6b28498e12c70c0758d3dbd68f966e5889e5c7133c9a55b667bb023d69e2f52d"
 }
