@@ -1,0 +1,131 @@
+{
+  "Input": {
+    "Name": "Blood Tribute",
+    "ManaCost": "{4}{B}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Kicker—Tap an untapped Vampire you control. (You may tap a Vampire you control in addition to any other costs as you cast this spell.)\nTarget opponent loses half their life, rounded up. If this spell was kicked, you gain life equal to the life lost this way.",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Blood Tribute",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Kicker—Tap an untapped Vampire you control. (You may tap a Vampire you control in addition to any other costs as you cast this spell.)\nTarget opponent loses half their life, rounded up. If this spell was kicked, you gain life equal to the life lost this way.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Kicker",
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "tapPermanents",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Subtypes": [
+                      "Vampire"
+                    ],
+                    "Controller": "You"
+                  },
+                  "Quantity": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                },
+                "IsOptional": true
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(You may tap a Vampire you control in addition to any other costs as you cast this spell.)"
+          }
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "derived",
+                  "DerivedFrom": "LifeTotal"
+                },
+                "Operation": "half",
+                "Rounding": "up"
+              },
+              "Player": {
+                "Kind": "Opponent"
+              }
+            },
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "LifeLost"
+              },
+              "Player": {
+                "Kind": "You"
+              },
+              "Condition": {
+                "ConditionType": "keywordCostPaid",
+                "Keyword": "Kicker"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}
