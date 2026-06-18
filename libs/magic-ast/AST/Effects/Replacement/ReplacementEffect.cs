@@ -26,6 +26,16 @@ public sealed record ReplacementEffect : Effect
   public bool OriginalEventOccurs { get; init; }
 
   /// <summary>
+  /// Whether the controller may choose not to apply this replacement effect.
+  /// CR 614.1: most replacement effects are mandatory; however, some use "you may instead",
+  /// meaning the player whose event would be replaced may opt out, letting the original
+  /// event occur normally (e.g. Abundance — "you may instead choose land or nonland …").
+  /// Omitted (false by default) for mandatory replacements.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool IsOptional { get; init; }
+
+  /// <summary>
   /// The effect(s) that happen instead of or in addition to the original event.
   /// Null when the replacement is expressed purely as a <see cref="Modifier"/>
   /// on the original event (e.g., Doubling Season's "twice that many" — the
