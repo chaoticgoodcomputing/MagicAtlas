@@ -25,8 +25,14 @@ public sealed class GrantedAbilityRule : IStaticRule
   // ("All Slivers have", Telekinetic Sliver's global tribal grant). Both shapes
   // land on the same GainAbilityEffect node; ClassifyGrantTarget distinguishes
   // the subject.
+  //
+  // The trailing (?:\s*\([^)]*\))? allows an optional parenthetical reminder
+  // that appears after the closing quote on the same oracle text line —
+  // e.g. Umbral Mantle's "({Q} is the untap symbol.)" reminder (CR 107.6
+  // defines the untap symbol {Q}). The reminder carries no rules semantics
+  // and is stripped before the inner body is parsed.
   private static readonly Regex _grantedAbilityPattern = new(
-    @"^\s*(?<filter>[^""""]+?)\s+(?:has|have)\s+[""""](?<body>[^""""]+)[""""]\.?\s*$",
+    @"^\s*(?<filter>[^""""]+?)\s+(?:has|have)\s+[""""](?<body>[^""""]+)[""""]\.?(?:\s*\([^)]*\))?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

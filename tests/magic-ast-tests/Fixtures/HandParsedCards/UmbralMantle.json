@@ -1,0 +1,133 @@
+{
+  "Input": {
+    "Name": "Umbral Mantle",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "Equipped creature has \"{3}, {Q}: This creature gets +2/+2 until end of turn.\" ({Q} is the untap symbol.)\nEquip {0}",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Umbral Mantle",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature has \"{3}, {Q}: This creature gets +2/+2 until end of turn.\" ({Q} is the untap symbol.)\nEquip {0}",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "mana",
+                    "Symbols": [
+                      {
+                        "Kind": "generic",
+                        "GenericAmount": 3
+                      }
+                    ]
+                  },
+                  {
+                    "CostType": "untap"
+                  }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "modifyPT",
+                    "Target": {
+                      "Kind": "Self"
+                    },
+                    "PowerModifier": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    },
+                    "ToughnessModifier": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    },
+                    "Duration": {
+                      "DurationType": "untilTime",
+                      "Until": {
+                        "Part": "Turn",
+                        "Edge": "End"
+                      }
+                    }
+                  }
+                ],
+                "IsManaAbility": false
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 0
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
