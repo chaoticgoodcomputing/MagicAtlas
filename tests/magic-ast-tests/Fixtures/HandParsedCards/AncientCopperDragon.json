@@ -1,0 +1,148 @@
+{
+  "Input": {
+    "Name": "Ancient Copper Dragon",
+    "ManaCost": "{4}{R}{R}",
+    "TypeLine": "Creature — Elder Dragon",
+    "OracleText": "Flying\nWhenever this creature deals combat damage to a player, roll a d20. You create a number of Treasure tokens equal to the result.",
+    "Power": "6",
+    "Toughness": "5",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Ancient Copper Dragon",
+    "TypeLine": {
+      "Raw": "Creature — Elder Dragon",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elder",
+        "Dragon"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying\nWhenever this creature deals combat damage to a player, roll a d20. You create a number of Treasure tokens equal to the result.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "rollDie",
+              "Sides": 20
+            },
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "dieRollResult"
+              },
+              "Token": {
+                "Types": [
+                  "artifact"
+                ],
+                "Subtypes": [
+                  "Treasure"
+                ],
+                "AbilityText": [
+                  "{T}, Sacrifice this artifact: Add one mana of any color."
+                ]
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}

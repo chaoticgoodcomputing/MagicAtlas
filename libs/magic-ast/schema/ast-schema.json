@@ -1591,6 +1591,14 @@
           "Fields": []
         },
         {
+          "Type": "RollDieEffect",
+          "Discriminator": "rollDie",
+          "IsUnparsed": false,
+          "Fields": [
+            "Sides"
+          ]
+        },
+        {
           "Type": "SacrificeEffect",
           "Discriminator": "sacrifice",
           "IsUnparsed": false,
@@ -1981,6 +1989,12 @@
           ]
         },
         {
+          "Type": "DieRollResultQuantity",
+          "Discriminator": "dieRollResult",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "KeywordCostPaidCountQuantity",
           "Discriminator": "keywordCostPaidCount",
           "IsUnparsed": false,
@@ -2098,5 +2112,5 @@
       ]
     }
   ],
-  "SchemaHash": "4ed4de40c4e295d7b5b783f4925a690c73942755152f29a56d45076bf6e1583e"
+  "SchemaHash": "aded1db2f3c569e7979340556312cadf2793b44596db739a582df96bc4a1b265"
 }
