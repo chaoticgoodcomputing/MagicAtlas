@@ -144,6 +144,48 @@ public sealed record TriggeringAbilityIsManaCondition : Condition
 public sealed record CastThisObjectCondition : Condition;
 
 /// <summary>
+/// "if it's a Unicorn" / "if it's an Elf" — a condition that checks whether a designated
+/// game object (the "it" pronoun from the enclosing ability context, typically the creature
+/// that entered the battlefield in an ETB trigger) has a specific creature subtype.
+///
+/// <para>
+/// CR 205.3m (Creature subtypes): creature subtypes are listed after the type-line dash and
+/// are checked at resolution by looking at the object's current characteristic. MAST records
+/// the condition as written — reference-not-resolution (ADR 0004): the engine reads the
+/// object's type line; MAST does not pre-evaluate it.
+/// </para>
+///
+/// <para>
+/// The <see cref="Subject"/> field disambiguates the pronoun ("It" for the standard "if it's
+/// a [Subtype]" oracle form, the most common case). "It" refers to the same object as the
+/// preceding effect's target — in Emiel the Blessed, the creature that just entered the
+/// battlefield and received the counter.
+/// </para>
+///
+/// CR 205.3m (verbatim): "Creature subtypes are always a single word and are listed after a
+/// long dash on the card's type line. ..."
+/// CR 603.2: "Whenever a game event or game state matches a triggered ability's trigger
+/// event, that ability automatically triggers."
+/// </summary>
+[ConditionKind("objectHasSubtype")]
+public sealed record ObjectHasSubtypeCondition : Condition
+{
+  /// <summary>
+  /// The creature subtype to check — e.g. <c>"Unicorn"</c>, <c>"Elf"</c>.
+  /// Always the proper-cased single word as it appears on type lines (CR 205.3m).
+  /// </summary>
+  public required string Subtype { get; init; }
+
+  /// <summary>
+  /// The pronoun that identifies the subject object — typically <c>"It"</c>
+  /// (the object referred to by the containing ability context, e.g. the entering
+  /// creature in an ETB trigger). Uses title-case to match the ObjectReferenceKind
+  /// vocabulary.
+  /// </summary>
+  public required string Subject { get; init; }
+}
+
+/// <summary>
 /// Typed residual for a condition that does not yet have a structured variant —
 /// carries the literal oracle phrase. A deferral, not a destination (ADR 0001):
 /// counted by the residual-debt metric, structured when the shape recurs.

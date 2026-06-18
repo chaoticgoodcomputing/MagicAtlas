@@ -1,0 +1,205 @@
+{
+  "Input": {
+    "Name": "Emiel the Blessed",
+    "ManaCost": "{2}{W}{W}",
+    "TypeLine": "Legendary Creature — Unicorn",
+    "OracleText": "{3}: Exile another target creature you control, then return it to the battlefield under its owner's control.\nWhenever another creature you control enters, you may pay {G/W}. If you do, put a +1/+1 counter on it. If it's a Unicorn, put two +1/+1 counters on it instead. ({G/W} can be paid with either {G} or {W}.)",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "G",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Emiel the Blessed",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Unicorn",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Unicorn"
+      ],
+      "Supertypes": [
+        "Legendary"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{3}: Exile another target creature you control, then return it to the battlefield under its owner's control.\nWhenever another creature you control enters, you may pay {G/W}. If you do, put a +1/+1 counter on it. If it's a Unicorn, put two +1/+1 counters on it instead. ({G/W} can be paid with either {G} or {W}.)",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              }
+            },
+            {
+              "EffectType": "returnToBattlefield",
+              "Target": {
+                "Kind": "Designated",
+                "Filter": {
+                  "Zone": "Exile",
+                  "ExiledWith": {
+                    "Kind": "Self"
+                  }
+                }
+              },
+              "Tapped": false,
+              "UnderControl": {
+                "Kind": "Owner"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "hybrid",
+                      "Colors": [
+                        "G",
+                        "W"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "conditional",
+                "Condition": {
+                  "ConditionType": "objectHasSubtype",
+                  "Subtype": "Unicorn",
+                  "Subject": "It"
+                },
+                "Then": {
+                  "EffectType": "putCounters",
+                  "Target": {
+                    "Kind": "It"
+                  },
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "CounterType": "+1/+1"
+                },
+                "Else": {
+                  "EffectType": "putCounters",
+                  "Target": {
+                    "Kind": "It"
+                  },
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "CounterType": "+1/+1"
+                }
+              }
+            }
+          ],
+          "Instructions": [
+            "you may pay {G/W}"
+          ],
+          "Reminder": {
+            "Text": "{G/W} can be paid with either {G} or {W}."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}

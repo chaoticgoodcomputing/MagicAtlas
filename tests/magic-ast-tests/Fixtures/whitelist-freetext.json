@@ -206,6 +206,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "EmieltheBlessed",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/ForsakenMiner; the ConditionalPayEffect.Cost carries the structured {G/W})"
+    },
+    {
       "card": "ExpeditionRaptor",
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
