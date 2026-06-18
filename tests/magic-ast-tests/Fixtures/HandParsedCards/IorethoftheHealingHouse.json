@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Ioreth of the Healing House",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Legendary Creature — Human Cleric",
+    "OracleText": "{T}: Untap another target permanent.\n{T}: Untap two other target legendary creatures.",
+    "Power": "1",
+    "Toughness": "4",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Ioreth of the Healing House",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Cleric",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "{T}: Untap another target permanent.\n{T}: Untap two other target legendary creatures.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["permanent"],
+                  "ExcludeSelf": true
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Target",
+                "Quantity": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                },
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Supertypes": ["Legendary"],
+                  "ExcludeSelf": true
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+      }
+    ]
+  }
+}
