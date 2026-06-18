@@ -9,11 +9,13 @@ using MagicAST.AST.Quantities;
 /// energy symbol is {E}; each represents one energy counter removed from the player.
 ///
 /// <para>
-/// Oracle text may use either the word-number form ("Pay eight {E}") or the
-/// multi-symbol form ("Pay {E}{E}{E}{E}{E}{E}{E}{E}"). In the word-number form,
-/// the word (e.g. "eight") encodes the count and a single {E} names the currency
-/// — the {E} symbol count need not equal the word value. In the multi-symbol form,
-/// the count is derived by counting the {E} symbols (and no leading word is present).
+/// Oracle text may use three forms:
+/// <list type="bullet">
+///   <item>Word-number form: "Pay eight {E}" — word encodes count, symbol names currency.</item>
+///   <item>Pay-symbols form: "Pay {E}{E}{E}" — "Pay" prefix + pure symbol repetition;
+///     count derived from symbol occurrences (e.g., Whirler Virtuoso, Aetherworks Marvel).</item>
+///   <item>Symbol-only form: "{E}{E}{E}" — no "Pay" prefix; count from symbol occurrences.</item>
+/// </list>
 /// MAST always emits the declared amount as a LiteralQuantity.
 /// </para>
 /// </summary>
@@ -27,7 +29,14 @@ public sealed class PayEnergyCostRule : IActivatedCostRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
-  // Form 2: "{E}{E}..." only — multi-symbol form with no leading word number.
+  // Form 2: "Pay {E}{E}..." — "Pay" prefix with pure symbol repetition (no word number).
+  // Count derived by counting the {E} symbols. (e.g. "Pay {E}{E}{E}" on Whirler Virtuoso.)
+  private static readonly Regex _paySymbolsPattern = new(
+    @"^Pay\s+(?:\{E\}\s*)+$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Form 3: "{E}{E}..." only — multi-symbol form with no leading word or "Pay".
   private static readonly Regex _symbolOnlyPattern = new(
     @"^(?:\{E\}\s*)+$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
@@ -61,6 +70,16 @@ public sealed class PayEnergyCostRule : IActivatedCostRule
       if (amount > 0)
       {
         return new PayEnergyCost { Amount = LiteralQuantity.Of(amount) };
+      }
+    }
+
+    // Try "Pay {E}{E}..." form (Pay prefix + pure symbol repetition).
+    if (_paySymbolsPattern.IsMatch(trimmed))
+    {
+      var count = _energySymbol.Matches(trimmed).Count;
+      if (count > 0)
+      {
+        return new PayEnergyCost { Amount = LiteralQuantity.Of(count) };
       }
     }
 
