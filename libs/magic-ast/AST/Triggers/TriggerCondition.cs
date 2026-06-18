@@ -396,6 +396,17 @@ public enum TriggerEvent
   /// </summary>
   CommitsACrime,
 
+  /// <summary>
+  /// A card is cycled by its controller — "When you cycle this card" (CR 702.29c:
+  /// "'When you cycle this card' means 'When you discard this card to pay an
+  /// activation cost of a cycling ability.' These abilities trigger from whatever
+  /// zone the card winds up in after it's cycled.").
+  /// CR 702.29 (verbatim): "Cycling is an activated ability that functions only
+  /// while the card with cycling is in a player's hand."
+  /// The Filter carries IsSelf=true to identify that this card is the one being cycled.
+  /// </summary>
+  Cycled,
+
   /// <summary>Unrecognized trigger event</summary>
   Other,
 }
