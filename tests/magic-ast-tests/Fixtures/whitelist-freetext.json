@@ -248,6 +248,12 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
+      "card": "HellkiteCharger",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/ForsakenMiner; the ConditionalPayEffect.Cost carries the structured {5}{R}{R})"
+    },
+    {
       "card": "HollowTrees",
       "sink": "OtherCondition",
       "tag": "debt",
