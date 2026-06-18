@@ -559,4 +559,11 @@ public enum KeywordAbility
   /// all collapse to this identity.
   /// </summary>
   Landcycling,
+
+  /// <summary>
+  /// Compleated (CR 702.150). A static ability on Phyrexian planeswalkers that
+  /// causes the planeswalker to enter with two fewer loyalty counters for each
+  /// Phyrexian mana symbol whose cost was paid with 2 life.
+  /// </summary>
+  Compleated,
 }
