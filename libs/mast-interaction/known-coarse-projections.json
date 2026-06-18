@@ -184,7 +184,8 @@
     "tapPermanents": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "unattachNamed": "KHM Toralf's Hammer 'Unattach Toralf's Hammer' inline activation cost (CR 702.6a Equip / CR 701.35 Unattach keyword-action) — the Equipment detaches from the equipped creature as part of paying the cost; no flow rule reads named-unattach costs yet; consciously inert for interaction recall",
     "untap": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
-    "payEnergy": "pay-energy-counter cost (CR 122.1 energy) — no flow rule reads energy payment yet; consciously inert for recall"
+    "payEnergy": "pay-energy-counter cost (CR 122.1 energy) — no flow rule reads energy payment yet; consciously inert for recall",
+    "putCounters": "place-counter activation cost (CR 122.1 — 'a counter is a marker placed on an object'; CR 602.1a — everything before the colon is the cost; Devoted Druid 'Put a -1/-1 counter on this creature:') — no flow rule reads put-counter costs yet; consciously inert for interaction recall"
   },
   "triggerEvent": {
     "AbilityActivated": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",

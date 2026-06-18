@@ -215,6 +215,39 @@ public sealed record PayEnergyCost : Cost
 }
 
 /// <summary>
+/// "Put N [type] counter(s) on [target]" — a cost that places counters as part of
+/// activating an ability. Used by cards like Devoted Druid:
+/// "Put a -1/-1 counter on this creature: Untap this creature."
+///
+/// <para>
+/// CR 122.1: "A counter is a marker placed on an object or player that modifies its
+/// characteristics and/or interacts with a rule, ability, or effect."
+/// CR 602.1a: "The activation cost is everything before the colon (:)."
+/// The placement of the counter is itself the cost; the engine resolves the counter
+/// placement at activation time.
+/// </para>
+/// </summary>
+[OracleCost("putCounters")]
+public sealed record PutCountersCost : Cost
+{
+  /// <summary>
+  /// The type of counter to place (e.g. "-1/-1", "+1/+1", "charge").
+  /// </summary>
+  public required string CounterType { get; init; }
+
+  /// <summary>
+  /// How many counters to place.
+  /// </summary>
+  public required Quantity Quantity { get; init; }
+
+  /// <summary>
+  /// What to place the counters on. Null means place on this permanent.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? Target { get; init; }
+}
+
+/// <summary>
 /// "Unattach [card name]" — the activation cost of undetaching a specifically named
 /// Equipment from the creature it is currently attached to. Unlike the parameterless
 /// <see cref="MagicAST.AST.Effects.Modification.UnattachEffect"/> (the effect of
