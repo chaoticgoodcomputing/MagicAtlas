@@ -65,6 +65,27 @@ public sealed record AddManaEffect : Effect
   public string? SpendRestriction { get; init; }
 
   /// <summary>
+  /// For "For each color among [permanents] you control, add one mana of that color"
+  /// (Bloom Tender / Vivid ability-word shape). The produced mana is one unit per
+  /// distinct color present among permanents matching this filter — a per-color
+  /// mana-production loop whose output is neither <see cref="AnyColor"/> (a single
+  /// freely-chosen color) nor a fixed <see cref="Mana"/> symbol.
+  ///
+  /// <para>
+  /// CR 605.1a: the enclosing activated ability is a mana ability — it doesn't require
+  /// a target, it could add mana when it resolves, and it's not a loyalty ability.
+  /// CR 106.4: "When an effect instructs a player to add mana, that mana goes into a
+  /// player's mana pool." Reference-not-resolution (ADR 0004): MAST records which
+  /// permanents to check; the engine evaluates the actual colors at resolution time.
+  /// </para>
+  ///
+  /// <para>When set, <see cref="Mana"/> is <c>""</c> (the color is dynamic) and
+  /// <see cref="AnyColor"/> / <see cref="OfChosenColor"/> are <c>false</c>.</para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectFilter? ForEachColorAmong { get; init; }
+
+  /// <summary>
   /// For variable amounts
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
