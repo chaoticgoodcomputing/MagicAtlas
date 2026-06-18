@@ -666,6 +666,18 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return youDrawAndLose;
     }
 
+    // "create a P1/T1 color1 sub1 creature token. If [condition], create a P2/T2 color2 sub2
+    // creature token instead." — two-sentence conditional token creation where the "instead"
+    // means the second token REPLACES the first when the condition holds (Rule 111 / CR 603).
+    // Must be tried BEFORE TryParseCompositeCreateTokens: the composite check fires on any
+    // text containing 2+ token specs (including this shape), producing a CompositeEffect of
+    // two unconditional creates — incorrect when the second is a conditional replacement.
+    var createOrInstead = Triggered.Rules.CreateTokenOrInsteadIfConditionRule.TryMatch(trimmed);
+    if (createOrInstead is not null)
+    {
+      return new List<Effect> { createOrInstead };
+    }
+
     // "create a P1/T1 color1 sub1 creature token, a P2/T2 color2 sub2 creature token,
     // and a P3/T3 color3 sub3 creature token" — multi-token composite triggered
     // effect (Rule 111). Tried before the single-rule loop so the comma-separated

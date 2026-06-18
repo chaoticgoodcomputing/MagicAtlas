@@ -506,6 +506,12 @@
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
+      "card": "TheNecrobloom",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition: CountCondition needs a DifferentNames axis on ObjectFilter to express \"seven or more lands with different names\" without free-text residual"
+    },
+    {
       "card": "TirelessProvisioner",
       "sink": "AbilityText",
       "tag": "irreducible",
