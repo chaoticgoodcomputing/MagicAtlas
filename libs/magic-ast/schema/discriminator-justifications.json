@@ -38,5 +38,10 @@
     "name": "conditional",
     "near": "conditionalPay",
     "reason": "Distinct effects sharing only the 'conditional' prefix. 'conditional' (ConditionalEffect) is an effect-level 'If [condition], [effect]' gate checked mid-ability-resolution (fires AFTER the preceding effects). 'conditionalPay' (ConditionalPayEffect) is the 'you may pay [cost]' optional-cost effect (CR 117.7), wrapped by OptionalEffect with its consequent on IfYouDo. Different concepts (a state gate vs an optional payment); not sprawl. Pre-existing pair surfaced when the lint first ran post-batch-8."
+  },
+  {
+    "name": "payLifeForColoredMana",
+    "near": "payLife",
+    "reason": "Distinct: 'payLife' is a life-payment effect/cost; 'payLifeForColoredMana' (K'rrik) is a mana-substitution permission — pay N life rather than a colored mana symbol in a cost (CR 107.4f analogue). Different concepts; prefix overlap only."
   }
 ]
