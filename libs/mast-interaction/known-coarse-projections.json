@@ -141,6 +141,7 @@
     "skipUntap": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "sneak": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "splice": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "spendManaAsAnyColor": "mana-payment flexibility (CR 609.4b 'spend mana as though it were mana of any color') \u2014 a color-restriction relaxation on mana already in the pool; no interaction flow rule reads mana-payment permissions yet; consciously inert for interaction recall",
     "surveil": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "suspend": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "tap": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
