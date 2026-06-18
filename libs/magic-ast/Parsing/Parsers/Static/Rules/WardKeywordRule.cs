@@ -7,12 +7,14 @@ using MagicAST.AST.Costs;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 using MagicAST.Parsing;
+using MagicAST.Parsing.Parsers.Activated;
 
 /// <summary>
-/// Parses Ward keyword abilities in two cost forms:
+/// Parses Ward keyword abilities in three cost forms:
 /// <list type="bullet">
 /// <item>Mana cost: "Ward {N}" — e.g. "Ward {2}"</item>
 /// <item>Life cost: "Ward—Pay N life." — e.g. "Ward—Pay 7 life."</item>
+/// <item>Sacrifice cost: "Ward—Sacrifice a [filter]." — e.g. "Ward—Sacrifice a Food."</item>
 /// </list>
 /// CR 702.21a: "Ward is a triggered ability. Ward [cost] means 'Whenever this permanent
 /// becomes the target of a spell or ability an opponent controls, counter that spell or
@@ -30,6 +32,13 @@ public sealed class WardKeywordRule : IStaticRule
   // Matches: "Ward—Pay N life." (em-dash separated life cost, CR 702.21a)
   private static readonly Regex LifeCostPattern = new(
     @"^\s*Ward—Pay\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life[.\s]*(?<rest>.*)$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches: "Ward—Sacrifice a [filter]." (em-dash separated sacrifice cost, CR 702.21a)
+  // Anchored at both ends so it cannot match as a substring of a more-specific pattern.
+  private static readonly Regex SacrificeCostPattern = new(
+    @"^\s*Ward—(?<saccost>Sacrifice\s+.+?)[.\s]*(?<rest>(?:\([^)]+\))?)\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -67,24 +76,46 @@ public sealed class WardKeywordRule : IStaticRule
     {
       // Try life cost form: "Ward—Pay N life."
       var lifeMatch = LifeCostPattern.Match(clause.RawText);
-      if (!lifeMatch.Success)
+      if (lifeMatch.Success)
       {
-        return null;
+        var rawAmount = lifeMatch.Groups["amount"].Value;
+        var amount = ParseNumberWord(rawAmount);
+        if (amount is null)
+        {
+          return null;
+        }
+
+        wardCost = new PayLifeCost { Amount = LiteralQuantity.Of(amount.Value) };
+
+        var rest = lifeMatch.Groups["rest"].Value.Trim();
+        if (rest.StartsWith('(') && rest.EndsWith(')'))
+        {
+          reminder = new Parenthetical { Text = rest };
+        }
       }
-
-      var rawAmount = lifeMatch.Groups["amount"].Value;
-      var amount = ParseNumberWord(rawAmount);
-      if (amount is null)
+      else
       {
-        return null;
-      }
+        // Try sacrifice cost form: "Ward—Sacrifice a [filter]."
+        var sacMatch = SacrificeCostPattern.Match(clause.RawText);
+        if (!sacMatch.Success)
+        {
+          return null;
+        }
 
-      wardCost = new PayLifeCost { Amount = LiteralQuantity.Of(amount.Value) };
+        var sacCostText = sacMatch.Groups["saccost"].Value.Trim();
+        var (quantity, filter) = ActivatedRuleHelpers.ParseSacrificePattern(sacCostText);
+        if (filter is null)
+        {
+          return null;
+        }
 
-      var rest = lifeMatch.Groups["rest"].Value.Trim();
-      if (rest.StartsWith('(') && rest.EndsWith(')'))
-      {
-        reminder = new Parenthetical { Text = rest };
+        wardCost = new SacrificeCost { Filter = filter, Quantity = quantity };
+
+        var rest = sacMatch.Groups["rest"].Value.Trim();
+        if (rest.StartsWith('(') && rest.EndsWith(')'))
+        {
+          reminder = new Parenthetical { Text = rest };
+        }
       }
     }
 

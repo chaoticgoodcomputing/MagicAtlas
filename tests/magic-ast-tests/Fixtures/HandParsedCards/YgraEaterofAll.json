@@ -1,0 +1,234 @@
+{
+  "Input": {
+    "Name": "Ygra, Eater of All",
+    "ManaCost": "{3}{B}{G}",
+    "TypeLine": "Legendary Creature — Elemental Cat",
+    "OracleText": "Ward—Sacrifice a Food.\nOther creatures are Food artifacts in addition to their other types and have \"{2}, {T}, Sacrifice this permanent: You gain 3 life.\"\nWhenever a Food is put into a graveyard from the battlefield, put two +1/+1 counters on Ygra.",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": [
+      "B",
+      "G"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Ygra, Eater of All",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Elemental Cat",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental",
+        "Cat"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Ward—Sacrifice a Food.\nOther creatures are Food artifacts in addition to their other types and have \"{2}, {T}, Sacrifice this permanent: You gain 3 life.\"\nWhenever a Food is put into a graveyard from the battlefield, put two +1/+1 counters on Ygra.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Ward",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesTarget",
+            "Filter": {
+              "Controller": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": {
+                  "Kind": "It"
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "ThatPlayer"
+                },
+                "Cost": {
+                  "CostType": "sacrifice",
+                  "Filter": {
+                    "Subtypes": [
+                      "Food"
+                    ]
+                  },
+                  "Quantity": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "ExcludeSelf": true
+                }
+              },
+              "AddedCardTypes": [
+                "artifact"
+              ],
+              "AddedSubtypes": [
+                "Food"
+              ]
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "ExcludeSelf": true
+                }
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "mana",
+                    "Symbols": [
+                      {
+                        "Kind": "generic",
+                        "GenericAmount": 2
+                      }
+                    ]
+                  },
+                  {
+                    "CostType": "tap"
+                  },
+                  {
+                    "CostType": "sacrifice",
+                    "Filter": {
+                      "CardTypes": [
+                        "permanent"
+                      ],
+                      "IsSelf": true
+                    },
+                    "Quantity": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    }
+                  }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "gainLife",
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 3
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                ],
+                "IsManaAbility": false
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "Subtypes": [
+                "Food"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        }
+      }
+    ]
+  }
+}
