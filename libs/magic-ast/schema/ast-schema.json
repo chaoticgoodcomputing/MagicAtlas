@@ -1115,6 +1115,14 @@
           ]
         },
         {
+          "Type": "EarthbendEffect",
+          "Discriminator": "earthbend",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count"
+          ]
+        },
+        {
           "Type": "EmergeEffect",
           "Discriminator": "emerge",
           "IsUnparsed": false,
@@ -2082,6 +2090,14 @@
           ]
         },
         {
+          "Type": "UnlockDoorEffect",
+          "Discriminator": "unlockDoor",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
           "Type": "UnparsedEffect",
           "Discriminator": "unparsed",
           "IsUnparsed": true,
@@ -2406,5 +2422,5 @@
       ]
     }
   ],
-  "SchemaHash": "301765aa937b0fe701676dfb2172967d6c9118801b0d6b8f85cc72493139734b"
+  "SchemaHash": "694d79dc6a81874212dd87f47f8c5f3dcb145906edd931008ddb6d6321e7bb48"
 }

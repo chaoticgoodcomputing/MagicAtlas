@@ -3,7 +3,7 @@
     "Name": "Ichormoon Gauntlet",
     "ManaCost": "{2}{U}",
     "TypeLine": "Artifact",
-    "OracleText": "Planeswalkers you control have “[0]: Proliferate” and “[−12]: Take an extra turn after this one.”\nWhenever you cast a noncreature spell, choose a counter on target permanent. Put an additional counter of that kind on that permanent.",
+    "OracleText": "Planeswalkers you control have \"[0]: Proliferate\" and \"[−12]: Take an extra turn after this one.\"\nWhenever you cast a noncreature spell, choose a counter on target permanent. Put an additional counter of that kind on that permanent.",
     "Colors": [
       "U"
     ],
@@ -20,7 +20,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Planeswalkers you control have “[0]: Proliferate” and “[−12]: Take an extra turn after this one.”\nWhenever you cast a noncreature spell, choose a counter on target permanent. Put an additional counter of that kind on that permanent.",
+      "RawText": "Planeswalkers you control have \"[0]: Proliferate\" and \"[−12]: Take an extra turn after this one.\"\nWhenever you cast a noncreature spell, choose a counter on target permanent. Put an additional counter of that kind on that permanent.",
       "Abilities": [
         {
           "Kind": "static",
