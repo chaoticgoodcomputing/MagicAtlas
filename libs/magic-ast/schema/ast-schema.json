@@ -332,6 +332,14 @@
           ]
         },
         {
+          "Type": "SourceCombatStateCondition",
+          "Discriminator": "sourceCombatState",
+          "IsUnparsed": false,
+          "Fields": [
+            "State"
+          ]
+        },
+        {
           "Type": "TriggeringAbilityIsManaCondition",
           "Discriminator": "triggeringAbilityIsMana",
           "IsUnparsed": false,
@@ -1416,6 +1424,14 @@
           ]
         },
         {
+          "Type": "NoCombatDamageEffect",
+          "Discriminator": "noCombatDamage",
+          "IsUnparsed": false,
+          "Fields": [
+            "Source"
+          ]
+        },
+        {
           "Type": "NoMaxHandSizeEffect",
           "Discriminator": "noMaxHandSize",
           "IsUnparsed": false,
@@ -1556,6 +1572,15 @@
           ]
         },
         {
+          "Type": "PutIntoLibraryAtPositionEffect",
+          "Discriminator": "putIntoLibraryAtPosition",
+          "IsUnparsed": false,
+          "Fields": [
+            "Card",
+            "Position"
+          ]
+        },
+        {
           "Type": "PutOnTopOfLibraryEffect",
           "Discriminator": "putOnTopOfLibrary",
           "IsUnparsed": false,
@@ -1691,6 +1716,15 @@
           ]
         },
         {
+          "Type": "SetLifeTotalEffect",
+          "Discriminator": "setLifeTotal",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player",
+            "Total"
+          ]
+        },
+        {
           "Type": "ShuffleEffect",
           "Discriminator": "shuffle",
           "IsUnparsed": false,
@@ -1724,6 +1758,14 @@
           "IsUnparsed": false,
           "Fields": [
             "Cost"
+          ]
+        },
+        {
+          "Type": "SpendManaAsAnyColorEffect",
+          "Discriminator": "spendManaAsAnyColor",
+          "IsUnparsed": false,
+          "Fields": [
+            "Beneficiary"
           ]
         },
         {
@@ -2160,5 +2202,5 @@
       ]
     }
   ],
-  "SchemaHash": "41f14e4dc4f33116e4b928aab6c64aea777e4a5d7320838b72af29a4d39fda50"
+  "SchemaHash": "2474399f0ecf375cad41e8d10e565ec8f2b1de72949fb8b753b5954f43281722"
 }
