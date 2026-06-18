@@ -314,6 +314,16 @@ internal static class TriggeredRuleHelpers
       return new ObjectFilter { CardTypes = ["creature"], IsEquipped = true };
     }
 
+    // "nontoken creature" / "a nontoken creature" — CR 111: tokens are permanents
+    // created by effects, not cards. "Nontoken" restricts the trigger to creature
+    // permanents that are not tokens (IsToken = false). Must be checked before the
+    // plain "a creature" branch because "a nontoken creature" does NOT contain the
+    // literal substring "a creature" — the two paths are mutually exclusive by text.
+    if (lower.Contains("nontoken creature"))
+    {
+      return new ObjectFilter { CardTypes = ["creature"], IsToken = false, Controller = controller };
+    }
+
     if (lower.Contains("a creature") || lower.Contains("another creature"))
     {
       // "another creature" excludes the source (CR 109.5) — mirrors the "another artifact"
