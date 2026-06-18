@@ -1115,6 +1115,15 @@
           ]
         },
         {
+          "Type": "GrantAlternativeCostEffect",
+          "Discriminator": "grantAlternativeCost",
+          "IsUnparsed": false,
+          "Fields": [
+            "AffectedSpells",
+            "AlternativeCost"
+          ]
+        },
+        {
           "Type": "HarmonizeEffect",
           "Discriminator": "harmonize",
           "IsUnparsed": false,
@@ -2098,5 +2107,5 @@
       ]
     }
   ],
-  "SchemaHash": "4ed4de40c4e295d7b5b783f4925a690c73942755152f29a56d45076bf6e1583e"
+  "SchemaHash": "d7236a79798d8d6265d85abefbccd669fb426cf5bde83f55cdd3ca6ea8ecb409"
 }
