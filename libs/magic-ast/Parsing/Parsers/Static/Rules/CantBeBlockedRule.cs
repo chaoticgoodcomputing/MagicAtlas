@@ -12,6 +12,18 @@ public sealed class CantBeBlockedRule : IStaticRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // Named-card self-reference: "[CardName] can't be blocked." — the subject is the card
+  // referring to itself by name (CR 201.5: a card's name in its own text means that object).
+  // Matches any clause that is exactly "[Capitalized name phrase] can't be blocked." with no
+  // qualifier — unconditional unblockability in self-by-name form. ANCHORED (^…$) to prevent
+  // matching inside broader clauses. The capitalized leading word disambiguates from generic
+  // lowercase nouns; it does NOT match "This creature", "Target creature", or filtered forms
+  // because those are handled by the other patterns above.
+  private static readonly Regex _cantBeBlockedSelfByNamePattern = new(
+    @"^\s*[A-Z][^,\n]+?\s+can'?t\s+be\s+blocked\.?\s*$",
+    RegexOptions.Compiled
+  );
+
   private static readonly Regex _cantBeBlockedByMoreThanOnePattern = new(
     @"^\s*This\s+(?:creature|permanent)\s+can'?t\s+be\s+blocked\s+by\s+more\s+than\s+one\s+creature\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
@@ -236,6 +248,22 @@ public sealed class CantBeBlockedRule : IStaticRule
               },
             },
           ],
+        },
+      ];
+    }
+
+    // Named-card self-reference: "[CardName] can't be blocked." — unconditional unblockability
+    // where the card names itself (CR 201.5). Placed last so it only fires after all the specific
+    // "This creature can't be blocked by [filter]" arms have had a chance to match. The pattern
+    // requires a capitalized opening word (a proper name, not a pronoun or article) and no
+    // trailing qualifier, making it highly specific to the self-by-name unconditional form.
+    if (_cantBeBlockedSelfByNamePattern.IsMatch(clause.RawText))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects = [new MagicAST.AST.Effects.Combat.CantBeBlockedEffect()],
         },
       ];
     }
