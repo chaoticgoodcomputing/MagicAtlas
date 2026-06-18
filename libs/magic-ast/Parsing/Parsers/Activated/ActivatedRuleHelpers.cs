@@ -83,9 +83,16 @@ internal static class ActivatedRuleHelpers
     // dual of the §6 trigger self-bind), replacing the free-text Characteristic.Other("this permanent")
     // marker. The interaction engine reads IsSelf to know a created token can never refuel a
     // self-sacrifice (a self-sac source is consumed once — ADR-0002 §8).
-    if (lower.Contains("this creature") || lower.Contains("this permanent"))
+    if (lower.Contains("this creature"))
     {
       filter = new ObjectFilter { CardTypes = ["creature"], IsSelf = true };
+    }
+    else if (lower.Contains("this permanent"))
+    {
+      // "this permanent" → CardTypes=["permanent"] (CR 110.4a: any permanent); distinct from
+      // "this creature" which names a specific card type. Ygra-family "Sacrifice this permanent"
+      // grants a self-sacrifice ability to creatures-acting-as-permanents.
+      filter = new ObjectFilter { CardTypes = ["permanent"], IsSelf = true };
     }
     else if (lower.Contains("this artifact"))
     {
