@@ -46,4 +46,13 @@ public sealed record CostReductionEffect : Effect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Condition? Condition { get; init; }
+
+  /// <summary>
+  /// Floor on the mana component of the cost after reduction — "this effect
+  /// can't reduce the mana in that cost to less than <c>N</c> mana" printed
+  /// on some cards (e.g. Forensic Gadgeteer: <c>1</c>). Null when no floor
+  /// is stated (default: the cost may be reduced to zero mana, per CR 601.2f).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? MinimumManaCost { get; init; }
 }

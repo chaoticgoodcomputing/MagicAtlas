@@ -115,6 +115,14 @@
           ]
         },
         {
+          "Type": "ObjectActivatedAbilityReference",
+          "Discriminator": "objectActivatedAbility",
+          "IsUnparsed": false,
+          "Fields": [
+            "PermanentFilter"
+          ]
+        },
+        {
           "Type": "SpellReference",
           "Discriminator": "spell",
           "IsUnparsed": false,
@@ -2152,5 +2160,5 @@
       ]
     }
   ],
-  "SchemaHash": "6859621695374064ba30c74868f351d4230581ceb8185c68a9c69cc86a4b6ee4"
+  "SchemaHash": "41f14e4dc4f33116e4b928aab6c64aea777e4a5d7320838b72af29a4d39fda50"
 }
