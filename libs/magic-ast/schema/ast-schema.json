@@ -504,6 +504,14 @@
           ]
         },
         {
+          "Type": "UnattachNamedCost",
+          "Discriminator": "unattachNamed",
+          "IsUnparsed": false,
+          "Fields": [
+            "CardName"
+          ]
+        },
+        {
           "Type": "UntapCost",
           "Discriminator": "untap",
           "IsUnparsed": false,
@@ -2251,5 +2259,5 @@
       ]
     }
   ],
-  "SchemaHash": "15583f71bfe5ce6f26cb2f1f9ff7111d44acbe010cc76a463c26a6eb10abd63f"
+  "SchemaHash": "e9bb58c356929d51f0bd62a8e64d2a03b845063b8fdc6334e139fdc324a0ddbd"
 }
