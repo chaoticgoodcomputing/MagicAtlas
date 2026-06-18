@@ -460,6 +460,14 @@ internal static class StaticRuleHelpers
         KeywordSource = KeywordAbility.Haunt,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haunt }],
       },
+      // Riot (Rule 702.136): this creature enters with your choice of a +1/+1 counter or
+      // haste. A parameterless keyword marker — MAST records keyword presence; the choice
+      // and counter/haste application semantics are engine territory.
+      "riot" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Riot,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Riot }],
+      },
       _ => null,
     };
   }
