@@ -7,27 +7,32 @@ using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
 namespace MagicAtlas.Ast.Tests.Flows.InteractionTriage.Steps;
 
 /// <summary>
-/// The reconstructed cycles, computed in C# via the direct MAST APIs (<c>PortGraphEngine.FindCycles</c>)
-/// rather than re-derived in Python from the flat edges — so the viz renders the engine's
-/// <b>cycle-level verdict</b> (the worst hop floored by §8 firability + the multi-cost conjunction),
-/// which a per-edge export cannot express. Bounded to length ≤5. NOTE the reach here is DELIBERATELY
-/// lower than the per-combo bench's <see cref="PortGraphEngine.DefaultReconstructionReach"/> (=6): this
-/// step enumerates cycles over the whole-corpus UNION graph (every parse-ready card at once), where
-/// cycle enumeration is exponential in the length bound — length 6 over the union is intractable (minutes+),
-/// while length 6 over a 2-3 card bench combo is trivial. So the two reaches are scoped to their graph
-/// size: 6 for the tiny per-combo bench, 5 for the large union viz (the cast-recursion blink loop that
-/// motivated reach 6 is a per-combo reconstruction, reflected in the bench, not the union viz). This is
-/// exactly the graph-size × reach cost the cycle-enumeration feasibility memo describes
-/// (libs/mast-interaction/docs/cycle-enumeration-acceleration.md). Single-card loops dropped (no 1-card combo exists in MTG), deduped by node set, ranked
+/// The reconstructed cycles, computed in C# via the TWO-LAYER MAST API
+/// (<c>PortGraphEngine.FindCyclesByLabelGraph</c>) rather than re-derived in Python from the flat edges —
+/// so the viz renders the engine's <b>cycle-level verdict</b> (the worst hop floored by §8 firability +
+/// the multi-cost conjunction), which a per-edge export cannot express. The two-layer engine runs the
+/// elementary-cycle enumeration over the grammar-bounded distinct-LABEL graph (~545 atoms) and then
+/// re-instantiates only the admissible instance subset — making the whole-corpus UNION enumeration
+/// tractable where the reference <see cref="PortGraphEngine.FindCycles"/> stalled for hours. The result
+/// is proven byte-identical in tiers to the reference (PortWalkTwoLayerEquivalenceTest + bench
+/// TwoLayerEquivalenceTest). The old hop-length bound is GONE from the search and demoted to
+/// <c>DisplayMaxCards</c> — a post-enumeration filter on a cycle's DISTINCT-card count (the design's
+/// cards-based demotion; libs/mast-interaction/docs/cycle-enumeration-acceleration.md).
+/// Single-card loops dropped (no 1-card combo exists in MTG), deduped by node set, ranked
 /// GREEN-verdict-first then shortest, and PER-TIER display-capped (verified/partial/derived each capped
 /// so all three appear — partial + derived each far exceed a flat cap). One <see cref="CycleEdgeRow"/> per hop.
 /// </summary>
 [FlowthruStep]
 public static class MaterializeCyclesStep
 {
-  // Union-graph reach: stays at 5 (length 6 over the whole-corpus union is intractable). The per-combo
-  // bench uses PortGraphEngine.DefaultReconstructionReach (=6); see the class doc for why they differ.
-  private const int LengthBound = 5;
+  // The two-layer engine (FindCyclesByLabelGraph) runs the elementary-cycle enumeration over the
+  // grammar-bounded distinct-LABEL graph (~545 cycle-relevant atoms, a ~54× dedup of the 29,615 cards)
+  // rather than the ~100k-port instance graph the reference FindCycles walks directly — which made the
+  // old length-5 union enumeration stall for hours. The two-layer result is proven byte-identical in
+  // tiers (PortWalkTwoLayerEquivalenceTest + bench TwoLayerEquivalenceTest, 62 sentinels + 33 combos).
+  // The old hop-length bound is GONE from the search; it is demoted to DisplayMaxCards, a post-
+  // enumeration filter on the count of DISTINCT CARDS a cycle spans (a combo is a small card set).
+  private const int DisplayMaxCards = 5;
   private const int PerTierCap = 60;
 
   public static Func<
@@ -113,7 +118,7 @@ public static class MaterializeCyclesStep
         };
 
       var ranked = engine
-        .FindCycles(edges, LengthBound)
+        .FindCyclesByLabelGraph(edges, DisplayMaxCards)
         // No 1-card combo exists in MTG — a loop whose ports all belong to one card is an artifact.
         .Where(c =>
           c.Edges.SelectMany(e => new[] { e.From.Card, e.To.Card })
