@@ -1,0 +1,210 @@
+{
+  "Input": {
+    "Name": "Captain Rex Nebula",
+    "ManaCost": "{1}{R}{W}",
+    "TypeLine": "Legendary Creature — Human Pilot Employee",
+    "OracleText": "At the beginning of combat on your turn, choose target nonland permanent you control. Until end of turn, it becomes a Vehicle artifact with base power and toughness each equal to its mana value, and it gains crew 2 and \"Crash Land — Whenever this Vehicle deals damage, roll a six-sided die. If the result is equal to this Vehicle's mana value, sacrifice this Vehicle, then it deals that much damage to any target.\"",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Captain Rex Nebula",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Pilot Employee",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Pilot",
+        "Employee"
+      ]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of combat on your turn, choose target nonland permanent you control. Until end of turn, it becomes a Vehicle artifact with base power and toughness each equal to its mana value, and it gains crew 2 and \"Crash Land — Whenever this Vehicle deals damage, roll a six-sided die. If the result is equal to this Vehicle's mana value, sacrifice this Vehicle, then it deals that much damage to any target.\"",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Combat",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "becomesPermanent",
+              "Subject": {
+                "Kind": "Target",
+                "Filter": {
+                  "ExcludedCardTypes": [
+                    "land"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "Power": {
+                "QuantityType": "derived",
+                "DerivedFrom": "ManaValue"
+              },
+              "Toughness": {
+                "QuantityType": "derived",
+                "DerivedFrom": "ManaValue"
+              },
+              "Colors": [],
+              "CardTypes": [
+                "artifact"
+              ],
+              "AddedSubtypes": [
+                "Vehicle"
+              ],
+              "GainedAbilities": [
+                {
+                  "Kind": "static",
+                  "KeywordSource": "Crew",
+                  "Effects": [
+                    {
+                      "EffectType": "crew",
+                      "Power": {
+                        "QuantityType": "literal",
+                        "Value": 2
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Kind": "triggered",
+                  "AbilityWord": "Crash Land",
+                  "Trigger": {
+                    "Timing": "Whenever",
+                    "Event": "DealsDamage",
+                    "Filter": {
+                      "IsSelf": true
+                    }
+                  },
+                  "Effects": [
+                    {
+                      "EffectType": "rollDie",
+                      "Sides": 6
+                    },
+                    {
+                      "EffectType": "conditional",
+                      "Condition": {
+                        "ConditionType": "quantityComparison",
+                        "Left": {
+                          "QuantityType": "dieRollResult"
+                        },
+                        "Operator": "Equal",
+                        "Right": {
+                          "QuantityType": "derived",
+                          "DerivedFrom": "ManaValue",
+                          "Source": "this Vehicle"
+                        }
+                      },
+                      "Then": {
+                        "EffectType": "composite",
+                        "Effects": [
+                          {
+                            "EffectType": "sacrifice",
+                            "Target": {
+                              "Kind": "Self"
+                            }
+                          },
+                          {
+                            "EffectType": "dealDamage",
+                            "Amount": {
+                              "QuantityType": "dieRollResult"
+                            },
+                            "Target": {
+                              "Kind": "AnyTarget"
+                            },
+                            "Source": {
+                              "Kind": "Self"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ],
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
