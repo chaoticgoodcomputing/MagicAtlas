@@ -64,3 +64,26 @@ public sealed record SpellReference : AbilityReference
   /// <summary>The characteristics a matched spell must have (e.g. subtype Aura).</summary>
   public required ObjectFilter Filter { get; init; }
 }
+
+/// <summary>
+/// Matches <b>activated abilities</b> that belong to a class of permanents
+/// identified by <see cref="PermanentFilter"/> — Forensic Gadgeteer's
+/// "Activated abilities of artifacts you control" (CR 602.1c). Unlike
+/// <see cref="ActivatedAbilityReference"/> (which keys on a keyword identity),
+/// this variant keys on the <i>permanent's</i> card-type characteristics, so
+/// it clusters cards that reduce activation costs for a whole category of
+/// permanents (Vedalken Orrery-style effects, rock-reduction effects).
+///
+/// <para>
+/// The <c>Controller</c> base field carries "you control" when present.
+/// </para>
+/// </summary>
+[AbilityReferenceKind("objectActivatedAbility")]
+public sealed record ObjectActivatedAbilityReference : AbilityReference
+{
+  /// <summary>
+  /// The filter that the <em>permanent</em> owning the activated ability must satisfy
+  /// (e.g. <c>CardTypes: ["artifact"], Controller: You</c> for "artifacts you control").
+  /// </summary>
+  public required ObjectFilter PermanentFilter { get; init; }
+}

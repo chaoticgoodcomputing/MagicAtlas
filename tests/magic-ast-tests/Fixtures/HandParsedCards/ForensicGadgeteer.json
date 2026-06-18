@@ -1,0 +1,124 @@
+{
+  "Input": {
+    "Name": "Forensic Gadgeteer",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Creature — Vedalken Artificer Detective",
+    "OracleText": "Whenever you cast an artifact spell, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\nActivated abilities of artifacts you control cost {1} less to activate. This effect can't reduce the mana in that cost to less than one mana.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Forensic Gadgeteer",
+    "TypeLine": {
+      "Raw": "Creature — Vedalken Artificer Detective",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vedalken",
+        "Artificer",
+        "Detective"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever you cast an artifact spell, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\nActivated abilities of artifacts you control cost {1} less to activate. This effect can't reduce the mana in that cost to less than one mana.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell",
+                "artifact"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "investigate"
+            }
+          ],
+          "Reminder": {
+            "Text": "Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\""
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "AppliesTo": {
+                "Kind": "objectActivatedAbility",
+                "PermanentFilter": {
+                  "CardTypes": [
+                    "artifact"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "MinimumManaCost": 1
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
