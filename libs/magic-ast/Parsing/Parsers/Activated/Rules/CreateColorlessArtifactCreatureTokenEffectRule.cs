@@ -86,10 +86,13 @@ public sealed class CreateColorlessArtifactCreatureTokenEffectRule : IActivatedE
     {
       var keywordText = m.Groups["keyword"].Value.Trim().ToLowerInvariant();
       var grantedAbility = ActivatedRuleHelpers.BuildGrantedKeywordAbility(keywordText);
-      if (grantedAbility is not null)
+      if (grantedAbility is null)
       {
-        tokenAbilities = [grantedAbility];
+        // The text grants a keyword this helper does not model — bail rather than emit a token that
+        // SILENTLY DROPS the granted ability (CR 111.3). Falls through to unparsed for honesty.
+        return null;
       }
+      tokenAbilities = [grantedAbility];
     }
 
     return new CreateTokenEffect
