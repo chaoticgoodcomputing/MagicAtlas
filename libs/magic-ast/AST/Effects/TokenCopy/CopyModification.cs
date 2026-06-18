@@ -97,3 +97,27 @@ public sealed record TriggeredAbilityAdder : CopyModification
   /// </summary>
   public required TriggeredAbility Ability { get; init; }
 }
+
+/// <summary>
+/// "except it's [color]" — overrides the copy's colors (CR 707.2 copiable values).
+/// The copy becomes exactly the specified colors, replacing the original's color
+/// characteristic. Preston, the Vanisher: "create a token that's a copy of that
+/// creature, except it's a 0/1 white Illusion" — the token is white regardless of
+/// the copied creature's colors.
+///
+/// <para>
+/// CR 707.2: "When copying an object, the copy acquires the copiable values of the
+/// original object's characteristics … except those characteristics are modified as
+/// specified by the effect that created the copy." The color is a copiable value
+/// (CR 613.1a — a characteristic) so an "except it's [color]" clause replaces it.
+/// </para>
+/// </summary>
+[CopyModificationKind("colorOverride")]
+public sealed record ColorOverride : CopyModification
+{
+  /// <summary>
+  /// The colors the token is, as single-letter codes (e.g. <c>["W"]</c> for white).
+  /// An empty list means the token is colorless.
+  /// </summary>
+  public required IReadOnlyList<string> Colors { get; init; }
+}

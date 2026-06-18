@@ -371,6 +371,14 @@
           ]
         },
         {
+          "Type": "ColorOverride",
+          "Discriminator": "colorOverride",
+          "IsUnparsed": false,
+          "Fields": [
+            "Colors"
+          ]
+        },
+        {
           "Type": "PowerToughnessOverride",
           "Discriminator": "powerToughnessOverride",
           "IsUnparsed": false,
@@ -2276,5 +2284,5 @@
       ]
     }
   ],
-  "SchemaHash": "fca257c8e4ea2bff0a502d293b3b602265c3596b0e60617bda6237601a8d9f0e"
+  "SchemaHash": "85f97a189e3ede3f3a3985e558e9987d614d84d372b8e333a938f2704db3d5e8"
 }
