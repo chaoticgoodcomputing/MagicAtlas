@@ -560,6 +560,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "SwiftReconfiguration",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic — 'creature or Vehicle' is a cross-axis disjunction (card type OR artifact subtype); ObjectFilter has no structured OR field spanning CardTypes and Subtypes axes; consistent with DFT/BroodheartEngine 'creature or Vehicle card' encoding"
+    },
+    {
       "card": "THS/TritonFortuneHunter",
       "sink": "OtherCharacteristic",
       "tag": "debt",
