@@ -265,6 +265,16 @@ public enum TriggerEvent
   /// <summary>A spell is cast</summary>
   SpellCast,
 
+  /// <summary>
+  /// A spell is cast OR copied (the Magecraft ability-word trigger — CR 207.2c lists
+  /// "magecraft" as an ability word). CR 707.10: "a copy of a spell isn't cast" — so
+  /// the union event "cast or copy" is distinct from <see cref="SpellCast"/> alone.
+  /// Oracle text: "Whenever you cast or copy an instant or sorcery spell, …"
+  /// The <see cref="TriggerCondition.Filter"/> carries the type qualifier
+  /// (CardTypes = ["spell", "instant", "sorcery"]) and controller restriction.
+  /// </summary>
+  CastOrCopySpell,
+
   /// <summary>An ability is activated</summary>
   AbilityActivated,
 
