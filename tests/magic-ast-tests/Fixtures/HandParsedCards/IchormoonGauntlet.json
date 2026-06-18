@@ -1,0 +1,138 @@
+{
+  "Input": {
+    "Name": "Ichormoon Gauntlet",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Artifact",
+    "OracleText": "Planeswalkers you control have “[0]: Proliferate” and “[−12]: Take an extra turn after this one.”\nWhenever you cast a noncreature spell, choose a counter on target permanent. Put an additional counter of that kind on that permanent.",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Ichormoon Gauntlet",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Planeswalkers you control have “[0]: Proliferate” and “[−12]: Take an extra turn after this one.”\nWhenever you cast a noncreature spell, choose a counter on target permanent. Put an additional counter of that kind on that permanent.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "planeswalker"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [],
+                "Effects": [
+                  {
+                    "EffectType": "proliferate"
+                  }
+                ],
+                "IsManaAbility": false,
+                "LoyaltyCost": 0
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "planeswalker"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [],
+                "Effects": [
+                  {
+                    "EffectType": "takeExtraTurn",
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                ],
+                "IsManaAbility": false,
+                "LoyaltyCost": -12
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell"
+              ],
+              "ExcludedCardTypes": [
+                "creature"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putAdditionalCounterOfChosenKind",
+              "Target": {
+                "Kind": "Target"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
