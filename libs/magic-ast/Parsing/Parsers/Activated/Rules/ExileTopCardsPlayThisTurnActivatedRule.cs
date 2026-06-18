@@ -22,7 +22,7 @@ using MagicAST.AST.References;
 /// </para>
 ///
 /// <para>
-/// CR 406 (exile zone); CR 701.13 (exile); CR 701.14 ("play").
+/// CR 406 (exile zone); CR 701.13 (exile); CR 701.18 ("play").
 /// </para>
 ///
 /// <para>

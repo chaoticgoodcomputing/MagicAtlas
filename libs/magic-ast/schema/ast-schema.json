@@ -1348,6 +1348,12 @@
           ]
         },
         {
+          "Type": "ManaPersistsUntilEndOfTurnEffect",
+          "Discriminator": "manaPersists",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "MayCastTargetFromGraveyardEffect",
           "Discriminator": "mayCastTargetFromGraveyard",
           "IsUnparsed": false,
@@ -1427,6 +1433,15 @@
             "AllowDuplicates",
             "ModeSelection",
             "Modes"
+          ]
+        },
+        {
+          "Type": "ModifyBoastActivationLimitEffect",
+          "Discriminator": "modifyBoastActivationLimit",
+          "IsUnparsed": false,
+          "Fields": [
+            "NewLimit",
+            "Target"
           ]
         },
         {
@@ -2341,5 +2356,5 @@
       ]
     }
   ],
-  "SchemaHash": "1b7572a849afa69e8bb3aa156d750c0e44f2cb63cca8028e6cc1cf6f7b23e60b"
+  "SchemaHash": "3e51330ae31470f53f423d0d1aa0ce18d3768f1ffb25f8087ccef0df62426c6e"
 }

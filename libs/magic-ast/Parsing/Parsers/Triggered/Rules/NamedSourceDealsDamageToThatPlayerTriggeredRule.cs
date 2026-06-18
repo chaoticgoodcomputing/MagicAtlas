@@ -10,7 +10,7 @@ using MagicAST.AST.References;
 /// "[CardName] deals N damage to that player." — named-source self-ping effect
 /// directed at the trigger's named player. Covers triggered abilities whose effect
 /// reads "[CardName] deals N damage to that player." where the card refers to
-/// itself by its own printed name (CR 201.4 — a card's name in its own text refers
+/// itself by its own printed name (CR 201.5 — a card's name in its own text refers
 /// to itself). MAST resolves the self-reference to
 /// <see cref="ObjectReferenceKind.Self"/>. "That player" back-references whichever
 /// player caused the trigger to fire (CR 603.2: the event-match player).
@@ -47,7 +47,7 @@ public sealed class NamedSourceDealsDamageToThatPlayerTriggeredRule : ITriggered
       return false;
     }
 
-    // Subject must begin with a capital letter — card names are capitalised (CR 201.4).
+    // Subject must begin with a capital letter — card names are capitalised (CR 201.5).
     var subject = m.Groups["subject"].Value;
     if (!char.IsUpper(subject[0]))
     {

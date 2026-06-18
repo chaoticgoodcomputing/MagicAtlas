@@ -9,7 +9,7 @@ using MagicAST.AST.References;
 /// <summary>
 /// "that player draws an additional card" — a draw-step trigger effect that makes
 /// the player whose draw step is occurring draw one extra card. "That player" is
-/// the pronoun for the trigger's named player (CR 603.2b: "at the beginning of"
+/// the pronoun for the trigger's named player (CR 603.2: "at the beginning of"
 /// fires for the active player; "that player" back-references whoever owns that
 /// step). The "additional" qualifier is oracle flavour; mechanically this is
 /// identical to drawing one card (CR 121.1: "A player draws a card by putting the

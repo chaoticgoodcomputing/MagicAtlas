@@ -621,7 +621,9 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     // "deals" is a named-creature damage effect and therefore an effect start.
     // The named-card oracle convention capitalises the self-reference (CR 201.3).
     // Match: starts with an uppercase letter, followed by non-comma text, then " deals ".
-    if (Regex.IsMatch(tail, @"^[A-Z]\S.*\s+deals?\s+", RegexOptions.None))
+    // Use [^,]* (NOT .*) so the match cannot span an internal comma/clause boundary — a greedy .*
+    // here swallowed across commas and mis-split multi-clause triggers on sibling cards (regression).
+    if (Regex.IsMatch(tail, @"^[A-Z]\S[^,]*\s+deals?\s+", RegexOptions.None))
     {
       return true;
     }

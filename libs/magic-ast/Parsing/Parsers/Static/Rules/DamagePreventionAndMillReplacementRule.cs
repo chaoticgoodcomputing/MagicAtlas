@@ -12,11 +12,11 @@ using MagicAST.AST.References;
 ///
 /// CR 615.1: some continuous effects are prevention effects; they watch for a
 /// damage event that would happen and completely prevent the damage that would be
-/// dealt. CR 615.1a: effects that use the word "prevent" are prevention effects.
+/// dealt. CR 615.1: effects that use the word "prevent" are prevention effects.
 /// CR 615.5: some prevention effects also include an additional effect, which may
 /// refer to the amount of damage that was prevented.
 ///
-/// CR 701.17a: to mill a number of cards is to put that many cards from the top
+/// CR 701.17: to mill a number of cards is to put that many cards from the top
 /// of a player's library into their graveyard.
 ///
 /// Structure: a <c>StaticAbility</c> with a <c>ReplacementEffect</c> that:
@@ -75,7 +75,7 @@ public sealed class DamagePreventionAndMillReplacementRule : IStaticRule
             {
               Effects =
               [
-                // "prevent that damage" — the prevention action (CR 615.1a).
+                // "prevent that damage" — the prevention action (CR 615.1).
                 // Target: the opponent who would have received the damage.
                 new MagicAST.AST.Effects.Damage.PreventDamageEffect
                 {
