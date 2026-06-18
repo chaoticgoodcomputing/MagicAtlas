@@ -43,5 +43,10 @@
     "name": "payLifeForColoredMana",
     "near": "payLife",
     "reason": "Distinct: 'payLife' is a life-payment effect/cost; 'payLifeForColoredMana' (K'rrik) is a mana-substitution permission — pay N life rather than a colored mana symbol in a cost (CR 107.4f analogue). Different concepts; prefix overlap only."
+  },
+  {
+    "name": "blight",
+    "near": "fight",
+    "reason": "Distinct effects: 'blight' (High Perfect Morcant) puts -1/-1 counters / affliction on a target; 'fight' (CR 701.12) makes two creatures deal damage equal to power to each other. Edit distance 1 (b/f) is coincidental; no semantic overlap."
   }
 ]
