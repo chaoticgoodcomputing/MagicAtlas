@@ -60,7 +60,36 @@ public sealed class PutCountersEffectRule : IActivatedEffectRule
 
     // Parse target
     ObjectReference target;
-    if (
+
+    // "put a +1/+1 counter on each other [Subtype] you control" — mass-counter
+    // shape for lord-style activated abilities (e.g. Camellia, the Seedmiser).
+    // Must be matched before the "target creature" / "this creature" paths so the
+    // "each other" quantifier and subtype filter land correctly on an Each reference.
+    // The subtype is captured without requiring a trailing "creature" word because
+    // oracle text may use just the subtype name (e.g. "each other Squirrel you control"
+    // rather than "each other Squirrel creature you control").
+    var eachOtherSubtypeMatch = Regex.Match(
+      effectText,
+      @"\bon\s+each\s+other\s+(?<subtype>[A-Z][a-z]+)\s+you\s+control\b",
+      RegexOptions.IgnoreCase
+    );
+    if (eachOtherSubtypeMatch.Success)
+    {
+      var subtype = eachOtherSubtypeMatch.Groups["subtype"].Value;
+      subtype = char.ToUpperInvariant(subtype[0]) + subtype[1..].ToLowerInvariant();
+      target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Subtypes = [subtype],
+          Controller = ControllerFilter.You,
+          ExcludeSelf = true,
+        },
+      };
+    }
+    else if (
       lower.Contains("this creature")
       || lower.Contains("this permanent")
       || lower.Contains("this artifact")

@@ -240,6 +240,9 @@ public enum KeywordAbility
   /// <summary>Forestwalk (CR 702.14).</summary>
   Forestwalk,
 
+  /// <summary>Forage (CR 701.61) — keyword action cost. "Exile three cards from your graveyard or sacrifice a Food."</summary>
+  Forage,
+
   /// <summary>Foretell (CR 702).</summary>
   Foretell,
 
