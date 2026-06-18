@@ -333,6 +333,14 @@ public enum TriggerEvent
   /// </summary>
   TapsForMana,
 
+  /// <summary>
+  /// A player commits a crime — casts a spell, activates an ability, or puts a triggered
+  /// ability on the stack that targets at least one opponent, a permanent/spell/ability an
+  /// opponent controls, and/or a card in an opponent's graveyard (CR 700.13).
+  /// Oracle text: "Whenever you commit a crime, …"
+  /// </summary>
+  CommitsACrime,
+
   /// <summary>Unrecognized trigger event</summary>
   Other,
 }

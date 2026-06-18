@@ -177,6 +177,7 @@
     "BecomesUntapped": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "Blocks": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "BlocksOrBecomesBlocked": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "CommitsACrime": "crime-mechanic trigger (CR 700.13) \u2014 fires when a player targets an opponent, their permanents/spells/abilities, or their graveyard cards; no flow rule consumes it yet; consciously inert for interaction recall",
     "ControlNoLandType": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "CounterPlaced": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "CounterRemoved": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",

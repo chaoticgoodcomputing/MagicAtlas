@@ -194,6 +194,12 @@
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
+      "card": "ForsakenMiner",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct"
+    },
+    {
       "card": "FreshFacedRecruit",
       "sink": "OtherCondition",
       "tag": "debt",
