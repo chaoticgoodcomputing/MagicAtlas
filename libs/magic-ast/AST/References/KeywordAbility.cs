@@ -88,6 +88,10 @@ public enum KeywordAbility
   /// <summary>Cascade (CR 702).</summary>
   Cascade,
 
+  /// <summary>Casualty (CR 702.153). Parameterized — the integer N is carried by the
+  /// expanded sacrifice cost, not this identity.</summary>
+  Casualty,
+
   /// <summary>Changeling (CR 702).</summary>
   Changeling,
 
