@@ -1,5 +1,7 @@
 namespace MagicAST.AST.Effects.Timing;
 
+using System.Text.Json.Serialization;
+using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
@@ -27,8 +29,25 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// additional combat phase"). The specific insertion mechanics (which phase becomes
 /// the postcombat main, etc.) are engine territory (CR 505.1a, 505.1b).
 /// </para>
+///
+/// <para>
+/// When <see cref="OnlyAttackers"/> is set, the oracle text constrains which
+/// creatures may attack during the inserted combat phase — e.g. "Only land
+/// creatures can attack during that combat phase." (CR 508.1c: attacker
+/// restrictions are applied when the active player declares attackers). The filter
+/// describes the only <em>permitted</em> attacker class; all other creatures are
+/// implicitly restricted. Null for the common unrestricted form.
+/// </para>
 /// </summary>
 [OracleEffect("additionalCombatPhase")]
 public sealed record AdditionalCombatPhaseEffect : Effect
 {
+  /// <summary>
+  /// When set, only creatures matching this filter may attack during the inserted
+  /// combat phase. Represents oracle text of the form "Only [filter] can attack
+  /// during that combat phase." (CR 508.1c — attacker restrictions).
+  /// Null for the unrestricted form.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectFilter? OnlyAttackers { get; init; }
 }
