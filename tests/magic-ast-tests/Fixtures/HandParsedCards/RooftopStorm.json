@@ -1,0 +1,86 @@
+{
+  "Input": {
+    "Name": "Rooftop Storm",
+    "ManaCost": "{5}{U}",
+    "TypeLine": "Enchantment",
+    "OracleText": "You may pay {0} rather than pay the mana cost for Zombie creature spells you cast.",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Rooftop Storm",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You may pay {0} rather than pay the mana cost for Zombie creature spells you cast.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "grantAlternativeCost",
+              "AlternativeCost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 0
+                  }
+                ]
+              },
+              "AffectedSpells": {
+                "CardTypes": [
+                  "spell",
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Zombie"
+                ],
+                "Controller": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
