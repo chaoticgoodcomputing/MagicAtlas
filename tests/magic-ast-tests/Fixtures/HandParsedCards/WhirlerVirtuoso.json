@@ -1,0 +1,182 @@
+{
+  "Input": {
+    "Name": "Whirler Virtuoso",
+    "ManaCost": "{1}{U}{R}",
+    "TypeLine": "Creature — Vedalken Artificer",
+    "OracleText": "When this creature enters, you get {E}{E}{E} (three energy counters).\nPay {E}{E}{E}: Create a 1/1 colorless Thopter artifact creature token with flying.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": [
+      "R",
+      "U"
+    ],
+    "ColorIdentity": [
+      "R",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Whirler Virtuoso",
+    "TypeLine": {
+      "Raw": "Creature — Vedalken Artificer",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vedalken",
+        "Artificer"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, you get {E}{E}{E} (three energy counters).\nPay {E}{E}{E}: Create a 1/1 colorless Thopter artifact creature token with flying.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "gainEnergy",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "three energy counters"
+          }
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "payEnergy",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": [
+                  "C"
+                ],
+                "Types": [
+                  "artifact",
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Thopter"
+                ],
+                "Abilities": [
+                  {
+                    "Kind": "static",
+                    "Effects": [
+                      {
+                        "EffectType": "evasion",
+                        "CanBeBlockedBy": {
+                          "CardTypes": [
+                            "creature"
+                          ],
+                          "Characteristics": [
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Flying"
+                            },
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Reach"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "KeywordSource": "Flying"
+                  }
+                ],
+                "IsCopy": false
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
