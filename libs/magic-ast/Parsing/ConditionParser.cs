@@ -119,6 +119,19 @@ public static class ConditionParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
+  /// "it's a Unicorn" / "it's an Elf" — a subtype predicate on the "it" pronoun,
+  /// checking whether the designated object has the stated creature subtype. The standard
+  /// oracle form for subtype-conditional counter boosts and similar effects
+  /// (e.g. Emiel the Blessed: "if it's a Unicorn, put two +1/+1 counters on it instead").
+  /// Structured to <see cref="ObjectHasSubtypeCondition"/> rather than left as a free-text
+  /// <see cref="OtherCondition"/> residual. Anchored (^…$); uppercase-first subtype word.
+  /// CR 205.3m: creature subtypes are always a single proper-cased word.
+  /// </summary>
+  private static readonly Regex ItsASubtype = new(
+    @"^it(?:'s|\s+is)\s+an?\s+(?<subtype>[A-Z][a-zA-Z]*)$",
+    RegexOptions.Compiled);
+
+  /// <summary>
   /// "there are four or more card types among cards in your graveyard" — the Delirium
   /// mechanic's activation gate (CR 207.2c: Delirium is an ability word with no special
   /// rules meaning; the condition is the diversity-count predicate). Structured to a
@@ -257,6 +270,15 @@ public static class ConditionParser
         Count = Quant(ctd.Groups["quant"].Value, ctd.Groups["dir"].Value),
         Zone = zoneEnum,
         Owner = owner,
+      };
+    }
+
+    if (ItsASubtype.Match(body) is { Success: true } ias)
+    {
+      return new ObjectHasSubtypeCondition
+      {
+        Subtype = ias.Groups["subtype"].Value,
+        Subject = "It",
       };
     }
 

@@ -314,6 +314,15 @@
           ]
         },
         {
+          "Type": "ObjectHasSubtypeCondition",
+          "Discriminator": "objectHasSubtype",
+          "IsUnparsed": false,
+          "Fields": [
+            "Subject",
+            "Subtype"
+          ]
+        },
+        {
           "Type": "OtherCondition",
           "Discriminator": "other",
           "IsUnparsed": false,
@@ -2356,5 +2365,5 @@
       ]
     }
   ],
-  "SchemaHash": "3e51330ae31470f53f423d0d1aa0ce18d3768f1ffb25f8087ccef0df62426c6e"
+  "SchemaHash": "9b7ded138df4b7c202d4ae5f998c4c5f49c9b11c4297af32a48454cb5a217917"
 }
