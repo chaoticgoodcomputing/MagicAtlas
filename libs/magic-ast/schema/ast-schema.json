@@ -1119,6 +1119,16 @@
           ]
         },
         {
+          "Type": "GainAbilitiesFromExiledCardsEffect",
+          "Discriminator": "gainAbilitiesFromExiledCards",
+          "IsUnparsed": false,
+          "Fields": [
+            "AbilityKind",
+            "SourceFilter",
+            "Target"
+          ]
+        },
+        {
           "Type": "GainAbilityEffect",
           "Discriminator": "gainAbility",
           "IsUnparsed": false,
@@ -2211,5 +2221,5 @@
       ]
     }
   ],
-  "SchemaHash": "f2d62619b0ee27a1a5b2fdafb1a43683500f93ddcf144f9f2ae1e9a062231c94"
+  "SchemaHash": "fbd3cf747bdbc7fa7b79aa7791093057a782d542afd8280bd4419babd7360e9b"
 }
