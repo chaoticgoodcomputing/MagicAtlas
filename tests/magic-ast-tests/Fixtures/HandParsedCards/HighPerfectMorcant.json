@@ -1,0 +1,153 @@
+{
+  "Input": {
+    "Name": "High Perfect Morcant",
+    "ManaCost": "{2}{B}{G}",
+    "TypeLine": "Legendary Creature — Elf Noble",
+    "OracleText": "Whenever High Perfect Morcant or another Elf you control enters, each opponent blights 1. (They each put a -1/-1 counter on a creature they control.)\nTap three untapped Elves you control: Proliferate. Activate only as a sorcery. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "B",
+      "G"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "High Perfect Morcant",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Elf Noble",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Noble"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever High Perfect Morcant or another Elf you control enters, each opponent blights 1. (They each put a -1/-1 counter on a creature they control.)\nTap three untapped Elves you control: Proliferate. Activate only as a sorcery. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Subtypes": [
+                "Elf"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "blight",
+              "Player": {
+                "Kind": "EachOpponent"
+              },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "They each put a -1/-1 counter on a creature they control."
+          }
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tapPermanents",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Elf"
+                ],
+                "Controller": "You"
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 3
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "proliferate"
+            }
+          ],
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}

@@ -744,6 +744,15 @@
           ]
         },
         {
+          "Type": "BlightEffect",
+          "Discriminator": "blight",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount",
+            "Player"
+          ]
+        },
+        {
           "Type": "BlockAdditionalEffect",
           "Discriminator": "blockAdditional",
           "IsUnparsed": false,
@@ -2356,5 +2365,5 @@
       ]
     }
   ],
-  "SchemaHash": "3e51330ae31470f53f423d0d1aa0ce18d3768f1ffb25f8087ccef0df62426c6e"
+  "SchemaHash": "383db39349265310f41446791170f3c943538bfc1fb73a412d1609761953ff3e"
 }
