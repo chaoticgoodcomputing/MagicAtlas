@@ -116,4 +116,29 @@ public sealed record CantAttackEffect : ContinuousEffect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
   public bool Alone { get; init; }
+
+  /// <summary>
+  /// "only alone" qualifier: when <c>true</c>, the oracle line reads "can only
+  /// attack alone" — the restriction applies when this object would NOT be the
+  /// sole attacker, i.e. the creature may only be declared as an attacker when
+  /// no other creatures are also attacking.
+  ///
+  /// <para>
+  /// CR 508.1 (excerpt): "First, the active player declares attackers. This
+  /// turn-based action doesn't use the stack…" — "only alone" is the dual of
+  /// <see cref="Alone"/>: where <see cref="Alone"/> lifts the restriction when
+  /// other creatures also attack, <see cref="OnlyAlone"/> applies the restriction
+  /// precisely when other creatures are also attacking. MAST records what the
+  /// words mean; the declare-attackers legality check is engine territory.
+  /// </para>
+  ///
+  /// <para>
+  /// This qualifier is distinct from <see cref="Alone"/>. "This creature can only
+  /// attack alone." (Master of Cruelties) yields a <see cref="CantAttackEffect"/>
+  /// with <c>OnlyAlone = true</c>; "This creature can't attack alone." (Loyal
+  /// Pegasus) yields a <see cref="CantAttackEffect"/> with <c>Alone = true</c>.
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool OnlyAlone { get; init; }
 }

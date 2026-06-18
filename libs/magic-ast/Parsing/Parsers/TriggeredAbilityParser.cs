@@ -178,6 +178,17 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     var additionalTrigger = Triggered.Rules.EntersAndOpponentDrawsNotFirstConditionRule.PendingAdditionalTrigger;
     Triggered.Rules.EntersAndOpponentDrawsNotFirstConditionRule.PendingAdditionalTrigger = null;
 
+    // Compound-condition trigger: if a TriggerConditionRule left a pending intervening-if
+    // (e.g. AttacksPlayerAndIsntBlockedConditionRule for Master of Cruelties), read and
+    // clear it. If no intervening-if was already extracted from the trigger text, adopt
+    // the pending one so the compound qualifier is preserved (CR 603.4).
+    var pendingIf = Triggered.Rules.AttacksPlayerAndIsntBlockedConditionRule.PendingInterveningIf;
+    Triggered.Rules.AttacksPlayerAndIsntBlockedConditionRule.PendingInterveningIf = null;
+    if (interveningIf is null && pendingIf is not null)
+    {
+      interveningIf = pendingIf;
+    }
+
     // Same intervening-if shape, but with the condition still sitting at the
     // head of the effect half (e.g., when the split landed on a different
     // comma). Strip it off and assign to interveningIf if not already set.
