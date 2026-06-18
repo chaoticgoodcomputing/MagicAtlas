@@ -40,6 +40,7 @@ public static class PortWalkProjection
     "returnToHand", // PortWalk.EmitPort — emit:cast (self-bounce → recast a noncreature spell, Displacer Kitten cast-trigger arm) + pay:mana recast co-cost. Only Target:Self bounces project the cast emit; a non-self return stays coarse.
     "optional", // PortWalk.Effects — "you may" wrapper: blink detection (gated emit:blink) + gated recursion into Inner (blink flow arm)
     "composite", // PortWalk.Effects — blink detection (exile+returnToBattlefield(ExiledWith:Self) → emit:blink) + recursion into Effects (blink flow arm)
+    "rollDie", // PortWalk.EmitPort — emit:rolldice:<scope> (dice flow arm), Subject = the rolling player (controller)
   };
 
   /// <summary><c>CostType</c> discriminators with a semantic projection (not the <c>pay:&lt;x&gt;</c> fallback).</summary>
@@ -59,6 +60,7 @@ public static class PortWalkProjection
     "GainsLife", // PortWalk.Trigger — trigger:life:gain:<scope> (life flow arm)
     "LosesLife", // PortWalk.Trigger — trigger:life:loss:<scope> (life flow arm)
     "SpellCast", // PortWalk.Trigger — trigger:cast:<spell>:<scope> (Displacer Kitten cast-trigger arm), Subject = the watched (noncreature) spell filter
+    "DiceRolled", // PortWalk.Trigger — trigger:rolldice:<scope> (dice flow arm), Subject = the rolling player (controller)
   };
 
   /// <summary>Restriction values treated as HARD firability gates (ADR-0002 §8). Everything else is a

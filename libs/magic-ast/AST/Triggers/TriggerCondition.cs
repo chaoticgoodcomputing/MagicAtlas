@@ -58,6 +58,15 @@ public sealed record TriggerCondition
   public bool? PerTurn { get; init; }
 
   /// <summary>
+  /// Result threshold for a die-roll trigger (<see cref="TriggerEvent.DiceRolled"/>): the minimum roll
+  /// result that fires the ability — "whenever you roll a 4 or higher" → <c>DieResultThreshold = 4</c>
+  /// (Mr. House, President and CEO). Null means the trigger fires on any roll ("whenever you roll one or
+  /// more dice"). Descriptive only; the runtime compares the actual result. CR 706.3.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? DieResultThreshold { get; init; }
+
+  /// <summary>
   /// True when this draw trigger excludes the first card drawn in each of the
   /// triggering player's draw steps — the "except the first one they draw in each
   /// of their draw steps" qualifier on Orcish Bowmasters (CR 121.1: "a player draws
@@ -446,6 +455,16 @@ public enum TriggerEvent
   /// designation and gains both."
   /// </summary>
   FullyUnlockRoom,
+
+  /// <summary>
+  /// A player rolls one or more dice — "whenever you roll one or more dice" (CR 706, the dice-rolling
+  /// rules). A player-action trigger (no object on the battlefield), so the <see cref="TriggerCondition.Filter"/>
+  /// is typically null; the controller restriction ("you") is implicit. A result threshold ("roll a 4 or
+  /// higher" — Mr. House) is carried as an intervening-if on the triggered ability, not on this event.
+  /// This is the dice CONSUMER side: it is what a <c>RollDieEffect</c> (the emitter) satisfies, so the
+  /// interaction engine can close a dice loop (roll → this trigger → effect → … → roll again).
+  /// </summary>
+  DiceRolled,
 
   /// <summary>Unrecognized trigger event</summary>
   Other,

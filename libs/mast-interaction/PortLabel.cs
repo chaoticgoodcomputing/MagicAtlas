@@ -266,6 +266,16 @@ public static class PortLabel
 
   public static string LifeLossTrigger(ObjectFilter? who) => Join("trigger", "life", "loss", who is null ? null : Scope(who));
 
+  // --- Die rolls as a flowing resource (CR 706). -----------------------------------------------
+  // A "roll [N] dice" EFFECT is an emit; a "whenever you roll one or more dice" TRIGGER is a consume.
+  // The flow arm (PortGraphEngine.FlowFeasible) connects emit→trigger so a self-feeding roll engine
+  // closes (roll → trigger → effect → … → roll). The ROLLING PLAYER (the controller — "you roll" watches
+  // YOUR rolls) rides as the port Subject so the operator tiers it (You↔You is GREEN). Player-scoped,
+  // never a null-default-GREEN scalar.
+  public static string RollDiceEmit(ObjectFilter? who) => Join("emit", "rolldice", who is null ? null : Scope(who));
+
+  public static string RollDiceTrigger(ObjectFilter? who) => Join("trigger", "rolldice", who is null ? null : Scope(who));
+
   /// <summary>
   /// A sacrifice cost. CR 701.21a: a player only sacrifices a permanent they control, so an unscoped
   /// fodder filter floors to <c>controlled</c> (the rules-invariant lives here, not in the parse).

@@ -1,5 +1,6 @@
 namespace MagicAST.AST.Effects.Dice;
 
+using System.Text.Json.Serialization;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
@@ -34,4 +35,13 @@ public sealed record RollDieEffect : Effect
   /// CR 706.1a: the die must have N equally likely outcomes, numbered 1 to N.
   /// </summary>
   public required int Sides { get; init; }
+
+  /// <summary>
+  /// The number of dice rolled (CR 706.1: "how many of those dice to roll"). Null means the single-die
+  /// form ("roll a dN" — implicitly one); "roll two six-sided dice" is Count = 2, Sides = 6. Kept nullable
+  /// (null ≡ 1) so single-die rolls serialize unchanged. Rolling N dice is N die-roll events for trigger
+  /// purposes (CR 706.2), which the interaction projection treats accordingly.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? Count { get; init; }
 }

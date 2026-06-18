@@ -577,6 +577,11 @@ public sealed class PortGraphEngine
       ("mana", "pay") => ResourceKind(consume.Label) == "mana" // mana refunds a mana cost…
         && ManaColorFeeds(ManaColor(emit.Label), ManaColor(consume.Label)), // …of a colour it can pay
       ("life", "trigger") => LifeFlowFeasible(emit, consume), // a life event feeds a same-direction life trigger (CR 119)
+      // Die rolls (CR 706.2). A "roll [N] dice" emit refuels a "whenever you roll one or more dice"
+      // trigger, so a self-feeding roll engine closes (Brazen Dwarf, Mr. House). Feasibility only —
+      // AddRulesEdge's operator tiers certainty on the player Subjects (You↔You → GREEN; a result
+      // threshold on the trigger floors firability via §8, not the arm).
+      ("rolldice", "trigger") => ResourceKind(consume.Label) == "rolldice",
       // Cast-recursion (Displacer Kitten family). A RE-CAST spell (emit:cast — a noncreature permanent that
       // bounced itself to hand and is cast again, CR 601) feeds a "whenever you cast a [noncreature] spell"
       // trigger (CR 603.2) whose watched-spell filter is type-compatible. Feasibility only — AddRulesEdge's

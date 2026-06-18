@@ -335,6 +335,12 @@ public sealed class PortWalk
       // the cast flow arm tiers the connection by spell-type (ADR-0002 §7). Non-null (broadest "a spell"
       // when unqualified) — a cast event is type-scoped, never a null-default-GREEN scalar.
       consumes.Add(Port(card, PortLabel.CastTrigger(filter ?? AnySpell, _ontology), PortSide.Consume, subject: filter ?? AnySpell));
+    else if (ev == "DiceRolled")
+      // "Whenever you roll one or more dice" (CR 706.2) — consumes a die-roll event. The rolling player
+      // (the controller) rides as the subject so the dice flow arm tiers by player (You↔You GREEN). A
+      // result threshold (DieResultThreshold) gates firability, not the flow connection. Non-null
+      // (controller-scoped) — a roll trigger watches YOUR rolls, never a null-default-GREEN scalar.
+      consumes.Add(Port(card, PortLabel.RollDiceTrigger(Roller), PortSide.Consume, subject: Roller));
     else
       // Coarse fallback (totality): the event name as the role, plus the subject if any.
       consumes.Add(Port(card, Coarse(ev, filter), PortSide.Consume));
@@ -588,6 +594,14 @@ public sealed class PortWalk
       var who = PlayerFilter(e["Player"]);
       return Port(card, PortLabel.LifeLossEmit(who), PortSide.Emit, Qty(e["Amount"]), who);
     }
+    if (effectType == "rollDie")
+    {
+      // A die-roll event (CR 706). The rolling player (the controller) rides as the subject so a
+      // "whenever you roll" trigger tiers by player. Count (null ≡ 1) is the number of dice rolled —
+      // the emit quantity, since rolling N dice is N roll events (CR 706.2). Feeds the dice flow arm.
+      var count = (int?)(e["Count"]?.GetValue<int>()) ?? 1;
+      return Port(card, PortLabel.RollDiceEmit(Roller), PortSide.Emit, count, Roller);
+    }
     return effectType switch
     {
       // Inert effects (no flow) are still ports, by totality (§4) — edge-sparse, never dropped.
@@ -766,6 +780,11 @@ public sealed class PortWalk
   /// scalar null-default GREEN in <see cref="PortGraphEngine"/>; tiers as a sound AMBER against a
   /// controller-scoped trigger.</summary>
   private static readonly ObjectFilter AnyPlayer = new() { CardTypes = ["player"] };
+
+  /// <summary>The die-roll Subject — the rolling player (the controller). "Whenever you roll" watches the
+  /// controller's own rolls (CR 706.2), and a "roll N dice" effect is the controller rolling, so both the
+  /// emit and the trigger carry this controller scope; You↔You overlap tiers the dice flow arm.</summary>
+  private static readonly ObjectFilter Roller = new() { Controller = ControllerFilter.You };
 
   /// <summary>The cast consume's Subject — "this instant or sorcery spell" (CR 601.2). The card type is
   /// not threaded into the walk, so this is the broadest faithful spell type (a Kind:spell ability is an
