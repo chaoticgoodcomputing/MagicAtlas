@@ -8,11 +8,15 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// Spell-resolution mill keyword action. Rule 701.17.
-/// Handles three oracle clause forms:
+/// Handles five oracle clause forms:
 /// <list type="bullet">
 ///   <item>"Mill N cards." — controller (Player = You).</item>
 ///   <item>"Target player mills N cards." — targeted player (Player = Target + player filter).</item>
 ///   <item>"Target opponent mills N cards." — targeted opponent (Player = Opponent).</item>
+///   <item>"Target player mills half their library, rounded down." — half-library mill, rounded down
+///     (Traumatize). CR 701.17a: to mill a number of cards is to put that many cards from the top of
+///     the library into the graveyard.</item>
+///   <item>"Target player mills half their library, rounded up." — half-library mill, rounded up.</item>
 /// </list>
 /// For the triggered-ability side, see <see cref="MagicAST.Parsing.Parsers.Triggered.Rules.MillTriggeredRule"/>.
 /// </summary>
@@ -29,6 +33,17 @@ public sealed class MillSpellRule : ISpellRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  /// <summary>
+  /// "Target player mills half their library, rounded down/up."
+  /// CR 701.17a — the count is half of the target player's library size, rounded in the named direction.
+  /// Anchored (^ … $) to prevent substring collision with the two-sentence MaddeningCacophony form
+  /// ("If this spell was kicked, instead each opponent mills half their library, rounded up.").
+  /// </summary>
+  private static readonly Regex TargetHalfLibraryPattern = new(
+    @"^Target\s+(?<target>player|opponent)\s+mills?\s+half\s+their\s+library,?\s+rounded\s+(?<rounding>down|up)$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   public bool TryMatch(string text, out Effect? effect)
   {
     effect = null;
@@ -41,6 +56,39 @@ public sealed class MillSpellRule : ISpellRule
       {
         Count = LiteralQuantity.Of(ParseCount(selfMatch.Groups["count"].Value)),
         Player = ObjectReference.You(),
+      };
+      return true;
+    }
+
+    var halfMatch = TargetHalfLibraryPattern.Match(trimmed);
+    if (halfMatch.Success)
+    {
+      var isOpponent = halfMatch.Groups["target"].Value.Equals("opponent", StringComparison.OrdinalIgnoreCase);
+      var player = isOpponent
+        ? new ObjectReference { Kind = ObjectReferenceKind.Opponent }
+        : ObjectReference.Target(ObjectFilter.Player());
+      var rounding = halfMatch.Groups["rounding"].Value.ToLowerInvariant();
+
+      var libraryCount = new CountQuantity
+      {
+        CountOf = new ObjectFilter
+        {
+          CardTypes = ["card"],
+          Zone = Zone.Library,
+          Controller = isOpponent ? ControllerFilter.Opponent : ControllerFilter.Target,
+        },
+      };
+      var halfLibrary = new CalculatedQuantity
+      {
+        Operation = "half",
+        BaseQuantity = libraryCount,
+        Rounding = rounding,
+      };
+
+      effect = new MillEffect
+      {
+        Count = halfLibrary,
+        Player = player,
       };
       return true;
     }

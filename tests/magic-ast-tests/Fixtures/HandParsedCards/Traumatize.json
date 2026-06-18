@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Traumatize",
+    "ManaCost": "{3}{U}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Target player mills half their library, rounded down.",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Traumatize",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Target player mills half their library, rounded down.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "mill",
+              "Count": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "count",
+                  "CountOf": {
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "Zone": "Library",
+                    "Controller": "Target"
+                  }
+                },
+                "Operation": "half",
+                "Rounding": "down"
+              },
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
