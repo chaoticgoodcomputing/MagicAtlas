@@ -1,0 +1,164 @@
+{
+  "Input": {
+    "Name": "Solphim, Mayhem Dominus",
+    "ManaCost": "{2}{R}{R}",
+    "TypeLine": "Legendary Creature — Phyrexian Horror",
+    "OracleText": "If a source you control would deal noncombat damage to an opponent or a permanent an opponent controls, it deals double that damage to that player or permanent instead.\n{1}{R/P}{R/P}, Discard two cards: Put an indestructible counter on Solphim. ({R/P} can be paid with either {R} or 2 life.)",
+    "Power": "5",
+    "Toughness": "4",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Solphim, Mayhem Dominus",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Phyrexian Horror",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Horror"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If a source you control would deal noncombat damage to an opponent or a permanent an opponent controls, it deals double that damage to that player or permanent instead.\n{1}{R/P}{R/P}, Discard two cards: Put an indestructible counter on Solphim. ({R/P} can be paid with either {R} or 2 life.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "damage",
+                "Source": {
+                  "Controller": "You"
+                },
+                "DamageType": "noncombat",
+                "AffectedObjects": {
+                  "Controller": "Opponent"
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Modifier": {
+                "Type": "double"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ],
+                  "IsPhyrexian": true
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ],
+                  "IsPhyrexian": true
+                }
+              ]
+            },
+            {
+              "CostType": "discard",
+              "Filter": {
+                "CardTypes": [
+                  "card"
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "indestructible",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}
