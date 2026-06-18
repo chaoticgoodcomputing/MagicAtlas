@@ -5,10 +5,12 @@ using MagicAST.AST.References;
 using MagicAST.AST.Triggers;
 
 /// <summary>
-/// "Whenever [subject] deals combat damage to (a player|an opponent|any player)" —
-/// emits <see cref="TriggerEvent.DealsCombatDamageToPlayer"/> (Rule 510 — Combat
-/// Damage Step; Rule 603.6 — triggered abilities). The recipient class is implied
-/// by the enum value; the Filter captures the subject (what is dealing the damage).
+/// "Whenever [subject] deals combat damage to (a player|an opponent|any player|a player or planeswalker)" —
+/// emits <see cref="TriggerEvent.DealsCombatDamageToPlayer"/> for player-only recipients and
+/// <see cref="TriggerEvent.DealsCombatDamageToPlayerOrPlaneswalker"/> for the broader
+/// "player or planeswalker" form (The Reaver Cleaver, Sword of Sinew and Steel).
+/// Rule 510 — Combat Damage Step; Rule 603.6 — triggered abilities. The recipient
+/// class is encoded in the event enum value; the Filter captures the subject.
 ///
 /// <para>
 /// "a creature you control with [keyword] deals combat damage to a player" —
@@ -55,12 +57,16 @@ public sealed class DealsCombatDamageConditionRule : ITriggerConditionRule
       return null;
     }
 
-    // Require a player-class recipient: "to a player", "to an opponent", "to any player".
-    if (
-      !lower.Contains("to a player")
-      && !lower.Contains("to an opponent")
-      && !lower.Contains("to any player")
-    )
+    // Determine the recipient class:
+    //   "player or planeswalker" → DealsCombatDamageToPlayerOrPlaneswalker
+    //   "to a player", "to an opponent", "to any player" → DealsCombatDamageToPlayer
+    var isPlayerOrPlaneswalker = lower.Contains("to a player or planeswalker");
+    var isPlayerOnly =
+      lower.Contains("to a player")
+      || lower.Contains("to an opponent")
+      || lower.Contains("to any player");
+
+    if (!isPlayerOrPlaneswalker && !isPlayerOnly)
     {
       return null;
     }
@@ -106,10 +112,14 @@ public sealed class DealsCombatDamageConditionRule : ITriggerConditionRule
       }
     }
 
+    var triggerEvent = isPlayerOrPlaneswalker
+      ? TriggerEvent.DealsCombatDamageToPlayerOrPlaneswalker
+      : TriggerEvent.DealsCombatDamageToPlayer;
+
     return new TriggerCondition
     {
       Timing = timing,
-      Event = TriggerEvent.DealsCombatDamageToPlayer,
+      Event = triggerEvent,
       Filter = filter,
     };
   }

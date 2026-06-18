@@ -506,6 +506,12 @@
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
+      "card": "TheReaverCleaver",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 Treasure token ability text (separate de-string initiative)"
+    },
+    {
       "card": "TirelessProvisioner",
       "sink": "AbilityText",
       "tag": "irreducible",
