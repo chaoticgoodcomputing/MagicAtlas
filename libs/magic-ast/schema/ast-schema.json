@@ -1719,6 +1719,14 @@
           ]
         },
         {
+          "Type": "SpendManaAsAnyColorEffect",
+          "Discriminator": "spendManaAsAnyColor",
+          "IsUnparsed": false,
+          "Fields": [
+            "Beneficiary"
+          ]
+        },
+        {
           "Type": "SpliceEffect",
           "Discriminator": "splice",
           "IsUnparsed": false,
@@ -2152,5 +2160,5 @@
       ]
     }
   ],
-  "SchemaHash": "6859621695374064ba30c74868f351d4230581ceb8185c68a9c69cc86a4b6ee4"
+  "SchemaHash": "ed7500019dd7d7c63de619cf4b010b245b759a380adc64974dc4a963b2ed4d35"
 }
