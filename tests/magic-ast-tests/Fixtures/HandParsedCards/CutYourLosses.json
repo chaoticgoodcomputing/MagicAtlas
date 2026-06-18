@@ -1,0 +1,149 @@
+{
+  "Input": {
+    "Name": "Cut Your Losses",
+    "ManaCost": "{4}{U}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Casualty 2 (As you cast this spell, you may sacrifice a creature with power 2 or greater. When you do, copy this spell and you may choose a new target for the copy.)\nTarget player mills half their library, rounded down.",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Cut Your Losses",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Casualty 2 (As you cast this spell, you may sacrifice a creature with power 2 or greater. When you do, copy this spell and you may choose a new target for the copy.)\nTarget player mills half their library, rounded down.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Casualty",
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "sacrifice",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "PowerComparison": {
+                      "Operator": "GreaterThanOrEqual",
+                      "Value": 2
+                    }
+                  },
+                  "Quantity": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                },
+                "IsOptional": true
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(As you cast this spell, you may sacrifice a creature with power 2 or greater. When you do, copy this spell and you may choose a new target for the copy.)"
+          }
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Casualty",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "SpellCast"
+          },
+          "InterveningIf": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Casualty"
+          },
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "Self"
+              },
+              "MayChooseNewTargets": true
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "mill",
+              "Count": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "count",
+                  "CountOf": {
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "Zone": "Library",
+                    "Controller": "Target"
+                  }
+                },
+                "Operation": "half",
+                "Rounding": "down"
+              },
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
