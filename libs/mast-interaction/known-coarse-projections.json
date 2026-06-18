@@ -18,6 +18,7 @@
     "attach": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "awaken": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "backup": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "blight": "CR 701.68 Blight keyword action (-1/-1 counter placement by a player on their own creature) — no flow rule reads opponent-blight events yet; consciously inert for interaction recall",
     "becomeMonarch": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "becomesCopy": "no semantic projection yet — coarse fallback no flow rule consumes; explicit named carve-out",
     "becomesCreature": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
