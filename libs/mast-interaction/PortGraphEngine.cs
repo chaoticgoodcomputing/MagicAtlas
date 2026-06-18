@@ -1014,11 +1014,19 @@ public sealed class PortGraphEngine
   /// </summary>
   public IReadOnlyList<PortCycle> FindCyclesByLabelGraph(
     IReadOnlyList<PortEdge> edges,
-    int displayMaxLengthInCards = int.MaxValue
+    int displayMaxLengthInCards = int.MaxValue,
+    int maxLabelCycleLength = int.MaxValue,
+    int maxInstanceHops = int.MaxValue
   )
   {
-    // Layer 1: candidate label-cycle shapes over the distinct-label graph (small N, generous length).
-    var shapeHops = LabelCycleHops(edges);
+    // Layer 1: candidate label-cycle shapes over the distinct-label graph. UNBOUNDED by default (exact, the
+    // per-combo path). The whole-corpus UNION caller passes maxLabelCycleLength because the union label
+    // graph is dense enough that unbounded elementary-cycle enumeration over it does not terminate in
+    // practice (the blowup the two-layer split moved here from the instance layer) — there, the bound makes
+    // it a tractable, observable, SOUND-BUT-INCOMPLETE approximation (it can only DROP candidate hops, never
+    // invent them, so Layer 2 still never reports a false cycle; it may miss cycles whose only label-shape
+    // is longer than the bound).
+    var shapeHops = LabelCycleHops(edges, maxLabelCycleLength);
 
     // Layer 2a: the admissible instance edges — every edge whose label-hop participates in a candidate
     // shape. A sound over-approximation of "edges that can lie on a real instance cycle" (the label graph
@@ -1027,8 +1035,9 @@ public sealed class PortGraphEngine
     var admissible = edges.Where(e => shapeHops.Contains((e.From.Label, e.To.Label))).ToList();
 
     // Layer 2b: instantiate + tier — the identical per-instance enumerator over the admissible subset,
-    // with every §8 floor still evidenced against the FULL edge set.
-    var cycles = EnumerateInstanceCycles(admissible, edges, int.MaxValue);
+    // with every §8 floor still evidenced against the FULL edge set. maxInstanceHops bounds the per-instance
+    // DFS for the union caller (default unbounded = exact).
+    var cycles = EnumerateInstanceCycles(admissible, edges, maxInstanceHops);
 
     // Length-bound is now a cards-based DISPLAY filter (two-layer-cycle-engine.md §Complexity): keep only
     // cycles spanning ≤ K distinct cards. Default int.MaxValue = no filter (the full enumeration).
@@ -1052,7 +1061,10 @@ public sealed class PortGraphEngine
   /// cap. A self-loop label (A→A, a same-label hop) is its own one-node cycle and contributes the hop
   /// <c>(A,A)</c>. The returned hop-set is the admissibility gate Layer 2 filters instance edges by.
   /// </summary>
-  private static HashSet<(string From, string To)> LabelCycleHops(IReadOnlyList<PortEdge> edges)
+  private static HashSet<(string From, string To)> LabelCycleHops(
+    IReadOnlyList<PortEdge> edges,
+    int maxLen = int.MaxValue
+  )
   {
     // Distinct-label adjacency (deduped — the label graph is the atom graph, one node per label).
     var labelAdj = edges
@@ -1071,9 +1083,14 @@ public sealed class PortGraphEngine
         hops.Add((e.From.Label, e.To.Label));
 
     // Elementary cycles over the label graph, rooted at each label's lowest-ordinal node (the same
-    // canonical-rooting discipline as the instance DFS), no length bound. Small N — the bounded atom set.
+    // canonical-rooting discipline as the instance DFS). UNBOUNDED by default (the per-combo path, exact);
+    // the whole-corpus UNION caller passes a maxLen because the union label graph is DENSE (hub resources
+    // like death/returntobattlefield/mana interconnect heavily) and unbounded elementary-cycle enumeration
+    // over it is itself intractable — the blowup the two-layer split moved here from the instance layer.
     var path = new List<string>();
     var onPath = new HashSet<string>(StringComparer.Ordinal);
+    var bigGraph = labelAdj.Count > 200;
+    var sw = bigGraph ? System.Diagnostics.Stopwatch.StartNew() : null;
 
     void Dfs(string node, string start)
     {
@@ -1088,7 +1105,7 @@ public sealed class PortGraphEngine
           for (var i = 0; i < path.Count; i++)
             hops.Add((path[i], i + 1 < path.Count ? path[i + 1] : start));
         }
-        else if (string.CompareOrdinal(to, start) > 0 && !onPath.Contains(to))
+        else if (path.Count < maxLen && string.CompareOrdinal(to, start) > 0 && !onPath.Contains(to))
         {
           path.Add(to);
           onPath.Add(to);
@@ -1099,14 +1116,28 @@ public sealed class PortGraphEngine
       }
     }
 
-    foreach (var start in labelAdj.Keys.OrderBy(k => k, StringComparer.Ordinal))
+    var starts = labelAdj.Keys.OrderBy(k => k, StringComparer.Ordinal).ToList();
+    if (sw is not null)
+      Console.Error.WriteLine(
+        $"[LabelCycleHops] enumerating label cycles ≤{maxLen} over {starts.Count} label nodes…"
+      );
+    var done = 0;
+    foreach (var start in starts)
     {
       onPath.Clear();
       onPath.Add(start);
       path.Clear();
       path.Add(start);
       Dfs(start, start);
+      if (sw is not null && ++done % 50 == 0)
+        Console.Error.WriteLine(
+          $"[LabelCycleHops] {done}/{starts.Count} label nodes, {hops.Count} hops, {sw.Elapsed.TotalSeconds:F0}s"
+        );
     }
+    if (sw is not null)
+      Console.Error.WriteLine(
+        $"[LabelCycleHops] done: {hops.Count} hops over {starts.Count} label nodes, {sw.Elapsed.TotalSeconds:F0}s"
+      );
     return hops;
   }
 

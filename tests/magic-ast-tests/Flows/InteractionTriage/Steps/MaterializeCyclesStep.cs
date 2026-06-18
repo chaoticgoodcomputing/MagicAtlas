@@ -27,12 +27,18 @@ public static class MaterializeCyclesStep
 {
   // The two-layer engine (FindCyclesByLabelGraph) runs the elementary-cycle enumeration over the
   // grammar-bounded distinct-LABEL graph (~545 cycle-relevant atoms, a ~54× dedup of the 29,615 cards)
-  // rather than the ~100k-port instance graph the reference FindCycles walks directly — which made the
-  // old length-5 union enumeration stall for hours. The two-layer result is proven byte-identical in
-  // tiers (PortWalkTwoLayerEquivalenceTest + bench TwoLayerEquivalenceTest, 62 sentinels + 33 combos).
-  // The old hop-length bound is GONE from the search; it is demoted to DisplayMaxCards, a post-
-  // enumeration filter on the count of DISTINCT CARDS a cycle spans (a combo is a small card set).
+  // rather than the ~100k-port instance graph the reference FindCycles walks directly. Proven
+  // byte-identical in tiers on small graphs (PortWalkTwoLayerEquivalenceTest + bench equivalence).
+  //
+  // On the whole-corpus UNION, however, even Layer 1 (label-cycle enumeration) is intractable UNBOUNDED —
+  // the union label graph is dense (hub resources interconnect heavily). So the union caller bounds BOTH
+  // layers: MaxLabelCycleLen caps the Layer-1 label-cycle length, MaxInstanceHops caps the Layer-2
+  // per-instance cycle length, and DisplayMaxCards is the final distinct-card display filter. These bounds
+  // make the union pass a tractable, SOUND-BUT-INCOMPLETE approximation (no false cycle; may miss cycles
+  // whose only shape is longer than the bound) — distinct from the per-combo bench, which stays exact.
   private const int DisplayMaxCards = 5;
+  private const int MaxLabelCycleLen = 6;
+  private const int MaxInstanceHops = 6;
   private const int PerTierCap = 60;
 
   public static Func<
@@ -118,7 +124,7 @@ public static class MaterializeCyclesStep
         };
 
       var ranked = engine
-        .FindCyclesByLabelGraph(edges, DisplayMaxCards)
+        .FindCyclesByLabelGraph(edges, DisplayMaxCards, MaxLabelCycleLen, MaxInstanceHops)
         // No 1-card combo exists in MTG — a loop whose ports all belong to one card is an artifact.
         .Where(c =>
           c.Edges.SelectMany(e => new[] { e.From.Card, e.To.Card })

@@ -1,5 +1,6 @@
 using Flowthru.Cli;
 using Flowthru.Data.Storage.Http;
+using Flowthru.Diagnostics;
 using Flowthru.Hosting;
 using Flowthru.Step.Python;
 using MagicAtlas.Ast.Tests.Data;
@@ -165,6 +166,13 @@ public class Program
           "Parses + PortWalk-projects every corpus card and aggregates the distinct port-label space → "
             + "Data/_08_Reporting/port-label-census.json (diagnostic: the card:label ratio that sizes the two-layer cycle engine)."
         );
+
+      flowthru.ConfigureMetadata(meta =>
+      {
+        var metadataPath = Path.Combine(basePath, "Metadata");
+        meta.AddJsonMetadata(opt => opt.WithOutputDirectory(metadataPath));
+        meta.AddMermaidMetadata(opt => opt.WithOutputDirectory(metadataPath));
+      });
     });
   }
 }
