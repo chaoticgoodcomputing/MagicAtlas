@@ -1,0 +1,183 @@
+{
+  "Input": {
+    "Name": "Preston, the Vanisher",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Legendary Creature — Rabbit Wizard",
+    "OracleText": "Whenever another nontoken creature you control enters, if it wasn't cast, create a token that's a copy of that creature, except it's a 0/1 white Illusion.\n{1}{W}, Sacrifice five Illusions: Exile target nonland permanent.",
+    "Power": "2",
+    "Toughness": "5",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Preston, the Vanisher",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Rabbit Wizard",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Rabbit",
+        "Wizard"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever another nontoken creature you control enters, if it wasn't cast, create a token that's a copy of that creature, except it's a 0/1 white Illusion.\n{1}{W}, Sacrifice five Illusions: Exile target nonland permanent.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsToken": false,
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "it wasn't cast"
+          },
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "ThatCreature"
+              },
+              "Modifications": [
+                {
+                  "ModificationType": "powerToughnessOverride",
+                  "Power": {
+                    "QuantityType": "literal",
+                    "Value": 0
+                  },
+                  "Toughness": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                },
+                {
+                  "ModificationType": "colorOverride",
+                  "Colors": [
+                    "W"
+                  ]
+                },
+                {
+                  "ModificationType": "typeAdder",
+                  "Subtypes": [
+                    "Illusion"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                }
+              ]
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "Subtypes": [
+                  "Illusion"
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 5
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "ExcludedCardTypes": [
+                    "land"
+                  ]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}

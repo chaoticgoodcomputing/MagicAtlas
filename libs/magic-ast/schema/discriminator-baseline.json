@@ -19,6 +19,7 @@
     "ConditionKind:triggeringAbilityIsMana",
     "ConditionKind:triggeringObjectCounter",
     "CopyModificationKind:abilityAdder",
+    "CopyModificationKind:colorOverride",
     "CopyModificationKind:powerToughnessOverride",
     "CopyModificationKind:supertypeRemover",
     "CopyModificationKind:triggeredAbilityAdder",

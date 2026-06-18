@@ -696,6 +696,12 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'it wasn't put onto the battlefield with this ability' is a loop-prevention anti-recursion gate unique to Kodama of the East Tree; requires a new NotEnteredByAbilityCondition arm with no current peer"
+    },
+    {
+      "card": "PrestontheVanisher",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'it wasn't cast' is the negation of CastThisObjectCondition (CR 707.10: copies aren't cast); requires a new NotCastCondition arm or extending CastThisObjectCondition with a WasCast polarity field"
     }
   ]
 }
