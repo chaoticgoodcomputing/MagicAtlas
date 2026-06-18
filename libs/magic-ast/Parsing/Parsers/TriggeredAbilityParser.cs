@@ -679,6 +679,23 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return new List<Effect> { millLost };
     }
 
+    // Trigger-aware "that many" antecedent: "draw that many cards" (imperative, no "you"
+    // subject) under a LosesLife trigger — the controller draws cards equal to the life
+    // just lost (CR 119.3). Vilis, Broker of Blood: "Whenever you lose life, draw that
+    // many cards." The effect text uses the imperative form (no "you" subject), distinct
+    // from the "you draw that many cards" surface handled by
+    // YouDrawThatManyCardsTriggeredRule (which keys on DerivedKind.DamageDealt). This
+    // rule MUST NOT be reflection-discovered: the same imperative surface could appear
+    // under a damage trigger with a different antecedent. Guard on LosesLife exactly.
+    if (
+      trigger.Event is EventOccurrence { Event: TriggerEvent.LosesLife }
+      && new Triggered.Rules.DrawThatManyCardsLifeLostRule().TryMatch(trimmed, out var drawLifeLost)
+      && drawLifeLost is not null
+    )
+    {
+      return new List<Effect> { drawLifeLost };
+    }
+
     var opponentExileThenExile = TryParseOpponentExileCreatureThenExileGraveyardCard(trimmed);
     if (opponentExileThenExile is not null)
     {
