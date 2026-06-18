@@ -188,6 +188,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "Electroduplicate",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — haste keyword in AbilityAdder CopyModification"
+    },
+    {
       "card": "ElectrosBolt",
       "sink": "OtherCondition",
       "tag": "debt",
