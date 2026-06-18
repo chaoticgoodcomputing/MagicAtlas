@@ -512,6 +512,12 @@
       "reason": "PB-7 structured-condition buckets \u2014 'The Reality Chip is attached to a creature' is an attachment-state predicate; no IsAttachedToCreature condition arm exists yet (CR 702.151b)"
     },
     {
+      "card": "TheReaverCleaver",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 Treasure token ability text (separate de-string initiative)"
+    },
+    {
       "card": "TirelessProvisioner",
       "sink": "AbilityText",
       "tag": "irreducible",

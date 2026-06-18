@@ -171,6 +171,18 @@ public enum TriggerEvent
   DealsCombatDamageToPlayer,
 
   /// <summary>
+  /// A creature deals combat damage to a player or planeswalker — the broader
+  /// "deals combat damage to a player or planeswalker" trigger condition used on
+  /// Equipment and creatures (The Reaver Cleaver, Sword of Sinew and Steel).
+  /// Rule 510 (Combat Damage Step): combat damage may be assigned to both players
+  /// and planeswalkers. Rule 603.2 (triggered abilities): the event fires whenever
+  /// either recipient class takes combat damage from the triggering source.
+  /// Distinct from <see cref="DealsCombatDamageToPlayer"/> (player only) and
+  /// <see cref="DealsCombatDamage"/> (recipient unspecified).
+  /// </summary>
+  DealsCombatDamageToPlayerOrPlaneswalker,
+
+  /// <summary>
   /// A creature deals combat damage to a creature — Rule 510.1 (combat damage
   /// assignment) / Rule 603.2 (the event-match is the trigger). The recipient
   /// class is a creature rather than a player; the Filter carries the subject
