@@ -560,6 +560,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "TheChainVeil",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'you didn't activate a loyalty ability of a planeswalker this turn' is an activation-history predicate (CR 606.3 once-per-turn gate, checked at end step); no ActivationHistoryCondition arm exists yet"
+    },
+    {
       "card": "TheDeathOfGwenStacy",
       "sink": "OtherCharacteristic",
       "tag": "debt",

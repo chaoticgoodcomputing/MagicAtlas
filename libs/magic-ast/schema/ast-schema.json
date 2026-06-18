@@ -550,6 +550,14 @@
       "DiscriminatorKey": "EffectType",
       "Types": [
         {
+          "Type": "ActivateLoyaltyAbilityAsThoughEffect",
+          "Discriminator": "activateLoyaltyAbilityAsThough",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
           "Type": "AdaptEffect",
           "Discriminator": "adapt",
           "IsUnparsed": false,
@@ -2251,5 +2259,5 @@
       ]
     }
   ],
-  "SchemaHash": "15583f71bfe5ce6f26cb2f1f9ff7111d44acbe010cc76a463c26a6eb10abd63f"
+  "SchemaHash": "b99ebd18e990062a45422bac5d23d33a3efd1a512a8b336a34b50bfac25a61bc"
 }
