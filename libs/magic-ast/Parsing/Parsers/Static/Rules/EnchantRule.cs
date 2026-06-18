@@ -143,6 +143,40 @@ public sealed class EnchantRule : IStaticRule
       }
     }
 
+    // Zone-qualified shape: "creature card in a graveyard" (Animate Dead CR 702.5 /
+    // CR 303.4 — Auras that enchant graveyard cards). "creature card" is a creature
+    // card (non-token, in the graveyard zone). The zone qualifier lands on
+    // ObjectFilter.Zone; the card type remains "creature" (CR 109.1 — a "card" in
+    // oracle text refers to any card, including creature cards in a graveyard zone).
+    // CR 702.5a: the enchant ability restricts what the Aura can enchant.
+    var zoneMatch = Regex.Match(
+      d,
+      @"^(?<type>creature|artifact|enchantment|permanent|land|card)\s+card\s+in\s+(?:a|an|the)\s+(?<zone>graveyard|exile|hand|library)$",
+      RegexOptions.IgnoreCase
+    );
+    if (zoneMatch.Success)
+    {
+      var cardType = zoneMatch.Groups["type"].Value.ToLowerInvariant();
+      var zoneName = zoneMatch.Groups["zone"].Value.ToLowerInvariant();
+      var zone = zoneName switch
+      {
+        "graveyard" => Zone.Graveyard,
+        "exile"     => Zone.Exile,
+        "hand"      => Zone.Hand,
+        "library"   => Zone.Library,
+        _           => (Zone?)null,
+      };
+      if (zone is not null)
+      {
+        return new ObjectFilter
+        {
+          CardTypes = [cardType],
+          Zone = zone.Value,
+          Controller = controller,
+        };
+      }
+    }
+
     return null;
   }
 
