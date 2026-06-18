@@ -162,7 +162,8 @@
     "vanishing": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "warp": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "webSlinging": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
-    "winTheGame": "absolute win effect \u2014 no flow rule needs to propagate win conditions yet; coarse conscious carve-out"
+    "winTheGame": "absolute win effect \u2014 no flow rule needs to propagate win conditions yet; coarse conscious carve-out",
+    "wish": "Karn, the Great Creator \u22122 / Glittering Wish family (CR 400.11b: retrieve from outside game or exile to hand) \u2014 sideboard retrieval; no interaction flow rule reads wish-retrieval events yet; consciously inert for interaction recall"
   },
   "costType": {
     "composite": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",

@@ -1949,6 +1949,15 @@
           "Fields": [
             "Player"
           ]
+        },
+        {
+          "Type": "WishEffect",
+          "Discriminator": "wish",
+          "IsUnparsed": false,
+          "Fields": [
+            "CardFilter",
+            "Sources"
+          ]
         }
       ]
     },
@@ -2211,5 +2220,5 @@
       ]
     }
   ],
-  "SchemaHash": "f2d62619b0ee27a1a5b2fdafb1a43683500f93ddcf144f9f2ae1e9a062231c94"
+  "SchemaHash": "78eb091847d5ac4bf4bda588c0b44dd2b31442848c71336f0f090679247ca35f"
 }
