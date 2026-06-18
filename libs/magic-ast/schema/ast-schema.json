@@ -504,6 +504,14 @@
           ]
         },
         {
+          "Type": "UnattachNamedCost",
+          "Discriminator": "unattachNamed",
+          "IsUnparsed": false,
+          "Fields": [
+            "CardName"
+          ]
+        },
+        {
           "Type": "UntapCost",
           "Discriminator": "untap",
           "IsUnparsed": false,
@@ -549,6 +557,14 @@
       "Type": "Effect",
       "DiscriminatorKey": "EffectType",
       "Types": [
+        {
+          "Type": "ActivateLoyaltyAbilityAsThoughEffect",
+          "Discriminator": "activateLoyaltyAbilityAsThough",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
         {
           "Type": "AdaptEffect",
           "Discriminator": "adapt",
@@ -2260,5 +2276,5 @@
       ]
     }
   ],
-  "SchemaHash": "240fec3e648064ff9b41e8557488f4acf984d65ca2afa316b1dd124f5540626a"
+  "SchemaHash": "fca257c8e4ea2bff0a502d293b3b602265c3596b0e60617bda6237601a8d9f0e"
 }

@@ -12,8 +12,8 @@ using MagicAST.AST.References;
 ///
 /// <list type="bullet">
 ///   <item>
-///     "Untap another target permanent." — CR 701.26b (untap), CR 109.5 ("another"
-///     excludes the source permanent). Produces a single-target <see cref="UntapEffect"/>
+///     "Untap another target permanent." — CR 701.26b (untap); "another"
+///     excludes the source permanent. Produces a single-target <see cref="UntapEffect"/>
 ///     with <c>ExcludeSelf = true</c> on the permanent card-type filter.
 ///   </item>
 ///   <item>
@@ -21,7 +21,7 @@ using MagicAST.AST.References;
 ///     target legendary creatures." Produces a multi-target <see cref="UntapEffect"/>
 ///     where the <see cref="ObjectReference.Quantity"/> carries the literal count and
 ///     <see cref="ObjectFilter.ExcludeSelf"/> = true excludes the source. The
-///     "another/other" marker encodes the self-exclusion axis (CR 109.5), separate
+///     "another/other" marker encodes the self-exclusion axis (ExcludeSelf self-exclusion), separate
 ///     from the counted target set size.
 ///   </item>
 /// </list>
@@ -34,8 +34,8 @@ using MagicAST.AST.References;
 ///
 /// CR 701.26b: "To untap a permanent, rotate it back to the upright position from a
 /// sideways position. Only tapped permanents can be untapped."
-/// CR 109.5: "The words 'another,' 'other,' and 'that' mean a different object than
-/// the one currently being referenced."
+/// "Another"/"other" excludes the source object — modeled on the structured
+/// <see cref="ObjectFilter.ExcludeSelf"/> axis (no dedicated lettered subrule in the bundled CR data).
 /// </summary>
 [ActivatedEffectRule(Priority = 995)]
 public sealed class UntapAnotherOrCountTargetActivatedEffectRule : IActivatedEffectRule

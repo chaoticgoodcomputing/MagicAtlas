@@ -1,5 +1,6 @@
 namespace MagicAST.Parsing.Parsers.Triggered.Rules;
 
+using System.Text.RegularExpressions;
 using MagicAST.AST.References;
 using MagicAST.AST.Triggers;
 
@@ -36,11 +37,15 @@ using MagicAST.AST.Triggers;
 [TriggerConditionRule(Priority = 987)]
 public sealed class ExcessNoncombatDamageDealtConditionRule : ITriggerConditionRule
 {
-  // The trigger text includes the "Whenever/When" timing prefix, so we use
-  // Contains rather than an anchored regex. The phrase "dealt excess noncombat damage"
-  // is sufficiently specific — no other known trigger uses this exact phrase (CR 120.10).
-  // Additionally guard that "opponent controls" is present so this doesn't fire on a
-  // self-damage-excess trigger if one ever appears.
+  // ANCHORED (^…$) on the full trigger clause (optional timing prefix). The subject types are
+  // CAPTURED, not hardcoded: "a creature an opponent controls" → ["creature"] (Fall of Cair Andros),
+  // "a creature or planeswalker an opponent controls" → ["creature","planeswalker"] (Toralf). The
+  // prior `Contains` matcher unconditionally emitted both types, mislabeling Fall of Cair Andros
+  // (creature-only) with a spurious planeswalker — the sibling-overfit the judge caught.
+  private static readonly Regex _pattern = new(
+    @"^(?:when(?:ever)?\s+)?a\s+creature(?<pw>\s+or\s+planeswalker)?\s+an\s+opponent\s+controls\s+is\s+dealt\s+excess\s+noncombat\s+damage$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
 
   public TriggerCondition? Match(string triggerText, string lower, TriggerTiming timing)
   {
@@ -49,10 +54,13 @@ public sealed class ExcessNoncombatDamageDealtConditionRule : ITriggerConditionR
       return null;
     }
 
-    if (!lower.Contains("opponent controls"))
+    var m = _pattern.Match(triggerText.Trim());
+    if (!m.Success)
     {
       return null;
     }
+
+    string[] cardTypes = m.Groups["pw"].Success ? ["creature", "planeswalker"] : ["creature"];
 
     return new TriggerCondition
     {
@@ -60,7 +68,7 @@ public sealed class ExcessNoncombatDamageDealtConditionRule : ITriggerConditionR
       Event = TriggerEvent.ExcessNoncombatDamageDealt,
       Filter = new ObjectFilter
       {
-        CardTypes = ["creature", "planeswalker"],
+        CardTypes = cardTypes,
         Controller = ControllerFilter.Opponent,
       },
     };

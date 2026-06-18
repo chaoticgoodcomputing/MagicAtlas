@@ -111,7 +111,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
 
     // Parse trigger timing (When/Whenever/At).
     // "As this creature/permanent transforms into [Name]" uses "As" instead of "When"
-    // but is semantically a triggered event (CR 603.6d — the transform-into shape).
+    // but is semantically a triggered event (CR 603.6 — the transform-into shape).
     // "As" doesn't have a dedicated OracleToken, so intercept via raw-text prefix
     // before the token-based path runs.
     TriggerTiming? triggerTiming;

@@ -5,7 +5,7 @@ using MagicAST.AST.Triggers;
 
 /// <summary>
 /// "As this creature transforms into [Name]" — transform-into trigger condition.
-/// CR 603.6d: an ability that uses "as [permanent] transforms into [Name]" fires
+/// CR 603.6: an ability that uses "as [permanent] transforms into [Name]" fires
 /// when the permanent transforms; it is functionally a "When" trigger with timing
 /// simultaneous to the transformation event.
 ///
@@ -13,7 +13,7 @@ using MagicAST.AST.Triggers;
 /// Produces <see cref="TriggerEvent.Transforms"/> with Filter carrying the source
 /// type and <c>IsSelf = true</c> (the object being transformed is the source itself,
 /// CR 201.5 — "this [type]" in oracle text is a self-reference). Timing is always
-/// <see cref="TriggerTiming.When"/> (the "As" keyword maps to When by CR 603.6d;
+/// <see cref="TriggerTiming.When"/> (the "As" keyword maps to When by CR 603.6;
 /// the caller supplies the timing having already detected the "As" prefix via the
 /// raw-text intercept in <see cref="MagicAST.Parsing.Parsers.TriggeredAbilityParser"/>).
 /// </para>

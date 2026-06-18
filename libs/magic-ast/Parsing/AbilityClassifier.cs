@@ -1442,7 +1442,7 @@ public sealed class AbilityClassifier
     return body.StartsWith("When ", StringComparison.OrdinalIgnoreCase)
       || body.StartsWith("Whenever ", StringComparison.OrdinalIgnoreCase)
       || body.StartsWith("At ", StringComparison.OrdinalIgnoreCase)
-      // CR 603.6d: "As [this permanent] transforms into [Name]" is a static trigger
+      // CR 603.6: "As [this permanent] transforms into [Name]" is a static trigger
       // (fires on the transform event, timing = When). Oracle uses "As" instead of
       // "When" for the transform-into shape; detected here so the classifier routes
       // the body to the triggered path rather than defaulting to static.
