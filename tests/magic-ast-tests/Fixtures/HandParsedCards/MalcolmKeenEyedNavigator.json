@@ -1,0 +1,162 @@
+{
+  "Input": {
+    "Name": "Malcolm, Keen-Eyed Navigator",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Legendary Creature — Siren Pirate",
+    "OracleText": "Flying\nWhenever one or more Pirates you control deal damage to your opponents, you create a Treasure token for each opponent dealt damage. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nPartner (You can have two commanders if both have partner.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Malcolm, Keen-Eyed Navigator",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Siren Pirate",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Siren",
+        "Pirate"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying\nWhenever one or more Pirates you control deal damage to your opponents, you create a Treasure token for each opponent dealt damage. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")\nPartner (You can have two commanders if both have partner.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
+            }
+          ],
+          "KeywordSource": "Flying"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsDamageToOpponents",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Subtypes": [
+                "Pirate"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "calculated",
+                "Expression": "for each opponent dealt damage"
+              },
+              "Token": {
+                "Types": [
+                  "artifact"
+                ],
+                "Subtypes": [
+                  "Treasure"
+                ],
+                "AbilityText": [
+                  "{T}, Sacrifice this artifact: Add one mana of any color."
+                ],
+                "IsCopy": false
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\""
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "partner",
+              "PartnerType": "Partner"
+            }
+          ],
+          "KeywordSource": "Partner",
+          "Reminder": {
+            "Text": "(You can have two commanders if both have partner.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

@@ -278,6 +278,12 @@
       "reason": "PB-7 structured-condition buckets \u2014 'attacks a player and isn't blocked' is a compound attack-target + unblocked-state predicate; no structured AttacksPlayerAndIsntBlockedCondition node exists yet"
     },
     {
+      "card": "MalcolmKeenEyedNavigator",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
       "card": "LCI/NissaResurgentAnimist",
       "sink": "OtherCondition",
       "tag": "debt",
