@@ -1,0 +1,138 @@
+{
+  "Input": {
+    "Name": "Terisian Mindbreaker",
+    "ManaCost": "{7}",
+    "TypeLine": "Artifact Creature — Juggernaut",
+    "OracleText": "Whenever this creature attacks, defending player mills half their library, rounded up.\nUnearth {1}{U}{U}{U} ({1}{U}{U}{U}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)",
+    "Power": "6",
+    "Toughness": "4",
+    "Colors": [],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Terisian Mindbreaker",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Juggernaut",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Juggernaut"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever this creature attacks, defending player mills half their library, rounded up.\nUnearth {1}{U}{U}{U} ({1}{U}{U}{U}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "mill",
+              "Count": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "derived",
+                  "DerivedFrom": "CardsInLibrary"
+                },
+                "Operation": "half",
+                "Rounding": "up"
+              },
+              "Player": {
+                "Kind": "DefendingPlayer"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Unearth",
+          "Reminder": {
+            "Text": "({1}{U}{U}{U}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "unearth",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 1
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ]
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ]
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{7}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 7
+          }
+        ],
+        "ManaValue": 7,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}
