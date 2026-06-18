@@ -6,7 +6,7 @@
     "addType": "additive card-type/subtype grant (CR 205.1a \u0027in addition to their other types\u0027) \u2014 type-line characteristic, no interaction flow rule reads additive type grants yet; consciously inert for interaction recall",
     "additionalCastCost": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "additionalCombatAndMainPhase": "no semantic projection yet \u2014 coarse fallback no flow rule consumes; explicit named carve-out",
-    "additionalCombatPhase": "CR 500.8 turn-structure insertion (no additional main phase) \u2014 no flow rule consumes extra-combat-phase events yet; consciously inert for interaction recall",
+    "additionalCombatPhase": "CR 500.8 turn-structure insertion (no additional main phase; Combat Celebrant, Godo) \u2014 no flow rule consumes extra-combat-phase events yet; consciously inert for interaction recall",
     "allMustBlock": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "alternativePayment": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "amass": "Amass keyword action (CR 701.45a) \u2014 counter placement on Army tokens; no flow rule reads Amass yet; consciously inert for interaction recall",

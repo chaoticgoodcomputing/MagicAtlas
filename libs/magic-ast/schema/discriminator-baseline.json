@@ -54,6 +54,7 @@
     "OracleEffect:addType",
     "OracleEffect:additionalCastCost",
     "OracleEffect:additionalCombatAndMainPhase",
+    "OracleEffect:additionalCombatPhase",
     "OracleEffect:allMustBlock",
     "OracleEffect:alternativeCast",
     "OracleEffect:alternativePayment",
