@@ -1,0 +1,132 @@
+{
+  "Input": {
+    "Name": "Conduit of Worlds",
+    "ManaCost": "{2}{G}{G}",
+    "TypeLine": "Artifact",
+    "OracleText": "You may play lands from your graveyard.\n{T}: Choose target nonland permanent card in your graveyard. If you haven't cast a spell this turn, you may cast that card. If you do, you can't cast additional spells this turn. Activate only as a sorcery.",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Conduit of Worlds",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You may play lands from your graveyard.\n{T}: Choose target nonland permanent card in your graveyard. If you haven't cast a spell this turn, you may cast that card. If you do, you can't cast additional spells this turn. Activate only as a sorcery.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "mayPlayFromGraveyard",
+              "Cards": {
+                "CardTypes": [
+                  "land"
+                ],
+                "Zone": "Graveyard",
+                "Controller": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "count",
+                "Filter": {
+                  "History": {
+                    "PredicateType": "castThisTurn",
+                    "Caster": "You"
+                  }
+                },
+                "Count": {
+                  "Operator": "Equal",
+                  "Value": 0
+                }
+              },
+              "Then": {
+                "EffectType": "optional",
+                "Inner": {
+                  "EffectType": "mayCastTargetFromGraveyard",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": [
+                        "permanent"
+                      ],
+                      "ExcludedCardTypes": [
+                        "land"
+                      ],
+                      "Zone": "Graveyard",
+                      "Controller": "You"
+                    }
+                  }
+                },
+                "IfYouDo": {
+                  "EffectType": "cantCastAdditionalSpellsThisTurn"
+                }
+              }
+            }
+          ],
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
