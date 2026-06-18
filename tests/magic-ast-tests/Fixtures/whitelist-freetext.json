@@ -702,6 +702,12 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'it wasn't put onto the battlefield with this ability' is a loop-prevention anti-recursion gate unique to Kodama of the East Tree; requires a new NotEnteredByAbilityCondition arm with no current peer"
+    },
+    {
+      "card": "Spelunking",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'you put a Cave onto the battlefield this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound; requires a new PutSubtypeThisWayCondition arm with no current peer"
     }
   ]
 }

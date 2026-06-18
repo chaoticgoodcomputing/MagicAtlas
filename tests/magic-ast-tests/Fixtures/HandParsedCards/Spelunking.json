@@ -1,0 +1,137 @@
+{
+  "Input": {
+    "Name": "Spelunking",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "When this enchantment enters, draw a card, then you may put a land card from your hand onto the battlefield. If you put a Cave onto the battlefield this way, you gain 4 life.\nLands you control enter untapped.",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Spelunking",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this enchantment enters, draw a card, then you may put a land card from your hand onto the battlefield. If you put a Cave onto the battlefield this way, you gain 4 life.\nLands you control enter untapped.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "enchantment"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "drawCards",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                },
+                {
+                  "EffectType": "optional",
+                  "Inner": {
+                    "EffectType": "putFromHandOntoBattlefield",
+                    "Filter": {
+                      "CardTypes": [
+                        "land"
+                      ],
+                      "Zone": "Hand",
+                      "Controller": "You"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "you put a Cave onto the battlefield this way"
+              },
+              "Then": {
+                "EffectType": "gainLife",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 4
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "When": "asObjectEnters",
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "Controller": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
