@@ -34,4 +34,18 @@ public sealed record TakeExtraTurnEffect : Effect
   /// takes an extra turn after this one." (Timetwister-adjacent spells).
   /// </summary>
   public required ObjectReference Player { get; init; }
+
+  /// <summary>
+  /// How many extra turns are taken. Null (omitted in JSON) for the canonical
+  /// "an extra turn" form (count = 1). Populated for "Take two extra turns after
+  /// this one." (Teferi, Master of Time −10) and similar N-turn forms.
+  ///
+  /// <para>
+  /// CR 500.7: "If a player is given multiple extra turns, the extra turns are
+  /// added one at a time." Recording the count here keeps the oracle description
+  /// faithful; the sequencing is engine territory (ADR 0001).
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? Count { get; init; }
 }
