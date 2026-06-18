@@ -549,9 +549,9 @@ public sealed class PortWalk
       // spell is put on the STACK, isn't cast, and carries no ETB/untap to graft onto a permanent loop).
       // Project it FAITHFULLY but DISTINCTLY (emit:copy:spell, NON-NULL Subject = the copied-spell filter)
       // so the copy-inheritance permanent graft (which keys on the bare emit:copy) never grafts a spell as a
-      // permanent. No flow arm consumes emit:copy:spell yet — the sound spell-copy refuel needs a
-      // copy-of-spell graft shape (sibling of copy-inheritance), STOP-and-reported for human review; this is
-      // the parse-layer prerequisite (PortLabel.SpellCopyEmit docstring; adding-a-flow-arm.md projection↔connection split).
+      // permanent. Consumed by the ("copy","cast") arm (PortGraphEngine.SpellCopyReFiresEffects): a stack
+      // spell-copy re-fires the copied spell's effects into a type-compatible cast:spell:self driver
+      // (CR 707.10), never a cast trigger. (adding-a-flow-arm.md projection↔connection split.)
       if (copyTarget.Zone == MagicAST.AST.References.Zone.Stack)
         return Port(card, PortLabel.SpellCopyEmit(copyTarget, _ontology), PortSide.Emit, subject: copyTarget);
 

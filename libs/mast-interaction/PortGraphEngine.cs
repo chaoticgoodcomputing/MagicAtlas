@@ -609,8 +609,35 @@ public sealed class PortGraphEngine
       // Subjects (the returned {instant,sorcery} graveyard filter vs the cast spell's {instant,sorcery}
       // self-type). A returned filter type-incompatible with the cast spell is pruned by the operator.
       ("returntohand", "cast") => SpellRecursionSatisfiesCast(emit, consume),
+      // Stack spell-copy (CR 707.10). A copy of a spell resolves with the ORIGINAL's effects, so an
+      // emit:copy:spell:<types> re-fires a type-compatible spell's effect emits — modeled as feeding that
+      // spell's cast:spell driver (its effect source). Reverberate (copy instant/sorcery) re-fires Pair o'
+      // Dice Lost's roll/return effects, closing the magecraft-copy loop. NOT a cast TRIGGER (CR 707.10:
+      // a copy is never cast); this is the copy's own-effects re-fire, which IS real. Feasibility only —
+      // the operator tiers on the copied-type vs spell-self-type Subjects.
+      ("copy", "cast") => SpellCopyReFiresEffects(emit, consume),
       _ => false,
     };
+
+  /// <summary>
+  /// A STACK spell-copy (<c>emit:copy:spell:&lt;types&gt;</c>, CR 707.10) re-fires the copied spell's own
+  /// effects: it satisfies a <c>cast:spell:self</c> driver of a DIFFERENT card whose self-type is
+  /// type-compatible with the copied filter (Reverberate copies "an instant or sorcery" → Pair o' Dice
+  /// Lost IS an instant). Excludes the permanent token-copy path (<c>emit:copy</c>, no <c>:spell</c>) and a
+  /// spell copying itself (a spell can't target itself on the stack). Feasibility only — <see cref="AddRulesEdge"/>
+  /// tiers GREEN vs AMBER on the Subjects (Subsumes vs Intersects).
+  /// </summary>
+  private bool SpellCopyReFiresEffects(PortNode emit, PortNode consume)
+  {
+    if (!emit.Label.StartsWith("emit:copy:spell", StringComparison.Ordinal))
+      return false; // a permanent token-copy (emit:copy) has no spell effects to re-fire
+    if (string.Equals(emit.Card, consume.Card, StringComparison.Ordinal))
+      return false; // a spell can't copy itself on the stack
+    if (emit.Subject is null || consume.Subject is null)
+      return true;
+    return ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
+      != FilterRelation.Disjoint;
+  }
 
   /// <summary>
   /// A spell-recursion emit (emit:returntohand:spell, Subject = the returned instant/sorcery filter)

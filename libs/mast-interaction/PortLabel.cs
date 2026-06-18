@@ -205,15 +205,14 @@ public static class PortLabel
   /// instant/sorcery-on-stack discriminator the operator would tier a future spell-copy arm on; never a
   /// scalar null-default GREEN — adding-a-flow-arm anti-pattern 3).
   ///
-  /// <para><b>No flow arm consumes this yet</b> (interaction-judge / human review pending): the sound
-  /// refuel for the bench spell-copy combos (Dualcaster × Ghostly Flicker, Dualcaster × Cackling
-  /// Counterpart, Reiterate × Narset's Reversal) is the copy <em>reproducing the copied spell's
-  /// effects</em> (a blink that re-flickers Dualcaster; a token-copy that re-makes Dualcaster; a
-  /// spell-copy that re-copies), which needs a copy-of-spell GRAFT shape (a sibling of copy-inheritance)
-  /// the corpus does not yet model — NOT an <c>emit:copy:spell → trigger:cast</c> arm, which CR 707.10
-  /// makes unsound (a copy isn't cast, so it can't feed a "whenever you cast" trigger). Projecting the
-  /// label faithfully and distinctly is the parse-layer prerequisite for that future arm (the
-  /// projection↔connection split, adding-a-flow-arm.md).</para>
+  /// <para><b>Consumed by the <c>("copy","cast")</c> arm</b> (LANDED 2026-06-18, interaction-judge
+  /// PROCEED — <c>PortGraphEngine.SpellCopyReFiresEffects</c>): a spell-copy <em>reproduces the copied
+  /// spell's effects</em> (CR 707.10), so it feeds a type-compatible spell's <c>cast:spell:self</c>
+  /// effect-driver — NOT a <c>trigger:cast</c> (a copy isn't cast, so it can't feed "whenever you cast"),
+  /// which the arm's Role≠trigger keying makes structurally impossible. Reconstructs Dualcaster × Ghostly
+  /// Flicker / × Cackling Counterpart, Narset's Reversal × Reiterate (all Missed→Amber) and the
+  /// Storm-Kiln × Reverberate × Pair o' Dice Lost dice combo. Honest AMBER via the IsSelf Subsumes=No
+  /// floor (the copied "instant or sorcery" only Intersects the recast spell's self-type).</para>
   /// </summary>
   public static string SpellCopyEmit(ObjectFilter spell, TypeOntology ontology) =>
     Join("emit", "copy", "spell", Subject(spell, ontology));

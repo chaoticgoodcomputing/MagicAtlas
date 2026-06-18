@@ -53,6 +53,13 @@ public class DiceComboReconstructionProbe
     var edges = engine.Materialize(graphs);
     var cycles = engine.FindCycles(edges, PortGraphEngine.DefaultReconstructionReach);
 
+    foreach (var g in graphs)
+      TestContext.Out.WriteLine(
+        $"PORTS {g.Ports.FirstOrDefault()?.Card}: "
+          + string.Join(", ", g.Ports.Select(p => p.Label))
+      );
+    foreach (var e in edges)
+      TestContext.Out.WriteLine($"EDGE [{e.Tier}] {e.From.Card}:{e.From.Label} → {e.To.Card}:{e.To.Label}");
     TestContext.Out.WriteLine($"edges among the 3 cards: {edges.Count}");
     TestContext.Out.WriteLine($"emit:rolldice ports present: {edges.Count(e => e.From.Label.StartsWith("emit:rolldice"))}");
     TestContext.Out.WriteLine($"cycles found: {cycles.Count}");

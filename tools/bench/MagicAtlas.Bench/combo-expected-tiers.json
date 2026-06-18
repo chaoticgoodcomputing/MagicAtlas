@@ -16,8 +16,8 @@
         "Narset's Reversal",
         "Reiterate"
       ],
-      "expectedTier": "Missed",
-      "reason": "no spanning cycle reconstructs the interaction over the combo's gold ASTs (engine blind spot)"
+      "expectedTier": "Amber",
+      "reason": "Spell-copy re-fires the copied spell's effects (the ('copy','cast') arm, CR 707.10); honest AMBER via the IsSelf Subsumes=No floor (twin of the spell-recast arm) — the copied 'instant or sorcery' only Intersects the recast spell's self-type, never a false GREEN. interaction-judge PROCEED 2026-06-18."
     },
     {
       "id": "110-3966",
@@ -83,8 +83,8 @@
         "Dualcaster Mage",
         "Cackling Counterpart"
       ],
-      "expectedTier": "Missed",
-      "reason": "no spanning cycle reconstructs the interaction over the combo's gold ASTs (engine blind spot)"
+      "expectedTier": "Amber",
+      "reason": "Spell-copy re-fires the copied spell's effects (the ('copy','cast') arm, CR 707.10); honest AMBER via the IsSelf Subsumes=No floor (twin of the spell-recast arm) — the copied 'instant or sorcery' only Intersects the recast spell's self-type, never a false GREEN. interaction-judge PROCEED 2026-06-18."
     },
     {
       "id": "147-1987",
@@ -92,8 +92,8 @@
         "Ghostly Flicker",
         "Dualcaster Mage"
       ],
-      "expectedTier": "Missed",
-      "reason": "no spanning cycle reconstructs the interaction over the combo's gold ASTs (engine blind spot)"
+      "expectedTier": "Amber",
+      "reason": "Spell-copy re-fires the copied spell's effects (the ('copy','cast') arm, CR 707.10); honest AMBER via the IsSelf Subsumes=No floor (twin of the spell-recast arm) — the copied 'instant or sorcery' only Intersects the recast spell's self-type, never a false GREEN. interaction-judge PROCEED 2026-06-18."
     },
     {
       "id": "1987-2493-3821",

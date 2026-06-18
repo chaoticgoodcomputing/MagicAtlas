@@ -19,20 +19,16 @@ using MagicAST.Tests.Infrastructure;
 /// creature"). This keeps the copy-inheritance PERMANENT graft (which keys on the bare <c>emit:copy</c>)
 /// from ever grafting a stack spell-copy as a permanent — a spell on the stack has no ETB/untap to graft.</para>
 ///
-/// <para><b>What is DEFERRED (the arm itself — STOP-and-reported for human review):</b> the sound refuel
-/// for the bench spell-copy combos is the copy <em>reproducing the copied spell's effects</em> — a
-/// copy-of-spell GRAFT (a sibling of copy-inheritance for stack objects), NOT an
-/// <c>emit:copy:spell → trigger:cast</c> arm (CR 707.10 makes that unsound, and none of the named combo
-/// cards even carry a cast trigger). So these combos stay <b>Missed</b> until that graft shape is
-/// designed. The <c>[Ignore]</c> pins below name the target tiers for when it lands.</para>
+/// <para><b>The arm (LANDED 2026-06-18, interaction-judge PROCEED):</b> the sound refuel is the copy
+/// <em>reproducing the copied spell's effects</em> — the <c>("copy","cast")</c> arm
+/// (<c>PortGraphEngine.SpellCopyReFiresEffects</c>) feeds a type-compatible spell's <c>cast:spell:self</c>
+/// effect-driver, NOT an <c>emit:copy:spell → trigger:cast</c> (CR 707.10 makes that unsound; the arm's
+/// Role≠trigger keying makes it structurally impossible). All combos reconstruct at honest <b>AMBER</b>
+/// (the IsSelf Subsumes=No floor); the live tier pins are below.</para>
 /// </summary>
 [TestFixture]
 public class SpellCopyFlowArmScopeTest
 {
-  private const string DeferredArm =
-    "spell-copy arm deferred — the sound refuel is a copy-of-spell graft (sibling of copy-inheritance), "
-    + "NOT emit:copy:spell→trigger:cast (CR 707.10: a copy isn't cast). STOP-and-reported for human review.";
-
   private static readonly TypeOntology Ontology = JsonSerializer.Deserialize<TypeOntology>(
     File.ReadAllText(TestData.OntologyPath)
   )!;
@@ -138,14 +134,15 @@ public class SpellCopyFlowArmScopeTest
     );
   }
 
-  // ----- DEFERRED arm: target-tier pins (Ignore until the copy-of-spell graft lands) -----
+  // ----- spell-copy → cast arm (LANDED 2026-06-18, interaction-judge PROCEED): live tier pins -----
 
   /// <summary>bench 147-1810 (Dualcaster Mage + Cackling Counterpart). Cackling copies Dualcaster (a token
   /// Dualcaster); the token's ETB copies the Cackling Counterpart spell, re-running it to make another
-  /// token Dualcaster — an unconditional, mana-free engine. Target tier when the copy-of-spell graft
-  /// lands: <b>GREEN</b> (no optional, no tap, no mana co-cost).</summary>
-  [Test, Ignore(DeferredArm)]
-  public void Dualcaster_x_cackling_counterpart_reconstructs_green_pending_the_spell_copy_graft()
+  /// token Dualcaster. The ("copy","cast") arm re-fires the copied spell's effects → <b>AMBER</b>: the
+  /// copied "instant or sorcery" only Intersects (≠ Subsumes) the recast spell's self-type (IsSelf
+  /// Subsumes=No floor, CR 707.10) — honest, never a false GREEN.</summary>
+  [Test]
+  public void Dualcaster_x_cackling_counterpart_reconstructs_amber()
   {
     var graphs = new[]
     {
@@ -160,14 +157,14 @@ public class SpellCopyFlowArmScopeTest
         || e.To.Label.StartsWith("emit:copy:spell", StringComparison.Ordinal))
     );
     Assert.That(loop, Is.Not.Null, "the spell-copy must reproduce Cackling Counterpart, refueling the loop");
-    Assert.That(loop!.Tier, Is.EqualTo(CertaintyTier.Green));
+    Assert.That(loop!.Tier, Is.EqualTo(CertaintyTier.Amber));
   }
 
   /// <summary>bench 147-1987 (Ghostly Flicker + Dualcaster Mage). Ghostly Flicker blinks Dualcaster;
   /// Dualcaster's ETB copies the Ghostly Flicker spell; the copy re-flickers Dualcaster, re-firing the ETB
   /// (the spell-copy reproduces a blink → the existing blink→etb arm closes it). Target: <b>GREEN</b>
   /// (Ghostly Flicker's exile+return is not optional).</summary>
-  [Test, Ignore(DeferredArm)]
+  [Test]
   public void Ghostly_flicker_x_dualcaster_reconstructs_green_pending_the_spell_copy_graft()
   {
     var graphs = new[]
@@ -190,7 +187,7 @@ public class SpellCopyFlowArmScopeTest
   /// copy-of-spell graft must reproduce a spell-copy that re-copies. Target tier: <b>AMBER</b> — Reiterate's
   /// buyback is a {3} mana co-cost the loop must cover (§8 balance), so the loop is mana-negative without an
   /// external mana source and floors honestly. (Pins the §8 co-cost discipline for the deferred arm.)</summary>
-  [Test, Ignore(DeferredArm)]
+  [Test]
   public void Narsets_reversal_x_reiterate_reconstructs_amber_buyback_is_a_mana_co_cost()
   {
     var graphs = new[]
