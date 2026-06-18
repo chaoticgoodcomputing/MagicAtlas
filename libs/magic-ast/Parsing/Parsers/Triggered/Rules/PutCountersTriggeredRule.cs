@@ -147,6 +147,22 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
     }
     else if (lower.Contains("target creature you control"))
     {
+      // "other than [Card Name]" where the name is the card's own name (self-reference,
+      // CR 109.5 / CR 201.5) — the target excludes the source permanent itself.
+      // Model as ExcludeSelf=true, the same axis used for "another target creature you
+      // control" (hasAnother). The SelfReferenceTypeCorrector downstream handles the
+      // creature-type default (CR 201.5).
+      //
+      // Distinguished from "other than that creature" (a pronoun referring to a
+      // different game object, NOT to self — e.g. PawpatchRecruit's trigger) by
+      // checking that the word immediately following "other than " begins with an
+      // uppercase letter (proper noun / card name) rather than a lowercase pronoun
+      // ("that", "this", "it").
+      var hasOtherThanSelfName = Regex.IsMatch(
+        text,
+        @"\bother\s+than\s+[A-Z]",
+        RegexOptions.None
+      );
       target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
@@ -154,7 +170,7 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
         {
           CardTypes = ["creature"],
           Controller = ControllerFilter.You,
-          ExcludeSelf = hasAnother ? true : (bool?)null,
+          ExcludeSelf = (hasAnother || hasOtherThanSelfName) ? true : (bool?)null,
         },
       };
     }

@@ -506,6 +506,12 @@
       "reason": "may-pay-cost effort structuring — deferred adjunct (same as Nim Deathmantle/Ulalek; the ConditionalPayEffect.Cost carries the structured {2})"
     },
     {
+      "card": "RosieCottonofSouthLane",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
       "card": "SPM/HotDogCart",
       "sink": "AbilityText",
       "tag": "irreducible",
