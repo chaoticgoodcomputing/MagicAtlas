@@ -204,6 +204,19 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       Triggered.Rules.EntersAndCreatureControllerDealsCombatDamageToPlayerConditionRule.PendingAdditionalTrigger = null;
     }
 
+    // Compound-trigger: Eerie ability-word "Whenever an enchantment you control enters
+    // and whenever you fully unlock a Room" — read and clear the pending secondary trigger
+    // from the compound-condition rule (CR 603.2, same pattern as above).
+    if (additionalTrigger is null)
+    {
+      additionalTrigger = Triggered.Rules.EnchantmentEntersOrFullyUnlocksRoomConditionRule.PendingAdditionalTrigger;
+      Triggered.Rules.EnchantmentEntersOrFullyUnlocksRoomConditionRule.PendingAdditionalTrigger = null;
+    }
+    else
+    {
+      Triggered.Rules.EnchantmentEntersOrFullyUnlocksRoomConditionRule.PendingAdditionalTrigger = null;
+    }
+
     // Triple-or-more trigger: if a TriggerConditionRule left a pending list of extra
     // conditions (e.g. SyrKonradTripleOrConditionRule for Syr Konrad, the Grim), read
     // and clear it so the TriggeredAbility can carry all three conditions (CR 603.2).

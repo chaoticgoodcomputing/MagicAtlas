@@ -120,6 +120,10 @@ public sealed class AbilityClassifier
       "Void",
       // Bloom Tender / Eventide ability word (CR 207.2c list)
       "Vivid",
+      // Duskmourn: House of Horror ability word (CR 207.2c list).
+      // "Eerie — Whenever an enchantment you control enters and whenever you fully
+      // unlock a Room, [effect]." — fires on enchantment ETB and Room full-unlock.
+      "Eerie",
       // Exhaust (CR 702.177): a special kind of activated ability. "Exhaust — [Cost]:
       // [Effect]" means "[Cost]: [Effect]. Activate only once." The prefix is stripped
       // and the ability word emitted so the parser can inject the OnlyOnce restriction.
