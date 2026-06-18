@@ -41,4 +41,14 @@ public sealed record ExileEffect : ContinuousEffect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectReference? EncodedOn { get; init; }
+
+  /// <summary>
+  /// "exile [target] face down" — the card is placed in exile hidden from
+  /// opponents (CR 406.3: "Cards 'exiled face down' can't be examined by any
+  /// player except when instructions allow it"). The exiling player may look at
+  /// it per CR 406.3. Used by Ugin, the Ineffable's +1 ability and similar effects.
+  /// Null (omitted in JSON) for normal face-up exile.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsFaceDown { get; init; }
 }

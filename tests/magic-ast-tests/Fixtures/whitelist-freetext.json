@@ -620,6 +620,12 @@
       "reason": "PB-7 structured-condition buckets — 'it’s legendary' is a supertype-presence predicate on the equipped creature; no IsLegendary/SuptertypeCondition arm exists yet in ConditionParser"
     },
     {
+      "card": "UgintheIneffable",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "two PB-9 structured-characteristic residuals: (1) positional 'top' on library exile target (no Position axis on ObjectFilter; same residual as M20/MysticForge and BFZ/FathomFeeder); (2) 'one or more colors' is a color-presence filter (complement of IsColorless) with no dedicated IsColored boolean axis yet"
+    },
+    {
       "card": "UlalekFusedAtrocity",
       "sink": "Instructions",
       "tag": "irreducible",
