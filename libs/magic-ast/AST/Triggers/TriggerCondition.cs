@@ -433,6 +433,20 @@ public enum TriggerEvent
   /// </summary>
   LeavesGraveyard,
 
+  /// <summary>
+  /// A player fully unlocks a Room permanent — "whenever you fully unlock a Room"
+  /// (CR 709.5i). A Room permanent has a shared type line and two halves (doors);
+  /// it is "fully unlocked" when the second of its two unlocked designations is
+  /// assigned — either when both halves are cast as spells simultaneously or when
+  /// a player pays the unlock cost of the remaining locked half. The Filter carries
+  /// the controller restriction (Controller = You).
+  /// CR 709.5i: "Some abilities trigger when a player 'fully unlocks' a permanent
+  /// with a shared type line. Such an ability triggers when that permanent has one
+  /// of the two unlocked designations and gets the other, or when it has neither
+  /// designation and gains both."
+  /// </summary>
+  FullyUnlockRoom,
+
   /// <summary>Unrecognized trigger event</summary>
   Other,
 }
