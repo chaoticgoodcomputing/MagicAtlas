@@ -284,6 +284,12 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
+      "card": "MarvinMurderousMimic",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 relational name-exclusion predicate — 'don't have the same name as this creature' is a self-referential name filter with no structured ObjectFilter field; a future ExcludesSameNameAsSelf axis would close it"
+    },
+    {
       "card": "MasterofCruelties",
       "sink": "OtherCondition",
       "tag": "debt",

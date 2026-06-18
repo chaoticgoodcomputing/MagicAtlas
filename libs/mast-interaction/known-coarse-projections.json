@@ -75,6 +75,7 @@
     "gainEnergy": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "graft": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "harmonize": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "hasAllAbilitiesOfControlledCreatures": "ability-set grant from battlefield creatures you control (CR 613.1f layer-6, Marvin Murderous Mimic) — grants all activated abilities of a filtered set of controlled permanents; no interaction flow rule reads this dynamic ability-set grant yet; consciously inert for interaction recall",
     "hideaway": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "impulse": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "increment": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
