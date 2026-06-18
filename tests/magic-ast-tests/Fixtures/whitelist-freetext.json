@@ -506,6 +506,12 @@
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
+      "card": "TheRealityChip",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets \u2014 'The Reality Chip is attached to a creature' is an attachment-state predicate; no IsAttachedToCreature condition arm exists yet (CR 702.151b)"
+    },
+    {
       "card": "TirelessProvisioner",
       "sink": "AbilityText",
       "tag": "irreducible",
