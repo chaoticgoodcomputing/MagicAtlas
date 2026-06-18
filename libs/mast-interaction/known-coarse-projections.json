@@ -162,7 +162,8 @@
     "warp": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "webSlinging": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "winTheGame": "absolute win effect — no flow rule needs to propagate win conditions yet; coarse conscious carve-out",
-    "gainAbilitiesFromExiledCards": "ability-set grant from exiled creature cards (CR 613.1f layer-6) — grants dynamic activated abilities; no interaction flow rule reads exiled-card ability grants yet; consciously inert for interaction recall"
+    "gainAbilitiesFromExiledCards": "ability-set grant from exiled creature cards (CR 613.1f layer-6) — grants dynamic activated abilities; no interaction flow rule reads exiled-card ability grants yet; consciously inert for interaction recall",
+    "wish": "Karn, the Great Creator −2 / Glittering Wish family (CR 400.11b: retrieve from outside game or exile to hand) — sideboard retrieval; no interaction flow rule reads wish-retrieval events yet; consciously inert for interaction recall"
   },
   "costType": {
     "composite": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
