@@ -219,6 +219,7 @@
     "EntersOrHauntedCreatureDies": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "Exerted": "CR 701.43 exert action event — fires the linked 'When you do' triggered ability (CR 607.2h); no flow rule consumes exert events yet; consciously inert for interaction recall",
     "Exiled": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "LeavesGraveyard": "Syr Konrad, the Grim third-clause trigger — fires when a creature card leaves the controller's graveyard by any means (cast, returned to hand, exiled, etc.); no flow rule consumes it yet; consciously inert for interaction recall",
     "LeavesTheBattlefield": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "Mutates": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "NoncombatDamageDealt": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",

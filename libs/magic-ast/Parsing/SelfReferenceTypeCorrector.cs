@@ -63,15 +63,27 @@ public static class SelfReferenceTypeCorrector
         ? null
         : CorrectTrigger(triggered.AdditionalTrigger, selfTypes);
 
+    IReadOnlyList<TriggerCondition>? additionals = null;
+    if (triggered.AdditionalTriggers is not null)
+    {
+      var corrected = triggered.AdditionalTriggers
+        .Select(t => CorrectTrigger(t, selfTypes))
+        .ToList();
+      additionals = corrected.Zip(triggered.AdditionalTriggers, ReferenceEquals).All(x => x)
+        ? triggered.AdditionalTriggers
+        : corrected;
+    }
+
     if (
       ReferenceEquals(trigger, triggered.Trigger)
       && ReferenceEquals(additional, triggered.AdditionalTrigger)
+      && ReferenceEquals(additionals, triggered.AdditionalTriggers)
     )
     {
       return ability;
     }
 
-    return triggered with { Trigger = trigger, AdditionalTrigger = additional };
+    return triggered with { Trigger = trigger, AdditionalTrigger = additional, AdditionalTriggers = additionals };
   }
 
   private static TriggerCondition CorrectTrigger(
