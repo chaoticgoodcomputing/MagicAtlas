@@ -12,6 +12,14 @@ using MagicAST.AST.References;
 /// Also handles "target player mills N cards." (Constellation pattern such as
 /// Sage of Mysteries / Thassa's Devourer) where the target is encoded as
 /// Player = Target + player filter (Rule 115.1).
+/// Also handles "defending player mills half their library, rounded up/down."
+/// (Terisian Mindbreaker) where the defending player (CR 508.1b) mills a
+/// calculated half of their own library, rounded in the named direction.
+/// The <see cref="ObjectReferenceKind.DefendingPlayer"/> reference already exists
+/// in the reference system; this rule composes it with a
+/// <see cref="CalculatedQuantity"/> using <see cref="DerivedKind.CardsInLibrary"/>
+/// as the base (mirroring the Heartless Hidetsugu pattern where LifeTotal is
+/// used without a source — context is provided by the Player field of MillEffect).
 /// </summary>
 [TriggeredRule]
 public sealed class MillTriggeredRule : ITriggeredRule
@@ -23,6 +31,16 @@ public sealed class MillTriggeredRule : ITriggeredRule
 
   private static readonly Regex TargetPattern = new(
     @"^target\s+(?<target>player|opponent)\s+mills?\s+(?<count>a|an|one|two|three|four|five|\d+)\s+cards?$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// "defending player mills half their library, rounded down/up."
+  /// CR 701.17a — the count is half of the defending player's library size.
+  /// Anchored (^ … $) to prevent substring collision with other mill patterns.
+  /// </summary>
+  private static readonly Regex DefendingHalfLibraryPattern = new(
+    @"^defending\s+player\s+mills?\s+half\s+their\s+library,?\s+rounded\s+(?<rounding>down|up)$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -38,6 +56,23 @@ public sealed class MillTriggeredRule : ITriggeredRule
       {
         Count = LiteralQuantity.Of(ParseCount(selfMatch.Groups[1].Value)),
         Player = ObjectReference.You(),
+      };
+      return true;
+    }
+
+    var defendingHalfMatch = DefendingHalfLibraryPattern.Match(trimmed);
+    if (defendingHalfMatch.Success)
+    {
+      var rounding = defendingHalfMatch.Groups["rounding"].Value.ToLowerInvariant();
+      effect = new MillEffect
+      {
+        Count = new CalculatedQuantity
+        {
+          BaseQuantity = new DerivedQuantity { DerivedFrom = DerivedKind.CardsInLibrary },
+          Operation = "half",
+          Rounding = rounding,
+        },
+        Player = new ObjectReference { Kind = ObjectReferenceKind.DefendingPlayer },
       };
       return true;
     }
