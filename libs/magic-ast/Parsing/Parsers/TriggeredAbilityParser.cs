@@ -191,6 +191,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     var additionalTrigger = Triggered.Rules.EntersAndOpponentDrawsNotFirstConditionRule.PendingAdditionalTrigger;
     Triggered.Rules.EntersAndOpponentDrawsNotFirstConditionRule.PendingAdditionalTrigger = null;
 
+    // Triple-or-more trigger: if a TriggerConditionRule left a pending list of extra
+    // conditions (e.g. SyrKonradTripleOrConditionRule for Syr Konrad, the Grim), read
+    // and clear it so the TriggeredAbility can carry all three conditions (CR 603.2).
+    var additionalTriggers = Triggered.Rules.SyrKonradTripleOrConditionRule.PendingAdditionalTriggers;
+    Triggered.Rules.SyrKonradTripleOrConditionRule.PendingAdditionalTriggers = null;
+
     // Compound-condition trigger: if a TriggerConditionRule left a pending intervening-if
     // (e.g. AttacksPlayerAndIsntBlockedConditionRule for Master of Cruelties), read and
     // clear it. If no intervening-if was already extracted from the trigger text, adopt
@@ -229,6 +235,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       {
         Trigger = trigger,
         AdditionalTrigger = additionalTrigger,
+        AdditionalTriggers = additionalTriggers,
         InterveningIf = interveningIf,
         Effects = [modalEffect],
         AbilityWord = abilityWord,
@@ -262,6 +269,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     {
       Trigger = trigger,
       AdditionalTrigger = additionalTrigger,
+      AdditionalTriggers = additionalTriggers,
       InterveningIf = interveningIf,
       Effects = effects,
       Instructions = ExtractInstructions(effectPart, effects),
@@ -608,6 +616,16 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         }
       }
     }
+
+    // "Syr Konrad deals …", "Ragavan deals …" — a proper-noun source followed by
+    // "deals" is a named-creature damage effect and therefore an effect start.
+    // The named-card oracle convention capitalises the self-reference (CR 201.3).
+    // Match: starts with an uppercase letter, followed by non-comma text, then " deals ".
+    if (Regex.IsMatch(tail, @"^[A-Z]\S.*\s+deals?\s+", RegexOptions.None))
+    {
+      return true;
+    }
+
     return false;
   }
 

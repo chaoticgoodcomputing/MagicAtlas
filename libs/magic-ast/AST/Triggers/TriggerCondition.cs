@@ -421,6 +421,18 @@ public enum TriggerEvent
   /// </summary>
   Cycled,
 
+  /// <summary>
+  /// A card leaves a player's graveyard — "a creature card leaves your graveyard"
+  /// (Syr Konrad, the Grim). Covers any zone change that removes a card from the
+  /// graveyard (cast from graveyard, returned to hand, exiled, etc.).
+  /// CR 603.2: "Whenever a game event … matches a triggered ability's trigger event,
+  /// that ability automatically triggers." The Filter carries card-type and
+  /// Controller (You = your graveyard) restrictions.
+  /// Distinct from <see cref="LeavesTheBattlefield"/> (which fires when a permanent
+  /// moves away from the battlefield) — here the origin zone is the graveyard.
+  /// </summary>
+  LeavesGraveyard,
+
   /// <summary>Unrecognized trigger event</summary>
   Other,
 }

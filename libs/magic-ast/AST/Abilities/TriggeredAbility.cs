@@ -43,6 +43,24 @@ public sealed record TriggeredAbility : Ability
   public TriggerCondition? AdditionalTrigger { get; init; }
 
   /// <summary>
+  /// Two or more additional trigger conditions beyond <see cref="AdditionalTrigger"/> —
+  /// used when oracle text lists three or more disjoint events on one ability
+  /// (e.g. Syr Konrad, the Grim: "Whenever … dies, or … is put into a graveyard …,
+  /// or … leaves your graveyard, …"). Items in this list are the 3rd, 4th, … conditions;
+  /// <see cref="Trigger"/> is always the 1st and <see cref="AdditionalTrigger"/> the 2nd.
+  ///
+  /// <para>
+  /// CR 603.2: a triggered ability fires whenever ANY of its stated events occurs.
+  /// The split across Trigger / AdditionalTrigger / AdditionalTriggers is purely
+  /// presentational (the list grew incrementally); semantically all conditions are
+  /// peers. Serialized only when present (two-condition abilities continue to use
+  /// only Trigger + AdditionalTrigger without any AdditionalTriggers list).
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<TriggerCondition>? AdditionalTriggers { get; init; }
+
+  /// <summary>
   /// Optional "intervening if" clause that must be true for the ability to trigger.
   /// Rule 603.4: "When/Whenever/At [trigger event], if [condition], [effect]."
   /// </summary>
