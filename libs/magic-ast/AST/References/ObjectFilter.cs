@@ -140,6 +140,19 @@ public sealed record ObjectFilter
   public bool? IsColorless { get; init; }
 
   /// <summary>
+  /// Filters to historic objects — those that have the legendary supertype, the
+  /// artifact card type, or the Saga subtype (CR 700.6: "The term historic refers
+  /// to an object that has the legendary supertype, the artifact card type, or the
+  /// Saga subtype."). A named game quality, not a supertype or subtype: it cannot
+  /// be expressed on the existing type axes without losing semantic precision
+  /// (encoding it as a Subtypes entry would assert "Historic" is a printed subtype
+  /// of the card, which is false). Parallels <see cref="IsColorless"/> as a boolean
+  /// game-quality axis on the filter.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsHistoric { get; init; }
+
+  /// <summary>
   /// Filters to multicolored objects (those with two or more colors). Rule 105.5
   /// ("An object is multicolored if it has two or more colors"). Parallel axis to
   /// <see cref="IsColorless"/> — distinct from the "has any of these colors" semantics
