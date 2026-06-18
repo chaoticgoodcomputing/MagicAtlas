@@ -25,9 +25,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// When the trigger-multiplying effect is scoped to triggers <em>caused by</em> a
 /// particular entering object (Panharmonicon: "if an artifact or creature entering
 /// causes … to trigger"), <see cref="CausedByEntering"/> carries an
-/// <see cref="ObjectFilter"/> for that entering object. Null when the scope is
-/// unconditional (Echoes of Eternity) — omitted in serialization so existing cards
-/// round-trip unchanged.
+/// <see cref="ObjectFilter"/> for that entering object. When scoped to triggers caused
+/// by a creature dying (Drivnod: "if a creature dying causes … to trigger"),
+/// <see cref="CausedByDying"/> carries an <see cref="ObjectFilter"/> for that dying
+/// object. Both are null when the scope is unconditional (Echoes of Eternity) —
+/// omitted in serialization so existing cards round-trip unchanged.
 /// </para>
 ///
 /// <para>
@@ -65,4 +67,28 @@ public sealed record AbilityTriggerEvent : ReplacementEvent
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectFilter? CausedByEntering { get; init; }
+
+  /// <summary>
+  /// When present, restricts this trigger-multiplication to triggered abilities that were
+  /// caused by an object matching this filter dying (being put into a graveyard from the
+  /// battlefield) — i.e. the oracle text reads "if a [filter] dying causes a triggered
+  /// ability … to trigger." Null when the scope is unconditional — omitted in
+  /// serialization so existing cards round-trip unchanged.
+  ///
+  /// <para>
+  /// Example: Drivnod, Carnage Dominus — "if a <c>creature</c> dying causes …" →
+  /// <c>CausedByDying = { CardTypes: ["creature"] }</c>. The filter narrows the universe
+  /// of triggers affected: only death-triggered abilities whose trigger event was a
+  /// creature dying are doubled.
+  /// </para>
+  ///
+  /// <para>
+  /// CR 603.2d (verbatim): "An ability may state that a triggered ability triggers
+  /// additional times." The dying scope is the parallel of the entering scope
+  /// (<see cref="CausedByEntering"/>): both restrict the multiplying effect to triggers
+  /// fired by a specific zone-change event for a matching object.
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectFilter? CausedByDying { get; init; }
 }

@@ -1,0 +1,166 @@
+{
+  "Input": {
+    "Name": "Drivnod, Carnage Dominus",
+    "ManaCost": "{3}{B}{B}",
+    "TypeLine": "Legendary Creature — Phyrexian Horror",
+    "OracleText": "If a creature dying causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.\n{B/P}{B/P}, Exile three creature cards from your graveyard: Put an indestructible counter on Drivnod. ({B/P} can be paid with either {B} or 2 life.)",
+    "Power": "8",
+    "Toughness": "3",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Drivnod, Carnage Dominus",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Phyrexian Horror",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Horror"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If a creature dying causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.\n{B/P}{B/P}, Exile three creature cards from your graveyard: Put an indestructible counter on Drivnod. ({B/P} can be paid with either {B} or 2 life.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "abilityTrigger",
+                "AffectedObjects": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Controller": "You"
+                },
+                "CausedByDying": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "OriginalEventOccurs": true,
+              "Modifier": {
+                "Type": "additionalTime"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ],
+                  "IsPhyrexian": true
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ],
+                  "IsPhyrexian": true
+                }
+              ]
+            },
+            {
+              "CostType": "exile",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Controller": "You"
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "FromZone": "Graveyard"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "indestructible",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 8,
+          "Raw": "8"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
