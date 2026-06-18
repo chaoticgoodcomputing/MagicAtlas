@@ -69,5 +69,8 @@ public static class PortWalkProjection
     "OnlyOnceEachTurn",
     "Conditional",
     "OnlyIfNoUntappedLands",
+    // CR 702.177a: Exhaust abilities can be activated "only once" (permanently, not per-turn).
+    // Stricter than OnlyOnceEachTurn: an exhaust ability is permanently locked after first use.
+    "OnlyOnce",
   };
 }

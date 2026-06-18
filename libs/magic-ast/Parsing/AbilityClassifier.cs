@@ -120,6 +120,10 @@ public sealed class AbilityClassifier
       "Void",
       // Bloom Tender / Eventide ability word (CR 207.2c list)
       "Vivid",
+      // Exhaust (CR 702.177): a special kind of activated ability. "Exhaust — [Cost]:
+      // [Effect]" means "[Cost]: [Effect]. Activate only once." The prefix is stripped
+      // and the ability word emitted so the parser can inject the OnlyOnce restriction.
+      "Exhaust",
     };
 
   /// <summary>
