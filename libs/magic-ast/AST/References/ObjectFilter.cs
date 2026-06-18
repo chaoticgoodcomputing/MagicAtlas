@@ -382,6 +382,22 @@ public enum ControllerFilter
   /// ownership, CR 108.3).
   /// </summary>
   ThatPlayer,
+
+  /// <summary>
+  /// Objects controlled by the defending player (CR 508.1b) — "target creature
+  /// defending player controls", "any creature defending player controls". The
+  /// defending player is the player being attacked (or the controller of a
+  /// planeswalker or battle being attacked). Distinct from
+  /// <see cref="Opponent"/> (which covers any opponent regardless of combat role)
+  /// and from <see cref="Target"/> (which requires a "target" keyword to select
+  /// a player). Used in combat-triggered abilities that target permanents
+  /// controlled by whoever is defending against the attacking creature.
+  /// CR 508.1b: "If the defending player controls any planeswalkers, is the
+  /// protector of any battles, or the game allows the active player to attack
+  /// multiple other players, the active player announces which player, planeswalker,
+  /// or battle each of the chosen creatures is attacking."
+  /// </summary>
+  DefendingPlayer,
 }
 
 /// <summary>

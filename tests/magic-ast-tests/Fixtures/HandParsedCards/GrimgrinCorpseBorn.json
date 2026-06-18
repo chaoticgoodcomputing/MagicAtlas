@@ -1,0 +1,194 @@
+{
+  "Input": {
+    "Name": "Grimgrin, Corpse-Born",
+    "ManaCost": "{3}{U}{B}",
+    "TypeLine": "Legendary Creature — Zombie Warrior",
+    "OracleText": "Grimgrin enters tapped and doesn't untap during your untap step.\nSacrifice another creature: Untap Grimgrin and put a +1/+1 counter on it.\nWhenever Grimgrin attacks, destroy target creature defending player controls, then put a +1/+1 counter on Grimgrin.",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": [
+      "B",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Grimgrin, Corpse-Born",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Zombie Warrior",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Grimgrin enters tapped and doesn't untap during your untap step.\nSacrifice another creature: Untap Grimgrin and put a +1/+1 counter on it.\nWhenever Grimgrin attacks, destroy target creature defending player controls, then put a +1/+1 counter on Grimgrin.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "When": "asThisEnters",
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "doesntUntap",
+              "WhoseUntapStep": "your"
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "ExcludeSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Self"
+              }
+            },
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "destroy",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Controller": "DefendingPlayer"
+                    }
+                  }
+                },
+                {
+                  "EffectType": "putCounters",
+                  "Target": {
+                    "Kind": "Self"
+                  },
+                  "CounterType": "+1/+1",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
