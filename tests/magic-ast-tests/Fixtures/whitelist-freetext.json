@@ -26,6 +26,12 @@
       "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
+      "card": "AncientCopperDragon",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing \u2014 Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
       "card": "ALA/Deathgreeter",
       "sink": "Instructions",
       "tag": "irreducible",

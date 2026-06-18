@@ -214,6 +214,23 @@ public sealed record CountersRemovedThisWayQuantity : Quantity
 }
 
 /// <summary>
+/// A quantity equal to the numeric result of the most recently rolled die within
+/// the same ability — "a number … equal to the result" (Ancient Copper Dragon).
+///
+/// <para>
+/// CR 706.2: "After the roll, the number indicated on the top face of the die
+/// before any modifiers is the natural result … After considering all applicable
+/// modifiers, the final number is the result of the die roll." The antecedent of
+/// "the result" is the <see cref="MagicAST.AST.Effects.Dice.RollDieEffect"/> that
+/// immediately precedes this quantity's owner in the ability's effect list.
+/// Reference-not-resolution (ADR 0004): MAST records the reference to the roll
+/// result; the engine evaluates the actual numeric value at resolution time.
+/// </para>
+/// </summary>
+[OracleQuantity("dieRollResult")]
+public sealed record DieRollResultQuantity : Quantity;
+
+/// <summary>
 /// The cost choice "Remove <b>any number of</b> [type] counters" — an unbounded
 /// player choice (Hollow Trees, the Mana Batteries). Per CR 107.3 — "Many objects
 /// use the letter X as a placeholder for a number that needs to be determined …

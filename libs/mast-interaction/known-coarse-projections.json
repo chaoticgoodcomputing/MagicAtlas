@@ -123,6 +123,7 @@
     "returnToBattlefield": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "revealUntil": "Nissa Resurgent Animist reveal-until-found library action \u2014 library card-draw surrogate; no flow rule reads reveal-until-found yet; consciously inert for interaction recall",
     "ringTemptsYou": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "rollDie": "CR 706 die-roll instruction \u2014 no flow rule consumes die-roll events yet; consciously inert for interaction recall",
     "sacrifice": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "saddle": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "scry": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
