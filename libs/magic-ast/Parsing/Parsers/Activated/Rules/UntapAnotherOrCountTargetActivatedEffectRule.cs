@@ -44,8 +44,10 @@ public sealed class UntapAnotherOrCountTargetActivatedEffectRule : IActivatedEff
   // Anchored: must match the full effect text. Card types recognised here are the
   // CR 205.2a permanent card types; subtypes (Forest, Island) are handled by
   // UntapEffectRule (Priority 993) which already defers to Subtypes.
+  // Optional "you control" suffix sets Controller = You on the ObjectFilter
+  // (e.g. "Untap another target permanent you control." — Kelpie Guide).
   private static readonly Regex _anotherPattern = new(
-    @"^Untap\s+another\s+target\s+(?<type>permanent|creature|artifact|enchantment|land|planeswalker)\s*\.?\s*$",
+    @"^Untap\s+another\s+target\s+(?<type>permanent|creature|artifact|enchantment|land|planeswalker)(?:\s+(?<ctrl>you\s+control))?\s*\.?\s*$",
     RegexOptions.Compiled | RegexOptions.IgnoreCase
   );
 
@@ -61,11 +63,12 @@ public sealed class UntapAnotherOrCountTargetActivatedEffectRule : IActivatedEff
   {
     var text = effectText.Trim();
 
-    // --- Shape 1: "Untap another target <card-type>." ---
+    // --- Shape 1: "Untap another target <card-type>[you control]." ---
     var m1 = _anotherPattern.Match(text);
     if (m1.Success)
     {
       var cardType = m1.Groups["type"].Value.ToLowerInvariant();
+      var hasController = m1.Groups["ctrl"].Success;
       return new UntapEffect
       {
         Target = new ObjectReference
@@ -75,6 +78,7 @@ public sealed class UntapAnotherOrCountTargetActivatedEffectRule : IActivatedEff
           {
             CardTypes = [cardType],
             ExcludeSelf = true,
+            Controller = hasController ? ControllerFilter.You : null,
           },
         },
       };

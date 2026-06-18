@@ -1,0 +1,136 @@
+{
+  "Input": {
+    "Name": "Kelpie Guide",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Creature — Beast",
+    "OracleText": "{T}: Untap another target permanent you control.\n{T}: Tap target permanent. Activate only if you control eight or more lands.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Kelpie Guide",
+    "TypeLine": {
+      "Raw": "Creature — Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: Untap another target permanent you control.\n{T}: Tap target permanent. Activate only if you control eight or more lands.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ]
+                }
+              }
+            }
+          ],
+          "ActivationCondition": {
+            "ConditionType": "count",
+            "Filter": {
+              "CardTypes": [
+                "land"
+              ],
+              "Controller": "You"
+            },
+            "Count": {
+              "Operator": "GreaterThanOrEqual",
+              "Value": 8
+            }
+          },
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
