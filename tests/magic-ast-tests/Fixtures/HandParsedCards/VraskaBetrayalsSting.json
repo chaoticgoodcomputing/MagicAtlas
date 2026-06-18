@@ -1,0 +1,218 @@
+{
+  "Input": {
+    "Name": "Vraska, Betrayal's Sting",
+    "ManaCost": "{4}{B}{B/P}",
+    "TypeLine": "Legendary Planeswalker — Vraska",
+    "OracleText": "Compleated ({B/P} can be paid with {B} or 2 life. If life was paid, this planeswalker enters with two fewer loyalty counters.)\n0: You draw a card and lose 1 life. Proliferate.\n−2: Target creature becomes a Treasure artifact with \"{T}, Sacrifice this artifact: Add one mana of any color\" and loses all other card types and abilities.\n−9: If target player has fewer than nine poison counters, they get a number of poison counters equal to the difference.",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Vraska, Betrayal's Sting",
+    "TypeLine": {
+      "Raw": "Legendary Planeswalker — Vraska",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Planeswalker"
+      ],
+      "Subtypes": [
+        "Vraska"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Compleated ({B/P} can be paid with {B} or 2 life. If life was paid, this planeswalker enters with two fewer loyalty counters.)\n0: You draw a card and lose 1 life. Proliferate.\n−2: Target creature becomes a Treasure artifact with \"{T}, Sacrifice this artifact: Add one mana of any color\" and loses all other card types and abilities.\n−9: If target player has fewer than nine poison counters, they get a number of poison counters equal to the difference.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Compleated",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Compleated"
+            }
+          ],
+          "Reminder": {
+            "Text": "({B/P} can be paid with {B} or 2 life. If life was paid, this planeswalker enters with two fewer loyalty counters.)"
+          }
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            },
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            },
+            {
+              "EffectType": "proliferate"
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": 0
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "setCardTypes",
+              "Subject": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "CardTypes": [
+                "artifact"
+              ]
+            },
+            {
+              "EffectType": "changeSubtype",
+              "Target": {
+                "Kind": "It"
+              },
+              "Subtypes": [
+                "Treasure"
+              ]
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "It"
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "tap"
+                  },
+                  {
+                    "CostType": "sacrifice",
+                    "Filter": {
+                      "CardTypes": [
+                        "artifact"
+                      ],
+                      "IsSelf": true
+                    },
+                    "Quantity": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    }
+                  }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "addMana",
+                    "Mana": "",
+                    "AnyColor": true,
+                    "AnyType": false,
+                    "OfChosenColor": false
+                  }
+                ],
+                "IsManaAbility": true
+              }
+            },
+            {
+              "EffectType": "loseAbility",
+              "Target": {
+                "Kind": "It"
+              },
+              "AbilityText": "all other abilities"
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": -2
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "target player has fewer than nine poison counters"
+              },
+              "Then": {
+                "EffectType": "putCounters",
+                "Target": {
+                  "Kind": "It"
+                },
+                "CounterType": "poison",
+                "Count": {
+                  "QuantityType": "calculated",
+                  "Expression": "the difference"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": -9
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{B}{B/P}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ],
+            "IsPhyrexian": true
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

@@ -542,6 +542,18 @@
       "reason": "recursive token/granted-ability body parsing \u2014 separate de-string initiative"
     },
     {
+      "card": "VraskaBetrayalsSting",
+      "sink": "AbilityText",
+      "tag": "debt",
+      "reason": "PB-9 LoseAbilityEffect residual \u2014 'all other abilities' has no structured ability-scope node yet"
+    },
+    {
+      "card": "VraskaBetrayalsSting",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets \u2014 'target player has fewer than nine poison counters' (quantity-comparison on poison counters) not yet a structured QuantityComparisonCondition"
+    },
+    {
       "card": "WOE/RowdyResearch",
       "sink": "OtherHistoryPredicate",
       "tag": "irreducible",
