@@ -1570,6 +1570,16 @@ public sealed class AbilityClassifier
         {
           hasNonManaCostVerb = true;
         }
+
+        // "Put a -1/-1 counter on this creature:" — placing counters as an
+        // activation cost (Devoted Druid, Quillspike). CR 122.1: counter
+        // placement is a valid cost action. Scoped to the clause's first token
+        // so "Put a +1/+1 counter on target creature." (no colon — a spell/triggered
+        // effect) is not mistaken for an activated ability cost.
+        if (i == 0 && word.Equals("Put", StringComparison.OrdinalIgnoreCase))
+        {
+          hasNonManaCostVerb = true;
+        }
       }
 
       // If we hit a trigger timing word, this isn't an activated ability

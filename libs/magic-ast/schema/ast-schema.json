@@ -465,6 +465,15 @@
           ]
         },
         {
+          "Type": "PutCountersCost",
+          "Discriminator": "putCounters",
+          "IsUnparsed": false,
+          "Fields": [
+            "CounterType",
+            "Quantity"
+          ]
+        },
+        {
           "Type": "RemoveCountersCost",
           "Discriminator": "removeCounters",
           "IsUnparsed": false,
@@ -2302,5 +2311,5 @@
       ]
     }
   ],
-  "SchemaHash": "fbd3df1868c224fcb0325bca5018df30694d384b8753ff4af9176e940347afdd"
+  "SchemaHash": "4c997641cc7063eb8e9ac1adc6135139a1338356d4f9a91e5973914f18cd90e0"
 }
