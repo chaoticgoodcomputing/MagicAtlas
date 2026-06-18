@@ -70,6 +70,15 @@ public sealed class SearchLibraryToBattlefieldTriggeredRule : ITriggeredRule
     var filterRaw = m.Groups["filter"].Value.Trim();
     var isTapped = m.Groups["tapped"].Success;
 
+    // "basic land" searches are owned by SearchBasicLandTriggeredRule (Priority 50). This rule is
+    // Priority 62 (it runs first), so without this guard it would preempt the basic-land sibling for
+    // the ~15 basic-land ETB tutors (Farhaven Elf, Wild Wanderer, …) and silently reshape their AST.
+    // Returning false here lets dispatch fall through to the dedicated basic-land rule.
+    if (filterRaw.StartsWith("basic ", StringComparison.OrdinalIgnoreCase))
+    {
+      return false;
+    }
+
     var filter = BuildFilter(filterRaw);
     if (filter is null)
     {

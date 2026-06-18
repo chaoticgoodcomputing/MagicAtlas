@@ -30,7 +30,7 @@ using MagicAST.Parsing;
 ///
 /// <para>
 /// Rule citations: CR 604 (static abilities), CR 702.52 (Dredge),
-/// CR 207.2 (reminder text), CR 406.3 (graveyard zone).
+/// CR 207.2 (reminder text), CR 404/404.1 (graveyard zone).
 /// </para>
 /// </summary>
 [StaticRule(Priority = 50)]
