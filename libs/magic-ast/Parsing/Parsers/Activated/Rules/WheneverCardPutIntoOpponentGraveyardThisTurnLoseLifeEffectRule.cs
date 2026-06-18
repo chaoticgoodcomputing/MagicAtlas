@@ -28,8 +28,8 @@ using MagicAST.AST.Triggers;
 /// <list type="bullet">
 /// <item>CR 602.1: Activated abilities have a cost and an effect (cost:effect form).</item>
 /// <item>CR 603.7: A resolving effect may create a delayed triggered ability.</item>
-/// <item>CR 701.7 / 701.17: "put into a graveyard" / mill.</item>
-/// <item>CR 702.117 / 119.3: Life loss.</item>
+/// <item>CR 404 (graveyard) / 701.17: "put into a graveyard" / mill.</item>
+/// <item>CR 119.3: Life loss.</item>
 /// </list>
 /// </para>
 ///

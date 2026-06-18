@@ -51,6 +51,18 @@ public sealed class GrantedAbilityRule : IStaticRule
       return null;
     }
 
+    // Guard against compound "[subject] gets +X/+X and has \"...\"" buff-plus-grant lines: the
+    // non-greedy filter group would swallow the "gets +X/+X and" buff into the subject and DROP it.
+    // A pure grant subject ("Equipped creature", "Enchanted creature") never contains "gets"/" and ";
+    // such compound lines are owned by the buff+grant rule, so bail here rather than mislabel.
+    if (
+      filterText.Contains(" gets ", System.StringComparison.OrdinalIgnoreCase)
+      || filterText.Contains(" and ", System.StringComparison.OrdinalIgnoreCase)
+    )
+    {
+      return null;
+    }
+
     var target = ClassifyGrantTarget(filterText);
     if (target is null)
     {

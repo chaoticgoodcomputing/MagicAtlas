@@ -167,7 +167,8 @@
     "winTheGame": "absolute win effect — no flow rule needs to propagate win conditions yet; coarse conscious carve-out",
     "gainAbilitiesFromExiledCards": "ability-set grant from exiled creature cards (CR 613.1f layer-6) — grants dynamic activated abilities; no interaction flow rule reads exiled-card ability grants yet; consciously inert for interaction recall",
     "wish": "Karn, the Great Creator −2 / Glittering Wish family (CR 400.11b: retrieve from outside game or exile to hand) — sideboard retrieval; no interaction flow rule reads wish-retrieval events yet; consciously inert for interaction recall",
-    "repeat": "repeat/loop control-flow effect — no interaction flow rule consumes iterative repetition yet; consciously inert for recall"
+    "repeat": "repeat/loop control-flow effect — no interaction flow rule consumes iterative repetition yet; consciously inert for recall",
+    "takeExtraTurn": "take-extra-turn effect (CR 720) — no flow rule reads extra-turn grants yet; consciously inert for recall"
   },
   "costType": {
     "composite": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
@@ -180,7 +181,8 @@
     "selfMana": "no semantic projection yet — coarse fallback no flow rule consumes; explicit named carve-out",
     "tapPermanents": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "unattachNamed": "KHM Toralf's Hammer 'Unattach Toralf's Hammer' inline activation cost (CR 702.6a Equip / CR 701.35 Unattach keyword-action) — the Equipment detaches from the equipped creature as part of paying the cost; no flow rule reads named-unattach costs yet; consciously inert for interaction recall",
-    "untap": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet"
+    "untap": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "payEnergy": "pay-energy-counter cost (CR 122.1 energy) — no flow rule reads energy payment yet; consciously inert for recall"
   },
   "triggerEvent": {
     "AbilityActivated": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",

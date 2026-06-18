@@ -35,10 +35,13 @@ public sealed class WardKeywordRule : IStaticRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
-  // Matches: "Ward—Sacrifice a [filter]." (em-dash separated sacrifice cost, CR 702.21a)
+  // Matches ONLY the SINGULAR "Ward—Sacrifice a/an [filter]." form (Ygra: "Ward—Sacrifice a Food.").
+  // The plural/count form ("Ward—Sacrifice two permanents." — Ulamog, +6 siblings) is deliberately
+  // excluded: ParseSacrificePattern emits the count-word as a bogus Subtype ({Subtypes:["two"]}), so
+  // those fall through to the base (Ward-cost unparsed) rather than being mislabeled. CR 702.21a.
   // Anchored at both ends so it cannot match as a substring of a more-specific pattern.
   private static readonly Regex SacrificeCostPattern = new(
-    @"^\s*Ward—(?<saccost>Sacrifice\s+.+?)[.\s]*(?<rest>(?:\([^)]+\))?)\s*$",
+    @"^\s*Ward—(?<saccost>Sacrifice\s+an?\s+.+?)[.\s]*(?<rest>(?:\([^)]+\))?)\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

@@ -371,6 +371,14 @@
           ]
         },
         {
+          "Type": "ColorOverride",
+          "Discriminator": "colorOverride",
+          "IsUnparsed": false,
+          "Fields": [
+            "Colors"
+          ]
+        },
+        {
           "Type": "PowerToughnessOverride",
           "Discriminator": "powerToughnessOverride",
           "IsUnparsed": false,
@@ -446,6 +454,14 @@
           "IsUnparsed": false,
           "Fields": [
             "Symbols"
+          ]
+        },
+        {
+          "Type": "PayEnergyCost",
+          "Discriminator": "payEnergy",
+          "IsUnparsed": false,
+          "Fields": [
+            "Amount"
           ]
         },
         {
@@ -1861,6 +1877,14 @@
           "Fields": []
         },
         {
+          "Type": "TakeExtraTurnEffect",
+          "Discriminator": "takeExtraTurn",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
           "Type": "TapEffect",
           "Discriminator": "tap",
           "IsUnparsed": false,
@@ -2286,5 +2310,5 @@
       ]
     }
   ],
-  "SchemaHash": "68d59a618e6575aa3467e2e4dbfb134ce0aad12d625f62433beb35babdf9754c"
+  "SchemaHash": "e97f0b1dbc6994fce79646b1c12d05e053ffe1b5145ab2720c8c51553f91cbc2"
 }
