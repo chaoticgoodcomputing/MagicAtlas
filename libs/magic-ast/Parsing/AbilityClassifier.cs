@@ -492,6 +492,26 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Play with the top card of your library revealed." — a continuous static
+    // game-modification (CR 701.18c: "Some effects instruct a player to 'play'
+    // with a certain aspect of the game changed … 'Play' in this sense means to
+    // play the Magic game."; CR 401.5–401.6 govern how the revealed top card
+    // interacts with spells in flight). This is a persistent, non-optional static
+    // (no "You may" preamble) — the controller must keep the top card visible as
+    // long as the source is on the battlefield (CR 604.2). Intercept before any
+    // other clause that could misroute an imperative starting with "Play".
+    if (clause.RawText.TrimStart().StartsWith(
+      "Play with the top card of your library revealed",
+      StringComparison.OrdinalIgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.95,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "You may look at the top card of your library any time." A continuous
     // static permission ("any time" timing grant) that persists as long as the
     // source permanent is on the battlefield (Rule 604.2 — static abilities
