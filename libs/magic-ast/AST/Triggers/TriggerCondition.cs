@@ -213,6 +213,22 @@ public enum TriggerEvent
   /// </summary>
   DealsDamageToOpponent,
 
+  /// <summary>
+  /// One or more creatures of a specific subtype deal any damage (combat or non-combat)
+  /// to multiple opponents simultaneously (the plural "your opponents" form).
+  /// Rule 120 (dealing damage); Rule 102.2 (opponent = player not on controller's team).
+  /// Distinct from <see cref="DealsDamageToOpponent"/> (singular "an opponent" / single source).
+  /// Used for oracle text such as "Whenever one or more Pirates you control deal damage
+  /// to your opponents, [effect]." The Filter carries the subtype group (e.g. Pirate) and
+  /// controller (You).
+  /// Rule 120.1: "Objects can deal damage to battles, creatures, planeswalkers, and
+  /// players. This is generally detrimental to the object or player that receives that
+  /// damage. An object that deals damage is the source of that damage."
+  /// Rule 603.2: "Whenever a game event or game state matches a triggered ability's
+  /// trigger event, that ability automatically triggers."
+  /// </summary>
+  DealsDamageToOpponents,
+
   // Damage triggers
   /// <summary>Damage is dealt</summary>
   DamageDealt,
