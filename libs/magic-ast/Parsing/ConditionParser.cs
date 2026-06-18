@@ -108,6 +108,17 @@ public static class ConditionParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
+  /// "this [permanent|creature|card] is attacking" / "this [permanent|creature|card] is blocking" —
+  /// the source object's own combat-state gate (CR 508/509). The "Activate only if this creature is
+  /// attacking" restriction family (Glint-Horn Buccaneer, Spectral Sailor, Boltbender). Structured to a
+  /// <see cref="SourceCombatStateCondition"/> rather than left as a free-text <see cref="OtherCondition"/>
+  /// residual. Anchored (^…$) so it cannot match a substring of a longer clause.
+  /// </summary>
+  private static readonly Regex SourceCombatState = new(
+    @"^this\s+(?:creature|permanent|card)\s+is\s+(?<state>attacking|blocking|attacking\s+or\s+blocking|attacking\s+alone)$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// "there are four or more card types among cards in your graveyard" — the Delirium
   /// mechanic's activation gate (CR 207.2c: Delirium is an ability word with no special
   /// rules meaning; the condition is the diversity-count predicate). Structured to a
@@ -217,6 +228,20 @@ public static class ConditionParser
     if (CastThisObject.IsMatch(body))
     {
       return new CastThisObjectCondition();
+    }
+
+    if (SourceCombatState.Match(body) is { Success: true } scm)
+    {
+      var stateText = scm.Groups["state"].Value.Trim().ToLowerInvariant();
+      var state = stateText switch
+      {
+        "attacking" => CombatState.Attacking,
+        "blocking" => CombatState.Blocking,
+        "attacking or blocking" => CombatState.AttackingOrBlocking,
+        "attacking alone" => CombatState.AttackingAlone,
+        _ => CombatState.Attacking,
+      };
+      return new SourceCombatStateCondition { State = state };
     }
 
     if (CardTypeDiversity.Match(body) is { Success: true } ctd)

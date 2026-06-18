@@ -324,6 +324,14 @@
           ]
         },
         {
+          "Type": "SourceCombatStateCondition",
+          "Discriminator": "sourceCombatState",
+          "IsUnparsed": false,
+          "Fields": [
+            "State"
+          ]
+        },
+        {
           "Type": "TriggeringAbilityIsManaCondition",
           "Discriminator": "triggeringAbilityIsMana",
           "IsUnparsed": false,
@@ -2152,5 +2160,5 @@
       ]
     }
   ],
-  "SchemaHash": "6859621695374064ba30c74868f351d4230581ceb8185c68a9c69cc86a4b6ee4"
+  "SchemaHash": "ff9897fbc52b4898c44c9e6060115f79339cae190e0a4aedd16ade0eb1e7e3f1"
 }
