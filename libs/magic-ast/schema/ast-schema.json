@@ -2191,6 +2191,12 @@
           "Fields": []
         },
         {
+          "Type": "SpellCopyEvent",
+          "Discriminator": "spellCopy",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "TokenCreationEvent",
           "Discriminator": "tokenCreation",
           "IsUnparsed": false,
@@ -2211,5 +2217,5 @@
       ]
     }
   ],
-  "SchemaHash": "f2d62619b0ee27a1a5b2fdafb1a43683500f93ddcf144f9f2ae1e9a062231c94"
+  "SchemaHash": "a999b8e8e5b4b60746e841d3117cb8c32a1f39aa2fb56f9c6e5ec687ef8e6f8e"
 }

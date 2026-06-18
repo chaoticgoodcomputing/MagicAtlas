@@ -20,4 +20,14 @@ public sealed record ReplacementModifier
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Quantity? Amount { get; init; }
+
+  /// <summary>
+  /// When true, the controller may choose new targets for the additional copy produced
+  /// by this modifier (e.g. Twinning Staff's "You may choose new targets for the
+  /// additional copy."). Applies only when the modifier adds extra copies (plusOne, etc.)
+  /// and mirrors the <see cref="MagicAST.AST.Effects.TokenCopy.CopyEffect.MayChooseNewTargets"/>
+  /// flag on the extra copy.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? MayChooseNewTargets { get; init; }
 }
