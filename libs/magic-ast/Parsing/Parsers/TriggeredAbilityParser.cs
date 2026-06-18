@@ -228,6 +228,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     // Capture it for the Reminder field on the returned TriggeredAbility.
     var reminder = ExtractTrailingReminder(ref effectPart);
 
+    // Strip trailing triggered-ability restriction sentences from the effect
+    // text before dispatching to effect rules. These sentences are not effects
+    // themselves (CR 603.2h): "Do this only once each turn." restricts when the
+    // action may be taken, not what happens when the ability resolves.
+    var triggeredRestrictions = ExtractTriggeredRestrictions(ref effectPart);
+
     // Parse effects. The trigger condition is threaded in so an effect rule can
     // resolve a "that much" derived quantity against the triggering event — the
     // antecedent of "that much" is the trigger's own event (CR 603.2), so e.g.
@@ -248,6 +254,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       Instructions = ExtractInstructions(effectPart, effects),
       Reminder = reminder,
       AbilityWord = abilityWord,
+      Restrictions = triggeredRestrictions,
     };
   }
 
@@ -273,6 +280,43 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     var reminderText = m.Groups[1].Value.Trim();
     effectPart = effectPart[..m.Index].Trim();
     return new Parenthetical { Text = reminderText };
+  }
+
+  /// <summary>
+  /// Strips trailing triggered-ability restriction sentences from
+  /// <paramref name="effectPart"/> (mutating it in place via ref) and returns
+  /// the corresponding <see cref="TriggeredAbilityRestriction"/> list, or
+  /// <see langword="null"/> if none were found.
+  ///
+  /// <para>
+  /// CR 603.2h: "A triggered ability may have an instruction followed by
+  /// 'Do this only once each turn.' This ability triggers only if its
+  /// source's controller has not yet taken the indicated action that turn."
+  /// The restriction sentence is not an effect — it must be peeled before
+  /// effect parsing so the sentence bundle splitter doesn't try to map it
+  /// to a rule and fail.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<TriggeredAbilityRestriction>? ExtractTriggeredRestrictions(
+    ref string effectPart
+  )
+  {
+    List<TriggeredAbilityRestriction>? restrictions = null;
+
+    // "Do this only once each turn." — CR 603.2h
+    var onceEachTurn = Regex.Match(
+      effectPart,
+      @"\s*\bDo\s+this\s+only\s+once\s+each\s+turn\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (onceEachTurn.Success)
+    {
+      effectPart = effectPart[..onceEachTurn.Index].Trim();
+      restrictions ??= [];
+      restrictions.Add(TriggeredAbilityRestriction.OnlyOnceEachTurn);
+    }
+
+    return restrictions;
   }
 
   /// <summary>

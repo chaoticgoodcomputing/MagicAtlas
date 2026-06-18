@@ -1,0 +1,77 @@
+{
+  "Input": {
+    "Name": "Ondu Spiritdancer",
+    "ManaCost": "{4}{W}",
+    "TypeLine": "Creature — Kor Cleric",
+    "OracleText": "Whenever an enchantment you control enters, you may create a token that's a copy of it. Do this only once each turn.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Ondu Spiritdancer",
+    "TypeLine": {
+      "Raw": "Creature — Kor Cleric",
+      "Types": ["Creature"],
+      "Subtypes": ["Kor", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "Whenever an enchantment you control enters, you may create a token that's a copy of it. Do this only once each turn.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["enchantment"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "copy",
+                "Target": {
+                  "Kind": "It"
+                }
+              }
+            }
+          ],
+          "Restrictions": ["OnlyOnceEachTurn"]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+      }
+    ]
+  }
+}
