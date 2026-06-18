@@ -22,7 +22,7 @@
         "Name": "Sephiroth, One-Winged Angel",
         "ManaCost": "",
         "TypeLine": "Legendary Creature — Angel Nightmare Avatar",
-        "OracleText": "Flying\nSuper Nova — As this creature transforms into Sephiroth, One-Winged Angel, you get an emblem with “Whenever a creature dies, target opponent loses 1 life and you gain 1 life.”\nWhenever Sephiroth attacks, you may sacrifice any number of other creatures. If you do, draw that many cards.",
+        "OracleText": "Flying\nSuper Nova — As this creature transforms into Sephiroth, One-Winged Angel, you get an emblem with \"Whenever a creature dies, target opponent loses 1 life and you gain 1 life.\"\nWhenever Sephiroth attacks, you may sacrifice any number of other creatures. If you do, draw that many cards.",
         "Power": "5",
         "Toughness": "5",
         "Colors": [
@@ -241,7 +241,7 @@
           ]
         },
         "Oracle": {
-          "RawText": "Flying\nSuper Nova — As this creature transforms into Sephiroth, One-Winged Angel, you get an emblem with “Whenever a creature dies, target opponent loses 1 life and you gain 1 life.”\nWhenever Sephiroth attacks, you may sacrifice any number of other creatures. If you do, draw that many cards.",
+          "RawText": "Flying\nSuper Nova — As this creature transforms into Sephiroth, One-Winged Angel, you get an emblem with \"Whenever a creature dies, target opponent loses 1 life and you gain 1 life.\"\nWhenever Sephiroth attacks, you may sacrifice any number of other creatures. If you do, draw that many cards.",
           "Abilities": [
             {
               "Kind": "static",
