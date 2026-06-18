@@ -133,6 +133,9 @@ public sealed class AbilityClassifier
     {
       // Displacer Kitten's printed label; not on the CR 207.2c ability-word list.
       "Avoidance",
+      // Sephiroth, Fabled SOLDIER's printed label for the transform-into trigger.
+      // Not on the CR 207.2c ability-word list; mechanically inert flavor label.
+      "Super Nova",
     };
 
   /// <summary>
@@ -1438,7 +1441,13 @@ public sealed class AbilityClassifier
     var body = rawText[(emDashIndex + 1)..].TrimStart();
     return body.StartsWith("When ", StringComparison.OrdinalIgnoreCase)
       || body.StartsWith("Whenever ", StringComparison.OrdinalIgnoreCase)
-      || body.StartsWith("At ", StringComparison.OrdinalIgnoreCase);
+      || body.StartsWith("At ", StringComparison.OrdinalIgnoreCase)
+      // CR 603.6d: "As [this permanent] transforms into [Name]" is a static trigger
+      // (fires on the transform event, timing = When). Oracle uses "As" instead of
+      // "When" for the transform-into shape; detected here so the classifier routes
+      // the body to the triggered path rather than defaulting to static.
+      || body.StartsWith("As this creature transforms into ", StringComparison.OrdinalIgnoreCase)
+      || body.StartsWith("As this permanent transforms into ", StringComparison.OrdinalIgnoreCase);
   }
 
   /// <summary>
