@@ -1,0 +1,148 @@
+{
+  "Input": {
+    "Name": "K'rrik, Son of Yawgmoth",
+    "ManaCost": "{4}{B/P}{B/P}{B/P}",
+    "TypeLine": "Legendary Creature — Phyrexian Horror Minion",
+    "OracleText": "({B/P} can be paid with either {B} or 2 life.)\nLifelink\nFor each {B} in a cost, you may pay 2 life rather than pay that mana.\nWhenever you cast a black spell, put a +1/+1 counter on K'rrik.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "K'rrik, Son of Yawgmoth",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Phyrexian Horror Minion",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Horror",
+        "Minion"
+      ]
+    },
+    "Oracle": {
+      "RawText": "({B/P} can be paid with either {B} or 2 life.)\nLifelink\nFor each {B} in a cost, you may pay 2 life rather than pay that mana.\nWhenever you cast a black spell, put a +1/+1 counter on K'rrik.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Lifelink",
+          "Effects": [
+            {
+              "EffectType": "lifelink"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "payLifeForColoredMana",
+              "Colors": [
+                "B"
+              ],
+              "LifePerMana": 2
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell"
+              ],
+              "Colors": [
+                "B"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{B/P}{B/P}{B/P}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ],
+            "IsPhyrexian": true
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ],
+            "IsPhyrexian": true
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ],
+            "IsPhyrexian": true
+          }
+        ],
+        "ManaValue": 7,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

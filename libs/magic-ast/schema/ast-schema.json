@@ -1523,6 +1523,15 @@
           ]
         },
         {
+          "Type": "PayLifeForColoredManaEffect",
+          "Discriminator": "payLifeForColoredMana",
+          "IsUnparsed": false,
+          "Fields": [
+            "Colors",
+            "LifePerMana"
+          ]
+        },
+        {
           "Type": "PlayAdditionalLandEffect",
           "Discriminator": "playAdditionalLand",
           "IsUnparsed": false,
@@ -2251,5 +2260,5 @@
       ]
     }
   ],
-  "SchemaHash": "15583f71bfe5ce6f26cb2f1f9ff7111d44acbe010cc76a463c26a6eb10abd63f"
+  "SchemaHash": "240fec3e648064ff9b41e8557488f4acf984d65ca2afa316b1dd124f5540626a"
 }
