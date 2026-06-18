@@ -1342,6 +1342,12 @@
           ]
         },
         {
+          "Type": "ManaPersistsUntilEndOfTurnEffect",
+          "Discriminator": "manaPersists",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "MayPlayFromExileEffect",
           "Discriminator": "mayPlayFromExile",
           "IsUnparsed": false,
@@ -1415,6 +1421,15 @@
             "AllowDuplicates",
             "ModeSelection",
             "Modes"
+          ]
+        },
+        {
+          "Type": "ModifyBoastActivationLimitEffect",
+          "Discriminator": "modifyBoastActivationLimit",
+          "IsUnparsed": false,
+          "Fields": [
+            "NewLimit",
+            "Target"
           ]
         },
         {
@@ -2323,5 +2338,5 @@
       ]
     }
   ],
-  "SchemaHash": "3553306b481a4c8e5a0e23588691b58a59fd7e9ef52366e78e2235a51c4e1723"
+  "SchemaHash": "470a1fd9ebe8ba13645272c50b125b34479a00093c932b038ccc64538a17482c"
 }

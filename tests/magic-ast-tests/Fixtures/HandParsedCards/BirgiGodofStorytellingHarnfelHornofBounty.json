@@ -1,0 +1,257 @@
+{
+  "Input": {
+    "Name": "Birgi, God of Storytelling // Harnfel, Horn of Bounty",
+    "TypeLine": "Legendary Creature — God // Legendary Artifact",
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [],
+    "Id": "44657ab1-0a6a-4a5f-9688-86f239083821",
+    "Layout": "modal_dfc",
+    "CardFaces": [
+      {
+        "Name": "Birgi, God of Storytelling",
+        "ManaCost": "{2}{R}",
+        "TypeLine": "Legendary Creature — God",
+        "OracleText": "Whenever you cast a spell, add {R}. Until end of turn, you don't lose this mana as steps and phases end.\nCreatures you control can boast twice during each of your turns rather than once.",
+        "Power": "3",
+        "Toughness": "3",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Name": "Harnfel, Horn of Bounty",
+        "ManaCost": "{4}{R}",
+        "TypeLine": "Legendary Artifact",
+        "OracleText": "Discard a card: Exile the top two cards of your library. You may play those cards this turn.",
+        "Power": null,
+        "Toughness": null,
+        "Colors": [
+          "R"
+        ]
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Birgi, God of Storytelling // Harnfel, Horn of Bounty",
+    "TypeLine": {
+      "Raw": "Legendary Creature — God // Legendary Artifact",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "God",
+        "//",
+        "Legendary",
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "layout",
+        "Layout": "modal_dfc"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Birgi, God of Storytelling",
+        "TypeLine": {
+          "Raw": "Legendary Creature — God",
+          "Supertypes": [
+            "Legendary"
+          ],
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "God"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Whenever you cast a spell, add {R}. Until end of turn, you don't lose this mana as steps and phases end.\nCreatures you control can boast twice during each of your turns rather than once.",
+          "Abilities": [
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "Whenever",
+                "Event": "SpellCast",
+                "Filter": {
+                  "Controller": "You"
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "addMana",
+                  "Mana": "{R}"
+                },
+                {
+                  "EffectType": "manaPersists",
+                  "Duration": {
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "modifyBoastActivationLimit",
+                  "Target": {
+                    "Kind": "Each",
+                    "Filter": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Controller": "You"
+                    }
+                  },
+                  "NewLimit": 2
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{2}{R}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "R"
+                ]
+              }
+            ],
+            "ManaValue": 3,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 3,
+              "Raw": "3"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 3,
+              "Raw": "3"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Harnfel, Horn of Bounty",
+        "TypeLine": {
+          "Raw": "Legendary Artifact",
+          "Supertypes": [
+            "Legendary"
+          ],
+          "Types": [
+            "Artifact"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Discard a card: Exile the top two cards of your library. You may play those cards this turn.",
+          "Abilities": [
+            {
+              "Kind": "activated",
+              "Costs": [
+                {
+                  "CostType": "discard",
+                  "Filter": {
+                    "CardTypes": [
+                      "card"
+                    ]
+                  },
+                  "Quantity": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                }
+              ],
+              "Effects": [
+                {
+                  "EffectType": "impulse",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "RestDestination": "RemainExiled",
+                  "Duration": {
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
+                  }
+                }
+              ],
+              "IsManaAbility": false
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{4}{R}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 4
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "R"
+                ]
+              }
+            ],
+            "ManaValue": 5,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": [
+              "R"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
