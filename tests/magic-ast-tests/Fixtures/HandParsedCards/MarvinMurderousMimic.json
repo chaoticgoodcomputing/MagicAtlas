@@ -3,7 +3,7 @@
     "Name": "Marvin, Murderous Mimic",
     "ManaCost": "{2}",
     "TypeLine": "Legendary Artifact Creature — Toy",
-    "OracleText": "Marvin has all activated abilities of creatures you control that don’t have the same name as this creature.",
+    "OracleText": "Marvin has all activated abilities of creatures you control that don't have the same name as this creature.",
     "Power": "2",
     "Toughness": "2",
     "Colors": [],
@@ -25,7 +25,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Marvin has all activated abilities of creatures you control that don’t have the same name as this creature.",
+      "RawText": "Marvin has all activated abilities of creatures you control that don't have the same name as this creature.",
       "Abilities": [
         {
           "Kind": "static",

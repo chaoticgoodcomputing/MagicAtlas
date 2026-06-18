@@ -40,7 +40,7 @@ public sealed class MarvinHasAllActivatedAbilitiesRule : IStaticRule
   //   - U+2019 (RIGHT SINGLE QUOTATION MARK, curly ‘) — Scryfall oracle text form
   // Using an interpolated string so we can embed ’ explicitly.
   private static readonly Regex Pattern = new(
-    $@"^\s*\S+(?:\s+\S+)*\s+has\s+all\s+activated\s+abilities\s+of\s+creatures\s+you\s+control\s+that\s+don[‘’]t\s+have\s+the\s+same\s+name\s+as\s+this\s+creature\.?\s*$",
+    $@"^\s*\S+(?:\s+\S+)*\s+has\s+all\s+activated\s+abilities\s+of\s+creatures\s+you\s+control\s+that\s+don['‘’]t\s+have\s+the\s+same\s+name\s+as\s+this\s+creature\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

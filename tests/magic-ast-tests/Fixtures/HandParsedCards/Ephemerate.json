@@ -3,7 +3,7 @@
     "Name": "Ephemerate",
     "ManaCost": "{W}",
     "TypeLine": "Instant",
-    "OracleText": "Exile target creature you control, then return it to the battlefield under its owner’s control.\nRebound (If you cast this spell from your hand, exile it as it resolves. At the beginning of your next upkeep, you may cast this card from exile without paying its mana cost.)",
+    "OracleText": "Exile target creature you control, then return it to the battlefield under its owner's control.\nRebound (If you cast this spell from your hand, exile it as it resolves. At the beginning of your next upkeep, you may cast this card from exile without paying its mana cost.)",
     "Colors": [
       "W"
     ],
@@ -20,7 +20,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Exile target creature you control, then return it to the battlefield under its owner’s control.\nRebound (If you cast this spell from your hand, exile it as it resolves. At the beginning of your next upkeep, you may cast this card from exile without paying its mana cost.)",
+      "RawText": "Exile target creature you control, then return it to the battlefield under its owner's control.\nRebound (If you cast this spell from your hand, exile it as it resolves. At the beginning of your next upkeep, you may cast this card from exile without paying its mana cost.)",
       "Abilities": [
         {
           "Kind": "spell",
