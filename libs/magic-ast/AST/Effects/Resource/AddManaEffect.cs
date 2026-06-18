@@ -86,6 +86,29 @@ public sealed record AddManaEffect : Effect
   public ObjectFilter? ForEachColorAmong { get; init; }
 
   /// <summary>
+  /// For "add one mana of any color among [filter] you control" — the Mox Amber
+  /// shape. The produced mana is ONE unit of a freely-chosen color, but the chosen
+  /// color must be present among permanents matching this filter. Distinct from
+  /// <see cref="AnyColor"/> (unconstrained choice across all five colors) and
+  /// <see cref="ForEachColorAmong"/> (one mana PER EACH color present).
+  ///
+  /// <para>
+  /// CR 605.1a: the enclosing activated ability is a mana ability — it doesn't
+  /// require a target (the filter is not a target per CR 115.6), it could add mana
+  /// when it resolves, and it's not a loyalty ability. CR 106.4: "When an effect
+  /// instructs a player to add mana, that mana goes into a player's mana pool."
+  /// Reference-not-resolution (ADR 0004): MAST records the permanents whose colors
+  /// constrain the choice; the engine evaluates which colors are present at activation.
+  /// </para>
+  ///
+  /// <para>When set, <see cref="Mana"/> is <c>""</c> (the color is dynamic) and
+  /// <see cref="AnyColor"/> / <see cref="OfChosenColor"/> / <see cref="ForEachColorAmong"/>
+  /// are <c>false</c> / <c>null</c>.</para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectFilter? AnyColorAmong { get; init; }
+
+  /// <summary>
   /// For variable amounts
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
