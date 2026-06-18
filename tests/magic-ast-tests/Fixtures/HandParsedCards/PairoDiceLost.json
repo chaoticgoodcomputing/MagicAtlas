@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "Pair o' Dice Lost",
+    "ManaCost": "{3}{G}{G}",
+    "TypeLine": "Instant",
+    "OracleText": "Roll two six-sided dice. Return any number of cards with total mana value X or less from your graveyard to your hand, where X is the total of those results. Exile Pair o' Dice Lost.",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Pair o' Dice Lost",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Roll two six-sided dice. Return any number of cards with total mana value X or less from your graveyard to your hand, where X is the total of those results. Exile Pair o' Dice Lost.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            { "EffectType": "rollDie", "Sides": 6, "Count": 2 },
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Designated",
+                "Filter": {
+                  "CardTypes": ["card"],
+                  "Zone": "Graveyard",
+                  "Controller": "You"
+                }
+              },
+              "TotalManaValueBudget": { "QuantityType": "dieRollResult" }
+            },
+            {
+              "EffectType": "exile",
+              "Target": { "Kind": "Self" }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 5
+      },
+      { "Kind": "colors", "Colors": ["G"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["G"] }
+    ]
+  }
+}

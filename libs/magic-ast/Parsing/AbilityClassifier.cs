@@ -1338,6 +1338,10 @@ public sealed class AbilityClassifier
     // unimplemented static-ability parser. "Add" is an imperative resolution step
     // (Rule 701.21 — it produces mana that goes into the mana pool).
     "Add",
+    // "Roll [N] dice" (CR 706) is an imperative die-roll resolution step — a spell body
+    // opener (Pair o' Dice Lost: "Roll two six-sided dice. …"). Without this it defaults to
+    // Static and stalls in the unimplemented static parser.
+    "Roll",
     // Keyword actions (Rule 701) — these are imperative resolution steps, not
     // statics. Without an explicit entry here, a bare "Investigate." line would
     // be classified as IsSingleKeyword → Static, which sends it to the static
