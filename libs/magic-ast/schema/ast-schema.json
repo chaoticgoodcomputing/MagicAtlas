@@ -668,6 +668,12 @@
           "Fields": []
         },
         {
+          "Type": "AssignDamageAsToughnessEffect",
+          "Discriminator": "assignDamageAsToughness",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "AssignDamageAsUnblockedEffect",
           "Discriminator": "assignDamageAsUnblocked",
           "IsUnparsed": false,
@@ -731,6 +737,12 @@
         {
           "Type": "BlockAdditionalEffect",
           "Discriminator": "blockAdditional",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "CanAttackIgnoringDefenderEffect",
+          "Discriminator": "canAttackIgnoringDefender",
           "IsUnparsed": false,
           "Fields": []
         },
@@ -2302,5 +2314,5 @@
       ]
     }
   ],
-  "SchemaHash": "fbd3df1868c224fcb0325bca5018df30694d384b8753ff4af9176e940347afdd"
+  "SchemaHash": "6f568af3fcfd326a415d40b0456ddbc33facb20efe0869885b216280b72834f7"
 }
