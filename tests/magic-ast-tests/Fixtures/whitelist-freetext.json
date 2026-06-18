@@ -524,6 +524,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "RazorkinNeedlehead",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
       "card": "RoadOfReturn",
       "sink": "OtherCharacteristic",
       "tag": "debt",
