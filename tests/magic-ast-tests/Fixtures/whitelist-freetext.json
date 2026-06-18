@@ -92,6 +92,12 @@
       "reason": "PB-7 structured-condition buckets — 'it's on the battlefield' is a self-zone check (ZoneSelfCondition shape not yet structured)"
     },
     {
+      "card": "BoromirWardenoftheTower",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "'no mana was spent to cast it' — cost-zero cast gate; needs a structured NoManaSpentCondition arm (PB-7 structured-condition buckets)"
+    },
+    {
       "card": "BFZ/FathomFeeder",
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
