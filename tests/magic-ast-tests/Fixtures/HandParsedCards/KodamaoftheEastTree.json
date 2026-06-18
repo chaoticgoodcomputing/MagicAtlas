@@ -1,0 +1,149 @@
+{
+  "Input": {
+    "Name": "Kodama of the East Tree",
+    "ManaCost": "{4}{G}{G}",
+    "TypeLine": "Legendary Creature — Spirit",
+    "OracleText": "Reach\nWhenever another permanent you control enters, if it wasn't put onto the battlefield with this ability, you may put a permanent card with equal or lesser mana value from your hand onto the battlefield.\nPartner (You can have two commanders if both have partner.)",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Kodama of the East Tree",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Spirit",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spirit"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Reach\nWhenever another permanent you control enters, if it wasn't put onto the battlefield with this ability, you may put a permanent card with equal or lesser mana value from your hand onto the battlefield.\nPartner (You can have two commanders if both have partner.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Reach",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "permanent"
+              ],
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "it wasn't put onto the battlefield with this ability"
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "putFromHandOntoBattlefield",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Zone": "Hand",
+                  "Controller": "You",
+                  "ManaValueComparison": {
+                    "Operator": "LessThanOrEqual",
+                    "RelativeTo": {
+                      "Kind": "It"
+                    },
+                    "RelativeCharacteristic": "ManaValue"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Partner",
+          "Reminder": {
+            "Text": "(You can have two commanders if both have partner.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "partner",
+              "PartnerType": "Partner"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        }
+      }
+    ]
+  }
+}

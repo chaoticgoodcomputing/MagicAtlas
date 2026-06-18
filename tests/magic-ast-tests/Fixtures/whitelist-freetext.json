@@ -666,6 +666,12 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'an opponent lost N+ life this turn' is a turn-scoped life-history predicate with no current HistoryCondition arm; requires a new quantity (LifeLostThisTurn by player) or HistoryCondition variant"
+    },
+    {
+      "card": "KodamaoftheEastTree",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'it wasn't put onto the battlefield with this ability' is a loop-prevention anti-recursion gate unique to Kodama of the East Tree; requires a new NotEnteredByAbilityCondition arm with no current peer"
     }
   ]
 }
