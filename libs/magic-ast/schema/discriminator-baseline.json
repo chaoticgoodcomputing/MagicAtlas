@@ -118,6 +118,7 @@
     "OracleEffect:discardCards",
     "OracleEffect:disguise",
     "OracleEffect:doesntUntap",
+    "OracleEffect:doubleLifeTotal",
     "OracleEffect:drawCards",
     "OracleEffect:dredge",
     "OracleEffect:emerge",
