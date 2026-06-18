@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Abundance",
+    "ManaCost": "{2}{G}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "If you would draw a card, you may instead choose land or nonland and reveal cards from the top of your library until you reveal a card of the chosen kind. Put that card into your hand and put all other cards revealed this way on the bottom of your library in any order.",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Abundance",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If you would draw a card, you may instead choose land or nonland and reveal cards from the top of your library until you reveal a card of the chosen kind. Put that card into your hand and put all other cards revealed this way on the bottom of your library in any order.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "drawCard",
+                "Player": {
+                  "Kind": "You"
+                }
+              },
+              "OriginalEventOccurs": false,
+              "IsOptional": true,
+              "Replacement": {
+                "EffectType": "abundanceReveal",
+                "Player": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
