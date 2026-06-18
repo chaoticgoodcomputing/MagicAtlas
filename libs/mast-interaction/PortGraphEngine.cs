@@ -909,19 +909,43 @@ public sealed class PortGraphEngine
     long nextStepLog = 5_000_000;
     string currentStart = "";
 
+    // Per-start-node SAFETY BUDGET (union only). A single alphabetically-early high-degree node (a
+    // broad token/mana emitter) defeats the canonical-rooting prune — almost every node sorts after it —
+    // so its bounded DFS can still explore tens of millions of paths and dominate the whole pass. When one
+    // node exceeds PerNodeStepBudget it is abandoned (and logged), so no single node can stall the run.
+    // This makes the union pass sound-but-incomplete (it may drop cycles rooted at an abandoned node — a
+    // lower-bounding count, never a false cycle). Disabled for the per-combo bench (sw is null).
+    const long PerNodeStepBudget = 20_000_000;
+    long nodeSteps = 0;
+    var nodeAborted = false;
+    var truncatedNodes = 0;
+
     void Dfs(string nodeId, string startId)
     {
-      if (!adjacency.TryGetValue(nodeId, out var outgoing))
+      if (nodeAborted || !adjacency.TryGetValue(nodeId, out var outgoing))
         return;
       foreach (var edge in outgoing)
       {
-        if (sw is not null && ++steps >= nextStepLog)
+        if (sw is not null)
         {
-          nextStepLog += 5_000_000;
-          Console.Error.WriteLine(
-            $"[FindCycles] …{steps / 1_000_000}M edge-steps, {cycles.Count} cycles, "
-              + $"{sw.Elapsed.TotalSeconds:F0}s (at start node {currentStart})"
-          );
+          if (++steps >= nextStepLog)
+          {
+            nextStepLog += 5_000_000;
+            Console.Error.WriteLine(
+              $"[FindCycles] …{steps / 1_000_000}M edge-steps, {cycles.Count} cycles, "
+                + $"{sw.Elapsed.TotalSeconds:F0}s (at start node {currentStart})"
+            );
+          }
+          if (++nodeSteps >= PerNodeStepBudget)
+          {
+            nodeAborted = true;
+            truncatedNodes++;
+            Console.Error.WriteLine(
+              $"[FindCycles] BUDGET: abandoned start node {currentStart} at "
+                + $"{nodeSteps / 1_000_000}M node-steps ({cycles.Count} cycles so far)"
+            );
+            return;
+          }
         }
         var toId = edge.To.Identity;
         if (toId == startId)
@@ -970,6 +994,8 @@ public sealed class PortGraphEngine
     foreach (var start in startNodes)
     {
       currentStart = start;
+      nodeSteps = 0;
+      nodeAborted = false;
       onPath.Clear();
       onPath.Add(start);
       path.Clear();
@@ -986,6 +1012,7 @@ public sealed class PortGraphEngine
       Console.Error.WriteLine(
         $"[FindCycles] done: {cycles.Count} cycles, {steps / 1_000_000}M edge-steps, "
           + $"{sw.Elapsed.TotalSeconds:F0}s"
+          + (truncatedNodes > 0 ? $" — {truncatedNodes} start node(s) hit the step budget (count is a lower bound)" : "")
       );
     return cycles;
   }

@@ -37,8 +37,8 @@ public static class MaterializeCyclesStep
   // make the union pass a tractable, SOUND-BUT-INCOMPLETE approximation (no false cycle; may miss cycles
   // whose only shape is longer than the bound) — distinct from the per-combo bench, which stays exact.
   private const int DisplayMaxCards = 5;
-  private const int MaxLabelCycleLen = 6;
-  private const int MaxInstanceHops = 6;
+  private const int MaxLabelCycleLen = 5;
+  private const int MaxInstanceHops = 5;
   private const int PerTierCap = 60;
 
   public static Func<
