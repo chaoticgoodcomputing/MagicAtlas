@@ -179,7 +179,9 @@
     "mayCastTargetFromGraveyard": "one-shot cast-from-graveyard permission (CR 601/608) — recursion enabler; no flow rule projects graveyard-cast grants yet, consciously inert for recall",
     "cantCastAdditionalSpellsThisTurn": "per-turn cast restriction (CR 608) — a limiter, not an emit/consume; no flow rule reads it, consciously inert",
     "abundanceReveal": "Abundance reveal-until-land/nonland replacement (CR 614 replacement of a draw) — bespoke library-visibility action; no flow rule projects it yet, consciously inert for recall",
-    "putAdditionalCounterOfChosenKind": "Ichormoon Gauntlet triggered effect (CR 122.1 counters) — player chooses a counter kind already on the target permanent and places one additional counter of that kind; no flow rule reads counter-duplication events yet; consciously inert for interaction recall"
+    "putAdditionalCounterOfChosenKind": "Ichormoon Gauntlet triggered effect (CR 122.1 counters) — player chooses a counter kind already on the target permanent and places one additional counter of that kind; no flow rule reads counter-duplication events yet; consciously inert for interaction recall",
+    "earthbend": "earthbend N (CR 701.66) — puts +1/+1 counters on a land you control, making it a 0/0 creature; bespoke keyword action, no flow rule projects it yet, consciously inert",
+    "unlockDoor": "unlock a door of a Room (CR 709.5) — assigns an unlocked designation; bespoke Room-mechanic action, no flow rule reads door state yet, consciously inert"
   },
   "costType": {
     "composite": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
@@ -247,7 +249,8 @@
     "DealsDamageToOpponents": "Malcolm, Keen-Eyed Navigator group-damage trigger — fires when one or more creatures of a named subtype deal damage to multiple opponents simultaneously (Rule 120.1 + 102.2, plural 'your opponents'); no flow rule consumes it yet; consciously inert for interaction recall",
     "EntersOrAttacks": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "CastOrCopySpell": "cast-or-copy-a-spell trigger (CR 707.10 copy / 601 cast) — no flow rule reads the cast-or-copy disjunct yet; consciously inert for recall",
-    "ExcessNoncombatDamageDealt": "KHM Toralf, God of Fury excess-noncombat-damage trigger (CR 120.10 — fires when noncombat damage dealt to a creature or planeswalker exceeds lethal damage or loyalty); no flow rule reads excess-damage events yet; consciously inert for interaction recall"
+    "ExcessNoncombatDamageDealt": "KHM Toralf, God of Fury excess-noncombat-damage trigger (CR 120.10 — fires when noncombat damage dealt to a creature or planeswalker exceeds lethal damage or loyalty); no flow rule reads excess-damage events yet; consciously inert for interaction recall",
+    "FullyUnlockRoom": "fires when both halves of a Room become unlocked (CR 709.5i) — bespoke Room trigger; no flow rule consumes it yet, consciously inert"
   },
   "restriction": {
     "OnlyAsInstant": "timing restriction (CR 602.5a — already at instant speed by default; this explicit marker is inert for intra-turn loop firability gating) — no flow rule consumes it yet",
