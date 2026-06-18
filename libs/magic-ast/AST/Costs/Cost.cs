@@ -184,3 +184,19 @@ public sealed record ReturnToHandCost : Cost
   /// <summary>What returns. For a self-bounce cost this is <see cref="ObjectReference.Self"/>.</summary>
   public required ObjectReference Target { get; init; }
 }
+
+/// <summary>
+/// "Forage" keyword action cost (CR 701.61a): "Exile three cards from your graveyard
+/// or sacrifice a Food." Printed as a bare keyword on the cost side of an activated
+/// ability, e.g. "{2}, Forage: [effect]".
+///
+/// <para>
+/// CR 701.61a (verbatim): "To forage means 'Exile three cards from your graveyard
+/// or sacrifice a Food.'" MAST records the keyword-action invocation here; the two
+/// alternative payment modes (exile-3 or sacrifice-Food) are engine territory —
+/// the node names the action, not the execution (per the descriptive-not-engine doctrine).
+/// This mirrors how other keyword-action costs are modelled (e.g. Saddle).
+/// </para>
+/// </summary>
+[OracleCost("forage")]
+public sealed record ForageCost : Cost;

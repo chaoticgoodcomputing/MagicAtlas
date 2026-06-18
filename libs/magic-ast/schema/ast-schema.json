@@ -435,6 +435,12 @@
           ]
         },
         {
+          "Type": "ForageCost",
+          "Discriminator": "forage",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "ManaCost",
           "Discriminator": "mana",
           "IsUnparsed": false,
@@ -2211,5 +2217,5 @@
       ]
     }
   ],
-  "SchemaHash": "f2d62619b0ee27a1a5b2fdafb1a43683500f93ddcf144f9f2ae1e9a062231c94"
+  "SchemaHash": "8a25384df9a862c767ffa5cb795e0c2fcae259c3848e780f29133335e40ceda2"
 }

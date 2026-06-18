@@ -1,0 +1,224 @@
+{
+  "Input": {
+    "Name": "Camellia, the Seedmiser",
+    "ManaCost": "{1}{B}{G}",
+    "TypeLine": "Legendary Creature — Squirrel Warlock",
+    "OracleText": "Menace\nOther Squirrels you control have menace.\nWhenever you sacrifice one or more Foods, create a 1/1 green Squirrel creature token.\n{2}, Forage: Put a +1/+1 counter on each other Squirrel you control. (To forage, exile three cards from your graveyard or sacrifice a Food.)",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "B",
+      "G"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Camellia, the Seedmiser",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Squirrel Warlock",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Squirrel",
+        "Warlock"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Menace\nOther Squirrels you control have menace.\nWhenever you sacrifice one or more Foods, create a 1/1 green Squirrel creature token.\n{2}, Forage: Put a +1/+1 counter on each other Squirrel you control. (To forage, exile three cards from your graveyard or sacrifice a Food.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Menace",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ]
+              },
+              "MinimumBlockers": 2
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Squirrel"
+                  ],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Menace",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": [
+                        "creature"
+                      ]
+                    },
+                    "MinimumBlockers": 2
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Sacrifices",
+            "Filter": {
+              "Subtypes": [
+                "Food"
+              ],
+              "Controller": "You"
+            },
+            "MinimumCount": 1
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": [
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Squirrel"
+                ],
+                "IsCopy": false
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
+              ]
+            },
+            {
+              "CostType": "forage"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Squirrel"
+                  ],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
