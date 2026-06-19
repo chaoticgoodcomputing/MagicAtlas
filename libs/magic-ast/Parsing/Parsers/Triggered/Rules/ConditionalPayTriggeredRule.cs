@@ -48,6 +48,7 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
   private static readonly SurveilTriggeredRule _surveilRule = new();
   private static readonly EachOpponentLosesLifeTriggeredRule _eachOpponentLosesLifeRule = new();
   private static readonly ReturnSelfFromGraveyardToBattlefieldRule _returnSelfFromGraveyardRule = new();
+  private static readonly TapUntapTargetTriggeredRule _tapUntapTargetRule = new();
 
   // ── Pattern 1: "you may pay {COST}. If you do, [effect]" ──────────────
   // The cost is one or more {X} symbols; the consequent effect is everything
@@ -130,6 +131,10 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
       return oppLose;
     if (_returnSelfFromGraveyardRule.TryMatch(text, out var returnSelf) && returnSelf is not null)
       return returnSelf;
+    // "untap target permanent" (Talisman/Cameo untap cycle: Hematite, Lapis Lazuli,
+    // Malachite, Nacre, Onyx) and the tap/tap-or-untap siblings.
+    if (_tapUntapTargetRule.TryMatch(text, out var tapUntap) && tapUntap is not null)
+      return tapUntap;
 
     // No match: return null so the caller (TryMatch) rejects the whole text
     // rather than emitting a partially-parsed effect. The dispatcher will
