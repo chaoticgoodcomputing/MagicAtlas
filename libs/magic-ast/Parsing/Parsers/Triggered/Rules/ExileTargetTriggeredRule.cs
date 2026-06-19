@@ -19,13 +19,19 @@ using MagicAST.Parsing.Parsers.Spell;
 /// </list>
 /// This rule handles PERMANENT exile (no "until [this] leaves the battlefield" suffix).
 /// The <see cref="ExileUntilLeavesTriggeredRule"/> handles the temporary Oblivion Ring shape.
-/// Rule 701.13 (exile action) + Rule 205.3 (card types).
+///
+/// <para>
+/// An optional "another" before "target" is the CR 109.5 self-exclusion marker
+/// ("exile another target permanent" — Flickerwisp): it rides on
+/// <see cref="ObjectFilter.ExcludeSelf"/> = true rather than on the card-type axis.
+/// </para>
+/// Rule 701.13 (exile action) + Rule 205.3 (card types) + Rule 109.5 ("another").
 /// </summary>
 [TriggeredRule]
 public sealed class ExileTargetTriggeredRule : ITriggeredRule
 {
   private static readonly Regex Pattern = new(
-    @"^exile\s+target\s+(?<filter>.+)$",
+    @"^exile\s+(?<another>another\s+)?target\s+(?<filter>.+)$",
     RegexOptions.Compiled | RegexOptions.IgnoreCase
   );
 
@@ -45,6 +51,13 @@ public sealed class ExileTargetTriggeredRule : ITriggeredRule
     if (filter is null)
     {
       return false;
+    }
+
+    // "another target ..." excludes the source permanent (CR 109.5). The
+    // self-exclusion is an axis on the filter, not a card-type qualifier.
+    if (m.Groups["another"].Success)
+    {
+      filter = filter with { ExcludeSelf = true };
     }
 
     effect = new ExileEffect
