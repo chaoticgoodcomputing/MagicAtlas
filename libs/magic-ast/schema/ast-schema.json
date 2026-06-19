@@ -769,6 +769,20 @@
           ]
         },
         {
+          "Type": "BecomesPermanentEffect",
+          "Discriminator": "becomesPermanent",
+          "IsUnparsed": false,
+          "Fields": [
+            "AddedSubtypes",
+            "CardTypes",
+            "Colors",
+            "GainedAbilities",
+            "Power",
+            "Subject",
+            "Toughness"
+          ]
+        },
+        {
           "Type": "BlightEffect",
           "Discriminator": "blight",
           "IsUnparsed": false,
@@ -2430,5 +2444,5 @@
       ]
     }
   ],
-  "SchemaHash": "c016613724a0b8aadecc36eb8c2ccd99034f2bd482ab0161a35ef2db820a2327"
+  "SchemaHash": "55b32830995e40f7c2b94d763ef95f20aa4a03deefb3570ebd24a00fde10d41a"
 }

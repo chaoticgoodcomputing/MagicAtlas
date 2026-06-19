@@ -41,6 +41,9 @@ public static class PortWalkProjection
     "optional", // PortWalk.Effects — "you may" wrapper: blink detection (gated emit:blink) + gated recursion into Inner (blink flow arm)
     "composite", // PortWalk.Effects — blink detection (exile+returnToBattlefield(ExiledWith:Self) → emit:blink) + recursion into Effects (blink flow arm)
     "rollDie", // PortWalk.EmitPort — emit:rolldice:<scope> (dice flow arm), Subject = the rolling player (controller)
+    "dealDamage", // PortWalk.EmitPort — emit:damage:<combat>:<recipient> (damage flow arm), Subject = the damage source; IsCombat → combat facet
+    "conditional", // PortWalk.Effects — recurse Then/Else as GATED inner ports (CR 603 in-ability gate → §8 Amber floor); the gated damage emit that closes Captain Rex's Crash Land self-loop
+    "becomesPermanent", // PortWalk.Effects — recurse GainedAbilities (the granted Crash Land triggered ability) as own port units; the grant emit itself is the coarse inert emit:becomespermanent
   };
 
   /// <summary><c>CostType</c> discriminators with a semantic projection (not the <c>pay:&lt;x&gt;</c> fallback).</summary>
@@ -61,6 +64,16 @@ public static class PortWalkProjection
     "LosesLife", // PortWalk.Trigger — trigger:life:loss:<scope> (life flow arm)
     "SpellCast", // PortWalk.Trigger — trigger:cast:<spell>:<scope> (Displacer Kitten cast-trigger arm), Subject = the watched (noncreature) spell filter
     "DiceRolled", // PortWalk.Trigger — trigger:rolldice:<scope> (dice flow arm), Subject = the rolling player (controller)
+    // Damage flow arm — trigger:damage:<combat>:<recipient>, Subject = the watched SOURCE (the source-perspective
+    // "[source] deals [combat] damage [to recipient]" triggers). Combat facet: combat (CR 510) / noncombat / any (CR 120).
+    "DealsDamage", // trigger:damage:any:any — fires on any damage (Captain Rex's Crash Land)
+    "DealsCombatDamage", // trigger:damage:combat:any
+    "DealsCombatDamageToPlayer", // trigger:damage:combat:player
+    "DealsCombatDamageToPlayerOrPlaneswalker", // trigger:damage:combat:playerorpw
+    "DealsCombatDamageToCreature", // trigger:damage:combat:creature
+    "NoncombatDamageDealt", // trigger:damage:noncombat:any
+    "DealsDamageToOpponent", // trigger:damage:any:opponent
+    "DealsDamageToOpponents", // trigger:damage:any:opponent
   };
 
   /// <summary>Restriction values treated as HARD firability gates (ADR-0002 §8). Everything else is a

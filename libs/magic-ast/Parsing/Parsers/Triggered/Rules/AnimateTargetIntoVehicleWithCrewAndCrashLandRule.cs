@@ -114,7 +114,7 @@ public sealed class AnimateTargetIntoVehicleWithCrewAndCrashLandRule : ITriggere
         new RollDieEffect { Sides = 6 },
         // "If the result is equal to this Vehicle's mana value, sacrifice this
         // Vehicle, then it deals that much damage to any target." (CR 706 result;
-        // CR 701.16 sacrifice; CR 119 damage). The "that much" damage is the roll
+        // CR 701.21 sacrifice; CR 120 damage). The "that much" damage is the roll
         // result (CR 706.2). The Vehicle is the damage source (Self).
         new ConditionalEffect
         {

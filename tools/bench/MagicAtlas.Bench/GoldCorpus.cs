@@ -14,14 +14,17 @@ public sealed class GoldCorpus
 {
   private readonly IReadOnlyDictionary<string, JsonArray> _abilitiesByName;
   private readonly IReadOnlyDictionary<string, JsonArray> _manaCostByName;
+  private readonly IReadOnlyDictionary<string, JsonObject> _profileByName;
 
   private GoldCorpus(
     IReadOnlyDictionary<string, JsonArray> abilitiesByName,
-    IReadOnlyDictionary<string, JsonArray> manaCostByName
+    IReadOnlyDictionary<string, JsonArray> manaCostByName,
+    IReadOnlyDictionary<string, JsonObject> profileByName
   )
   {
     _abilitiesByName = abilitiesByName;
     _manaCostByName = manaCostByName;
+    _profileByName = profileByName;
   }
 
   /// <summary>The distinct card names present in the corpus.</summary>
@@ -41,6 +44,13 @@ public sealed class GoldCorpus
   public JsonArray? ManaCostSymbolsFor(string cardName) =>
     _manaCostByName.TryGetValue(cardName, out var mc) ? mc : null;
 
+  /// <summary>The card's combat profile — <c>{ Types, Power, HasDefender }</c> — for the PortWalk
+  /// combat-presence projection (a creature that can attack deals combat damage, CR 510). <c>null</c> for
+  /// a card with no creatureStats/type line. Lets the combo-recall bench (the product reconstruction path)
+  /// project the structural combat-damage emit; other callers omit it.</summary>
+  public JsonObject? CardProfileFor(string cardName) =>
+    _profileByName.TryGetValue(cardName, out var p) ? p : null;
+
   /// <summary>
   /// Load every <c>*.json</c> under <paramref name="fixturesRoot"/> (recursively), keying each by its
   /// <c>Input.Name</c>. DETERMINISTIC: files are visited in ordinal-sorted path order and a duplicate
@@ -53,6 +63,7 @@ public sealed class GoldCorpus
   {
     var byName = new Dictionary<string, JsonArray>(StringComparer.Ordinal);
     var manaByName = new Dictionary<string, JsonArray>(StringComparer.Ordinal);
+    var profileByName = new Dictionary<string, JsonObject>(StringComparer.Ordinal);
     var files = Directory
       .EnumerateFiles(fixturesRoot, "*.json", SearchOption.AllDirectories)
       .OrderBy(p => p, StringComparer.Ordinal);
@@ -83,9 +94,29 @@ public sealed class GoldCorpus
           is JsonArray symbols
         )
           manaByName[name] = (JsonArray)symbols.DeepClone();
+
+        // Combat profile (for the PortWalk combat-presence emit): card types + printed power. A fixed
+        // creatureStats power is read as an int; a variable/absent power is left null (conservatively
+        // "could attack"). Defender is not threaded — a gated combat-presence emit floors to Amber anyway,
+        // so a rare >0-power Defender is a harmless over-approximation (never a false GREEN).
+        if (root?["Output"]?["TypeLine"]?["Types"] is JsonArray cardTypes && cardTypes.Count > 0)
+        {
+          var profile = new JsonObject
+          {
+            ["Types"] = new JsonArray(
+              cardTypes.Select(t => (JsonNode)t!.ToString().ToLowerInvariant()).ToArray()
+            ),
+          };
+          var power = (root["Output"]["Attributes"] as JsonArray)
+            ?.FirstOrDefault(a => a?["Kind"]?.ToString() == "creatureStats")
+            ?["Power"]?["Value"];
+          if (power is not null && power.GetValueKind() == System.Text.Json.JsonValueKind.Number)
+            profile["Power"] = power.GetValue<int>();
+          profileByName[name] = profile;
+        }
       }
     }
 
-    return new GoldCorpus(byName, manaByName);
+    return new GoldCorpus(byName, manaByName, profileByName);
   }
 }

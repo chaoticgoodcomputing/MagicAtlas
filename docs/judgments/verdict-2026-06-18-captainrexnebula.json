@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/AST/Effects/Modification/BecomesPermanentEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 301.7", "CR 611.1", "CR 205", "CR 202.3", "CR 208", "CR 113.6"],
+      "reason": "new-vs-reuse decision is rules-correct: CR 301.7 a Vehicle isn't inherently a creature, so modeling 'becomes a Vehicle artifact' with a non-creature CardTypes box requires a distinct node; reusing BecomesCreatureEffect (asserts 'creature') would be a fidelity error. Field shape grounded; all cited rules exist and match."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CaptainRexNebula.json",
+      "verdict": "PASS",
+      "citations": ["CR 508", "CR 301.7", "CR 202.3", "CR 208", "CR 702.122", "CR 120.1", "CR 706.1", "CR 706.2", "CR 701.21"],
+      "reason": "oracle text matches raw data verbatim; trigger=beginning-of-combat-your-turn; becomesPermanent CardTypes [artifact]+AddedSubtypes [Vehicle] (no 'creature'), P/T=derived ManaValue; crew 2 as static Crew keyword; Crash Land granted triggered ability with general DealsDamage (CR 120, correctly NOT combat-specific)+Filter IsSelf; effects rollDie(6) then conditional(dieRollResult==ManaValue) -> composite[sacrifice(Self), dealDamage(dieRollResult, AnyTarget, Source Self)]; no unparsed nodes."
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/AnimateTargetIntoVehicleWithCrewAndCrashLandRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 701.16", "CR 701.21"],
+      "reason": "doc-comment cites 'CR 701.16 sacrifice' but CR 701.16 is Investigate in rules-structure.json (and glossary.json); the correct Sacrifice rule is CR 701.21. Cited rule contradicts the modeling. (Anchored full-text rule itself is acceptable, matching the AnimateTargetNoncreatureArtifactByManaValueRule pattern; only the citation is wrong.)"
+    },
+    {
+      "target": "libs/mast-interaction/PortWalkProjection.cs#becomesPermanent",
+      "verdict": "FAIL",
+      "citations": [],
+      "reason": "new [OracleEffect('becomesPermanent')] discriminator has NO projection decision: absent from both PortWalkProjection.EffectTypes (semantic) and known-coarse-projections.json (coarse) at branch tip and merged HEAD. Sibling 'becomesCreature' is whitelisted coarse but the new discriminator is neither projected nor justified-coarse; nothing present to judge as sensible."
+    }
+  ]
+}

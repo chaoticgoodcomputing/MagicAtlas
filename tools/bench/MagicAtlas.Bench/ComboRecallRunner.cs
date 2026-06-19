@@ -123,7 +123,12 @@ public sealed class ComboRecallRunner
     // exactly that card set").
     var graphs = cardNames
       .Select(name =>
-        _walk.Project(name, _corpus.AbilitiesFor(name), _corpus.ManaCostSymbolsFor(name))
+        _walk.Project(
+          name,
+          _corpus.AbilitiesFor(name),
+          _corpus.ManaCostSymbolsFor(name),
+          _corpus.CardProfileFor(name)
+        )
       )
       .ToList();
     var cycles = _engine.FindCycles(_engine.Materialize(graphs), LengthBound);
