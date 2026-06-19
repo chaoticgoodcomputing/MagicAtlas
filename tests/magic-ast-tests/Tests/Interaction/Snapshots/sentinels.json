@@ -655,6 +655,20 @@
           "card": "Bargain"
         }
       ]
+    },
+    {
+      "name": "Captain Rex Nebula x Brazen Dwarf (damage flow arm exemplar)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/CaptainRexNebula.json",
+          "card": "Captain Rex Nebula"
+        },
+        {
+          "path": "HandParsedCards/BrazenDwarf.json",
+          "card": "Brazen Dwarf"
+        }
+      ]
     }
   ]
 }

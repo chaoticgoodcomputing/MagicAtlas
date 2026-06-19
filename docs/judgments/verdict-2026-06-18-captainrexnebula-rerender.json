@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/AnimateTargetIntoVehicleWithCrewAndCrashLandRule.cs#SacrificeEffect-citation",
+      "verdict": "PASS",
+      "citations": ["CR 701.21", "CR 120"],
+      "reason": "sacrifice now cites CR 701.21 (Sacrifice) and the damage clause CR 120 (Damage); both exist in rules-structure.json and match the modeling; stale CR 701.16 (Investigate) is gone"
+    },
+    {
+      "target": "libs/mast-interaction/PortWalkProjection.cs#becomesPermanent",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "becomesPermanent has an explicit semantic projection in PortWalkProjection.EffectTypes (recurse GainedAbilities), not parked in known-coarse-projections.json; sensible choice; PortWalkExhaustiveness passes 5/5"
+    }
+  ]
+}
