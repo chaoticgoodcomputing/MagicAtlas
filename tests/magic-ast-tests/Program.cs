@@ -4,6 +4,7 @@ using Flowthru.Diagnostics;
 using Flowthru.Hosting;
 using Flowthru.Step.Python;
 using MagicAtlas.Ast.Tests.Data;
+using MagicAtlas.Ast.Tests.Flows.DiceComboReport;
 using MagicAtlas.Ast.Tests.Flows.InteractionTriage;
 using MagicAtlas.Ast.Tests.Flows.LabelCensus;
 using MagicAtlas.Ast.Tests.Flows.MagicAstSmoke;
@@ -165,6 +166,30 @@ public class Program
         .WithDescription(
           "Parses + PortWalk-projects every corpus card and aggregates the distinct port-label space → "
             + "Data/_08_Reporting/port-label-census.json (diagnostic: the card:label ratio that sizes the two-layer cycle engine)."
+        );
+
+      var diceStubAstsPath = Path.Combine(
+        dataPath,
+        "_01_Raw",
+        "Datasets",
+        "Curated",
+        "dice-report-stub-asts.json"
+      );
+      flowthru
+        .RegisterFlow<Catalog>(
+          "DiceComboReport",
+          catalog =>
+            DiceComboReportFlow.Create(
+              catalog,
+              ontologyPath,
+              handParsedFixturesRoot,
+              diceStubAstsPath
+            )
+        )
+        .WithDescription(
+          "Reconstructs every CSB die-roll combo 'as if the support cards were parsed' (gold AST > stub > "
+            + "parsed text > inert) → Data/_08_Reporting/dice-combo-report.json: per-combo best dice-cycle "
+            + "tier + hops vs product reach + cards-in-cycle + AST provenance, plus engine-derived novel dice loops."
         );
 
       flowthru.ConfigureMetadata(meta =>

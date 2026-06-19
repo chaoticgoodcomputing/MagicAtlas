@@ -75,6 +75,16 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/port-graph-metrics.json")
       .Build());
 
+  /// <summary>The dice-combo reconstruction report (diagnostic): every CSB die-roll combo reconstructed
+  /// "as if the support cards were parsed" — best dice-cycle tier + hop count vs. product reach +
+  /// cards-in-cycle + AST provenance, plus the engine-derived (novel) dice loops. Output of the
+  /// <c>DiceComboReport</c> flow.</summary>
+  public IItem<DiceComboReport> DiceComboReport =>
+    CreateItem(() => Item.Of<DiceComboReport>("DiceComboReport")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/dice-combo-report.json")
+      .Build());
+
   /// <summary>The interaction-graph Plotly viz (label grammar | card-card expansion) — interactive HTML.</summary>
   public IItem<string> InteractionGraphHtml =>
     CreateItem(() => Item.Of<string>("InteractionGraphHtml")
