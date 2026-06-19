@@ -1490,12 +1490,49 @@ public sealed class AbilityClassifier
   /// to "this turn", the signature of a delayed triggered ability created by a
   /// resolving spell (CR 603.7) rather than a printed trigger. Scoped pre-comma so a
   /// printed trigger whose *effect* says "this turn" is not misread.
+  ///
+  /// <para>
+  /// Not every "this turn" in a trigger condition is the delayed-trigger boundary.
+  /// In the death-watch-with-provenance family — "Whenever a creature dealt damage by
+  /// [source] this turn <i>dies</i>, …" (Sengir Bats/Vampire, Predator Ooze, Blood
+  /// Cultist, Zurgo Helmsmasher, …) — "this turn" is a backward-looking provenance
+  /// qualifier on the subject ("dealt damage by [source] this turn", a
+  /// <see cref="MagicAST.AST.References.DealtDamageByPredicate"/>), and the real
+  /// trigger event verb ("dies") <i>follows</i> it. The same shape appears for
+  /// "creatures that entered this turn <i>attack</i>" triggers. These are printed
+  /// triggers (CR 603.2), not delayed triggers (CR 603.7). The distinguishing
+  /// structural fact: in a delayed trigger "this turn" terminates the condition
+  /// (e.g. Glimpse of Nature's "you cast a creature spell this turn"; Graceful
+  /// Reprieve's "target creature dies this turn"), whereas here an event verb sits
+  /// <i>after</i> the last "this turn". Detect that trailing event verb and decline
+  /// the delayed-trigger classification so the printed trigger routes correctly.
+  /// </para>
   /// </summary>
   private static bool TriggerConditionMentionsThisTurn(string raw)
   {
     var comma = raw.IndexOf(',');
     var condition = comma >= 0 ? raw[..comma] : raw;
-    return condition.Contains("this turn", StringComparison.OrdinalIgnoreCase);
+
+    var lastThisTurn = condition.LastIndexOf("this turn", StringComparison.OrdinalIgnoreCase);
+    if (lastThisTurn < 0)
+    {
+      return false;
+    }
+
+    // Text following the final "this turn" within the condition. When an event verb
+    // (dies / attacks / enters / …) appears here, "this turn" was a provenance
+    // qualifier on the subject and the condition's real event verb terminates it —
+    // a printed trigger (CR 603.2), not a spell-created delayed trigger (CR 603.7).
+    var afterThisTurn = condition[(lastThisTurn + "this turn".Length)..];
+    if (Regex.IsMatch(
+      afterThisTurn,
+      @"\b(dies|die|attacks|attack|blocks|block|enters|enter)\b",
+      RegexOptions.IgnoreCase))
+    {
+      return false;
+    }
+
+    return true;
   }
 
   /// <summary>
