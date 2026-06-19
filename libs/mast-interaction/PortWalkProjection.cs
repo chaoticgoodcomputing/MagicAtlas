@@ -44,6 +44,7 @@ public static class PortWalkProjection
     "dealDamage", // PortWalk.EmitPort — emit:damage:<combat>:<recipient> (damage flow arm), Subject = the damage source; IsCombat → combat facet
     "conditional", // PortWalk.Effects — recurse Then/Else as GATED inner ports (CR 603 in-ability gate → §8 Amber floor); the gated damage emit that closes Captain Rex's Crash Land self-loop
     "becomesPermanent", // PortWalk.Effects — recurse GainedAbilities (the granted Crash Land triggered ability) as own port units; the grant emit itself is the coarse inert emit:becomespermanent
+    "returnToBattlefield", // PortWalk.EmitPort — emit:blink when the return is of the just-exiled card (Target.Filter.ExiledWith:Self — the activated/triggered "exile target, then return it" blink outlets: Emiel, Eldrazi Displacer). A non-blink return (Persist/Undying self-return, reanimation) stays the coarse emit:returntobattlefield.
   };
 
   /// <summary><c>CostType</c> discriminators with a semantic projection (not the <c>pay:&lt;x&gt;</c> fallback).</summary>

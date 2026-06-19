@@ -723,6 +723,26 @@ public sealed class PortWalk
       var count = (int?)(e["Count"]?.GetValue<int>()) ?? 1;
       return Port(card, PortLabel.RollDiceEmit(Roller), PortSide.Emit, count, Roller);
     }
+    if (
+      effectType == "returnToBattlefield"
+      && e["Target"]?["Filter"]?["ExiledWith"]?["Kind"]?.ToString() == "Self"
+    )
+    {
+      // A "return [the just-exiled thing] to the battlefield" (Target.Filter.ExiledWith:Self) is a BLINK:
+      // the permanent re-enters as a NEW object (CR 603.6e/400.7), re-firing its ETB. Project emit:blink
+      // (feeds the blink arm → an etb consume), so the ACTIVATED/triggered "exile target creature, then
+      // return it" outlets the narrow composite BlinkPort missed — Emiel the Blessed, Eldrazi Displacer
+      // (they parse as a FLAT [exile, returnToBattlefield] pair, not a composite) — become real repeatable
+      // blink outlets the engine can bond to a dice-ETB creature's self-ETB (Swarming Goblins, etc.). The
+      // Subject floors to {creature} (the standalone-return blink outlets exile creatures; the exile's exact
+      // filter lives on the sibling effect, not threaded here) — NON-NULL, so it never hits the scalar
+      // null-default GREEN (anti-pattern 3), and BlinkSatisfiesEnter's same-card guard keeps it sound.
+      // CRITICAL: a return WITHOUT ExiledWith:Self — Persist/Undying's self-return (Target:Self from the
+      // graveyard) and reanimation (return a card from a graveyard) — falls through to the coarse
+      // emit:returntobattlefield, PRESERVING the §8-B one-shot-self-removal carve-out that keys on it.
+      var blinked = new ObjectFilter { CardTypes = ["creature"] };
+      return Port(card, PortLabel.BlinkEmit(blinked, _ontology), PortSide.Emit, subject: blinked);
+    }
     if (effectType == "dealDamage")
     {
       // A "deals N damage to [target]" event (CR 119/120). The combat facet is non-combat by default

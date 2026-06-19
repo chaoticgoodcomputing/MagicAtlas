@@ -246,6 +246,8 @@ public static class DiceComboReportStep
         ("engine:emiel+drake+swarming", ["Emiel the Blessed", "Peregrine Drake", "Swarming Goblins"]),
         ("engine:emiel+drake (control, no roll card)", ["Emiel the Blessed", "Peregrine Drake"]),
         ("engine:emiel+swarming (no mana source)", ["Emiel the Blessed", "Swarming Goblins"]),
+        // Second newly-covered activated blink outlet (returnToBattlefield ExiledWith:Self → emit:blink).
+        ("engine:eldrazi-displacer+drake+swarming", ["Eldrazi Displacer", "Peregrine Drake", "Swarming Goblins"]),
       };
       foreach (var (id, cards) in candidates)
         efficient.Add(AnalyzeCombo(id, cards, ["(anchored efficient-engine candidate)"], collectNovel: false));
