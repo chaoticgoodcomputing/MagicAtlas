@@ -7,9 +7,10 @@ using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 
 /// <summary>
-/// "Tap [count] target [type]" — "Tap target creature", "Tap X target lands",
-/// "Tap two target creatures" (Rule 701.21). For variable-X abilities the X in
-/// cost and effect refer to the same chosen value (Rule 107.3b/c).
+/// "Tap [count] [another] target [type]" — "Tap target creature", "Tap another target
+/// creature" (Thassa, Deep-Dwelling), "Tap X target lands", "Tap two target creatures"
+/// (Rule 701.21). "another" excludes the source permanent (CR 109.5). For variable-X
+/// abilities the X in cost and effect refer to the same chosen value (Rule 107.3b/c).
 /// </summary>
 [ActivatedEffectRule(Priority = 994)]
 public sealed class TapEffectRule : IActivatedEffectRule
@@ -26,6 +27,16 @@ public sealed class TapEffectRule : IActivatedEffectRule
 
     // Strip leading "tap " before parsing count + target noun.
     var rest = text[4..].Trim();
+
+    // "Tap another target <type>" — exclude the source permanent (CR 109.5). Strip
+    // the "another" qualifier so the count/target parsing below sees plain "target …".
+    bool? excludeSelf = null;
+    if (Regex.IsMatch(rest, @"^another\s+", RegexOptions.IgnoreCase))
+    {
+      excludeSelf = true;
+      rest = Regex.Replace(rest, @"^another\s+", "", RegexOptions.IgnoreCase).Trim();
+    }
+
     var restLower = rest.ToLowerInvariant();
 
     Quantity? count = null;
@@ -81,7 +92,7 @@ public sealed class TapEffectRule : IActivatedEffectRule
       {
         noun2 = noun2[..^1];
       }
-      var orFilter = new ObjectFilter { CardTypes = [noun1, noun2] };
+      var orFilter = new ObjectFilter { CardTypes = [noun1, noun2], ExcludeSelf = excludeSelf };
       return new TapEffect { Target = ObjectReference.Target(orFilter), Count = count };
     }
 
@@ -100,7 +111,7 @@ public sealed class TapEffectRule : IActivatedEffectRule
       noun = noun[..^1];
     }
 
-    var filter = new ObjectFilter { CardTypes = [noun] };
+    var filter = new ObjectFilter { CardTypes = [noun], ExcludeSelf = excludeSelf };
     var target = ObjectReference.Target(filter);
 
     return new TapEffect { Target = target, Count = count };
