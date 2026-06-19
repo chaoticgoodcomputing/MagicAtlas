@@ -1,0 +1,159 @@
+{
+  "Input": {
+    "Name": "Dragon Scales",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nEnchanted creature gets +1/+2 and has vigilance.\nWhen a creature with mana value 6 or greater enters, you may return this card from your graveyard to the battlefield attached to that creature.",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Dragon Scales",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nEnchanted creature gets +1/+2 and has vigilance.\nWhen a creature with mana value 6 or greater enters, you may return this card from your graveyard to the battlefield attached to that creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ]
+              }
+            }
+          ],
+          "KeywordSource": "Enchant"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "modifyPT",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  }
+                },
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "Effects": [
+                      {
+                        "EffectType": "keywordAbility",
+                        "Keyword": "Vigilance"
+                      }
+                    ],
+                    "KeywordSource": "Vigilance"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "ManaValueComparison": {
+                "Operator": "GreaterThanOrEqual",
+                "Value": 6
+              }
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "returnToBattlefield",
+                    "Target": {
+                      "Kind": "Self",
+                      "Filter": {
+                        "Zone": "Graveyard",
+                        "Controller": "You"
+                      }
+                    }
+                  },
+                  {
+                    "EffectType": "attach",
+                    "Target": {
+                      "Kind": "It"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}
