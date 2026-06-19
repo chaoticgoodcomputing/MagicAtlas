@@ -582,6 +582,14 @@ public sealed class PortGraphEngine
       // AddRulesEdge's operator tiers certainty on the player Subjects (You↔You → GREEN; a result
       // threshold on the trigger floors firability via §8, not the arm).
       ("rolldice", "trigger") => ResourceKind(consume.Label) == "rolldice",
+      // Damage (CR 120 general / CR 510 combat). A "deals N damage" emit refuels a "whenever [source]
+      // deals [combat] damage [to recipient]" trigger — closing a deal→…→deal loop (Captain Rex Nebula's
+      // Crash Land: the Vehicle's own damage re-triggers its roll). Feasibility only — combat/noncombat +
+      // recipient facets gate it (a NON-combat emit must never feed a combat-specific trigger — the
+      // blocker-memory soundness; a player-recipient emit never feeds a creature-recipient trigger), a
+      // self-watching trigger is matched same-card-only (object identity the operator can't see), and
+      // AddRulesEdge's operator tiers certainty on the SOURCE Subjects.
+      ("damage", "trigger") => DamageSatisfiesTrigger(emit, consume),
       // Cast-recursion (Displacer Kitten family). A RE-CAST spell (emit:cast — a noncreature permanent that
       // bounced itself to hand and is cast again, CR 601) feeds a "whenever you cast a [noncreature] spell"
       // trigger (CR 603.2) whose watched-spell filter is type-compatible. Feasibility only — AddRulesEdge's
@@ -721,6 +729,71 @@ public sealed class PortGraphEngine
       return true;
     return ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
       != FilterRelation.Disjoint;
+  }
+
+  /// <summary>
+  /// A "deals N damage" emit (<c>emit:damage:&lt;combat&gt;:&lt;recipient&gt;</c>, Subject = the SOURCE)
+  /// satisfies a "whenever [source] deals [combat] damage [to recipient]" trigger
+  /// (<c>trigger:damage:&lt;combat&gt;:&lt;recipient&gt;</c>, Subject = the watched source) when three
+  /// gates hold: (1) the consume is genuinely a damage trigger (resource kind <c>damage</c> — NOT a
+  /// same-Role life/dice/cast trigger the tuple could otherwise reach); (2) the combat facets are
+  /// compatible — a non-combat emit (CR 120) feeds a general or non-combat trigger but NEVER a
+  /// combat-specific trigger (CR 510), the soundness the combat-damage-modeling blocker named; (3) the
+  /// recipient classes overlap (a player-recipient emit can't feed a creature-recipient trigger).
+  /// <para>SOURCE object-identity: a <b>self-watching</b> trigger ("whenever THIS deals damage", Subject
+  /// <c>IsSelf</c>) fires only for its OWN source object. The operator can't see object identity
+  /// (<c>IsSelf</c> is absent from <see cref="ObjectFilterRelations.Intersects"/>), so the arm matches it
+  /// <b>same-card-only</b> — the emit must be that same card's own (self-source) damage. A DIFFERENT card's
+  /// self-source damage does NOT feed it (Brazen Dwarf's "this creature deals 1 to each opponent" never
+  /// triggers the Vehicle's Crash Land — the false positive this guard prevents; the dual of
+  /// <see cref="BlinkSatisfiesEnter"/>'s same-card guard). For a non-self watched source, feasibility is
+  /// type-overlap and <see cref="AddRulesEdge"/>'s operator sets GREEN vs AMBER on the source Subjects.</para>
+  /// </summary>
+  private bool DamageSatisfiesTrigger(PortNode emit, PortNode consume)
+  {
+    if (ResourceKind(consume.Label) != "damage")
+      return false; // a non-damage trigger of the same Role token — not this arm
+    if (!CombatFacetFeeds(DamageFacet(emit.Label, 2), DamageFacet(consume.Label, 2)))
+      return false; // non-combat damage must not feed a combat-specific trigger (CR 510 vs 120)
+    if (!RecipientFeeds(DamageFacet(emit.Label, 3), DamageFacet(consume.Label, 3)))
+      return false; // a player-recipient emit can't feed a creature-recipient trigger (CR 510.1)
+    if (consume.Subject?.IsSelf == true)
+      // a self-watching trigger fires only for THE SAME object's own damage (same card, self-source)
+      return string.Equals(emit.Card, consume.Card, StringComparison.Ordinal)
+        && emit.Subject?.IsSelf == true;
+    if (emit.Subject is null || consume.Subject is null)
+      return true;
+    return ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
+      != FilterRelation.Disjoint;
+  }
+
+  /// <summary>The facet at <paramref name="index"/> of a damage label
+  /// (<c>role:damage:&lt;combat=2&gt;:&lt;recipient=3&gt;</c>); the permissive <c>any</c> when absent.</summary>
+  private static string DamageFacet(string label, int index)
+  {
+    var parts = label.Split(':');
+    return parts.Length > index ? parts[index] : "any";
+  }
+
+  /// <summary>Combat-facet feasibility (CR 510 vs 120): a general trigger (<c>any</c> — a bare "deals
+  /// damage") fires on either kind; a combat or non-combat trigger needs an emit of that same kind. An
+  /// explicit damage emit is <c>noncombat</c> by default, a combat-presence emit is <c>combat</c> — so a
+  /// non-combat emit NEVER feeds a combat-specific trigger (the false GREEN the blocker memory warned of).</summary>
+  private static bool CombatFacetFeeds(string emitFacet, string triggerFacet) =>
+    triggerFacet == "any" || string.Equals(emitFacet, triggerFacet, StringComparison.Ordinal);
+
+  /// <summary>Recipient-class feasibility (CR 510.1 — combat damage is assigned to players, planeswalkers,
+  /// battles, or creatures): <c>any</c> overlaps everything; <c>creature</c> is DISJOINT from the
+  /// player-class recipients (player/opponent/planeswalker/playerorpw, treated as mutually overlapping — an
+  /// opponent IS a player, and the only cost of leniency among them is a rare false AMBER on a gated
+  /// combat-presence emit, never a false GREEN). The load-bearing prune is creature-vs-player.</summary>
+  private static bool RecipientFeeds(string emitR, string triggerR)
+  {
+    if (triggerR == "any" || emitR == "any")
+      return true;
+    var emitCreature = string.Equals(emitR, "creature", StringComparison.Ordinal);
+    var triggerCreature = string.Equals(triggerR, "creature", StringComparison.Ordinal);
+    return emitCreature == triggerCreature; // both creature, or both player-class → overlap; else disjoint
   }
 
   /// <summary>A life-gain/loss event refuels a life trigger of the SAME direction (gain↔gain, loss↔loss,

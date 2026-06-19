@@ -275,6 +275,40 @@ public static class PortLabel
 
   public static string RollDiceTrigger(ObjectFilter? who) => Join("trigger", "rolldice", who is null ? null : Scope(who));
 
+  // --- Damage as a flowing resource (CR 119/120 general, CR 510 combat). -----------------------
+  // A "deals N damage" EFFECT is an emit; a "whenever [a source] deals [combat] damage [to X]" TRIGGER is
+  // a consume. The flow arm (PortGraphEngine.FlowFeasible) connects an emit to a trigger whose COMBAT facet
+  // is compatible (a non-combat emit feeds a general "deals damage" trigger and a non-combat trigger, but
+  // NEVER a combat-specific trigger — the combat-vs-noncombat soundness, CR 510 vs 120) and whose RECIPIENT
+  // class is compatible (a player-recipient emit can't feed a "deals combat damage to a CREATURE" trigger).
+  // The discriminating SOURCE (who deals the damage — "this Vehicle", "a creature you control") rides as the
+  // port Subject so the operator tiers it (ADR-0002 §7); a self-watching trigger ("whenever THIS deals
+  // damage") is matched same-card-only by the arm (the operator can't see object identity). Both facets are
+  // ALWAYS emitted (never dropped) so the index-based facet read in the engine is stable. NON-NULL Subject.
+
+  /// <summary>The combat facet of a damage label: <c>combat</c> (CR 510), <c>noncombat</c> (CR 120),
+  /// or <c>any</c> (a bare "deals damage" trigger — fires on either). A constant vocabulary so the
+  /// engine's facet read is total.</summary>
+  public const string DamageCombat = "combat";
+  public const string DamageNoncombat = "noncombat";
+  public const string DamageAnyKind = "any";
+
+  /// <summary>A "deals N damage to [recipient]" EFFECT emit (CR 119/120). The <paramref name="combatFacet"/>
+  /// is <see cref="DamageCombat"/> when the effect's damage is combat damage, else <see cref="DamageNoncombat"/>
+  /// (the default — explicit damage effects are non-combat). <paramref name="recipient"/> is the recipient
+  /// class facet. The SOURCE rides as the NON-NULL port Subject (never the scalar null-default GREEN —
+  /// adding-a-flow-arm anti-pattern 3).</summary>
+  public static string DealDamageEmit(string combatFacet, string recipient) =>
+    Join("emit", "damage", combatFacet, recipient);
+
+  /// <summary>A "whenever [source] deals [combat] damage [to recipient]" TRIGGER consume (CR 120 general /
+  /// CR 510 combat). <paramref name="combatFacet"/> is <see cref="DamageCombat"/> (a <c>DealsCombatDamage*</c>
+  /// trigger), <see cref="DamageNoncombat"/> (a <c>NoncombatDamageDealt</c> trigger), or
+  /// <see cref="DamageAnyKind"/> (a bare <c>DealsDamage</c> trigger — fires on either). The watched SOURCE
+  /// rides as the NON-NULL port Subject.</summary>
+  public static string DamageTrigger(string combatFacet, string recipient) =>
+    Join("trigger", "damage", combatFacet, recipient);
+
   /// <summary>
   /// A sacrifice cost. CR 701.21a: a player only sacrifices a permanent they control, so an unscoped
   /// fodder filter floors to <c>controlled</c> (the rules-invariant lives here, not in the parse).

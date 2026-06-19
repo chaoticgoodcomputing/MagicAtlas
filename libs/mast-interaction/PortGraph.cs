@@ -131,19 +131,97 @@ public sealed class PortWalk
 
   public PortWalk(TypeOntology ontology) => _ontology = ontology;
 
-  public PortGraph Project(string card, JsonNode? oracleAbilities, JsonNode? manaCostSymbols = null)
+  public PortGraph Project(
+    string card,
+    JsonNode? oracleAbilities,
+    JsonNode? manaCostSymbols = null,
+    JsonNode? cardProfile = null
+  )
   {
-    if (oracleAbilities is not JsonArray abilities)
-      return new PortGraph();
-
     var ports = new List<PortNode>();
     var edges = new List<CardDefinedEdge>();
 
-    foreach (var ability in abilities)
-    {
-      if (ability is not JsonObject)
-        continue;
+    // Combat-damage as a structural CARD PROPERTY (CR 510, combat-damage-modeling decision 1): a creature
+    // that can attack (a creature card, power not provably 0, no Defender) deals combat damage as a
+    // consequence of attacking — there is NO effect/emit for it (the modeling blocker), so it is projected
+    // here from the card's combat presence, not from an ability. The SOURCE is the creature itself
+    // (self), the recipient is `any` (combat damage hits the blocker creature or the defending player), and
+    // it is GATED: attacking is a once-per-combat event the engine can't freely re-fire within a turn (no
+    // extra-combat modeling), so any loop through it floors to AMBER — never a false GREEN. Projected only
+    // when the caller supplies a cardProfile (the bench corpus); other callers omit it (no combat presence).
+    ProjectCombatPresence(card, cardProfile, ports);
 
+    if (oracleAbilities is JsonArray abilities)
+      foreach (var ability in abilities)
+        if (ability is JsonObject ao)
+          ProjectAbility(ao, card, ports, edges, manaCostSymbols);
+
+    ResolvePredefinedTokens(card, ports, edges);
+
+    // One port per (card, label) — the Identity is card::label. The §9 resolution can re-derive a port
+    // the card already declares (Ruthless Knave sacs Treasures in its own draw ability too); collapse
+    // the duplicate so the engine sees one node, not parallel edges.
+    var distinctPorts = ports.GroupBy(p => p.Identity).Select(g => g.First()).ToList();
+    var distinctEdges = edges
+      .GroupBy(e => (e.From.Identity, e.To.Identity))
+      .Select(g => g.First())
+      .ToList();
+    return new PortGraph { Ports = distinctPorts, CardDefinedEdges = distinctEdges };
+  }
+
+  /// <summary>
+  /// Project a creature's structural <b>combat-damage emit</b> (CR 510, combat-damage-modeling decision 1).
+  /// "Dealing combat damage" is an implicit consequence of attacking with NO effect to read — so it is
+  /// projected from the card's combat presence: a CREATURE (CR 301.7 — a Vehicle isn't one until crewed, too
+  /// indirect to claim here), power not provably 0 (CR 208 — a 0-power creature deals no combat damage),
+  /// and no Defender (CR 702.3b — can't attack). The SOURCE is self ("this creature"); the recipient is
+  /// <c>any</c> (combat damage hits the blocking creature OR the defending player, CR 510.1). GATED: attacking
+  /// is once per combat and the engine models no extra-combat phases, so any loop through it floors to AMBER
+  /// — never a false GREEN (the soundness floor that lets the combat arm be active without over-certifying).
+  /// <para>The <paramref name="cardProfile"/> (a <c>{ Types, Power, HasDefender }</c> object) is supplied
+  /// only by callers that know the card's type line + P/T (the combo-recall bench). Callers that omit it
+  /// (the sentinel snapshot, census, union) project no combat presence — keeping the combat emit scoped to
+  /// where it is measured.</para>
+  /// </summary>
+  private void ProjectCombatPresence(string card, JsonNode? cardProfile, List<PortNode> ports)
+  {
+    if (cardProfile is not JsonObject p)
+      return;
+    var types = (p["Types"] as JsonArray)?.Select(t => t?.ToString()) ?? [];
+    if (!types.Any(t => string.Equals(t, "creature", StringComparison.OrdinalIgnoreCase)))
+      return; // only creatures have a standing combat presence
+    if (p["HasDefender"]?.GetValue<bool>() == true)
+      return; // Defender can't attack (CR 702.3b)
+    if (p["Power"] is JsonValue pv && pv.TryGetValue<int>(out var pow) && pow == 0)
+      return; // provably 0 power deals no combat damage; variable/unknown power stays present (conservative)
+
+    var self = new ObjectFilter { IsSelf = true };
+    ports.Add(
+      Port(card, PortLabel.DealDamageEmit(PortLabel.DamageCombat, "any"), PortSide.Emit, subject: self)
+        with
+      {
+        Gated = true,
+      }
+    );
+  }
+
+  /// <summary>
+  /// Project ONE ability (a card's own top-level ability, or — recursively — an ability GRANTED by a
+  /// continuous effect, CR 113.6) into single-role ports + their card-defined edges, appended to the
+  /// card-level <paramref name="ports"/>/<paramref name="edges"/> accumulators. A granted ability's ports
+  /// belong to the GRANTING card (CR 611 — the grant gives the affected permanent that ability; for
+  /// reconstruction it is attributed to the granter, whose grant is what creates the looping object — e.g.
+  /// Captain Rex Nebula's Crash Land on the Vehicle it makes). Each ability is its own unit so its trigger
+  /// drives its own effects (§5), not the granter's outer trigger.
+  /// </summary>
+  private void ProjectAbility(
+    JsonObject ability,
+    string card,
+    List<PortNode> ports,
+    List<CardDefinedEdge> edges,
+    JsonNode? manaCostSymbols
+  )
+  {
       var consumes = new List<PortNode>();
       var emits = new List<PortNode>();
 
@@ -166,7 +244,7 @@ public sealed class PortWalk
           consumes.Add(Port(card, label, PortSide.Consume, quantity));
 
       foreach (var effect in ability["Effects"] as JsonArray ?? [])
-        Effects(effect, card, keyword, manaCostSymbols, consumes, emits);
+        Effects(effect, card, keyword, manaCostSymbols, consumes, emits, ports, edges);
 
       // Spell-recast (CR 601.2): a `Kind:spell` ability is the on-cast effect of an instant/sorcery — its
       // effects fire because the spell was CAST. Project a cast:spell:self consume (NON-NULL spell-type
@@ -209,19 +287,6 @@ public sealed class PortWalk
       foreach (var from in consumes)
         foreach (var to in emits)
           edges.Add(new CardDefinedEdge { From = from, To = to });
-    }
-
-    ResolvePredefinedTokens(card, ports, edges);
-
-    // One port per (card, label) — the Identity is card::label. The §9 resolution can re-derive a port
-    // the card already declares (Ruthless Knave sacs Treasures in its own draw ability too); collapse
-    // the duplicate so the engine sees one node, not parallel edges.
-    var distinctPorts = ports.GroupBy(p => p.Identity).Select(g => g.First()).ToList();
-    var distinctEdges = edges
-      .GroupBy(e => (e.From.Identity, e.To.Identity))
-      .Select(g => g.First())
-      .ToList();
-    return new PortGraph { Ports = distinctPorts, CardDefinedEdges = distinctEdges };
   }
 
   /// <summary>
@@ -341,6 +406,21 @@ public sealed class PortWalk
       // result threshold (DieResultThreshold) gates firability, not the flow connection. Non-null
       // (controller-scoped) — a roll trigger watches YOUR rolls, never a null-default-GREEN scalar.
       consumes.Add(Port(card, PortLabel.RollDiceTrigger(Roller), PortSide.Consume, subject: Roller));
+    else if (DamageTriggerFacets(ev) is { } facets)
+      // "Whenever [source] deals [combat] damage [to recipient]" (CR 120 general / CR 510 combat) —
+      // consumes a damage event. The watched SOURCE (the trigger's Filter — "this Vehicle", "a creature
+      // you control") rides as the NON-NULL subject so the damage flow arm tiers it; a self-watching
+      // trigger ("this …") matches same-card-only in the arm. The combat facet (combat/noncombat/any) and
+      // recipient class (from the event name) ride in the label, gating feasibility (a non-combat emit
+      // never feeds a combat trigger; a player-recipient emit never feeds a creature-recipient trigger).
+      consumes.Add(
+        Port(
+          card,
+          PortLabel.DamageTrigger(facets.Combat, facets.Recipient),
+          PortSide.Consume,
+          subject: filter ?? AnySource
+        )
+      );
     else
       // Coarse fallback (totality): the event name as the role, plus the subject if any.
       consumes.Add(Port(card, Coarse(ev, filter), PortSide.Consume));
@@ -388,7 +468,9 @@ public sealed class PortWalk
     string? keyword,
     JsonNode? manaCostSymbols,
     List<PortNode> consumes,
-    List<PortNode> emits
+    List<PortNode> emits,
+    List<PortNode> ports,
+    List<CardDefinedEdge> edges
   )
   {
     if (effect is not JsonObject e)
@@ -416,13 +498,52 @@ public sealed class PortWalk
       foreach (var sub in InnerEffects(inner))
       {
         var before = emits.Count;
-        Effects(sub, card, keyword, manaCostSymbols, consumes, emits);
+        Effects(sub, card, keyword, manaCostSymbols, consumes, emits, ports, edges);
         if (gated)
           for (var i = before; i < emits.Count; i++)
             emits[i] = emits[i] with { Gated = true };
       }
       return;
     }
+
+    // A CONDITIONAL effect ("If [condition], [Then] [else Else]", CR 603 in-ability gate) is a hard
+    // firability gate on its branches (ADR-0002 §8): the branch fires only when the condition holds, so a
+    // loop through a Then/Else emit can't be certified infinite — its ports are marked Gated → the cycle
+    // floors to Amber. Recurse into BOTH branches by totality (§4) so their flow ports project (Captain Rex
+    // Nebula's Crash Land: "if the result equals this Vehicle's mana value, … it deals that much damage" —
+    // the gated dealDamage emit that closes the deal→roll→deal self-loop at a sound Amber). The condition
+    // itself is descriptive (the engine doesn't evaluate it); only the gate matters here.
+    if (effectType == "conditional")
+    {
+      foreach (var branch in new[] { e["Then"], e["Else"] })
+        foreach (var sub in InnerEffects(branch))
+        {
+          var beforeE = emits.Count;
+          var beforeC = consumes.Count;
+          Effects(sub, card, keyword, manaCostSymbols, consumes, emits, ports, edges);
+          for (var i = beforeE; i < emits.Count; i++)
+            emits[i] = emits[i] with { Gated = true };
+          for (var i = beforeC; i < consumes.Count; i++)
+            consumes[i] = consumes[i] with { Gated = true };
+        }
+      return;
+    }
+
+    // A "becomes a [type] permanent … and gains [abilities]" continuous grant (becomesPermanent, CR
+    // 611/113.6) gives the affected permanent one or more abilities. Project each GRANTED ability as its
+    // own port unit, attributed to the GRANTING card — the grant is what creates the looping object
+    // (Captain Rex Nebula's "Crash Land" on the Vehicle it makes; a granted ability's own trigger drives
+    // its own effects, §5, so it forms an independent ProjectAbility unit). The grant effect itself still
+    // projects its coarse inert emit (totality, §4) below.
+    // SCOPE: only becomesPermanent recurses today — it is the sole node whose grant carries a flow-relevant
+    // TRIGGERED ability (Crash Land). The sibling grants (becomesCreature's Keyrune flying, gainAbility's
+    // dredge/keywords) grant only inert keywords in the corpus, so recursing them would add inert ports
+    // with no recall benefit (broad snapshot churn for zero arms) — deferred per the non-inert principle;
+    // they stay coarse-whitelisted until a combo needs a granted triggered ability through them.
+    if (effectType == "becomesPermanent")
+      foreach (var ga in e["GainedAbilities"] as JsonArray ?? [])
+        if (ga is JsonObject gao)
+          ProjectAbility(gao, card, ports, edges, manaCostSymbols);
 
     if (effectType == "replacement")
     {
@@ -601,6 +722,19 @@ public sealed class PortWalk
       // the emit quantity, since rolling N dice is N roll events (CR 706.2). Feeds the dice flow arm.
       var count = (int?)(e["Count"]?.GetValue<int>()) ?? 1;
       return Port(card, PortLabel.RollDiceEmit(Roller), PortSide.Emit, count, Roller);
+    }
+    if (effectType == "dealDamage")
+    {
+      // A "deals N damage to [target]" event (CR 119/120). The combat facet is non-combat by default
+      // (an explicit damage effect, CR 120) unless IsCombat marks it combat (CR 510) — so it feeds a
+      // bare "deals damage" trigger and a non-combat trigger, but NEVER a combat-specific trigger (the
+      // soundness the damage arm enforces). The SOURCE (who deals it — Self/"this", a target creature)
+      // rides as the NON-NULL subject so the operator tiers the arm; a self-source self-watching pair
+      // is matched same-card-only by the arm. The recipient class rides in the label, gating feasibility.
+      var source = SourceFilter(e["Source"]);
+      var combat = e["IsCombat"]?.GetValue<bool>() == true ? PortLabel.DamageCombat : PortLabel.DamageNoncombat;
+      var recipient = DamageRecipientFacet(e["Target"]);
+      return Port(card, PortLabel.DealDamageEmit(combat, recipient), PortSide.Emit, Qty(e["Amount"]), source);
     }
     return effectType switch
     {
@@ -802,6 +936,77 @@ public sealed class PortWalk
   /// "whenever you cast a spell") or not threaded into the walk (a self-bounce recast); the operator tiers
   /// the trigger's `!creature` exclusion against it as a sound AMBER until a parse-layer sharpen earns more.</summary>
   private static readonly ObjectFilter AnySpell = new() { CardTypes = ["spell"], Controller = ControllerFilter.You };
+
+  /// <summary>The broadest damage-source subject — a NON-null floor (an empty filter Overlaps any source)
+  /// so a damage trigger/emit with no stated source never hits the scalar null-default GREEN in
+  /// <see cref="PortGraphEngine"/> (adding-a-flow-arm anti-pattern 3). Most damage triggers DO carry a
+  /// source filter ("this …", "a creature you control"), so this floor is the rare unqualified case.</summary>
+  private static readonly ObjectFilter AnySource = new();
+
+  /// <summary>The damage SOURCE (who deals the damage) → an <see cref="ObjectFilter"/> subject the operator
+  /// tiers. <c>Self</c>/<c>It</c> → <c>{IsSelf:true}</c> ("this object" — the source itself, the common case:
+  /// a creature/Vehicle dealing its own damage); a <c>Target</c>/filtered source carries its embedded filter;
+  /// absent/unknown → the broadest <see cref="AnySource"/>. NEVER null (a null source would hit the scalar
+  /// null-default GREEN). The arm's same-card guard handles the <c>IsSelf</c> object-identity question the
+  /// operator can't see.</summary>
+  private static ObjectFilter SourceFilter(JsonNode? source) =>
+    source?["Kind"]?.ToString() switch
+    {
+      null => AnySource,
+      "Self" or "It" => new ObjectFilter { IsSelf = true },
+      _ => Filter(source?["Filter"]) ?? AnySource,
+    };
+
+  /// <summary>The recipient-class facet of a damage event's target (who/what takes the damage) — the
+  /// label facet that prunes a player-recipient emit from feeding a creature-recipient trigger (CR 510.1:
+  /// combat damage is assigned to players, planeswalkers, battles, or creatures). <c>any</c> is the
+  /// permissive floor (an unqualified or "any target" recipient overlaps everything).</summary>
+  private static string DamageRecipientFacet(JsonNode? target) =>
+    (target?["Kind"]?.ToString()) switch
+    {
+      "Opponent" or "EachOpponent" => "opponent",
+      "AnyTarget" => "any",
+      "You" or "EachPlayer" or "ThatPlayer" => "player",
+      _ => DamageRecipientFromFilter(Filter(target?["Filter"])),
+    };
+
+  /// <summary>The recipient facet from a target's type filter — <c>player</c>/<c>creature</c>/
+  /// <c>planeswalker</c> when the filter names that card type, else the permissive <c>any</c>.</summary>
+  private static string DamageRecipientFromFilter(ObjectFilter? f)
+  {
+    var types = f?.CardTypes;
+    if (types is null || types.Count == 0)
+      return "any";
+    if (types.Any(t => string.Equals(t, "creature", StringComparison.OrdinalIgnoreCase)))
+      return "creature";
+    if (types.Any(t => string.Equals(t, "planeswalker", StringComparison.OrdinalIgnoreCase)))
+      return "planeswalker";
+    if (types.Any(t => string.Equals(t, "player", StringComparison.OrdinalIgnoreCase)))
+      return "player";
+    return "any";
+  }
+
+  /// <summary>
+  /// The combat facet + recipient class of a damage TRIGGER event (CR 120 general / CR 510 combat), or
+  /// <c>null</c> when <paramref name="ev"/> is not a source-perspective damage trigger. Only the
+  /// SOURCE-perspective events ("[source] deals damage …") are projected here — their <c>Filter</c> is the
+  /// watched source, which rides as the port Subject. The recipient-perspective events ("a player/creature
+  /// is dealt damage", <c>PlayerDealtDamage</c>/<c>CreatureDealtDamage</c>/<c>DamageDealt</c>) watch the
+  /// RECIPIENT, a different keying, and stay coarse for now.
+  /// </summary>
+  private static (string Combat, string Recipient)? DamageTriggerFacets(string ev) =>
+    ev switch
+    {
+      "DealsCombatDamage" => ("combat", "any"),
+      "DealsCombatDamageToPlayer" => ("combat", "player"),
+      "DealsCombatDamageToPlayerOrPlaneswalker" => ("combat", "playerorpw"),
+      "DealsCombatDamageToCreature" => ("combat", "creature"),
+      "NoncombatDamageDealt" => ("noncombat", "any"),
+      "DealsDamage" => ("any", "any"),
+      "DealsDamageToOpponent" => ("any", "opponent"),
+      "DealsDamageToOpponents" => ("any", "opponent"),
+      _ => null,
+    };
 
   private static ObjectFilter PlayerFilter(JsonNode? player) =>
     player?["Kind"]?.ToString() switch
