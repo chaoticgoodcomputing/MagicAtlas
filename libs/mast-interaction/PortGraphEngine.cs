@@ -660,6 +660,21 @@ public sealed class PortGraphEngine
   /// </summary>
   private bool SpellRecursionSatisfiesCast(PortNode emit, PortNode consume)
   {
+    // A SELF-recast (cast:spell:self, the spell re-firing its OWN effects) re-fueled by the SAME card's
+    // return-to-hand is genuine only if that card returns ITSELF to a castable zone. A card whose
+    // return-to-hand returns OTHER cards does NOT recast itself — Pair o' Dice Lost returns "cards from
+    // your GRAVEYARD to your hand" (other cards) and "Exile Pair o' Dice Lost" (removes ITSELF to exile),
+    // so it can never be its own cast:spell:self subject (CR 601.2 — a spell is cast from where it is; an
+    // exiled card and other-card returns are not this spell in hand). Prune the spurious 1-card self-loop
+    // (the dual of the damage arm's same-card self-source guard and the RecastSatisfies type guard — both
+    // false-loop classes the dice-report panel surfaced). The CROSS-card spell-recursion (Archaeomancer
+    // returns Ghostly Flicker → Ghostly Flicker recast) is a DIFFERENT card and unaffected.
+    if (
+      consume.Subject?.IsSelf == true
+      && string.Equals(emit.Card, consume.Card, StringComparison.Ordinal)
+      && emit.Subject?.IsSelf != true
+    )
+      return false;
     if (emit.Subject is null || consume.Subject is null)
       return true;
     return ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
