@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Ornery Goblin",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature — Goblin Warrior",
+    "OracleText": "Whenever this creature blocks or becomes blocked by a creature, this creature deals 1 damage to that creature.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Ornery Goblin",
+    "TypeLine": {
+      "Raw": "Creature — Goblin Warrior",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever this creature blocks or becomes blocked by a creature, this creature deals 1 damage to that creature.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BlocksOrBecomesBlocked",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": {
+                "Kind": "ThatCreature"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1,
+            "IsPhyrexian": false,
+            "IsSnow": false
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

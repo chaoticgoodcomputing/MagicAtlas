@@ -1,0 +1,117 @@
+{
+  "Input": {
+    "Name": "Inferno Elemental",
+    "ManaCost": "{4}{R}{R}",
+    "TypeLine": "Creature — Elemental",
+    "OracleText": "Whenever this creature blocks or becomes blocked by a creature, this creature deals 3 damage to that creature.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Inferno Elemental",
+    "TypeLine": {
+      "Raw": "Creature — Elemental",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever this creature blocks or becomes blocked by a creature, this creature deals 3 damage to that creature.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BlocksOrBecomesBlocked",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Target": {
+                "Kind": "ThatCreature"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4,
+            "IsPhyrexian": false,
+            "IsSnow": false
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
