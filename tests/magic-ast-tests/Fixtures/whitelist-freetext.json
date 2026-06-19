@@ -26,18 +26,6 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
-      "card": "AncientCopperDragon",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
-    },
-    {
-      "card": "ApproachoftheSecondSun",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "compound cast-history gate ('cast from your hand AND cast another named spell this game') — two novel condition shapes (CastFromZoneCondition + NamedSpellCastHistoryCondition) with no recurring peer; PB-7 structured-condition buckets"
-    },
-    {
       "card": "ALA/Deathgreeter",
       "sink": "Instructions",
       "tag": "irreducible",
@@ -80,6 +68,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "AncientCopperDragon",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
       "card": "AnimateDead",
       "sink": "AbilityText",
       "tag": "debt",
@@ -92,10 +86,10 @@
       "reason": "PB-7 structured-condition buckets — 'it's on the battlefield' is a self-zone check (ZoneSelfCondition shape not yet structured)"
     },
     {
-      "card": "BoromirWardenoftheTower",
+      "card": "ApproachoftheSecondSun",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "'no mana was spent to cast it' — cost-zero cast gate; needs a structured NoManaSpentCondition arm (PB-7 structured-condition buckets)"
+      "reason": "compound cast-history gate ('cast from your hand AND cast another named spell this game') — two novel condition shapes (CastFromZoneCondition + NamedSpellCastHistoryCondition) with no recurring peer; PB-7 structured-condition buckets"
     },
     {
       "card": "BFZ/FathomFeeder",
@@ -108,6 +102,12 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "BoromirWardenoftheTower",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "'no mana was spent to cast it' — cost-zero cast gate; needs a structured NoManaSpentCondition arm (PB-7 structured-condition buckets)"
     },
     {
       "card": "CMR/SailorOfMeans",
@@ -266,25 +266,25 @@
       "reason": "recursive token/granted-ability body parsing — haste keyword in AbilityAdder CopyModification"
     },
     {
-      "card": "HelmOfTheHost",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
       "card": "HellkiteCharger",
       "sink": "Instructions",
       "tag": "irreducible",
       "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/ForsakenMiner; the ConditionalPayEffect.Cost carries the structured {5}{R}{R})"
     },
     {
-      "card": "HollowTrees",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+      "card": "HelmOfTheHost",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
-      "card": "ISD/VillagersOfEstwaldHowlpackOfEstwald",
+      "card": "HematiteTalisman",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
+    },
+    {
+      "card": "HollowTrees",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
@@ -294,6 +294,12 @@
       "sink": "OtherCharacteristic",
       "tag": "debt",
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "ISD/VillagersOfEstwaldHowlpackOfEstwald",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "KTK/AbzanSkycaptain",
@@ -308,22 +314,10 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
-      "card": "MarvinMurderousMimic",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 relational name-exclusion predicate — 'don't have the same name as this creature' is a self-referential name filter with no structured ObjectFilter field; a future ExcludesSameNameAsSelf axis would close it"
-    },
-    {
-      "card": "MasterofCruelties",
+      "card": "KodamaoftheEastTree",
       "sink": "OtherCondition",
       "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'attacks a player and isn't blocked' is a compound attack-target + unblocked-state predicate; no structured AttacksPlayerAndIsntBlockedCondition node exists yet"
-    },
-    {
-      "card": "MalcolmKeenEyedNavigator",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+      "reason": "PB-7 structured-condition buckets — 'it wasn't put onto the battlefield with this ability' is a loop-prevention anti-recursion gate unique to Kodama of the East Tree; requires a new NotEnteredByAbilityCondition arm with no current peer"
     },
     {
       "card": "LCI/NissaResurgentAnimist",
@@ -356,16 +350,16 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "M20/MysticForge",
-      "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "positional predicate 'top' (library top-card position) — no structured Position field on ObjectFilter; same residual category as BFZ/FathomFeeder and Ingest keyword expansion"
-    },
-    {
       "card": "LTR/PeregrinTook",
       "sink": "AbilityText",
       "tag": "irreducible",
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "LapisLazuliTalisman",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
     },
     {
       "card": "M10/Falter",
@@ -378,6 +372,12 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "M20/MysticForge",
+      "sink": "OtherCharacteristic",
+      "tag": "irreducible",
+      "reason": "positional predicate 'top' (library top-card position) — no structured Position field on ObjectFilter; same residual category as BFZ/FathomFeeder and Ingest keyword expansion"
     },
     {
       "card": "M21/BarrinTolarianArchmage",
@@ -428,10 +428,40 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "MalachiteTalisman",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
+    },
+    {
+      "card": "MalcolmKeenEyedNavigator",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
+      "card": "MarvinMurderousMimic",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 relational name-exclusion predicate — 'don't have the same name as this creature' is a self-referential name filter with no structured ObjectFilter field; a future ExcludesSameNameAsSelf axis would close it"
+    },
+    {
+      "card": "MasterofCruelties",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'attacks a player and isn't blocked' is a compound attack-target + unblocked-state predicate; no structured AttacksPlayerAndIsntBlockedCondition node exists yet"
+    },
+    {
       "card": "NEO/CrackOpen",
       "sink": "AbilityText",
       "tag": "irreducible",
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "NacreTalisman",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
     },
     {
       "card": "OGW/ContainmentMembrane",
@@ -468,6 +498,12 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "OnyxTalisman",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
     },
     {
       "card": "PIP/NukaColaVendingMachine",
@@ -530,10 +566,22 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "RingsOfBrighthearth",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Nim Deathmantle/Ulalek; the ConditionalPayEffect.Cost carries the structured {2})"
+    },
+    {
       "card": "RoadOfReturn",
       "sink": "OtherCharacteristic",
       "tag": "debt",
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "RosieCottonofSouthLane",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
     },
     {
       "card": "SOM/NimDeathmantle",
@@ -542,40 +590,10 @@
       "reason": "may-pay-cost effort structuring — deferred adjunct"
     },
     {
-      "card": "RingsOfBrighthearth",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Nim Deathmantle/Ulalek; the ConditionalPayEffect.Cost carries the structured {2})"
-    },
-    {
-      "card": "RosieCottonofSouthLane",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing \u2014 Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
-    },
-    {
-      "card": "SelvalaHeartoftheWilds",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'its power is greater than each other creature's power' is a relative-maximum-power comparison (no structured GreatestPowerCondition node exists yet; the predicate spans the full set of creatures rather than a single comparator)"
-    },
-    {
       "card": "SPM/HotDogCart",
       "sink": "AbilityText",
       "tag": "irreducible",
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
-      "card": "SephirothFabledSOLDIERSephirothOneWingedAngel",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'this is the fourth time this ability has resolved this turn' is an ordinal ability-history predicate; no structured NthTimeAbilityResolvedCondition node exists yet (same family as LCI/NissaResurgentAnimist)"
-    },
-    {
-      "card": "SmotheringTithe",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative (Treasure token ability text)"
     },
     {
       "card": "STX/FurycalmSnarl",
@@ -590,22 +608,52 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "SelvalaHeartoftheWilds",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'its power is greater than each other creature's power' is a relative-maximum-power comparison (no structured GreatestPowerCondition node exists yet; the predicate spans the full set of creatures rather than a single comparator)"
+    },
+    {
+      "card": "SengirBats",
+      "sink": "Timeframe",
+      "tag": "debt",
+      "reason": "DealtDamageByPredicate.Timeframe free-text (\"this turn\") — deferred enum structuring of the damage-provenance window"
+    },
+    {
+      "card": "SephirothFabledSOLDIERSephirothOneWingedAngel",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'this is the fourth time this ability has resolved this turn' is an ordinal ability-history predicate; no structured NthTimeAbilityResolvedCondition node exists yet (same family as LCI/NissaResurgentAnimist)"
+    },
+    {
+      "card": "SmotheringTithe",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative (Treasure token ability text)"
+    },
+    {
+      "card": "Spelunking",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'you put a Cave onto the battlefield this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound; requires a new PutSubtypeThisWayCondition arm with no current peer"
+    },
+    {
       "card": "SwiftReconfiguration",
       "sink": "OtherCharacteristic",
       "tag": "debt",
       "reason": "PB-9 misc structured-characteristic — 'creature or Vehicle' is a cross-axis disjunction (card type OR artifact subtype); ObjectFilter has no structured OR field spanning CardTypes and Subtypes axes; consistent with DFT/BroodheartEngine 'creature or Vehicle card' encoding"
     },
     {
-      "card": "THS/TritonFortuneHunter",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
-    },
-    {
       "card": "TDM/EnduringTenacity",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'it was a creature' is a last-known-information type predicate (LKI on card type at dies-trigger look-back time, CR 603.10); no TriggeringObjectTypeCondition node exists yet"
+    },
+    {
+      "card": "THS/TritonFortuneHunter",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
       "card": "TLA/ForecastingFortuneTeller",
@@ -632,6 +680,12 @@
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
+      "card": "TheNecrobloom",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition: CountCondition needs a DifferentNames axis on ObjectFilter to express \"seven or more lands with different names\" without free-text residual"
+    },
+    {
       "card": "TheRealityChip",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -644,12 +698,6 @@
       "reason": "recursive token/granted-ability body parsing — Treasure token ability text (separate de-string initiative)"
     },
     {
-      "card": "TheNecrobloom",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition: CountCondition needs a DifferentNames axis on ObjectFilter to express \"seven or more lands with different names\" without free-text residual"
-    },
-    {
       "card": "TirelessProvisioner",
       "sink": "AbilityText",
       "tag": "irreducible",
@@ -660,18 +708,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'it’s legendary' is a supertype-presence predicate on the equipped creature; no IsLegendary/SuptertypeCondition arm exists yet in ConditionParser"
-    },
-    {
-      "card": "UgintheIneffable",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "two PB-9 structured-characteristic residuals: (1) positional 'top' on library exile target (no Position axis on ObjectFilter; same residual as M20/MysticForge and BFZ/FathomFeeder); (2) 'one or more colors' is a color-presence filter (complement of IsColorless) with no dedicated IsColored boolean axis yet"
-    },
-    {
-      "card": "UlalekFusedAtrocity",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct"
     },
     {
       "card": "ULG/AlbinoTroll",
@@ -690,6 +726,18 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "UgintheIneffable",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "two PB-9 structured-characteristic residuals: (1) positional 'top' on library exile target (no Position axis on ObjectFilter; same residual as M20/MysticForge and BFZ/FathomFeeder); (2) 'one or more colors' is a color-presence filter (complement of IsColorless) with no dedicated IsColored boolean axis yet"
+    },
+    {
+      "card": "UlalekFusedAtrocity",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct"
     },
     {
       "card": "VOW/BloodServitor",
@@ -726,18 +774,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'an opponent lost N+ life this turn' is a turn-scoped life-history predicate with no current HistoryCondition arm; requires a new quantity (LifeLostThisTurn by player) or HistoryCondition variant"
-    },
-    {
-      "card": "KodamaoftheEastTree",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'it wasn't put onto the battlefield with this ability' is a loop-prevention anti-recursion gate unique to Kodama of the East Tree; requires a new NotEnteredByAbilityCondition arm with no current peer"
-    },
-    {
-      "card": "Spelunking",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'you put a Cave onto the battlefield this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound; requires a new PutSubtypeThisWayCondition arm with no current peer"
     }
   ]
 }
