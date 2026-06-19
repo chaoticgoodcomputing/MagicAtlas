@@ -38,10 +38,13 @@ using MagicAST.AST.References;
 [ActivatedEffectRule(Priority = 948)]
 public sealed class ExileAnotherCreatureThenReturnRule : IActivatedEffectRule, IMultiActivatedEffectRule
 {
-  // "Exile another target creature you control, then return it to the battlefield
-  //  under its owner's control"
+  // "Exile another target creature [you control], then return it to the battlefield
+  //  [tapped] under its owner's control". Both qualifiers are OPTIONAL: Emiel the Blessed
+  //  exiles "another target creature you control" and returns it untapped; Eldrazi Displacer
+  //  exiles "another target creature" (any) and returns it TAPPED. The presence of each
+  //  qualifier drives the exile's Controller filter and the return's Tapped flag respectively.
   private static readonly Regex Pattern = new(
-    @"^Exile\s+another\s+target\s+creature\s+you\s+control,\s*then\s+return\s+it\s+to\s+the\s+battlefield\s+under\s+its\s+owner'?s\s+control$",
+    @"^Exile\s+another\s+target\s+creature(?<youControl>\s+you\s+control)?,\s*then\s+return\s+it\s+to\s+the\s+battlefield(?<tapped>\s+tapped)?\s+under\s+its\s+owner'?s\s+control$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -56,10 +59,16 @@ public sealed class ExileAnotherCreatureThenReturnRule : IActivatedEffectRule, I
   public bool TryMatchMulti(string effectText, out IReadOnlyList<Effect>? effects)
   {
     effects = null;
-    if (!Pattern.IsMatch(effectText.Trim().TrimEnd('.')))
+    var match = Pattern.Match(effectText.Trim().TrimEnd('.'));
+    if (!match.Success)
     {
       return false;
     }
+
+    // "you control" → the exiled creature is controller-scoped (CR 109.5); absent → any creature.
+    var youControl = match.Groups["youControl"].Success;
+    // "return it ... tapped" → the re-entered permanent comes back tapped (Eldrazi Displacer).
+    var tapped = match.Groups["tapped"].Success;
 
     effects = new List<Effect>
     {
@@ -71,7 +80,7 @@ public sealed class ExileAnotherCreatureThenReturnRule : IActivatedEffectRule, I
           Filter = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Controller = ControllerFilter.You,
+            Controller = youControl ? ControllerFilter.You : null,
             ExcludeSelf = true,
           },
         },
@@ -87,7 +96,7 @@ public sealed class ExileAnotherCreatureThenReturnRule : IActivatedEffectRule, I
             ExiledWith = new ObjectReference { Kind = ObjectReferenceKind.Self },
           },
         },
-        Tapped = false,
+        Tapped = tapped,
         UnderControl = new ObjectReference { Kind = ObjectReferenceKind.Owner },
       },
     };
