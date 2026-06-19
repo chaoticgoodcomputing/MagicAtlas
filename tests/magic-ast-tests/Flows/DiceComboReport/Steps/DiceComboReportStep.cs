@@ -121,18 +121,41 @@ public static class DiceComboReportStep
       static IReadOnlyList<string> CardsOf(PortCycle c) =>
         c.Edges.SelectMany(e => new[] { e.From.Card, e.To.Card }).Distinct(StringComparer.Ordinal).OrderBy(x => x, StringComparer.Ordinal).ToList();
 
-      // A cycle "drives a roll" iff a port on its ring has a card-defined edge to an emit:rolldice, OR a
-      // rolldice port sits directly on the ring — i.e. each loop iteration produces a die roll.
-      bool DrivesRoll(PortCycle c, IReadOnlyList<PortEdge> edges)
+      // The "string off a loop" model. A core loop produces a die roll EACH ITERATION iff a roll EMITTER
+      // (emit:rolldice) is reachable from the loop's ports by following emit->consume / card-defined edges
+      // forward — the roll need NOT be a load-bearing hop ON the ring. Returns whether a roll is produced,
+      // whether it sits ON the ring (load-bearing) vs hangs off as an OFFSHOOT (a roll-on-ETB card riding
+      // an event the loop spins), and the offshoot card + hop distance from the ring.
+      static bool IsRoll(string l) => l.StartsWith("emit:rolldice", StringComparison.Ordinal);
+      (bool Produces, bool OnRing, string Card, int Distance) RollAttachment(
+        PortCycle c, IReadOnlyList<PortEdge> edges)
       {
-        if (c.Edges.Any(e => e.From.Label.StartsWith("emit:rolldice", StringComparison.Ordinal)
-          || e.To.Label.StartsWith("trigger:rolldice", StringComparison.Ordinal)
-          || e.From.Label.StartsWith("trigger:rolldice", StringComparison.Ordinal)))
-          return true;
-        var ring = c.Edges.SelectMany(e => new[] { e.From.Identity, e.To.Identity }).ToHashSet(StringComparer.Ordinal);
-        return edges.Any(e => e.Provenance == EdgeProvenance.CardDefined
-          && ring.Contains(e.From.Identity)
-          && e.To.Label.StartsWith("emit:rolldice", StringComparison.Ordinal));
+        var ringPorts = c.Edges.SelectMany(e => new[] { e.From, e.To }).ToList();
+        var onRing = ringPorts.FirstOrDefault(p => IsRoll(p.Label));
+        if (onRing is not null)
+          return (true, true, onRing.Card, 0); // the roll feeds a hop the loop needs (load-bearing)
+
+        // Forward BFS from the ring over ALL edges: the loop's per-iteration output reaching a rolldice
+        // emitter on a DIFFERENT (off-ring) port is the offshoot — a string, not part of the loop.
+        var adj = edges
+          .GroupBy(e => e.From.Identity, StringComparer.Ordinal)
+          .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.Ordinal);
+        var seen = ringPorts.Select(p => p.Identity).ToHashSet(StringComparer.Ordinal);
+        var q = new Queue<(string Id, int D)>(ringPorts.Select(p => (p.Identity, 0)));
+        while (q.Count > 0)
+        {
+          var (id, d) = q.Dequeue();
+          if (!adj.TryGetValue(id, out var outs))
+            continue;
+          foreach (var e in outs)
+          {
+            if (IsRoll(e.To.Label))
+              return (true, false, e.To.Card, d + 1);
+            if (seen.Add(e.To.Identity))
+              q.Enqueue((e.To.Identity, d + 1));
+          }
+        }
+        return (false, false, "", 0);
       }
 
       var rows = new List<DiceComboRow>();
@@ -141,77 +164,95 @@ public static class DiceComboReportStep
       var reconstructedAny = 0;
       var reconstructedWithinReach = 0;
 
-      foreach (var combo in diceCombos)
+      // Analyze one card set: find the SMALLEST core loop whose forward closure produces a roll (so the
+      // roll may ride as an offshoot), report it, and collect any novel (non-CSB-combo) dice loops.
+      DiceComboRow AnalyzeCombo(string id, IReadOnlyList<string> names, IReadOnlyList<string> results, bool collectNovel)
       {
-        var names = combo.Cards.Select(c => c.Name).ToList();
         var graphs = names.Select(GraphFor).ToList();
         var edges = engine.Materialize(graphs);
         var cycles = engine.FindCycles(edges, ReportReach);
-        var diceCycles = cycles.Where(c => DrivesRoll(c, edges)).ToList();
-
-        // Best dice cycle: prefer a MULTI-card loop (a 1-card self-loop is the dice engine but not a
-        // multi-card combo — the bench drops 1-card loops; CR has no 1-card combo), then lowest tier,
-        // then fewest hops. A combo whose ONLY dice cycle is 1-card falls back to it (with a note).
-        var best = diceCycles
-          .OrderBy(c => CardsOf(c).Count == 1 ? 1 : 0)
-          .ThenBy(c => (int)c.Tier)
-          .ThenBy(c => c.Edges.Count)
-          .FirstOrDefault();
-
+        var producing = cycles
+          .Select(c => (Cycle: c, Roll: RollAttachment(c, edges)))
+          .Where(x => x.Roll.Produces)
+          .ToList();
         var sources = names.Select(n => $"{n}={sourceOf.GetValueOrDefault(n, "?")}").ToList();
 
-        if (best is null)
-        {
-          rows.Add(new DiceComboRow
-          {
-            Id = combo.Id, Cards = names, Results = combo.Results,
-            BestDiceCycleTier = "none", BestDiceCycleHops = 0, WithinProductReach = false,
-            CardsInCycle = [], Classification = "none", CardAstSources = sources,
-            Note = "no dice-producing cycle — the loop's driver isn't reconstructed by current arms",
-          });
-          continue;
-        }
+        // Prefer the SMALLEST CORE loop (fewest cards) — the efficient engine, with the roll riding off it
+        // — then lowest tier, then fewest hops. (A small core + an offshoot roll beats a big roll-on-loop.)
+        var best = producing
+          .OrderBy(x => CardsOf(x.Cycle).Count)
+          .ThenBy(x => (int)x.Cycle.Tier)
+          .ThenBy(x => x.Cycle.Edges.Count)
+          .FirstOrDefault();
 
-        reconstructedAny++;
-        var hops = best.Edges.Count;
+        if (collectNovel)
+          foreach (var x in producing)
+          {
+            var cards = CardsOf(x.Cycle);
+            if (cards.Count < 2)
+              continue;
+            var (m, cid) = Classify(cards);
+            if (m == "verified" || !novelSeen.Add(string.Join("|", cards)))
+              continue;
+            novel.Add(new DiceCycleRow
+            {
+              Cards = cards, Tier = x.Cycle.Tier.ToString(), Hops = x.Cycle.Edges.Count,
+              Classification = m, ComboId = cid,
+              Ring = x.Cycle.Edges.Select(e => $"{e.From.Card}:{e.From.Label}").ToList(),
+            });
+          }
+
+        if (best.Cycle is null)
+          return new DiceComboRow
+          {
+            Id = id, Cards = names, Results = results, BestDiceCycleTier = "none", BestDiceCycleHops = 0,
+            WithinProductReach = false, CardsInCycle = [], Classification = "none", RollAttachment = "none",
+            CardAstSources = sources, CoreRing = [],
+            Note = "no dice-producing loop — no core cycle whose closure reaches a roll emitter",
+          };
+
+        var hops = best.Cycle.Edges.Count;
         var withinReach = hops <= PortGraphEngine.DefaultReconstructionReach;
-        if (withinReach)
-          reconstructedWithinReach++;
-        var cardsInCycle = CardsOf(best);
-        var (match, comboId) = Classify(cardsInCycle);
-        var note = cardsInCycle.Count == 1
-          ? "1-card self-loop (the dice engine lives on one card); the combo's other cards are payoffs/enablers off the cycle"
-          : best.LimitingReason ?? "reconstructed";
+        var coreCards = CardsOf(best.Cycle);
+        var (match, comboId) = Classify(coreCards);
+        var attach = best.Roll.OnRing
+          ? "on-loop (load-bearing rolldice hop on the ring)"
+          : $"offshoot via {best.Roll.Card} (+{best.Roll.Distance} hops off the core loop)";
+        var note = best.Roll.OnRing
+          ? best.Cycle.LimitingReason ?? "roll is load-bearing on the core loop"
+          : $"the {coreCards.Count}-card core loop spins an event each iteration; {best.Roll.Card}'s roll is a SECONDARY effect riding it (a string off the loop), not part of the cycle";
         if (!withinReach)
-          note = $"loop is {hops} hops > product reach {PortGraphEngine.DefaultReconstructionReach} — exists in the graph but the product enumerator won't surface it; " + note;
+          note = $"core loop is {hops} hops > product reach {PortGraphEngine.DefaultReconstructionReach}; " + note;
 
-        rows.Add(new DiceComboRow
+        return new DiceComboRow
         {
-          Id = combo.Id, Cards = names, Results = combo.Results,
-          BestDiceCycleTier = best.Tier.ToString(), BestDiceCycleHops = hops, WithinProductReach = withinReach,
-          CardsInCycle = cardsInCycle, Classification = match, CardAstSources = sources, Note = note,
-        });
-
-        // Novel-loop scan: any dice cycle whose card set is NOT exactly a CSB combo (a simpler subset the
-        // engine derived, or a cross-card loop CSB doesn't list). Dedup by card set across all combos.
-        foreach (var c in diceCycles)
-        {
-          var cards = CardsOf(c);
-          if (cards.Count < 2)
-            continue;
-          var (m, cid) = Classify(cards);
-          if (m == "verified")
-            continue; // exactly a known combo — not novel
-          var key = string.Join("|", cards);
-          if (!novelSeen.Add(key))
-            continue;
-          novel.Add(new DiceCycleRow
-          {
-            Cards = cards, Tier = c.Tier.ToString(), Hops = c.Edges.Count, Classification = m, ComboId = cid,
-            Ring = c.Edges.Select(e => $"{e.From.Card}:{e.From.Label}").ToList(),
-          });
-        }
+          Id = id, Cards = names, Results = results, BestDiceCycleTier = best.Cycle.Tier.ToString(),
+          BestDiceCycleHops = hops, WithinProductReach = withinReach, CardsInCycle = coreCards,
+          Classification = match, RollAttachment = attach, CardAstSources = sources, Note = note,
+          CoreRing = best.Cycle.Edges.Select(e => $"{e.From.Card}:{e.From.Label}").ToList(),
+        };
       }
+
+      foreach (var combo in diceCombos)
+        rows.Add(AnalyzeCombo(combo.Id, combo.Cards.Select(c => c.Name).ToList(), combo.Results, collectNovel: true));
+
+      // ANCHORED efficient-engine scan (the user's "string off a loop" hypothesis, made concrete): a
+      // minimal infinite-ETB/mana core engine + a roll-on-ETB card as a pure offshoot. Emiel the Blessed
+      // (blink outlet) + Peregrine Drake (ETB untap 5 lands = net-positive mana) is THE classic 2-card
+      // infinite-mana/ETB loop; blinking a roll-on-ETB creature alongside it rolls every iteration for free.
+      var efficient = new List<DiceComboRow>();
+      var candidates = new (string Id, string[] Cards)[]
+      {
+        ("engine:emiel+drake+swarming", ["Emiel the Blessed", "Peregrine Drake", "Swarming Goblins"]),
+        ("engine:emiel+drake (control, no roll card)", ["Emiel the Blessed", "Peregrine Drake"]),
+        ("engine:emiel+swarming (no mana source)", ["Emiel the Blessed", "Swarming Goblins"]),
+      };
+      foreach (var (id, cards) in candidates)
+        efficient.Add(AnalyzeCombo(id, cards, ["(anchored efficient-engine candidate)"], collectNovel: false));
+
+      // Counts over the CSB combos only (not the anchored candidates).
+      reconstructedAny = rows.Count(r => r.BestDiceCycleTier != "none");
+      reconstructedWithinReach = rows.Count(r => r.WithinProductReach);
 
       return new ReportSchema
       {
@@ -222,6 +263,7 @@ public static class DiceComboReportStep
         ProductReach = PortGraphEngine.DefaultReconstructionReach,
         Combos = rows,
         NovelLoops = novel.OrderBy(n => (int)Enum.Parse<CertaintyTier>(n.Tier)).ThenBy(n => n.Hops).ToList(),
+        EfficientEngines = efficient,
       };
     };
 

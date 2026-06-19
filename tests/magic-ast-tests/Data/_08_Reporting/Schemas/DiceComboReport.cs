@@ -42,6 +42,13 @@ public partial record DiceComboReport
   /// <summary>Engine-DERIVED dice cycles (card set is not a known CSB combo) — the novel-loop scan.</summary>
   [SerializedLabel("novelLoops")]
   public required IReadOnlyList<DiceCycleRow> NovelLoops { get; init; }
+
+  /// <summary>ANCHORED efficient-engine candidates (the "string off a loop" model): a small core loop
+  /// (e.g. a 2-card infinite-ETB/mana engine) carrying a roll-on-ETB card as a pure OFFSHOOT — the roll
+  /// is a secondary effect of an event the core loop spins, not a load-bearing hop. Surfaces dice combos
+  /// more efficient than the CSB-listed ones.</summary>
+  [SerializedLabel("efficientEngines")]
+  public required IReadOnlyList<DiceComboRow> EfficientEngines { get; init; }
 }
 
 /// <summary>One CSB dice combo's reconstruction verdict.</summary>
@@ -69,9 +76,16 @@ public partial record DiceComboRow
   [SerializedLabel("withinProductReach")]
   public bool WithinProductReach { get; init; }
 
-  /// <summary>The distinct cards the best dice cycle actually spans (a 1-card self-loop spans one).</summary>
+  /// <summary>The distinct cards the best CORE loop actually spans (a 1-card self-loop spans one). The
+  /// roll may be ON this loop or hang off it as an offshoot — see <see cref="RollAttachment"/>.</summary>
   [SerializedLabel("cardsInCycle")]
   public required IReadOnlyList<string> CardsInCycle { get; init; }
+
+  /// <summary>How the die roll attaches to the core loop: "on-loop" (a load-bearing rolldice hop on the
+  /// ring) or "offshoot via &lt;card&gt; (+N hops)" — a roll-on-ETB/event card riding an event the loop
+  /// spins each iteration (the string-off-a-loop model). "none" when no roll is produced.</summary>
+  [SerializedLabel("rollAttachment")]
+  public required string RollAttachment { get; init; }
 
   /// <summary>CSB-cross-check of the best dice cycle: verified (cards == this combo), partial (≥2 shared), derived, or none.</summary>
   [SerializedLabel("classification")]
@@ -84,6 +98,10 @@ public partial record DiceComboRow
   /// <summary>The limiting hop's reason (why not GREEN), or the structural note.</summary>
   [SerializedLabel("note")]
   public required string Note { get; init; }
+
+  /// <summary>The core loop's ring as "card:label" hops, in order (for auditing the reconstruction).</summary>
+  [SerializedLabel("coreRing")]
+  public required IReadOnlyList<string> CoreRing { get; init; }
 }
 
 /// <summary>A reconstructed dice cycle (used for the novel-loop scan).</summary>

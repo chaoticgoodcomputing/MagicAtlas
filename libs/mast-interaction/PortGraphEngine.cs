@@ -677,11 +677,41 @@ public sealed class PortGraphEngine
   /// </summary>
   private bool RecastSatisfies(PortNode emit, PortNode consume)
   {
+    // A SAC is type-specific (CR 701.21 — you sacrifice a permanent of the named type), so a re-entered
+    // object feeds it only when its card types CONFIRMABLY cover the sac's required types. This is the
+    // structural twin of <see cref="TokenSatisfiesAtCreation"/>; plain Intersects is too weak — a
+    // re-entered CREATURE "overlaps" an artifact-Treasure sac (artifact-creatures exist), AND a COARSE
+    // return (Emiel's "return target creature", projected emit:returntobattlefield with a NULL Subject)
+    // would slip through the null→true gate. Both were the spurious false-GREEN aristocrat loop the
+    // dice-report offshoot scan surfaced: a blinked creature "sacrificed as a Treasure" for mana. So a
+    // sac needs a NON-NULL re-entry Subject whose types cover it: Gravecrawler ({creature}) still feeds
+    // "sacrifice a creature" / "a permanent" (CR 110.4a); a creature never feeds a Treasure sac, and a
+    // coarse unknown-type return feeds no typed sac.
+    if (Role(consume.Label) == "sac")
+    {
+      if (consume.Subject is null)
+        return true; // an untyped sac (sacrifice any controlled permanent) — any re-entry satisfies it
+      if (emit.Subject is null)
+        return false; // a coarse/unknown-type re-entry can't be confirmed to be the sac's type
+      if (
+        ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
+        == FilterRelation.Disjoint
+      )
+        return false;
+      var reentered = EffectiveCardTypes(emit.Subject);
+      if (reentered.Count > 0)
+        foreach (var required in consume.Subject.CardTypes ?? [])
+          if (!TokenHasCardType(reentered, required))
+            return false;
+      return true;
+    }
+
+    // An ETB (re-entry triggers an Enters trigger) is satisfied by ANY re-entered object — the entering
+    // event fires regardless of the precise type, so this stays lenient (the blink/aristocrat ETB path the
+    // real loops turn on: Emiel returns Swarming Goblins → its ETB fires → it rolls). Feasibility only;
+    // <see cref="AddRulesEdge"/>'s operator tiers it.
     if (emit.Subject is null || consume.Subject is null)
       return true;
-    // A sac/etb that requires a specific OTHER object (e.g. an artifact-Treasure sac) can't be the
-    // re-entered creature; the operator prunes a Disjoint type in AddRulesEdge. Here we only confirm the
-    // re-entered creature could BE the consume's target by type-compatibility (Subsumes/Intersects ≠ No).
     return ObjectFilterRelations.Intersects(emit.Subject, consume.Subject, _ontology).Relation
       != FilterRelation.Disjoint;
   }
