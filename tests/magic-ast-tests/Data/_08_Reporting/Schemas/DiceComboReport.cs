@@ -8,7 +8,7 @@ namespace MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
 /// the engine "as if the support cards were parsed" — gold-fixture ASTs where they exist, hand-authored
 /// flow-relevant stubs (dice-report-stub-asts.json) for the rest, parsed oracle text otherwise — and
 /// records the best dice-producing cycle's tier, its hop count vs. the product reconstruction reach
-/// (<c>PortGraphEngine.DefaultReconstructionReach</c> = 6), which cards actually join the cycle, and the
+/// (<c>PortGraphEngine.DefaultReconstructionReach</c> = 10), which cards actually join the cycle, and the
 /// per-card AST provenance. A SOFT TEST of the dice + damage + blink + token arms end to end.
 ///
 /// <para>The <see cref="NovelLoops"/> section answers "does the derive-don't-transcribe engine find a

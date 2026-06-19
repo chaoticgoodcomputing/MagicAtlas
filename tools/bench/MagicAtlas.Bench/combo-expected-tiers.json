@@ -122,8 +122,8 @@
         "Pitiless Plunderer",
         "Ashnod's Altar"
       ],
-      "expectedTier": "Amber",
-      "reason": "engine reconstructs a spanning cycle but its best certified tier is Amber (conditional)"
+      "expectedTier": "Green",
+      "reason": "Amber->Green at reach 10 (raised from 6, 2026-06-19): the full aristocrat-recursion loop is >6 hops (Gravecrawler self-death -> Pitiless Treasure -> sac to Ashnod -> mana -> recast Gravecrawler for {B}), so reach 6 truncated it to a gated sub-path (Amber). This is THE combo in the GREEN sentinel exemplar gravecrawler-x-pitiless-plunderer-x-ashnod-s-altar-aristocrat-recursion-green (interaction-judge-verified GREEN); reach 10 aligns the bench with that established tier. §8 machinery unchanged; certified infinite (CR 701.21 sac -> CR 601.3e recast), matches Commander Spellbook ground truth"
     },
     {
       "id": "2034-3000-5009",
@@ -142,8 +142,8 @@
         "Gravecrawler",
         "Bloodflow Connoisseur"
       ],
-      "expectedTier": "Amber",
-      "reason": "engine reconstructs a spanning cycle but its best certified tier is Amber (conditional)"
+      "expectedTier": "Green",
+      "reason": "Amber->Green at reach 10 (raised from 6, 2026-06-19): same aristocrat-recursion family as 2034-2577-4871 with Bloodflow Connoisseur as the free sac outlet (Gravecrawler self-death -> Pitiless Treasure -> recast Gravecrawler for {B}); the full loop is >6 hops so reach 6 truncated it (Amber). §8 machinery unchanged — certified infinite by the same validated rules (free sac + Treasure-paid {B} recast, net-positive death/Treasure triggers), matches Commander Spellbook ground truth"
     },
     {
       "id": "2577-2741-5670",

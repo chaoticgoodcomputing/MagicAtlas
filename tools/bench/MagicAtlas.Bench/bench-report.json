@@ -1,10 +1,10 @@
 {
   "CombosEligible": 33,
-  "ReconstructedGreen": 6,
-  "ReconstructedAmber": 21,
-  "Missed": 6,
-  "RecallAtGreen": 0.1818,
-  "RecallAtAmber": 0.8182,
+  "ReconstructedGreen": 8,
+  "ReconstructedAmber": 22,
+  "Missed": 3,
+  "RecallAtGreen": 0.2424,
+  "RecallAtAmber": 0.9091,
   "Combos": [
     {
       "Id": "1090-2781",
@@ -26,8 +26,11 @@
         "Narset's Reversal",
         "Reiterate"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Narset's Reversal",
+        "Reiterate"
+      ]
     },
     {
       "Id": "110-3966",
@@ -120,8 +123,11 @@
         "Dualcaster Mage",
         "Cackling Counterpart"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Cackling Counterpart",
+        "Dualcaster Mage"
+      ]
     },
     {
       "Id": "147-1987",
@@ -130,8 +136,11 @@
         "Ghostly Flicker",
         "Dualcaster Mage"
       ],
-      "Outcome": "Missed",
-      "CycleCards": []
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Dualcaster Mage",
+        "Ghostly Flicker"
+      ]
     },
     {
       "Id": "1987-2493-3821",
@@ -169,8 +178,9 @@
         "Pitiless Plunderer",
         "Ashnod's Altar"
       ],
-      "Outcome": "Amber",
+      "Outcome": "Green",
       "CycleCards": [
+        "Ashnod's Altar",
         "Gravecrawler",
         "Pitiless Plunderer"
       ]
@@ -198,8 +208,9 @@
         "Gravecrawler",
         "Bloodflow Connoisseur"
       ],
-      "Outcome": "Amber",
+      "Outcome": "Green",
       "CycleCards": [
+        "Bloodflow Connoisseur",
         "Gravecrawler",
         "Pitiless Plunderer"
       ]

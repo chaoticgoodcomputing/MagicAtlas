@@ -129,23 +129,25 @@ public sealed class PortGraphEngine
 {
   /// <summary>
   /// The canonical cycle-reconstruction REACH — the maximum number of hops (edges) in an elementary
-  /// cycle the product reconstructs and reports. This is the single source of truth: the recall bench
-  /// (<c>ComboRecallRunner</c>), the product viz flow (<c>MaterializeCyclesStep</c>), and the flow-arm
-  /// scope tests all reference it so they cannot drift apart (a worker scope test that enumerates
-  /// <em>unbounded</em> can pass on a cycle longer than the product reconstructs — a false "will-flip";
-  /// see <c>docs/adding-a-flow-arm.md</c> anti-pattern 5).
+  /// cycle the product reconstructs and reports. This is the single source of truth for the per-combo
+  /// path: the recall bench (<c>ComboRecallRunner</c>) and the flow-arm scope tests / probes all derive
+  /// it so they cannot drift apart (a worker scope test that enumerates <em>unbounded</em> can pass on a
+  /// cycle longer than the product reconstructs — a false "will-flip"; see
+  /// <c>docs/adding-a-flow-arm.md</c> anti-pattern 5). The whole-corpus UNION path
+  /// (<see cref="FindCyclesByLabelGraph"/> / <c>MaterializeCyclesStep</c>) does NOT use this — it carries
+  /// its own tighter bounds because unbounded union enumeration is intractable (the giant SCC).
   /// <para>
-  /// Currently <b>6</b>: the longest real reconstructed loop is the 6-hop cast-recursion blink
-  /// (Displacer Kitten: emit:cast → trigger:cast → emit:blink → etb → emit:untap → pay:mana); the
-  /// 5-hop sac→death→token→doubler→refuel aristocrat loop and the full Ashnod×Ruthless×Chatterfang
-  /// 6-hop infinite also fit. Raising it is <b>soundness-safe</b> — longer cycles have more co-costs/§8
-  /// gates to clear, so they floor toward Amber, never toward a false GREEN — but at the per-combo
-  /// 2–3-card scale it finds nothing new past ~7 (cycle counts saturate; the bound is non-binding on
-  /// compute). The two-layer path (<see cref="FindCyclesByLabelGraph"/>) treats reach as a post-
-  /// enumeration display filter, not a search bound. (See the cycle-enumeration feasibility memo.)
+  /// <b>10</b> (raised from 6, 2026-06-19). The per-combo graph is tiny (2–5 cards) so enumeration stays
+  /// cheap, and with whole-set union analysis abandoned (it has its own bounds) the per-combo reach can be
+  /// generous. 6 truncated genuine aristocrat-/engine-length loops — e.g. the 10-hop Brazen Dwarf ×
+  /// Swarming Goblins × Emiel × Malcolm dice loop (blink→ETB→roll→damage→Treasure→mana→re-blink) the
+  /// DiceComboReport surfaced as "exists but exceeds reach"; 10 captures it. Raising it is
+  /// <b>soundness-safe</b> — longer cycles have more co-costs/§8 gates to clear, so they floor toward Amber,
+  /// never toward a false GREEN (longer ⇒ strictly more constraints, never fewer). The shorter known loops
+  /// (the 6-hop Displacer cast-blink, the 5-hop sac→death aristocrat) are unaffected.
   /// </para>
   /// </summary>
-  public const int DefaultReconstructionReach = 6;
+  public const int DefaultReconstructionReach = 10;
 
   private readonly TypeOntology _ontology;
 
