@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ThassaDeepDwelling.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.12", "CR 700.5", "CR 603.6e", "CR 701.13", "CR 701.26", "CR 109.5", "CR 400.7"],
+      "reason": "Indestructible static (702.12); devotion-conditional loseType matches Heliod God pattern (700.5); end-step triggered exile (upTo Max1, ExcludeSelf, Controller You) + returnToBattlefield ExiledWith:Self UnderControl You is a faithful blink (603.6e/400.7); {3}{U} tap ExcludeSelf; no unparsed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Flickerwisp.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.7", "CR 513", "CR 701.13", "CR 109.5", "CR 400.6", "CR 607.2"],
+      "reason": "ETB exile(another target permanent, ExcludeSelf) + createDelayedTrigger returning the exiled card (ExiledWith:Self, UnderControl Owner) at the beginning of the NEXT end step is a CR-faithful delayed triggered ability (603.7), not an immediate return; no unparsed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AVR/DeadeyeNavigator.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.95", "CR 701.13", "CR 400.7"],
+      "reason": "Soulbond keyword static (702.95) + conditional gainAbility (Target BothPaired, asLongAs duration) granting a {1}{U} self-blink (exile Self + returnToBattlefield ExiledWith:Self UnderControl You); paired-duration encoding matches existing TandemLookout/Wingcrafter precedent; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/TapEffectRule.cs#summary",
+      "verdict": "FAIL",
+      "citations": ["CR 701.21", "CR 701.26"],
+      "reason": "doc-comment summary cites 'Rule 701.21' for the tap action, but 701.21 = Sacrifice in rules-structure.json; tap is 701.26a — contradictory citation (the same file correctly cites 701.26a in its enchanted-tap branch)"
+    },
+    {
+      "target": "libs/mast-interaction#projection:returnToBattlefield",
+      "verdict": "PASS",
+      "citations": ["CR 603.6e", "CR 400.7", "CR 117.7"],
+      "reason": "the new blink-outlet discriminator returnToBattlefield is semantically projected (emit:blink when ExiledWith:Self; composite[exile,returnToBattlefield(ExiledWith:Self)] folded to one emit:blink) — a sensible projection a flow rule wants; createDelayedTrigger consciously parked coarse with honest reason (delayed return cannot close a same-resolution refuel loop)"
+    }
+  ]
+}

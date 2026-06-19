@@ -9,7 +9,7 @@ using MagicAST.AST.References;
 /// <summary>
 /// "Tap [count] [another] target [type]" — "Tap target creature", "Tap another target
 /// creature" (Thassa, Deep-Dwelling), "Tap X target lands", "Tap two target creatures"
-/// (Rule 701.21). "another" excludes the source permanent (CR 109.5). For variable-X
+/// (CR 701.26a). "another" excludes the source permanent (CR 109.5). For variable-X
 /// abilities the X in cost and effect refer to the same chosen value (Rule 107.3b/c).
 /// </summary>
 [ActivatedEffectRule(Priority = 994)]
