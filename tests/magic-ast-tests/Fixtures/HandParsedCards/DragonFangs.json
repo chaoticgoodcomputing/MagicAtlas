@@ -1,0 +1,159 @@
+{
+  "Input": {
+    "Name": "Dragon Fangs",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nEnchanted creature gets +1/+1 and has trample.\nWhen a creature with mana value 6 or greater enters, you may return this card from your graveyard to the battlefield attached to that creature.",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Dragon Fangs",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nEnchanted creature gets +1/+1 and has trample.\nWhen a creature with mana value 6 or greater enters, you may return this card from your graveyard to the battlefield attached to that creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ]
+              }
+            }
+          ],
+          "KeywordSource": "Enchant"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "modifyPT",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                },
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "Effects": [
+                      {
+                        "EffectType": "keywordAbility",
+                        "Keyword": "Trample"
+                      }
+                    ],
+                    "KeywordSource": "Trample"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "ManaValueComparison": {
+                "Operator": "GreaterThanOrEqual",
+                "Value": 6
+              }
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "returnToBattlefield",
+                    "Target": {
+                      "Kind": "Self",
+                      "Filter": {
+                        "Zone": "Graveyard",
+                        "Controller": "You"
+                      }
+                    }
+                  },
+                  {
+                    "EffectType": "attach",
+                    "Target": {
+                      "Kind": "It"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
