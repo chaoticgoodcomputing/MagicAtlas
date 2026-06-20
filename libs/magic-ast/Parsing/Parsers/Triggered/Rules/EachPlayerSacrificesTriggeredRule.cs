@@ -8,7 +8,7 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// "each [player|opponent] sacrifices [a|an|one|N] [type] [of their choice]" —
-/// the triggered-ability form of the distributed (edict) sacrifice (CR 701.16 —
+/// the triggered-ability form of the distributed (edict) sacrifice (CR 701.21 —
 /// Sacrifice). Covers the classic ETB edict family:
 /// <list type="bullet">
 ///   <item>"each player sacrifices a creature of their choice." (Fleshbag Marauder, Slum Reaper)</item>
@@ -18,7 +18,7 @@ using MagicAST.AST.References;
 /// </list>
 ///
 /// <para>
-/// "of their choice" is mechanically inert (CR 701.16a — the affected player
+/// "of their choice" is mechanically inert (CR 701.21a — the affected player
 /// always chooses which permanent they sacrifice), so it carries no extra AST;
 /// the optional suffix is matched and discarded. This mirrors the spell-level
 /// <see cref="MagicAST.Parsing.Parsers.Spell.Rules.EachSacrificesRule"/> shape:

@@ -1,0 +1,130 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FleshbagMarauder.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.21"],
+      "reason": "ETB (Enters, IsSelf) -> sacrifice with Target EachPlayer + creature filter; 'each player' scope matches oracle; 'of their choice' inert (701.21a)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SlumReaper.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.21"],
+      "reason": "same edict shape as Fleshbag; EachPlayer scope matches 'each player' oracle text; sacrifice creature filter correct"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/EachPlayerSacrificesTriggeredRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 701.16", "CR 701.21"],
+      "reason": "doc-comment cites CR 701.16 (= 'Investigate' in rules-structure.json) for Sacrifice; Sacrifice is CR 701.21 -- contradictory citation"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/InfernoElemental.json",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 510.1", "CR 603.2"],
+      "reason": "BlocksOrBecomesBlocked trigger + dealDamage Source=Self Target=ThatCreature amount 3; IsCombat absent (noncombat, CR 120 not 510); source/target not conflated"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/OrneryGoblin.json",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 510.1", "CR 603.2"],
+      "reason": "same self-ping shape, amount 1; IsCombat absent = noncombat; Self vs ThatCreature distinct"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ThisCreatureDealsDamageToThatCreatureTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 109.1", "CR 120.1", "CR 120.2", "CR 510.1", "CR 603.2"],
+      "reason": "all cited CR rules exist and match; IsCombat null = noncombat doc is correct; Source=Self, Target=ThatCreature back-reference"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DragonFangs.json",
+      "verdict": "PASS",
+      "citations": ["CR 202.3", "CR 303.4", "CR 406.6", "CR 701.3"],
+      "reason": "all 3 lines parse (Enchant + +1/+1&trample + trigger); MV>=6 threshold preserved; returnToBattlefield Graveyard/You with NO ExiledWith + attach; no unparsed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DragonScales.json",
+      "verdict": "PASS",
+      "citations": ["CR 202.3", "CR 303.4", "CR 406.6", "CR 701.3"],
+      "reason": "identical structure with +1/+2 & Vigilance matching oracle; graveyard self-return (no ExiledWith) + attach; MV threshold preserved"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/CreatureWithManaValueEntersConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 107.1", "CR 202.3", "CR 603.2"],
+      "reason": "MV-threshold ETB watch; ManaValueComparison GreaterThanOrEqual on filter; cited rules exist and match"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ReturnSelfFromGraveyardAttachedToThatCreatureRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 117.7", "CR 303.4", "CR 406.6", "CR 614", "CR 701.3"],
+      "reason": "returnToBattlefield Self from Graveyard/You (no ExiledWith, exile-only per 406) + attach; OptionalEffect for 'you may'; cited rules exist, no contradiction"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/HematiteTalisman.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2", "CR 603.2"],
+      "reason": "SpellCast Colors=R matches 'red spell'; Controller Any; optional->conditionalPay {3} IfYouDo untap target permanent; 'you may pay {3}' Instructions whitelisted irreducible"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LapisLazuliTalisman.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2", "CR 603.2"],
+      "reason": "SpellCast Colors=U matches 'blue spell'; rest of conditionalPay->untap shape correct; Instructions whitelisted"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MalachiteTalisman.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2", "CR 603.2"],
+      "reason": "SpellCast Colors=G matches 'green spell'; conditionalPay->untap shape correct; Instructions whitelisted"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/OnyxTalisman.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2", "CR 603.2"],
+      "reason": "SpellCast Colors=B matches 'black spell'; conditionalPay->untap shape correct; Instructions whitelisted"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NacreTalisman.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2", "CR 603.2"],
+      "reason": "SpellCast Colors=W matches 'white spell'; conditionalPay->untap shape correct; Instructions whitelisted"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ConditionalPayTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2"],
+      "reason": "wires untap-target as IfYouDo consequent via TapUntapTargetTriggeredRule; no contradictory citation"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SengirBats.json",
+      "verdict": "PASS",
+      "citations": ["CR 109.5", "CR 201.5", "CR 603.2", "CR 700.4"],
+      "reason": "Dies trigger + History DealtDamageBy{Source:Self, this turn} -> putCounters +1/+1 Self; subject is any creature, 'this creature' = damage Source not dying subject; Timeframe free-text whitelisted by-design"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/CreatureDealtDamageThisTurnDiesConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 109.5", "CR 201.5", "CR 603.2", "CR 700.4"],
+      "reason": "separates dying subject (any creature) from provenance source (Self); cited rules exist and match; priority above DiesConditionRule prevents self-ref misread"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/AbilityClassifier.cs#TriggerConditionMentionsThisTurn",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 603.7"],
+      "reason": "declines delayed-trigger when an event verb follows the last 'this turn' (provenance qualifier = printed trigger); Glimpse of Nature & Graceful Reprieve keep delayed (this turn terminal), verified"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#BlocksOrBecomesBlocked",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "projection decision present (coarse) and sensible: block-trigger event is not a walkable loop driver; the damage payoff (dealDamage) projects semantically"
+    },
+    {
+      "target": "libs/mast-interaction/PortWalkProjection.cs#trigger-family",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "Item-5 payoff edges project semantically (Dies trigger, putCounters, untap, dealDamage); dealtDamageBy is a history predicate not a port discriminator; no insensible coarse park"
+    }
+  ]
+}
