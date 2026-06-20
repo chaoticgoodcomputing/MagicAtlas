@@ -16,6 +16,24 @@ public sealed record AddManaEffect : Effect
   public required string Mana { get; init; }
 
   /// <summary>
+  /// The player who adds the mana, when the oracle text names a subject other than the
+  /// implicit ability controller — e.g. "<b>its controller</b> adds an additional one mana
+  /// of any color" on the mana-doubler Auras (Fertile Ground, Wild Growth, Glittering Frost).
+  /// "Its controller" is the controller of the enchanted land, i.e. the player who tapped it
+  /// (<see cref="MagicAST.AST.References.ObjectReferenceKind.Controller"/>) — distinct from the
+  /// ability's own controller (You). Null for the bare "add {X}" / "add an additional {X}" forms
+  /// (Forsaken Monument), where the player is the implicit ability controller.
+  ///
+  /// <para>CR 106.4: "When an effect instructs a player to add mana, that mana goes into a
+  /// player's mana pool." This field names <i>which</i> player when the text does so explicitly —
+  /// a structured <see cref="ObjectReference"/>, mirroring the <c>Player</c> axis on
+  /// <see cref="GainLifeEffect"/> / <see cref="LoseLifeEffect"/>, rather than free-texting the
+  /// "its controller" subject.</para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? Player { get; init; }
+
+  /// <summary>
   /// For effects like "add one mana of any color"
   /// </summary>
   public bool AnyColor { get; init; }
