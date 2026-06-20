@@ -1,0 +1,78 @@
+{
+  "Input": {
+    "Name": "Banisher Priest",
+    "ManaCost": "{1}{W}{W}",
+    "TypeLine": "Creature — Human Cleric",
+    "OracleText": "When this creature enters, exile target creature an opponent controls until this creature leaves the battlefield.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Banisher Priest",
+    "TypeLine": {
+      "Raw": "Creature — Human Cleric",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, exile target creature an opponent controls until this creature leaves the battlefield.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "Opponent"
+                }
+              },
+              "Duration": {
+                "DurationType": "untilLeavesBattlefield",
+                "Object": "this creature"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
