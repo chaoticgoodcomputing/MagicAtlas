@@ -28,7 +28,7 @@ using MagicAST.AST.Triggers;
 /// CR 701.21a: "To sacrifice a permanent, its controller moves it from the battlefield directly
 /// to its owner's graveyard. A player can't sacrifice something that isn't a permanent, or
 /// something that's a permanent they don't control."
-/// CR 109.5: a permanent named "another" excludes the source object of the ability.
+/// "another" excludes the source object of the ability (plain-language, per the dies-family convention).
 /// CR 603.2: "Whenever a game event or game state matches a triggered ability's trigger event,
 /// that ability automatically triggers."
 /// </summary>
@@ -65,7 +65,8 @@ public sealed class SacrificeConditionRule : ITriggerConditionRule
 
     // General object form first: "you sacrifice another creature/permanent/…". Hand the
     // sacrificed-object phrase to the shared filter parser so the card-type and the
-    // "another" self-exclusion (CR 109.5) are recovered the same way as for the
+    // "another" self-exclusion (plain-language "another", per the dies-family convention)
+    // are recovered the same way as for the
     // dies/enters families. Overlay Controller=You — the sacrificing player is "you"
     // (CR 701.21a), which the bare "another permanent" phrasing leaves implicit.
     // ParseObjectFilter returns null for a bare subtype phrase ("a Food"), so the

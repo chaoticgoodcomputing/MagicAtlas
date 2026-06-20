@@ -1,0 +1,112 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ViashinoPyromancer.json",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 115.1", "CR 603.2"],
+      "reason": "ETB trigger -> dealDamage Source It, Amount literal 2, IsCombat absent (noncombat), disjunctive target union CardTypes:[player,planeswalker] matches printed 'target player or planeswalker'"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CinderHellion.json",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 115.1", "CR 603.2"],
+      "reason": "Trample keyword + ETB dealDamage Source It, literal 2, IsCombat absent, target union [opponent,planeswalker] matches printed 'target opponent or planeswalker'"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BanisherPriest.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.6e", "CR 611.1", "CR 701.13"],
+      "reason": "ETB exile of target creature Controller:Opponent with Duration untilLeavesBattlefield (linkage, no separate LTB trigger) faithful to printed text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CitizensArrest.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.6e", "CR 611.1", "CR 701.13"],
+      "reason": "ETB exile of target creature-or-planeswalker (union) Controller:Opponent, Duration untilLeavesBattlefield, enchantment subject; faithful"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FertileGround.json",
+      "verdict": "PASS",
+      "citations": ["CR 106.4", "CR 106.12", "CR 603.2"],
+      "reason": "Enchant land static + TapsForMana trigger Filter{land,IsEnchanted} -> addMana Mana:'' AnyColor:true Player:Controller ('its controller'='any color'); faithful"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WildGrowth.json",
+      "verdict": "PASS",
+      "citations": ["CR 106.4", "CR 106.12", "CR 603.2"],
+      "reason": "Enchant land static + TapsForMana trigger Filter{land,IsEnchanted} -> addMana Mana:'{G}' Player:Controller; faithful"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Resource/AddManaEffect.cs#Player",
+      "verdict": "PASS",
+      "citations": ["CR 106.4"],
+      "reason": "new Player ObjectReference? field is sound; structured 'its controller' subject mirroring GainLife/LoseLife Player axis, CR 106.4 cited verbatim, not free-text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ArgothianOpportunist.json",
+      "verdict": "PASS",
+      "citations": ["CR 111.10", "CR 207.2", "CR 603.2"],
+      "reason": "ETB createToken tapped Powerstone (Types[artifact],Subtypes[Powerstone],EntersTapped) with reminder discarded to Reminder field (CR 207.2); no AbilityText body acceptable, no IUnparsed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/KoilosRoc.json",
+      "verdict": "PASS",
+      "citations": ["CR 111.10", "CR 207.2", "CR 603.2"],
+      "reason": "Flash + Flying + ETB createToken tapped Powerstone; reminder discarded, no IUnparsed; Flying evasion is structured Characteristics not free-text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Bloodbriar.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.21a", "CR 109.5", "CR 603.2"],
+      "reason": "Sacrifices trigger Filter{permanent,Controller:You,ExcludeSelf:true} matches 'whenever you sacrifice another permanent' -> putCounters +1/+1 on Self"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BodyDropper.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.21a", "CR 109.5", "CR 603.2", "CR 702.111"],
+      "reason": "Sacrifices trigger Filter{creature,Controller:You,ExcludeSelf:true} -> putCounters +1/+1 on Self; activated menace bonus (MinimumBlockers:2) also faithful"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ItDealsDamageToTargetTypeDisjunctionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 115.1", "CR 102.2", "CR 603.2"],
+      "reason": "all cited rules (120, 120.1, 510, 115.1, 115.4, 102.2, 603) exist in rules-structure.json; texts match the disjunctive-target / noncombat-source-It modeling"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ExileUntilLeavesTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.6e", "CR 611.1", "CR 701.13", "CR 406.1"],
+      "reason": "cited rules (611, 406, 701.13, 603.6, 603.7) all present; texts match temporary-exile-with-duration linkage modeling"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TapForManaConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 106.12", "CR 603.2"],
+      "reason": "CR 106.12 ('tap for mana') and CR 603.2 (triggered) present and matching"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/AddAdditionalManaRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 106.4"],
+      "reason": "CR 106.4 present and text matches add-mana-to-pool modeling"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/CreateTappedPredefinedTokenRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 111.10", "CR 207.2", "CR 603.2"],
+      "reason": "CR 111/111.10 (predefined token), 207.2 (italic no-game-function reminder), 603.2 all present and matching"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SacrificeConditionRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 109.5", "CR 701.21a", "CR 603.2"],
+      "reason": "doc-comment cites CR 109.5 for the \"another\" self-exclusion semantics, but CR 109.5 text is solely about 'you/your'='controller' and says nothing about 'another'; cited rule text contradicts the modeling it is attached to (the established dies-family convention treats 'another' as uncited plain-language)"
+    },
+    {
+      "target": "libs/mast-interaction/PortWalkProjection.cs#trigger-families-r2",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "batch introduces no new top-level discriminator (reuses dealDamage/exile/addMana/createToken/putCounters effects, Enters/TapsForMana/Sacrifices events, It source); the one new sub-field AddManaEffect.Player refines an existing emit:mana projection and needs no new projection decision"
+    }
+  ]
+}
