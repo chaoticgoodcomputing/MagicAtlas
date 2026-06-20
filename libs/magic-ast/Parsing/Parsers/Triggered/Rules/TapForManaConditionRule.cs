@@ -20,11 +20,19 @@ using MagicAST.AST.Triggers;
 ///     recorded (<see cref="TriggerCondition.ProducedMana"/> is null). The nonland qualifier is
 ///     expressed as <c>ExcludedCardTypes: ["land"]</c> on the filter.
 ///   </item>
+///   <item>
+///     Enchanted-subject (passive): "enchanted land is tapped for mana" (Fertile Ground, Wild
+///     Growth, Glittering Frost, Market Festival — the mana-doubler Aura family). The triggering
+///     object is the enchanted land itself, modeled as <c>IsEnchanted: true</c> with the named
+///     card type. No specific symbol is recorded (<see cref="TriggerCondition.ProducedMana"/> is
+///     null) — the trigger fires for any mana the enchanted land produces.
+///   </item>
 /// </list>
 ///
-/// Rule 605.1a: An activated ability is a mana ability if it could add mana to a player's mana
-/// pool when it resolves and it doesn't require a target. Tapping a permanent for mana is such
-/// an ability; this rule encodes the trigger that fires when that activation occurs.
+/// CR 106.12: "To 'tap [a permanent] for mana' is to activate a mana ability of that permanent
+/// that includes the {T} symbol in its activation cost." CR 603.2: the event-match (the
+/// enchanted land being tapped for mana) is the trigger. This rule encodes the trigger that
+/// fires when that mana-tap occurs.
 /// </summary>
 [TriggerConditionRule(Priority = 994)]
 public sealed class TapForManaConditionRule : ITriggerConditionRule
@@ -46,9 +54,42 @@ public sealed class TapForManaConditionRule : ITriggerConditionRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // "enchanted land is tapped for mana" — the mana-doubler Aura family (Fertile Ground,
+  // Wild Growth, Glittering Frost, Market Festival). Passive voice: the triggering object is
+  // the enchanted land itself, not a player tapping a permanent. Modeled as the enchanted
+  // permanent (IsEnchanted = true) of the named card type. No specific mana symbol — the
+  // trigger fires for any mana the enchanted land is tapped for (ProducedMana is null).
+  private static readonly Regex _enchantedTappedForManaPattern = new(
+    @"\benchanted\s+(?<type>land)\s+is\s+tapped\s+for\s+mana\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   public TriggerCondition? Match(string triggerText, string lower, TriggerTiming timing)
   {
-    if (!lower.Contains("tap") || !lower.Contains("permanent"))
+    if (!lower.Contains("tap"))
+    {
+      return null;
+    }
+
+    // "enchanted land is tapped for mana" — Aura mana-doublers. Checked before the
+    // "permanent" guard because this shape names the enchanted land, not a "permanent".
+    var e = _enchantedTappedForManaPattern.Match(triggerText.Trim());
+    if (e.Success)
+    {
+      return new TriggerCondition
+      {
+        Timing = timing,
+        Event = TriggerEvent.TapsForMana,
+        Filter = new ObjectFilter
+        {
+          CardTypes = [e.Groups["type"].Value.ToLowerInvariant()],
+          IsEnchanted = true,
+        },
+        // ProducedMana is null — the trigger fires for any mana the enchanted land produces.
+      };
+    }
+
+    if (!lower.Contains("permanent"))
     {
       return null;
     }
