@@ -1,0 +1,91 @@
+{
+  "Input": {
+    "Name": "Champions of the Perfect",
+    "ManaCost": "{3}{G}",
+    "TypeLine": "Creature — Elf Warrior",
+    "OracleText": "As an additional cost to cast this spell, behold an Elf and exile it. (Exile an Elf you control or an Elf card from your hand.)\nWhenever you cast a creature spell, draw a card.\nWhen this creature leaves the battlefield, return the exiled card to its owner's hand.",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Champions of the Perfect",
+    "TypeLine": {
+      "Raw": "Creature — Elf Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Elf", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "As an additional cost to cast this spell, behold an Elf and exile it. (Exile an Elf you control or an Elf card from your hand.)\nWhenever you cast a creature spell, draw a card.\nWhen this creature leaves the battlefield, return the exiled card to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": ["spell", "creature"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": { "QuantityType": "literal", "Value": 1 },
+              "Player": { "Kind": "You" }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "LeavesTheBattlefield",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Designated",
+                "Filter": {
+                  "Zone": "Exile",
+                  "ExiledWith": { "Kind": "Self" }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "6", "Value": 6 },
+        "Toughness": { "ValueType": "fixed", "Raw": "6", "Value": 6 }
+      }
+    ]
+  }
+}
