@@ -67,6 +67,24 @@ public sealed record TriggerCondition
   public int? DieResultThreshold { get; init; }
 
   /// <summary>
+  /// Exact die-result value(s) that fire a die-roll trigger (<see cref="TriggerEvent.DiceRolled"/>):
+  /// the ability fires only when the roll's result equals one of these values — "whenever you roll a 1"
+  /// → <c>DieResultValues = [1]</c> (Complaints Clerk); "whenever you roll a 1 or 2"
+  /// → <c>DieResultValues = [1, 2]</c> (Atomwheel Acrobats). Distinct from <see cref="DieResultThreshold"/>
+  /// (a <i>minimum</i>, "a 4 or higher") — this is an exact match against an enumerated set, not a lower
+  /// bound. Null means the trigger fires on any roll, or uses the threshold form instead.
+  ///
+  /// <para>
+  /// CR 706.2: "the final number is the result of the die roll." A specific-value trigger compares that
+  /// result to the named value(s) (CR 706.7 references comparing "the results of that roll … to a given
+  /// number"). Descriptive only; the runtime compares the actual result. Mutually exclusive with
+  /// <see cref="DieResultThreshold"/> — a roll trigger carries at most one result qualifier.
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<int>? DieResultValues { get; init; }
+
+  /// <summary>
   /// True when this draw trigger excludes the first card drawn in each of the
   /// triggering player's draw steps — the "except the first one they draw in each
   /// of their draw steps" qualifier on Orcish Bowmasters (CR 121.1: "a player draws

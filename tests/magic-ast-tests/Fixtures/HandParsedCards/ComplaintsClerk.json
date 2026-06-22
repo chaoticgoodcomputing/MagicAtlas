@@ -1,0 +1,83 @@
+{
+  "Input": {
+    "Name": "Complaints Clerk",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Creature — Sloth Beast Employee",
+    "OracleText": "When this creature enters, open an Attraction. (Put the top card of your Attraction deck onto the battlefield.)\nWhenever you roll a 1, create a 1/1 white Clown Robot artifact creature token.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Complaints Clerk",
+    "TypeLine": {
+      "Raw": "Creature — Sloth Beast Employee",
+      "Types": ["Creature"],
+      "Subtypes": ["Sloth", "Beast", "Employee"]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, open an Attraction. (Put the top card of your Attraction deck onto the battlefield.)\nWhenever you roll a 1, create a 1/1 white Clown Robot artifact creature token.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            { "EffectType": "openAttraction" }
+          ],
+          "Reminder": {
+            "Text": "Put the top card of your Attraction deck onto the battlefield."
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DiceRolled",
+            "DieResultValues": [1]
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": { "QuantityType": "literal", "Value": 1 },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": ["W"],
+                "Types": ["artifact", "creature"],
+                "Subtypes": ["Clown", "Robot"],
+                "IsCopy": false
+              },
+              "Player": { "Kind": "You" }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 4
+      },
+      { "Kind": "colors", "Colors": ["W"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+      }
+    ]
+  }
+}
