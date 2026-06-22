@@ -7,7 +7,7 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// "Exile target card from a graveyard." — single-card graveyard-exile as an
-/// activated-ability effect (Rule 701.7), the common graveyard-hoser pattern.
+/// activated-ability effect (Rule 701.13 — Exile), the common graveyard-hoser pattern.
 /// </summary>
 [ActivatedEffectRule(Priority = 984)]
 public sealed class ExileFromGraveyardEffectRule : IActivatedEffectRule

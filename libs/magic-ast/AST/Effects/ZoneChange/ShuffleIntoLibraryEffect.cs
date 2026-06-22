@@ -17,9 +17,9 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// <para>
 /// Most commonly appears as the resolution of the Unravel the Aether pattern —
 /// a two-sentence oracle form "Choose target artifact or enchantment. Its owner
-/// shuffles it into their library." Rule 701.20 governs zone-change actions;
-/// the shuffle is an inherent part of the zone-change (the owner shuffles
-/// immediately after the card is placed in the library). Rule 701.19 governs shuffle.
+/// shuffles it into their library." The card moves to the library (a zone change)
+/// and the owner shuffles immediately after the card is placed there. Rule 701.24
+/// governs shuffle (its own CR example is Guile's "put into a graveyard … shuffle" text).
 /// </para>
 /// </summary>
 [OracleEffect("shuffleIntoLibrary")]

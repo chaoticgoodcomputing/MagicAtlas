@@ -6,8 +6,9 @@ using MagicAST.AST.Triggers;
 
 /// <summary>
 /// Recognises the "one or more [type] cards are put into your graveyard from anywhere"
-/// trigger condition (Rule 603 — Handling Triggered Abilities; Rule 701.7 — "Put into a
-/// graveyard"). Maps to <see cref="TriggerEvent.PutIntoGraveyard"/> with a filter that
+/// trigger condition (Rule 603 — Handling Triggered Abilities; Rule 404 — Graveyard, the
+/// destination zone; "put into a graveyard" is a zone change, not a keyword action). Maps
+/// to <see cref="TriggerEvent.PutIntoGraveyard"/> with a filter that
 /// captures the card type and the controller whose graveyard is the destination.
 ///
 /// <para>
@@ -26,7 +27,7 @@ using MagicAST.AST.Triggers;
 /// <para>
 /// Representative cards: The Gitrog Monster (SOI) — "Whenever one or more land cards
 /// are put into your graveyard from anywhere, draw a card."
-/// Rule citations: CR 603 (Triggered Abilities), CR 701.7 (Put into a graveyard).
+/// Rule citations: CR 603 (Triggered Abilities), CR 404 (Graveyard — the destination zone).
 /// </para>
 /// </summary>
 [TriggerConditionRule(Priority = 985)]
