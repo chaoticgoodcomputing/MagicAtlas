@@ -128,6 +128,17 @@ public sealed class AbilityClassifier
       // [Effect]" means "[Cost]: [Effect]. Activate only once." The prefix is stripped
       // and the ability word emitted so the parser can inject the OnlyOnce restriction.
       "Exhaust",
+      // Grant an Advantage: the CR 207.2c ability word for the dice-advantage
+      // replacement (Adventures in the Forgotten Realms / Commander Legends: Battle
+      // for Baldur's Gate). "Grant an Advantage — If you would roll one or more dice,
+      // instead roll that many dice plus one and ignore the lowest roll." (Pixie
+      // Guide; the word also fronts Barbarian Class's identical line). The prefix is
+      // stripped and the word emitted on AbilityWord so DiceAdvantageReplacementRule
+      // matches the body. (FLAG: the abridged rules-structure.json dataset shipped in
+      // libs/mtg-rules does not include the CR 207.2c ability-word list, so the word
+      // itself could not be string-verified there — only the underlying "ignore the
+      // lowest roll" mechanic, CR 706.6, is present and verified.)
+      "Grant an Advantage",
     };
 
   /// <summary>

@@ -271,6 +271,7 @@
     "OracleReplacementEvent:damage",
     "OracleReplacementEvent:death",
     "OracleReplacementEvent:destruction",
+    "OracleReplacementEvent:diceRoll",
     "OracleReplacementEvent:drawCard",
     "OracleReplacementEvent:generic",
     "OracleReplacementEvent:lifeChange",
