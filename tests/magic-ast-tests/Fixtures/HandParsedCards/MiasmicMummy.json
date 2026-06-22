@@ -1,0 +1,103 @@
+{
+  "Input": {
+    "Name": "Miasmic Mummy",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Zombie Jackal",
+    "OracleText": "When this creature enters, each player discards a card.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Miasmic Mummy",
+    "TypeLine": {
+      "Raw": "Creature — Zombie Jackal",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie",
+        "Jackal"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, each player discards a card.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "discardCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "EachPlayer"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
