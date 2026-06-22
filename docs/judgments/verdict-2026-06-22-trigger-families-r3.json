@@ -1,0 +1,88 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MiasmicMummy.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.9"],
+      "reason": "ETB trigger -> discardCards Count literal 1, Player EachPlayer; matches 'each player discards a card'"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/RottingRats.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.9", "CR 702.84"],
+      "reason": "ETB each-player discard (count 1) + Unearth keyword effect; both lines parsed, no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/EachOpponentDiscardsRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.9"],
+      "reason": "discardCards with EachPlayer/EachOpponent scope + literal count; cites Discard 701.9 (not Destroy 701.8) correctly"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AngelOfFinality.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.13a", "CR 404.1"],
+      "reason": "Flying evasion + ETB exile Each/card/Owner:Target/Zone:Graveyard; whole-zone exile, all lines parsed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BojukaBog.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.13a", "CR 404.1"],
+      "reason": "enters-tapped static + ETB exile target graveyard (Owner:Target) + {T}:Add{B} mana ability; all lines parsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ExilePlayerGraveyardZoneRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.13a", "CR 108.3", "CR 406"],
+      "reason": "ExileEffect Kind:Each over Filter{card,Owner,Graveyard}; Owner=Target/Opponent by scope; cites Exile 701.13a + owner 108.3 correctly"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BreedingPit.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.21", "CR 118.5"],
+      "reason": "upkeep preventable{sacrifice Self, Unless pay {B}{B}} + end-step Thrull token; cost correct, both lines parsed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Thirst.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.21", "CR 118.5"],
+      "reason": "Enchant + ETB tap + doesnt-untap + upkeep preventable{sacrifice Self, Unless pay {U}}; all four lines parsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SacrificeSelfUnlessPayRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.21", "CR 118.5", "CR 702.30"],
+      "reason": "Preventable{sacrifice Self}+UnlessClause{You, mana cost}; cites Sacrifice 701.21 / not-automatic 118.5 / Echo 702.30a (verbatim templating) correctly"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WorldspineWurm.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.24", "CR 603.6", "CR 700.4"],
+      "reason": "Trample + dies->3x5/5 Wurm tokens + PutIntoGraveyard(IsSelf, from-anywhere)->shuffleIntoLibrary Self; the literal CR 701.24 Guile example"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SelfPutIntoGraveyardFromAnywhereConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.6", "CR 700.4", "CR 404.1", "CR 201.5"],
+      "reason": "TriggerEvent.PutIntoGraveyard (IsSelf), broader than Dies/700.4; correctly distinguishes from-anywhere; all cites resolve"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ShuffleSelfIntoLibraryTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.24", "CR 603.2"],
+      "reason": "ShuffleIntoLibraryEffect Target Self; reuses existing discriminator; CR 701.24's own example IS this family's Guile text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ReturnExiledCardToHandOnLeaveTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 607", "CR 406"],
+      "reason": "LTB(IsSelf)->returnToHand Designated{Zone:Exile, ExiledWith:Self}; linked reference not free text; no UnderControl (hand has owner not controller); cites verified"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ChampionsOfThePerfect.json",
+      "verdict": "FAIL",
+      "citations": ["CR 607"],
+      "reason": "silently drops the 'behold an Elf and exile it' additional-cost producer line; the CR 607 producer half is absent, leaving the returnToHand ExiledWith:Self consumer with no linked producer. Established convention (BoneSplinters/InfernalPlunge/Raze) models additional-cost producers as an additionalCosts attribute"
+    }
+  ]
+}
