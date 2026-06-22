@@ -2390,6 +2390,12 @@
           "Fields": []
         },
         {
+          "Type": "DiceRollEvent",
+          "Discriminator": "diceRoll",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "DrawCardEvent",
           "Discriminator": "drawCard",
           "IsUnparsed": false,
@@ -2444,5 +2450,5 @@
       ]
     }
   ],
-  "SchemaHash": "55b32830995e40f7c2b94d763ef95f20aa4a03deefb3570ebd24a00fde10d41a"
+  "SchemaHash": "a4bb4c196b788a3fe1e7ead19b39965d1b45c9a74d84aaeeb4cb792208aba1bc"
 }

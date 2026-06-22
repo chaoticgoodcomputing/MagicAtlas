@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Pixie Guide",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Creature — Faerie",
+    "OracleText": "Flying\nGrant an Advantage — If you would roll one or more dice, instead roll that many dice plus one and ignore the lowest roll.",
+    "Power": "1",
+    "Toughness": "3",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Pixie Guide",
+    "TypeLine": {
+      "Raw": "Creature — Faerie",
+      "Types": ["Creature"],
+      "Subtypes": ["Faerie"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nGrant an Advantage — If you would roll one or more dice, instead roll that many dice plus one and ignore the lowest roll.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": [
+                  { "CharacteristicType": "keyword", "Keyword": "Flying" },
+                  { "CharacteristicType": "keyword", "Keyword": "Reach" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "AbilityWord": "Grant an Advantage",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "diceRoll",
+                "MinimumQuantity": 1,
+                "Controller": { "Kind": "You" }
+              },
+              "OriginalEventOccurs": false,
+              "Modifier": { "Type": "advantage" }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["U"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 1, "Raw": "1" },
+        "Toughness": { "ValueType": "fixed", "Value": 3, "Raw": "3" }
+      }
+    ]
+  }
+}
