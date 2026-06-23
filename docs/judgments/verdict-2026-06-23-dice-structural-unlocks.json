@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BreathOfFury.json",
+      "verdict": "PASS",
+      "citations": ["CR 101.3", "CR 603.12", "CR 500.8", "CR 702.111"],
+      "reason": "enchantRestriction + DealsCombatDamageToPlayer(IsEnchanted) trigger -> composite[sacrifice It, attach creature-you-control, conditional(precedingActionPerformed -> untap Each + additionalCombatPhase)] is faithful; oracle verbatim; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/AST/Abilities/Condition.cs#PrecedingActionPerformedCondition",
+      "verdict": "PASS",
+      "citations": ["CR 101.3", "CR 603.12"],
+      "reason": "field-less 'if you do' causation marker; correctly cites CR 101.3 (impossible parts ignored) and distinguishes itself from a CR 603.12 reflexive trigger; non-duplicative vs the other 8 Condition arms"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Timing/AdditionalCombatPhaseEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 500.8"],
+      "reason": "single pre-existing node reused (defined for Combat Celebrant/Bumi, NOT re-added in this batch); CR 500.8 'effects can add phases' matches; no duplicate definition"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AFR/BarbarianClass.json",
+      "verdict": "PASS",
+      "citations": ["CR 716", "CR 716.2", "CR 716.3", "CR 702.111", "CR 614.1"],
+      "reason": "class ability: BaseAbilities=dice-advantage replacement (CR 716.3 top section always active) + Levels[L2 {1}{R}, L3 {2}{R}] (CR 716.2 level bars); L2 menace composite [modifyPT +2/+0, gainAbility menace] faithful; oracle has no L1, fixture scope complete; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/AST/Abilities/ClassAbility.cs",
+      "verdict": "PASS",
+      "citations": ["CR 716", "CR 716.2", "CR 716.3", "CR 107.16", "CR 602.1a", "CR 207.2"],
+      "reason": "BaseAbilities (CR 716.3 always-active top section) + ordered Levels{Level, Cost, Abilities} (CR 716.2 level bar = activated+static); all citations resolve and match; reminder text dropped per CR 207.2"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/TriggeredAbilityParser.cs#TryParseGetsPTAndGainsKeyword",
+      "verdict": "PASS",
+      "citations": ["CR 702.111"],
+      "reason": "in-scope fix: reuses the spell composite rules to emit [modifyPT, gainAbility(menace)] instead of dropping the menace grant; matches gold; menace = evasion + MinimumBlockers:2 per CR 702.111b; non-regressing"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/EarthCultElemental.json",
+      "verdict": "PASS",
+      "citations": ["CR 706.2", "CR 706.3", "CR 706.1a"],
+      "reason": "Siege Monster ETB -> [rollDie{20}, rollResultsTable{3 rows}]; all rows faithful (1-9 EachPlayer, 10-19 EachOpponent, 20 EachOpponent Count:2), 20 row encodes Min==Max==20; no dropped row; no unparsed/IUnparsed"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Dice/RollResultsTableEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 706.3", "CR 706.2", "CR 706.1a"],
+      "reason": "Rows:[{MinResult,MaxResult,Effects}] inclusive closed range, single-value = Min==Max; composes after rollDie; CR 706.3 results-table text matches; row effects use the ordinary effect vocabulary"
+    },
+    {
+      "target": "discriminator-projection:rollResultsTable",
+      "verdict": "PASS",
+      "citations": ["CR 706.3"],
+      "reason": "SEMANTIC projection present and sensible: PortWalkProjection entry + PortGraph case recurses each row's effects as GATED ports (Amber floor); Earth-Cult Elemental's d20 ETB demonstrably projects emit:rolldice (novel-combo PoC reconstructs it)"
+    },
+    {
+      "target": "discriminator-projection:precedingActionPerformed",
+      "verdict": "PASS",
+      "citations": ["CR 101.3"],
+      "reason": "projects through the conditional effect case: Then-branch recursed and marked Gated -> a loop through the 'if you do' gate floors to Amber; sound, not parked-coarse"
+    },
+    {
+      "target": "discriminator-projection:class",
+      "verdict": "PASS",
+      "citations": ["CR 716"],
+      "reason": "ability-kind container, OUT of the projection ratchet's scope by design (ratchet scans only effectType/costType/triggerEvent/restriction); follows the established Saga/Modal/LevelUp container pattern (body not recursed in interaction layer); not a parked-coarse insensible choice"
+    }
+  ]
+}

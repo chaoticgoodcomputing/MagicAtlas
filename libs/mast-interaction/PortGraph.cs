@@ -222,6 +222,27 @@ public sealed class PortWalk
     JsonNode? manaCostSymbols
   )
   {
+      // A CLASS ability (CR 716) is a CONTAINER — a base section (always active) plus leveled sections
+      // gained by paying a level-up cost. It has no Trigger/Costs/Effects of its own; its flow lives in
+      // the nested abilities. Recurse each (base + per-level) as its own ProjectAbility unit (like
+      // becomesPermanent's GainedAbilities), so the base + level bodies project their ports — e.g. Barbarian
+      // Class's base dice-advantage replacement and its Level-2 "whenever you roll" trigger become real graph
+      // nodes. The level-up mana cost gates the leveled abilities, but the parse layer models level bodies as
+      // reachable and §8 firability already floors any loop through a gated emit, so a per-level cost gate is
+      // not needed for soundness here. (Saga/Modal/LevelUp containers stay un-recursed until a combo needs
+      // their bodies — same non-inert principle as the becomesPermanent scope note.)
+      if (string.Equals(ability["Kind"]?.ToString(), "class", StringComparison.Ordinal))
+      {
+        foreach (var ba in ability["BaseAbilities"] as JsonArray ?? [])
+          if (ba is JsonObject bao)
+            ProjectAbility(bao, card, ports, edges, manaCostSymbols);
+        foreach (var lvl in ability["Levels"] as JsonArray ?? [])
+          foreach (var la in lvl?["Abilities"] as JsonArray ?? [])
+            if (la is JsonObject lao)
+              ProjectAbility(lao, card, ports, edges, manaCostSymbols);
+        return;
+      }
+
       var consumes = new List<PortNode>();
       var emits = new List<PortNode>();
 
