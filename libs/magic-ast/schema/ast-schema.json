@@ -39,6 +39,15 @@
           ]
         },
         {
+          "Type": "ClassAbility",
+          "Discriminator": "class",
+          "IsUnparsed": false,
+          "Fields": [
+            "BaseAbilities",
+            "Levels"
+          ]
+        },
+        {
           "Type": "LevelUpAbility",
           "Discriminator": "levelUp",
           "IsUnparsed": false,
@@ -329,6 +338,12 @@
           "Fields": [
             "Text"
           ]
+        },
+        {
+          "Type": "PrecedingActionPerformedCondition",
+          "Discriminator": "precedingActionPerformed",
+          "IsUnparsed": false,
+          "Fields": []
         },
         {
           "Type": "QuantityComparisonCondition",
@@ -2458,5 +2473,5 @@
       ]
     }
   ],
-  "SchemaHash": "5c1b3371b339c5d6a88cf0a4293017567efc001574daed63a8ddc8de8e0d39e0"
+  "SchemaHash": "8a9278f701de983adc4b1d43933b054043a0bfd7cff292087e09db8b3088dc50"
 }
