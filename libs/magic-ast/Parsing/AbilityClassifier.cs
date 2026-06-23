@@ -212,6 +212,14 @@ public sealed class AbilityClassifier
       return new ClauseClassification { Kind = AbilityKind.LevelUp, Confidence = 1.0 };
     }
 
+    // Class cluster head: ClauseSplitter has pre-grouped the reminder preamble
+    // with the base abilities and class level bars (CR 716, "Class Cards").
+    // Route straight to the Class parser.
+    if (clause.ClassLevels is { Count: > 0 })
+    {
+      return new ClauseClassification { Kind = AbilityKind.Class, Confidence = 1.0 };
+    }
+
     // Check for ability word pattern: "Word —"
     var abilityWord = TryExtractAbilityWord(clause);
 

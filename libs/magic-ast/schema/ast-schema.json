@@ -39,6 +39,15 @@
           ]
         },
         {
+          "Type": "ClassAbility",
+          "Discriminator": "class",
+          "IsUnparsed": false,
+          "Fields": [
+            "BaseAbilities",
+            "Levels"
+          ]
+        },
+        {
           "Type": "LevelUpAbility",
           "Discriminator": "levelUp",
           "IsUnparsed": false,
@@ -2450,5 +2459,5 @@
       ]
     }
   ],
-  "SchemaHash": "a4bb4c196b788a3fe1e7ead19b39965d1b45c9a74d84aaeeb4cb792208aba1bc"
+  "SchemaHash": "636eac46b700a95d5b752f77208ad7d7294d33f2e08f5ff09f9ef99f990d7be3"
 }
