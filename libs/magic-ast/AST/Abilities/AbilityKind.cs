@@ -54,6 +54,15 @@ public enum AbilityKind
   LevelUp,
 
   /// <summary>
+  /// Class abilities — the level-bar superstructure on "Enchantment — Class"
+  /// cards (CR 716, "Class Cards"; AFR). A base ability active at all times
+  /// (CR 716.3) plus an ordered series of class level bars, each a keyword
+  /// ability that pairs a level-up activation cost with the abilities that
+  /// section grants (CR 716.2 / 107.16).
+  /// </summary>
+  Class,
+
+  /// <summary>
   /// Ability that could not be parsed. Contains raw text and diagnostics.
   /// </summary>
   Unparsed,

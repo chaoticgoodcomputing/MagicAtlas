@@ -1,5 +1,6 @@
 namespace MagicAST.Parsing;
 
+using System.Text.RegularExpressions;
 using MagicAST.Parsing.Tokens;
 using Superpower.Model;
 // Use our own TextSpan, not Superpower's
@@ -68,6 +69,42 @@ public sealed record OracleClause
   /// For level-up cards, the level range this clause applies to.
   /// </summary>
   public (int Min, int Max)? LevelRange { get; init; }
+
+  /// <summary>
+  /// For a Class cluster head clause (one that <see cref="ClauseSplitter"/> has
+  /// pre-grouped), the base abilities printed in the top text-box section (CR 716.3)
+  /// and the class level bars. The head clause's RawText is the reminder preamble
+  /// "(Gain the next level as a sorcery to add its ability.)"; the base-ability and
+  /// level-bar bodies hang off these fields. Null on every non-Class clause.
+  /// </summary>
+  public IReadOnlyList<OracleClause>? ClassBaseAbilities { get; init; }
+
+  /// <summary>
+  /// For a Class cluster head clause, the class level bars in oracle-text order.
+  /// Null on every non-Class clause.
+  /// </summary>
+  public IReadOnlyList<ClassLevelClause>? ClassLevels { get; init; }
+}
+
+/// <summary>
+/// One pre-grouped class level bar from a Class cluster (CR 716.2). Carries the
+/// level number, the raw activation-cost text from the bar (e.g. <c>"{1}{R}"</c>),
+/// and the ability sub-clauses printed in that bar's text-box section. The parser
+/// converts these into a <c>ClassLevel</c> AST node.
+/// </summary>
+public sealed record ClassLevelClause
+{
+  /// <summary>The level number this bar advances the Class to (2, 3, …).</summary>
+  public required int Level { get; init; }
+
+  /// <summary>Raw activation-cost text from the bar, verbatim (e.g. <c>"{1}{R}"</c>).</summary>
+  public required string CostText { get; init; }
+
+  /// <summary>
+  /// Ability clauses granted at this level, in source order. Each is dispatched
+  /// through <c>AbilityParserRegistry</c> like any body ability.
+  /// </summary>
+  public IReadOnlyList<OracleClause> AbilityClauses { get; init; } = [];
 }
 
 /// <summary>
@@ -187,6 +224,35 @@ public sealed class ClauseSplitter
             CreateClause(paragraphText, paragraphStart) with { LevelUpStanzas = stanzas }
           );
           i = lookahead - 1;
+          continue;
+        }
+      }
+
+      // Class preambles (the reminder line "(Gain the next level as a sorcery to
+      // add its ability.)") head a Class superstructure (CR 716, "Class Cards").
+      // Consume the reminder, the base-ability paragraph(s) printed in the top
+      // text-box section (CR 716.3), and the class level bars ("{cost}: Level N"
+      // each followed by the abilities granted at that level) into one cluster
+      // clause. The reminder carries no game function (CR 207.2) and is kept only
+      // as the head clause's RawText anchor.
+      if (IsClassPreamble(paragraphText))
+      {
+        var consumedTo = TryConsumeClassCluster(
+          paragraphs,
+          i,
+          out var baseAbilities,
+          out var levels
+        );
+        if (consumedTo > i && levels.Count > 0)
+        {
+          clauses.Add(
+            CreateClause(paragraphText, paragraphStart) with
+            {
+              ClassBaseAbilities = baseAbilities,
+              ClassLevels = levels,
+            }
+          );
+          i = consumedTo;
           continue;
         }
       }
@@ -459,6 +525,106 @@ public sealed class ClauseSplitter
 
   private static bool HasInnerWhitespace(string s) =>
     s.Any(char.IsWhiteSpace);
+
+  /// <summary>
+  /// Class preamble — the reminder paragraph that introduces the level-up
+  /// mechanic on "Enchantment — Class" cards (CR 716). Always wrapped in
+  /// parentheses; the printed wording is "(Gain the next level as a sorcery to
+  /// add its ability.)". Matched on the "Gain the next level" opening after the
+  /// leading paren so a future minor reminder-wording change still anchors.
+  /// </summary>
+  private static bool IsClassPreamble(string text) =>
+    Regex.IsMatch(
+      text.Trim(),
+      @"^\(\s*Gain the next level as a sorcery",
+      RegexOptions.IgnoreCase
+    );
+
+  /// <summary>
+  /// Recognises a class level bar paragraph: "{cost}: Level N" (CR 716.2 /
+  /// 107.16 — a level bar pairs an activation cost with a level number).
+  /// Returns the (level number, raw cost text) on success; null otherwise.
+  /// </summary>
+  private static (int Level, string CostText)? TryParseClassLevelBar(string text)
+  {
+    var m = Regex.Match(
+      text.Trim(),
+      @"^(?<cost>\{[^}]+\}(?:\{[^}]+\})*)\s*:\s*Level\s+(?<n>\d+)\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (!m.Success)
+    {
+      return null;
+    }
+    if (!int.TryParse(m.Groups["n"].Value, out var level))
+    {
+      return null;
+    }
+    return (level, m.Groups["cost"].Value);
+  }
+
+  /// <summary>
+  /// Consumes a Class cluster starting at the reminder preamble paragraph
+  /// <paramref name="headIndex"/>. Gathers the base-ability paragraph(s) printed
+  /// before the first level bar (CR 716.3) and each "{cost}: Level N" bar with the
+  /// ability paragraphs printed in its section. Returns the index of the LAST
+  /// paragraph consumed (so the caller sets <c>i = result</c>); equals
+  /// <paramref name="headIndex"/> when no level bar was found.
+  /// </summary>
+  private int TryConsumeClassCluster(
+    IReadOnlyList<(string Text, int Start)> paragraphs,
+    int headIndex,
+    out IReadOnlyList<OracleClause> baseAbilities,
+    out IReadOnlyList<ClassLevelClause> levels
+  )
+  {
+    var baseList = new List<OracleClause>();
+    var levelList = new List<ClassLevelClause>();
+    baseAbilities = baseList;
+    levels = levelList;
+
+    // Base abilities: every paragraph after the reminder, up to the first level bar.
+    var j = headIndex + 1;
+    while (j < paragraphs.Count && TryParseClassLevelBar(paragraphs[j].Text) is null)
+    {
+      baseList.Add(CreateClause(paragraphs[j].Text, paragraphs[j].Start));
+      j++;
+    }
+
+    // Level bars: each "{cost}: Level N" followed by its granted-ability paragraphs
+    // (up to the next bar or end of text).
+    var lastConsumed = headIndex;
+    while (j < paragraphs.Count)
+    {
+      var bar = TryParseClassLevelBar(paragraphs[j].Text);
+      if (bar is null)
+      {
+        break;
+      }
+      var abilityClauses = new List<OracleClause>();
+      var k = j + 1;
+      while (k < paragraphs.Count && TryParseClassLevelBar(paragraphs[k].Text) is null)
+      {
+        abilityClauses.Add(CreateClause(paragraphs[k].Text, paragraphs[k].Start));
+        k++;
+      }
+      levelList.Add(
+        new ClassLevelClause
+        {
+          Level = bar.Value.Level,
+          CostText = bar.Value.CostText,
+          AbilityClauses = abilityClauses,
+        }
+      );
+      lastConsumed = k - 1;
+      j = k;
+    }
+
+    // If we found level bars, the base-ability paragraphs were legitimately part of
+    // the cluster. If no bar was found at all, the reminder stands alone — signal
+    // "nothing consumed" so the caller falls through to normal processing.
+    return levelList.Count > 0 ? lastConsumed : headIndex;
+  }
 
   /// <summary>
   /// Saga preamble — the reminder paragraph that introduces the lore-counter

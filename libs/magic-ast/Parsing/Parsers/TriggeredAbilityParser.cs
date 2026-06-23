@@ -844,6 +844,23 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return gainEnergyThenCombat;
     }
 
+    // Single-sentence composite buff: "[target creature [you control]] gets +N/+M
+    // and gains <keyword(s)> until end of turn." This shape combines a P/T modifier
+    // with one or more keyword grants in a single sentence — e.g. Barbarian Class's
+    // level-2 trigger "…target creature you control gets +2/+0 and gains menace
+    // until end of turn." The single-rule loop below would let the greedy
+    // ModifyPTTriggeredRule claim it and emit ONLY the ModifyPTEffect, silently
+    // dropping the keyword grant. Reuse the existing spell composite rules
+    // (ModifyPTAndGainKeyword[Controlled]SpellRule) — the same nodes the spell
+    // parser produces for the identical surface — so the trigger lands the full
+    // [ModifyPTEffect, GainAbilityEffect, …] flat list. Tried before the single-rule
+    // loop so the greedy P/T rule never shadows it.
+    var pumpAndGain = TryParseGetsPTAndGainsKeyword(trimmed);
+    if (pumpAndGain is not null)
+    {
+      return pumpAndGain;
+    }
+
     // Multi-sentence effect bundle: "Sentence one. Sentence two." — split on
     // ". " followed by an uppercase letter (the same heuristic the SpellAbilityParser
     // uses). Each sentence is dispatched through the single-rule loop independently.
@@ -863,6 +880,33 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       }
     }
 
+    return null;
+  }
+
+  // Shared instances of the spell composite rules reused for the single-sentence
+  // "gets +N/+M and gains <kw> until end of turn" buff in a triggered context.
+  // Stateless; the controller-qualified rule is tried first (it is the more
+  // specific "you control" shape).
+  private static readonly Spell.Rules.ModifyPTAndGainKeywordControlledSpellRule _controlledPumpGain = new();
+  private static readonly Spell.Rules.ModifyPTAndGainKeywordSpellRule _pumpGain = new();
+
+  /// <summary>
+  /// Recognises the single-sentence composite buff "[target creature [you control]]
+  /// gets +N/+M and gains &lt;keyword(s)&gt; until end of turn." by delegating to the
+  /// existing spell composite rules, which emit the flat
+  /// <c>[ModifyPTEffect, GainAbilityEffect, …]</c> list. Returns null when neither
+  /// rule matches so the dispatcher falls through to the single-rule loop.
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseGetsPTAndGainsKeyword(string trimmed)
+  {
+    if (_controlledPumpGain.TryMatchMulti(trimmed, out var controlled) && controlled is not null)
+    {
+      return controlled.ToList();
+    }
+    if (_pumpGain.TryMatchMulti(trimmed, out var plain) && plain is not null)
+    {
+      return plain.ToList();
+    }
     return null;
   }
 
