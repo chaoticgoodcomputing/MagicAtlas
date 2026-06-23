@@ -529,6 +529,28 @@ public sealed class PortWalk
       return;
     }
 
+    // A die-roll RESULTS-TABLE (rollResultsTable, CR 706.3) is a result-gated fan-out: each row's effects
+    // fire only when the die result lands in that row's inclusive range. Like a conditional (§8), a specific
+    // row's emit is a hard firability gate (you can't certify a given row fires every iteration) → Gated →
+    // a loop through it floors to Amber. Recurse every row's effects by totality (§4) so their flow ports
+    // project (e.g. a "10—19 | create a token" row's emit:token; the roll itself is the sibling rollDie
+    // effect in the composite, which projects emit:rolldice independently → the offshoot the dice arm reads).
+    if (effectType == "rollResultsTable")
+    {
+      foreach (var row in e["Rows"] as JsonArray ?? [])
+        foreach (var sub in row?["Effects"] as JsonArray ?? [])
+        {
+          var beforeE = emits.Count;
+          var beforeC = consumes.Count;
+          Effects(sub, card, keyword, manaCostSymbols, consumes, emits, ports, edges);
+          for (var i = beforeE; i < emits.Count; i++)
+            emits[i] = emits[i] with { Gated = true };
+          for (var i = beforeC; i < consumes.Count; i++)
+            consumes[i] = consumes[i] with { Gated = true };
+        }
+      return;
+    }
+
     // A "becomes a [type] permanent … and gains [abilities]" continuous grant (becomesPermanent, CR
     // 611/113.6) gives the affected permanent one or more abilities. Project each GRANTED ability as its
     // own port unit, attributed to the GRANTING card — the grant is what creates the looping object
