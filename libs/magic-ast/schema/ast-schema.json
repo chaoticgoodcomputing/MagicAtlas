@@ -1883,6 +1883,14 @@
           ]
         },
         {
+          "Type": "RollResultsTableEffect",
+          "Discriminator": "rollResultsTable",
+          "IsUnparsed": false,
+          "Fields": [
+            "Rows"
+          ]
+        },
+        {
           "Type": "SacrificeEffect",
           "Discriminator": "sacrifice",
           "IsUnparsed": false,
@@ -2450,5 +2458,5 @@
       ]
     }
   ],
-  "SchemaHash": "a4bb4c196b788a3fe1e7ead19b39965d1b45c9a74d84aaeeb4cb792208aba1bc"
+  "SchemaHash": "5c1b3371b339c5d6a88cf0a4293017567efc001574daed63a8ddc8de8e0d39e0"
 }

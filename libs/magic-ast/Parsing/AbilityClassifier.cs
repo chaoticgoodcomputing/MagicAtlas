@@ -157,6 +157,14 @@ public sealed class AbilityClassifier
       // Sephiroth, Fabled SOLDIER's printed label for the transform-into trigger.
       // Not on the CR 207.2c ability-word list; mechanically inert flavor label.
       "Super Nova",
+      // d20 results-table cohort (AFR / Forgotten Realms) printed flavor labels.
+      // Each fronts a "[Label] — When/Whenever … roll a d20." trigger that opens a
+      // results table (CR 706.3). None is a CR 207.2c ability word — they are
+      // single-card flavor labels, mechanically inert, so they re-home to
+      // PrintedLabel and the body still classifies as the triggered ability it is.
+      "Siege Monster",
+      "Sneak Attack",
+      "Wild Magic Surge",
     };
 
   /// <summary>

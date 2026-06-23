@@ -291,6 +291,23 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return null;
     }
 
+    // Die-roll RESULTS TABLE (CR 706.3): the head paragraph "…roll a dN." parsed
+    // to the roll effect above; the rows ClauseSplitter pre-grouped become a
+    // RollResultsTableEffect appended after the roll. Each row body is dispatched
+    // through the SAME effect rules under the SAME triggering event (the table's
+    // "result" is the preceding roll's result — CR 706.2). If any row fails to
+    // parse, bail (return null) so the whole ability falls back rather than
+    // silently dropping a row.
+    if (clause.ResultsTableRows is { Count: > 0 } tableRows)
+    {
+      var table = TryBuildResultsTable(tableRows, trigger);
+      if (table is null)
+      {
+        return null;
+      }
+      effects = [.. effects, table];
+    }
+
     return new TriggeredAbility
     {
       Trigger = trigger,
@@ -303,6 +320,45 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       AbilityWord = abilityWord,
       Restrictions = triggeredRestrictions,
     };
+  }
+
+  /// <summary>
+  /// Builds a <see cref="MagicAST.AST.Effects.Dice.RollResultsTableEffect"/> from
+  /// the pre-grouped table rows (CR 706.3). Each row's body text is dispatched
+  /// through the ordinary effect rules via <see cref="ParseEffects"/> under the
+  /// same triggering event. Returns <see langword="null"/> if any row fails to
+  /// parse, so the caller can fall back rather than emit a results table with a
+  /// silently-dropped row.
+  /// </summary>
+  private static MagicAST.AST.Effects.Dice.RollResultsTableEffect? TryBuildResultsTable(
+    IReadOnlyList<ResultsTableRowClause> rows,
+    TriggerCondition trigger
+  )
+  {
+    var built = new List<MagicAST.AST.Effects.Dice.ResultsTableRow>(rows.Count);
+    foreach (var row in rows)
+    {
+      // Strip a trailing parenthetical reminder from the row body (Rule 207.4 /
+      // 107.4 — reminder text is mechanically inert), mirroring the head-clause
+      // reminder strip in TryParse. e.g. Hoarding Ogre's first row:
+      // "Create a Treasure token. (It's an artifact with ...)".
+      var body = row.BodyText;
+      ExtractTrailingReminder(ref body);
+
+      var rowEffects = ParseEffects(body, trigger);
+      if (rowEffects is null || rowEffects.Count == 0)
+      {
+        return null;
+      }
+      built.Add(new MagicAST.AST.Effects.Dice.ResultsTableRow
+      {
+        MinResult = row.MinResult,
+        MaxResult = row.MaxResult,
+        Effects = rowEffects,
+      });
+    }
+
+    return new MagicAST.AST.Effects.Dice.RollResultsTableEffect { Rows = built };
   }
 
   /// <summary>
