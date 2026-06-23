@@ -84,6 +84,16 @@ public sealed record OracleClause
   /// Null on every non-Class clause.
   /// </summary>
   public IReadOnlyList<ClassLevelClause>? ClassLevels { get; init; }
+
+  /// <summary>
+  /// For a die-roll RESULTS-TABLE head clause (a trigger paragraph ending in
+  /// "roll a dN." followed by "&lt;range&gt; | &lt;effect&gt;" row paragraphs), the
+  /// table rows that <see cref="ClauseSplitter"/> has pre-grouped onto it. The
+  /// head clause's RawText is the trigger + roll sentence; each
+  /// <see cref="ResultsTableRowClause"/> carries the inclusive result range and the
+  /// raw body text of one row. Null on every non-results-table clause. CR 706.3.
+  /// </summary>
+  public IReadOnlyList<ResultsTableRowClause>? ResultsTableRows { get; init; }
 }
 
 /// <summary>
@@ -105,6 +115,24 @@ public sealed record ClassLevelClause
   /// through <c>AbilityParserRegistry</c> like any body ability.
   /// </summary>
   public IReadOnlyList<OracleClause> AbilityClauses { get; init; } = [];
+}
+
+/// <summary>
+/// One pre-grouped row of a die-roll results table (CR 706.3): the inclusive
+/// numeric range and the raw effect body text. The triggered-ability parser
+/// dispatches <see cref="BodyText"/> through its effect rules and pairs the
+/// resulting effects with the range to build a <c>ResultsTableRow</c> AST node.
+/// </summary>
+public sealed record ResultsTableRowClause
+{
+  /// <summary>Inclusive lower bound of the result range (the "1" in "1—9").</summary>
+  public required int MinResult { get; init; }
+
+  /// <summary>Inclusive upper bound (the "9" in "1—9"); equals Min for a single value ("20").</summary>
+  public required int MaxResult { get; init; }
+
+  /// <summary>The raw effect text after the "&lt;range&gt; | " delimiter.</summary>
+  public required string BodyText { get; init; }
 }
 
 /// <summary>
@@ -321,11 +349,101 @@ public sealed class ClauseSplitter
         }
       }
 
+      // Die-roll RESULTS TABLE (CR 706.3): a trigger paragraph ending in
+      // "...roll a dN." may be followed by "<range> | <effect>" row paragraphs.
+      // Consume those rows greedily into a single head clause carrying the rows
+      // on its ResultsTableRows field — the triggered/activated parser maps each
+      // range to its effect(s) inside a RollResultsTableEffect. Without this the
+      // newline-split would turn every row into its own unparseable clause.
+      if (EndsWithDieRoll(paragraphText))
+      {
+        var rows = new List<ResultsTableRowClause>();
+        var lookahead = i + 1;
+        while (lookahead < paragraphs.Count)
+        {
+          var row = TryParseResultsTableRow(paragraphs[lookahead].Text);
+          if (row is null)
+          {
+            break;
+          }
+          rows.Add(row);
+          lookahead++;
+        }
+
+        if (rows.Count > 0)
+        {
+          clauses.Add(CreateClause(paragraphText, paragraphStart) with { ResultsTableRows = rows });
+          i = lookahead - 1;
+          continue;
+        }
+      }
+
       var paragraphClauses = ProcessParagraph(paragraphText, paragraphStart);
       clauses.AddRange(paragraphClauses);
     }
 
     return clauses;
+  }
+
+  /// <summary>
+  /// True if the paragraph ends with a "roll a dN" / "roll N dN" /
+  /// "roll a/N N-sided die/dice" instruction (CR 706.1) — the head of a
+  /// die-roll results table whose rows follow on subsequent paragraphs.
+  /// Trailing period optional.
+  /// </summary>
+  private static bool EndsWithDieRoll(string text) =>
+    DieRollTailPattern.IsMatch(text.TrimEnd());
+
+  private static readonly System.Text.RegularExpressions.Regex DieRollTailPattern =
+    new(
+      @"\broll\s+(?:a|an|one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+"
+        + @"(?:d\d+|(?:two|three|four|six|eight|ten|twelve|twenty|hundred)-sided\s+(?:die|dice))\.?$",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase
+    );
+
+  // "<min>[—|-|–]<max> | <effect>" or "<value> | <effect>" — one results-table row.
+  // The range separator is an em-dash (U+2014) in modern oracle text; an en-dash
+  // (U+2013) and a plain hyphen are tolerated. The " | " pipe separates the range
+  // from the effect body.
+  private static readonly System.Text.RegularExpressions.Regex ResultsTableRowPattern =
+    new(
+      @"^(?<min>\d+)\s*(?:[—–\-]\s*(?<max>\d+))?\s*\|\s*(?<body>.+)$",
+      System.Text.RegularExpressions.RegexOptions.Singleline
+    );
+
+  /// <summary>
+  /// Parses a results-table row paragraph "&lt;range&gt; | &lt;effect&gt;" into its
+  /// inclusive range and raw body text. Returns null if the paragraph isn't a row.
+  /// A single value ("20 | ...") yields Min == Max. CR 706.3.
+  /// </summary>
+  private static ResultsTableRowClause? TryParseResultsTableRow(string text)
+  {
+    var m = ResultsTableRowPattern.Match(text.Trim());
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    if (!int.TryParse(m.Groups["min"].Value, out var min))
+    {
+      return null;
+    }
+    var max = min;
+    if (m.Groups["max"].Success && !int.TryParse(m.Groups["max"].Value, out max))
+    {
+      return null;
+    }
+    if (max < min)
+    {
+      return null;
+    }
+
+    return new ResultsTableRowClause
+    {
+      MinResult = min,
+      MaxResult = max,
+      BodyText = m.Groups["body"].Value.Trim(),
+    };
   }
 
   private static bool ContainsBullet(string text) => text.Contains('•');

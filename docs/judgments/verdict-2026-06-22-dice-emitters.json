@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WillingTestSubject.json",
+      "verdict": "PASS",
+      "citations": ["CR 706.1", "CR 706.2"],
+      "reason": "activated ability effect is rollDie {Sides:6} (CR 706.1); Reach static + 'roll a 4 or higher' uses DieResultThreshold:4 (minimum) with putCounters +1/+1 Count:1 — all lines faithful, no unparsed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ComplaintsClerk.json",
+      "verdict": "PASS",
+      "citations": ["CR 706.2", "CR 706.7"],
+      "reason": "'whenever you roll a 1' modeled as DieResultValues:[1] (exact-value set, correctly distinct from DieResultThreshold minimum) firing createToken 1/1 W Clown Robot; openAttraction ETB faithful"
+    },
+    {
+      "target": "libs/magic-ast/AST/Triggers/TriggerCondition.cs#DieResultValues",
+      "verdict": "PASS",
+      "citations": ["CR 706.2", "CR 706.7"],
+      "reason": "new List<int>? DieResultValues is a sound exact-value-set qualifier, doc-documented as mutually exclusive with DieResultThreshold (minimum); not a new PortWalk discriminator (refines existing DiceRolled trigger) so no separate projection needed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PixieGuide.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 706.6", "CR 207.2c"],
+      "reason": "'instead roll ... ignore the lowest' modeled as Kind:static replacement, Event=diceRoll MinimumQuantity:1, OriginalEventOccurs:false, Modifier.Type='advantage' (CR 614.1a 'instead'); Flying faithful; ability word captured"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WyllBladeOfFrontiers.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 706.6"],
+      "reason": "advantage replacement identical+sound; 'whenever you roll one or more dice' trigger carries no result qualifier (fires on any roll) — correct; Choose a Background partner faithful"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Replacement/DiceRollEvent.cs",
+      "verdict": "PASS",
+      "citations": ["CR 706.1", "CR 614.1"],
+      "reason": "new diceRoll replacement-event discriminator is faithful and non-duplicative (mirrors MillEvent/CounterPlacementEvent MinimumQuantity); cited rules resolve and match"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Replacement/ReplacementModifier.cs#advantage",
+      "verdict": "PASS",
+      "citations": ["CR 706.6"],
+      "reason": "'advantage' as an atomic Modifier.Type (roll N+1, ignore lowest) is acceptable — CR 706.6 'ignored roll never happened'; an atomic template, not rules-meaningful free text; a value of existing Type string, not a new discriminator"
+    },
+    {
+      "target": "libs/mast-interaction#OracleReplacementEvent:diceRoll-projection",
+      "verdict": "PASS",
+      "citations": ["CR 614.1"],
+      "reason": "diceRoll is semantically projected via the generic replacement path (PortGraph.cs:548 -> intercept:replacement:diceRoll), drawing a Modifier edge against any emit:rolldice; the advantage modifier carries no inner roll-emitting effect (a shield, not an outlet) — present and sensible, not parked coarse"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AdorableKitten.json",
+      "verdict": "PASS",
+      "citations": ["CR 706.2", "CR 706.4", "CR 119.3"],
+      "reason": "ETB -> [rollDie Sides:6, gainLife {Amount: dieRollResult}]; 'the result' modeled as dieRollResult (not a literal) per CR 706.2"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DissatisfiedCustomer.json",
+      "verdict": "PASS",
+      "citations": ["CR 706.2", "CR 706.4", "CR 119.3"],
+      "reason": "ETB -> [rollDie Sides:6, conditional{ quantityComparison(dieRollResult <= 3), Then: loseLife {dieRollResult} }]; 'that much life' = dieRollResult; Flying+haste faithful"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/VelukanDragon.json",
+      "verdict": "PASS",
+      "citations": ["CR 706.2", "CR 706.4"],
+      "reason": "AttacksOrBlocks compound trigger preserved (not dropped) -> [rollDie, modifyPT PowerModifier=calculated(dieRollResult add -1), ToughnessModifier 0, Duration untilTime Turn/End]; 'result minus 1' and EOT duration faithful"
+    }
+  ]
+}

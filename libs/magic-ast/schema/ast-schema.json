@@ -39,15 +39,6 @@
           ]
         },
         {
-          "Type": "ClassAbility",
-          "Discriminator": "class",
-          "IsUnparsed": false,
-          "Fields": [
-            "BaseAbilities",
-            "Levels"
-          ]
-        },
-        {
           "Type": "LevelUpAbility",
           "Discriminator": "levelUp",
           "IsUnparsed": false,
@@ -1892,6 +1883,14 @@
           ]
         },
         {
+          "Type": "RollResultsTableEffect",
+          "Discriminator": "rollResultsTable",
+          "IsUnparsed": false,
+          "Fields": [
+            "Rows"
+          ]
+        },
+        {
           "Type": "SacrificeEffect",
           "Discriminator": "sacrifice",
           "IsUnparsed": false,
@@ -2459,5 +2458,5 @@
       ]
     }
   ],
-  "SchemaHash": "636eac46b700a95d5b752f77208ad7d7294d33f2e08f5ff09f9ef99f990d7be3"
+  "SchemaHash": "5c1b3371b339c5d6a88cf0a4293017567efc001574daed63a8ddc8de8e0d39e0"
 }
