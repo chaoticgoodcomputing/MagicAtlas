@@ -186,6 +186,36 @@ public sealed record ObjectHasSubtypeCondition : Condition
 }
 
 /// <summary>
+/// "If you do, …" — a within-resolution gate on whether the IMMEDIATELY PRECEDING
+/// instruction in the same effect was actually performed. The structured form of the
+/// mid-resolution "if you do" idiom (Breath of Fury: "sacrifice it and attach this Aura
+/// to a creature you control. <em>If you do</em>, untap all creatures you control and after
+/// this phase, there is an additional combat phase.").
+///
+/// <para>
+/// A marker (no fields): "you do" always refers to the preceding instruction of the same
+/// resolving ability, so there is nothing to parameterise. The antecedent can fail to
+/// happen — e.g. the attach is impossible when no legal creature is available — in which
+/// case the gated <see cref="ConditionalEffect.Then"/> is skipped (CR 101.3: any part of
+/// an instruction that's impossible to perform is ignored). Reference-not-resolution
+/// (ADR 0004): MAST records the printed gate; the engine reads whether the preceding
+/// instruction resolved, MAST does not pre-evaluate it.
+/// </para>
+///
+/// <para>
+/// Distinct from a reflexive triggered ability (CR 603.12 — "when you do, …"), which puts
+/// a NEW delayed trigger on the stack; this is an in-line conditional applied during the
+/// SAME resolution. Also distinct from <see cref="OtherCondition"/>: this idiom is fixed
+/// and parameter-free, so it is structured rather than left as a free-text residual.
+/// </para>
+///
+/// CR 101.3 (verbatim): "Any part of an instruction that's impossible to perform is ignored.
+/// (In many cases the card will specify consequences for this; if it doesn't, there's no effect.)"
+/// </summary>
+[ConditionKind("precedingActionPerformed")]
+public sealed record PrecedingActionPerformedCondition : Condition;
+
+/// <summary>
 /// Typed residual for a condition that does not yet have a structured variant —
 /// carries the literal oracle phrase. A deferral, not a destination (ADR 0001):
 /// counted by the residual-debt metric, structured when the shape recurs.

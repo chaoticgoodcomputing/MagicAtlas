@@ -331,6 +331,12 @@
           ]
         },
         {
+          "Type": "PrecedingActionPerformedCondition",
+          "Discriminator": "precedingActionPerformed",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "QuantityComparisonCondition",
           "Discriminator": "quantityComparison",
           "IsUnparsed": false,
@@ -2450,5 +2456,5 @@
       ]
     }
   ],
-  "SchemaHash": "a4bb4c196b788a3fe1e7ead19b39965d1b45c9a74d84aaeeb4cb792208aba1bc"
+  "SchemaHash": "a58509e6661a05962fa3090d875026a098412ce7b9269fb62138cff7fbfe63db"
 }
