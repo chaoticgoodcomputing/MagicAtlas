@@ -248,6 +248,11 @@ public static class DiceComboReportStep
         ("engine:emiel+swarming (no mana source)", ["Emiel the Blessed", "Swarming Goblins"]),
         // Second newly-covered activated blink outlet (returnToBattlefield ExiledWith:Self → emit:blink).
         ("engine:eldrazi-displacer+drake+swarming", ["Eldrazi Displacer", "Peregrine Drake", "Swarming Goblins"]),
+        // NOVEL-COMBO PoC: substitute a newly-parsed dice-ETB creature (Earth-Cult Elemental — its ETB
+        // d20 results-table now projects emit:rolldice) into the proven blink-dice loop shape. Not a
+        // CSB-listed combo — pure graph-discovered reconstruction enabled by the results-table coverage.
+        ("engine:emiel+drake+earthcult (NOVEL d20-ETB rider)", ["Emiel the Blessed", "Peregrine Drake", "Earth-Cult Elemental"]),
+        ("engine:eldrazi-displacer+drake+earthcult (NOVEL)", ["Eldrazi Displacer", "Peregrine Drake", "Earth-Cult Elemental"]),
       };
       foreach (var (id, cards) in candidates)
         efficient.Add(AnalyzeCombo(id, cards, ["(anchored efficient-engine candidate)"], collectNovel: false));
