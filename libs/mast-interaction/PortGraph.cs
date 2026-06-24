@@ -456,8 +456,13 @@ public sealed class PortWalk
         )
       );
     else
-      // Coarse fallback (totality): the event name as the role, plus the subject if any.
-      consumes.Add(Port(card, Coarse(ev, filter), PortSide.Consume));
+      // Coarse fallback (totality): the event name as the role, plus the watched filter as the NON-NULL
+      // subject. Threading the filter (not null) is load-bearing: when a flow arm reads a coarse trigger
+      // consume (e.g. the extra-combat arm reads attacksorblocks), a null subject would hit AddRulesEdge's
+      // scalar null-default-GREEN branch — a false GREEN (re-attacking is a CHOICE, CR 508.1a, never
+      // guaranteed). The filter ("this creature" → {creature, IsSelf}) tiers it AMBER (Overlaps, not
+      // Subsumes a producer's {Controller:You}), matching the explicit ?? Any… floors the semantic triggers use.
+      consumes.Add(Port(card, Coarse(ev, filter), PortSide.Consume, subject: filter));
   }
 
   private void Costs(JsonNode? cost, string card, List<PortNode> consumes)

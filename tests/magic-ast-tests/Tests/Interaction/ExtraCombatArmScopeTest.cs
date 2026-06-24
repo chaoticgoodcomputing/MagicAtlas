@@ -39,16 +39,26 @@ public class ExtraCombatArmScopeTest
     );
 
   /// <summary>The arm: an additional combat phase re-fires a creature's attack trigger (Velukan Dragon's
-  /// "whenever this attacks or blocks, roll" — the dice offshoot) and the combat-presence re-attack consume.</summary>
+  /// "whenever this attacks or blocks, roll" — the dice offshoot). Tiered AMBER, never GREEN: re-attacking is
+  /// a CHOICE (CR 508.1a "if any"), never guaranteed. The subject is what the coarse AttacksOrBlocks trigger
+  /// actually projects ({creature, IsSelf}) — the regression guard for the null-subject false-GREEN.</summary>
   [Test]
-  public void Additional_combat_feeds_an_attacks_consume()
+  public void Additional_combat_feeds_an_attacks_roll_trigger_at_amber()
   {
     var extraCombat = Emit("Breath of Fury", PortLabel.AdditionalCombatEmit(), YouControl);
-    var attackRoll = Consume("Velukan Dragon", "attacksorblocks:creature", Self); // the coarse attack-trigger role
+    var attackRoll = Consume(
+      "Velukan Dragon",
+      "attacksorblocks:creature",
+      new ObjectFilter { CardTypes = ["creature"], IsSelf = true } // what PortGraph.Trigger's coarse path projects
+    );
+    var hop = Edges(extraCombat, attackRoll).SingleOrDefault(e =>
+      e.From.Label.StartsWith("emit:additionalcombat", StringComparison.Ordinal)
+    );
+    Assert.That(hop, Is.Not.Null, "an additional combat phase must re-fire a creature's attacks trigger");
     Assert.That(
-      HasExtraCombatHop(Edges(extraCombat, attackRoll)),
-      Is.True,
-      "an additional combat phase must re-fire a creature's attacks trigger (re-attack → re-roll / re-damage)"
+      hop!.Tier,
+      Is.EqualTo(CertaintyTier.Amber),
+      "re-attacking is a choice (CR 508.1a) — the hop must be AMBER, never a null-default GREEN"
     );
   }
 

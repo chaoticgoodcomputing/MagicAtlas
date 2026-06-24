@@ -10,7 +10,7 @@
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": null
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Lat-Nam Adept::emit:counter:\u002B1/\u002B1:self",
