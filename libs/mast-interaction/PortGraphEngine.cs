@@ -592,6 +592,13 @@ public sealed class PortGraphEngine
       // self-watching trigger is matched same-card-only (object identity the operator can't see), and
       // AddRulesEdge's operator tiers certainty on the SOURCE Subjects.
       ("damage", "trigger") => DamageSatisfiesTrigger(emit, consume),
+      // Extra-combat loop (CR 500.8). An additional combat phase lets a creature attack AGAIN: emit:
+      // additionalcombat satisfies an attacksorblocks consume — re-driving a creature's combat-damage emit
+      // (closing the Breath of Fury / Aggravated Assault infinite-combat loop) AND re-firing a card's own
+      // "whenever this attacks" roll trigger (the dice offshoot). Feasibility only — the combat-damage emit
+      // stays Gated so any loop through it floors to AMBER (never a false GREEN), and AddRulesEdge's operator
+      // tiers the {Controller:You}↔self Subjects (Overlaps, not Subsumes → Amber). Sound for any attacker.
+      ("additionalcombat", "attacksorblocks") => true,
       // Cast-recursion (Displacer Kitten family). A RE-CAST spell (emit:cast — a noncreature permanent that
       // bounced itself to hand and is cast again, CR 601) feeds a "whenever you cast a [noncreature] spell"
       // trigger (CR 603.2) whose watched-spell filter is type-compatible. Feasibility only — AddRulesEdge's

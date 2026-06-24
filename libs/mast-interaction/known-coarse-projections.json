@@ -6,8 +6,6 @@
     "grantAlternativeCost": "alternative-cost grant (CR 118.9 'you may pay [cost] rather than pay the mana cost') — a cost-replacement permission; no interaction flow rule reads alternative-cost grants yet; consciously inert for interaction recall (Rooftop Storm)",
     "addType": "additive card-type/subtype grant (CR 205.1a 'in addition to their other types') — type-line characteristic, no interaction flow rule reads additive type grants yet; consciously inert for interaction recall",
     "additionalCastCost": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
-    "additionalCombatAndMainPhase": "no semantic projection yet — coarse fallback no flow rule consumes; explicit named carve-out",
-    "additionalCombatPhase": "CR 500.8 turn-structure insertion (no additional main phase; Combat Celebrant, Godo) — no flow rule consumes extra-combat-phase events yet; consciously inert for interaction recall",
     "allMustBlock": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "alternativePayment": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "amass": "Amass keyword action (CR 701.45a) — counter placement on Army tokens; no flow rule reads Amass yet; consciously inert for interaction recall",

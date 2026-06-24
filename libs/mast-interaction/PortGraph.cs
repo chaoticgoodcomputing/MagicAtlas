@@ -149,7 +149,7 @@ public sealed class PortWalk
     // it is GATED: attacking is a once-per-combat event the engine can't freely re-fire within a turn (no
     // extra-combat modeling), so any loop through it floors to AMBER — never a false GREEN. Projected only
     // when the caller supplies a cardProfile (the bench corpus); other callers omit it (no combat presence).
-    ProjectCombatPresence(card, cardProfile, ports);
+    ProjectCombatPresence(card, cardProfile, ports, edges);
 
     if (oracleAbilities is JsonArray abilities)
       foreach (var ability in abilities)
@@ -183,7 +183,7 @@ public sealed class PortWalk
   /// (the sentinel snapshot, census, union) project no combat presence — keeping the combat emit scoped to
   /// where it is measured.</para>
   /// </summary>
-  private void ProjectCombatPresence(string card, JsonNode? cardProfile, List<PortNode> ports)
+  private void ProjectCombatPresence(string card, JsonNode? cardProfile, List<PortNode> ports, List<CardDefinedEdge> edges)
   {
     if (cardProfile is not JsonObject p)
       return;
@@ -196,13 +196,26 @@ public sealed class PortWalk
       return; // provably 0 power deals no combat damage; variable/unknown power stays present (conservative)
 
     var self = new ObjectFilter { IsSelf = true };
-    ports.Add(
+    var combatDamage =
       Port(card, PortLabel.DealDamageEmit(PortLabel.DamageCombat, "any"), PortSide.Emit, subject: self)
         with
       {
         Gated = true,
-      }
-    );
+      };
+    ports.Add(combatDamage);
+
+    // Extra-combat re-attack (CR 500.8): an additional combat phase lets this creature attack AGAIN → it
+    // deals combat damage again. Project an `attacksorblocks:self` consume (satisfied by an
+    // emit:additionalcombat through the extra-combat arm) and a card-defined edge re-driving the
+    // combat-damage emit. This CLOSES the Breath-of-Fury / Aggravated-Assault infinite-combat loop
+    // (combat-damage → additional-combat → re-attack → combat-damage), with an attack-roll creature's roll
+    // as the offshoot. CRUCIAL: combatDamage is ALSO projected as a standalone (seed) emit, so the turn's
+    // free first combat fires it unconditionally — this only ADDS a re-drive path. A loop through it stays
+    // AMBER (combatDamage is Gated); a non-extra-combat combo (Captain Rex) is untouched (its combat-damage
+    // hop was already Gated→Amber; the unfed attacks co-cost only re-confirms that floor, never prunes).
+    var attacks = Port(card, PortLabel.AttacksConsume(), PortSide.Consume, subject: self) with { Gated = true };
+    ports.Add(attacks);
+    edges.Add(new CardDefinedEdge { From = attacks, To = combatDamage });
   }
 
   /// <summary>
@@ -758,6 +771,13 @@ public sealed class PortWalk
       var who = PlayerFilter(e["Player"]);
       return Port(card, PortLabel.LifeLossEmit(who), PortSide.Emit, Qty(e["Amount"]), who);
     }
+    if (effectType is "additionalCombatPhase" or "additionalCombatAndMainPhase")
+      // An additional combat phase (CR 500.8 — Aggravated Assault, Breath of Fury, Combat Celebrant) lets
+      // YOUR creatures attack again. Subject {Controller:You} (your creatures) so the extra-combat arm into
+      // an attacksorblocks:self consume tiers AMBER (Overlaps, not Subsumes the specific attacker) — never a
+      // null-default GREEN. additionalCombatAndMainPhase collapses to the same emit: the extra MAIN phase is
+      // irrelevant to the combat loop. Drives the extra-combat arm (emit:additionalcombat → attacksorblocks).
+      return Port(card, PortLabel.AdditionalCombatEmit(), PortSide.Emit, subject: new ObjectFilter { Controller = ControllerFilter.You });
     if (effectType == "rollDie")
     {
       // A die-roll event (CR 706). The rolling player (the controller) rides as the subject so a

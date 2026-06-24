@@ -275,6 +275,19 @@ public static class PortLabel
 
   public static string RollDiceTrigger(ObjectFilter? who) => Join("trigger", "rolldice", who is null ? null : Scope(who));
 
+  // --- Additional combat phases as a loop driver (CR 500.8). -----------------------------------
+  // An "additional combat phase" EFFECT (Aggravated Assault, Breath of Fury, Combat Celebrant) is an emit
+  // that lets a creature attack AGAIN. The extra-combat arm connects it to an attacksorblocks consume (a
+  // creature's re-attack opportunity), re-driving combat damage to close an infinite-combat loop — with an
+  // attack-roll creature's roll as the offshoot. The combat-damage emit stays Gated, so the loop floors to
+  // AMBER (never a false GREEN; the turn's free first combat is the seed outside the cycle).
+  public static string AdditionalCombatEmit() => "emit:additionalcombat";
+
+  // "This creature attacks/blocks" as a consume on a creature's combat presence. Role "attacksorblocks"
+  // matches the coarse attack-trigger role the AttacksOrBlocks trigger event projects, so ONE extra-combat
+  // arm satisfies both this (re-driving combat damage) and a card's own "whenever this attacks" roll trigger.
+  public static string AttacksConsume() => "attacksorblocks:self";
+
   // --- Damage as a flowing resource (CR 119/120 general, CR 510 combat). -----------------------
   // A "deals N damage" EFFECT is an emit; a "whenever [a source] deals [combat] damage [to X]" TRIGGER is
   // a consume. The flow arm (PortGraphEngine.FlowFeasible) connects an emit to a trigger whose COMBAT facet
