@@ -85,6 +85,15 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/dice-combo-report.json")
       .Build());
 
+  /// <summary>The port-graph structural atlas (diagnostic): SCC decomposition + hub census + economy-cut
+  /// fragmentation + cross-family cycle sample of the emergent port-LABEL graph. The edge-structure
+  /// complement to <see cref="PortLabelCensus"/>; output of the <c>PortGraphAtlas</c> flow.</summary>
+  public IItem<PortGraphAtlas> PortGraphAtlas =>
+    CreateItem(() => Item.Of<PortGraphAtlas>("PortGraphAtlas")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/port-graph-atlas.json")
+      .Build());
+
   /// <summary>The interaction-graph Plotly viz (label grammar | card-card expansion) — interactive HTML.</summary>
   public IItem<string> InteractionGraphHtml =>
     CreateItem(() => Item.Of<string>("InteractionGraphHtml")

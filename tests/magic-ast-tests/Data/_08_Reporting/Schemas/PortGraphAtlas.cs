@@ -1,0 +1,183 @@
+using Flowthru.Data.Schema;
+
+namespace MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
+
+/// <summary>
+/// Structural diagnostic of the EMERGENT port-label graph — the "atoms of gameplay" graph the
+/// two-layer cycle engine runs over (<c>libs/mast-interaction/docs/two-layer-cycle-engine.md</c>).
+/// Where <see cref="PortLabelCensus"/> counts the label VOCABULARY (nodes) and
+/// <see cref="PortGraphMetrics"/> counts the materialized instance graph's size, THIS report analyzes
+/// the label graph's EDGE STRUCTURE: is it one giant strongly-connected blob (like the card-projection
+/// SCC), or does it fragment into recognizable combo families once the universal "economy" connectors
+/// (mana / tap) are cut? And which short elementary cycles bridge ≥2 resource families — the candidate
+/// NOVEL combo archetypes the anchored reconstruction (DiceComboReport) never enumerates globally.
+/// <para>
+/// Nodes = distinct port LABELS (grouped from the materialized <c>PortEdge</c>s, one node per label —
+/// the atom, not the per-card instance). A directed edge <c>A → B</c> exists iff some materialized
+/// instance edge runs from a label-A port to a label-B port (the card-defined <em>wiring</em> edges
+/// consume→emit, plus the rules-defined <em>arm</em> edges emit→consume). Diagnostic only — never a gate.
+/// </para>
+/// </summary>
+[FlowthruSchema]
+public partial record PortGraphAtlas
+{
+  [SerializedLabel("generatedAt")]
+  public DateTime GeneratedAt { get; init; }
+
+  /// <summary>The card scope the label graph was materialized over (e.g. the CSB combo-card union).</summary>
+  [SerializedLabel("scope")]
+  public required string Scope { get; init; }
+
+  /// <summary>Distinct cards that contributed ≥1 port to the materialized graph.</summary>
+  [SerializedLabel("cardsInScope")]
+  public int CardsInScope { get; init; }
+
+  /// <summary>Distinct port-label NODES in the label graph (the atoms actually wired in scope).</summary>
+  [SerializedLabel("labelNodes")]
+  public int LabelNodes { get; init; }
+
+  /// <summary>Distinct directed label→label EDGES (deduped from the instance edges).</summary>
+  [SerializedLabel("labelEdges")]
+  public int LabelEdges { get; init; }
+
+  /// <summary>Emit-side label nodes (<c>emit:</c>) — the producers.</summary>
+  [SerializedLabel("emitNodes")]
+  public int EmitNodes { get; init; }
+
+  /// <summary>Consume-side label nodes (pay/sac/tap/etb/ltb/trigger/cast/…) — the consumers.</summary>
+  [SerializedLabel("consumeNodes")]
+  public int ConsumeNodes { get; init; }
+
+  // ── SCC of the FULL label graph (the "is it one blob?" measurement) ─────────────────────────────
+
+  /// <summary>Strongly-connected-component count of the full label graph (Tarjan). 1 giant + many
+  /// singletons ⇒ the same one-blob pathology as the card projection, but at atom scale.</summary>
+  [SerializedLabel("sccCount")]
+  public int SccCount { get; init; }
+
+  /// <summary>Size (in label nodes) of the largest SCC — the core interaction blob.</summary>
+  [SerializedLabel("largestSccSize")]
+  public int LargestSccSize { get; init; }
+
+  /// <summary>The largest SCC's member labels (capped) — the atoms mutually reachable through the economy.</summary>
+  [SerializedLabel("largestScc")]
+  public required IReadOnlyList<string> LargestScc { get; init; }
+
+  /// <summary>The highest-degree label nodes (in+out) — the universal connectors / hubs.</summary>
+  [SerializedLabel("topHubs")]
+  public required IReadOnlyList<LabelDegree> TopHubs { get; init; }
+
+  // ── Hub-cut experiment: remove the economy connectors, re-decompose ─────────────────────────────
+
+  /// <summary>The resource families of the top-degree HUBS removed for the fragmentation experiment — the
+  /// universal connectors the graph actually has (data-driven: the top <c>topHubs</c>, not a guessed family).</summary>
+  [SerializedLabel("cutFamilies")]
+  public required string CutFamilies { get; init; }
+
+  /// <summary>How many label nodes (the top-degree hubs) were removed by the cut.</summary>
+  [SerializedLabel("cutLabelCount")]
+  public int CutLabelCount { get; init; }
+
+  /// <summary>SCC count AFTER cutting the economy connectors — if it jumps, the blob was mana-glued.</summary>
+  [SerializedLabel("sccCountAfterCut")]
+  public int SccCountAfterCut { get; init; }
+
+  /// <summary>Largest SCC size after the cut — if it collapses, the giant blob was an economy artifact.</summary>
+  [SerializedLabel("largestSccSizeAfterCut")]
+  public int LargestSccSizeAfterCut { get; init; }
+
+  /// <summary>The multi-node SCC "islands" that survive the cut — the recognizable combo families
+  /// (dice / blink / aristocrat / …), each with its dominant resource family + members.</summary>
+  [SerializedLabel("islandsAfterCut")]
+  public required IReadOnlyList<LabelIsland> IslandsAfterCut { get; init; }
+
+  // ── Cross-family cycles: candidate combo archetypes ─────────────────────────────────────────────
+
+  /// <summary>The label-cycle length bound used for the (bounded, sampled) elementary-cycle enumeration.</summary>
+  [SerializedLabel("cycleLenBound")]
+  public int CycleLenBound { get; init; }
+
+  /// <summary>Distinct elementary label-cycles found within the bound (a SAMPLE — enumeration is capped).</summary>
+  [SerializedLabel("boundedCyclesFound")]
+  public int BoundedCyclesFound { get; init; }
+
+  /// <summary>Of those, how many touch ≥2 resource families — the cross-family archetypes (novel-combo shapes).</summary>
+  [SerializedLabel("crossFamilyCycles")]
+  public int CrossFamilyCycles { get; init; }
+
+  /// <summary>Of those, how many stay within one resource family — self-feeding single-resource engines.</summary>
+  [SerializedLabel("singleFamilyCycles")]
+  public int SingleFamilyCycles { get; init; }
+
+  /// <summary>Distinct FAMILY-SIGNATURES among the cross-family cycles — the TRUE archetype diversity, once
+  /// the label-facet multiplicity (Saproling-vs-Pentavite token variants of one shape) is collapsed away.</summary>
+  [SerializedLabel("distinctArchetypes")]
+  public int DistinctArchetypes { get; init; }
+
+  /// <summary>The distinct cross-family archetypes (grouped by family-signature, one example ring + its
+  /// occurrence count each) — the candidate combo shapes to anchor + verify at instance level. Ranked by
+  /// families bridged, then by how many facet-variant cycles collapse into the archetype.</summary>
+  [SerializedLabel("sampleArchetypes")]
+  public required IReadOnlyList<ArchetypeCycle> SampleArchetypes { get; init; }
+}
+
+/// <summary>A label node's in/out degree in the label graph, plus its resource family and card mass.</summary>
+[FlowthruSchema]
+public partial record LabelDegree
+{
+  [SerializedLabel("label")]
+  public required string Label { get; init; }
+
+  [SerializedLabel("family")]
+  public required string Family { get; init; }
+
+  [SerializedLabel("inDegree")]
+  public int InDegree { get; init; }
+
+  [SerializedLabel("outDegree")]
+  public int OutDegree { get; init; }
+
+  /// <summary>Distinct in-scope cards projecting this label (the centroid "mass").</summary>
+  [SerializedLabel("cardsInScope")]
+  public int CardsInScope { get; init; }
+}
+
+/// <summary>A strongly-connected island of the label graph that survives the economy cut — a combo family.</summary>
+[FlowthruSchema]
+public partial record LabelIsland
+{
+  [SerializedLabel("size")]
+  public int Size { get; init; }
+
+  /// <summary>The most common resource family among the island's labels — the family's name.</summary>
+  [SerializedLabel("dominantFamily")]
+  public required string DominantFamily { get; init; }
+
+  [SerializedLabel("labels")]
+  public required IReadOnlyList<string> Labels { get; init; }
+}
+
+/// <summary>A bounded elementary label-cycle — a candidate combo archetype (its label ring + families bridged).</summary>
+[FlowthruSchema]
+public partial record ArchetypeCycle
+{
+  /// <summary>Label hops in the ring.</summary>
+  [SerializedLabel("length")]
+  public int Length { get; init; }
+
+  /// <summary>Distinct resource families the ring touches (1 ⇒ single-resource engine, ≥2 ⇒ cross-family combo).</summary>
+  [SerializedLabel("familyCount")]
+  public int FamilyCount { get; init; }
+
+  /// <summary>How many enumerated facet-variant cycles collapse into this family-signature archetype.</summary>
+  [SerializedLabel("occurrences")]
+  public int Occurrences { get; init; }
+
+  /// <summary>The families bridged, comma-joined (e.g. <c>blink, etb, dice</c>).</summary>
+  [SerializedLabel("families")]
+  public required string Families { get; init; }
+
+  /// <summary>The label ring, arrow-joined (e.g. <c>emit:blink → etb:creature → … → emit:blink</c>).</summary>
+  [SerializedLabel("ring")]
+  public required string Ring { get; init; }
+}

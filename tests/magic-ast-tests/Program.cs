@@ -9,6 +9,7 @@ using MagicAtlas.Ast.Tests.Flows.InteractionTriage;
 using MagicAtlas.Ast.Tests.Flows.LabelCensus;
 using MagicAtlas.Ast.Tests.Flows.MagicAstSmoke;
 using MagicAtlas.Ast.Tests.Flows.MagicAstTriage;
+using MagicAtlas.Ast.Tests.Flows.PortGraphAtlas;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -190,6 +191,18 @@ public class Program
           "Reconstructs every CSB die-roll combo 'as if the support cards were parsed' (gold AST > stub > "
             + "parsed text > inert) → Data/_08_Reporting/dice-combo-report.json: per-combo best dice-cycle "
             + "tier + hops vs product reach + cards-in-cycle + AST provenance, plus engine-derived novel dice loops."
+        );
+
+      flowthru
+        .RegisterFlow<Catalog>(
+          "PortGraphAtlas",
+          catalog => PortGraphAtlasFlow.Create(catalog, ontologyPath)
+        )
+        .WithDescription(
+          "Materializes the emergent port-LABEL graph over the CSB combo-card union and analyzes its edge "
+            + "structure → Data/_08_Reporting/port-graph-atlas.json: SCC decomposition, hub census, the "
+            + "economy-cut (mana/tap) fragmentation experiment, and a cross-family cycle sample (candidate "
+            + "novel combo archetypes). The edge-structure complement to PortLabelCensus."
         );
 
       flowthru.ConfigureMetadata(meta =>
