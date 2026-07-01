@@ -201,6 +201,46 @@ public partial record LabelIsland
   public required IReadOnlyList<string> Labels { get; init; }
 }
 
+/// <summary>A node of the family-collapsed "subway map" — a resource family (station), with its mass.</summary>
+[FlowthruSchema]
+public partial record FamilyNodeRow
+{
+  [SerializedLabel("family")]
+  public required string Family { get; init; }
+
+  /// <summary>Distinct in-scope cards that project ≥1 label in this family — the station's "ridership" (node size).</summary>
+  [SerializedLabel("cards")]
+  public int Cards { get; init; }
+
+  /// <summary>Distinct port labels that collapse into this family (the subtype fan behind the station).</summary>
+  [SerializedLabel("labels")]
+  public int Labels { get; init; }
+}
+
+/// <summary>A directed edge of the family "subway map" — a line from one resource station to another.</summary>
+[FlowthruSchema]
+public partial record FamilyEdgeRow
+{
+  [SerializedLabel("from")]
+  public required string From { get; init; }
+
+  [SerializedLabel("to")]
+  public required string To { get; init; }
+
+  /// <summary>Underlying label edges of the ARM kind (emit→consume — the rules/physics: mana feeds a cost).</summary>
+  [SerializedLabel("armWeight")]
+  public int ArmWeight { get; init; }
+
+  /// <summary>Underlying label edges of the WIRING kind (consume→emit — a card's own text: pay, then do).</summary>
+  [SerializedLabel("wiringWeight")]
+  public int WiringWeight { get; init; }
+
+  /// <summary>True iff the reverse edge (To→From) also exists — the two stations form a fundamental
+  /// two-family ENGINE (an infinite loop, e.g. blink↔etb). Highlighted on the map.</summary>
+  [SerializedLabel("engine")]
+  public bool Engine { get; init; }
+}
+
 /// <summary>How many distinct archetypes bridge exactly this many resource families (the catalog's shape).</summary>
 [FlowthruSchema]
 public partial record ArchetypeSizeBand

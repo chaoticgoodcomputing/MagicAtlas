@@ -94,6 +94,27 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/port-graph-atlas.json")
       .Build());
 
+  /// <summary>The family "subway map" nodes (resource-family stations + card mass) — input to the viz step.</summary>
+  public IItem<IEnumerable<FamilyNodeRow>> FamilyGraphNodes =>
+    CreateItem(() => Item.Of<IEnumerable<FamilyNodeRow>>("FamilyGraphNodes")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/family-graph-nodes.json")
+      .Build());
+
+  /// <summary>The family "subway map" edges (directed family→family lines, arm/wiring-weighted, engine-flagged).</summary>
+  public IItem<IEnumerable<FamilyEdgeRow>> FamilyGraphEdges =>
+    CreateItem(() => Item.Of<IEnumerable<FamilyEdgeRow>>("FamilyGraphEdges")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/family-graph-edges.json")
+      .Build());
+
+  /// <summary>The family-graph "subway map" Plotly viz — resource stations, arm/wiring lines, engine loops highlighted.</summary>
+  public IItem<string> FamilyGraphHtml =>
+    CreateItem(() => Item.Of<string>("FamilyGraphHtml")
+      .Text()
+      .AtPath($"{_basePath}/_08_Reporting/family-graph.html")
+      .Build());
+
   /// <summary>The interaction-graph Plotly viz (label grammar | card-card expansion) — interactive HTML.</summary>
   public IItem<string> InteractionGraphHtml =>
     CreateItem(() => Item.Of<string>("InteractionGraphHtml")

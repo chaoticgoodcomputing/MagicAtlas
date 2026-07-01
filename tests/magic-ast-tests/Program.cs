@@ -194,15 +194,15 @@ public class Program
         );
 
       flowthru
-        .RegisterFlow<Catalog>(
+        .RegisterFlow<Catalog, IPythonExecutor>(
           "PortGraphAtlas",
-          catalog => PortGraphAtlasFlow.Create(catalog, ontologyPath)
+          (catalog, executor) => PortGraphAtlasFlow.Create(catalog, ontologyPath, executor)
         )
         .WithDescription(
           "Materializes the emergent port-LABEL graph over the CSB combo-card union and analyzes its edge "
-            + "structure → Data/_08_Reporting/port-graph-atlas.json: SCC decomposition, hub census, the "
-            + "economy-cut (mana/tap) fragmentation experiment, and a cross-family cycle sample (candidate "
-            + "novel combo archetypes). The edge-structure complement to PortLabelCensus."
+            + "structure → Data/_08_Reporting/port-graph-atlas.json (SCC decomposition, hub census, the "
+            + "data-driven hub-cut fragmentation experiment, and the complete family-collapsed archetype "
+            + "catalog), plus the family 'subway map' Plotly viz → Data/_08_Reporting/family-graph.html."
         );
 
       flowthru.ConfigureMetadata(meta =>

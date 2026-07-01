@@ -64,7 +64,7 @@ public static class PortGraphAtlasStep
 
   public static Func<
     (IEnumerable<Combo> Combos, IEnumerable<MastCardInput> CardInputs),
-    PortGraphAtlasReport
+    (PortGraphAtlasReport Report, IEnumerable<FamilyNodeRow> Nodes, IEnumerable<FamilyEdgeRow> Edges)
   > Create(string ontologyPath) =>
     inputs =>
     {
@@ -294,11 +294,14 @@ public static class PortGraphAtlasStep
       // that swamped the per-label pass (19k cycles, budget-truncated) is gone — one "token" node, not 50.
       // On this ~15-node graph elementary-cycle enumeration is exhaustive: no facet blowup, no display cap. ──
       var famAdj = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+      var famArm = new Dictionary<(string, string), int>();
+      var famWiring = new Dictionary<(string, string), int>();
       foreach (var (a, outs) in adj)
       {
         var fa = FamilyOf(a);
         if (!CanonicalFamilies.Contains(fa))
           continue; // inert/coarse label — a dead-end, never on a resource cycle
+        var aEmit = a.StartsWith("emit:", StringComparison.Ordinal);
         foreach (var b in outs)
         {
           var fb = FamilyOf(b);
@@ -307,13 +310,59 @@ public static class PortGraphAtlasStep
           if (!famAdj.TryGetValue(fa, out var s))
             famAdj[fa] = s = new HashSet<string>(StringComparer.Ordinal);
           s.Add(fb);
+          var key = (fa, fb);
+          var bEmit = b.StartsWith("emit:", StringComparison.Ordinal);
+          if (aEmit && !bEmit) // emit→consume: a rules/arm edge (the physics)
+            famArm[key] = famArm.GetValueOrDefault(key) + 1;
+          else if (!aEmit && bEmit) // consume→emit: a card-defined wiring edge (the text)
+            famWiring[key] = famWiring.GetValueOrDefault(key) + 1;
         }
+      }
+
+      // Family node masses (station ridership) + edge rows (the subway-map export the Python step renders).
+      var famCards = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+      var famLabels = new Dictionary<string, int>(StringComparer.Ordinal);
+      foreach (var (label, cardSet) in cardsPerLabel)
+      {
+        var fam = FamilyOf(label);
+        if (!CanonicalFamilies.Contains(fam))
+          continue;
+        if (!famCards.TryGetValue(fam, out var set))
+          famCards[fam] = set = new HashSet<string>(StringComparer.Ordinal);
+        set.UnionWith(cardSet);
+        famLabels[fam] = famLabels.GetValueOrDefault(fam) + 1;
       }
       var famNodes = famAdj
         .Keys.Concat(famAdj.Values.SelectMany(s => s))
         .Distinct(StringComparer.Ordinal)
         .ToList();
       var famEdges = famAdj.Values.Sum(s => s.Count);
+
+      // The subway-map export: one row per station (family, sized by card mass) + one per directed line,
+      // arm/wiring-weighted and flagged when it's half of a fundamental two-family engine (blink↔etb).
+      var familyNodeRows = famNodes
+        .OrderBy(f => f, StringComparer.Ordinal)
+        .Select(f => new FamilyNodeRow
+        {
+          Family = f,
+          Cards = famCards.TryGetValue(f, out var cs) ? cs.Count : 0,
+          Labels = famLabels.GetValueOrDefault(f),
+        })
+        .ToList();
+      var familyEdgeRows = famAdj
+        .SelectMany(kv => kv.Value.Select(to => (From: kv.Key, To: to)))
+        .OrderBy(e => e.From, StringComparer.Ordinal)
+        .ThenBy(e => e.To, StringComparer.Ordinal)
+        .Select(e => new FamilyEdgeRow
+        {
+          From = e.From,
+          To = e.To,
+          ArmWeight = famArm.GetValueOrDefault((e.From, e.To)),
+          WiringWeight = famWiring.GetValueOrDefault((e.From, e.To)),
+          Engine = famAdj.TryGetValue(e.To, out var back) && back.Contains(e.From),
+        })
+        .ToList();
+
       var (famRings, famComplete) = EnumerateFamilyCycles(famNodes, famAdj);
       var familyCatalog = famRings
         .Select(r =>
@@ -350,7 +399,7 @@ public static class PortGraphAtlasStep
           + $"{famRings.Count} cycles, {familyCatalog.Count} distinct archetypes (complete={famComplete}, {sw.ElapsedMilliseconds} ms)"
       );
 
-      return new PortGraphAtlasReport
+      var report = new PortGraphAtlasReport
       {
         GeneratedAt = DateTime.UtcNow,
         Scope = ScopeLabel,
@@ -386,6 +435,8 @@ public static class PortGraphAtlasStep
         FamilyArchetypesBySize = familySizeBands,
         FamilyArchetypeCatalog = familyCatalog.Take(100).ToList(),
       };
+
+      return (report, familyNodeRows, familyEdgeRows);
     };
 
   /// <summary>A canonical signature of a port's SUBJECT filter for dedup — two ports with the same
