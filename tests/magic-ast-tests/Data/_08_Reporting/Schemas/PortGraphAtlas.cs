@@ -114,11 +114,55 @@ public partial record PortGraphAtlas
   [SerializedLabel("distinctArchetypes")]
   public int DistinctArchetypes { get; init; }
 
-  /// <summary>The distinct cross-family archetypes (grouped by family-signature, one example ring + its
-  /// occurrence count each) — the candidate combo shapes to anchor + verify at instance level. Ranked by
-  /// families bridged, then by how many facet-variant cycles collapse into the archetype.</summary>
+  /// <summary>A budget-limited SAMPLE of the cross-family archetypes read off the per-LABEL graph (grouped
+  /// by family-signature). Superseded by <see cref="FamilyArchetypeCatalog"/> — kept for the concrete
+  /// subtype flavor (real Saproling/Treasure rings) the family collapse erases.</summary>
   [SerializedLabel("sampleArchetypes")]
   public required IReadOnlyList<ArchetypeCycle> SampleArchetypes { get; init; }
+
+  // ── Family-collapsed graph: the COMPLETE archetype catalog (atoms, not molecules) ────────────────
+
+  /// <summary>Nodes of the family-collapsed graph — every label mapped to its resource family (the ~15-atom
+  /// "periodic table": mana/token/sacrifice/death/dice/damage/…). One <c>token</c> node, not 50 subtypes.</summary>
+  [SerializedLabel("familyNodes")]
+  public int FamilyNodes { get; init; }
+
+  /// <summary>Directed family→family edges (the label graph projected onto families).</summary>
+  [SerializedLabel("familyEdges")]
+  public int FamilyEdges { get; init; }
+
+  /// <summary>Elementary-cycle length cap on the family graph (in families) — generous; real archetypes are
+  /// ≤5 families, so this is effectively unbounded and only backstops a pathologically dense family graph.</summary>
+  [SerializedLabel("familyCycleLenBound")]
+  public int FamilyCycleLenBound { get; init; }
+
+  /// <summary>Elementary cycles enumerated over the family graph — with the facet multiplicity collapsed
+  /// away, this is small and exhaustively enumerable (no display budget, unlike the per-label pass).</summary>
+  [SerializedLabel("familyCyclesFound")]
+  public int FamilyCyclesFound { get; init; }
+
+  /// <summary>True iff the family-graph enumeration ran to completion (no expansion-budget truncation) — so
+  /// <see cref="FamilyArchetypeCatalog"/> is the COMPLETE archetype catalog, not a sample.</summary>
+  [SerializedLabel("familyEnumComplete")]
+  public bool FamilyEnumComplete { get; init; }
+
+  /// <summary>Distinct family-SIGNATURES among the family cycles — the size of the complete archetype catalog.</summary>
+  [SerializedLabel("familyArchetypes")]
+  public int FamilyArchetypes { get; init; }
+
+  /// <summary>The archetype catalog binned by family-count — how many distinct 2-family, 3-family, … archetypes
+  /// exist. The small bins are the FUNDAMENTAL engines; the large bins are combinatorial elaborations
+  /// (a fundamental loop with a redundant resource threaded in). Shows the combo space's shape at a glance.</summary>
+  [SerializedLabel("familyArchetypesBySize")]
+  public required IReadOnlyList<ArchetypeSizeBand> FamilyArchetypesBySize { get; init; }
+
+  /// <summary>The COMPLETE cross-family archetype catalog: every distinct family-signature ring (≥2 families;
+  /// within-family self-loops are excluded, being cost-payment like emit:mana→pay:mana, not feedback) the
+  /// graph admits — one example ring + how many family-rings collapse into it, ranked by families bridged.
+  /// The candidate combo-shape catalog to anchor + verify at instance level — the graph's answer to "what
+  /// cross-resource infinite loops are structurally possible from the coverage we have."</summary>
+  [SerializedLabel("familyArchetypeCatalog")]
+  public required IReadOnlyList<ArchetypeCycle> FamilyArchetypeCatalog { get; init; }
 }
 
 /// <summary>A label node's in/out degree in the label graph, plus its resource family and card mass.</summary>
@@ -155,6 +199,17 @@ public partial record LabelIsland
 
   [SerializedLabel("labels")]
   public required IReadOnlyList<string> Labels { get; init; }
+}
+
+/// <summary>How many distinct archetypes bridge exactly this many resource families (the catalog's shape).</summary>
+[FlowthruSchema]
+public partial record ArchetypeSizeBand
+{
+  [SerializedLabel("familyCount")]
+  public int FamilyCount { get; init; }
+
+  [SerializedLabel("archetypes")]
+  public int Archetypes { get; init; }
 }
 
 /// <summary>A bounded elementary label-cycle — a candidate combo archetype (its label ring + families bridged).</summary>

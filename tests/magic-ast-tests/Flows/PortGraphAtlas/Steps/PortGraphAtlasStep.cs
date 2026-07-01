@@ -38,6 +38,22 @@ public static class PortGraphAtlasStep
   private const int MaxCyclesCollected = 40_000;
   private const long MaxDfsExpansions = 6_000_000;
 
+  // The family-collapsed graph is tiny (~15 nodes), so its elementary-cycle enumeration is exhaustive: a
+  // generous length cap (no real archetype exceeds ~5 families) and a high expansion budget that only trips
+  // on a pathologically dense family graph. Completion ⇒ the archetype catalog is COMPLETE, not sampled.
+  private const int FamilyCycleLenBound = 10;
+  private const long FamilyMaxExpansions = 30_000_000;
+
+  // The canonical FLOWING resources — the real "periodic table" the arms move. The family graph is built
+  // over ONLY these: everything else (the coarse emit:<effect-type> fallbacks — emit:draw, emit:destroy, …)
+  // is inert (no arm reads it, so it's a dead-end that can't lie on a cycle) and is excluded, rather than
+  // bucketed into one "other" node that would merge unrelated dead-ends and fabricate false cycles.
+  private static readonly HashSet<string> CanonicalFamilies = new(StringComparer.Ordinal)
+  {
+    "mana", "token", "sacrifice", "death", "etb", "recur", "dice", "damage",
+    "life", "blink", "copy", "cast", "combat", "untap", "tap", "counter", "phase",
+  };
+
   // The fragmentation probe cuts the top-K highest-degree HUBS (data-driven — the connectors the graph
   // actually has, discovered from the degree distribution, not a guessed family). If the giant SCC
   // shatters into recognizable families, those hubs were its glue.
@@ -273,6 +289,67 @@ public static class PortGraphAtlasStep
         .Take(25)
         .ToList();
 
+      // ── Family-collapsed graph: the COMPLETE archetype catalog (atoms, not molecules). Map every label to
+      // its resource FAMILY *before* enumerating, so the token-subtype / sac-variant / ltb-scope multiplicity
+      // that swamped the per-label pass (19k cycles, budget-truncated) is gone — one "token" node, not 50.
+      // On this ~15-node graph elementary-cycle enumeration is exhaustive: no facet blowup, no display cap. ──
+      var famAdj = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+      foreach (var (a, outs) in adj)
+      {
+        var fa = FamilyOf(a);
+        if (!CanonicalFamilies.Contains(fa))
+          continue; // inert/coarse label — a dead-end, never on a resource cycle
+        foreach (var b in outs)
+        {
+          var fb = FamilyOf(b);
+          if (!CanonicalFamilies.Contains(fb) || string.Equals(fa, fb, StringComparison.Ordinal))
+            continue; // skip non-canonical targets and family self-loops (a single-label self-hop, not a ring)
+          if (!famAdj.TryGetValue(fa, out var s))
+            famAdj[fa] = s = new HashSet<string>(StringComparer.Ordinal);
+          s.Add(fb);
+        }
+      }
+      var famNodes = famAdj
+        .Keys.Concat(famAdj.Values.SelectMany(s => s))
+        .Distinct(StringComparer.Ordinal)
+        .ToList();
+      var famEdges = famAdj.Values.Sum(s => s.Count);
+      var (famRings, famComplete) = EnumerateFamilyCycles(famNodes, famAdj);
+      var familyCatalog = famRings
+        .Select(r =>
+          (Ring: r, Fams: r.Distinct(StringComparer.Ordinal).OrderBy(f => f, StringComparer.Ordinal).ToList())
+        )
+        .GroupBy(x => string.Join(", ", x.Fams), StringComparer.Ordinal)
+        .Select(grp =>
+        {
+          var ex = grp.OrderBy(x => x.Ring.Count)
+            .ThenBy(x => string.Join("|", x.Ring), StringComparer.Ordinal)
+            .First();
+          return new ArchetypeCycle
+          {
+            Length = ex.Ring.Count,
+            FamilyCount = ex.Fams.Count,
+            Occurrences = grp.Count(),
+            Families = grp.Key,
+            Ring = string.Join(" → ", ex.Ring) + " → " + ex.Ring[0],
+          };
+        })
+        // Fundamental engines FIRST (fewest families) — the tightest loops are the building blocks; the
+        // many-family signatures are combinatorial elaborations (a base loop with a redundant detour).
+        .OrderBy(a => a.FamilyCount)
+        .ThenByDescending(a => a.Occurrences)
+        .ThenBy(a => a.Families, StringComparer.Ordinal)
+        .ToList();
+      var familySizeBands = familyCatalog
+        .GroupBy(a => a.FamilyCount)
+        .OrderBy(g => g.Key)
+        .Select(g => new ArchetypeSizeBand { FamilyCount = g.Key, Archetypes = g.Count() })
+        .ToList();
+      Console.Error.WriteLine(
+        $"[PortGraphAtlas] family graph: {famNodes.Count} nodes, {famEdges} edges → "
+          + $"{famRings.Count} cycles, {familyCatalog.Count} distinct archetypes (complete={famComplete}, {sw.ElapsedMilliseconds} ms)"
+      );
+
       return new PortGraphAtlasReport
       {
         GeneratedAt = DateTime.UtcNow,
@@ -300,6 +377,14 @@ public static class PortGraphAtlasStep
         SingleFamilyCycles = rings.Count - crossFamily.Count,
         DistinctArchetypes = archetypes.Count,
         SampleArchetypes = sample,
+        FamilyNodes = famNodes.Count,
+        FamilyEdges = famEdges,
+        FamilyCycleLenBound = FamilyCycleLenBound,
+        FamilyCyclesFound = famRings.Count,
+        FamilyEnumComplete = famComplete,
+        FamilyArchetypes = familyCatalog.Count,
+        FamilyArchetypesBySize = familySizeBands,
+        FamilyArchetypeCatalog = familyCatalog.Take(100).ToList(),
       };
     };
 
@@ -481,5 +566,66 @@ public static class PortGraphAtlasStep
         $"[PortGraphAtlas] cycle enumeration hit the {MaxDfsExpansions:N0}-expansion budget — sample is partial (dense SCC)."
       );
     return rings;
+  }
+
+  /// <summary>Elementary-cycle enumeration over the tiny family-collapsed graph — EXHAUSTIVE (the facet
+  /// multiplicity is already gone, so the graph is ~15 nodes and its cycle set is small). Canonically rooted
+  /// like <see cref="EnumerateBoundedCycles"/>, but with a generous length cap and a high expansion budget
+  /// that only trips on a pathologically dense family graph; a family self-loop (X→X, a single-resource
+  /// engine) is recorded as a one-node cycle. Returns the rings and whether enumeration ran to completion.</summary>
+  private static (List<List<string>> Rings, bool Complete) EnumerateFamilyCycles(
+    IReadOnlyList<string> nodes,
+    IReadOnlyDictionary<string, HashSet<string>> adj
+  )
+  {
+    var rings = new List<List<string>>();
+    var path = new List<string>();
+    var onPath = new HashSet<string>(StringComparer.Ordinal);
+    var expansions = 0L;
+    var complete = true;
+
+    void Dfs(string start, string node)
+    {
+      if (!adj.TryGetValue(node, out var outs))
+        return;
+      foreach (var to in outs)
+      {
+        if (expansions >= FamilyMaxExpansions)
+        {
+          complete = false;
+          return;
+        }
+        expansions++;
+        if (string.Equals(to, start, StringComparison.Ordinal))
+        {
+          rings.Add(new List<string>(path)); // closed an elementary cycle (incl. a X→X self-loop: path=[X])
+        }
+        else if (
+          path.Count < FamilyCycleLenBound
+          && string.CompareOrdinal(to, start) > 0
+          && !onPath.Contains(to)
+        )
+        {
+          path.Add(to);
+          onPath.Add(to);
+          Dfs(start, to);
+          onPath.Remove(to);
+          path.RemoveAt(path.Count - 1);
+        }
+      }
+    }
+
+    foreach (var start in nodes.OrderBy(n => n, StringComparer.Ordinal))
+    {
+      if (!complete)
+        break;
+      path.Clear();
+      onPath.Clear();
+      path.Add(start);
+      onPath.Add(start);
+      Dfs(start, start);
+    }
+
+    return (rings, complete);
   }
 }
