@@ -1952,6 +1952,14 @@
           "Fields": []
         },
         {
+          "Type": "RippleEffect",
+          "Discriminator": "ripple",
+          "IsUnparsed": false,
+          "Fields": [
+            "Value"
+          ]
+        },
+        {
           "Type": "RollDieEffect",
           "Discriminator": "rollDie",
           "IsUnparsed": false,

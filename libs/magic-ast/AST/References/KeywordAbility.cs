@@ -441,6 +441,9 @@ public enum KeywordAbility
   /// <summary>Riot (CR 702).</summary>
   Riot,
 
+  /// <summary>Ripple (CR 702.60).</summary>
+  Ripple,
+
   /// <summary>Saddle (CR 702).</summary>
   Saddle,
 
