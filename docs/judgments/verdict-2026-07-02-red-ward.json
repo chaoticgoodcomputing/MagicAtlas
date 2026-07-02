@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LEG/RedWard.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.16a", "CR 702.16c", "CR 702.16n"],
+      "reason": "gainAbility -> Protection static -> protection{From:[Color R], DoesNotRemoveThisAura:true} faithfully models 'protection from red' + the SBA-override self-preservation clause (702.16n); oracle text matches exactly; Enchant-creature restriction sibling preserved; no free-text/unparsed residual; new fixture so no regression"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-red-ward#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "new DoesNotRemoveThisAura field refines the existing 'protection' effect, already a justified coarse-projection entry ('no flow rule consumes it yet'); self-preservation flag is inert for combo flow, so coarse remains sensible"
+    }
+  ]
+}

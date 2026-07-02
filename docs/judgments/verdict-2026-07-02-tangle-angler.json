@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NPH/TangleAngler.json",
+      "verdict": "PASS",
+      "citations": ["CR 602.1", "CR 509.1c"],
+      "reason": "activated {G} lure modeled as mustBlock: Target=creature (forced blocker), Blocks=Self (the attacker 'this creature'), Duration=end-of-turn ('this turn'); Infect sibling matches keywordAbility convention; no unparsed/free-text; oracle text verbatim; both CR cites present and matching"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-tangle-angler#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new effect/cost/trigger discriminator introduced — 'Blocks' is an additive optional field on the pre-existing mustBlock effect (Culling Mark gold), so no new PortWalk projection decision is required; branch touches no projection files"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DwarvenSong.json",
+      "verdict": "PASS",
+      "citations": ["CR 105.3", "CR 613.1e", "CR 115.1", "CR 601.2c", "CR 113.3a"],
+      "reason": "spell ability -> changeColor effect (Colors:[R]) on Target creature with atLeast/Minimum:1 quantity and a separate untilTime(EndOfTurn) Duration; faithful to 'One or more target creatures become red until end of turn', no baked-in timing, no residual, all cites exist"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-dwarven-song#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new effect/cost/trigger/restriction discriminator introduced -> changeColor effect is reused (pre-existing, e.g. Metathran Transport); only new node is AtLeastQuantity (a Quantity refinement), which is not projection-relevant, so no PortWalk projection decision required"
+    }
+  ]
+}

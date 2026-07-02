@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WastelandViper.json",
+      "verdict": "PASS",
+      "citations": ["CR 613.4c", "CR 207.2c", "CR 702.2a"],
+      "reason": "bloodrush pump+grant modeled as composite[modifyPT(target attacking creature, +1/+2, EOT) + gainAbility(It, deathtouch, EOT)]; ability word captured as AbilityWord label, no baked timing, no free-text/unparsed residual, Deathtouch sibling preserved, oracle text and all three CR cites verified verbatim"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-wasteland-viper#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — parser composes pre-existing modifyPT/gainAbility/composite effect types and existing combatState:Attacking characteristic; no PortWalk projection decision required and none parked as insensibly coarse"
+    }
+  ]
+}

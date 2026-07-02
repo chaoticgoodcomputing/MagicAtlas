@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WWK/TwistedImage.json",
+      "verdict": "PASS",
+      "citations": ["CR 613.4d"],
+      "reason": "switchPT effect faithful to 'Switch target creature's power and toughness' (target=creature filter), 'until end of turn' modeled as a separate untilTime Turn/End Duration node (no baked-in timing), sibling drawCards preserved, no free-text or unparsed residual"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-twisted-image#projection:switchPT",
+      "verdict": "PASS",
+      "citations": ["CR 613.4d"],
+      "reason": "new switchPT discriminator given a semantic PortGraph case (switch:pt emit port) + PortWalkProjection entry; inert P/T-switch mirrors modifyPT, not parked as coarse — sensible"
+    }
+  ]
+}
