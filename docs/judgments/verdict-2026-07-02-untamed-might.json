@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/HOU/UntamedMight.json",
+      "verdict": "PASS",
+      "citations": ["CR 107.3a", "CR 107.3i", "CR 613.4c"],
+      "reason": "modifyPT (not setPT) with Target creature, PowerModifier/ToughnessModifier both variable X (same X per 107.3i), untilTime EndOfTurn as a separate composable Duration; oracle text exact-matched; no unparsed/free-text; siblings + {X}{G}/colors attrs intact"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-untamed-might#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses existing modifyPT effect + variable quantity; no PortWalk/known-coarse projection decision required and none parked as coarse"
+    }
+  ]
+}

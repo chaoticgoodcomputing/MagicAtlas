@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M10/PestilenceDemon.json",
+      "verdict": "PASS",
+      "citations": ["CR 602.1", "CR 120.1", "CR 119.2"],
+      "reason": "{B} activated ability modeled as composite of two dealDamage effects (Source Self, Amount literal 1) — Target Each{creature} + Target EachPlayer — faithful to symmetric ping, oracle text verified, Flying sibling + attributes preserved, no unparsed/free-text residual"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-pestilence-demon#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses existing DealDamageEffect, CompositeEffect, ObjectReferenceKind.Each/EachPlayer; no PortWalk projection decision required"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/5DN/StasisCocoon.json",
+      "verdict": "PASS",
+      "citations": ["CR 604.1", "CR 604.2", "CR 602.5", "CR 508.1", "CR 509.1"],
+      "reason": "Aura's compound Arrest-template restriction faithfully decomposed into three static effects (cantAttack, cantBlock, cantActivateAbilities) each Target=EnchantedOrEquipped, plus a separate Enchant static (enchantRestriction, CardTypes=[artifact]); no free-text/unparsed residual; all cited CR rules exist and match"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-stasis-cocoon#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — cantAttack/cantBlock/cantActivateAbilities/enchantRestriction all pre-exist on base; branch only generalizes the rule's subject-noun regex, so no PortWalk projection decision is required"
+    }
+  ]
+}
