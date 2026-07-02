@@ -147,9 +147,9 @@ const PLANNER = (f) =>
   `7. Write workerBrief: a self-contained brief for a Sonnet worker — the mechanic, the VERBATIM CR citation(s), the recommended AST shape + exact rule interface + the fixture/rule to mirror, and explicit notes on how to encode EVERY other ability on the card. Do NOT include the Input JSON (the harness injects it byte-exact). Do NOT dictate — establish rules facts + a concrete shape the worker implements.\n` +
   `Return the PLAN object.`
 
-const WORKER_PRELUDE = (branch) =>
+const WORKER_PRELUDE = (branch, base) =>
   `You run in an isolated git worktree (isolation:'worktree').\n` +
-  `Step 0 (FIRST, before any edit): run \`bash tools/gate-isolation.sh ${BASE}\`. If nonzero → STOP, make NO changes, return green:false blocked:true blockReason="isolation failed: <verbatim>". ` +
+  `Step 0 (FIRST, before any edit): run \`bash tools/gate-isolation.sh ${base}\`. If nonzero → STOP, make NO changes, return green:false blocked:true blockReason="isolation failed: <verbatim>". ` +
   `Else: WORKTREE_ROOT="$(pwd)"; \`git -C "$WORKTREE_ROOT" checkout -b ${branch}\`.\n` +
   `Rules: never cd; RELATIVE paths for Read/Write/Edit; git ONLY via git -C "$WORKTREE_ROOT"; nx unavailable → use dotnet directly. ` +
   `Copy the GOLD INPUT below BYTE-FOR-BYTE into the fixture's "Input" field (keep curly quotes/apostrophes/em-dashes exactly — a single substituted char silently fails the orchestrator's fidelity gate). Author only the "Output" AST + parser. ` +
@@ -161,16 +161,16 @@ const WORKER_PRELUDE = (branch) =>
   `If green: \`git -C "$WORKTREE_ROOT" add -A && git -C "$WORKTREE_ROOT" commit --no-verify -m "<msg>"\`, return green:true with regeneratedGolds + filesChanged + newDiscriminators + sharedFileEdits. Do NOT merge. ` +
   `If you CANNOT make the WHOLE card green: fully revert (git checkout -- . && git clean -fd tests libs), return green:false blocked:true with a precise blockReason. Never leave a half-changed tree.`
 
-const DELTA_JUDGE = (task, gold) =>
+const DELTA_JUDGE = (task, gold, base) =>
   `DELTA-JUDGE the regenerated gold '${gold}' on UNMERGED branch '${task.branch}' — task ${task.slug} ("${task.mechanic}").\n` +
-  `Inspect via \`git diff ${BASE}..${task.branch}\` and \`git show ${task.branch}:${gold}\`. Confirm the real oracle text (oracle-cards.json) + cross-check the brief's CR citation against libs/mtg-rules/Data/_03_Primary/Datasets/rules-structure.json.\n` +
+  `Inspect via \`git diff ${base}..${task.branch}\` and \`git show ${task.branch}:${gold}\`. Confirm the real oracle text (oracle-cards.json) + cross-check the brief's CR citation against libs/mtg-rules/Data/_03_Primary/Datasets/rules-structure.json.\n` +
   `PASS iff ALL hold: (a) the target line is structured CORRECTLY (right node/discriminator, faithful to the card, describe-not-execute, no baked-in timing); (b) NO new free-text/unparsed residual introduced; (c) NO regression — no dropped/added/inverted ability, siblings preserved, out-of-axis nodes unchanged; (d) the cited CR rule genuinely exists in the data and matches the modeling. ` +
   `A residual on a DIFFERENT axis that another task owns is NOT a fail. Strict PASS/FAIL + one-line rationale.`
 
-const MERGE_AGENT = (task, gateCmd, judgeNote) =>
+const MERGE_AGENT = (task, gateCmd, judgeNote, base) =>
   `Integration agent — NON-isolated, main checkout on the integration branch. Merge the judge-PASSED branch \`${task.branch}\` and gate it. ${judgeNote}\n` +
   `Steps (any red → ROLL BACK this merge only, leave the branch intact, return status:rolled-back + redReason):\n` +
-  `1. \`bash tools/gate-fixture-immutability.sh ${BASE} ${task.branch}\` — additions-only; nonzero → rolled-back (worker illicitly edited a gold).\n` +
+  `1. \`bash tools/gate-fixture-immutability.sh ${base} ${task.branch}\` — additions-only; nonzero → rolled-back (worker illicitly edited a gold).\n` +
   `2. \`git merge --no-verify ${task.branch}\`.\n` +
   `3. ON CONFLICT (only ever on a hot shared file): resolve HERE — keep-BOTH for additive routing/registry/field lines; for a genuine semantic overlap, rebase ${task.branch} onto the merge result and re-run its targeted test. Do NOT push resolution back to the worker.\n` +
   `4. REBUILD clean: \`dotnet build tests/magic-ast-tests/MagicAtlas.Ast.Tests.csproj -v q -clp:ErrorsOnly\`.\n` +
@@ -214,14 +214,14 @@ function packWaves(tasks) {
 }
 
 // ── ONE WAVE: fan out workers → delta-judge → serial merge ──────────────────────
-async function runWave(wave, waveIdx) {
+async function runWave(wave, waveIdx, waveBase) {
   log(`Wave ${waveIdx}: ${wave.length} workers (${wave.filter((t) => t.cls === 'new-file').length} new-file, ${wave.filter((t) => t.cls !== 'new-file').length} shared/interaction)`)
 
   // (1) FAN OUT — workers in parallel, worktree-isolated, per-task model.
   const builds = await parallel(
     wave.map((t) => () => {
       const workerPrompt =
-        `${WORKER_PRELUDE(t.branch)}\n\nTASK ${t.slug} — ${t.mechanic}\n\nBRIEF:\n${t.workerBrief}\n\n` +
+        `${WORKER_PRELUDE(t.branch, waveBase)}\n\nTASK ${t.slug} — ${t.mechanic}\n\nBRIEF:\n${t.workerBrief}\n\n` +
         `FIXTURE PATH: ${t.fixturePath}\n\nGOLD INPUT (copy VERBATIM into the fixture "Input"):\n\`\`\`json\n${JSON.stringify(t.input, null, 2)}\n\`\`\``
       return agent(workerPrompt, {
         label: `build:${t.slug}`,
@@ -250,7 +250,7 @@ async function runWave(wave, waveIdx) {
     const verdicts = (
       await parallel(
         golds.map((g) => () =>
-          agent(DELTA_JUDGE(task, g), { label: `judge:${task.slug}`, phase: `Wave`, model: 'opus', agentType: judgeType, schema: VERDICT })
+          agent(DELTA_JUDGE(task, g, waveBase), { label: `judge:${task.slug}`, phase: `Wave`, model: 'opus', agentType: judgeType, schema: VERDICT })
         )
       )
     ).filter(Boolean)
@@ -269,7 +269,7 @@ async function runWave(wave, waveIdx) {
   const committed = []
   for (const { task, build, verdicts } of passed) {
     const note = `${task.cls === 'interaction' ? 'interaction-judge' : 'mast-judge'} PASSED ${verdicts.length} gold(s).`
-    const merge = await agent(MERGE_AGENT(task, gateCmdFor(task), note), { label: `merge:${task.slug}`, phase: `Wave`, model: 'opus', agentType: 'general-purpose', schema: MERGE })
+    const merge = await agent(MERGE_AGENT(task, gateCmdFor(task), note, waveBase), { label: `merge:${task.slug}`, phase: `Wave`, model: 'opus', agentType: 'general-purpose', schema: MERGE })
     if (merge && merge.status === 'merged') {
       log(`MERGED ${task.slug}`)
       committed.push({ slug: task.slug, build, merge })
@@ -331,10 +331,23 @@ const waves = packWaves(tasks)
 log(`Packed ${tasks.length} tasks into ${waves.length} wave(s) by disjoint touch-set.`)
 const allCommitted = []
 const allDeferred = []
+const SHA = { type: 'object', additionalProperties: false, properties: { sha: { type: 'string' } }, required: ['sha'] }
 let wi = 0
+let waveBase = BASE
 for (const wave of waves) {
   wi++
-  const { committed, deferred } = await runWave(wave, wi)
+  // Wave 1 forks from the batch base. Wave N>1's worktrees fork from the CURRENT
+  // integration HEAD (advanced by wave N-1's merges), so its isolation + immutability
+  // gates must use THAT sha, not the fixed batch base — else every wave-2 worker STOPs
+  // with WRONG BASE (the halam-djinn batch-4 defer). Recapture HEAD between waves.
+  if (wi > 1) {
+    const cap = await agent(
+      `Run \`git rev-parse HEAD\` in the main checkout (integration branch) and return ONLY that 40-char sha as {sha}.`,
+      { label: `capture-head:wave${wi}`, phase: 'Wave', agentType: 'general-purpose', schema: SHA }
+    )
+    if (cap && cap.sha) { waveBase = cap.sha.trim(); log(`Wave ${wi} base = ${waveBase.slice(0, 8)} (recaptured after wave ${wi - 1} merges).`) }
+  }
+  const { committed, deferred } = await runWave(wave, wi, waveBase)
   allCommitted.push(...committed.map((c) => c.slug))
   allDeferred.push(...deferred)
 }
