@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SPM/RedRoomRecruit.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.50a"],
+      "reason": "ETB connive modeled as triggered ability: Trigger{When,Enters,Filter creature+IsSelf} + separate connive effect with Target It; discriminator matches CR terminology, describe-not-execute (draw/discard/counter left to engine, mirrors surveil/explore), reminder text verbatim-exempt, no unparsed residual, no regression (new single-ability card, attributes intact)"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#connive",
+      "verdict": "PASS",
+      "citations": ["CR 701.50a"],
+      "reason": "new discriminator connive parked coarse; sensible — net-zero card-flow (draw 1/discard 1 + conditional self +1/+1) sits with its coarse peers explore/surveil/drawCards/discardCards; no flow rule consumes it, justified reason present"
+    }
+  ]
+}

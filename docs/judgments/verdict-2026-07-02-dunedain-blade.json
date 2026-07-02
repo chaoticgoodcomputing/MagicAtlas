@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LTR/DunedainBlade.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.6a", "CR 702.6c", "CR 702.6d"],
+      "reason": "typed 'Equip Human {1}' modeled as activated Equip ability: AttachEffect targeting creature + Subtypes:[Human] + Controller:You (chosen-quality restriction per 702.6c, structured not free-text), mana cost {1}, OnlyAsSorcery restriction separate from effect; static +2/+1 and plain 'Equip {3}' siblings preserved as independent equip abilities (702.6d); oracle text matches oracle-cards.json exactly"
+    },
+    {
+      "target": "libs/magic-ast/Keywords/Definitions/EquipQualityKeyword.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.6a", "CR 702.6c", "CR 702.6d"],
+      "reason": "all three cited rules exist verbatim in rules-structure.json and match the modeling; combinator emits AttachEffect with creature+Subtypes[quality]+Controller.You filter, exactly 702.6c's 'controlled by activating player and has the chosen quality'"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-dunedain-blade#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses existing AttachEffect, KeywordAbility.Equip, ActivationRestriction.OnlyAsSorcery, and Subtypes ObjectFilter (all pre-existing); quality is filter data, not a new effect/cost/trigger/restriction type; no PortWalk projection decision required and none touched"
+    }
+  ]
+}

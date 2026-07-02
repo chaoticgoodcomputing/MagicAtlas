@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WTH/DeepwoodLegate.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.9", "CR 118.9b", "CR 118.9c", "CR 601.3", "CR 205.3i"],
+      "reason": "Conditional free-cast modeled as static ability gated by AllCondition (AND of two CountConditions: opponent Forest >=1, your Swamp >=1) with a castWithoutPaying effect targeting Self; matches CR 118.9 alternative-cost text verbatim, land subtypes on Subtypes not baked as CardTypes, no free-text/unparsed residual, {B} pump sibling and attributes preserved and faithful"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-deepwood-legate#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "Only new discriminator is AllCondition (ConditionKind \"all\"), which is outside the projected axis — the PortWalk exhaustiveness ratchet tracks only effectType/costType/triggerEvent/restriction, not condition kinds — so no projection decision is required; the reused castWithoutPaying effect is pre-existing and already registered coarse with a sensible reason (baseline coarse fallback, no flow rule consumes free-cast yet)"
+    }
+  ]
+}

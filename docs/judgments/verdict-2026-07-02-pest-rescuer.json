@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PestRescuer.json#static-replacement",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 614.1a", "CR 119.3"],
+      "reason": "life-gain augmentation modeled as a static ReplacementEffect (EventType lifeChange/ChangeType gain, Controller You, OriginalEventOccurs false, Modifier plus/Amount 1) — faithful to 'you gain that much life plus 1 instead', describe-not-execute, no baked-in timing, no free text on this axis"
+    }
+  ]
+}

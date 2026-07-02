@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Relearn.json",
+      "verdict": "PASS",
+      "citations": ["CR 608.2", "CR 404.1", "CR 402.1", "CR 115.1"],
+      "reason": "returnToHand effect with Target ref + ObjectFilter CardTypes:[instant,sorcery] (structured type-disjunction), Zone:Graveyard source, Controller:You; faithful to oracle, no free-text/unparsed residual, describe-not-execute, cited rules all present and matching"
+    }
+  ]
+}
