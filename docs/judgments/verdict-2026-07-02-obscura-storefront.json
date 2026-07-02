@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SNC/ObscuraStorefront.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.12", "CR 603.7", "CR 701.23a", "CR 119.3"],
+      "reason": "reflexive 'When you do' tail modeled as createDelayedTrigger -> DelayedTriggeredAbility on Sacrifices{IsSelf} with structured searchLibrary(Basic land Plains/Island/Swamp, BattlefieldTapped)+shuffle+gainLife; sacrifice It preserved; oracle text exact; no unparsed/free-text; new fixture, no regression"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ReflexiveSacrificeSearchBasicLandGainLifeRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.12", "CR 603.7", "CR 701.23a", "CR 119.3"],
+      "reason": "cited CR rules exist verbatim and match modeling; reuse-only rule (no new node/enum), anchored, mandatory search, optional life tail"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-obscura-storefront#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "reuse-only: no new discriminator (TriggerEvent.Sacrifices, SearchDestination.BattlefieldTapped, CreateDelayedTriggerEffect all pre-exist on base) -> initiative-03 projection ratchet not triggered"
+    }
+  ]
+}
