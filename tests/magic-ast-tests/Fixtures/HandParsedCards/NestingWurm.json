@@ -1,0 +1,125 @@
+{
+  "Input": {
+    "Name": "Nesting Wurm",
+    "ManaCost": "{4}{G}{G}",
+    "TypeLine": "Creature — Wurm",
+    "OracleText": "Trample\nWhen this creature enters, you may search your library for up to three cards named Nesting Wurm, reveal them, put them into your hand, then shuffle.",
+    "Power": "4",
+    "Toughness": "3",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Nesting Wurm",
+    "TypeLine": {
+      "Raw": "Creature — Wurm",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Wurm"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Trample\nWhen this creature enters, you may search your library for up to three cards named Nesting Wurm, reveal them, put them into your hand, then shuffle.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ],
+          "KeywordSource": "Trample"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "searchLibrary",
+                "Filter": {
+                  "Name": "Nesting Wurm"
+                },
+                "Count": {
+                  "QuantityType": "upTo",
+                  "Maximum": 3,
+                  "Minimum": 0
+                },
+                "Destination": "Hand",
+                "Revealed": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
