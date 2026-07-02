@@ -1,0 +1,103 @@
+{
+  "Input": {
+    "Name": "Mosstodon",
+    "ManaCost": "{4}{G}",
+    "TypeLine": "Creature — Plant Elephant",
+    "OracleText": "{1}: Target creature with power 5 or greater gains trample until end of turn.",
+    "Power": "5",
+    "Toughness": "3",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Mosstodon",
+    "TypeLine": {
+      "Raw": "Creature — Plant Elephant",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Plant",
+        "Elephant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{1}: Target creature with power 5 or greater gains trample until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 1 }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "PowerComparison": {
+                    "Operator": "GreaterThanOrEqual",
+                    "Value": 5
+                  }
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Trample",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Trample"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
+        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+      }
+    ]
+  }
+}
