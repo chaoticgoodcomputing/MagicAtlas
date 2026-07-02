@@ -843,6 +843,29 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Switch target creature's power and toughness until end of turn." — spell-resolution
+    // single-target P/T-switch instruction (CR 613.4d — layer 7d: "Effects that switch a
+    // creature's power and toughness are applied."). "Switch" is not in
+    // <see cref="_spellInstructionVerbs"/> (it's too generic a word to allowlist bare), so
+    // without this narrow, fully-anchored intercept the line defaults to Static and stalls
+    // in StaticAbilityParser. Distinct from the "Target [filter] gets +N/+M" rule above —
+    // this is a swap operation, not an additive modifier. (Twisted Image.)
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Switch\s+target\s+creature's\s+power\s+and\s+toughness\s+until\s+end\s+of\s+turn\.?\s*$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Target [filter] gains [keyword] until end of turn." — spell-resolution single-target
     // keyword grant (e.g., Jump, Unnatural Speed, Lace with Moonglove). The "Target"
     // subject marks this as a one-shot imperative spell effect (Rule 113.3a, Rule 613.1c),

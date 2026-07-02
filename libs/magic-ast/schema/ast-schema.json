@@ -2042,6 +2042,14 @@
           "Fields": []
         },
         {
+          "Type": "SwitchPTEffect",
+          "Discriminator": "switchPT",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
           "Type": "TakeExtraTurnEffect",
           "Discriminator": "takeExtraTurn",
           "IsUnparsed": false,
@@ -2495,5 +2503,5 @@
       ]
     }
   ],
-  "SchemaHash": "9f0323e759c74d813342ee9cb5d0a2e3c8a4caf16ffb140029af490458b0f495"
+  "SchemaHash": "a43b886f58e3e47580a5c7f13f619c3ca31f7b4df5effb08b8068c1e8b3fc875"
 }

@@ -1,0 +1,94 @@
+{
+  "Input": {
+    "Name": "Twisted Image",
+    "ManaCost": "{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Switch target creature's power and toughness until end of turn.\nDraw a card.",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Twisted Image",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Switch target creature's power and toughness until end of turn.\nDraw a card.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "switchPT",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}

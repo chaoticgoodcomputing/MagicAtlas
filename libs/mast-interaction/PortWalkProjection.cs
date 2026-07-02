@@ -32,6 +32,7 @@ public static class PortWalkProjection
     "putCounters", // PortWalk.EmitPort — emit:counter:<type>:<scope>
     "untap", // PortWalk.EmitPort — emit:untap[:self]
     "modifyPT", // PortWalk.EmitPort — modify:pt (inert, but an explicit stable label)
+    "switchPT", // PortWalk.EmitPort — switch:pt (CR 613.4d layer-7d P/T switch; inert, but an explicit stable label — mirrors modifyPT)
     "evasion", // PortWalk.EmitPort — evasion:<keyword> (inert, explicit)
     "gainLife", // PortWalk.EmitPort — emit:life:gain:<scope> (life flow arm)
     "loseLife", // PortWalk.EmitPort — emit:life:loss:<scope> (life flow arm)
