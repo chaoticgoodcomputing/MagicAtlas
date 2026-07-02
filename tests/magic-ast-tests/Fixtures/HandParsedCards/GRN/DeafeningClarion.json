@@ -1,0 +1,138 @@
+{
+  "Input": {
+    "Name": "Deafening Clarion",
+    "ManaCost": "{1}{R}{W}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Choose one or both —\n• Deafening Clarion deals 3 damage to each creature.\n• Creatures you control gain lifelink until end of turn.",
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Deafening Clarion",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Choose one or both —\n• Deafening Clarion deals 3 damage to each creature.\n• Creatures you control gain lifelink until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "modal",
+          "ModeSelection": {
+            "Minimum": 1,
+            "Maximum": 2
+          },
+          "Modes": [
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "dealDamage",
+                    "Source": {
+                      "Kind": "Self"
+                    },
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 3
+                    },
+                    "Target": {
+                      "Kind": "Each",
+                      "Filter": {
+                        "CardTypes": [
+                          "creature"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "gainAbility",
+                    "Target": {
+                      "Kind": "Each",
+                      "Filter": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "Controller": "You"
+                      }
+                    },
+                    "GainedAbility": {
+                      "Kind": "static",
+                      "KeywordSource": "Lifelink",
+                      "Effects": [
+                        {
+                          "EffectType": "lifelink"
+                        }
+                      ]
+                    },
+                    "Duration": {
+                      "DurationType": "untilTime",
+                      "Until": {
+                        "Part": "Turn",
+                        "Edge": "End"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
+      }
+    ]
+  }
+}

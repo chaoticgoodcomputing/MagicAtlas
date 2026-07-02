@@ -1103,6 +1103,31 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Creatures you control gain [keyword] until end of turn." — spell-resolution
+    // mass keyword grant to all creatures the caster controls (e.g. Deafening Clarion's
+    // modal option "Creatures you control gain lifelink until end of turn."). The
+    // "until end of turn" duration marks this as a one-shot imperative spell effect
+    // (Rule 113.3a), not a permanent declarative static like "Creatures you control
+    // have [keyword]." The narrow "you control gain" anchor (immediate "gain" right
+    // after "you control") prevents this from catching the "Creatures you control get
+    // +N/+N ..." anthem forms above. Without this route the clause defaults to Static
+    // and stalls in StaticAbilityParser.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Creatures\s+you\s+control\s+gain\s+\S+.*?\s+until\s+end\s+of\s+turn\.?\s*$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Creatures [without <keyword>] can't block this turn." — one-shot blocking
     // restriction applied by a spell (Falter, Cosmotronic Wave). The "this turn"
     // duration marks this as an imperative spell-resolution instruction (Rule 509.1c),
