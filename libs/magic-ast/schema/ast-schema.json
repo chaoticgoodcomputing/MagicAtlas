@@ -331,6 +331,16 @@
           ]
         },
         {
+          "Type": "MostCommonColorCondition",
+          "Discriminator": "mostCommonColor",
+          "IsUnparsed": false,
+          "Fields": [
+            "Among",
+            "Color",
+            "IncludeTies"
+          ]
+        },
+        {
           "Type": "ObjectHasSubtypeCondition",
           "Discriminator": "objectHasSubtype",
           "IsUnparsed": false,

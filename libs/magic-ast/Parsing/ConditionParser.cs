@@ -142,6 +142,28 @@ public static class ConditionParser
     @"^there\s+(?:are|is)\s+(?<quant>a|an|\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer))?\s+card\s+types?\s+among\s+cards?\s+in\s+(?<zone>your\s+graveyard|a\s+graveyard|your\s+hand|your\s+library)$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+  /// <summary>
+  /// "red is the most common color among all permanents [or is tied for most common]" —
+  /// a color-prevalence gate (Halam Djinn). Structured to a
+  /// <see cref="MostCommonColorCondition"/> (a max-by-color tally, not an object count)
+  /// rather than left as a free-text residual. There is no CR rule for "most common
+  /// color"; it is a card-defined, engine-evaluated tally recorded as written (ADR 0004).
+  /// The "or is tied for most common" tail sets <c>IncludeTies</c>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex MostCommonColor = new(
+    @"^(?<color>white|blue|black|red|green)\s+is\s+the\s+most\s+common\s+color\s+among\s+all\s+(?<noun>[a-z]+?)(?:\s+or\s+is\s+tied\s+for\s+most\s+common)?$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  private static readonly IReadOnlyDictionary<string, string> ColorWordToCode =
+    new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+      ["white"] = "W",
+      ["blue"] = "U",
+      ["black"] = "B",
+      ["red"] = "R",
+      ["green"] = "G",
+    };
+
   /// <summary>Parse a condition phrase; never throws — unrecognised phrases become a residual.</summary>
   public static Condition Parse(string phrase)
   {
@@ -279,6 +301,16 @@ public static class ConditionParser
       {
         Subtype = ias.Groups["subtype"].Value,
         Subject = "It",
+      };
+    }
+
+    if (MostCommonColor.Match(body) is { Success: true } mcc)
+    {
+      return new MostCommonColorCondition
+      {
+        Color = ColorWordToCode[mcc.Groups["color"].Value],
+        IncludeTies = body.Contains("tied", StringComparison.OrdinalIgnoreCase),
+        Among = NounToFilter(mcc.Groups["noun"].Value.Trim()),
       };
     }
 

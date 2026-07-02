@@ -1,0 +1,119 @@
+{
+  "Input": {
+    "Name": "Halam Djinn",
+    "ManaCost": "{5}{R}",
+    "TypeLine": "Creature — Djinn",
+    "OracleText": "Haste\nThis creature gets -2/-2 as long as red is the most common color among all permanents or is tied for most common.",
+    "Power": "6",
+    "Toughness": "5",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Halam Djinn",
+    "TypeLine": {
+      "Raw": "Creature — Djinn",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Djinn"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Haste\nThis creature gets -2/-2 as long as red is the most common color among all permanents or is tied for most common.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Haste",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": -2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": -2
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "mostCommonColor",
+                  "Color": "R",
+                  "IncludeTies": true,
+                  "Among": {
+                    "CardTypes": [
+                      "permanent"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
