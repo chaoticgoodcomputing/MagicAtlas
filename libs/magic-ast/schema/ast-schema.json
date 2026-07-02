@@ -1401,6 +1401,14 @@
           "Fields": []
         },
         {
+          "Type": "IncubateEffect",
+          "Discriminator": "incubate",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count"
+          ]
+        },
+        {
           "Type": "InvestigateEffect",
           "Discriminator": "investigate",
           "IsUnparsed": false,
