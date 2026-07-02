@@ -7,18 +7,21 @@ using MagicAST.AST.References;
 [StaticRule(Priority = 958)]
 public sealed class EnchantedCantAttackOrBlockRule : IStaticRule
 {
+  private const string PermanentTypeAlternation =
+    @"(?:creature|artifact|planeswalker|enchantment|land|permanent)";
+
   private static readonly Regex _enchantedArrestPattern = new(
-    @"^\s*(?:Enchanted|Equipped)\s+creature\s+can'?t\s+attack\s+or\s+block,\s+and\s+its\s+activated\s+abilities\s+can'?t\s+be\s+activated\.?\s*$",
+    $@"^\s*(?:Enchanted|Equipped)\s+{PermanentTypeAlternation}\s+can'?t\s+attack\s+or\s+block,\s+and\s+its\s+activated\s+abilities\s+can'?t\s+be\s+activated\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
   private static readonly Regex _enchantedCantAttackOrBlockPattern = new(
-    @"^\s*(?:Enchanted|Equipped)\s+creature\s+can'?t\s+attack\s+or\s+block\.?\s*$",
+    $@"^\s*(?:Enchanted|Equipped)\s+{PermanentTypeAlternation}\s+can'?t\s+attack\s+or\s+block\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
   private static readonly Regex _enchantedCantAttackOnlyPattern = new(
-    @"^\s*(?:Enchanted|Equipped)\s+creature\s+can'?t\s+attack\.?\s*$",
+    $@"^\s*(?:Enchanted|Equipped)\s+{PermanentTypeAlternation}\s+can'?t\s+attack\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
