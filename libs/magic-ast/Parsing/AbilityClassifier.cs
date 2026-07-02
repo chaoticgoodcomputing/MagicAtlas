@@ -1123,6 +1123,28 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Up to N target creatures can't block this turn." — spell-resolution blocking
+    // restriction on a bounded target count (Abandon the Post). The "this turn"
+    // duration marks this as an imperative spell-resolution instruction (Rule 509.1),
+    // not the declarative static "This creature can't block." that lives on a
+    // permanent. Without this route the clause defaults to Static and stalls in
+    // StaticAbilityParser.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Up\s+to\s+\w+\s+target\s+creatures?\s+can'?t\s+block\s+this\s+turn\.?\s*$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Target creature can't be blocked this turn." — spell-resolution single-target
     // evasion grant (Artful Dodge, Slip Through Space). The "this turn" duration marks
     // this as an imperative spell-resolution instruction (Rule 509.1b), not the
