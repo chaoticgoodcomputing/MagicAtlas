@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SOK/SakuraTribeScout.json",
+      "verdict": "PASS",
+      "citations": ["CR 305.4", "CR 116.2a", "CR 602.1a"],
+      "reason": "activated {T} ability models 'You may put a land card from your hand onto the battlefield' as optional-wrapped putFromHandOntoBattlefield with land/Hand/You filter; oracle text verbatim; no timing baked in, no unparsed residual, no regression"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-sakura-tribe-scout#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (putFromHandOntoBattlefield pre-exists in discriminator-baseline); existing known-coarse-projections entry (hand-to-battlefield cheat, no flow rule consumes it) is sensible and inert"
+    }
+  ]
+}

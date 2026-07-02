@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/schema/ast-schema.json#MostCommonColorCondition",
+      "verdict": "PASS",
+      "citations": ["CR 105.1", "CR 604.2", "CR 613.4c"],
+      "reason": "regenerated gold adds exactly one condition discriminator (mostCommonColor, IsUnparsed:false) faithful to Halam Djinn's 'red is the most common color among all permanents or is tied for most common' — Color:R + IncludeTies + Among:permanents; timing carried by AsLongAsDuration wrapper on a plain modifyPT effect (no baked-in timing); describe-not-execute (reference-not-resolution, no pre-evaluated boolean); no free-text/unparsed residual; Haste sibling and all out-of-axis schema entries preserved; cited CR rules all exist and match; doc-comment correctly notes no CR rule defines 'most common color' (card-defined tally)"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-halam-djinn#projection-decision",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "new discriminator mostCommonColor is a Condition (ConditionType), outside the four PortWalk projection axes the ratchet governs (effectType/costType/triggerEvent/restriction); conditions reach the port graph only via the already-projected 'Conditional' restriction, so no per-condition projection entry is required and the branch correctly added none"
+    }
+  ]
+}
