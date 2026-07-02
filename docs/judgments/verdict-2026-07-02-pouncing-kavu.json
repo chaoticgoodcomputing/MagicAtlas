@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PLS/PouncingKavu.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.33a", "CR 702.33d", "CR 702.33e", "CR 614.1c", "CR 122.6", "CR 702.10a"],
+      "reason": "kicked-conditional ETB modeled as static ability (When: asThisEnters, CR 614.1c replacement) with structured Condition keywordCostPaid/Kicker and two conjoined plain effects (putCounters Self/2/+1+1 + keywordAbility Haste); timing and condition are separate composable nodes, not baked into effect discriminators; no free-text/unparsed residual; Kicker + First strike siblings preserved; all cited rules exist and match"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/KickerConditionalEntersWithCountersAndKeywordRule.cs#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — composes pre-existing PutCountersEffect, KeywordAbilityEffect, keywordCostPaid condition, and AsThisEnters timing; no PortWalk projection decision required"
+    }
+  ]
+}
