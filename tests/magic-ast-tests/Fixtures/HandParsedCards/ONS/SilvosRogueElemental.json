@@ -1,0 +1,127 @@
+{
+  "Input": {
+    "Name": "Silvos, Rogue Elemental",
+    "ManaCost": "{3}{G}{G}{G}",
+    "TypeLine": "Legendary Creature — Elemental",
+    "OracleText": "Trample\n{G}: Regenerate Silvos.",
+    "Power": "8",
+    "Toughness": "5",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Silvos, Rogue Elemental",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Elemental",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Trample\n{G}: Regenerate Silvos.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ],
+          "KeywordSource": "Trample"
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "regenerate",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 8,
+          "Raw": "8"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        }
+      }
+    ]
+  }
+}
