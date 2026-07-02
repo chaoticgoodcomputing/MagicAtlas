@@ -1,0 +1,147 @@
+{
+  "Input": {
+    "Name": "Eternal Skylord",
+    "ManaCost": "{4}{U}",
+    "TypeLine": "Creature — Zombie Wizard",
+    "OracleText": "When this creature enters, amass Zombies 2. (Put two +1/+1 counters on an Army you control. It's also a Zombie. If you don't control an Army, create a 0/0 black Zombie Army creature token first.)\nZombie tokens you control have flying.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Eternal Skylord",
+    "TypeLine": {
+      "Raw": "Creature — Zombie Wizard",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie",
+        "Wizard"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, amass Zombies 2. (Put two +1/+1 counters on an Army you control. It's also a Zombie. If you don't control an Army, create a 0/0 black Zombie Army creature token first.)\nZombie tokens you control have flying.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "amass",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ArmySubtype": "Zombies"
+            }
+          ],
+          "Reminder": {
+            "Text": "Put two +1/+1 counters on an Army you control. It's also a Zombie. If you don't control an Army, create a 0/0 black Zombie Army creature token first."
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "Subtypes": [
+                    "Zombie"
+                  ],
+                  "IsToken": true,
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Characteristics": [
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Flying"
+                        },
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Reach"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "KeywordSource": "Flying"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
