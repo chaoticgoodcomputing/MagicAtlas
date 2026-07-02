@@ -423,6 +423,9 @@ public enum KeywordAbility
   /// <summary>Recover (CR 702).</summary>
   Recover,
 
+  /// <summary>Reinforce (CR 702.77).</summary>
+  Reinforce,
+
   /// <summary>Renown (CR 702).</summary>
   Renown,
 
