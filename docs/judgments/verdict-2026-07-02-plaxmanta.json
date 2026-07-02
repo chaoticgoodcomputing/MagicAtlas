@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/RAV/Plaxmanta.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2f", "CR 601.2h", "CR 707.10", "CR 701.21a"],
+      "reason": "ETB 'sacrifice it unless {G} was spent to cast it' modeled as triggered(Enters, IsSelf) + ConditionalEffect{Condition: manaSpentToCast(Color:G, WasSpent:false), Then: sacrifice(It)} — timing lives in the trigger not the effect, WasSpent:false is the 'unless' negation (fact-lookup, not a payable UnlessClause), no free-text/unparsed residual, Flash + shroud siblings faithful; all cited CR rules exist and match"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-plaxmanta#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "new discriminator is a Condition kind (ConditionKind manaSpentToCast) — not one of the four PortWalk dispatch dimensions (effectType/costType/triggerEvent/restriction) the exhaustiveness ratchet enumerates, so no projection entry is required; the enclosing 'conditional' effectType is already projected and recurses Then->sacrifice, preserving flow reach of the sacrifice port; no insensible coarse parking"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WTH/DemonicVigor.json#triggered-return",
+      "verdict": "PASS",
+      "citations": ["CR 700.4", "CR 400.7"],
+      "reason": "'When enchanted creature dies, return that card to its owner's hand' modeled as Trigger{When,Dies,Filter:creature+IsEnchanted} + plain returnToHand{Target:It}; timing not baked into effect, no free text/unparsed, matches sibling UnhallowedPact convention"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WTH/DemonicVigor.json#siblings",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no regression — Enchant restriction (enchantRestriction/CardTypes creature) and 'gets +1/+1' (modifyPT/EnchantedOrEquipped/+1/+1) preserved and faithful; three abilities map 1:1 to three oracle lines"
+    }
+  ]
+}

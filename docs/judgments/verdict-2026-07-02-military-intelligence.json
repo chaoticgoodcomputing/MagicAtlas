@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/JOU/MilitaryIntelligence.json",
+      "verdict": "PASS",
+      "citations": ["CR 508.3c", "CR 508.3d", "CR 508.1a"],
+      "reason": "attack-declaration trigger gated on attacker count: Trigger{Event:Attacks, MinimumCount:2, Filter:creature/You} + plain drawCards(1) effect; timing/event/effect kept as separate composable nodes, faithful to 'Whenever you attack with two or more creatures, draw a card.'"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-military-intelligence#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses pre-existing TriggerEvent.Attacks and TriggerCondition.MinimumCount (both on base sha); no new PortGraph case / projection entry required."
+    }
+  ]
+}

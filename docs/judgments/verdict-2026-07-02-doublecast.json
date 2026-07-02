@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Doublecast.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.7", "CR 603.2", "CR 707.10"],
+      "reason": "delayed next-cast copy modeled as createDelayedTrigger -> DelayedTriggeredAbility{Trigger(When/SpellCast, instant-or-sorcery-spell you control) + Window(this turn) + copy(It, MayChooseNewTargets)}; When=once faithfully encodes 'next', Window encodes 'this turn'; proper timing/effect composite, no free-text/unparsed, filter matches ThousandYearStorm/YoungPyromancer convention; cited rules exist and match"
+    }
+  ]
+}
