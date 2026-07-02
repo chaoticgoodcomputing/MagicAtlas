@@ -85,6 +85,43 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/dice-combo-report.json")
       .Build());
 
+  // ── CardAtlas data layer (D1–D4): the "shape → buildable" datasets. ──
+
+  /// <summary>D1 — per-card deckbuilding metadata (colour identity, mana value, type line, port count).</summary>
+  public IItem<IEnumerable<CardMetaRow>> CardMeta =>
+    CreateItem(() => Item.Of<IEnumerable<CardMetaRow>>("CardMeta")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/card-meta.json")
+      .Build());
+
+  /// <summary>D1 — the card↔port index (one row per card, distinct port label; family + emit/consume side).</summary>
+  public IItem<IEnumerable<CardPortRow>> CardPorts =>
+    CreateItem(() => Item.Of<IEnumerable<CardPortRow>>("CardPorts")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/card-ports.json")
+      .Build());
+
+  /// <summary>D4 — per-combo reconstructed loops (named cards, family-signature, tier, result).</summary>
+  public IItem<IEnumerable<ComboInstanceRow>> ComboInstances =>
+    CreateItem(() => Item.Of<IEnumerable<ComboInstanceRow>>("ComboInstances")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/combo-instances.json")
+      .Build());
+
+  /// <summary>D2 — the family subway map (stations + realized-combo-annotated directed lines).</summary>
+  public IItem<ResourceGraph> ResourceGraph =>
+    CreateItem(() => Item.Of<ResourceGraph>("ResourceGraph")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/resource-graph.json")
+      .Build());
+
+  /// <summary>D3 — the realized combo-shape catalog (family-signatures with ≥1 reconstructed combo).</summary>
+  public IItem<ArchetypeCatalog> ArchetypeCatalog =>
+    CreateItem(() => Item.Of<ArchetypeCatalog>("ArchetypeCatalog")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/archetype-catalog.json")
+      .Build());
+
   /// <summary>The port-graph structural atlas (diagnostic): SCC decomposition + hub census + economy-cut
   /// fragmentation + cross-family cycle sample of the emergent port-LABEL graph. The edge-structure
   /// complement to <see cref="PortLabelCensus"/>; output of the <c>PortGraphAtlas</c> flow.</summary>

@@ -9,6 +9,7 @@ using MagicAtlas.Ast.Tests.Flows.InteractionTriage;
 using MagicAtlas.Ast.Tests.Flows.LabelCensus;
 using MagicAtlas.Ast.Tests.Flows.MagicAstSmoke;
 using MagicAtlas.Ast.Tests.Flows.MagicAstTriage;
+using MagicAtlas.Ast.Tests.Flows.CardAtlas;
 using MagicAtlas.Ast.Tests.Flows.PortGraphAtlas;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -203,6 +204,18 @@ public class Program
             + "structure → Data/_08_Reporting/port-graph-atlas.json (SCC decomposition, hub census, the "
             + "data-driven hub-cut fragmentation experiment, and the complete family-collapsed archetype "
             + "catalog), plus the family 'subway map' Plotly viz → Data/_08_Reporting/family-graph.html."
+        );
+
+      flowthru
+        .RegisterFlow<Catalog>(
+          "CardAtlas",
+          catalog => CardAtlasFlow.Create(catalog, ontologyPath)
+        )
+        .WithDescription(
+          "The CardAtlas data layer (D1–D4) over the parse-ready CSB combo-card union: D1 card↔port index "
+            + "+ metadata (card-ports.json / card-meta.json), D4 per-combo reconstructed loops "
+            + "(combo-instances.json), D2 realized-annotated family subway map (resource-graph.json), and "
+            + "D3 realized combo-shape catalog (archetype-catalog.json). The 'shape → buildable' bridge."
         );
 
       flowthru.ConfigureMetadata(meta =>

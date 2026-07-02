@@ -1,0 +1,90 @@
+{
+  "cards": [
+    {
+      "name": "Chatterfang, Squirrel General",
+      "manaCost": "{2}{G}",
+      "typeLine": "Legendary Creature \u2014 Squirrel Warrior",
+      "colorIdentity": [
+        "B",
+        "G"
+      ],
+      "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)\nIf one or more tokens would be created under your control, those tokens plus that many 1/1 green Squirrel creature tokens are created instead.\n{B}, Sacrifice X Squirrels: Target creature gets +X/-X until end of turn."
+    },
+    {
+      "name": "Pitiless Plunderer",
+      "manaCost": "{3}{B}",
+      "typeLine": "Creature \u2014 Human Pirate",
+      "colorIdentity": [
+        "B"
+      ],
+      "oracleText": "Whenever another creature you control dies, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+    },
+    {
+      "name": "Warren Soultrader",
+      "manaCost": "{2}{B}",
+      "typeLine": "Creature \u2014 Zombie Goblin Wizard",
+      "colorIdentity": [
+        "B"
+      ],
+      "oracleText": "Pay 1 life, Sacrifice another creature: Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+    },
+    {
+      "name": "Ashnod's Altar",
+      "manaCost": "{3}",
+      "typeLine": "Artifact",
+      "colorIdentity": [],
+      "oracleText": "Sacrifice a creature: Add {C}{C}."
+    },
+    {
+      "name": "Blood Artist",
+      "manaCost": "{1}{B}",
+      "typeLine": "Creature \u2014 Vampire",
+      "colorIdentity": [
+        "B"
+      ],
+      "oracleText": "Whenever this creature or another creature dies, target player loses 1 life and you gain 1 life."
+    }
+  ],
+  "combos": [
+    {
+      "id": "3000-4871",
+      "popularity": 61009,
+      "results": [
+        "Infinite colored mana",
+        "Infinite death triggers",
+        "Infinite ETB",
+        "Infinite LTB",
+        "Infinite sacrifice triggers",
+        "Infinite Treasure tokens",
+        "Reduce the toughness of creatures opponents control to 0"
+      ],
+      "cards": [
+        "Chatterfang, Squirrel General",
+        "Pitiless Plunderer"
+      ]
+    },
+    {
+      "id": "fixture-warren",
+      "popularity": 1,
+      "results": [
+        "Infinite creature tokens",
+        "Infinite LTB"
+      ],
+      "cards": [
+        "Chatterfang, Squirrel General",
+        "Warren Soultrader"
+      ]
+    },
+    {
+      "id": "fixture-ashnod",
+      "popularity": 1,
+      "results": [
+        "Aristocrat drain"
+      ],
+      "cards": [
+        "Ashnod's Altar",
+        "Blood Artist"
+      ]
+    }
+  ]
+}

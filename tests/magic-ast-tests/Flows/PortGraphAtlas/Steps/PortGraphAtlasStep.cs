@@ -6,6 +6,7 @@ using MagicAST.Interaction;
 using MagicAST.Parsing;
 using MagicAtlas.Ast.Tests.Data._02_Intermediate.Schemas;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
+using MagicAtlas.Ast.Tests.Flows.Shared;
 // Alias: the step's own namespace segment (...Flows.PortGraphAtlas) shadows the report TYPE.
 using PortGraphAtlasReport = MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas.PortGraphAtlas;
 
@@ -44,15 +45,9 @@ public static class PortGraphAtlasStep
   private const int FamilyCycleLenBound = 10;
   private const long FamilyMaxExpansions = 30_000_000;
 
-  // The canonical FLOWING resources — the real "periodic table" the arms move. The family graph is built
-  // over ONLY these: everything else (the coarse emit:<effect-type> fallbacks — emit:draw, emit:destroy, …)
-  // is inert (no arm reads it, so it's a dead-end that can't lie on a cycle) and is excluded, rather than
-  // bucketed into one "other" node that would merge unrelated dead-ends and fabricate false cycles.
-  private static readonly HashSet<string> CanonicalFamilies = new(StringComparer.Ordinal)
-  {
-    "mana", "token", "sacrifice", "death", "etb", "recur", "dice", "damage",
-    "life", "blink", "copy", "cast", "combat", "untap", "tap", "counter", "phase",
-  };
+  // The canonical FLOWING resources + the label→family taxonomy now live in the shared ResourceFamilies
+  // helper (so CardAtlas and PortGraphAtlas agree). The family graph is built over ONLY canonical families:
+  // coarse emit:<effect-type> fallbacks are inert dead-ends excluded here.
 
   // The fragmentation probe cuts the top-K highest-degree HUBS (data-driven — the connectors the graph
   // actually has, discovered from the degree distribution, not a guessed family). If the giant SCC
@@ -204,7 +199,7 @@ public static class PortGraphAtlasStep
         .Select(n => new LabelDegree
         {
           Label = n,
-          Family = FamilyOf(n),
+          Family = ResourceFamilies.Of(n),
           InDegree = radj.TryGetValue(n, out var i) ? i.Count : 0,
           OutDegree = adj.TryGetValue(n, out var o) ? o.Count : 0,
           CardsInScope = cardsPerLabel[n].Count,
@@ -243,7 +238,7 @@ public static class PortGraphAtlasStep
         .Select(c => new LabelIsland
         {
           Size = c.Count,
-          DominantFamily = c.GroupBy(FamilyOf)
+          DominantFamily = c.GroupBy(ResourceFamilies.Of)
             .OrderByDescending(g => g.Count())
             .ThenBy(g => g.Key, StringComparer.Ordinal)
             .First()
@@ -258,7 +253,7 @@ public static class PortGraphAtlasStep
         $"[PortGraphAtlas] enumerated {rings.Count} bounded (≤{CycleLenBound}) cycles ({sw.ElapsedMilliseconds} ms)"
       );
       var tagged = rings
-        .Select(r => (Ring: r, Families: r.Select(FamilyOf).Distinct(StringComparer.Ordinal).OrderBy(f => f, StringComparer.Ordinal).ToList()))
+        .Select(r => (Ring: r, Families: r.Select(ResourceFamilies.Of).Distinct(StringComparer.Ordinal).OrderBy(f => f, StringComparer.Ordinal).ToList()))
         .ToList();
       var crossFamily = tagged.Where(t => t.Families.Count >= 2).ToList();
 
@@ -298,14 +293,14 @@ public static class PortGraphAtlasStep
       var famWiring = new Dictionary<(string, string), int>();
       foreach (var (a, outs) in adj)
       {
-        var fa = FamilyOf(a);
-        if (!CanonicalFamilies.Contains(fa))
+        var fa = ResourceFamilies.Of(a);
+        if (!ResourceFamilies.Canonical.Contains(fa))
           continue; // inert/coarse label — a dead-end, never on a resource cycle
         var aEmit = a.StartsWith("emit:", StringComparison.Ordinal);
         foreach (var b in outs)
         {
-          var fb = FamilyOf(b);
-          if (!CanonicalFamilies.Contains(fb) || string.Equals(fa, fb, StringComparison.Ordinal))
+          var fb = ResourceFamilies.Of(b);
+          if (!ResourceFamilies.Canonical.Contains(fb) || string.Equals(fa, fb, StringComparison.Ordinal))
             continue; // skip non-canonical targets and family self-loops (a single-label self-hop, not a ring)
           if (!famAdj.TryGetValue(fa, out var s))
             famAdj[fa] = s = new HashSet<string>(StringComparer.Ordinal);
@@ -324,8 +319,8 @@ public static class PortGraphAtlasStep
       var famLabels = new Dictionary<string, int>(StringComparer.Ordinal);
       foreach (var (label, cardSet) in cardsPerLabel)
       {
-        var fam = FamilyOf(label);
-        if (!CanonicalFamilies.Contains(fam))
+        var fam = ResourceFamilies.Of(label);
+        if (!ResourceFamilies.Canonical.Contains(fam))
           continue;
         if (!famCards.TryGetValue(fam, out var set))
           famCards[fam] = set = new HashSet<string>(StringComparer.Ordinal);
@@ -414,7 +409,7 @@ public static class PortGraphAtlasStep
         TopHubs = topHubs,
         CutFamilies = string.Join(
           ", ",
-          cut.Select(FamilyOf).Distinct(StringComparer.Ordinal).OrderBy(f => f, StringComparer.Ordinal)
+          cut.Select(ResourceFamilies.Of).Distinct(StringComparer.Ordinal).OrderBy(f => f, StringComparer.Ordinal)
         ),
         CutLabelCount = cut.Count,
         SccCountAfterCut = cutSccs.Count,
@@ -433,7 +428,7 @@ public static class PortGraphAtlasStep
         FamilyEnumComplete = famComplete,
         FamilyArchetypes = familyCatalog.Count,
         FamilyArchetypesBySize = familySizeBands,
-        FamilyArchetypeCatalog = familyCatalog.Take(100).ToList(),
+        FamilyArchetypeCatalog = familyCatalog.ToList(),
       };
 
       return (report, familyNodeRows, familyEdgeRows);
@@ -459,50 +454,6 @@ public static class PortGraphAtlasStep
     return walk.Project(name, abilities);
   }
 
-  /// <summary>The resource FAMILY a label belongs to — the axis cross-family cycles are measured on. Groups
-  /// an emit + its matching trigger/cost onto the same flowing resource (emit:rolldice &amp; trigger:rolldice
-  /// → "dice"; emit:mana &amp; pay:mana → "mana"), so a cycle staying within one resource is a single-family
-  /// engine and a cycle bridging resources (blink→etb→dice) is a cross-family combo.</summary>
-  private static string FamilyOf(string label)
-  {
-    var parts = label.Split(':');
-    var role = parts[0];
-    return role switch
-    {
-      "emit" => ResourceFamily(parts.Length > 1 ? parts[1] : "emit"),
-      "trigger" => ResourceFamily(parts.Length > 1 ? parts[1] : "trigger"),
-      "pay" => "mana",
-      "tap" => "tap",
-      "sac" => "sacrifice",
-      "etb" => "etb",
-      "ltb" => "death",
-      "at" => "phase",
-      "cast" => "cast",
-      "attacksorblocks" => "combat",
-      "replace" => "replacement",
-      "intercept" => "intercept",
-      _ => role,
-    };
-  }
-
-  private static string ResourceFamily(string kind) =>
-    kind switch
-    {
-      "rolldice" => "dice",
-      "additionalcombat" => "combat",
-      "returntobattlefield" => "recur",
-      "returntohand" => "recur",
-      "damage" => "damage",
-      "life" => "life",
-      "mana" => "mana",
-      "token" => "token",
-      "counter" => "counter",
-      "blink" => "blink",
-      "copy" => "copy",
-      "cast" => "cast",
-      "untap" => "untap",
-      _ => kind,
-    };
 
   /// <summary>Tarjan strongly-connected components over a string-node adjacency (iterative-safe at
   /// atom scale — a few hundred nodes). Returns one list per component (singletons included).</summary>
