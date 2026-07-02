@@ -233,6 +233,11 @@
     "OracleEffect:setCardTypes",
     "OracleEffect:setLifeTotal",
     "OracleEffect:shuffle",
+<<<<<<< HEAD
+=======
+    "OracleEffect:shuffleCardsFromGraveyardIntoLibrary",
+    "OracleEffect:shuffleGraveyardIntoLibrary",
+>>>>>>> 437eace6 (chore(mast): advance discriminator baseline for krosan-reclamation merge)
     "OracleEffect:shuffleIntoLibrary",
     "OracleEffect:siege",
     "OracleEffect:skipUntap",

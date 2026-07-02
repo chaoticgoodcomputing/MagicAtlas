@@ -48,5 +48,10 @@
     "name": "blight",
     "near": "fight",
     "reason": "Distinct effects: 'blight' (High Perfect Morcant) puts -1/-1 counters / affliction on a target; 'fight' (CR 701.12) makes two creatures deal damage equal to power to each other. Edit distance 1 (b/f) is coincidental; no semantic overlap."
+  },
+  {
+    "name": "shuffleCardsFromGraveyardIntoLibrary",
+    "near": "shuffle",
+    "reason": "'shuffle' shuffles a library/zone in place; 'shuffleCardsFromGraveyardIntoLibrary' (Krosan Reclamation, CR 701.24) is a targeted-subset zone-change that moves separately-targeted graveyard cards into their owner's library and then shuffles. Shares only the 'shuffle' stem; carries both a targeted Player and a quantity-bounded Cards subset. Also distinct from whole-zone 'shuffleGraveyardIntoLibrary' and single-object 'shuffleIntoLibrary'. Not sprawl."
   }
 ]
