@@ -135,6 +135,7 @@
     "regenerate": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "removeCounters": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "renown": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "revealTopPutMatchingToHand": "Sylvan Messenger fixed-N reveal-and-partition (CR 701.20 reveal; CR 401.4 any-order remainder) — library-visibility action distinct from revealUntil/oracleTopLook/impulse; no flow rule reads it yet; consciously inert for interaction recall (same coarse precedent as sibling reveal/look effects)",
     "revealUntil": "Nissa Resurgent Animist reveal-until-found library action — library card-draw surrogate; no flow rule reads reveal-until-found yet; consciously inert for interaction recall",
     "ringTemptsYou": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "sacrifice": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
