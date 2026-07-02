@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Sandbar Crocodile",
+    "ManaCost": "{4}{U}",
+    "TypeLine": "Creature — Crocodile",
+    "OracleText": "Phasing (This phases in or out before you untap during each of your untap steps. While it's phased out, it's treated as though it doesn't exist.)",
+    "Power": "6",
+    "Toughness": "5",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Sandbar Crocodile",
+    "TypeLine": {
+      "Raw": "Creature — Crocodile",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Crocodile"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Phasing (This phases in or out before you untap during each of your untap steps. While it's phased out, it's treated as though it doesn't exist.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Phasing",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Phasing"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}

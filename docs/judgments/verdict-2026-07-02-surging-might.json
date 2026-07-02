@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CSP/SurgingMight.json#ripple",
+      "verdict": "PASS",
+      "citations": ["CR 702.60"],
+      "reason": "Ripple 4 modeled as Kind:static + KeywordSource:Ripple + EffectType:ripple Value:4 + verbatim reminder — matches the established parameterized-keyword-presence convention (fabricate/devour); discriminator is bare keyword name (no baked-in timing), reveal/free-cast/bottom deferred to engine; CR 702.60a text matches; enchant + modifyPT siblings faithful; no unparsed/free-text residual"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#ripple",
+      "verdict": "PASS",
+      "citations": ["CR 702.60"],
+      "reason": "new 'ripple' discriminator parked coarse; sensible because the node records only keyword presence + N (no structured free-cast sub-events to project), matching sibling keywords devour/fabricate/amplify/graft — nothing structured for a flow rule to consume yet, genuinely inert"
+    }
+  ]
+}

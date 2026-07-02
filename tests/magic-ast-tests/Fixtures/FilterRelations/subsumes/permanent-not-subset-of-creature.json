@@ -1,0 +1,6 @@
+{
+  "_note": "A permanent need not be a creature → No.",
+  "Sub": { "CardTypes": ["permanent"] },
+  "Sup": { "CardTypes": ["creature"] },
+  "Expected": "No"
+}

@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PLC/CloudchaserKestrel.json#changeColor",
+      "verdict": "PASS",
+      "citations": ["CR 105.3"],
+      "reason": "activated {W} color-change modeled as EffectType changeColor, Target permanent (faithful to 'Target permanent'), Colors ['W'], Duration untilTime Turn/End; describe-not-execute, no free-text, no unparsed, no baked-in timing; CR 105.3 exists and matches"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-cloudchaser-kestrel#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — changeColor pre-exists; branch only broadens target filter CardTypes creature->permanent (a filter value, not a discriminator); existing coarse projection entry for changeColor is present and sensible (color-change is inert for flow)"
+    }
+  ]
+}

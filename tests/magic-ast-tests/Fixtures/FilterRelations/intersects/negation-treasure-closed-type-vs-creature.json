@@ -1,0 +1,10 @@
+{
+  "_note": "The sound Treasure-death-trigger prune: the producer emits the token's closed type (noncreature artifact Treasure); ExcludedCardTypes[creature] ⊥ a creature consumer → Disjoint.",
+  "A": {
+    "CardTypes": ["artifact"],
+    "Subtypes": ["Treasure"],
+    "ExcludedCardTypes": ["creature"]
+  },
+  "B": { "CardTypes": ["creature"] },
+  "Expected": "Disjoint"
+}

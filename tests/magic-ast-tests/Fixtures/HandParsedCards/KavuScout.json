@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Kavu Scout",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Creature — Kavu Scout",
+    "OracleText": "Domain — This creature gets +1/+0 for each basic land type among lands you control.",
+    "Power": "0",
+    "Toughness": "2",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Kavu Scout",
+    "TypeLine": {
+      "Raw": "Creature — Kavu Scout",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kavu",
+        "Scout"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Domain — This creature gets +1/+0 for each basic land type among lands you control.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "AbilityWord": "Domain",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "domain"
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

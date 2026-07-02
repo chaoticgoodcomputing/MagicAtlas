@@ -1,0 +1,5 @@
+{
+  "A": { "Subtypes": ["Squirrel"] },
+  "B": { "Subtypes": ["Squirrel"] },
+  "Expected": "Overlaps"
+}

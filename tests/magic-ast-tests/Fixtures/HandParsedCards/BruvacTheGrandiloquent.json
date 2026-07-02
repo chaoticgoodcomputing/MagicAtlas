@@ -1,0 +1,103 @@
+{
+  "Input": {
+    "Name": "Bruvac the Grandiloquent",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Legendary Creature — Human Advisor",
+    "OracleText": "If an opponent would mill one or more cards, they mill twice that many cards instead. (To mill a card, a player puts the top card of their library into their graveyard.)",
+    "Power": "1",
+    "Toughness": "4",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Bruvac the Grandiloquent",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Advisor",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Advisor"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If an opponent would mill one or more cards, they mill twice that many cards instead. (To mill a card, a player puts the top card of their library into their graveyard.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Reminder": {
+            "Text": "To mill a card, a player puts the top card of their library into their graveyard."
+          },
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "mill",
+                "MinimumQuantity": 1,
+                "Controller": {
+                  "Kind": "Opponent"
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Modifier": {
+                "Type": "double"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}

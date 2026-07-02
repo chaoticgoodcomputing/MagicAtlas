@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DisplacerKitten.json",
+      "verdict": "PASS",
+      "citations": ["CR 207.2c"],
+      "reason": "noncreature spell-cast trigger structured as {CardTypes:[spell],ExcludedCardTypes:[creature],Controller:You} (reuses non-type negation path); false AbilityWord 'Avoidance' dropped (CR 207.2c ability words tie abilities across cards — 'Avoidance' is a one-off printed italic label); no new OtherCharacteristic/unparsed residual; exile + returnToBattlefield effects, nonland-permanent target, and owner-control all preserved; DisplacerKitten removed from whitelist-freetext.json"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "Keyword": "Affinity",
+  "Parameter": "for artifacts",
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "costReduction",
+        "Amount": {
+          "QuantityType": "literal",
+          "Value": 1
+        },
+        "PerObject": {
+          "CardTypes": [
+            "artifact"
+          ],
+          "Controller": "You"
+        }
+      }
+    ],
+    "KeywordSource": "Affinity"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "Keyword": "Dredge",
+  "Parameter": "2",
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "dredge",
+        "Value": 2
+      }
+    ],
+    "KeywordSource": "Dredge"
+  }
+}

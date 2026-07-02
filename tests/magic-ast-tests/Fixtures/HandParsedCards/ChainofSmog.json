@@ -1,0 +1,94 @@
+{
+  "Input": {
+    "Name": "Chain of Smog",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Target player discards two cards. That player may copy this spell and may choose a new target for that copy.",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Chain of Smog",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Target player discards two cards. That player may copy this spell and may choose a new target for that copy.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "discardCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
+              },
+              "RevealHand": false,
+              "Random": false
+            },
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "copy",
+                "Target": {
+                  "Kind": "Self"
+                },
+                "MayChooseNewTargets": true,
+                "Player": {
+                  "Kind": "ThatPlayer"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

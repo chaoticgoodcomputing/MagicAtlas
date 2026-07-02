@@ -1,0 +1,96 @@
+{
+  "Input": {
+    "Name": "Abzan Devotee",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Dog Cleric",
+    "OracleText": "{1}: Add {W}, {B}, or {G}. Activate only once each turn.\n{2}{B}: Return this card from your graveyard to your hand.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B", "G", "W"],
+    "Keywords": [],
+    "Id": "66555946-e747-46fa-b1ac-b103a8edcd93",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Abzan Devotee",
+    "TypeLine": {
+      "Raw": "Creature — Dog Cleric",
+      "Types": ["Creature"],
+      "Subtypes": ["Dog", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "{1}: Add {W}, {B}, or {G}. Activate only once each turn.\n{2}{B}: Return this card from your graveyard to your hand.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 1 }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{W}, {B}, or {G}"
+            }
+          ],
+          "Restrictions": ["OnlyOnceEachTurn"],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 2 },
+                { "Kind": "colored", "Colors": ["B"] }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Self",
+                "Filter": {
+                  "Zone": "Graveyard"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "G", "W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

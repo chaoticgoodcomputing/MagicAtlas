@@ -1,0 +1,6 @@
+{
+  "_note": "Not every creature has flying → No.",
+  "Sub": { "CardTypes": ["creature"] },
+  "Sup": { "Characteristics": [{ "CharacteristicType": "keyword", "Keyword": "Flying" }] },
+  "Expected": "No"
+}

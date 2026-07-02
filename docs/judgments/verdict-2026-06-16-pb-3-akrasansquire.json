@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ALA/AkrasanSquire.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.83a", "CR 506.5"],
+      "reason": "PB-3 structured the 'attacking alone' residual as CombatStateCharacteristic{AttackingAlone} (was other/Description free text); faithful to Exalted (CR 702.83a) + attacks-alone (CR 506.5); Exalted trigger + ModifyPT +1/+1 effect preserved; no new free-text/unparsed residual; gold fully cleaned and correctly removed from whitelist-freetext.json"
+    }
+  ]
+}

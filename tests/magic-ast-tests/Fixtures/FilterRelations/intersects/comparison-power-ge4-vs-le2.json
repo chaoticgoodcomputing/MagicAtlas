@@ -1,0 +1,5 @@
+{
+  "A": { "PowerComparison": { "Operator": "GreaterThanOrEqual", "Value": 4 } },
+  "B": { "PowerComparison": { "Operator": "LessThanOrEqual", "Value": 2 } },
+  "Expected": "Disjoint"
+}

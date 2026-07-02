@@ -1,0 +1,14 @@
+{
+  "Keyword": "Split second",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Split second"
+      }
+    ],
+    "KeywordSource": "Split second"
+  }
+}

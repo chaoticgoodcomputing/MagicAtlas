@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/KLD/HauntedCloak.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.1", "CR 611.3", "CR 301.5d", "CR 207.2"],
+      "reason": "\"Equipped creature has vigilance, trample, and haste\" modeled as one static ability with three flat gainAbility effects, each targeting EnchantedOrEquipped and granting a keywordAbility (Vigilance/Trample/Haste); no Duration/baked-in timing, no free-text/unparsed residual, Equip sibling + attributes intact; all cited rules exist and match"
+    }
+  ]
+}

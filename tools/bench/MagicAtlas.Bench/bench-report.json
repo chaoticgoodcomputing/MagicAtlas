@@ -1,0 +1,453 @@
+{
+  "CombosEligible": 33,
+  "ReconstructedGreen": 8,
+  "ReconstructedAmber": 22,
+  "Missed": 3,
+  "RecallAtGreen": 0.2424,
+  "RecallAtAmber": 0.9091,
+  "Combos": [
+    {
+      "Id": "1090-2781",
+      "Popularity": 48050,
+      "Cards": [
+        "Felidar Guardian",
+        "Restoration Angel"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Felidar Guardian",
+        "Restoration Angel"
+      ]
+    },
+    {
+      "Id": "11-3368",
+      "Popularity": 10584,
+      "Cards": [
+        "Narset's Reversal",
+        "Reiterate"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Narset's Reversal",
+        "Reiterate"
+      ]
+    },
+    {
+      "Id": "110-3966",
+      "Popularity": 54808,
+      "Cards": [
+        "Exquisite Blood",
+        "Marauding Blight-Priest"
+      ],
+      "Outcome": "Green",
+      "CycleCards": [
+        "Exquisite Blood",
+        "Marauding Blight-Priest"
+      ]
+    },
+    {
+      "Id": "110-6191",
+      "Popularity": 39019,
+      "Cards": [
+        "Bloodthirsty Conqueror",
+        "Marauding Blight-Priest"
+      ],
+      "Outcome": "Green",
+      "CycleCards": [
+        "Bloodthirsty Conqueror",
+        "Marauding Blight-Priest"
+      ]
+    },
+    {
+      "Id": "1170-3540-3821",
+      "Popularity": 0,
+      "Cards": [
+        "Displacer Kitten",
+        "Peregrine Drake",
+        "Mourning"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Displacer Kitten",
+        "Mourning",
+        "Peregrine Drake"
+      ]
+    },
+    {
+      "Id": "1170-3821-6058",
+      "Popularity": 9,
+      "Cards": [
+        "Displacer Kitten",
+        "Peregrine Drake",
+        "Conviction"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Conviction",
+        "Displacer Kitten",
+        "Peregrine Drake"
+      ]
+    },
+    {
+      "Id": "1385-2577-5670",
+      "Popularity": 34860,
+      "Cards": [
+        "Warren Soultrader",
+        "Gravecrawler",
+        "Zulaport Cutthroat"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Warren Soultrader"
+      ]
+    },
+    {
+      "Id": "1385-3000-5670",
+      "Popularity": 25505,
+      "Cards": [
+        "Warren Soultrader",
+        "Zulaport Cutthroat",
+        "Chatterfang, Squirrel General"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Chatterfang, Squirrel General",
+        "Warren Soultrader"
+      ]
+    },
+    {
+      "Id": "147-1810",
+      "Popularity": 2529,
+      "Cards": [
+        "Dualcaster Mage",
+        "Cackling Counterpart"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Cackling Counterpart",
+        "Dualcaster Mage"
+      ]
+    },
+    {
+      "Id": "147-1987",
+      "Popularity": 15899,
+      "Cards": [
+        "Ghostly Flicker",
+        "Dualcaster Mage"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Dualcaster Mage",
+        "Ghostly Flicker"
+      ]
+    },
+    {
+      "Id": "1987-2493-3821",
+      "Popularity": 34280,
+      "Cards": [
+        "Ghostly Flicker",
+        "Peregrine Drake",
+        "Archaeomancer"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Archaeomancer",
+        "Ghostly Flicker"
+      ]
+    },
+    {
+      "Id": "1987-3277-3821",
+      "Popularity": 217,
+      "Cards": [
+        "Ghostly Flicker",
+        "Peregrine Drake",
+        "Izzet Chronarch"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Ghostly Flicker",
+        "Izzet Chronarch"
+      ]
+    },
+    {
+      "Id": "2034-2577-4871",
+      "Popularity": 32582,
+      "Cards": [
+        "Gravecrawler",
+        "Pitiless Plunderer",
+        "Ashnod's Altar"
+      ],
+      "Outcome": "Green",
+      "CycleCards": [
+        "Ashnod's Altar",
+        "Gravecrawler",
+        "Pitiless Plunderer"
+      ]
+    },
+    {
+      "Id": "2034-3000-5009",
+      "Popularity": 1988,
+      "Cards": [
+        "Chatterfang, Squirrel General",
+        "Ruthless Knave",
+        "Ashnod's Altar"
+      ],
+      "Outcome": "Green",
+      "CycleCards": [
+        "Ashnod's Altar",
+        "Chatterfang, Squirrel General",
+        "Ruthless Knave"
+      ]
+    },
+    {
+      "Id": "2511-2577-4871",
+      "Popularity": 369,
+      "Cards": [
+        "Pitiless Plunderer",
+        "Gravecrawler",
+        "Bloodflow Connoisseur"
+      ],
+      "Outcome": "Green",
+      "CycleCards": [
+        "Bloodflow Connoisseur",
+        "Gravecrawler",
+        "Pitiless Plunderer"
+      ]
+    },
+    {
+      "Id": "2577-2741-5670",
+      "Popularity": 589,
+      "Cards": [
+        "Warren Soultrader",
+        "Gravecrawler",
+        "Essence Warden"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Warren Soultrader"
+      ]
+    },
+    {
+      "Id": "2577-2842-5670",
+      "Popularity": 38733,
+      "Cards": [
+        "Warren Soultrader",
+        "Gravecrawler",
+        "Blood Artist"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Warren Soultrader"
+      ]
+    },
+    {
+      "Id": "2577-3983-4871",
+      "Popularity": 87,
+      "Cards": [
+        "Gravecrawler",
+        "Pitiless Plunderer",
+        "Night of Souls' Betrayal"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Pitiless Plunderer"
+      ]
+    },
+    {
+      "Id": "261-2577-5670",
+      "Popularity": 575,
+      "Cards": [
+        "Warren Soultrader",
+        "Gravecrawler",
+        "Suture Priest"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Gravecrawler",
+        "Warren Soultrader"
+      ]
+    },
+    {
+      "Id": "261-3000-5670",
+      "Popularity": 62,
+      "Cards": [
+        "Warren Soultrader",
+        "Suture Priest",
+        "Chatterfang, Squirrel General"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Chatterfang, Squirrel General",
+        "Warren Soultrader"
+      ]
+    },
+    {
+      "Id": "2741-3000-5670",
+      "Popularity": 2844,
+      "Cards": [
+        "Warren Soultrader",
+        "Essence Warden",
+        "Chatterfang, Squirrel General"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Chatterfang, Squirrel General",
+        "Warren Soultrader"
+      ]
+    },
+    {
+      "Id": "2842-3000-5670",
+      "Popularity": 22716,
+      "Cards": [
+        "Warren Soultrader",
+        "Blood Artist",
+        "Chatterfang, Squirrel General"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Chatterfang, Squirrel General",
+        "Warren Soultrader"
+      ]
+    },
+    {
+      "Id": "3000-4231-5670",
+      "Popularity": 21072,
+      "Cards": [
+        "Chatterfang, Squirrel General",
+        "Warren Soultrader",
+        "Academy Manufactor"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Chatterfang, Squirrel General",
+        "Warren Soultrader"
+      ]
+    },
+    {
+      "Id": "3000-4772-5009",
+      "Popularity": 1279,
+      "Cards": [
+        "Chatterfang, Squirrel General",
+        "Ruthless Knave",
+        "Doubling Season"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Chatterfang, Squirrel General",
+        "Ruthless Knave"
+      ]
+    },
+    {
+      "Id": "3000-4871",
+      "Popularity": 59860,
+      "Cards": [
+        "Chatterfang, Squirrel General",
+        "Pitiless Plunderer"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Chatterfang, Squirrel General",
+        "Pitiless Plunderer"
+      ]
+    },
+    {
+      "Id": "314-3966",
+      "Popularity": 115026,
+      "Cards": [
+        "Exquisite Blood",
+        "Vito, Thorn of the Dusk Rose"
+      ],
+      "Outcome": "Green",
+      "CycleCards": [
+        "Exquisite Blood",
+        "Vito, Thorn of the Dusk Rose"
+      ]
+    },
+    {
+      "Id": "314-6191",
+      "Popularity": 74972,
+      "Cards": [
+        "Bloodthirsty Conqueror",
+        "Vito, Thorn of the Dusk Rose"
+      ],
+      "Outcome": "Green",
+      "CycleCards": [
+        "Bloodthirsty Conqueror",
+        "Vito, Thorn of the Dusk Rose"
+      ]
+    },
+    {
+      "Id": "618-1090",
+      "Popularity": 5671,
+      "Cards": [
+        "Kiki-Jiki, Mirror Breaker",
+        "Restoration Angel"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Kiki-Jiki, Mirror Breaker",
+        "Restoration Angel"
+      ]
+    },
+    {
+      "Id": "618-1692",
+      "Popularity": 15042,
+      "Cards": [
+        "Kiki-Jiki, Mirror Breaker",
+        "Helm of the Host"
+      ],
+      "Outcome": "Missed",
+      "CycleCards": []
+    },
+    {
+      "Id": "618-2781",
+      "Popularity": 13066,
+      "Cards": [
+        "Kiki-Jiki, Mirror Breaker",
+        "Felidar Guardian"
+      ],
+      "Outcome": "Amber",
+      "CycleCards": [
+        "Felidar Guardian",
+        "Kiki-Jiki, Mirror Breaker"
+      ]
+    },
+    {
+      "Id": "618-4222--140",
+      "Popularity": 927,
+      "Cards": [
+        "Kiki-Jiki, Mirror Breaker",
+        "Freed from the Real"
+      ],
+      "Outcome": "Missed",
+      "CycleCards": []
+    },
+    {
+      "Id": "618-4404",
+      "Popularity": 1680,
+      "Cards": [
+        "Kiki-Jiki, Mirror Breaker",
+        "Corridor Monitor"
+      ],
+      "Outcome": "Green",
+      "CycleCards": [
+        "Corridor Monitor",
+        "Kiki-Jiki, Mirror Breaker"
+      ]
+    },
+    {
+      "Id": "618-7624",
+      "Popularity": 174,
+      "Cards": [
+        "Kiki-Jiki, Mirror Breaker",
+        "Sea-Dasher Octopus"
+      ],
+      "Outcome": "Missed",
+      "CycleCards": []
+    }
+  ]
+}

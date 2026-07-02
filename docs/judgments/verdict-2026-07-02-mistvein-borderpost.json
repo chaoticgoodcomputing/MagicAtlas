@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ARB/MistveinBorderpost.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.9", "CR 604.5"],
+      "reason": "Borderpost alternative cost modeled as alternativeCosts attribute with composite cost (mana {1} + returnToHand of a basic land you control); oracle text matches oracle-cards.json; cost line correctly hosted as card-level cost attribute (not an oracle ability) per CR 604.5, no unparsed residual; siblings (enters-tapped static, {T}: Add {U} or {B} mana ability) preserved; both cited rules exist and match"
+    }
+  ]
+}

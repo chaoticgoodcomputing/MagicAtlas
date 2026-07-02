@@ -1,0 +1,14 @@
+{
+  "Keyword": "Skulk",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Skulk"
+      }
+    ],
+    "KeywordSource": "Skulk"
+  }
+}

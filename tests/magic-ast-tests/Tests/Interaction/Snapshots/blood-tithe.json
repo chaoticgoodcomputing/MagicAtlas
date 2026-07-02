@@ -1,0 +1,149 @@
+{
+  "Name": "Blood Tithe",
+  "Ports": [
+    {
+      "Identity": "Blood Tithe::cast:spell:self",
+      "Card": "Blood Tithe",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Blood Tithe::emit:life:gain:controlled",
+      "Card": "Blood Tithe",
+      "Label": "emit:life:gain:controlled",
+      "Side": "Emit",
+      "Quantity": null,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Tithe::emit:life:loss:opponent",
+      "Card": "Blood Tithe",
+      "Label": "emit:life:loss:opponent",
+      "Side": "Emit",
+      "Quantity": 3,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=Opponent|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Tithe::pay:mana",
+      "Card": "Blood Tithe",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 3,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Blood Tithe::pay:mana:black",
+      "Card": "Blood Tithe",
+      "Label": "pay:mana:black",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Blood Tithe::cast:spell:self",
+      "To": "Blood Tithe::emit:life:gain:controlled"
+    },
+    {
+      "From": "Blood Tithe::cast:spell:self",
+      "To": "Blood Tithe::emit:life:loss:opponent"
+    },
+    {
+      "From": "Blood Tithe::pay:mana:black",
+      "To": "Blood Tithe::emit:life:gain:controlled"
+    },
+    {
+      "From": "Blood Tithe::pay:mana:black",
+      "To": "Blood Tithe::emit:life:loss:opponent"
+    },
+    {
+      "From": "Blood Tithe::pay:mana",
+      "To": "Blood Tithe::emit:life:gain:controlled"
+    },
+    {
+      "From": "Blood Tithe::pay:mana",
+      "To": "Blood Tithe::emit:life:loss:opponent"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Blood Tithe::cast:spell:self",
+      "To": "Blood Tithe::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Tithe::cast:spell:self",
+      "To": "Blood Tithe::emit:life:loss:opponent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Tithe::pay:mana:black",
+      "To": "Blood Tithe::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Tithe::pay:mana:black",
+      "To": "Blood Tithe::emit:life:loss:opponent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Tithe::pay:mana",
+      "To": "Blood Tithe::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Tithe::pay:mana",
+      "To": "Blood Tithe::emit:life:loss:opponent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

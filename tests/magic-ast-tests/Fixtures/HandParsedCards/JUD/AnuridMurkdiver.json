@@ -1,0 +1,106 @@
+{
+  "Input": {
+    "Name": "Anurid Murkdiver",
+    "ManaCost": "{4}{B}{B}",
+    "TypeLine": "Creature — Zombie Frog Beast",
+    "OracleText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)",
+    "Power": "4",
+    "Toughness": "3",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Anurid Murkdiver",
+    "TypeLine": {
+      "Raw": "Creature — Zombie Frog Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie",
+        "Frog",
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "UnblockableCondition": {
+                "ConditionType": "DefendingPlayerControls",
+                "PermanentFilter": {
+                  "Subtypes": [
+                    "Swamp"
+                  ]
+                }
+              }
+            }
+          ],
+          "KeywordSource": "Swampwalk",
+          "Reminder": {
+            "Text": "(This creature can't be blocked as long as defending player controls a Swamp.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}

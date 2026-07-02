@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Murmuring Phantasm",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Creature — Spirit",
+    "OracleText": "Defender",
+    "Power": "0",
+    "Toughness": "5",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Murmuring Phantasm",
+    "TypeLine": {
+      "Raw": "Creature — Spirit",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spirit"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Defender",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Defender",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Defender"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}

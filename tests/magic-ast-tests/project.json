@@ -1,15 +1,73 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "name": "magic-ast-tests",
+  "name": "mast",
   "sourceRoot": "tests/magic-ast-tests",
   "projectType": "application",
+  "tags": ["type:test", "scope:magic-ast"],
   "targets": {
-    "run": {
+    "build": {
+      "//": "Build the consolidated MagicAST test harness (NUnit tests + Flowthru triage flow).",
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["dotnet run"],
+        "commands": ["dotnet build"],
         "cwd": "tests/magic-ast-tests",
         "parallel": false
+      },
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "//": "Run the MagicAST NUnit suite. Every test must pass green; no ratchet tolerance.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet test"],
+        "cwd": "tests/magic-ast-tests",
+        "parallel": false
+      }
+    },
+    "run": {
+      "//": "Run the MagicAstTriage Flowthru flow over the corpus and emit Data/_08_Reporting/triage-report.json.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run -- --flow MagicAstTriage"],
+        "cwd": "tests/magic-ast-tests",
+        "parallel": false
+      }
+    },
+    "interaction-triage": {
+      "//": "Fast data-triage: the InteractionTriage flow sliced (Flowthru --only auto-includes upstream) to ClassifyCombos + MaterializeCardEdges — emits interaction-triage-report.json (worklist) + card-edges.json + port-graph-metrics.json, EXCLUDING the intractable MaterializeCycles/PortNodes/PlotInteractionGraph viz tail (union cycle enumeration over a ~1.1M-edge graph). The canonical re-triage for the loop + the input to the corpus-edge-diff gate. Use 'interaction-graph' (full flow) only when the viz HTML is wanted.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run -- --only ClassifyCombos,MaterializeCardEdges"],
+        "cwd": "tests/magic-ast-tests",
+        "parallel": false
+      }
+    },
+    "seed-ontology": {
+      "//": "Regenerate the MTG type ontology from the upstream mtg-rules project and copy it into this project's Curated input layer. Preserves the explicit 'copied from mtg-rules' provenance; the raw CR text stays in mtg-rules (gitignored). Run after mtg-rules' ontology rules change.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "dotnet run --project libs/mtg-rules",
+          "cp libs/mtg-rules/Data/_03_Primary/Datasets/type-ontology.json tests/magic-ast-tests/Data/_01_Raw/Datasets/Curated/type-ontology.json"
+        ],
+        "cwd": "{workspaceRoot}",
+        "parallel": false
+      }
+    },
+    "gate-test": {
+      "//": "Hermetic self-tests for the MAST loop meta tier (tools/test/*/run.sh): deterministic gates (initiative 01) + discriminator lint (initiative 02). CI-safe — builds throwaway git repos / synthetic source in a temp dir; no network, no dependency on the live corpus. Runs alongside the core NUnit suite.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash tools/test/run.sh",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "worktree-clean": {
+      "//": "Reap MAST TDD-loop agent worktrees + merged agent branches (run after every batch). Default deletes only MERGED mast-tdd/* and worktree-agent-* branches; for a DISCARDED batch run `bash tools/clean-worktrees.sh --force` to also drop unmerged ones.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash tools/clean-worktrees.sh",
+        "cwd": "{workspaceRoot}"
       }
     },
     "format": {

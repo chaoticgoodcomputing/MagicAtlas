@@ -1,0 +1,32 @@
+{
+  "Keyword": "Conspire",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Conspire",
+    "Effects": [
+      {
+        "EffectType": "additionalCastCost",
+        "AdditionalCost": {
+          "Cost": {
+            "CostType": "tapPermanents",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Controller": "You",
+              "SharesColorWith": {
+                "Kind": "Self"
+              }
+            },
+            "Quantity": {
+              "QuantityType": "literal",
+              "Value": 2
+            }
+          },
+          "IsOptional": true,
+          "Repeatable": false
+        }
+      }
+    ]
+  }
+}

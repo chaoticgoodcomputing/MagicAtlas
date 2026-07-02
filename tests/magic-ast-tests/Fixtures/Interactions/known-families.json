@@ -1,0 +1,5 @@
+[
+  { "_note": "sac→death bridge: a sacrificed permanent dies and feeds a dies-trigger payoff (CR 701.21a→700.4). Wildcard families (ADR-0002 §2): ** globs the subject.", "from": "sac:**", "to": "ltb:**:to-graveyard:**", "resource": "Death", "family": "Flow" },
+  { "_note": "death payoff → token doubler: the dies-trigger's token creation is intercepted by a replacement (CR 614).", "from": "ltb:**:to-graveyard:**", "to": "replace:**", "resource": "Token", "family": "Modifier" },
+  { "_note": "token doubler → sac outlet: the doubled tokens refuel the sacrifice outlet.", "from": "replace:**", "to": "sac:**", "resource": "Token", "family": "Flow" }
+]

@@ -1,0 +1,106 @@
+{
+  "Name": "Implement of Examination",
+  "Ports": [
+    {
+      "Identity": "Implement of Examination::emit:drawcards",
+      "Card": "Implement of Examination",
+      "Label": "emit:drawcards",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Implement of Examination::ltb:artifact:to-graveyard:self",
+      "Card": "Implement of Examination",
+      "Label": "ltb:artifact:to-graveyard:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=artifact|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Implement of Examination::pay:mana:blue",
+      "Card": "Implement of Examination",
+      "Label": "pay:mana:blue",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Implement of Examination::sac:artifact:self",
+      "Card": "Implement of Examination",
+      "Label": "sac:artifact:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=artifact|subtypes=|supertypes=|controller=You|isToken=|isSelf=True|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Implement of Examination::ltb:artifact:to-graveyard:self",
+      "To": "Implement of Examination::emit:drawcards"
+    },
+    {
+      "From": "Implement of Examination::pay:mana:blue",
+      "To": "Implement of Examination::emit:drawcards"
+    },
+    {
+      "From": "Implement of Examination::sac:artifact:self",
+      "To": "Implement of Examination::emit:drawcards"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Implement of Examination::ltb:artifact:to-graveyard:self",
+      "To": "Implement of Examination::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Implement of Examination::pay:mana:blue",
+      "To": "Implement of Examination::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Implement of Examination::sac:artifact:self",
+      "To": "Implement of Examination::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Implement of Examination::sac:artifact:self",
+      "To": "Implement of Examination::ltb:artifact:to-graveyard:self",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

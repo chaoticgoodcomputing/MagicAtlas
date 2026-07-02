@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GRN/BargingSergeant.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.134", "CR 508"],
+      "reason": "PB-3 delta: Mentor target's two OtherCharacteristic free-text residuals ('attacking' + 'with power less than this creature's power') structured to CombatStateCharacteristic{Attacking} + PowerComparison{LessThan, RelativeTo:Self, RelativeCharacteristic:Power}, faithful to CR 702.134a; Haste, trigger, putCounters +1/+1 and sibling creature filter all preserved; no new free-text/unparsed residual; whitelist entry removed; no out-of-scope residual remains on this gold"
+    }
+  ]
+}

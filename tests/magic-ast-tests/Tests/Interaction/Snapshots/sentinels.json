@@ -1,0 +1,674 @@
+{
+  "entries": [
+    {
+      "name": "Kiki-Jiki x Corridor Monitor (copy-inheritance graft exemplar)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/KikiJikiMirrorBreaker.json",
+          "card": "Kiki-Jiki, Mirror Breaker"
+        },
+        {
+          "path": "HandParsedCards/ELD/CorridorMonitor.json",
+          "card": "Corridor Monitor"
+        }
+      ]
+    },
+    {
+      "name": "Chatterfang x Pitiless Plunderer",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/MH2/Chatterfang.json",
+          "card": "Chatterfang"
+        },
+        {
+          "path": "HandParsedCards/RIX/PitilessPlunderer.json",
+          "card": "Pitiless Plunderer"
+        }
+      ]
+    },
+    {
+      "name": "Vito x Exquisite Blood (life flow arm exemplar)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/M21/VitoThornOfTheDuskRose.json",
+          "card": "Vito, Thorn of the Dusk Rose"
+        },
+        {
+          "path": "HandParsedCards/ExquisiteBlood.json",
+          "card": "Exquisite Blood"
+        }
+      ]
+    },
+    {
+      "name": "Gravecrawler x Pitiless Plunderer x Ashnod's Altar (aristocrat recursion GREEN)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/Gravecrawler.json",
+          "card": "Gravecrawler"
+        },
+        {
+          "path": "HandParsedCards/RIX/PitilessPlunderer.json",
+          "card": "Pitiless Plunderer"
+        },
+        {
+          "path": "HandParsedCards/ATQ/AshnodsAltar.json",
+          "card": "Ashnod's Altar"
+        }
+      ]
+    },
+    {
+      "name": "Chatterfang x Ruthless Knave",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/MH2/Chatterfang.json",
+          "card": "Chatterfang"
+        },
+        {
+          "path": "HandParsedCards/XLN/RuthlessKnave.json",
+          "card": "Ruthless Knave"
+        }
+      ]
+    },
+    {
+      "name": "Felidar Guardian x Restoration Angel (blink flow arm exemplar, AMBER)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/FelidarGuardian.json",
+          "card": "Felidar Guardian"
+        },
+        {
+          "path": "HandParsedCards/RestorationAngel.json",
+          "card": "Restoration Angel"
+        }
+      ]
+    },
+    {
+      "name": "Kiki-Jiki x Felidar Guardian (copy-inheritance + blink tap-renewal, AMBER)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/KikiJikiMirrorBreaker.json",
+          "card": "Kiki-Jiki, Mirror Breaker"
+        },
+        {
+          "path": "HandParsedCards/FelidarGuardian.json",
+          "card": "Felidar Guardian"
+        }
+      ]
+    },
+    {
+      "name": "Blood Artist x Ruthless Knave",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "Interactions/cards/BloodArtist.json",
+          "card": "Blood Artist"
+        },
+        {
+          "path": "Interactions/cards/RuthlessKnave.json",
+          "card": "Ruthless Knave"
+        }
+      ]
+    },
+    {
+      "name": "Bramble Armor",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BrambleArmor.json",
+          "card": "Bramble Armor"
+        }
+      ]
+    },
+    {
+      "name": "Vivid Marsh",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/C17/VividMarsh.json",
+          "card": "Vivid Marsh"
+        }
+      ]
+    },
+    {
+      "name": "Inspirit",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/9ED/Inspirit.json",
+          "card": "Inspirit"
+        }
+      ]
+    },
+    {
+      "name": "Implement of Examination",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AER/ImplementOfExamination.json",
+          "card": "Implement of Examination"
+        }
+      ]
+    },
+    {
+      "name": "Kari Zev, Skyship Raider",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AER/KariZevSkyshipRaider.json",
+          "card": "Kari Zev, Skyship Raider"
+        }
+      ]
+    },
+    {
+      "name": "Chasm Guide",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/ChasmGuide.json",
+          "card": "Chasm Guide"
+        }
+      ]
+    },
+    {
+      "name": "Anointed Procession",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AKH/AnointedProcession.json",
+          "card": "Anointed Procession"
+        }
+      ]
+    },
+    {
+      "name": "Allied Reinforcements",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AlliedReinforcements.json",
+          "card": "Allied Reinforcements"
+        }
+      ]
+    },
+    {
+      "name": "Saurian Symbiote",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/SaurianSymbiote.json",
+          "card": "Saurian Symbiote"
+        }
+      ]
+    },
+    {
+      "name": "Combine Chrysalis",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/CombineChrysalis.json",
+          "card": "Combine Chrysalis"
+        }
+      ]
+    },
+    {
+      "name": "Coldsteel Heart",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/ColdsteelHeart.json",
+          "card": "Coldsteel Heart"
+        }
+      ]
+    },
+    {
+      "name": "Azorius Keyrune",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AzoriusKeyrune.json",
+          "card": "Azorius Keyrune"
+        }
+      ]
+    },
+    {
+      "name": "Black Mana Battery",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BlackManaBattery.json",
+          "card": "Black Mana Battery"
+        }
+      ]
+    },
+    {
+      "name": "Arbor Elf",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/ArborElf.json",
+          "card": "Arbor Elf"
+        }
+      ]
+    },
+    {
+      "name": "Expedition Raptor",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/ExpeditionRaptor.json",
+          "card": "Expedition Raptor"
+        }
+      ]
+    },
+    {
+      "name": "Hollow Trees",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/HollowTrees.json",
+          "card": "Hollow Trees"
+        }
+      ]
+    },
+    {
+      "name": "Lat-Nam Adept",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/LatNamAdept.json",
+          "card": "Lat-Nam Adept"
+        }
+      ]
+    },
+    {
+      "name": "Peregrine Drake",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/PeregrineDrake.json",
+          "card": "Peregrine Drake"
+        }
+      ]
+    },
+    {
+      "name": "Freed from the Real",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/FreedfromtheReal.json",
+          "card": "Freed from the Real"
+        }
+      ]
+    },
+    {
+      "name": "Acrobatic Leap",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AcrobaticLeap.json",
+          "card": "Acrobatic Leap"
+        }
+      ]
+    },
+    {
+      "name": "Benalish Marshal",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BenalishMarshal.json",
+          "card": "Benalish Marshal"
+        }
+      ]
+    },
+    {
+      "name": "Bull's Strength",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BullsStrength.json",
+          "card": "Bull's Strength"
+        }
+      ]
+    },
+    {
+      "name": "Bloodsworn Steward",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BloodswornSteward.json",
+          "card": "Bloodsworn Steward"
+        }
+      ]
+    },
+    {
+      "name": "Aggressive Mammoth",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AggressiveMammoth.json",
+          "card": "Aggressive Mammoth"
+        }
+      ]
+    },
+    {
+      "name": "Bloodthirsty Conqueror",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BloodthirstyConqueror.json",
+          "card": "Bloodthirsty Conqueror"
+        }
+      ]
+    },
+    {
+      "name": "Goblin Shortcutter",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/GoblinShortcutter.json",
+          "card": "Goblin Shortcutter"
+        }
+      ]
+    },
+    {
+      "name": "Hulldrifter",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/Hulldrifter.json",
+          "card": "Hulldrifter"
+        }
+      ]
+    },
+    {
+      "name": "Nantuko Husk",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/NantukoHusk.json",
+          "card": "Nantuko Husk"
+        }
+      ]
+    },
+    {
+      "name": "Undergrowth Leopard",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/UndergrowthLeopard.json",
+          "card": "Undergrowth Leopard"
+        }
+      ]
+    },
+    {
+      "name": "Etchings of the Chosen",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/EtchingsOfTheChosen.json",
+          "card": "Etchings of the Chosen"
+        }
+      ]
+    },
+    {
+      "name": "Dragon's Claw",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/DragonsClaw.json",
+          "card": "Dragon's Claw"
+        }
+      ]
+    },
+    {
+      "name": "Dakmor Ghoul",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/DakmorGhoul.json",
+          "card": "Dakmor Ghoul"
+        }
+      ]
+    },
+    {
+      "name": "Felidar Guardian",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/FelidarGuardian.json",
+          "card": "Felidar Guardian"
+        }
+      ]
+    },
+    {
+      "name": "Restoration Angel",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/RestorationAngel.json",
+          "card": "Restoration Angel"
+        }
+      ]
+    },
+    {
+      "name": "Dualcaster Mage",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/DualcasterMage.json",
+          "card": "Dualcaster Mage"
+        }
+      ]
+    },
+    {
+      "name": "Ancestral Recall",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AncestralRecall.json",
+          "card": "Ancestral Recall"
+        }
+      ]
+    },
+    {
+      "name": "Boomerang",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/Boomerang.json",
+          "card": "Boomerang"
+        }
+      ]
+    },
+    {
+      "name": "Bring Down",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BringDown.json",
+          "card": "Bring Down"
+        }
+      ]
+    },
+    {
+      "name": "Brute Force",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BruteForce.json",
+          "card": "Brute Force"
+        }
+      ]
+    },
+    {
+      "name": "Absorb Vis",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AbsorbVis.json",
+          "card": "Absorb Vis"
+        }
+      ]
+    },
+    {
+      "name": "Bruvac the Grandiloquent",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BruvacTheGrandiloquent.json",
+          "card": "Bruvac the Grandiloquent"
+        }
+      ]
+    },
+    {
+      "name": "Reiterate",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/Reiterate.json",
+          "card": "Reiterate"
+        }
+      ]
+    },
+    {
+      "name": "Azusa, Lost but Seeking",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AzusaLostButSeeking.json",
+          "card": "Azusa, Lost but Seeking"
+        }
+      ]
+    },
+    {
+      "name": "Blood Tithe",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BloodTithe.json",
+          "card": "Blood Tithe"
+        }
+      ]
+    },
+    {
+      "name": "Conviction",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/Conviction.json",
+          "card": "Conviction"
+        }
+      ]
+    },
+    {
+      "name": "Blessing",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/Blessing.json",
+          "card": "Blessing"
+        }
+      ]
+    },
+    {
+      "name": "Blessing of Leeches",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BlessingOfLeeches.json",
+          "card": "Blessing of Leeches"
+        }
+      ]
+    },
+    {
+      "name": "Bar the Door",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BarTheDoor.json",
+          "card": "Bar the Door"
+        }
+      ]
+    },
+    {
+      "name": "Barbarian Riftcutter",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BarbarianRiftcutter.json",
+          "card": "Barbarian Riftcutter"
+        }
+      ]
+    },
+    {
+      "name": "Boggart Harbinger",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BoggartHarbinger.json",
+          "card": "Boggart Harbinger"
+        }
+      ]
+    },
+    {
+      "name": "Bomat Bazaar Barge",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/BomatBazaarBarge.json",
+          "card": "Bomat Bazaar Barge"
+        }
+      ]
+    },
+    {
+      "name": "Adept Watershaper",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AdeptWatershaper.json",
+          "card": "Adept Watershaper"
+        }
+      ]
+    },
+    {
+      "name": "Artful Dodge",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/ArtfulDodge.json",
+          "card": "Artful Dodge"
+        }
+      ]
+    },
+    {
+      "name": "Bargain",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/Bargain.json",
+          "card": "Bargain"
+        }
+      ]
+    },
+    {
+      "name": "Captain Rex Nebula x Brazen Dwarf (damage flow arm exemplar)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/CaptainRexNebula.json",
+          "card": "Captain Rex Nebula"
+        },
+        {
+          "path": "HandParsedCards/BrazenDwarf.json",
+          "card": "Brazen Dwarf"
+        }
+      ]
+    }
+  ]
+}

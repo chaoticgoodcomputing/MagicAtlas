@@ -1,0 +1,60 @@
+{
+  "Input": {
+    "Name": "Brine Giant",
+    "ManaCost": "{6}{U}",
+    "TypeLine": "Creature — Giant",
+    "OracleText": "Affinity for enchantments (This spell costs {1} less to cast for each enchantment you control.)",
+    "Power": "5",
+    "Toughness": "6",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Brine Giant",
+    "TypeLine": {
+      "Raw": "Creature — Giant",
+      "Types": ["Creature"],
+      "Subtypes": ["Giant"]
+    },
+    "Oracle": {
+      "RawText": "Affinity for enchantments (This spell costs {1} less to cast for each enchantment you control.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Affinity",
+          "Reminder": {
+            "Text": "(This spell costs {1} less to cast for each enchantment you control.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "PerObject": {
+                "CardTypes": ["enchantment"],
+                "Controller": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{6}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 6 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 7
+      },
+      { "Kind": "colors", "Colors": ["U"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
+        "Toughness": { "ValueType": "fixed", "Raw": "6", "Value": 6 }
+      }
+    ]
+  }
+}

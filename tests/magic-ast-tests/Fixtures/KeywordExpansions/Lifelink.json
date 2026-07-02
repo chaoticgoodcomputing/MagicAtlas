@@ -1,0 +1,13 @@
+{
+  "Keyword": "Lifelink",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "lifelink"
+      }
+    ],
+    "KeywordSource": "Lifelink"
+  }
+}

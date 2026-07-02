@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M14/YoungPyromancer.json",
+      "verdict": "PASS",
+      "citations": ["CR 300.1", "CR 603.2"],
+      "reason": "PB-3 type axis: free-text OtherCharacteristic 'instant'/'sorcery' on the SpellCast trigger filter restructured to CardTypes:['spell','instant','sorcery'] (faithful to 'cast an instant or sorcery spell'); no new residual; Controller:You sibling + createToken/token effect preserved; gold fully clean, whitelist entry removed"
+    }
+  ]
+}

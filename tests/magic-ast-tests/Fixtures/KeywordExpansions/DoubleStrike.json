@@ -1,0 +1,14 @@
+{
+  "Keyword": "Double strike",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "combatDamageTiming",
+        "Timing": "Both"
+      }
+    ],
+    "KeywordSource": "Double strike"
+  }
+}

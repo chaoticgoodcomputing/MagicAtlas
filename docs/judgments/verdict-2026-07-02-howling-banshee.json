@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WTH/HowlingBanshee.json",
+      "verdict": "PASS",
+      "citations": ["CR 119.3", "CR 603.6", "CR 702.9"],
+      "reason": "ETB symmetric life-loss modeled as composite Trigger{When,Enters,Filter:creature+IsSelf} + loseLife effect (Amount literal 3, Player EachPlayer); oracle text verbatim; Flying sibling preserved as evasion static; no unparsed/free-text residual"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-howling-banshee#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses existing LoseLifeEffect + ObjectReferenceKind.EachPlayer (both present at base); PortWalk projection decision N/A"
+    }
+  ]
+}

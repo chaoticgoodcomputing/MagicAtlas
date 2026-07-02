@@ -1,0 +1,16 @@
+# Copyright hygiene: the MTG comprehensive rules text is WotC's and is NOT redistributed.
+# The raw .txt, the split section texts, and the verbatim structured rules/glossary all reproduce
+# that prose, so the DATA artifacts (everything under the Datasets/ dirs) stay as local build
+# artifacts — never committed. The catalog/schema .cs source that defines these layers IS committed
+# (it carries no rules prose). Only the derived, copyright-clean type ontology is kept among the
+# datasets.
+Data/_01_Raw/Datasets/
+Data/_02_Intermediate/Datasets/
+Data/_03_Primary/Datasets/rules-structure.json
+Data/_03_Primary/Datasets/glossary.json
+
+# .NET build outputs
+bin/
+obj/
+
+# !Data/_03_Primary/Datasets/type-ontology.json IS committed (derived facts, the published artifact).

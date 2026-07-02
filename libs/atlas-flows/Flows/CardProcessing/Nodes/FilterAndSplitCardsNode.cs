@@ -239,6 +239,7 @@ public static class FilterAndSplitCardsNode
     {
       // Identifiers
       Id = card.Id,
+      OracleId = card.OracleId,
 
       // Content
       Name = card.Name,

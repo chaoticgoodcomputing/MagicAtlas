@@ -1,0 +1,138 @@
+{
+  "Input": {
+    "Name": "Displacer Kitten",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Creature — Cat Beast",
+    "OracleText": "Avoidance — Whenever you cast a noncreature spell, exile up to one target nonland permanent you control, then return that card to the battlefield under its owner's control.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Displacer Kitten",
+    "TypeLine": {
+      "Raw": "Creature — Cat Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat",
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Avoidance — Whenever you cast a noncreature spell, exile up to one target nonland permanent you control, then return that card to the battlefield under its owner's control.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell"
+              ],
+              "ExcludedCardTypes": [
+                "creature"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "exile",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": [
+                        "permanent"
+                      ],
+                      "ExcludedCardTypes": [
+                        "land"
+                      ],
+                      "Controller": "You"
+                    },
+                    "Quantity": {
+                      "QuantityType": "upTo",
+                      "Maximum": 1,
+                      "Minimum": 0
+                    }
+                  }
+                },
+                {
+                  "EffectType": "returnToBattlefield",
+                  "Target": {
+                    "Kind": "Designated",
+                    "Filter": {
+                      "ExiledWith": {
+                        "Kind": "Self"
+                      },
+                      "Zone": "Exile"
+                    }
+                  },
+                  "Tapped": false,
+                  "UnderControl": {
+                    "Kind": "Owner"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

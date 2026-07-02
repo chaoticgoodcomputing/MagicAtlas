@@ -1,0 +1,6 @@
+{
+  "_note": "Corrects the prior draft's false Disjoint — artifact creatures exist (CR 205.2b).",
+  "A": { "CardTypes": ["artifact"] },
+  "B": { "CardTypes": ["creature"] },
+  "Expected": "Overlaps"
+}

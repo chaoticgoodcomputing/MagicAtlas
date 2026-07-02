@@ -39,6 +39,30 @@ public enum AbilityKind
   Modal,
 
   /// <summary>
+  /// Saga abilities — the chapter-triggered structure on Saga cards.
+  /// Rule 715. Each chapter is an implicit triggered ability fired when
+  /// the Nth lore counter is added; the saga itself is the container.
+  /// </summary>
+  Saga,
+
+  /// <summary>
+  /// Level-up abilities — the cost-driven stanza structure on Leveler cards.
+  /// Rule 711 (historical / leveler). The level-up cost is an activated
+  /// ability; the LEVEL N-M stanzas describe the creature's characteristics
+  /// at each level.
+  /// </summary>
+  LevelUp,
+
+  /// <summary>
+  /// Class abilities — the level-bar superstructure on "Enchantment — Class"
+  /// cards (CR 716, "Class Cards"; AFR). A base ability active at all times
+  /// (CR 716.3) plus an ordered series of class level bars, each a keyword
+  /// ability that pairs a level-up activation cost with the abilities that
+  /// section grants (CR 716.2 / 107.16).
+  /// </summary>
+  Class,
+
+  /// <summary>
   /// Ability that could not be parsed. Contains raw text and diagnostics.
   /// </summary>
   Unparsed,

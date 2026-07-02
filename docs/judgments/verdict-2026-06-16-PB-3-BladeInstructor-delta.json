@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GRN/BladeInstructor.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.134"],
+      "reason": "delta-PASS: structured the two target residuals on this Mentor gold — `other/attacking` -> CombatStateCharacteristic{State:Attacking} and `other/with power less than this creature's power` -> PowerComparison{LessThan, RelativeTo:Self, RelativeCharacteristic:Power}, matching CR 702.134a verbatim; gold now fully residual-free (no OtherCharacteristic/unparsed), trigger+putCounters+CounterType+1/+1+KeywordSource Mentor+creature-type filter all preserved, no out-of-scope residual remains; correctly removed from whitelist-freetext.json"
+    }
+  ]
+}

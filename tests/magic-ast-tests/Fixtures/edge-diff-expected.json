@@ -1,0 +1,4 @@
+{
+  "_doc": "Named carve-out for the corpus-edge-diff overfit gate (tools/gate-corpus-edge-diff.sh). A NON-target card whose interaction footprint legitimately changes (a real cross-card reprojection from a new flow arm, judge-reviewed) is listed here by name+reason — never a silent baseline rewrite. Empty = the gate halts on ANY non-target change.",
+  "entries": []
+}

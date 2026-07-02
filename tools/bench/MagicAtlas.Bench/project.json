@@ -1,0 +1,25 @@
+{
+  "name": "bench",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "tools/bench/MagicAtlas.Bench",
+  "tags": ["type:bench", "scope:interaction"],
+  "targets": {
+    "recall": {
+      "//": "Combo-recall GATE (alignment initiative 04, de-ratcheted 2026-06-16). Re-runs the bench over the pinned Spellbook snapshot + gold corpus and asserts each eligible combo's CURRENT tier equals its explicit pin in combo-expected-tiers.json — a loud, per-combo, stateless whitelist (no moving aggregate baseline). A regression OR an improvement on any combo fails by name; bench-report.json is now a derived report, not the gate. Run at mast-tdd-loop Step 8.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet test MagicAtlas.Bench.csproj --nologo",
+        "cwd": "tools/bench/MagicAtlas.Bench"
+      }
+    },
+    "recall:write": {
+      "//": "Regenerate the DERIVED report bench-report.json from current behavior, after a DELIBERATE recall change (e.g. initiative 06). The report no longer drives pass/fail — the gate is combo-expected-tiers.json (update each affected combo's pin alongside this regeneration).",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet run -- --write",
+        "cwd": "tools/bench/MagicAtlas.Bench"
+      }
+    }
+  }
+}

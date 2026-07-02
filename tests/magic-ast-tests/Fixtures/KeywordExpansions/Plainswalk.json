@@ -1,0 +1,21 @@
+{
+  "Keyword": "Plainswalk",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "evasion",
+        "UnblockableCondition": {
+          "ConditionType": "DefendingPlayerControls",
+          "PermanentFilter": {
+            "Subtypes": [
+              "Plains"
+            ]
+          }
+        }
+      }
+    ],
+    "KeywordSource": "Plainswalk"
+  }
+}

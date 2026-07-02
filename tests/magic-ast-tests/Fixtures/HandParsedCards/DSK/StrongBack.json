@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Strong Back",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nEquip abilities you activate that target enchanted creature cost {3} less to activate.\nAura spells you cast that target enchanted creature cost {3} less to cast.\nEnchanted creature gets +2/+2 for each Aura and Equipment attached to it.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Strong Back",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nEquip abilities you activate that target enchanted creature cost {3} less to activate.\nAura spells you cast that target enchanted creature cost {3} less to cast.\nEnchanted creature gets +2/+2 for each Aura and Equipment attached to it.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": { "CardTypes": ["creature"] }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 3 },
+              "AppliesTo": {
+                "Kind": "activatedAbility",
+                "Keyword": "Equip",
+                "Controller": "You",
+                "TargetsObject": { "Kind": "EnchantedOrEquipped" }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 3 },
+              "AppliesTo": {
+                "Kind": "spell",
+                "Filter": { "Subtypes": ["Aura"], "Controller": "You" },
+                "TargetsObject": { "Kind": "EnchantedOrEquipped" }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": { "Kind": "EnchantedOrEquipped" },
+              "PowerModifier": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "count",
+                  "CountOf": {
+                    "Subtypes": ["Aura", "Equipment"],
+                    "AttachedTo": { "Kind": "EnchantedOrEquipped" }
+                  }
+                },
+                "Operation": "multiply",
+                "Operand": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "count",
+                  "CountOf": {
+                    "Subtypes": ["Aura", "Equipment"],
+                    "AttachedTo": { "Kind": "EnchantedOrEquipped" }
+                  }
+                },
+                "Operation": "multiply",
+                "Operand": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 3
+      },
+      { "Kind": "colors", "Colors": ["G"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["G"] }
+    ]
+  }
+}

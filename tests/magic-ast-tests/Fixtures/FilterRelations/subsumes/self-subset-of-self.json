@@ -1,0 +1,6 @@
+{
+  "_note": "§6 self-binding: the source sacrificing itself (IsSelf) does satisfy its own 'when this creature dies' (IsSelf) trigger -> Yes. Keeps a legitimate same-card self-sac -> self-death loop GREEN; only the cross-card generic case is demoted.",
+  "Sub": { "CardTypes": ["creature"], "IsSelf": true },
+  "Sup": { "CardTypes": ["creature"], "IsSelf": true },
+  "Expected": "Yes"
+}

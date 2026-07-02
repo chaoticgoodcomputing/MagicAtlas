@@ -1,0 +1,5 @@
+{
+  "A": { "CardTypes": ["player"] },
+  "B": { "CardTypes": ["creature"] },
+  "Expected": "Disjoint"
+}

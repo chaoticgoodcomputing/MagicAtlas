@@ -1,0 +1,117 @@
+{
+  "Input": {
+    "Name": "Heartless Hidetsugu",
+    "ManaCost": "{3}{R}{R}",
+    "TypeLine": "Legendary Creature — Ogre Shaman",
+    "OracleText": "{T}: Heartless Hidetsugu deals damage to each player equal to half that player's life total, rounded down.",
+    "Power": "4",
+    "Toughness": "3",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Heartless Hidetsugu",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Ogre Shaman",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Ogre",
+        "Shaman"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: Heartless Hidetsugu deals damage to each player equal to half that player's life total, rounded down.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "derived",
+                  "DerivedFrom": "LifeTotal"
+                },
+                "Operation": "half",
+                "Rounding": "down"
+              },
+              "Source": {
+                "Kind": "Self"
+              },
+              "Target": {
+                "Kind": "EachPlayer"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "Name": "Etchings of the Chosen",
+  "Ports": [
+    {
+      "Identity": "Etchings of the Chosen::emit:choosecreaturetype",
+      "Card": "Etchings of the Chosen",
+      "Label": "emit:choosecreaturetype",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Etchings of the Chosen::emit:gainability",
+      "Card": "Etchings of the Chosen",
+      "Label": "emit:gainability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Etchings of the Chosen::modify:pt",
+      "Card": "Etchings of the Chosen",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Etchings of the Chosen::pay:mana",
+      "Card": "Etchings of the Chosen",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Etchings of the Chosen::sac:creature:controlled",
+      "Card": "Etchings of the Chosen",
+      "Label": "sac:creature:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Etchings of the Chosen::pay:mana",
+      "To": "Etchings of the Chosen::emit:gainability"
+    },
+    {
+      "From": "Etchings of the Chosen::sac:creature:controlled",
+      "To": "Etchings of the Chosen::emit:gainability"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Etchings of the Chosen::pay:mana",
+      "To": "Etchings of the Chosen::emit:gainability",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Etchings of the Chosen::sac:creature:controlled",
+      "To": "Etchings of the Chosen::emit:gainability",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

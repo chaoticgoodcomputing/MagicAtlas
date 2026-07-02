@@ -1,0 +1,84 @@
+{
+  "Input": {
+    "Name": "Monoist Sentry",
+    "ManaCost": "{B}",
+    "TypeLine": "Artifact Creature — Robot",
+    "OracleText": "Defender",
+    "Power": "4",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Monoist Sentry",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Robot",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Robot"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Defender",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Defender",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Defender"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

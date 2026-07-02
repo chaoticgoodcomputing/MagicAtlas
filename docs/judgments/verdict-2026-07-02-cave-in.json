@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CaveIn.json#alternativeCosts",
+      "verdict": "PASS",
+      "citations": ["CR 118.9", "CR 118.9a", "CR 604.5"],
+      "reason": "pitch cost 'exile a red card from your hand rather than pay mana cost' modeled as AlternativeCostsAttribute -> AlternativeCost{ExileCost Filter{card, Colors:[R]}, Qty 1, FromZone Hand}; faithful, describe-not-execute, no baked-in timing"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CaveIn.json#residual",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no unparsed/free-text residual; cost line consumed by AttributeExtractor and skipped in ClauseSplitter; damage line fully structured (composite dealDamage Each-creature + EachPlayer); siblings (manaCost/colors/colorIdentity) preserved"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-cave-in#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "N/A — no new discriminator introduced; reuses existing 'alternativeCosts' attribute + 'exile' cost nodes (as Bestow/Borderpost do), so no new PortGraph case or known-coarse-projections entry is required"
+    }
+  ]
+}

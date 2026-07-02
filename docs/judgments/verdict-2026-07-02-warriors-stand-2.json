@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/schema/ast-schema.json#beenAttackedThisStep",
+      "verdict": "PASS",
+      "citations": ["CR 508.1", "CR 508.1a", "CR 508.1b", "CR 601.3a"],
+      "reason": "schema delta adds only BeenAttackedThisStepCondition (fieldless Condition marker) — structured, describe-not-execute, no baked-in timing (timing lives on the separate Timing/Phase fields); cited CR rules all exist verbatim in rules-structure.json; no existing schema entry dropped/reordered (insertion + SchemaHash only)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WarriorsStand.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.3a", "CR 508.1", "CR 508.1a", "CR 508.1b"],
+      "reason": "conditional casting-time restriction modeled as timingModification{Restrict, Timing:Phase} gated by structured beenAttackedThisStep condition — faithful to oracle text (verified against oracle-cards.json), timing/effect decomposed (not baked into discriminator); no unparsed node; +2/+2 sibling ability preserved and correct (Each creature you control, until end of turn); Phase:'declare attackers step' rides the PRE-EXISTING free-text Phase field (separate phase-naming axis, not introduced here)"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-warriors-stand#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "the new discriminator is a ConditionKind (beenAttackedThisStep), which is OFF the PortWalk projection surface — PortWalkExhaustivenessTests enumerates only effectType/costType/triggerEvent/restriction; no new effect/cost/trigger/restriction discriminator introduced (host timingModification is pre-existing), so no projection decision is required and none is missing"
+    }
+  ]
+}

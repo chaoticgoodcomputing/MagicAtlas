@@ -8,10 +8,13 @@ namespace MagicAtlas.Flows.Ingest.Nodes;
 /// <summary>
 /// Source step that fetches Scryfall's card-symbology JSON from
 /// <c>https://api.scryfall.com/symbology</c> and parks it in the <c>RawCardSymbols</c> catalog
-/// item. Uses an injected <see cref="HttpClient"/> directly because
-/// <see cref="JsonSingletonBuilder{T}"/> doesn't compose with Flowthru's HTTP storage-medium
-/// resolver in 0.17.x — once that gap is closed we can collapse this step into a plain HTTP
-/// catalog item.
+/// item. Uses an injected <see cref="HttpClient"/> directly rather than a plain HTTP catalog item:
+/// <c>api.scryfall.com</c> rejects requests that carry no <c>Accept</c> header with HTTP 400, and
+/// Flowthru's <c>HttpStorageMedium</c> builds its client from <c>HttpOptions</c> (User-Agent only —
+/// no per-item header hook), so a <c>.Json()</c>-over-https item would 400 here. The injected client
+/// sets <c>Accept</c> explicitly. (The <c>.Json()</c> singleton itself <em>does</em> route https://
+/// through <c>UseHttp</c> as of 0.21+ — see the Commander Spellbook <c>CsbVariantsRaw</c> item in the
+/// magic-ast-tests harness, whose host needs no <c>Accept</c>.)
 /// </summary>
 /// <remarks>
 /// Scryfall returns snake_case JSON, but System.Text.Json doesn't understand Flowthru's

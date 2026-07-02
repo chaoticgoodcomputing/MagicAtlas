@@ -1,0 +1,90 @@
+{
+  "Input": {
+    "Name": "Sphere of Law",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Enchantment",
+    "OracleText": "If a red source would deal damage to you, prevent 2 of that damage.",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Sphere of Law",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If a red source would deal damage to you, prevent 2 of that damage.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "damage",
+                "Source": {
+                  "Colors": [
+                    "R"
+                  ]
+                },
+                "AffectedObjects": {
+                  "Controller": "You"
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "preventDamage",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                },
+                "Target": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}

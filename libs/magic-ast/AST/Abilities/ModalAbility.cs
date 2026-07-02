@@ -1,11 +1,13 @@
 namespace MagicAST.AST.Abilities;
 
 using System.Text.Json.Serialization;
+using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
 /// Represents a modal ability where the player chooses between options.
 /// e.g., "Choose one —", "Choose two —", "Choose one or both —"
 /// </summary>
+[OracleAbility("modal")]
 public sealed record ModalAbility : Ability
 {
   [JsonIgnore]
@@ -14,20 +16,17 @@ public sealed record ModalAbility : Ability
   /// <summary>
   /// How many modes must/can be chosen.
   /// </summary>
-  [JsonPropertyName("modeSelection")]
   public required ModeSelection ModeSelection { get; init; }
 
   /// <summary>
   /// The available modes to choose from.
   /// </summary>
-  [JsonPropertyName("modes")]
   public required IReadOnlyList<ModalOption> Modes { get; init; }
 
   /// <summary>
   /// Whether the same mode can be chosen more than once.
   /// e.g., "Choose three. You may choose the same mode more than once."
   /// </summary>
-  [JsonPropertyName("allowDuplicates")]
   public bool AllowDuplicates { get; init; }
 }
 
@@ -39,20 +38,17 @@ public sealed record ModeSelection
   /// <summary>
   /// The minimum number of modes that must be chosen.
   /// </summary>
-  [JsonPropertyName("minimum")]
   public required int Minimum { get; init; }
 
   /// <summary>
   /// The maximum number of modes that can be chosen.
   /// </summary>
-  [JsonPropertyName("maximum")]
   public required int Maximum { get; init; }
 
   /// <summary>
   /// Optional condition that changes mode selection.
   /// e.g., "choose one unless you control a creature, then choose both"
   /// </summary>
-  [JsonPropertyName("conditionalOverride")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ModeSelectionOverride? ConditionalOverride { get; init; }
 
@@ -80,6 +76,13 @@ public sealed record ModeSelection
   /// Creates an "up to N" selection.
   /// </summary>
   public static ModeSelection ChooseUpTo(int n) => new() { Minimum = 0, Maximum = n };
+
+  /// <summary>
+  /// Creates a "Choose one or more" selection over <paramref name="modeCount"/> available
+  /// modes: at least one, at most all of them.
+  /// </summary>
+  public static ModeSelection ChooseOneOrMore(int modeCount) =>
+    new() { Minimum = 1, Maximum = modeCount };
 }
 
 /// <summary>
@@ -90,13 +93,11 @@ public sealed record ModeSelectionOverride
   /// <summary>
   /// The condition that triggers the override.
   /// </summary>
-  [JsonPropertyName("condition")]
   public required Condition Condition { get; init; }
 
   /// <summary>
   /// The mode selection to use when the condition is met.
   /// </summary>
-  [JsonPropertyName("selection")]
   public required ModeSelection Selection { get; init; }
 }
 
@@ -108,14 +109,12 @@ public sealed record ModalOption
   /// <summary>
   /// The ability that occurs if this mode is chosen.
   /// </summary>
-  [JsonPropertyName("ability")]
   public required Ability Ability { get; init; }
 
   /// <summary>
   /// Optional name for the mode (used in some cards like Dawnbringer Cleric).
   /// e.g., "Cure Wounds", "Dispel Magic"
   /// </summary>
-  [JsonPropertyName("name")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Name { get; init; }
 }

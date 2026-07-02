@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/JOU/ArchetypeofImagination.json",
+      "verdict": "PASS",
+      "citations": ["CR 113.11", "CR 611.3", "CR 702.9"],
+      "reason": "opponent lock 'lose flying and can't have or gain flying' collapsed to one cantHaveOrGainKeyword(Flying) continuous effect on Each opponent creature — faithful to CR 113.11 (can't-have subsumes the loss), structured keyword enum, no free-text/unparsed, anthem sibling 'have flying' preserved as gainAbility"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#cantHaveOrGainKeyword",
+      "verdict": "PASS",
+      "citations": ["CR 113.11"],
+      "reason": "new discriminator's projection decision present and sensible — parked coarse alongside its already-coarse siblings loseAbility/gainAbility/keywordAbility; no flow rule consumes ability-denial, genuinely inert for interaction recall"
+    }
+  ]
+}

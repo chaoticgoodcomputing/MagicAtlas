@@ -1,0 +1,71 @@
+{
+  "Name": "Boomerang",
+  "Ports": [
+    {
+      "Identity": "Boomerang::cast:spell:self",
+      "Card": "Boomerang",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Boomerang::emit:returntohand:permanent",
+      "Card": "Boomerang",
+      "Label": "emit:returntohand:permanent",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=permanent|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Boomerang::pay:mana:blue",
+      "Card": "Boomerang",
+      "Label": "pay:mana:blue",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Boomerang::cast:spell:self",
+      "To": "Boomerang::emit:returntohand:permanent"
+    },
+    {
+      "From": "Boomerang::pay:mana:blue",
+      "To": "Boomerang::emit:returntohand:permanent"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Boomerang::cast:spell:self",
+      "To": "Boomerang::emit:returntohand:permanent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Boomerang::pay:mana:blue",
+      "To": "Boomerang::emit:returntohand:permanent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

@@ -1,0 +1,26 @@
+{
+  "Keyword": "Escalate",
+  "Parameter": "{2}",
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "additionalCastCost",
+        "AdditionalCost": {
+          "Cost": {
+            "CostType": "mana",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              }
+            ]
+          },
+          "IsOptional": true,
+          "Repeatable": true
+        }
+      }
+    ],
+    "KeywordSource": "Escalate"
+  }
+}

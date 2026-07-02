@@ -1,0 +1,139 @@
+{
+  "Input": {
+    "Name": "Earth-Cult Elemental",
+    "ManaCost": "{4}{R}{R}",
+    "TypeLine": "Creature — Elemental",
+    "OracleText": "Siege Monster — When this creature enters, roll a d20.\n1—9 | Each player sacrifices a permanent of their choice.\n10—19 | Each opponent sacrifices a permanent of their choice.\n20 | Each opponent sacrifices two permanents of their choice.",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Earth-Cult Elemental",
+    "TypeLine": {
+      "Raw": "Creature — Elemental",
+      "Types": ["Creature"],
+      "Subtypes": ["Elemental"]
+    },
+    "Oracle": {
+      "RawText": "Siege Monster — When this creature enters, roll a d20.\n1—9 | Each player sacrifices a permanent of their choice.\n10—19 | Each opponent sacrifices a permanent of their choice.\n20 | Each opponent sacrifices two permanents of their choice.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "rollDie",
+              "Sides": 20
+            },
+            {
+              "EffectType": "rollResultsTable",
+              "Rows": [
+                {
+                  "MinResult": 1,
+                  "MaxResult": 9,
+                  "Effects": [
+                    {
+                      "EffectType": "sacrifice",
+                      "Target": {
+                        "Kind": "EachPlayer",
+                        "Filter": {
+                          "CardTypes": ["permanent"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "MinResult": 10,
+                  "MaxResult": 19,
+                  "Effects": [
+                    {
+                      "EffectType": "sacrifice",
+                      "Target": {
+                        "Kind": "EachOpponent",
+                        "Filter": {
+                          "CardTypes": ["permanent"]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "MinResult": 20,
+                  "MaxResult": 20,
+                  "Effects": [
+                    {
+                      "EffectType": "sacrifice",
+                      "Target": {
+                        "Kind": "EachOpponent",
+                        "Filter": {
+                          "CardTypes": ["permanent"]
+                        }
+                      },
+                      "Count": {
+                        "QuantityType": "literal",
+                        "Value": 2
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        }
+      }
+    ]
+  }
+}

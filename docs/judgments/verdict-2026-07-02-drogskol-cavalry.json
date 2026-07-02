@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SOI/DrogskolCavalry.json",
+      "verdict": "PASS",
+      "citations": ["CR 111.1", "CR 111.3", "CR 701.7a", "CR 105.1", "CR 702.9a", "CR 702.9b"],
+      "reason": "activated token-creation modeled correctly: {3}{W} mana Costs + plain createToken effect (Count 1, 1/1 white Spirit, Colors [W] not [C], Subtypes [Spirit]) with the 'with flying' clause as a granted static evasion ability (CanBeBlockedBy creature w/ Flying|Reach) — matches GhostlyDancers precedent; no baked-in timing, no free-text/unparsed residual, siblings (Flying static, gainLife trigger) preserved, all CR cites exist and match"
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "Input": {
+    "Name": "Dissatisfied Customer",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Vampire Guest",
+    "OracleText": "Flying, haste\nWhen this creature enters, roll a six-sided die. If the result is 3 or less, you lose that much life.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Dissatisfied Customer",
+    "TypeLine": {
+      "Raw": "Creature — Vampire Guest",
+      "Types": ["Creature"],
+      "Subtypes": ["Vampire", "Guest"]
+    },
+    "Oracle": {
+      "RawText": "Flying, haste\nWhen this creature enters, roll a six-sided die. If the result is 3 or less, you lose that much life.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
+            }
+          ],
+          "KeywordSource": "Flying"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
+            }
+          ],
+          "KeywordSource": "Haste"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "rollDie",
+              "Sides": 6
+            },
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "quantityComparison",
+                "Left": {
+                  "QuantityType": "dieRollResult"
+                },
+                "Operator": "LessThanOrEqual",
+                "Right": {
+                  "QuantityType": "literal",
+                  "Value": 3
+                }
+              },
+              "Then": {
+                "EffectType": "loseLife",
+                "Amount": {
+                  "QuantityType": "dieRollResult"
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}

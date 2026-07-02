@@ -73,7 +73,10 @@ public sealed class KeywordExpander : IKeywordExpander
   public IEnumerable<KeywordDefinition> AllDefinitions => _definitions.Values;
 
   /// <summary>
-  /// Creates a KeywordExpander with the standard Magic keyword definitions.
+  /// Creates a KeywordExpander with the standard Magic keyword definitions, sourced
+  /// solely from the reflection-discovered one-file-per-keyword
+  /// <see cref="IKeyword"/> files (<see cref="KeywordRegistry.RegisteredDefinitions"/>).
   /// </summary>
-  public static KeywordExpander CreateDefault() => new(KeywordDefinitions.All);
+  public static KeywordExpander CreateDefault() =>
+    new(KeywordRegistry.RegisteredDefinitions);
 }

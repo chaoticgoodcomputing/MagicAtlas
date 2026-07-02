@@ -1,0 +1,32 @@
+{
+  "Keyword": "Multikicker",
+  "Parameter": "{1}{R}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Multikicker",
+    "Effects": [
+      {
+        "EffectType": "additionalCastCost",
+        "AdditionalCost": {
+          "Cost": {
+            "CostType": "mana",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "R"
+                ]
+              }
+            ]
+          },
+          "IsOptional": true,
+          "Repeatable": true
+        }
+      }
+    ]
+  }
+}

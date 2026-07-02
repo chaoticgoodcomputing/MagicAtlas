@@ -1,0 +1,96 @@
+{
+  "Name": "Bar the Door",
+  "Ports": [
+    {
+      "Identity": "Bar the Door::cast:spell:self",
+      "Card": "Bar the Door",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Bar the Door::modify:pt",
+      "Card": "Bar the Door",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bar the Door::pay:mana",
+      "Card": "Bar the Door",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Bar the Door::pay:mana:white",
+      "Card": "Bar the Door",
+      "Label": "pay:mana:white",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Bar the Door::cast:spell:self",
+      "To": "Bar the Door::modify:pt"
+    },
+    {
+      "From": "Bar the Door::pay:mana:white",
+      "To": "Bar the Door::modify:pt"
+    },
+    {
+      "From": "Bar the Door::pay:mana",
+      "To": "Bar the Door::modify:pt"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Bar the Door::cast:spell:self",
+      "To": "Bar the Door::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bar the Door::pay:mana:white",
+      "To": "Bar the Door::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Bar the Door::pay:mana",
+      "To": "Bar the Door::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "Panicked Altisaur",
+    "ManaCost": "{4}{R}",
+    "TypeLine": "Creature — Dinosaur",
+    "OracleText": "Reach\n{T}: This creature deals 2 damage to each opponent.",
+    "Power": "4",
+    "Toughness": "5",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Reach"
+    ],
+    "Id": "ad371c97-a266-4a88-9d28-2e889a37ba00",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Panicked Altisaur",
+    "TypeLine": {
+      "Raw": "Creature — Dinosaur",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dinosaur"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Reach\n{T}: This creature deals 2 damage to each opponent.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Reach",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Source": {
+                "Kind": "Self"
+              },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Target": {
+                "Kind": "EachOpponent"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}

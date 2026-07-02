@@ -1,0 +1,105 @@
+# Adding a flow arm — the reference pattern
+
+A **flow arm** is a rules-defined edge the interaction engine derives between two cards' ports — "an
+emit of kind X satisfies a consume of role Y" (ADR-0002 §5/§6). Adding one is how the engine learns
+to reconstruct a new family of combos. Most "missed combos" (see `tools/bench/MagicAtlas.Bench` recall)
+are a *missing flow arm*, not a parser bug.
+
+This doc is the canonical worked example. **Copy this pattern; do not copy the anti-patterns at the
+bottom.** The worked example is the **life-drain arm** (CR 119): Vito × Exquisite Blood,
+Marauding Blight-Priest combos — landed 2026-06-15, interaction-judge-verified zero-false-positive
+(`docs/judgments/verdict-2026-06-15-life-arm.json`). It also demonstrates the **full parse↔interaction
+virtuous cycle**: the arm first landed Vito's loop at a sound AMBER (the gold under-modeled "target
+opponent"), then a parse-layer sharpen earned the GREEN — never an engine fudge (see anti-pattern 2 +
+`verdict-2026-06-15-target-opponent-golds.json` / `verdict-2026-06-15-vito-green.json`).
+Net recall@Green 0→0.121 (4 combos), recall@Amber 0.24→0.36.
+
+## The split — two layers, each its own job
+
+A missed combo is almost always **two** problems on **two** layers. Fix each in its own layer:
+
+| Layer | Job | Where | The life example |
+|---|---|---|---|
+| **Parse** (magic-ast → PortWalk) | *Describe* the effect/trigger faithfully as a port **label** + a **Subject** | `PortGraph.cs`, `PortLabel.cs`, `PortWalkProjection.cs` | `gainLife`→`emit:life:gain:<scope>`; `GainsLife`→`trigger:life:gain:<scope>` |
+| **Interaction** (engine) | *Connect* emit→consume (rules-implicit, cross-card) + let the **operator tier** it | `PortGraphEngine.cs` `FlowFeasible` | a `("life","trigger")` arm; player-scope overlap → Green/Amber |
+
+The boundary is load-bearing (see ADR-0002 + the `feedback_mast_describes_not_executes` principle):
+**intra-card, lexical** meaning of explicit text lives in parse; **cross-card, causal, uncertain**
+connections live in the engine. A flow arm is always the latter.
+
+## The recipe (what the life arm did)
+
+1. **Project a faithful label + Subject** (`PortGraph.cs`). Add a case to `EmitPort`/`Trigger` that
+   emits a real label and carries the discriminating filter as the port **`Subject`** — the operator
+   tiers on the Subject, so this is what determines Green vs Amber. (Life: the affected/watched
+   *player* via `PlayerFilter` / the trigger filter.)
+2. **Add the discriminator to `PortWalkProjection`** and **remove it from
+   `known-coarse-projections.json`** (run `nx run magic-ast:lint-discriminators` mentally — the 03
+   ratchet *shrinks*; the blind-spot metric drops). A discriminator that stays coarse emits a label no
+   arm reads → zero recall.
+3. **Add the arm** (`PortGraphEngine.cs` `FlowFeasible`) — one `switch` clause matching
+   `(ResourceKind(emit), Role(consume))`, plus a tiny feasibility helper if needed (life: same
+   gain/loss direction). **The arm decides *feasibility* only; it does NOT decide certainty** — that
+   is `AddRulesEdge`'s operator overlap on the Subjects ("the label names, the operator decides",
+   ADR-0002 §7).
+4. **Pin it**: add the exemplar combo to the sentinel manifest, regenerate snapshots (a *justified*
+   diff — cite the arm), let `bench:recall` advance its baseline, and **dispatch the
+   `interaction-judge`** on every new edge.
+
+## Gate sequence (all must hold — this is the safety net)
+
+- `PortWalkExhaustivenessTests` passes — the new fine discriminators are **removed** from the named
+  coarse-projection whitelist (`known-coarse-projections.json`), never left coarse (de-ratcheted: an
+  explicit named whitelist, not a shrinking count).
+- `PortWalkSentinelSnapshotTest` regenerated with a justified diff (tier/label changes are *expected*).
+- `nx run bench:recall` — the per-combo expected-tier gate holds: any combo that flips is a **reviewed
+  pin edit** in `combo-expected-tiers.json` (the gate is loud on *any* drift, improvement or
+  regression — de-ratcheted from the old aggregate moving baseline).
+- **`interaction-judge` PROCEED** — every new GREEN is genuinely reliable (the false-positive guard),
+  every AMBER soundly irreducible. A GREEN it can't justify is a FAIL: stop.
+- `nx run mast:test` green.
+
+## Anti-patterns — do NOT do these
+
+1. **Don't encode the connection in the AST/parser.** "A sacrificed creature dies", "a life-loss
+   triggers a life-loss watcher" are *rules consequences* across cards — they belong in the engine's
+   flow grammar, never as a field the parser writes. The AST transcribes what the card *says*.
+2. **Don't fudge a GREEN.** When the gold is imprecise, the honest tier is AMBER, and the GREEN is
+   earned in the **parse layer**, never by relaxing the operator or the arm. *Worked through here:*
+   the Vito hop first landed AMBER because the gold (and parser) modeled "target **opponent**" as an
+   unqualified `target player` (`{CardTypes:[player]}`) — the operator can't certify the loser is an
+   opponent. The fix was a parse-layer sharpen — the parser (`LoseLifeDerivedRule`,
+   `TryParseTargetOpponentLoseAndYouGainLife`) and the 3 affected golds (Vito, Dakmor Ghoul, Highway
+   Robber) now emit `Player:{Kind:Opponent}` — after which the **same arm** tiers the hop GREEN, with
+   no engine change. mast-judge confirmed the gold modeling; interaction-judge confirmed the new GREEN
+   is sound. Marauding Blight-Priest was GREEN from the start because its gold was already
+   opponent-scoped (`EachOpponent`). The takeaway: a needless AMBER is a *parse-precision* backlog
+   item, surfaced by recall, fixed at the parse layer — the engine stays honest throughout.
+3. **Don't let a non-scalar resource hit the scalar null-default GREEN.** `AddRulesEdge` defaults a
+   **null** Subject to `Overlaps + reliability Yes` (GREEN) — correct only for a fungible scalar like
+   mana. Life/cards/players are *scoped*, so a null Subject there would be a false-positive vector.
+   Always carry a **non-null** Subject (life uses `PlayerFilter` + the `AnyPlayer` floor). This was the
+   subtle bug caught while building this arm; the judge confirmed the fix.
+4. **Don't leave the discriminator coarse.** If you add the arm but skip step 2, the emit still
+   projects `emit:<x>` and no arm matches — silent zero recall, and the 03 exhaustiveness gate will
+   flag the unprojected discriminator (it must be removed from the `known-coarse-projections.json`
+   whitelist, not left coarse).
+5. **Don't let the worker's scope test diverge from the product's reconstruction reach.** A worktree
+   can't run the corpus bench, so a flow-arm worker proves its arm with a *scope test* (Walk the combo
+   golds → `Materialize` → `FindCycles` → assert the cycle's tier). Call
+   `FindCycles(edges, LengthBound)` with the **same bound the product uses** (`MaterializeCyclesStep`
+   and `ComboRecallRunner`, currently **6**) — NOT the unbounded `FindCycles(edges)` default. An
+   unbounded enumeration finds cycles *longer* than the product ever reconstructs, so a 7+-hop loop
+   passes the scope test while the combo never flips in the bench — a false "will-flip" signal the
+   tier-judge will **not** catch (it judges soundness, not reach). *Surfaced by the fan-out trial:* the
+   Displacer cast-blink arm's **6-hop** loop passed an unbounded scope test but only flipped once the
+   bound was deliberately raised 5→6 (a reviewed product-reach decision), because at bound 5 it was
+   truncated. Mirror the bound, or the scope test lies about coverage.
+
+## Files (the life arm, to copy from)
+
+- `libs/mast-interaction/PortLabel.cs` — `LifeGainEmit`/`LifeLossEmit`/`LifeGainTrigger`/`LifeLossTrigger`
+- `libs/mast-interaction/PortGraph.cs` — `EmitPort` life cases, `Trigger` life branches, `PlayerFilter` + `AnyPlayer`
+- `libs/mast-interaction/PortWalkProjection.cs` — `gainLife`/`loseLife`/`GainsLife`/`LosesLife`
+- `libs/mast-interaction/PortGraphEngine.cs` — `FlowFeasible` `("life","trigger")` + `LifeFlowFeasible`
+- `tests/magic-ast-tests/Tests/Interaction/Snapshots/vito-x-exquisite-blood-life-flow-arm-exemplar.json`

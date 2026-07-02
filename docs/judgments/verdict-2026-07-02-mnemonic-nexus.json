@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/RAV/MnemonicNexus.json",
+      "verdict": "PASS",
+      "citations": ["CR 400.12", "CR 701.24a"],
+      "reason": "symmetric whole-zone recycle modeled as shuffleGraveyardIntoLibrary effect with Player=EachPlayer; faithful to oracle, describe-not-execute, no baked-in timing, no unparsed residual, no regression (new single-ability instant)"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#shuffleGraveyardIntoLibrary",
+      "verdict": "PASS",
+      "citations": ["CR 400.12"],
+      "reason": "new shuffleGraveyardIntoLibrary discriminator parked coarse alongside its shuffle/shuffleIntoLibrary siblings; no flow rule reads graveyard-recycle shuffle events, so the inert carve-out is sensible, not something a flow rule would clearly want"
+    }
+  ]
+}

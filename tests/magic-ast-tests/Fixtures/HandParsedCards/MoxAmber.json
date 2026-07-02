@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Mox Amber",
+    "ManaCost": "{0}",
+    "TypeLine": "Legendary Artifact",
+    "OracleText": "{T}: Add one mana of any color among legendary creatures and planeswalkers you control.",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Mox Amber",
+    "TypeLine": {
+      "Raw": "Legendary Artifact",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: Add one mana of any color among legendary creatures and planeswalkers you control.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "",
+              "AnyColor": false,
+              "AnyColorAmong": {
+                "CardTypes": [
+                  "creature",
+                  "planeswalker"
+                ],
+                "Supertypes": [
+                  "Legendary"
+                ],
+                "Controller": "You",
+                "Zone": "Battlefield"
+              }
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{0}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 0
+          }
+        ],
+        "ManaValue": 0
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

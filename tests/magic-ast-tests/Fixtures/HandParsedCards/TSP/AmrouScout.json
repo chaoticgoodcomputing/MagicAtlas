@@ -1,0 +1,134 @@
+{
+  "Input": {
+    "Name": "Amrou Scout",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Kithkin Rebel Scout",
+    "OracleText": "{4}, {T}: Search your library for a Rebel permanent card with mana value 3 or less, put it onto the battlefield, then shuffle.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [],
+    "Id": "da2b6d3a-15e7-4305-9384-3635159cb421",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Amrou Scout",
+    "TypeLine": {
+      "Raw": "Creature — Kithkin Rebel Scout",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kithkin",
+        "Rebel",
+        "Scout"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{4}, {T}: Search your library for a Rebel permanent card with mana value 3 or less, put it onto the battlefield, then shuffle.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 4
+                }
+              ]
+            },
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "searchLibrary",
+                  "Filter": {
+                    "CardTypes": [
+                      "permanent"
+                    ],
+                    "Subtypes": [
+                      "Rebel"
+                    ],
+                    "ManaValueComparison": {
+                      "Operator": "LessThanOrEqual",
+                      "Value": 3
+                    }
+                  },
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Destination": "Battlefield",
+                  "Revealed": false
+                },
+                {
+                  "EffectType": "shuffle",
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
+              ]
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "Keyword": "First strike",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "combatDamageTiming",
+        "Timing": "First"
+      }
+    ],
+    "KeywordSource": "First strike"
+  }
+}

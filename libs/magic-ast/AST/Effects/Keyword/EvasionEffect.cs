@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
+using MagicAST.AST.Effects.Traits;
 
 /// <summary>
 /// Evasion effect: restricts what can block this creature.
@@ -11,6 +13,7 @@ using MagicAST.AST.References;
 /// "This creature can't be blocked except by [filter]"
 /// "This creature can't be blocked as long as [condition]"
 /// </summary>
+[OracleEffect("evasion")]
 public sealed record EvasionEffect : Effect
 {
   /// <summary>
@@ -19,7 +22,6 @@ public sealed record EvasionEffect : Effect
   /// e.g., for Menace: two or more creatures
   /// Null means "can't be blocked" (unblockable).
   /// </summary>
-  [JsonPropertyName("canBeBlockedBy")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectFilter? CanBeBlockedBy { get; init; }
 
@@ -27,7 +29,6 @@ public sealed record EvasionEffect : Effect
   /// Minimum number of creatures required to block (for Menace-style effects).
   /// Null for most evasion abilities.
   /// </summary>
-  [JsonPropertyName("minimumBlockers")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public int? MinimumBlockers { get; init; }
 
@@ -35,7 +36,6 @@ public sealed record EvasionEffect : Effect
   /// For landwalk: the condition based on defending player's state.
   /// e.g., "defending player controls a Forest"
   /// </summary>
-  [JsonPropertyName("unblockableCondition")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public EvasionCondition? UnblockableCondition { get; init; }
 }

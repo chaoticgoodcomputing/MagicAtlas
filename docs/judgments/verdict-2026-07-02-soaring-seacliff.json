@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ZEN/SoaringSeacliff.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.1", "CR 115.1", "CR 611.1", "CR 702.9"],
+      "reason": "ETB Trigger{Enters,self-land} + plain gainAbility to Target creature filter; flying modeled structurally as evasion/CanBeBlockedBy(flying|reach); untilTime end-of-turn duration is a composable node, no baked timing; oracle text matches, no unparsed/free-text residual, siblings preserved"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TargetCreatureGainsKeywordUntilEndOfTurnRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 115.1", "CR 603.1", "CR 611.1"],
+      "reason": "parser rule emits existing GainAbilityEffect nodes; doc-comment CR cites all exist and match modeling; bails (no free text) on unrecognised keyword; correctly distinguished from ItGainsKeyword anaphoric variant"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-soaring-seacliff#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (gainAbility, evasion, Enters trigger all pre-exist; branch adds only a parser rule, no PortGraph/known-coarse-projections change) — PortWalk projection decision N/A"
+    }
+  ]
+}

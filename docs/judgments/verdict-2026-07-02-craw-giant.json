@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LEG/CrawGiant.json#Rampage",
+      "verdict": "PASS",
+      "citations": ["CR 702.23a"],
+      "reason": "triggered ability Whenever/BecomesBlocked/creature + modifyPT It +2/+2 untilEndOfTurn; N=2 captured structurally via CalculatedQuantity Operand=2 Operation=multiply (type's own worked example); combat-population count carried as established CalculatedQuantity.Expression residual (Melee precedent) — not a new axis; no baked-in timing; CR 702.23a verbatim match"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LEG/CrawGiant.json#Trample-sibling",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "sibling Trample preserved as static/keywordAbility per corpus-standard shape; no ability dropped/added/inverted; attributes (MV 7, G, 6/4) correct; no unparsed nodes"
+    },
+    {
+      "target": "libs/magic-ast/Keywords/Definitions/RampageKeyword.cs#projection",
+      "verdict": "PASS",
+      "citations": ["CR 702.23a"],
+      "reason": "no new discriminator introduced — TriggerEvent.BecomesBlocked and EffectType modifyPT pre-exist on base; branch adds only KeywordAbility.Rampage enum + combinator, so no PortWalk projection decision is required"
+    }
+  ]
+}

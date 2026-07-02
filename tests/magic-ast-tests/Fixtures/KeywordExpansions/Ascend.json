@@ -1,0 +1,14 @@
+{
+  "Keyword": "Ascend",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Ascend"
+      }
+    ],
+    "KeywordSource": "Ascend"
+  }
+}

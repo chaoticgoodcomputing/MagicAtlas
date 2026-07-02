@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Treasure Cruise",
+    "ManaCost": "{7}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Delve (Each card you exile from your graveyard while casting this spell pays for {1}.)\nDraw three cards.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Treasure Cruise",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Delve (Each card you exile from your graveyard while casting this spell pays for {1}.)\nDraw three cards.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Delve",
+          "Effects": [
+            {
+              "EffectType": "alternativePayment",
+              "Method": "Exile",
+              "Pays": "Generic",
+              "Source": {
+                "CardTypes": [
+                  "card"
+                ],
+                "Controller": "You",
+                "Zone": "Graveyard"
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(Each card you exile from your graveyard while casting this spell pays for {1}.)"
+          }
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{7}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 7
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 8
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}

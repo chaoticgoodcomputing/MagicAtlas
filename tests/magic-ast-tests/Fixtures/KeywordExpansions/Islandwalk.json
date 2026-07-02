@@ -1,0 +1,21 @@
+{
+  "Keyword": "Islandwalk",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "evasion",
+        "UnblockableCondition": {
+          "ConditionType": "DefendingPlayerControls",
+          "PermanentFilter": {
+            "Subtypes": [
+              "Island"
+            ]
+          }
+        }
+      }
+    ],
+    "KeywordSource": "Islandwalk"
+  }
+}

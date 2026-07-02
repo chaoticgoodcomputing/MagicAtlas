@@ -1,0 +1,71 @@
+{
+  "Name": "Ancestral Recall",
+  "Ports": [
+    {
+      "Identity": "Ancestral Recall::cast:spell:self",
+      "Card": "Ancestral Recall",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Ancestral Recall::emit:drawcards",
+      "Card": "Ancestral Recall",
+      "Label": "emit:drawcards",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Ancestral Recall::pay:mana:blue",
+      "Card": "Ancestral Recall",
+      "Label": "pay:mana:blue",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Ancestral Recall::cast:spell:self",
+      "To": "Ancestral Recall::emit:drawcards"
+    },
+    {
+      "From": "Ancestral Recall::pay:mana:blue",
+      "To": "Ancestral Recall::emit:drawcards"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Ancestral Recall::cast:spell:self",
+      "To": "Ancestral Recall::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ancestral Recall::pay:mana:blue",
+      "To": "Ancestral Recall::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

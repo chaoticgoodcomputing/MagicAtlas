@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MSC/WinterSoldierBuckyBarnes.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.6d", "CR 614.1d"],
+      "reason": "\"Winter Soldier enters tapped.\" modeled as StaticAbility{When:asThisEnters, Effects:[tap->Self]} — static (not triggered) per 603.6d, timing decomposed into When field (no tapOnEntry baking), faithful to card; oracle text/type/stats verified against oracle-cards.json; matches canonical enters-tapped shape"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-winter-soldier#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses existing tap effect, asThisEnters timing, and Self reference; no PortWalk projection decision required"
+    }
+  ]
+}

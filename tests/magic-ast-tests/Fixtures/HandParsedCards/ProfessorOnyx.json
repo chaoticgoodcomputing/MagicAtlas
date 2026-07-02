@@ -1,0 +1,197 @@
+{
+  "Input": {
+    "Name": "Professor Onyx",
+    "ManaCost": "{4}{B}{B}",
+    "TypeLine": "Legendary Planeswalker — Liliana",
+    "OracleText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, each opponent loses 2 life and you gain 2 life.\n+1: You lose 1 life. Look at the top three cards of your library. Put one of them into your hand and the rest into your graveyard.\n−3: Each opponent sacrifices a creature with the greatest power among creatures that player controls.\n−8: Each opponent may discard a card. If they don't, they lose 3 life. Repeat this process six more times.",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Professor Onyx",
+    "TypeLine": {
+      "Raw": "Legendary Planeswalker — Liliana",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Planeswalker"
+      ],
+      "Subtypes": [
+        "Liliana"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Magecraft — Whenever you cast or copy an instant or sorcery spell, each opponent loses 2 life and you gain 2 life.\n+1: You lose 1 life. Look at the top three cards of your library. Put one of them into your hand and the rest into your graveyard.\n−3: Each opponent sacrifices a creature with the greatest power among creatures that player controls.\n−8: Each opponent may discard a card. If they don't, they lose 3 life. Repeat this process six more times.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "AbilityWord": "Magecraft",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "CastOrCopySpell",
+            "Filter": {
+              "CardTypes": [
+                "spell",
+                "instant",
+                "sorcery"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "EachOpponent"
+              }
+            },
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            },
+            {
+              "EffectType": "impulse",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "RestDestination": "Graveyard"
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": 1
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "EachOpponent",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "with the greatest power among creatures that player controls"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": -3
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "repeat",
+              "Inner": {
+                "EffectType": "optional",
+                "Inner": {
+                  "EffectType": "discardCards",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "EachOpponent"
+                  },
+                  "RevealHand": false
+                },
+                "IfYouDoNot": {
+                  "EffectType": "loseLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 3
+                  },
+                  "Player": {
+                    "Kind": "EachOpponent"
+                  }
+                }
+              },
+              "AdditionalTimes": 6
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": -8
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

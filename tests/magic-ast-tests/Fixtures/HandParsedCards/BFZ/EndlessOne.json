@@ -1,0 +1,80 @@
+{
+  "Input": {
+    "Name": "Endless One",
+    "ManaCost": "{X}",
+    "TypeLine": "Creature — Eldrazi",
+    "OracleText": "This creature enters with X +1/+1 counters on it.",
+    "Power": "0",
+    "Toughness": "0",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Endless One",
+    "TypeLine": {
+      "Raw": "Creature — Eldrazi",
+      "Supertypes": [],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Eldrazi"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature enters with X +1/+1 counters on it.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "Count": {
+                "QuantityType": "variable",
+                "Name": "X"
+              },
+              "CounterType": "+1/+1"
+            }
+          ],
+          "When": "asThisEnters"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{X}",
+        "Symbols": [
+          {
+            "Kind": "variable"
+          }
+        ],
+        "IsVariable": true
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        }
+      }
+    ]
+  }
+}

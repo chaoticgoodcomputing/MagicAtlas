@@ -12,6 +12,5 @@ public sealed record Parenthetical
   /// <summary>
   /// The text content inside the parentheses, without the parentheses themselves.
   /// </summary>
-  [JsonPropertyName("text")]
   public required string Text { get; init; }
 }

@@ -1,0 +1,6 @@
+{
+  "_note": "The asymmetry (panel Claim 1): Squirrel intersects creature, but a Squirrel could ride a Kindred non-creature (308.1) → cannot assert ALL Squirrels are creatures → Unknown, never Yes.",
+  "Sub": { "Subtypes": ["Squirrel"] },
+  "Sup": { "CardTypes": ["creature"] },
+  "Expected": "Unknown"
+}

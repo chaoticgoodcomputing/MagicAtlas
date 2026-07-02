@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ONS/SilvosRogueElemental.json#activated-regenerate",
+      "verdict": "PASS",
+      "citations": ["CR 701.19a", "CR 201.5"],
+      "reason": "'{G}: Regenerate Silvos' modeled as activated ability (mana {G} cost) with regenerate effect Target Self; self-by-name per CR 201.5, describe-not-execute, no baked timing"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ONS/SilvosRogueElemental.json#trample",
+      "verdict": "PASS",
+      "citations": ["CR 702.19"],
+      "reason": "out-of-axis sibling preserved as static keywordAbility Trample, matching established convention; no residual"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-silvos#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (regenerate EffectType pre-existing on base with a sensible baseline-coarse projection entry); ratchet not triggered"
+    }
+  ]
+}

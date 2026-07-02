@@ -1,0 +1,138 @@
+{
+  "Input": {
+    "Name": "Hapatra, Vizier of Poisons",
+    "ManaCost": "{B}{G}",
+    "TypeLine": "Legendary Creature — Human Cleric",
+    "OracleText": "Whenever Hapatra deals combat damage to a player, you may put a -1/-1 counter on target creature.\nWhenever you put one or more -1/-1 counters on a creature, create a 1/1 green Snake creature token with deathtouch.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["B", "G"],
+    "ColorIdentity": ["B", "G"]
+  },
+  "Output": {
+    "Name": "Hapatra, Vizier of Poisons",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Cleric",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "Whenever Hapatra deals combat damage to a player, you may put a -1/-1 counter on target creature.\nWhenever you put one or more -1/-1 counters on a creature, create a 1/1 green Snake creature token with deathtouch.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "putCounters",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": ["creature"]
+                  }
+                },
+                "CounterType": "-1/-1",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "CounterPlaced",
+            "CounterType": "-1/-1",
+            "MinimumCount": 1,
+            "Filter": {
+              "CardTypes": ["creature"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": ["G"],
+                "Types": ["creature"],
+                "Subtypes": ["Snake"],
+                "IsCopy": false,
+                "Abilities": [
+                  {
+                    "Kind": "static",
+                    "KeywordSource": "Deathtouch",
+                    "Effects": [
+                      {
+                        "EffectType": "keywordAbility",
+                        "Keyword": "Deathtouch"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}{G}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

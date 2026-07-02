@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Saberclaw Golem",
+    "ManaCost": "{5}",
+    "TypeLine": "Artifact Creature — Golem",
+    "OracleText": "{R}: This creature gains first strike until end of turn.",
+    "Power": "4",
+    "Toughness": "2",
+    "Colors": [],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Saberclaw Golem",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Golem",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Golem"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{R}: This creature gains first strike until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "First strike",
+                "Effects": [
+                  {
+                    "EffectType": "combatDamageTiming",
+                    "Timing": "First"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

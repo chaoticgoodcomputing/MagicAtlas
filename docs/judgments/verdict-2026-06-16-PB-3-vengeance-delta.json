@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/10E/Vengeance.json",
+      "verdict": "PASS",
+      "citations": ["CR 110.5", "CR 110.5a"],
+      "reason": "structured-characteristic slice: free-text {CharacteristicType:other, Description:tapped} replaced by structured TappedStateCharacteristic{Tapped:true} on the destroy target's creature filter; faithful to 'Destroy target tapped creature.'; destroy effect, Target, and creature CardType preserved; zero residual remaining; CR 110.5 governs tapped/untapped status and exists in rules data"
+    }
+  ]
+}

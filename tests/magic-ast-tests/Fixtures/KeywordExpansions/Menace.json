@@ -1,0 +1,19 @@
+{
+  "Keyword": "Menace",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "evasion",
+        "CanBeBlockedBy": {
+          "CardTypes": [
+            "creature"
+          ]
+        },
+        "MinimumBlockers": 2
+      }
+    ],
+    "KeywordSource": "Menace"
+  }
+}

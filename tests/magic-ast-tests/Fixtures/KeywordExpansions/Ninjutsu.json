@@ -1,0 +1,22 @@
+{
+  "Keyword": "Ninjutsu",
+  "Parameter": "{2}",
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "ninjutsu",
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "generic",
+              "GenericAmount": 2
+            }
+          ]
+        }
+      }
+    ],
+    "KeywordSource": "Ninjutsu"
+  }
+}

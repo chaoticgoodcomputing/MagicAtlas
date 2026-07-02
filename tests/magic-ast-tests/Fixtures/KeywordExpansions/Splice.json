@@ -1,0 +1,25 @@
+{
+  "Keyword": "Splice",
+  "Parameter": "onto Arcane {G}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Splice",
+    "Effects": [
+      {
+        "EffectType": "splice",
+        "Onto": {
+          "Subtypes": ["Arcane"]
+        },
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "colored",
+              "Colors": ["G"]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

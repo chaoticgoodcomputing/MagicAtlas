@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Changeling Titan",
+    "ManaCost": "{4}{G}",
+    "TypeLine": "Creature — Shapeshifter",
+    "OracleText": "Changeling (This card is every creature type.)\nChampion a creature (When this enters, sacrifice it unless you exile another creature you control. When this leaves the battlefield, that card returns to the battlefield.)",
+    "Power": "7",
+    "Toughness": "7",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Changeling Titan",
+    "TypeLine": {
+      "Raw": "Creature — Shapeshifter",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Shapeshifter"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Changeling (This card is every creature type.)\nChampion a creature (When this enters, sacrifice it unless you exile another creature you control. When this leaves the battlefield, that card returns to the battlefield.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Changeling",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Changeling"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Champion",
+          "Effects": [
+            {
+              "EffectType": "champion",
+              "CreatureType": "creature"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        }
+      }
+    ]
+  }
+}

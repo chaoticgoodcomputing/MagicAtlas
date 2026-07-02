@@ -1,0 +1,107 @@
+{
+  "Input": {
+    "Name": "Goliath Paladin",
+    "ManaCost": "{4}{W}",
+    "TypeLine": "Creature — Giant Knight",
+    "OracleText": "Vigilance\nWhen this creature enters, you take the initiative.",
+    "Power": "3",
+    "Toughness": "6",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Goliath Paladin",
+    "TypeLine": {
+      "Raw": "Creature — Giant Knight",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Giant",
+        "Knight"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Vigilance\nWhen this creature enters, you take the initiative.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Vigilance",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Vigilance"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "TakeInitiative"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        }
+      }
+    ]
+  }
+}

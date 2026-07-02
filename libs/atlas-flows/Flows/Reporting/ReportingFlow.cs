@@ -8,19 +8,11 @@ using MagicAtlas.Flows.Reporting.Nodes;
 namespace MagicAtlas.Flows.Reporting;
 
 /// <summary>
-/// Renders interactive Plotly HTML scatters of the atlas embedding for both model variants.
-/// Default-model output lands at <c>base.html</c>; fine-tuned-model output lands at
-/// <c>index.html</c> (the primary atlas — fine-tuned mpnet outperforms default MiniLM on the
-/// ModelEvaluations suite). Each variant joins four upstream inputs on <c>point_id</c> /
-/// <c>card_id</c> in Python: reporting points, hover metadata, cluster assignments, cluster
-/// labels. The hover metadata is model-agnostic and shared across both variants.
+/// Renders the explorer-mode atlas (index.html) — a standalone Plotly HTML scatter colored by
+/// MTG color identity (WUBRG + colorless + multicolor-hollow). Joins AtlasPoints with OracleLines
+/// (per-line text) and CardCoreData-derived hover metadata. No canonical/cluster overlay; that
+/// would be exploiter-mode and belongs in MagicAST tooling, not on this map.
 /// </summary>
-/// <remarks>
-/// The reporting input shapes (<see cref="ReportingPoint"/>, <c>ClusterAssignment</c>,
-/// <c>ClusterLabel</c>) are deliberately model- and backend-agnostic — both variants reuse the
-/// same projection node and Python impl; the two <c>@step</c> entries differ only in catalog
-/// bindings.
-/// </remarks>
 public static class ReportingFlow
 {
   public static BuiltFlow Create(Catalog catalog, IPythonExecutor executor)
@@ -32,13 +24,6 @@ public static class ReportingFlow
         transform: ProjectReportingPointsNode.Create(),
         inputs: catalog.AtlasPoints,
         outputs: catalog.AtlasReportingPoints
-      );
-
-      pipeline.AddStep<IEnumerable<AtlasPoint>, IEnumerable<ReportingPoint>>(
-        label: "ProjectReportingPointsFineTuned",
-        transform: ProjectReportingPointsNode.Create(),
-        inputs: catalog.FineTunedAtlasPoints,
-        outputs: catalog.FineTunedAtlasReportingPoints
       );
 
       pipeline.AddStep<IEnumerable<CardCoreData>, IEnumerable<CardHoverInfo>>(
@@ -54,27 +39,11 @@ public static class ReportingFlow
         function: "build_atlas_plot",
         input: (
           catalog.AtlasReportingPoints,
+          catalog.OracleLines,
           catalog.AtlasCardHoverInfo,
-          catalog.ClusterAssignments,
-          catalog.ClusterLabels,
           catalog.ReportingConfig
         ),
         output: catalog.AtlasPlotHtml,
-        executor: executor
-      );
-
-      pipeline.AddPythonStep(
-        label: "BuildAtlasPlotFineTuned",
-        module: "Flows.Reporting.build_atlas_plot_finetuned",
-        function: "build_atlas_plot_finetuned",
-        input: (
-          catalog.FineTunedAtlasReportingPoints,
-          catalog.AtlasCardHoverInfo,
-          catalog.FineTunedClusterAssignments,
-          catalog.FineTunedClusterLabels,
-          catalog.ReportingConfig
-        ),
-        output: catalog.FineTunedAtlasPlotHtml,
         executor: executor
       );
     });

@@ -1,0 +1,14 @@
+{
+  "Keyword": "Horsemanship",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Horsemanship"
+      }
+    ],
+    "KeywordSource": "Horsemanship"
+  }
+}

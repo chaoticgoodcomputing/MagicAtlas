@@ -1,0 +1,6 @@
+{
+  "_note": "'has white' and 'has blue' are both satisfied by a white-blue multicolored object → Overlaps.",
+  "A": { "Colors": ["W"] },
+  "B": { "Colors": ["U"] },
+  "Expected": "Overlaps"
+}

@@ -1,0 +1,141 @@
+{
+  "Input": {
+    "Name": "Phantom Tiger",
+    "ManaCost": "{1}{G}{G}",
+    "TypeLine": "Creature — Cat Spirit",
+    "OracleText": "Whenever Phantom Tiger attacks or blocks, remove a +1/+1 counter from it at end of combat.\nPhantom Tiger enters with two +1/+1 counters on it.",
+    "Power": "2",
+    "Toughness": "0",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Phantom Tiger",
+    "TypeLine": {
+      "Raw": "Creature — Cat Spirit",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat",
+        "Spirit"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever Phantom Tiger attacks or blocks, remove a +1/+1 counter from it at end of combat.\nPhantom Tiger enters with two +1/+1 counters on it.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "AttacksOrBlocks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "At",
+                  "Event": {
+                    "Part": "Combat",
+                    "Edge": "End"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "removeCounters",
+                    "Target": {
+                      "Kind": "It"
+                    },
+                    "CounterType": "+1/+1",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            }
+          ],
+          "When": "asThisEnters"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 0,
+          "Raw": "0"
+        }
+      }
+    ]
+  }
+}

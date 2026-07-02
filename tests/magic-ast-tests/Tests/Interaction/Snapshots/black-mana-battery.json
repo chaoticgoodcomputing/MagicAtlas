@@ -1,0 +1,131 @@
+{
+  "Name": "Black Mana Battery",
+  "Ports": [
+    {
+      "Identity": "Black Mana Battery::emit:counter:charge:self",
+      "Card": "Black Mana Battery",
+      "Label": "emit:counter:charge:self",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Black Mana Battery::emit:mana:black",
+      "Card": "Black Mana Battery",
+      "Label": "emit:mana:black",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Black Mana Battery::pay:mana",
+      "Card": "Black Mana Battery",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Black Mana Battery::pay:removecounters",
+      "Card": "Black Mana Battery",
+      "Label": "pay:removecounters",
+      "Side": "Consume",
+      "Quantity": null,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Black Mana Battery::tap:self",
+      "Card": "Black Mana Battery",
+      "Label": "tap:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Black Mana Battery::pay:mana",
+      "To": "Black Mana Battery::emit:counter:charge:self"
+    },
+    {
+      "From": "Black Mana Battery::pay:removecounters",
+      "To": "Black Mana Battery::emit:mana:black"
+    },
+    {
+      "From": "Black Mana Battery::tap:self",
+      "To": "Black Mana Battery::emit:counter:charge:self"
+    },
+    {
+      "From": "Black Mana Battery::tap:self",
+      "To": "Black Mana Battery::emit:mana:black"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Black Mana Battery::emit:mana:black",
+      "To": "Black Mana Battery::pay:mana",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Black Mana Battery::pay:mana",
+      "To": "Black Mana Battery::emit:counter:charge:self",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Black Mana Battery::pay:removecounters",
+      "To": "Black Mana Battery::emit:mana:black",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Black Mana Battery::tap:self",
+      "To": "Black Mana Battery::emit:counter:charge:self",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Black Mana Battery::tap:self",
+      "To": "Black Mana Battery::emit:mana:black",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

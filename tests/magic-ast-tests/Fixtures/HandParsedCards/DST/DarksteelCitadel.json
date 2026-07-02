@@ -1,0 +1,62 @@
+{
+  "Input": {
+    "Name": "Darksteel Citadel",
+    "ManaCost": "",
+    "TypeLine": "Artifact Land",
+    "OracleText": "Indestructible\n{T}: Add {C}.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Darksteel Citadel",
+    "TypeLine": {
+      "Raw": "Artifact Land",
+      "Types": [
+        "Artifact",
+        "Land"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Indestructible\n{T}: Add {C}.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Indestructible",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Indestructible"
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{C}"
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "_note": "Straddle: Shapeshifter is a creature type, which can ride a Kindred Instant (308.1) — cannot prove Disjoint, cannot prove ordinary overlap → Unknown.",
+  "A": { "Subtypes": ["Shapeshifter"] },
+  "B": { "CardTypes": ["instant"] },
+  "Expected": "Unknown"
+}

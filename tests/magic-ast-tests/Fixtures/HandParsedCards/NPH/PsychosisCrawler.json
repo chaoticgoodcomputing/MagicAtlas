@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Psychosis Crawler",
+    "ManaCost": "{5}",
+    "TypeLine": "Artifact Creature — Phyrexian Horror",
+    "OracleText": "Psychosis Crawler's power and toughness are each equal to the number of cards in your hand.\nWhenever you draw a card, each opponent loses 1 life.",
+    "Power": "*",
+    "Toughness": "*",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Psychosis Crawler",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Phyrexian Horror",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Horror"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Psychosis Crawler's power and toughness are each equal to the number of cards in your hand.\nWhenever you draw a card, each opponent loses 1 life.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "definePT",
+              "Characteristic": "Both",
+              "Value": {
+                "QuantityType": "derived",
+                "DerivedFrom": "CardsInHand"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DrawsCard",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "EachOpponent"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "variable",
+          "Raw": "*"
+        },
+        "Toughness": {
+          "ValueType": "variable",
+          "Raw": "*"
+        }
+      }
+    ]
+  }
+}

@@ -1,68 +1,72 @@
 namespace MagicAST.Parsing.Parsers;
 
-using MagicAST.AST;
 using MagicAST.AST.Abilities;
-using MagicAST.Parsing.Combinators;
+using MagicAST.Parsing;
+using MagicAST.Parsing.Parsers.Static;
 using MagicAST.Parsing.Tokens;
-using Superpower;
-using Superpower.Model;
 
 /// <summary>
-/// Parser for static abilities using token-based combinators.
-/// Handles keyword abilities (Flying, Vigilance, etc.) and other static effects.
+/// Dispatches static-ability oracle-text clauses to the priority-ordered set of
+/// <see cref="IStaticRule"/> implementations discovered by reflection at construction
+/// time. Each rule lives in its own file under <c>Parsers/Static/Rules/</c> and is
+/// decorated with <see cref="StaticRuleAttribute"/> (see attribute docs for the
+/// order-preserving priority convention). Adding a new shape means dropping a new file
+/// in <c>Rules/</c> with no edits to any shared file.
 /// </summary>
 /// <remarks>
-/// This parser uses monadic combinators from OracleParsers to parse keywords
-/// directly from token sequences, avoiding string manipulation.
+/// Falls through to <see cref="FallbackParser"/> when no rule matches. Shared
+/// recognition logic used by multiple rules lives in
+/// <see cref="Static.StaticRuleHelpers"/>.
 /// </remarks>
-public sealed class StaticAbilityParser
+[OracleAbilityParser(AbilityKind.Static)]
+public sealed class StaticAbilityParser : IAbilityParser
 {
-  private readonly OracleTokenizer _tokenizer = new();
+  private readonly FallbackParser _fallback = new();
 
   /// <summary>
-  /// Attempts to parse static abilities from a clause.
-  /// Returns a list of StaticAbility nodes (one per keyword or effect).
+  /// Reflection-discovered <see cref="IStaticRule"/> implementations, ordered by
+  /// descending <see cref="StaticRuleAttribute.Priority"/> then ordinal name (see
+  /// <see cref="RuleRegistry.Discover{TRule, TAttr}"/>). Priorities were migrated
+  /// order-preserving from the original hand-ordered dispatch chain.
+  /// </summary>
+  private readonly IReadOnlyList<DiscoveredRule<IStaticRule>> _staticRules =
+    RuleRegistry.Discover<IStaticRule, StaticRuleAttribute>("StaticAbilityParser");
+
+  /// <inheritdoc/>
+  public IReadOnlyList<Ability> Parse(OracleClause clause, ClauseClassification classification)
+  {
+    var parsed = TryParse(clause, classification);
+    if (parsed is { Count: > 0 })
+    {
+      return parsed;
+    }
+    return
+    [
+      _fallback.Parse(
+        clause,
+        classification,
+        "Static ability parser not yet implemented",
+        lastAttemptedRule: "StaticAbilityParser.Parse",
+        failurePosition: clause.SourceSpan.Start
+      ),
+    ];
+  }
+
+  /// <summary>
+  /// Attempts to parse static abilities from a clause by dispatching to the
+  /// priority-ordered rule chain; first non-null result wins. Returns null when no
+  /// rule recognises the clause.
   /// </summary>
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
   {
-    var tokens = clause.Tokens;
-
-    // Try parsing as keyword list using token combinators
-    var keywordAbilities = TryParseKeywordList(tokens);
-    if (keywordAbilities != null && keywordAbilities.Count > 0)
+    foreach (var entry in _staticRules)
     {
-      return keywordAbilities;
+      var result = entry.Rule.TryParse(clause, classification);
+      if (result is { Count: > 0 })
+      {
+        return result;
+      }
     }
-
-    // Try other static ability patterns
-    // TODO: Add more patterns as needed:
-    // - "Enchant [descriptor]"
-    // - "This spell can't be countered"
-    // - "This [permanent] doesn't untap during your untap step"
-    // - Replacement effects
-
     return null;
   }
-
-  #region Keyword Parsing
-
-  /// <summary>
-  /// Parses comma-separated keyword abilities using token combinators.
-  /// Example: "Flying, first strike, lifelink" → 3 separate StaticAbility nodes
-  /// </summary>
-  private IReadOnlyList<Ability>? TryParseKeywordList(TokenList<OracleToken> tokens)
-  {
-    // Try to parse using the OracleParsers.KeywordList combinator
-    var parseResult = OracleParsers.KeywordList(tokens);
-
-    if (!parseResult.HasValue)
-    {
-      return null;
-    }
-
-    // Convert StaticAbility[] to IReadOnlyList<Ability>
-    return parseResult.Value.Cast<Ability>().ToList();
-  }
-
-  #endregion
 }

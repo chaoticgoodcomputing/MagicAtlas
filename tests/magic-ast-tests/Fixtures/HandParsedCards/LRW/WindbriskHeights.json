@@ -1,0 +1,77 @@
+{
+  "Input": {
+    "Name": "Windbrisk Heights",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "Hideaway 4 (When this land enters, look at the top four cards of your library, exile one face down, then put the rest on the bottom in a random order.)\n{T}: Add {W}.\n{W}, {T}: You may play the exiled card without paying its mana cost if you attacked with three or more creatures this turn.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Windbrisk Heights",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": ["Land"]
+    },
+    "Oracle": {
+      "RawText": "Hideaway 4 (When this land enters, look at the top four cards of your library, exile one face down, then put the rest on the bottom in a random order.)\n{T}: Add {W}.\n{W}, {T}: You may play the exiled card without paying its mana cost if you attacked with three or more creatures this turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Hideaway",
+          "Effects": [
+            {
+              "EffectType": "hideaway",
+              "Amount": { "QuantityType": "literal", "Value": 4 }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{W}",
+              "AnyColor": false
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["W"] }
+              ]
+            },
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "unparsed",
+              "SourceSpan": { "Start": 175, "Length": 114 },
+              "RawText": "You may play the exiled card without paying its mana cost if you attacked with three or more creatures this turn."
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}

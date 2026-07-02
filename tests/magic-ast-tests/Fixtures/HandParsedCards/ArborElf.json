@@ -1,0 +1,67 @@
+{
+  "Input": {
+    "Name": "Arbor Elf",
+    "ManaCost": "{G}",
+    "TypeLine": "Creature — Elf Druid",
+    "OracleText": "{T}: Untap target Forest.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Arbor Elf",
+    "TypeLine": {
+      "Raw": "Creature — Elf Druid",
+      "Types": ["Creature"],
+      "Subtypes": ["Elf", "Druid"]
+    },
+    "Oracle": {
+      "RawText": "{T}: Untap target Forest.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "Subtypes": ["Forest"]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["G"], "IsPhyrexian": false, "IsSnow": false }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

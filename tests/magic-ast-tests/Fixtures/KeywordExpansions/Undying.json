@@ -1,0 +1,40 @@
+{
+  "Keyword": "Undying",
+  "Expected": {
+    "Kind": "triggered",
+    "KeywordSource": "Undying",
+    "Trigger": {
+      "Timing": "When",
+      "Event": "Dies",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ],
+        "IsSelf": true
+      }
+    },
+    "InterveningIf": {
+      "ConditionType": "triggeringObjectCounter",
+      "CounterType": "+1/+1",
+      "Present": false
+    },
+    "Effects": [
+      {
+        "EffectType": "returnToBattlefield",
+        "Target": {
+          "Kind": "It"
+        },
+        "UnderControl": {
+          "Kind": "Owner"
+        },
+        "WithCounters": {
+          "CounterType": "+1/+1",
+          "Count": {
+            "QuantityType": "literal",
+            "Value": 1
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "Input": {
+    "Name": "Foundry Assembler",
+    "ManaCost": "{5}",
+    "TypeLine": "Artifact Creature — Assembly-Worker",
+    "OracleText": "Improvise (Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Foundry Assembler",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Assembly-Worker",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Assembly-Worker"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Improvise (Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Improvise",
+          "Effects": [
+            {
+              "EffectType": "alternativePayment",
+              "Method": "TapObject",
+              "Pays": "Generic",
+              "Source": {
+                "CardTypes": ["artifact"],
+                "Controller": "You"
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}

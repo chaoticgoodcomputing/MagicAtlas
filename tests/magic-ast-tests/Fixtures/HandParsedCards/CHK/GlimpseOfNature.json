@@ -1,0 +1,61 @@
+{
+  "Input": {
+    "Name": "Glimpse of Nature",
+    "ManaCost": "{G}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Whenever you cast a creature spell this turn, draw a card.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Glimpse of Nature",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"],
+      "Subtypes": []
+    },
+    "Oracle": {
+      "RawText": "Whenever you cast a creature spell this turn, draw a card.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "Whenever",
+                  "Event": "SpellCast",
+                  "Filter": { "CardTypes": ["creature"], "Controller": "You" }
+                },
+                "Window": {
+                  "DurationType": "untilTime",
+                  "Until": { "Part": "Turn", "Edge": "End" }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "drawCards",
+                    "Count": { "QuantityType": "literal", "Value": 1 },
+                    "Player": { "Kind": "You" }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [ { "Kind": "colored", "Colors": ["G"] } ],
+        "ManaValue": 1
+      },
+      { "Kind": "colors", "Colors": ["G"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["G"] }
+    ]
+  }
+}

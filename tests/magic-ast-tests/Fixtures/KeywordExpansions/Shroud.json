@@ -1,0 +1,14 @@
+{
+  "Keyword": "Shroud",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Shroud"
+      }
+    ],
+    "KeywordSource": "Shroud"
+  }
+}

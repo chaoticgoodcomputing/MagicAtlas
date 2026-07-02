@@ -1,0 +1,99 @@
+{
+  "Input": {
+    "Name": "Razortooth Rats",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Rat",
+    "OracleText": "Fear (This creature can't be blocked except by artifact creatures and/or black creatures.)",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Razortooth Rats",
+    "TypeLine": {
+      "Raw": "Creature — Rat",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Rat"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Fear (This creature can't be blocked except by artifact creatures and/or black creatures.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature",
+                  "artifact"
+                ],
+                "Colors": [
+                  "B"
+                ]
+              }
+            }
+          ],
+          "KeywordSource": "Fear",
+          "Reminder": {
+            "Text": "(This creature can't be blocked except by artifact creatures and/or black creatures.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}

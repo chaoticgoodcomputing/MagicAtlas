@@ -1,0 +1,95 @@
+{
+  "Input": {
+    "Name": "Akroma, Angel of Wrath",
+    "ManaCost": "{5}{W}{W}{W}",
+    "TypeLine": "Legendary Creature — Angel",
+    "OracleText": "Flying, first strike, vigilance, trample, haste, protection from black and from red",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Akroma, Angel of Wrath",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Angel",
+      "Types": ["Creature"],
+      "Supertypes": ["Legendary"],
+      "Subtypes": ["Angel"]
+    },
+    "Oracle": {
+      "RawText": "Flying, first strike, vigilance, trample, haste, protection from black and from red",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": [
+                  { "CharacteristicType": "keyword", "Keyword": "Flying" },
+                  { "CharacteristicType": "keyword", "Keyword": "Reach" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "First strike",
+          "Effects": [ { "EffectType": "combatDamageTiming", "Timing": "First" } ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Vigilance",
+          "Effects": [ { "EffectType": "keywordAbility", "Keyword": "Vigilance" } ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [ { "EffectType": "keywordAbility", "Keyword": "Trample" } ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Haste",
+          "Effects": [ { "EffectType": "keywordAbility", "Keyword": "Haste" } ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Protection",
+          "Effects": [
+            {
+              "EffectType": "protection",
+              "From": [
+                { "Kind": "Color", "Value": "B" },
+                { "Kind": "Color", "Value": "R" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{W}{W}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 5 },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 8
+      },
+      { "Kind": "colors", "Colors": ["W"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "6", "Value": 6 },
+        "Toughness": { "ValueType": "fixed", "Raw": "6", "Value": 6 }
+      }
+    ]
+  }
+}

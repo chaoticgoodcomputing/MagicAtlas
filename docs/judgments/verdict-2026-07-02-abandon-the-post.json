@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MID/AbandonThePost.json",
+      "verdict": "PASS",
+      "citations": ["CR 115.1", "CR 509.1"],
+      "reason": "\"Up to two target creatures can't block this turn.\" modeled as cantBlock effect on a Target ref (Filter CardTypes:[creature]) with UpToQuantity max 2 / min 0 and a separate untilTime(Turn/End) duration; describe-not-execute, no timing baked into the discriminator, no free-text residual"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MID/AbandonThePost.json#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — cantBlock, upTo, Target ref, and untilTime duration all pre-exist; projection decision N/A (ratchet not triggered)"
+    }
+  ]
+}

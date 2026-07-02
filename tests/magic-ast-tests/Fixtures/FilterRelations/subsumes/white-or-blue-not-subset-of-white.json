@@ -1,0 +1,6 @@
+{
+  "_note": "'has white or blue' ⊄ 'has white' — a blue-only object isn't white → No.",
+  "Sub": { "Colors": ["W", "U"] },
+  "Sup": { "Colors": ["W"] },
+  "Expected": "No"
+}

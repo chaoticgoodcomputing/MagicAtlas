@@ -4,18 +4,19 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
+using MagicAST.AST.Effects.Traits;
 
 /// <summary>
 /// An effect that couldn't be parsed.
 /// </summary>
-public sealed record UnparsedEffect : Effect
+[OracleEffect("unparsed")]
+public sealed record UnparsedEffect : Effect, IUnparsed
 {
   /// <summary>
   /// Location of this unparsed effect in the original oracle text.
   /// </summary>
-  [JsonPropertyName("sourceSpan")]
   public required TextSpan SourceSpan { get; init; }
 
-  [JsonPropertyName("rawText")]
   public required string RawText { get; init; }
 }

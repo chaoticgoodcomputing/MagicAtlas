@@ -1,0 +1,60 @@
+{
+  "Input": {
+    "Name": "Gleam of Battle",
+    "ManaCost": "{4}{R}{W}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Whenever a creature you control attacks, put a +1/+1 counter on it.",
+    "Colors": ["R", "W"],
+    "ColorIdentity": ["R", "W"]
+  },
+  "Output": {
+    "Name": "Gleam of Battle",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "Whenever a creature you control attacks, put a +1/+1 counter on it.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "It"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 6
+      },
+      { "Kind": "colors", "Colors": ["R", "W"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["R", "W"] }
+    ]
+  }
+}

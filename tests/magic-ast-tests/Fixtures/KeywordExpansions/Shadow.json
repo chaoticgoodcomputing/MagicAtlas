@@ -1,0 +1,24 @@
+{
+  "Keyword": "Shadow",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "evasion",
+        "CanBeBlockedBy": {
+          "CardTypes": [
+            "creature"
+          ],
+          "Characteristics": [
+            {
+              "CharacteristicType": "keyword",
+              "Keyword": "Shadow"
+            }
+          ]
+        }
+      }
+    ],
+    "KeywordSource": "Shadow"
+  }
+}

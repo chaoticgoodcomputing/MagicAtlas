@@ -1,0 +1,134 @@
+{
+  "Input": {
+    "Name": "Hopping Automaton",
+    "ManaCost": null,
+    "TypeLine": "Artifact Creature — Construct",
+    "OracleText": "{0}: This creature gets -1/-1 and gains flying until end of turn.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [],
+    "Keywords": [],
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Hopping Automaton",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Construct",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Construct"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{0}: This creature gets -1/-1 and gains flying until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 0
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "modifyPT",
+                  "Target": {
+                    "Kind": "Self"
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": -1
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": -1
+                  },
+                  "Duration": {
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
+                  }
+                },
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "Self"
+                  },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "KeywordSource": "Flying",
+                    "Effects": [
+                      {
+                        "EffectType": "evasion",
+                        "CanBeBlockedBy": {
+                          "CardTypes": [
+                            "creature"
+                          ],
+                          "Characteristics": [
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Flying"
+                            },
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Reach"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  "Duration": {
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

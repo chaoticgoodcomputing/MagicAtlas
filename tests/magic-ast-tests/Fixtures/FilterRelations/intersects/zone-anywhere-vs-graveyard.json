@@ -1,0 +1,5 @@
+{
+  "A": { "Zone": "Anywhere" },
+  "B": { "Zone": "Graveyard" },
+  "Expected": "Overlaps"
+}

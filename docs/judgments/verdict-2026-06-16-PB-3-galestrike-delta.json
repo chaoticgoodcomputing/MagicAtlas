@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Galestrike.json",
+      "verdict": "PASS",
+      "citations": ["CR 110.5"],
+      "reason": "structured-characteristic axis: 'tapped' free-text residual ({CharacteristicType:other, Description:tapped}) replaced by TappedStateCharacteristic{Tapped:true}, faithful to 'Return target tapped creature...'; creature CardTypes filter, returnToHand target, and drawCards(1,You) all preserved; no new free-text/unparsed residual; no out-of-scope residual remains (Galestrike had only this one axis); correctly removed from whitelist-freetext.json"
+    }
+  ]
+}

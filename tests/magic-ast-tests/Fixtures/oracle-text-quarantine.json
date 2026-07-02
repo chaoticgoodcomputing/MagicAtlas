@@ -1,0 +1,405 @@
+{
+  "_doc": "Oracle-text DRIFT whitelist (formerly the quarantine). STATELESS INVARIANT (GoldOracleTextFidelityTests): every gold's Input.OracleText must match its authoritative source (card-inputs.json corpus, else the full oracle-cards.json bulk); a gold whose text mismatches is loud failure UNLESS named here. Each entry: tag debt = known drift slated for a fix (re-point via GoldRegenerationUtility — see libs/magic-ast/docs/gold-burndown-plan.md); tag irreducible = intentional. A listed gold that now MATCHES fails (remove it). De-ratcheted to explicit named carve-outs 2026-06-16. TARGET: empty.",
+  "entries": [
+    {
+      "card": "9ED/SpiketailDrake",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "AER/KariZevSkyshipRaider",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "ALA/Deathgreeter",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "AVR/BloodflowConnoisseur",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "AVR/Wingcrafter",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "BFZ/ClutchOfCurrents",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "BFZ/CoastalDiscovery",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "BFZ/ZulaportCutthroat",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "BLB/EmberheartChallenger",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "BLB/WildcallSpree",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "BOK/WheelAndDeal",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "CLB/ExquisiteHuntmaster",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "CLB/LaezelVlaakithsChampion",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "DFT/PointTheWay",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "DGM/UnflinchingCourage",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "DGM/WearTear",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "DKA/NiblisOfTheUrn",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "DMU/ArgivianPhalanx",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "DSK/ScreamingSwarm",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "DST/HoverguardSweepers",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "DTK/OjutaisBreath",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "Divert",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "ELD/CorridorMonitor",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "FDN/FindThePath",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "FDN/TheForetoldSoldier",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "FIN/BusterSword",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "FRF/SavingGrasp",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "FUT/KeldonHalberdier",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "GRN/DimirInformant",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "GRN/SilhanaWayfinder",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "GRN/WatcherInTheMist",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "GRN/WhisperAgent",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "IKO/SeaDasherOctopus",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "INV/ArmadilloCloak",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "JMP/ThrivingIsle",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "JUD/PhantomNantuko",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "JUD/PhantomTiger",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "KHM/TailSwipe",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "KTK/AbzanSkycaptain",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "LCI/WarrenSoultrader",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "LRW/ElvishHarbinger",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "LRW/WindbriskHeights",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "M13/LeylineOfTheVoid",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "M15/GoblinRabblemaster",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "MID/HauntedRidge",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "MIR/BurningShieldAskari",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "MRD/ArcboundWorker",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "MRD/BarterInBlood",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "MRD/LeoninDenGuard",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "MindRake",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "NEO/CrackOpen",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "NEO/VilespawnSpider",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "NPH/SuturePriest",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "ODY/InnocentBlood",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "OGW/StoneforgeMasterwork",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "ONE/JawboneDuelist",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "ONE/SerumCoreChimera",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "ONS/BarrenMoor",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "ONS/ForgottenCave",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "ONS/TranquilThicket",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "PLC/EssenceWarden",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "PTK/GluttonousCyclops",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "RAV/BorosGarrison",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "RAV/SelesnayaSanctuary",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "RIX/PitilessPlunderer",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "RNA/SpikewheelAcrobat",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "RTR/RakdosDrake",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "RitesOfFlourishing",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "SOI/NiblisOfTheMist",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "SOM/PrecursorGolem",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "THS/GodsWilling",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "TOR/DirtyWererat",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "TSP/DurkwoodBaloth",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "UDS/AvalancheRiders",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "UDS/Rebuild",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "VIS/Necrosavant",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "WTH/Aboroth",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "XLN/RuthlessKnave",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "ZEN/GuardGomazoa",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    },
+    {
+      "card": "ZEN/SpreadingSeas",
+      "tag": "debt",
+      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
+    }
+  ]
+}

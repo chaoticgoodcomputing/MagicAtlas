@@ -1,0 +1,124 @@
+{
+  "Input": {
+    "Name": "Kinnan, Bonder Prodigy",
+    "ManaCost": "{G}{U}",
+    "TypeLine": "Legendary Creature — Human Druid",
+    "OracleText": "Whenever you tap a nonland permanent for mana, add one mana of any type that permanent produced.\n{5}{G}{U}: Look at the top five cards of your library. You may put a non-Human creature card from among them onto the battlefield. Put the rest on the bottom of your library in a random order.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["G", "U"],
+    "ColorIdentity": ["G", "U"]
+  },
+  "Output": {
+    "Name": "Kinnan, Bonder Prodigy",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Druid",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Druid"],
+      "Supertypes": ["Legendary"]
+    },
+    "Oracle": {
+      "RawText": "Whenever you tap a nonland permanent for mana, add one mana of any type that permanent produced.\n{5}{G}{U}: Look at the top five cards of your library. You may put a non-Human creature card from among them onto the battlefield. Put the rest on the bottom of your library in a random order.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "TapsForMana",
+            "Filter": {
+              "CardTypes": ["permanent"],
+              "ExcludedCardTypes": ["land"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "",
+              "AnyType": true
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 5
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": ["G"]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": ["U"]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "topLookPutOntoBattlefield",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 5
+              },
+              "Player": {
+                "Kind": "You"
+              },
+              "CardFilter": {
+                "CardTypes": ["creature"],
+                "ExcludedSubtypes": ["Human"]
+              },
+              "Optional": true
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U", "G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

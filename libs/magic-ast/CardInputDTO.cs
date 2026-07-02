@@ -12,14 +12,12 @@ public sealed record CardInputDTO
   /// The card's name.
   /// Example: "Chatterfang, Squirrel General"
   /// </summary>
-  [JsonPropertyName("name")]
   public required string Name { get; init; }
 
   /// <summary>
   /// The card's mana cost in symbol notation.
   /// Example: "{1}{G}{G}"
   /// </summary>
-  [JsonPropertyName("manaCost")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? ManaCost { get; init; }
 
@@ -27,7 +25,6 @@ public sealed record CardInputDTO
   /// The card's type line.
   /// Example: "Legendary Creature — Squirrel Warrior"
   /// </summary>
-  [JsonPropertyName("typeLine")]
   public required string TypeLine { get; init; }
 
   /// <summary>
@@ -35,7 +32,6 @@ public sealed record CardInputDTO
   /// Abilities are separated by paragraph breaks (\n).
   /// This is the primary parsing target.
   /// </summary>
-  [JsonPropertyName("oracleText")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? OracleText { get; init; }
 
@@ -43,7 +39,6 @@ public sealed record CardInputDTO
   /// The card's power (for creatures).
   /// May contain non-numeric values like "*" or "1+*".
   /// </summary>
-  [JsonPropertyName("power")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Power { get; init; }
 
@@ -51,14 +46,12 @@ public sealed record CardInputDTO
   /// The card's toughness (for creatures).
   /// May contain non-numeric values like "*" or "1+*".
   /// </summary>
-  [JsonPropertyName("toughness")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Toughness { get; init; }
 
   /// <summary>
   /// The card's starting loyalty (for planeswalkers).
   /// </summary>
-  [JsonPropertyName("loyalty")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Loyalty { get; init; }
 
@@ -66,16 +59,24 @@ public sealed record CardInputDTO
   /// The card's colors.
   /// Example: ["G"] or ["W", "U"]
   /// </summary>
-  [JsonPropertyName("colors")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? Colors { get; init; }
 
   /// <summary>
-  /// The card's color identity (for Commander format).
-  /// Includes all colors in mana cost and rules text.
+  /// The card's color indicator (CR 204) — the colored dot beside the type line that
+  /// defines color for cards with no mana cost or whose color differs from their cost.
+  /// Not present in mana cost or rules text, so it is the only source of those colors
+  /// for color-identity derivation (CR 903.4). Example: ["R"] for a Kobold.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? ColorIndicator { get; init; }
+
+  /// <summary>
+  /// The card's color identity (for Commander format) as supplied by the source data.
+  /// NOTE: the parser DERIVES color identity itself (see ColorIdentityDeriver) and does
+  /// not consume this; it is retained only as the source-of-truth reference value.
   /// Example: ["G"] or ["W", "U", "B"]
   /// </summary>
-  [JsonPropertyName("colorIdentity")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? ColorIdentity { get; init; }
 
@@ -84,28 +85,24 @@ public sealed record CardInputDTO
   /// These may be used to assist parsing or validate results.
   /// Example: ["Forestwalk", "Flying"]
   /// </summary>
-  [JsonPropertyName("keywords")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? Keywords { get; init; }
 
   /// <summary>
   /// The card's unique identifier from the source system.
   /// </summary>
-  [JsonPropertyName("id")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Id { get; init; }
 
   /// <summary>
   /// Card layout type (normal, split, flip, transform, etc.)
   /// </summary>
-  [JsonPropertyName("layout")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Layout { get; init; }
 
   /// <summary>
   /// For multi-faced cards (split, transform, etc.), the individual faces.
   /// </summary>
-  [JsonPropertyName("cardFaces")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<CardFaceDTO>? CardFaces { get; init; }
 }
@@ -118,54 +115,53 @@ public sealed record CardFaceDTO
   /// <summary>
   /// The face's name.
   /// </summary>
-  [JsonPropertyName("name")]
   public required string Name { get; init; }
 
   /// <summary>
   /// The face's mana cost.
   /// </summary>
-  [JsonPropertyName("manaCost")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? ManaCost { get; init; }
 
   /// <summary>
   /// The face's type line.
   /// </summary>
-  [JsonPropertyName("typeLine")]
   public required string TypeLine { get; init; }
 
   /// <summary>
   /// The face's oracle text.
   /// </summary>
-  [JsonPropertyName("oracleText")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? OracleText { get; init; }
 
   /// <summary>
   /// The face's power (for creature faces).
   /// </summary>
-  [JsonPropertyName("power")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Power { get; init; }
 
   /// <summary>
   /// The face's toughness (for creature faces).
   /// </summary>
-  [JsonPropertyName("toughness")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Toughness { get; init; }
 
   /// <summary>
   /// The face's loyalty (for planeswalker faces).
   /// </summary>
-  [JsonPropertyName("loyalty")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public string? Loyalty { get; init; }
 
   /// <summary>
   /// The face's colors.
   /// </summary>
-  [JsonPropertyName("colors")]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? Colors { get; init; }
+
+  /// <summary>
+  /// The face's color indicator (CR 204) — included in color-identity derivation,
+  /// across both faces (CR 903.4d).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? ColorIndicator { get; init; }
 }

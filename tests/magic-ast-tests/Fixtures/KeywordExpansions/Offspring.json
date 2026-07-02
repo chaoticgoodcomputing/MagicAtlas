@@ -1,0 +1,22 @@
+{
+  "Keyword": "Offspring",
+  "Parameter": "{1}",
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "offspring",
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "generic",
+              "GenericAmount": 1
+            }
+          ]
+        }
+      }
+    ],
+    "KeywordSource": "Offspring"
+  }
+}

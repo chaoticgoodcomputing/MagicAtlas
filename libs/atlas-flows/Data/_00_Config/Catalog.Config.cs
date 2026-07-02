@@ -30,27 +30,11 @@ public partial class Catalog
         .Build()
     );
 
-  public IItem<ClusteringConfig> ClusteringConfig =>
-    CreateItem(() =>
-      Item.Of<ClusteringConfig>("ClusteringConfig")
-        .FromConfiguration(_configuration)
-        .AtSection("Flowthru:Flows:Clustering")
-        .Build()
-    );
-
   public IItem<ReportingConfig> ReportingConfig =>
     CreateItem(() =>
       Item.Of<ReportingConfig>("ReportingConfig")
         .FromConfiguration(_configuration)
         .AtSection("Flowthru:Flows:Reporting")
-        .Build()
-    );
-
-  public IItem<ModelEvaluationsConfig> ModelEvaluationsConfig =>
-    CreateItem(() =>
-      Item.Of<ModelEvaluationsConfig>("ModelEvaluationsConfig")
-        .FromConfiguration(_configuration)
-        .AtSection("Flowthru:Flows:ModelEvaluations")
         .Build()
     );
 }

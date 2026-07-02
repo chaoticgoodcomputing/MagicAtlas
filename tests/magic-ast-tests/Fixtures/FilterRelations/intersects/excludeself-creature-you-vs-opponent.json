@@ -1,0 +1,6 @@
+{
+  "_note": "ExcludeSelf is relationally compatible, but a real axis (Controller) still contradicts: 'another creature you control' vs 'a creature an opponent controls'.",
+  "A": { "CardTypes": ["creature"], "Controller": "You", "ExcludeSelf": true },
+  "B": { "CardTypes": ["creature"], "Controller": "Opponent" },
+  "Expected": "Disjoint"
+}

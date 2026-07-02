@@ -1,0 +1,14 @@
+{
+  "Keyword": "Wither",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Wither"
+      }
+    ],
+    "KeywordSource": "Wither"
+  }
+}

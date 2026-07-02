@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NestingWurm.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.23", "CR 701.20", "CR 701.24"],
+      "reason": "ETB named-tutor-to-hand modeled as Trigger{When,Enters,IsSelf} + optional{searchLibrary Filter.Name=\"Nesting Wurm\", Count upTo(max3,min0), Destination=Hand, Revealed=true}; timing kept in the Trigger (no baked-in timing), 'then shuffle' folded per the established searchLibrary convention (matches DuneMover/Veteran Explorer 701.23); Trample sibling + attributes preserved; no free-text/unparsed residual"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SearchForNamedCardsUpToNTriggeredRule.cs#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — parser rule reuses pre-existing searchLibrary/optional/upTo nodes (SearchLibraryEffect unmodified); no new PortWalk projection decision required"
+    }
+  ]
+}

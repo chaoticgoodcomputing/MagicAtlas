@@ -1,62 +1,88 @@
-"""Join points + hover info + cluster assignments + cluster labels and render a standalone Plotly
-HTML scatter. Points are colored by WUBRG color identity; cluster context appears as text
-annotations placed at each top-N cluster's 2D centroid (no cluster-based color encoding — the
-position-density structure already shows the clusters, the annotations name them).
+"""Render the explorer-mode atlas as a standalone Plotly HTML.
+
+Explorer-mode rendering choices:
+- Points are colored by **color identity** (WUBRG + colorless). Multi-color cards render as
+  transparent-filled markers with a dark outline so the underlying neighborhood remains visible
+  through them — multi-color regions tend to be dense, and opaque blended colors lose detail.
+- No canonical/cluster overlay. The atlas is for browsing semantic neighborhoods (explorer
+  mode); exploiter-mode categorical queries belong in MagicAST (libs/magic-ast/), not on this
+  map.
+- Hover details surface card name, mana cost, type line, P/T, this line's text, and the full
+  oracle text.
 
 Inputs:
-    points:      DataFrame [point_id, card_id, x, y]
-    hover:       DataFrame [card_id, name, mana_cost, cmc, type_line, color_identity, power,
-                            toughness, oracle_text]
-    assignments: DataFrame [point_id, cluster_id]
-    labels:      DataFrame [cluster_id, label, description, keywords, size, source,
-                            source_version]
+    points:  DataFrame [line_id, x, y]
+    lines:   DataFrame [line_id, card_id, text] — provides per-line text + the line→card key.
+    hover:   DataFrame [card_id, name, mana_cost, cmc, type_line, color_identity, power,
+                        toughness, oracle_text]
+    config:  ReportingConfig — uses AnnotationTextLimit (unused now but kept for stability),
+             MarkerSize, MarkerOpacity, OracleHoverTruncateLimit.
 
 Output:
-    str — full standalone HTML doc with Plotly.js inlined.
-
-Hover still surfaces each point's full cluster label, so the per-point cluster identity is
-recoverable even when a centroid annotation has been dropped (e.g. tiny clusters not in the
-top-N).
+    str — standalone HTML doc with Plotly.js inlined.
 """
 from __future__ import annotations
 
-import json
 import logging
-from typing import Dict, List, Tuple
+import uuid
+from typing import Dict, List
 
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from flowthru import step
 
 logger = logging.getLogger(__name__)
 
-# Color palette and similar aesthetic constants stay in-source — they're brand decisions, not
-# tuning knobs. Knobs that meaningfully change legibility (annotation count/length, marker size
-# and opacity, hover truncation) come from ReportingConfig via appsettings.json.
-_COLOR_ID_PALETTE: Dict[str, str] = {
-    "": "#9CA3AF",
-    "W": "#F9E79F",
-    "U": "#5DADE2",
-    "B": "#566573",
-    "R": "#E74C3C",
-    "G": "#27AE60",
+# MTG color-identity palette. Picked for contrast against a white plot background — pure white
+# would be invisible, so W is a warm gold. Black is a near-black grey so the marker outline is
+# still visible at small sizes.
+_COLORLESS = "colorless"
+_MULTICOLOR = "multicolor"
+_COLOR_PALETTE: Dict[str, str] = {
+    "W": "#D9B65A",          # gold-cream
+    "U": "#2A7FCB",          # blue
+    "B": "#3A3A3A",          # near-black
+    "R": "#D9453A",          # red
+    "G": "#2EA158",          # green
+    _COLORLESS: "#9CA3AF",   # neutral grey
 }
-_GOLD = "#D4AC0D"
+# Multicolor cards render as transparent fill with a dark outline. The dark outline is the only
+# visual signal — the empty center lets you see what's behind dense multicolor regions.
+_MULTICOLOR_OUTLINE = "#1F2937"
+_MULTICOLOR_OUTLINE_WIDTH = 1.0
 
 
-def _color_id_color(identity: str) -> str:
-    if identity in _COLOR_ID_PALETTE:
-        return _COLOR_ID_PALETTE[identity]
-    return _GOLD
+def _normalize_guid(v) -> str | None:
+    if v is None:
+        return None
+    if isinstance(v, float) and pd.isna(v):
+        return None
+    if isinstance(v, (bytes, bytearray)):
+        try:
+            return str(uuid.UUID(bytes=bytes(v)))
+        except ValueError:
+            return None
+    s = str(v)
+    return s if s else None
 
 
 def _truncate(text: object, limit: int) -> str:
     if text is None or (isinstance(text, float) and pd.isna(text)):
         return ""
-    s = str(text).replace("\n", " · ")
+    s = str(text)
     if len(s) <= limit:
         return s
     return s[: limit - 1] + "…"
+
+
+def _format_oracle_html(text: object, limit: int) -> str:
+    if text is None or (isinstance(text, float) and pd.isna(text)):
+        return ""
+    s = str(text)
+    if len(s) > limit:
+        s = s[: limit - 1] + "…"
+    return s.replace("\n", "<br>")
 
 
 def _format_pt(power: object, toughness: object) -> str:
@@ -67,87 +93,140 @@ def _format_pt(power: object, toughness: object) -> str:
     return f"{p}/{t}"
 
 
-def _color_id_legend(identity: str) -> str:
-    if identity == "":
-        return "Colorless"
-    if len(identity) > 1:
-        return f"Multi ({identity})"
-    return {"W": "White", "U": "Blue", "B": "Black", "R": "Red", "G": "Green"}.get(identity, identity)
+def _color_identity_bucket(ci: object) -> str:
+    """Classify a Scryfall color_identity string into one of the palette buckets.
 
-
-def _identity_sort_key(s: str) -> Tuple[int, str]:
-    return (len(s), s)
-
-
-def _annotation_text(label: str, keywords_json: str, text_limit: int) -> str:
-    """Prefer the first keyword (highest-c-TF-IDF n-gram); fall back to the label head."""
-    try:
-        kws = json.loads(keywords_json) if keywords_json else []
-    except (TypeError, ValueError):
-        kws = []
-    head = kws[0] if kws else label
-    if not head:
-        return ""
-    if len(head) <= text_limit:
-        return head
-    return head[: text_limit - 1] + "…"
+    color_identity arrives as a string like 'W', 'WU', 'WUBRG', or '' (colorless). The Scryfall
+    convention is single-letter color codes concatenated, no separator. We bucket as:
+        - empty / None  → 'colorless'
+        - one character → that character ('W' | 'U' | 'B' | 'R' | 'G')
+        - 2+ characters → 'multicolor' (rendered as transparent fill + outline)
+    """
+    if ci is None or (isinstance(ci, float) and pd.isna(ci)):
+        return _COLORLESS
+    s = str(ci).strip().upper()
+    if not s:
+        return _COLORLESS
+    # Strip any non-WUBRG chars defensively
+    valid = "".join(c for c in s if c in "WUBRG")
+    if not valid:
+        return _COLORLESS
+    if len(valid) == 1:
+        return valid
+    return _MULTICOLOR
 
 
 def _build_atlas_plot_impl(
     points: pd.DataFrame,
+    lines: pd.DataFrame,
     hover: pd.DataFrame,
-    assignments: pd.DataFrame,
-    labels: pd.DataFrame,
     config: dict,
 ) -> str:
-    max_annotations = int(config["MaxAnnotations"])
-    annotation_text_limit = int(config["AnnotationTextLimit"])
+    annotation_text_limit = int(config.get("AnnotationTextLimit", 36))  # unused but tolerated
     marker_size = int(config["MarkerSize"])
     marker_opacity = float(config["MarkerOpacity"])
     oracle_truncate_limit = int(config["OracleHoverTruncateLimit"])
     logger.info(
-        "Inputs: %d points, %d hover rows, %d assignments, %d labels",
-        len(points),
-        len(hover),
-        len(assignments),
-        len(labels),
+        "Inputs: %d points, %d lines, %d hover rows",
+        len(points), len(lines), len(hover),
     )
 
-    label_by_cluster = dict(zip(labels["cluster_id"].astype(int), labels["label"].astype(str)))
+    # ── Normalize Guid columns across all sources so the join keys line up. ──
+    points = points.copy()
+    lines = lines.copy()
+    points["line_id"] = points["line_id"].map(_normalize_guid)
+    lines["line_id"] = lines["line_id"].map(_normalize_guid)
+
+    line_with_text = lines[["line_id", "card_id", "text"]].rename(columns={"text": "line_text"})
 
     merged = (
-        points.merge(assignments, on="point_id", how="left", validate="one_to_one")
-        .merge(hover, on="card_id", how="left", validate="many_to_one")
+        points.merge(line_with_text, on="line_id", how="left", validate="one_to_one")
+              .merge(hover, on="card_id", how="left", validate="many_to_one")
     )
-    merged["cluster_id"] = merged["cluster_id"].fillna(-1).astype(int)
-    merged["cluster_label"] = merged["cluster_id"].map(label_by_cluster).fillna("(unlabeled)")
-    merged["color_identity"] = merged["color_identity"].fillna("")
     merged["name"] = merged["name"].fillna("(unknown)")
-
+    merged["_color_bucket"] = merged["color_identity"].map(_color_identity_bucket)
     merged["_hover_pt"] = [_format_pt(p, t) for p, t in zip(merged["power"], merged["toughness"])]
     merged["_hover_oracle"] = merged["oracle_text"].map(
-        lambda t: _truncate(t, oracle_truncate_limit)
+        lambda t: _format_oracle_html(t, oracle_truncate_limit)
+    )
+    merged["_hover_line"] = merged["line_text"].map(
+        lambda t: _truncate(t, oracle_truncate_limit).replace("\n", " · ")
     )
     merged["_hover_mana"] = merged["mana_cost"].fillna("")
+    merged["_hover_ci"] = merged["color_identity"].fillna("(colorless)")
 
-    color_id_traces = _build_color_id_traces(merged, marker_size, marker_opacity)
-    logger.info("Built %d color-identity traces", len(color_id_traces))
+    bucket_counts = merged["_color_bucket"].value_counts()
+    logger.info("Color-identity distribution: %s", bucket_counts.to_dict())
 
-    annotations = _build_cluster_annotations(
-        merged, labels, max_annotations, annotation_text_limit
-    )
-    logger.info("Built %d cluster centroid annotations", len(annotations))
+    # ── Trace order: monocolor + colorless render first (opaque), multicolor renders LAST so its
+    # outlined hollow markers sit on top and remain visible. ──
+    bucket_order = ["W", "U", "B", "R", "G", _COLORLESS, _MULTICOLOR]
+    traces: List[go.Scattergl] = []
+    for bucket in bucket_order:
+        subset = merged[merged["_color_bucket"] == bucket]
+        if len(subset) == 0:
+            continue
+        if bucket == _MULTICOLOR:
+            marker = dict(
+                color="rgba(0, 0, 0, 0)",  # fully transparent fill
+                size=marker_size,
+                line=dict(width=_MULTICOLOR_OUTLINE_WIDTH, color=_MULTICOLOR_OUTLINE),
+            )
+            legend_label = f"Multicolor ({len(subset)})"
+        else:
+            marker = dict(
+                color=_COLOR_PALETTE[bucket],
+                size=marker_size,
+                opacity=marker_opacity,
+                line=dict(width=0.3, color="#1F2937"),
+            )
+            display_name = {
+                "W": "White", "U": "Blue", "B": "Black", "R": "Red", "G": "Green",
+                _COLORLESS: "Colorless",
+            }[bucket]
+            legend_label = f"{display_name} ({len(subset)})"
 
-    fig = go.Figure(data=color_id_traces)
+        traces.append(go.Scattergl(
+            x=subset["x"],
+            y=subset["y"],
+            mode="markers",
+            name=legend_label,
+            marker=marker,
+            customdata=subset[
+                [
+                    "name",          # 0  card name
+                    "_hover_mana",   # 1  mana cost
+                    "type_line",     # 2  type line
+                    "_hover_pt",     # 3  P/T
+                    "_hover_ci",     # 4  color identity (raw string)
+                    "_hover_line",   # 5  THIS line's text
+                    "_hover_oracle", # 6  full card oracle text
+                ]
+            ].to_numpy(),
+            hovertemplate=(
+                "<b>%{customdata[0]}</b>"
+                "<br>%{customdata[1]} · %{customdata[2]}"
+                "<br>%{customdata[3]}  ·  Colors: %{customdata[4]}"
+                "<br>"
+                "<br><b>Line:</b> %{customdata[5]}"
+                "<br>"
+                "<br><b>Oracle text:</b>"
+                "<br>%{customdata[6]}"
+                "<extra></extra>"
+            ),
+        ))
+
+    fig = go.Figure(data=traces)
     fig.update_layout(
-        title=f"MagicAtlas — UMAP of oracle-text embeddings ({len(merged):,} fragments)",
+        title=(
+            f"MagicAtlas — UMAP of oracle-text embeddings ({len(merged):,} line points)"
+        ),
         xaxis_title="UMAP-1",
         yaxis_title="UMAP-2",
         plot_bgcolor="white",
         legend_title_text="Color identity",
         margin=dict(l=60, r=20, t=80, b=60),
-        hoverlabel=dict(bgcolor="white", font_size=12),
-        annotations=annotations,
+        hoverlabel=dict(bgcolor="white", font_size=12, align="left"),
     )
     fig.update_xaxes(zeroline=False, showgrid=True, gridcolor="#E5E7EB")
     fig.update_yaxes(zeroline=False, showgrid=True, gridcolor="#E5E7EB")
@@ -160,9 +239,8 @@ def _build_atlas_plot_impl(
 @step(
     inputs=[
         "AtlasReportingPoints",
+        "OracleLines",
         "AtlasCardHoverInfo",
-        "ClusterAssignments",
-        "ClusterLabels",
         "ReportingConfig",
     ],
     outputs="AtlasPlotHtml",
@@ -170,91 +248,8 @@ def _build_atlas_plot_impl(
 )
 def build_atlas_plot(
     points: pd.DataFrame,
+    lines: pd.DataFrame,
     hover: pd.DataFrame,
-    assignments: pd.DataFrame,
-    labels: pd.DataFrame,
     config: dict,
 ) -> str:
-    return _build_atlas_plot_impl(points, hover, assignments, labels, config)
-
-
-def _build_color_id_traces(
-    merged: pd.DataFrame, marker_size: int, marker_opacity: float
-) -> List[go.Scattergl]:
-    combos = sorted(merged["color_identity"].fillna("").unique(), key=_identity_sort_key)
-    traces: List[go.Scattergl] = []
-    for combo in combos:
-        subset = merged[merged["color_identity"] == combo]
-        if len(subset) == 0:
-            continue
-        traces.append(
-            go.Scattergl(
-                x=subset["x"],
-                y=subset["y"],
-                mode="markers",
-                name=f"{_color_id_legend(combo)} ({len(subset)})",
-                marker=dict(
-                    color=_color_id_color(combo),
-                    size=marker_size,
-                    opacity=marker_opacity,
-                    line=dict(width=0.3, color="#1f2937"),
-                ),
-                customdata=subset[
-                    ["name", "_hover_mana", "type_line", "_hover_pt", "_hover_oracle", "cluster_label"]
-                ].to_numpy(),
-                hovertemplate=(
-                    "<b>%{customdata[0]}</b>"
-                    "<br>%{customdata[1]} · %{customdata[2]}"
-                    "<br>%{customdata[3]}"
-                    "<br>%{customdata[4]}"
-                    "<br><i>cluster: %{customdata[5]}</i>"
-                    "<extra></extra>"
-                ),
-            )
-        )
-    return traces
-
-
-def _build_cluster_annotations(
-    merged: pd.DataFrame,
-    labels: pd.DataFrame,
-    max_annotations: int,
-    annotation_text_limit: int,
-) -> List[dict]:
-    """Top-N largest clusters → text annotations at the per-cluster (x, y) centroid."""
-    # Centroid per cluster from the actual rendered point positions.
-    centroids = (
-        merged[merged["cluster_id"] != -1]
-        .groupby("cluster_id")
-        .agg(cx=("x", "mean"), cy=("y", "mean"))
-        .reset_index()
-    )
-
-    labels_indexed = (
-        labels[labels["cluster_id"] != -1]
-        .sort_values("size", ascending=False)
-        .head(max_annotations)
-        .merge(centroids, on="cluster_id", how="inner")
-    )
-
-    annotations: List[dict] = []
-    for row in labels_indexed.itertuples(index=False):
-        text = _annotation_text(row.label, row.keywords, annotation_text_limit)
-        if not text:
-            continue
-        annotations.append(
-            dict(
-                x=float(row.cx),
-                y=float(row.cy),
-                xref="x",
-                yref="y",
-                text=text,
-                showarrow=False,
-                font=dict(size=11, color="#111827"),
-                bgcolor="rgba(255, 255, 255, 0.78)",
-                bordercolor="rgba(31, 41, 55, 0.35)",
-                borderwidth=0.5,
-                borderpad=2,
-            )
-        )
-    return annotations
+    return _build_atlas_plot_impl(points, lines, hover, config)

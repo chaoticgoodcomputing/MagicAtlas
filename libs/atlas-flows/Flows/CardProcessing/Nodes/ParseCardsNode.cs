@@ -316,11 +316,15 @@ public static class ParseCardsNode
     };
   }
 
-  private static (HashSet<string> types, HashSet<string> subtypes) ParseTypes(string typeLine)
+  private static (List<string> types, List<string> subtypes) ParseTypes(string typeLine)
   {
-    // Type line format: "Type1 Type2 — Subtype1 Subtype2" or just "Type1 Type2"
-    var types = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-    var subtypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    // Type line format: "Type1 Type2 — Subtype1 Subtype2" or just "Type1 Type2". Returns
+    // List<string> rather than HashSet<string> because the Card schema is JSON-persisted for
+    // the 0.18.x cache plan to fingerprint it, and System.Text.Json doesn't round-trip
+    // HashSet<T> correctly (writes Count/Capacity/Comparer instead of elements). Duplicates
+    // aren't a real concern — a single type line never contains the same word twice.
+    var types = new List<string>();
+    var subtypes = new List<string>();
 
     if (string.IsNullOrWhiteSpace(typeLine))
     {

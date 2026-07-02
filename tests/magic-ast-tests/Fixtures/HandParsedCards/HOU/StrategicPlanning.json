@@ -1,0 +1,50 @@
+{
+  "Input": {
+    "Name": "Strategic Planning",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Look at the top three cards of your library. Put one of them into your hand and the rest into your graveyard.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Strategic Planning",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Look at the top three cards of your library. Put one of them into your hand and the rest into your graveyard.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "impulse",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "RestDestination": "Graveyard"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["U"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U"] }
+    ]
+  }
+}

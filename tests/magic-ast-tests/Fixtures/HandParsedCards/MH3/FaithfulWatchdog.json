@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Faithful Watchdog",
+    "ManaCost": "{G}{W}",
+    "TypeLine": "Creature — Dog",
+    "OracleText": "Vigilance\nThis creature enters with three +1/+1 counters on it.",
+    "Power": "0",
+    "Toughness": "0",
+    "Colors": [
+      "G",
+      "W"
+    ],
+    "ColorIdentity": [
+      "G",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Faithful Watchdog",
+    "TypeLine": {
+      "Raw": "Creature — Dog",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dog"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Vigilance\nThis creature enters with three +1/+1 counters on it.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Vigilance",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Vigilance"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "CounterType": "+1/+1"
+            }
+          ],
+          "When": "asThisEnters"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        }
+      }
+    ]
+  }
+}

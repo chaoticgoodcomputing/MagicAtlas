@@ -1,0 +1,86 @@
+{
+  "Input": {
+    "Name": "Adorable Kitten",
+    "ManaCost": "{W}",
+    "TypeLine": "Host Creature — Cat",
+    "OracleText": "When this creature enters, roll a six-sided die. You gain life equal to the result.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Adorable Kitten",
+    "TypeLine": {
+      "Raw": "Host Creature — Cat",
+      "Types": ["Host", "Creature"],
+      "Subtypes": ["Cat"]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, roll a six-sided die. You gain life equal to the result.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "rollDie",
+              "Sides": 6
+            },
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "dieRollResult"
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}

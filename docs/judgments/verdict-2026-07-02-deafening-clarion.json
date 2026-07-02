@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GRN/DeafeningClarion.json",
+      "verdict": "PASS",
+      "citations": ["CR 700.2", "CR 113.3a", "CR 702.15a", "CR 702.15b"],
+      "reason": "modal 'choose one or both' (ModeSelection 1..2) with mode B modeled as gainAbility over Each creature Controller:You, GainedAbility Kind:static Lifelink (CR 702.15a), timing carried by separate until-end-of-turn Duration node (no baked-in timing); no unparsed/free-text residual; mode A + attributes faithful; new gold, no regression"
+    }
+  ]
+}

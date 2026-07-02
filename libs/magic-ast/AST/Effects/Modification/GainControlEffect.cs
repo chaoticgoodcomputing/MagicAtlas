@@ -4,12 +4,14 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
+using MagicAST.AST.Effects.Traits;
 
 /// <summary>
 /// "gain control of [target]"
 /// </summary>
-public sealed record GainControlEffect : Effect
+[OracleEffect("gainControl")]
+public sealed record GainControlEffect : ContinuousEffect
 {
-  [JsonPropertyName("target")]
   public required ObjectReference Target { get; init; }
 }

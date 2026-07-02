@@ -1,0 +1,19 @@
+{
+  "Name": "Adept Watershaper",
+  "Ports": [
+    {
+      "Identity": "Adept Watershaper::emit:gainability",
+      "Card": "Adept Watershaper",
+      "Label": "emit:gainability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

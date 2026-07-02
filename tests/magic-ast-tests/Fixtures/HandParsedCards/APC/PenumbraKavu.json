@@ -1,0 +1,118 @@
+{
+  "Input": {
+    "Name": "Penumbra Kavu",
+    "ManaCost": "{4}{G}",
+    "TypeLine": "Creature — Kavu",
+    "OracleText": "When this creature dies, create a 3/3 black Kavu creature token.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Id": "ee334211-4109-46ff-8676-856048221a1c",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Penumbra Kavu",
+    "TypeLine": {
+      "Raw": "Creature — Kavu",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kavu"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature dies, create a 3/3 black Kavu creature token.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "3",
+                "Toughness": "3",
+                "Colors": [
+                  "B"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Kavu"
+                ],
+                "IsCopy": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

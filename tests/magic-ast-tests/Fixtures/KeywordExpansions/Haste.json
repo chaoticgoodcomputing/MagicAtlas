@@ -1,0 +1,14 @@
+{
+  "Keyword": "Haste",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Haste"
+      }
+    ],
+    "KeywordSource": "Haste"
+  }
+}

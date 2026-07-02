@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "Rhythm of the Wild",
+    "ManaCost": "{1}{R}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Creature spells you control can't be countered.\nNontoken creatures you control have riot. (They enter with your choice of a +1/+1 counter or haste.)",
+    "Colors": [
+      "G",
+      "R"
+    ],
+    "ColorIdentity": [
+      "G",
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Rhythm of the Wild",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Creature spells you control can't be countered.\nNontoken creatures you control have riot. (They enter with your choice of a +1/+1 counter or haste.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "AffectedObjects": {
+            "CardTypes": [
+              "spell",
+              "creature"
+            ],
+            "Controller": "You"
+          },
+          "Effects": [
+            {
+              "EffectType": "cantBeCountered"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Reminder": {
+            "Text": "(They enter with your choice of a +1/+1 counter or haste.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "IsToken": false,
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Riot",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Riot"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G",
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "G"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Simic Initiate",
+    "ManaCost": "{G}",
+    "TypeLine": "Creature — Human Mutant",
+    "OracleText": "Graft 1 (This creature enters with a +1/+1 counter on it. Whenever another creature enters, you may move a +1/+1 counter from this creature onto it.)",
+    "Power": "0",
+    "Toughness": "0",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Simic Initiate",
+    "TypeLine": {
+      "Raw": "Creature — Human Mutant",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Mutant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Graft 1 (This creature enters with a +1/+1 counter on it. Whenever another creature enters, you may move a +1/+1 counter from this creature onto it.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Graft",
+          "Reminder": {
+            "Text": "(This creature enters with a +1/+1 counter on it. Whenever another creature enters, you may move a +1/+1 counter from this creature onto it.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "graft",
+              "Value": 1
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "Input": {
+    "Name": "Stomping Ground",
+    "ManaCost": "",
+    "TypeLine": "Land — Mountain Forest",
+    "OracleText": "({T}: Add {R} or {G}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [
+      "G",
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Stomping Ground",
+    "TypeLine": {
+      "Raw": "Land — Mountain Forest",
+      "Types": [
+        "Land"
+      ],
+      "Subtypes": [
+        "Mountain",
+        "Forest"
+      ]
+    },
+    "Oracle": {
+      "RawText": "({T}: Add {R} or {G}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{R} or {G}"
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "payLife",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                }
+              },
+              "IfYouDoNot": {
+                "EffectType": "tap",
+                "Target": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          ],
+          "When": "asThisEnters"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "G"
+        ]
+      }
+    ]
+  }
+}

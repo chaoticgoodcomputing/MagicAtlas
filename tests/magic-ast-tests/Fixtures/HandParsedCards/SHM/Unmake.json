@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "Unmake",
+    "ManaCost": "{W/B}{W/B}{W/B}",
+    "TypeLine": "Instant",
+    "OracleText": "Exile target creature.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["W", "B"],
+    "ColorIdentity": ["W", "B"]
+  },
+  "Output": {
+    "Name": "Unmake",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Exile target creature.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W/B}{W/B}{W/B}",
+        "Symbols": [
+          { "Kind": "hybrid", "Colors": ["W", "B"] },
+          { "Kind": "hybrid", "Colors": ["W", "B"] },
+          { "Kind": "hybrid", "Colors": ["W", "B"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W", "B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "B"]
+      }
+    ]
+  }
+}

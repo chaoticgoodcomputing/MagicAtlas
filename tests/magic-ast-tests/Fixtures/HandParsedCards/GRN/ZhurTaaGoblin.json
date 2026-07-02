@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Zhur-Taa Goblin",
+    "ManaCost": "{R}{G}",
+    "TypeLine": "Creature — Goblin Berserker",
+    "OracleText": "Riot (This creature enters with your choice of a +1/+1 counter or haste.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "G",
+      "R"
+    ],
+    "ColorIdentity": [
+      "G",
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Zhur-Taa Goblin",
+    "TypeLine": {
+      "Raw": "Creature — Goblin Berserker",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin",
+        "Berserker"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Riot (This creature enters with your choice of a +1/+1 counter or haste.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Riot",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Riot"
+            }
+          ],
+          "Reminder": {
+            "Text": "(This creature enters with your choice of a +1/+1 counter or haste.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{R}{G}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G",
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G",
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

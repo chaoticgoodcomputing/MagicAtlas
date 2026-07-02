@@ -1,0 +1,33 @@
+{
+  "Keyword": "Training",
+  "Expected": {
+    "Kind": "triggered",
+    "KeywordSource": "Training",
+    "Trigger": {
+      "Timing": "Whenever",
+      "Event": "Attacks",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ]
+      }
+    },
+    "InterveningIf": {
+      "ConditionType": "other",
+      "Text": "this creature attacks with at least one other creature with greater power"
+    },
+    "Effects": [
+      {
+        "EffectType": "putCounters",
+        "Target": {
+          "Kind": "Self"
+        },
+        "CounterType": "+1/+1",
+        "Count": {
+          "QuantityType": "literal",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "Input": {
+    "Name": "The Necrobloom",
+    "ManaCost": "{1}{W}{B}{G}",
+    "TypeLine": "Legendary Creature — Plant",
+    "OracleText": "Landfall — Whenever a land you control enters, create a 0/1 green Plant creature token. If you control seven or more lands with different names, create a 2/2 black Zombie creature token instead.\nLand cards in your graveyard have dredge 2. (You may return a land card from your graveyard to your hand and mill two cards instead of drawing a card.)",
+    "Power": "2",
+    "Toughness": "7",
+    "Colors": [
+      "B",
+      "G",
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "The Necrobloom",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Plant",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Plant"
+      ],
+      "Supertypes": [
+        "Legendary"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Landfall — Whenever a land you control enters, create a 0/1 green Plant creature token. If you control seven or more lands with different names, create a 2/2 black Zombie creature token instead.\nLand cards in your graveyard have dredge 2. (You may return a land card from your graveyard to your hand and mill two cards instead of drawing a card.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "AbilityWord": "Landfall",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "land"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "you control seven or more lands with different names"
+              },
+              "Then": {
+                "EffectType": "createToken",
+                "Player": {
+                  "Kind": "You"
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Token": {
+                  "Power": "2",
+                  "Toughness": "2",
+                  "Colors": [
+                    "B"
+                  ],
+                  "Types": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Zombie"
+                  ],
+                  "IsCopy": false
+                }
+              },
+              "Else": {
+                "EffectType": "createToken",
+                "Player": {
+                  "Kind": "You"
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Token": {
+                  "Power": "0",
+                  "Toughness": "1",
+                  "Colors": [
+                    "G"
+                  ],
+                  "Types": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Plant"
+                  ],
+                  "IsCopy": false
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "Controller": "You",
+                  "Zone": "Graveyard"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Dredge",
+                "Effects": [
+                  {
+                    "EffectType": "dredge",
+                    "Value": 2
+                  }
+                ]
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(You may return a land card from your graveyard to your hand and mill two cards instead of drawing a card.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}{B}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        }
+      }
+    ]
+  }
+}

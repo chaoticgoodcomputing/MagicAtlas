@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Murderous Cut",
+    "ManaCost": "{4}{B}",
+    "TypeLine": "Instant",
+    "OracleText": "Delve (Each card you exile from your graveyard while casting this spell pays for {1}.)\nDestroy target creature.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Murderous Cut",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Delve (Each card you exile from your graveyard while casting this spell pays for {1}.)\nDestroy target creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Delve",
+          "Effects": [
+            {
+              "EffectType": "alternativePayment",
+              "Method": "Exile",
+              "Pays": "Generic",
+              "Source": {
+                "CardTypes": [
+                  "card"
+                ],
+                "Controller": "You",
+                "Zone": "Graveyard"
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(Each card you exile from your graveyard while casting this spell pays for {1}.)"
+          }
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

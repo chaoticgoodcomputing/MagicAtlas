@@ -1,0 +1,6 @@
+{
+  "_note": "Chatterfang canonical: Squirrel is a creature type → a Squirrel creature exists.",
+  "A": { "Subtypes": ["Squirrel"] },
+  "B": { "CardTypes": ["creature"] },
+  "Expected": "Overlaps"
+}

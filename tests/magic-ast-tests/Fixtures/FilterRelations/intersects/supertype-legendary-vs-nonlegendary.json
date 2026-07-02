@@ -1,0 +1,5 @@
+{
+  "A": { "Supertypes": ["Legendary"] },
+  "B": { "ExcludedSupertypes": ["Legendary"] },
+  "Expected": "Disjoint"
+}

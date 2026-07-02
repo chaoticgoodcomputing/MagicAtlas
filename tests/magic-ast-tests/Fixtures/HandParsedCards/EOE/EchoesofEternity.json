@@ -1,0 +1,104 @@
+{
+  "Input": {
+    "Name": "Echoes of Eternity",
+    "ManaCost": "{3}{C}{C}{C}",
+    "TypeLine": "Kindred Enchantment — Eldrazi",
+    "OracleText": "If a triggered ability of a colorless spell you control or another colorless permanent you control triggers, that ability triggers an additional time.\nWhenever you cast a colorless spell, copy it. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Echoes of Eternity",
+    "TypeLine": {
+      "Raw": "Kindred Enchantment — Eldrazi",
+      "Types": [
+        "Kindred",
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Eldrazi"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If a triggered ability of a colorless spell you control or another colorless permanent you control triggers, that ability triggers an additional time.\nWhenever you cast a colorless spell, copy it. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "abilityTrigger",
+                "AffectedObjects": {
+                  "IsColorless": true,
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "OriginalEventOccurs": true,
+              "Modifier": {
+                "Type": "additionalTime"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell"
+              ],
+              "IsColorless": true,
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "It"
+              },
+              "MayChooseNewTargets": true
+            }
+          ],
+          "Reminder": {
+            "Text": "A copy of a permanent spell becomes a token."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{C}{C}{C}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colorless"
+          },
+          {
+            "Kind": "colorless"
+          },
+          {
+            "Kind": "colorless"
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

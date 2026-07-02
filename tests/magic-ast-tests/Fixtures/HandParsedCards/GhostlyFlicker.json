@@ -1,0 +1,82 @@
+{
+  "Input": {
+    "Name": "Ghostly Flicker",
+    "TypeLine": "Instant",
+    "ManaCost": "{2}{U}",
+    "OracleText": "Exile two target artifacts, creatures, and/or lands you control, then return those cards to the battlefield under your control.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Ghostly Flicker",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Exile two target artifacts, creatures, and/or lands you control, then return those cards to the battlefield under your control.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "exile",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": ["artifact", "creature", "land"],
+                      "Controller": "You"
+                    },
+                    "Quantity": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    }
+                  }
+                },
+                {
+                  "EffectType": "returnToBattlefield",
+                  "Target": {
+                    "Kind": "Designated",
+                    "Filter": {
+                      "Zone": "Exile",
+                      "ExiledWith": {
+                        "Kind": "Self"
+                      }
+                    }
+                  },
+                  "UnderControl": {
+                    "Kind": "You"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}

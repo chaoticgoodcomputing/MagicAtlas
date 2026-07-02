@@ -1,0 +1,117 @@
+{
+  "Input": {
+    "Name": "Izzet Chronarch",
+    "ManaCost": "{2}{U}{R}",
+    "TypeLine": "Creature — Human Wizard",
+    "OracleText": "When this creature enters, return target instant or sorcery card from your graveyard to your hand.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "U",
+      "R"
+    ],
+    "ColorIdentity": [
+      "U",
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Izzet Chronarch",
+    "TypeLine": {
+      "Raw": "Creature — Human Wizard",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Wizard"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, return target instant or sorcery card from your graveyard to your hand.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "instant",
+                    "sorcery"
+                  ],
+                  "Zone": "Graveyard",
+                  "Controller": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U",
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

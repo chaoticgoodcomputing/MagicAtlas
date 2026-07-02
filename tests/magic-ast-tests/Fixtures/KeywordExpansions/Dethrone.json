@@ -1,0 +1,33 @@
+{
+  "Keyword": "Dethrone",
+  "Expected": {
+    "Kind": "triggered",
+    "KeywordSource": "Dethrone",
+    "Trigger": {
+      "Timing": "Whenever",
+      "Event": "Attacks",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ]
+      }
+    },
+    "InterveningIf": {
+      "ConditionType": "other",
+      "Text": "the player you attacked has the most life or is tied for most life"
+    },
+    "Effects": [
+      {
+        "EffectType": "putCounters",
+        "Target": {
+          "Kind": "Self"
+        },
+        "CounterType": "+1/+1",
+        "Count": {
+          "QuantityType": "literal",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

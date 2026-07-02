@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/VampireOpportunist.json",
+      "verdict": "PASS",
+      "citations": ["CR 119.3"],
+      "reason": "activated {6}{B} drain decomposed into flat sibling effects loseLife(EachOpponent,2)+gainLife(You,2); faithful to oracle text, no unparsed residual, no baked-in timing"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-vampire-opportunist#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses pre-existing loseLife/gainLife effects and EachOpponent/You references; PortWalk projection unchanged, projection decision N/A"
+    }
+  ]
+}

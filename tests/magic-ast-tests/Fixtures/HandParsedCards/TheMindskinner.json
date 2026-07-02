@@ -1,0 +1,138 @@
+{
+  "Input": {
+    "Name": "The Mindskinner",
+    "ManaCost": "{U}{U}{U}",
+    "TypeLine": "Legendary Enchantment Creature — Nightmare",
+    "OracleText": "The Mindskinner can't be blocked.\nIf a source you control would deal damage to an opponent, prevent that damage and each opponent mills that many cards.",
+    "Power": "10",
+    "Toughness": "1",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "The Mindskinner",
+    "TypeLine": {
+      "Raw": "Legendary Enchantment Creature — Nightmare",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Enchantment",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Nightmare"
+      ]
+    },
+    "Oracle": {
+      "RawText": "The Mindskinner can't be blocked.\nIf a source you control would deal damage to an opponent, prevent that damage and each opponent mills that many cards.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "damage",
+                "Source": {
+                  "Controller": "You"
+                },
+                "AffectedObjects": {
+                  "Controller": "Opponent"
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "preventDamage",
+                    "All": true,
+                    "Target": {
+                      "Kind": "Opponent"
+                    }
+                  },
+                  {
+                    "EffectType": "mill",
+                    "Player": {
+                      "Kind": "EachOpponent"
+                    },
+                    "Count": {
+                      "QuantityType": "derived",
+                      "DerivedFrom": "DamageDealt"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "10",
+          "Value": 10
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

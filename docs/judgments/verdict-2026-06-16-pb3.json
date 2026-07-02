@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ZEN/SpellPierce.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.6", "CR 205.2a"],
+      "reason": "DELTA PB-3: 'noncreature' type-negation restructured from free-text Characteristics[other/Description] to ExcludedCardTypes:[creature]; sibling CardTypes:[spell], counterSpell effect, and preventable/Unless wrapper preserved; no new residual; off-whitelist"
+    }
+  ]
+}

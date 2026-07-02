@@ -4,18 +4,18 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
+using MagicAST.Serialization.DiscriminatorAttributes;
+using MagicAST.AST.Effects.Traits;
 
 /// <summary>
 /// "[target] gets +X/+Y" or "gets -X/-Y"
 /// </summary>
-public sealed record ModifyPTEffect : Effect
+[OracleEffect("modifyPT")]
+public sealed record ModifyPTEffect : ContinuousEffect
 {
-  [JsonPropertyName("target")]
   public required ObjectReference Target { get; init; }
 
-  [JsonPropertyName("powerModifier")]
   public required Quantity PowerModifier { get; init; }
 
-  [JsonPropertyName("toughnessModifier")]
   public required Quantity ToughnessModifier { get; init; }
 }

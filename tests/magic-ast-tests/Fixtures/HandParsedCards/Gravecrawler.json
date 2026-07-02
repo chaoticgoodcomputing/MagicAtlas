@@ -1,0 +1,103 @@
+{
+  "Input": {
+    "Name": "Gravecrawler",
+    "ManaCost": "{B}",
+    "TypeLine": "Creature — Zombie",
+    "OracleText": "This creature can't block.\nYou may cast this card from your graveyard as long as you control a Zombie.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Gravecrawler",
+    "TypeLine": {
+      "Raw": "Creature — Zombie",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature can't block.\nYou may cast this card from your graveyard as long as you control a Zombie.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBlock"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "alternativeCast",
+              "FromZone": "Graveyard",
+              "Condition": {
+                "ConditionType": "count",
+                "Filter": {
+                  "Subtypes": [
+                    "Zombie"
+                  ],
+                  "Controller": "You"
+                },
+                "Count": {
+                  "Operator": "GreaterThanOrEqual",
+                  "Value": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

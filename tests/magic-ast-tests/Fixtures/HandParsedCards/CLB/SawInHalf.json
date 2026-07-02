@@ -1,0 +1,122 @@
+{
+  "Input": {
+    "Name": "Saw in Half",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Instant",
+    "OracleText": "Destroy target creature. If that creature dies this way, its controller creates two tokens that are copies of that creature, except their power is half that creature's power and their toughness is half that creature's toughness. Round up each time.",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Saw in Half",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Destroy target creature. If that creature dies this way, its controller creates two tokens that are copies of that creature, except their power is half that creature's power and their toughness is half that creature's toughness. Round up each time.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "CantBeRegenerated": false
+            },
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "diedThisWay",
+                "Reference": {
+                  "Kind": "It"
+                }
+              },
+              "Then": {
+                "EffectType": "copy",
+                "Target": {
+                  "Kind": "It"
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                },
+                "Player": {
+                  "Kind": "Controller"
+                },
+                "Modifications": [
+                  {
+                    "ModificationType": "powerToughnessOverride",
+                    "Power": {
+                      "QuantityType": "calculated",
+                      "BaseQuantity": {
+                        "QuantityType": "derived",
+                        "DerivedFrom": "Power"
+                      },
+                      "Operation": "half",
+                      "Rounding": "up"
+                    },
+                    "Toughness": {
+                      "QuantityType": "calculated",
+                      "BaseQuantity": {
+                        "QuantityType": "derived",
+                        "DerivedFrom": "Toughness"
+                      },
+                      "Operation": "half",
+                      "Rounding": "up"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

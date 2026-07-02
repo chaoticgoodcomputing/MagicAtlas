@@ -1,0 +1,148 @@
+{
+  "Input": {
+    "Name": "Breath of Fury",
+    "ManaCost": "{2}{R}{R}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature you control\nWhen enchanted creature deals combat damage to a player, sacrifice it and attach this Aura to a creature you control. If you do, untap all creatures you control and after this phase, there is an additional combat phase.",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Breath of Fury",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature you control\nWhen enchanted creature deals combat damage to a player, sacrifice it and attach this Aura to a creature you control. If you do, untap all creatures you control and after this phase, there is an additional combat phase.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Controller": "You"
+              }
+            }
+          ],
+          "KeywordSource": "Enchant"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsEnchanted": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "sacrifice",
+                  "Target": {
+                    "Kind": "It"
+                  }
+                },
+                {
+                  "EffectType": "attach",
+                  "Target": {
+                    "Kind": "Any",
+                    "Filter": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Controller": "You"
+                    }
+                  }
+                },
+                {
+                  "EffectType": "conditional",
+                  "Condition": {
+                    "ConditionType": "precedingActionPerformed"
+                  },
+                  "Then": {
+                    "EffectType": "composite",
+                    "Effects": [
+                      {
+                        "EffectType": "untap",
+                        "Target": {
+                          "Kind": "Each",
+                          "Filter": {
+                            "CardTypes": [
+                              "creature"
+                            ],
+                            "Controller": "You"
+                          }
+                        }
+                      },
+                      {
+                        "EffectType": "additionalCombatPhase"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
+    ]
+  }
+}

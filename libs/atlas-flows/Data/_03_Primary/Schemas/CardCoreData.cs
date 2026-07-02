@@ -20,6 +20,13 @@ public partial record CardCoreData
   /// </summary>
   public required Guid Id { get; init; }
 
+  /// <summary>
+  /// Scryfall <c>oracle_id</c> — the stable identity of this card across printings. Nullable to
+  /// match the upstream API: reversible-layout cards omit the card-level oracle_id and carry
+  /// it per face instead.
+  /// </summary>
+  public Guid? OracleId { get; init; }
+
   // =====================
   // MARK: CONTENT
   // =====================

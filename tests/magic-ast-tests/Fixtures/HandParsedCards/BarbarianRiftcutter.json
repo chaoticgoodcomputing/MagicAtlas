@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Barbarian Riftcutter",
+    "ManaCost": "{4}{R}",
+    "TypeLine": "Creature — Human Barbarian",
+    "OracleText": "{R}, Sacrifice this creature: Destroy target land.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": [],
+    "Id": "152f4cfa-4f03-404d-a6f7-24c27505906f",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Barbarian Riftcutter",
+    "TypeLine": {
+      "Raw": "Creature — Human Barbarian",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Barbarian"]
+    },
+    "Oracle": {
+      "RawText": "{R}, Sacrifice this creature: Destroy target land.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["R"] }
+              ]
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"],
+                "IsSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["land"]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+      }
+    ]
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "Input": {
+    "Name": "Containment Membrane",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Surge {U} (You may cast this spell for its surge cost if you or a teammate has cast another spell this turn.)\nEnchant creature\nEnchanted creature doesn't untap during its controller's untap step.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Containment Membrane",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Surge {U} (You may cast this spell for its surge cost if you or a teammate has cast another spell this turn.)\nEnchant creature\nEnchanted creature doesn't untap during its controller's untap step.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Surge",
+          "Effects": [
+            {
+              "EffectType": "alternativeCast",
+              "FromZone": "Hand",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ],
+                    "IsPhyrexian": false,
+                    "IsSnow": false
+                  }
+                ]
+              },
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "you or one of your teammates has cast another spell this turn"
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(You may cast this spell for its surge cost if you or a teammate has cast another spell this turn.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "doesntUntap",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "WhoseUntapStep": "its controller's"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}

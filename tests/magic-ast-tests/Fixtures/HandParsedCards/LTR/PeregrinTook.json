@@ -1,0 +1,153 @@
+{
+  "Input": {
+    "Name": "Peregrin Took",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Legendary Creature — Halfling Citizen",
+    "OracleText": "If one or more tokens would be created under your control, those tokens plus an additional Food token are created instead. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nSacrifice three Foods: Draw a card.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Peregrin Took",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Halfling Citizen",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Halfling",
+        "Citizen"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If one or more tokens would be created under your control, those tokens plus an additional Food token are created instead. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nSacrifice three Foods: Draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "tokenCreation",
+                "MinimumQuantity": 1,
+                "Controller": {
+                  "Kind": "You"
+                }
+              },
+              "OriginalEventOccurs": true,
+              "Replacement": {
+                "EffectType": "createToken",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Token": {
+                  "Types": [
+                    "artifact"
+                  ],
+                  "Subtypes": [
+                    "Food"
+                  ],
+                  "AbilityText": [
+                    "{2}, {T}, Sacrifice this artifact: You gain 3 life."
+                  ],
+                  "IsCopy": false
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\""
+          }
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "Subtypes": [
+                  "Food"
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 3
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}

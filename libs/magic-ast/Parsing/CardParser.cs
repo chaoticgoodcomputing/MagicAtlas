@@ -1,7 +1,9 @@
 namespace MagicAST.Parsing;
 
 using System.Diagnostics;
+using System.Linq;
 using MagicAST.AST;
+using MagicAST.Analysis;
 using MagicAST.Diagnostics;
 
 /// <summary>
@@ -42,6 +44,10 @@ public sealed class CardParser
     var oracleResult = _oracleParser.Parse(input.OracleText);
     diagnostics.AddRange(oracleResult.Diagnostics);
 
+    // Correct the self-by-name reference type now that the type line is known (the oracle parser
+    // has no type-line access, so its self-by-name branch hardcodes "creature"). CR 201.5.
+    var correctedOracle = SelfReferenceTypeCorrector.Correct(oracleResult.Output, typeLine);
+
     // Extract attributes
     var attributes = _attributeExtractor.Extract(input);
 
@@ -65,7 +71,7 @@ public sealed class CardParser
     {
       Name = input.Name,
       TypeLine = typeLine,
-      Oracle = oracleResult.Output,
+      Oracle = correctedOracle,
       Attributes = attributes,
       Faces = faces,
     };
@@ -82,6 +88,9 @@ public sealed class CardParser
         FailedAbilities = oracleResult.Metrics.FailedAbilities,
         DurationMs = stopwatch.Elapsed.TotalMilliseconds,
         FaceCount = faces?.Count ?? 0,
+        // Walk the whole output (main oracle + every face) so residual debt is
+        // counted card-wide in one pass.
+        ResidualCounts = ResidualWalker.Count(output),
       },
     };
   }
@@ -99,7 +108,7 @@ public sealed class CardParser
     {
       Name = faceInput.Name,
       TypeLine = typeLine,
-      Oracle = oracleResult.Output,
+      Oracle = SelfReferenceTypeCorrector.Correct(oracleResult.Output, typeLine),
       Attributes = attributes,
     };
 
@@ -149,7 +158,9 @@ public sealed record CardParseMetrics
   public required int ParsedAbilities { get; init; }
 
   /// <summary>
-  /// Number of abilities that fell back to UnparsedAbility.
+  /// Number of abilities that did not fully parse — an <c>UnparsedAbility</c> or
+  /// any ability carrying a nested <c>IUnparsed</c> node (e.g. an
+  /// <c>UnparsedEffect</c>). Rule 0001 goal (a): buried failures count as failures.
   /// </summary>
   public required int FailedAbilities { get; init; }
 
@@ -162,4 +173,13 @@ public sealed record CardParseMetrics
   /// Number of faces parsed (0 for single-faced cards).
   /// </summary>
   public required int FaceCount { get; init; }
+
+  /// <summary>
+  /// Card-wide residual-debt tally (ADR 0001), counted across the main oracle
+  /// and every face. Keyed by kind; see <see cref="ParseMetrics.ResidualCounts"/>.
+  /// </summary>
+  public required IReadOnlyDictionary<string, int> ResidualCounts { get; init; }
+
+  /// <summary>Total residual occurrences across all kinds.</summary>
+  public int ResidualTotal => ResidualCounts.Values.Sum();
 }

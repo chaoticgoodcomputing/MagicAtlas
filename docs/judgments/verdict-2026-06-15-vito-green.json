@@ -1,0 +1,27 @@
+{
+  "judgment": "vito-green-tier-rejudge",
+  "date": "2026-06-15",
+  "bar": "false-positive guard: a wrong GREEN is the failure mode",
+  "result": "PASS",
+  "items": [
+    {
+      "target": "Exquisite Blood + Vito (bench 314-3966)",
+      "verdict": "PASS",
+      "tier": "Green",
+      "reason": "Both cross-card hops are genuinely reliable. Hop (a) Exquisite Blood emit:life:gain (Controller=You) -> Vito trigger:life:gain (Controller=You): You subset You, ControllerSubsumes(You,You)=Yes. Hop (b) Vito emit:life:loss:opponent (now Kind:Opponent -> Subject Controller=Opponent, NOT runtime-chosen Target) -> Exquisite Blood trigger:life:loss (Controller=Opponent): ControllerSubsumes(Opponent,Opponent)=Yes. No scope leak: post-sharpen recipient is the CR-pinned 'opponent' category (CR 102.2/102.3, glossary 'Opponent' = someone a player is playing against), provably disjoint from 'you' (CR 109.4; operator encodes You perp Opponent Disjoint). The pre-sharpen Kind:Target referent was runtime-chosen -> Unknown -> AMBER; the sharpen replaced it with a category the CR decides, so AMBER->GREEN is earned honestly, not a false positive. A singular targeted opponent losing life is a member of the existential set 'an opponent loses life', so every emitted object satisfies the consumer universally. Cycle steady-state (CoCostsSatisfied/Balanced) is a one-time-seed Firable property, orthogonal to per-edge reliability."
+    },
+    {
+      "target": "Bloodthirsty Conqueror + Vito (bench 314-6191)",
+      "verdict": "PASS",
+      "tier": "Green",
+      "reason": "Structurally identical to Exquisite Blood + Vito. Bloodthirsty Conqueror's trigger filter is Controller=Opponent and its gainLife effect targets Player:You, mirroring Exquisite Blood exactly (verified in AST and single-card snapshot). The life-loss hop closes on ControllerSubsumes(Opponent,Opponent)=Yes and the life-gain hop on You subset You. Same CR basis (102.2/102.3, 109.4, glossary 'Opponent'); same honest AMBER->GREEN earned by the Vito parse sharpen. No false positive."
+    }
+  ],
+  "cr_basis": [
+    "CR 102.2 — In a two-player game, a player's opponent is the other player.",
+    "CR 102.3 — In a multiplayer game between teams, a player's opponents are all players not on their team.",
+    "Glossary Opponent — Someone a player is playing against (rules 102.2, 102.3).",
+    "CR 109.4 — controller identity (operator: You perp Opponent => Disjoint)."
+  ],
+  "closing": "PROCEED"
+}

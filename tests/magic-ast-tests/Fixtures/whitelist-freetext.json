@@ -1,0 +1,785 @@
+{
+  "_doc": "Explicit per-(card,sink) whitelist of golds permitted to carry a free-text residual sink. STATELESS INVARIANT: any gold x sink NOT listed here must be free-text-free, else loud failure (DestringSinkRatchetTests -> renamed FreeTextWhitelistTests). Each entry is a NAMED carve-out: tag 'debt' = slated for a burndown slice (see libs/magic-ast/docs/gold-burndown-plan.md); tag 'irreducible' = permanent, no structured representation. A listed (card,sink) that no longer carries the sink also fails (remove it). Replaces the opaque aggregate count baseline destring-sink-baseline.json (de-ratcheted 2026-06-16).",
+  "entries": [
+    {
+      "card": "2X2/ManaVault",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct"
+    },
+    {
+      "card": "2X2/ManaVault",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "5DN/BrittleEffigy",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "AFR/UnexpectedWindfall",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "ALA/Deathgreeter",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct"
+    },
+    {
+      "card": "ATQ/Endoskeleton",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "ATQ/SpiritShield",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "ATQ/TawnossWeaponry",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "AVR/DeadeyeNavigator",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'X is paired with another creature' Soulbond state has no structured PairedWithCondition node yet (same family as AVR/Wingcrafter)"
+    },
+    {
+      "card": "AVR/TandemLookout",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'X is paired with another creature' Soulbond state has no structured PairedWithCondition node yet (same family as AVR/DeadeyeNavigator and AVR/Wingcrafter)"
+    },
+    {
+      "card": "AVR/Wingcrafter",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "AncientCopperDragon",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
+      "card": "AnimateDead",
+      "sink": "AbilityText",
+      "tag": "debt",
+      "reason": "PB-9 LoseAbilityEffect residual — 'enchant creature card in a graveyard' is an ability text reference (the ability being removed is named verbatim); no structured ability-scope node yet"
+    },
+    {
+      "card": "AnimateDead",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'it's on the battlefield' is a self-zone check (ZoneSelfCondition shape not yet structured)"
+    },
+    {
+      "card": "ApproachoftheSecondSun",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "compound cast-history gate ('cast from your hand AND cast another named spell this game') — two novel condition shapes (CastFromZoneCondition + NamedSpellCastHistoryCondition) with no recurring peer; PB-7 structured-condition buckets"
+    },
+    {
+      "card": "BFZ/FathomFeeder",
+      "sink": "OtherCharacteristic",
+      "tag": "irreducible",
+      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) — no clean structured node"
+    },
+    {
+      "card": "BNG/SnakeOfTheGoldenGrove",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "BoromirWardenoftheTower",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "'no mana was spent to cast it' — cost-zero cast gate; needs a structured NoManaSpentCondition arm (PB-7 structured-condition buckets)"
+    },
+    {
+      "card": "CMR/SailorOfMeans",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "CN2/GrenzoSRuffians",
+      "sink": "OtherCharacteristic",
+      "tag": "irreducible",
+      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) — no clean structured node"
+    },
+    {
+      "card": "CN2/MarchesasEmissary",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "CombatCelebrant",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'hasn't been exerted this turn' is a per-turn history predicate; no HistoryCondition arm exists yet"
+    },
+    {
+      "card": "DFT/BroodheartEngine",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "DKA/SpellSnuff",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct"
+    },
+    {
+      "card": "DaggersailAeronaut",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "Divert",
+      "sink": "OtherCharacteristic",
+      "tag": "irreducible",
+      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) — no clean structured node"
+    },
+    {
+      "card": "ELD/FierceWitchstalker",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "ELD/FortifyingProvisions",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "EMA/GiantTortoise",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "EOE/ElegyAcolyte",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "EOE/InsatiableSkittermaw",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "EOE/InterceptorMechan",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "EOE/KavaronSkywarden",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "EOE/VoidforgedTitan",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "EVE/GiftOfTheDeity",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "Electroduplicate",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — haste keyword in AbilityAdder CopyModification"
+    },
+    {
+      "card": "ElectrosBolt",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "EmieltheBlessed",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/ForsakenMiner; the ConditionalPayEffect.Cost carries the structured {G/W})"
+    },
+    {
+      "card": "ExpeditionRaptor",
+      "sink": "OtherCharacteristic",
+      "tag": "irreducible",
+      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) — no clean structured node"
+    },
+    {
+      "card": "FRF/SavingGrasp",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "ForsakenMiner",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct"
+    },
+    {
+      "card": "FreshFacedRecruit",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "HazelsBrewmaster",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life.) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
+      "card": "HeatShimmer",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — haste keyword in AbilityAdder CopyModification"
+    },
+    {
+      "card": "HellkiteCharger",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/ForsakenMiner; the ConditionalPayEffect.Cost carries the structured {5}{R}{R})"
+    },
+    {
+      "card": "HelmOfTheHost",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "HematiteTalisman",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
+    },
+    {
+      "card": "HollowTrees",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "IKO/LuminousBroodmoth",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "ISD/VillagersOfEstwaldHowlpackOfEstwald",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "KLD/IncendiaryFlow",
+      "sink": "Timeframe",
+      "tag": "debt",
+      "reason": "DealtDamageByPredicate.Timeframe free-text (\"this way\") — deferred enum structuring of the damage-provenance/linked-ability window (CR 607.1); same family as SengirBats"
+    },
+    {
+      "card": "KTK/AbzanSkycaptain",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "KikiJikiMirrorBreaker",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "KodamaoftheEastTree",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'it wasn't put onto the battlefield with this ability' is a loop-prevention anti-recursion gate unique to Kodama of the East Tree; requires a new NotEnteredByAbilityCondition arm with no current peer"
+    },
+    {
+      "card": "LCI/NissaResurgentAnimist",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'this is the second time this ability has resolved this turn' is an ordinal ability-history predicate; no structured NthTimeAbilityResolvedCondition node exists yet"
+    },
+    {
+      "card": "LCI/QuicksandWhirlpool",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "LCI/WarrenSoultrader",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "LRW/GaddockTeeg",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "LTR/MerryEsquireOfRohan",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "LTR/PeregrinTook",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "LapisLazuliTalisman",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
+    },
+    {
+      "card": "M10/Falter",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "M12/CarnageWurm",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "M20/MysticForge",
+      "sink": "OtherCharacteristic",
+      "tag": "irreducible",
+      "reason": "positional predicate 'top' (library top-card position) — no structured Position field on ObjectFilter; same residual category as BFZ/FathomFeeder and Ingest keyword expansion"
+    },
+    {
+      "card": "M21/BarrinTolarianArchmage",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "MH2/AcademyManufactor",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "MID/HopefulInitiate",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "MIR/BenalishCavalry",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "MIR/BurningShieldAskari",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "MIR/MtendaHerder",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "MOM/MentalModulation",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "MRD/LeoninDenGuard",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "MalachiteTalisman",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
+    },
+    {
+      "card": "MalcolmKeenEyedNavigator",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
+      "card": "MarvinMurderousMimic",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 relational name-exclusion predicate — 'don't have the same name as this creature' is a self-referential name filter with no structured ObjectFilter field; a future ExcludesSameNameAsSelf axis would close it"
+    },
+    {
+      "card": "MasterofCruelties",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'attacks a player and isn't blocked' is a compound attack-target + unblocked-state predicate; no structured AttacksPlayerAndIsntBlockedCondition node exists yet"
+    },
+    {
+      "card": "NEO/CrackOpen",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "NacreTalisman",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
+    },
+    {
+      "card": "OGW/ContainmentMembrane",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "ONS/IxidorRealitySculptor",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "OTJ/AlacrianJaguar",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "OTJ/DracosaurAuxiliary",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "OTJ/MercilessHarlequin",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "OTJ/VenomsacLagac",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "OnyxTalisman",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
+    },
+    {
+      "card": "PIP/NukaColaVendingMachine",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "PouncingLynx",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "ProfessorOnyx",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic — 'with the greatest power among creatures that player controls' is a comparative game-state predicate (no dedicated CR); no MaxStatFilter or RelativePowerFilter node exists yet"
+    },
+    {
+      "card": "RIX/DuskCharger",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "RIX/PitilessPlunderer",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "RIX/SkymarcharAspirant",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "RIX/StormFleetSwashbuckler",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "RNA/SpikewheelAcrobat",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "RTR/RakdosDrake",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "RazorkinNeedlehead",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "RingsOfBrighthearth",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Nim Deathmantle/Ulalek; the ConditionalPayEffect.Cost carries the structured {2})"
+    },
+    {
+      "card": "RoadOfReturn",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "RosieCottonofSouthLane",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
+      "card": "SOM/NimDeathmantle",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct"
+    },
+    {
+      "card": "SPM/HotDogCart",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "STX/FurycalmSnarl",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "STX/NecroblossomSnarl",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "SelvalaHeartoftheWilds",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'its power is greater than each other creature's power' is a relative-maximum-power comparison (no structured GreatestPowerCondition node exists yet; the predicate spans the full set of creatures rather than a single comparator)"
+    },
+    {
+      "card": "SengirBats",
+      "sink": "Timeframe",
+      "tag": "debt",
+      "reason": "DealtDamageByPredicate.Timeframe free-text (\"this turn\") — deferred enum structuring of the damage-provenance window"
+    },
+    {
+      "card": "SephirothFabledSOLDIERSephirothOneWingedAngel",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'this is the fourth time this ability has resolved this turn' is an ordinal ability-history predicate; no structured NthTimeAbilityResolvedCondition node exists yet (same family as LCI/NissaResurgentAnimist)"
+    },
+    {
+      "card": "SmotheringTithe",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative (Treasure token ability text)"
+    },
+    {
+      "card": "Spelunking",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'you put a Cave onto the battlefield this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound; requires a new PutSubtypeThisWayCondition arm with no current peer"
+    },
+    {
+      "card": "SwiftReconfiguration",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic — 'creature or Vehicle' is a cross-axis disjunction (card type OR artifact subtype); ObjectFilter has no structured OR field spanning CardTypes and Subtypes axes; consistent with DFT/BroodheartEngine 'creature or Vehicle card' encoding"
+    },
+    {
+      "card": "TDM/EnduringTenacity",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'it was a creature' is a last-known-information type predicate (LKI on card type at dies-trigger look-back time, CR 603.10); no TriggeringObjectTypeCondition node exists yet"
+    },
+    {
+      "card": "THS/TritonFortuneHunter",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "TLA/ForecastingFortuneTeller",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "TSP/Stingscourger",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "TheChainVeil",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'you didn't activate a loyalty ability of a planeswalker this turn' is an activation-history predicate (CR 606.3 once-per-turn gate, checked at end step); no ActivationHistoryCondition arm exists yet"
+    },
+    {
+      "card": "TheDeathOfGwenStacy",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+    },
+    {
+      "card": "TheNecrobloom",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition: CountCondition needs a DifferentNames axis on ObjectFilter to express \"seven or more lands with different names\" without free-text residual"
+    },
+    {
+      "card": "TheRealityChip",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'The Reality Chip is attached to a creature' is an attachment-state predicate; no IsAttachedToCreature condition arm exists yet (CR 702.151b)"
+    },
+    {
+      "card": "TheReaverCleaver",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — Treasure token ability text (separate de-string initiative)"
+    },
+    {
+      "card": "TirelessProvisioner",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "ToralfGodofFuryToralfsHammer",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'it’s legendary' is a supertype-presence predicate on the equipped creature; no IsLegendary/SuptertypeCondition arm exists yet in ConditionParser"
+    },
+    {
+      "card": "ULG/AlbinoTroll",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "USG/GoblinWarBuggy",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "USG/ViashinoOutrider",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "UgintheIneffable",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "two PB-9 structured-characteristic residuals: (1) positional 'top' on library exile target (no Position axis on ObjectFilter; same residual as M20/MysticForge and BFZ/FathomFeeder); (2) 'one or more colors' is a color-presence filter (complement of IsColorless) with no dedicated IsColored boolean axis yet"
+    },
+    {
+      "card": "UlalekFusedAtrocity",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct"
+    },
+    {
+      "card": "VOW/BloodServitor",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "VraskaBetrayalsSting",
+      "sink": "AbilityText",
+      "tag": "debt",
+      "reason": "PB-9 LoseAbilityEffect residual — 'all other abilities' has no structured ability-scope node yet"
+    },
+    {
+      "card": "VraskaBetrayalsSting",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'target player has fewer than nine poison counters' (quantity-comparison on poison counters) not yet a structured QuantityComparisonCondition"
+    },
+    {
+      "card": "WOE/RowdyResearch",
+      "sink": "OtherHistoryPredicate",
+      "tag": "irreducible",
+      "reason": "bespoke history predicate — deferred adjunct"
+    },
+    {
+      "card": "XLN/RuthlessKnave",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "ZEN/BloodchiefAscension",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'an opponent lost N+ life this turn' is a turn-scoped life-history predicate with no current HistoryCondition arm; requires a new quantity (LifeLostThisTurn by player) or HistoryCondition variant"
+    }
+  ]
+}

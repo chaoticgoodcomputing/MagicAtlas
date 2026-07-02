@@ -1,0 +1,148 @@
+{
+  "Input": {
+    "Name": "Wear // Tear",
+    "ManaCost": "{1}{R} // {W}",
+    "TypeLine": "Instant // Instant",
+    "OracleText": "Destroy target artifact.\n//\nDeal 2 damage to target enchantment or creature.\nFuse (You may cast one or both halves of this card from your hand.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Wear // Tear",
+    "TypeLine": {
+      "Raw": "Instant // Instant",
+      "Types": [
+        "Instant",
+        "//",
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Destroy target artifact.\n//\nDeal 2 damage to target enchantment or creature.\nFuse (You may cast one or both halves of this card from your hand.)",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "artifact"
+                  ]
+                }
+              },
+              "CantBeRegenerated": false
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 25,
+            "Length": 2
+          },
+          "RawText": "//",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Static ability parser not yet implemented",
+              "Location": {
+                "Start": 25,
+                "Length": 2
+              },
+              "RawText": "//",
+              "Pattern": "AmbiguousStructure",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 25
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 28,
+            "Length": 48
+          },
+          "RawText": "Deal 2 damage to target enchantment or creature.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Spell ability parser couldn't recognise effect",
+              "Location": {
+                "Start": 28,
+                "Length": 48
+              },
+              "RawText": "Deal 2 damage to target enchantment or creature.",
+              "Pattern": "ComplexTargeting",
+              "LastAttemptedRule": "SpellAbilityParser.YouLoseLifeSpellRule",
+              "FailurePosition": 28
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Fuse",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Fuse"
+            }
+          ],
+          "Reminder": {
+            "Text": "(You may cast one or both halves of this card from your hand.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R} // {W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W",
+          "R"
+        ]
+      }
+    ]
+  }
+}

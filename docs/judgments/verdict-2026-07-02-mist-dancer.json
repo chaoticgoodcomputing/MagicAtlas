@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CMR/MistDancer.json#tribal-anthem-keyword-grant",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 109.2", "CR 109.5", "CR 702.9"],
+      "reason": "'Other Merfolk you control get +1/+0 and have flying' modeled as one static ability with modifyPT (Power +1, Toughness 0) + gainAbility (Flying evasion), both targeting Each creature Subtypes=[Merfolk] Controller=You ExcludeSelf=true; faithful, describe-not-execute, no baked-in timing"
+    }
+  ]
+}

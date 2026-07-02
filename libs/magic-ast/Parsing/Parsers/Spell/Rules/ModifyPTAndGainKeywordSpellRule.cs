@@ -1,0 +1,206 @@
+namespace MagicAST.Parsing.Parsers.Spell.Rules;
+
+using System.Text.RegularExpressions;
+using MagicAST.AST.Abilities;
+using MagicAST.AST.Effects;
+using MagicAST.AST.Effects.Combat;
+using MagicAST.AST.Effects.Damage;
+using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.Effects.Modification;
+using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
+
+/// <summary>
+/// Recognises the composite buff shape:
+///   "Target creature gets +N/+M and gains &lt;keyword(s)&gt; until end of turn."
+///
+/// This covers any single-target creature buff that combines a P/T modifier with one
+/// or more keyword grants, all with until-end-of-turn duration. The keywords group is
+/// one or more keyword names joined by " and ". Examples:
+/// <list type="bullet">
+///   <item>"Target creature gets +2/+2 and gains trample until end of turn."</item>
+///   <item>"Target creature gets +3/+0 and gains first strike and reach until end of turn."</item>
+///   <item>"Target creature gets +1/+1 and gains flying and first strike until end of turn."</item>
+/// </list>
+///
+/// Emits a flat list via <see cref="IMultiSpellRule.TryMatchMulti"/>:
+/// <c>[ModifyPTEffect, GainAbilityEffect, …]</c>, one <see cref="GainAbilityEffect"/>
+/// per keyword, all sharing a single <see cref="UntilEndOfTurnDuration"/> instance.
+///
+/// <para>
+/// The single-effect <see cref="ISpellRule.TryMatch"/> always returns false so the
+/// flat-list path is the only active route.
+/// </para>
+/// </summary>
+[SpellRule]
+public sealed class ModifyPTAndGainKeywordSpellRule : ISpellRule, IMultiSpellRule
+{
+  // Matches: "Target creature gets +4/+2 and gains trample until end of turn"
+  //          "Target creature gets +3/+0 and gains first strike and reach until end of turn"
+  // The "until end of turn" clause is captured separately; the keywords group is everything
+  // between "gains" and " until end of turn" (or end of string for future extensibility).
+  private static readonly Regex _pattern = new(
+    @"^Target\s+creature\s+gets\s+(?<p>[+-]\d+)/(?<t>[+-]\d+)\s+and\s+gains\s+(?<kws>.+?)\s+until\s+end\s+of\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // -------------------------------------------------------------------------
+  // ISpellRule — single-effect path intentionally disabled.
+  // The dispatcher uses TryMatchMulti; this method must return false so the
+  // multi-effect path via SpellAbilityParser.TryParseMultiSpellRuleEffects
+  // is never shadowed by a premature single-effect match.
+  // -------------------------------------------------------------------------
+  public bool TryMatch(string text, out Effect? effect)
+  {
+    effect = null;
+    return false;
+  }
+
+  // -------------------------------------------------------------------------
+  // IMultiSpellRule — flat effect list.
+  // -------------------------------------------------------------------------
+  public bool TryMatchMulti(string text, out IReadOnlyList<Effect>? effects)
+  {
+    effects = null;
+    var m = _pattern.Match(text.Trim());
+    if (!m.Success)
+    {
+      return false;
+    }
+
+    var power = int.Parse(m.Groups["p"].Value);
+    var toughness = int.Parse(m.Groups["t"].Value);
+    var keywordsText = m.Groups["kws"].Value;
+
+    var duration = UntilTimeDuration.EndOfTurn;
+    var targetCreature = new ObjectReference
+    {
+      Kind = ObjectReferenceKind.Target,
+      Filter = new ObjectFilter { CardTypes = ["creature"] },
+    };
+    var it = new ObjectReference { Kind = ObjectReferenceKind.It };
+
+    var list = new List<Effect>
+    {
+      new ModifyPTEffect
+      {
+        Target = targetCreature,
+        PowerModifier = LiteralQuantity.Of(power),
+        ToughnessModifier = LiteralQuantity.Of(toughness),
+        Duration = duration,
+      },
+    };
+
+    // Split keywords on " and " (case-insensitive); each segment names one keyword.
+    var keywordNames = Regex.Split(keywordsText.Trim(), @"\s+and\s+", RegexOptions.IgnoreCase);
+    foreach (var name in keywordNames)
+    {
+      var trimmed = name.Trim();
+      var ability = BuildKeywordAbility(trimmed);
+      if (ability is null)
+      {
+        // Unrecognised keyword — bail so the fallback parser handles the card.
+        effects = null;
+        return false;
+      }
+      list.Add(new GainAbilityEffect
+      {
+        Target = it,
+        GainedAbility = ability,
+        Duration = duration,
+      });
+    }
+
+    effects = list;
+    return true;
+  }
+
+  // -------------------------------------------------------------------------
+  // Keyword → StaticAbility factory.
+  // Maps the keyword name from oracle text to its canonical StaticAbility node.
+  // New keywords can be added here without touching the pattern or caller.
+  // -------------------------------------------------------------------------
+  private static StaticAbility? BuildKeywordAbility(string keyword)
+  {
+    return keyword.ToLowerInvariant() switch
+    {
+      "trample" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Trample,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Trample }],
+      },
+      "first strike" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.FirstStrike,
+        Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.First }],
+      },
+      "reach" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Reach,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Reach }],
+      },
+      "flying" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Flying,
+        Effects = [new EvasionEffect
+        {
+          CanBeBlockedBy = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Characteristics = [Characteristic.HasKeyword(KeywordAbility.Flying), Characteristic.HasKeyword(KeywordAbility.Reach)],
+          },
+        }],
+      },
+      "double strike" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.DoubleStrike,
+        Effects = [new CombatDamageTimingEffect { Timing = CombatDamageTiming.Both }],
+      },
+      "haste" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Haste,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Haste }],
+      },
+      "deathtouch" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Deathtouch,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Deathtouch }],
+      },
+      "lifelink" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Lifelink,
+        Effects = [new LifelinkEffect()],
+      },
+      "vigilance" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Vigilance,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Vigilance }],
+      },
+      "menace" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Menace,
+        Effects = [new EvasionEffect
+        {
+          CanBeBlockedBy = new ObjectFilter { CardTypes = ["creature"] },
+          MinimumBlockers = 2,
+        }],
+      },
+      "indestructible" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Indestructible,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Indestructible }],
+      },
+      "hexproof" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Hexproof,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Hexproof }],
+      },
+      "shroud" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Shroud,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Shroud }],
+      },
+      _ => null,
+    };
+  }
+}

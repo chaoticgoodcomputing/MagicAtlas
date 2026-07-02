@@ -1,0 +1,15 @@
+{
+  "Keyword": "Partner with",
+  "Parameter": "Reyhan",
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "partner",
+        "PartnerType": "PartnerWith",
+        "PartnerName": "Reyhan"
+      }
+    ],
+    "KeywordSource": "Partner with"
+  }
+}

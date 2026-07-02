@@ -1,0 +1,80 @@
+{
+  "_doc": "Oracle-text UNCOVERED whitelist (formerly fidelity-uncovered-allowlist). STATELESS INVARIANT: a gold whose card is absent from BOTH the corpus AND the full Scryfall bulk cannot be validated against any authoritative source \u2014 loud failure UNLESS named here. These are genuinely irreducible (playtest/un-cards/variants with no Scryfall oracle entry). tag irreducible. A listed gold whose card later appears in either source fails (remove it \u2014 it now gets real validation).",
+  "entries": [
+    {
+      "card": "CMD/VineshapeHedron",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "FIN/WarpFixture",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "GTC/BlindObedienceCreatureVariant",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "HuntedWitnessAlt",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "INV/Entangle",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "MB6/ExileAllCreatures",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "MB6/ExileAllGraveyardCards",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "MB6/KickedBounce",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "MOM/EdictOfAgadeem",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "ODY/ShamblingSentinel",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "ONE/Goobling",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "P02/Gateway",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "TDM/DromokaExpeller",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "TDM/StormplainCondemner",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    },
+    {
+      "card": "TLA/TheLegendOfRoku",
+      "tag": "irreducible",
+      "reason": "card absent from corpus AND full oracle-cards bulk \u2014 no authoritative oracle source exists"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "Input": {
+    "Name": "Incendiary Flow",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Incendiary Flow deals 3 damage to any target. If a creature dealt damage this way would die this turn, exile it instead.",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Incendiary Flow",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Incendiary Flow deals 3 damage to any target. If a creature dealt damage this way would die this turn, exile it instead.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Target": {
+                "Kind": "AnyTarget"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "death",
+                "AffectedObjects": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "History": {
+                    "PredicateType": "dealtDamageBy",
+                    "Source": {
+                      "Kind": "Self"
+                    },
+                    "Timeframe": "this way"
+                  }
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "exile",
+                "Target": {
+                  "Kind": "It"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
+    ]
+  }
+}

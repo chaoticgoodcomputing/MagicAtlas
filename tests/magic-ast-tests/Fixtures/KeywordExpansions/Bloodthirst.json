@@ -1,0 +1,26 @@
+{
+  "Keyword": "Bloodthirst",
+  "Parameter": "2",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Bloodthirst",
+    "When": "asThisEnters",
+    "Condition": {
+      "ConditionType": "other",
+      "Text": "an opponent was dealt damage this turn"
+    },
+    "Effects": [
+      {
+        "EffectType": "putCounters",
+        "Target": {
+          "Kind": "Self"
+        },
+        "CounterType": "+1/+1",
+        "Count": {
+          "QuantityType": "literal",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

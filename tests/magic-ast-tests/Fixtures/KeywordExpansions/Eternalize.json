@@ -1,0 +1,73 @@
+{
+  "Keyword": "Eternalize",
+  "Parameter": "{4}{B}{B}",
+  "Expected": {
+    "Kind": "activated",
+    "KeywordSource": "Eternalize",
+    "Costs": [
+      {
+        "CostType": "mana",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
+        ]
+      },
+      {
+        "CostType": "exile",
+        "Filter": {
+          "IsSelf": true
+        },
+        "Quantity": {
+          "QuantityType": "literal",
+          "Value": 1
+        },
+        "FromZone": "Graveyard"
+      }
+    ],
+    "Effects": [
+      {
+        "EffectType": "createToken",
+        "Player": {
+          "Kind": "You"
+        },
+        "Count": {
+          "QuantityType": "literal",
+          "Value": 1
+        },
+        "Token": {
+          "IsCopy": true,
+          "Colors": [
+            "B"
+          ],
+          "Power": "4",
+          "Toughness": "4",
+          "Subtypes": [
+            "Zombie"
+          ]
+        }
+      }
+    ],
+    "Restrictions": [
+      "OnlyAsSorcery"
+    ],
+    "IsManaAbility": false
+  }
+}

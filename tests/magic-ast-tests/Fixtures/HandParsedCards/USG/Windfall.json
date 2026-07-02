@@ -1,0 +1,60 @@
+{
+  "Input": {
+    "Name": "Windfall",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Each player discards their hand, then draws cards equal to the greatest number of cards a player discarded this way.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Windfall",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Each player discards their hand, then draws cards equal to the greatest number of cards a player discarded this way.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "discardCards",
+              "Count": { "QuantityType": "derived", "DerivedFrom": "CardsInHand" },
+              "Player": { "Kind": "EachPlayer" },
+              "Random": false
+            },
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "calculated",
+                "Expression": "the greatest number of cards a player discarded this way"
+              },
+              "Player": { "Kind": "EachPlayer" }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}

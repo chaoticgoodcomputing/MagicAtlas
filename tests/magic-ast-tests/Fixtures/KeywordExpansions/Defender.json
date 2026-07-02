@@ -1,0 +1,14 @@
+{
+  "Keyword": "Defender",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Defender"
+      }
+    ],
+    "KeywordSource": "Defender"
+  }
+}

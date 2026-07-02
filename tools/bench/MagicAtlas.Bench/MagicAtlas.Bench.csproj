@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Combo-recall benchmark harness (alignment initiative 04 — external ground truth).
+
+    Deliberately OUT of the runtime libs and OUT of the Flowthru test host: this is an
+    evaluation harness, not shipped product code. It measures the END PRODUCT — does the
+    interaction engine reconstruct the combos Commander Spellbook says exist? — against a
+    pinned, offline, checksummed combo snapshot and the committed hand-parsed gold corpus.
+
+    Hybrid project: `dotnet run` invokes Program.Main (writes bench-report.json); `dotnet test`
+    runs the NUnit ratchet (recall may not decrease vs the committed baseline).
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>14</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>MagicAtlas.Bench</RootNamespace>
+
+    <IsTestProject>true</IsTestProject>
+    <IsPackable>false</IsPackable>
+    <GenerateProgramFile>false</GenerateProgramFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="NUnit" Version="4.3.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The engine under measurement + the AST types (TypeOntology). One-directional: the bench
+         depends on the libs; nothing in the libs depends on the bench. -->
+    <ProjectReference Include="../../../libs/magic-ast/MagicAST.csproj" />
+    <ProjectReference Include="../../../libs/mast-interaction/MagicAST.Interaction.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The explicit per-combo expected-tier whitelist — the combo-recall GATE. Read from the source
+         tree by the test (BenchPaths.ExpectedTiersPath), so it is listed here for IDE/build visibility
+         only, not copied to output. -->
+    <None Include="combo-expected-tiers.json" />
+    <!-- The pinned, checksummed Spellbook combo snapshot + the committed baseline report. -->
+    <None Include="Data/**/*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Data/**/*.sha256" CopyToOutputDirectory="PreserveNewest" />
+    <!-- The hand-parsed gold corpus (the eval corpus). Linked, not copied into Data, so the bench
+         reads the same source-of-truth fixtures the MAST tests use. -->
+    <None Include="../../../tests/magic-ast-tests/Fixtures/HandParsedCards/**/*.json"
+          Link="Fixtures/HandParsedCards/%(RecursiveDir)%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
+    <!-- The type ontology the engine binds to (provenance: mtg-rules; vendored under the test project). -->
+    <None Include="../../../tests/magic-ast-tests/Data/_01_Raw/Datasets/Curated/type-ontology.json"
+          Link="Data/type-ontology.json"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

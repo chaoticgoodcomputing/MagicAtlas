@@ -1,0 +1,14 @@
+{
+  "Keyword": "Vigilance",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Vigilance"
+      }
+    ],
+    "KeywordSource": "Vigilance"
+  }
+}

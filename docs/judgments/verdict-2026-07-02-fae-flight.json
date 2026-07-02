@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BLB/FaeFlight.json#etb-hexproof-trigger",
+      "verdict": "PASS",
+      "citations": ["CR 603.1", "CR 702.11a", "CR 702.11b", "CR 303.4", "CR 611.1", "CR 514.2"],
+      "reason": "ETB grant decomposes into Trigger{When,Enters,self aura} + gainAbility(Target=EnchantedOrEquipped, GainedAbility=static Hexproof keyword, Duration=untilTime EndOfTurn); timing not baked into effect; shape matches DiveDown convention; oracle verified; all cited rules present and matching"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BLB/FaeFlight.json#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — branch adds only a parser rule + fixture reusing pre-existing gainAbility/keywordAbility/EnchantedOrEquipped/untilTime nodes; no PortWalk projection decision required"
+    }
+  ]
+}

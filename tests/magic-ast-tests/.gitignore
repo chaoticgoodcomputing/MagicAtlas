@@ -1,7 +1,9 @@
 # Generated metadata
 Metadata/
 
-# Ignore all generated data artifacts
+# Flowthru triage layers: the generated data artifacts are not committed. Only the pipeline's
+# code (catalog/schema .cs), curated raw inputs, and the vendored type ontology are kept.
+# (Hand-authored NUnit golds live under Fixtures/, NOT here — see below.)
 Data/**
 
 # Un-ignore layer directories and their Schemas subdirectories so git can traverse them
@@ -9,7 +11,8 @@ Data/**
 !Data/*/Schemas/
 !Data/_01_Raw/Datasets/
 
-# Allow raw input dataset files
+# Curated raw inputs that ARE committed: hand-curated card inputs, plus the vendored
+# type-ontology.json seeded from the upstream mtg-rules project (nx run mast:seed-ontology).
 !Data/_01_Raw/Datasets/Curated/**/*
 
 # Allow all schema and catalog .cs files
@@ -17,3 +20,7 @@ Data/**
 
 # Un-ignore all .gitkeep files anywhere
 !**/.gitkeep
+
+# NOTE: committed NUnit fixtures (HandParsedCards, KeywordExpansions, MalformedParsedCards,
+# FilterRelations, Query, Interactions) live under Fixtures/ — a top-level dir that is NOT ignored,
+# so it needs no allowlist here. That separation is the whole point: Data/ = triage, Fixtures/ = golds.

@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/10E/Fear.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.36b", "CR 105.1"],
+      "reason": "PB-3 structured the fear evasion filter: free-text Characteristics [{other:artifact},{other:black}] -> CardTypes:[creature,artifact] + Colors:[B], matching canonical sibling shape (SeveredLegion/RazortoothRats) and CR 702.36b 'artifact creatures and/or black creatures'; no unparsed nodes, no leftover free-text residual, both abilities preserved, removed from whitelist-freetext.json"
+    }
+  ]
+}

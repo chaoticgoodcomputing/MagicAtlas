@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "name": "atlas-flow-test",
+  "name": "flowthru",
   "sourceRoot": "tests/atlas-flow-test",
   "projectType": "application",
   "targets": {
@@ -8,7 +8,7 @@
       "//": "Run the atlas pipeline harness. Pass --flows X,Y to limit, or no args for full run.",
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["dotnet run"],
+        "commands": [ "dotnet run" ],
         "cwd": "tests/atlas-flow-test",
         "parallel": false
       }
@@ -37,6 +37,13 @@
       "options": {
         "command": "dotnet csharpier {projectRoot} --check",
         "cwd": "{workspaceRoot}"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx serve Data/_08_Reporting/Datasets",
+        "cwd": "{projectRoot}"
       }
     }
   }

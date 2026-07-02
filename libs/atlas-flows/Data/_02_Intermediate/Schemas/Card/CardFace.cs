@@ -29,7 +29,7 @@ public partial record CardFace
   public string? PrintedText { get; init; }
   public string? PrintedTypeLine { get; init; }
   public string? Toughness { get; init; }
-  public HashSet<string>? Types { get; init; }
-  public HashSet<string>? Subtypes { get; init; }
+  public List<string>? Types { get; init; }
+  public List<string>? Subtypes { get; init; }
   public string? Watermark { get; init; }
 }

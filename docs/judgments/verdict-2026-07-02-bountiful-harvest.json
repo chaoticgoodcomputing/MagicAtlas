@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BountifulHarvest.json",
+      "verdict": "PASS",
+      "citations": ["CR 119.3"],
+      "reason": "spell effect gainLife with Amount as CountQuantity over ObjectFilter{CardTypes:[land],Zone:Battlefield,Controller:You} — faithful descriptive count of 'for each land you control', rate 1 = bare count, no timing baked in, no free-text/unparsed residual; matches ElvishArchdruid count shape and lowercase card-type convention"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/GainLifeForEachPermanentSpellRule.cs#doc-citation",
+      "verdict": "PASS",
+      "citations": ["CR 119.3"],
+      "reason": "doc-comment cites CR 119.3 which exists verbatim in rules-structure.json ('If an effect causes a player to gain life or lose life...') and matches the gainLife modeling"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-bountiful-harvest#projection-decision",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses pre-existing gainLife effect + count QuantityType (both already in AST and used by many fixtures); no PortWalk projection decision required"
+    }
+  ]
+}

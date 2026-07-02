@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/4ED/WordOfBinding.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.26", "CR 107.3a"],
+      "reason": "Tap X target creatures -> EffectType tap + Target creature-filter ObjectReference + Count VariableQuantity X; faithful, structured, no baked-in timing, no residual, oracle text verified"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-word-of-binding#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced; reuses already-projected tap effect + variable quantity (QuantityType variable already in downstream gold fixtures) -> no PortWalk projection decision required"
+    }
+  ]
+}

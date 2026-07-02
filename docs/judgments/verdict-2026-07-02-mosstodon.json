@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Mosstodon.json",
+      "verdict": "PASS",
+      "citations": ["CR 602.1", "CR 611.1", "CR 702.19a"],
+      "reason": "power-filtered target modeled as Target ObjectFilter CardTypes:[creature] + PowerComparison{GreaterThanOrEqual,5}; trample granted as static keywordAbility with separate untilTime EndOfTurn duration; no unparsed/free-text residual; oracle text and all cited CR rules verified"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-mosstodon#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — parser rule + fixture reuse pre-existing GainAbilityEffect, ObjectFilter.PowerComparison, ComparisonOperator.GreaterThanOrEqual, KeywordAbilityEffect; PortWalk projection ratchet does not apply"
+    }
+  ]
+}

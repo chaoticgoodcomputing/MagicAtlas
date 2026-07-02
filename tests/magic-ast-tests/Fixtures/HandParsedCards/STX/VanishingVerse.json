@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "Vanishing Verse",
+    "ManaCost": "{W}{B}",
+    "TypeLine": "Instant",
+    "OracleText": "Exile target monocolored permanent.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B", "W"],
+    "ColorIdentity": ["W", "B"]
+  },
+  "Output": {
+    "Name": "Vanishing Verse",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Exile target monocolored permanent.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["permanent"],
+                  "IsMonocolored": true
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}{B}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "B"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "Input": {
+    "Name": "Spike-Tailed Ceratops",
+    "ManaCost": "{4}{G}",
+    "TypeLine": "Creature — Dinosaur",
+    "OracleText": "This creature can block an additional creature each combat.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Spike-Tailed Ceratops",
+    "TypeLine": {
+      "Raw": "Creature — Dinosaur",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dinosaur"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature can block an additional creature each combat.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "blockAdditional"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}

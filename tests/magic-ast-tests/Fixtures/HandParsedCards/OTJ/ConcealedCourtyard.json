@@ -1,0 +1,82 @@
+{
+  "Input": {
+    "Name": "Concealed Courtyard",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "This land enters tapped unless you control two or fewer other lands.\n{T}: Add {W} or {B}.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": [
+      "B",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Concealed Courtyard",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": [
+        "Land"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This land enters tapped unless you control two or fewer other lands.\n{T}: Add {W} or {B}.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "When": "asThisEnters",
+          "Condition": {
+            "ConditionType": "count",
+            "Filter": {
+              "CardTypes": [
+                "land"
+              ],
+              "Controller": "You"
+            },
+            "Count": {
+              "Operator": "LessThanOrEqual",
+              "Value": 2
+            }
+          }
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{W} or {B}"
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "W"
+        ]
+      }
+    ]
+  }
+}

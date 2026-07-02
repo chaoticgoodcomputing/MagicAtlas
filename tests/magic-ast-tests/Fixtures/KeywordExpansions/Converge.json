@@ -1,0 +1,14 @@
+{
+  "Keyword": "Converge",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Converge"
+      }
+    ],
+    "KeywordSource": "Converge"
+  }
+}

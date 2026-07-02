@@ -6,13 +6,11 @@ using Flowthru.Hosting;
 using Flowthru.Step.Python;
 using MagicAtlas.Data;
 using MagicAtlas.Flows.CardProcessing;
-using MagicAtlas.Flows.Clustering;
 using MagicAtlas.Flows.FineTune;
+using MagicAtlas.Flows.FineTuneEval;
 using MagicAtlas.Flows.Ingest;
-using MagicAtlas.Flows.ModelEvaluations;
 using MagicAtlas.Flows.OracleEmbedding;
 using MagicAtlas.Flows.Reporting;
-using MagicAtlas.Flows.RulesProcessing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,18 +18,25 @@ using Microsoft.Extensions.Logging;
 namespace MagicAtlas.Harness;
 
 /// <summary>
-/// FlowthruCli entry point for the atlas pipeline harness. Wires the local-filesystem
+/// FlowthruCli entry point for the explorer-mode atlas pipeline. Wires the local-filesystem
 /// <see cref="Catalog"/> (rooted at this project's <c>Data/</c> folder), the Python runtime
 /// (venv + module search path resolved against the <c>libs/atlas-flows</c> source tree), and the
-/// four pipeline flows:
+/// six pipeline flows:
 /// </summary>
 /// <list type="number">
-/// <item><b>Ingest</b> — owns the HTTP boundary; fetches MTG rules + Scryfall card/symbology data
-/// and persists into the <c>_01_Raw</c> layer.</item>
+/// <item><b>Ingest</b> — HTTP boundary; fetches Scryfall card/symbology bytes. (MTG rules text
+/// moved to the standalone <c>mtg-rules</c> project.)</item>
 /// <item><b>CardProcessing</b> — typed Scryfall card parsing + commander-format filter.</item>
-/// <item><b>RulesProcessing</b> — section/rule/glossary extraction from the rules text.</item>
-/// <item><b>OracleEmbedding</b> — Python BERT + UMAP for the atlas-api's scatter plot.</item>
+/// <item><b>FineTune</b> — MTG-corpus fine-tune of the base sentence-transformer.</item>
+/// <item><b>OracleEmbedding</b> — encode oracle lines → unsupervised UMAP → 2D atlas coordinates.</item>
+/// <item><b>Reporting</b> — render the atlas as a standalone Plotly HTML.</item>
 /// </list>
+/// <remarks>
+/// Categorical/cluster machinery (HDBSCAN, supervised UMAP, archetype taxonomy, attribution
+/// scorecards) is intentionally absent — exploiter-mode queries are handled by MagicAST
+/// (libs/magic-ast/), not by statistical attribution. The atlas here is explorer-mode only:
+/// "show me cards near this one" via semantic similarity.
+/// </remarks>
 public class Program
 {
   public static Task<int> Main(string[] args) =>
@@ -140,10 +145,10 @@ public class Program
         sp.GetRequiredService<IConfiguration>()
       ));
 
-      // Enable smart caching (0.18.x). The cache manifest tracks per-step composite identities
+      // Enable smart caching. The cache manifest tracks per-step composite identities
       // (source-hash + input fingerprints) and short-circuits steps whose inputs and code
       // haven't changed since the last successful run. Python steps participate iff they're
-      // marked `cacheable=True` on the `@step` decorator (see Flows/**/<step>.py).
+      // marked `cacheable=True` on the `@step` decorator.
       flowthru.UseCacheStorage(_ =>
         Item.Of<CacheManifest>("flowthru.cache")
           .Json()
@@ -176,10 +181,6 @@ public class Program
         );
 
       flowthru
-        .RegisterFlow<Catalog>("RulesProcessing", RulesProcessingFlow.Create)
-        .WithDescription("Parses the comprehensive rules text into structured JSON");
-
-      flowthru
         .RegisterFlow<Catalog, CardProcessingFlowConfig>(
           "CardProcessing",
           CardProcessingFlow.Create
@@ -192,7 +193,7 @@ public class Program
           FineTuneFlow.Create
         )
         .WithDescription(
-          "Owns the embedding-model lifecycle (download base + future fine-tune)"
+          "Owns the embedding-model lifecycle (base model download + MTG-corpus fine-tune)"
         );
 
       flowthru
@@ -201,25 +202,7 @@ public class Program
           OracleEmbeddingFlow.Create
         )
         .WithDescription(
-          "BERT encode + UMAP→2D (Python): produces bert-embeddings.parquet + atlas-points.json"
-        );
-
-      flowthru
-        .RegisterFlow<Catalog, IPythonExecutor>(
-          "Clustering",
-          ClusteringFlow.Create
-        )
-        .WithDescription(
-          "UMAP→5D + HDBSCAN + c-TF-IDF (Python): produces cluster assignments and labels"
-        );
-
-      flowthru
-        .RegisterFlow<Catalog, IPythonExecutor>(
-          "ModelEvaluations",
-          ModelEvaluationsFlow.Create
-        )
-        .WithDescription(
-          "Scores embedding-model variants against centroid-distance assertions in 5D UMAP space"
+          "Encode oracle lines via the fine-tuned model + unsupervised UMAP → 2D atlas coordinates"
         );
 
       flowthru
@@ -229,6 +212,17 @@ public class Program
         )
         .WithDescription(
           "Renders the atlas embedding as a standalone Plotly HTML (index.html)"
+        );
+
+      flowthru
+        .RegisterFlow<Catalog, IPythonExecutor>(
+          "FineTuneEval",
+          FineTuneEvalFlow.Create
+        )
+        .WithDescription(
+          "Diagnostic: encodes the corpus + training-pair set under base AND fine-tuned "
+            + "models and emits a base-vs-fine-tuned health scorecard "
+            + "(geometry + per-source triplet margins). Run on demand."
         );
     });
   }

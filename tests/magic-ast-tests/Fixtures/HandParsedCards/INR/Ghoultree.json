@@ -1,0 +1,57 @@
+{
+  "Input": {
+    "Name": "Ghoultree",
+    "ManaCost": "{7}{G}",
+    "TypeLine": "Creature — Zombie Treefolk",
+    "OracleText": "This spell costs {1} less to cast for each creature card in your graveyard.",
+    "Power": "10",
+    "Toughness": "10",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Ghoultree",
+    "TypeLine": {
+      "Raw": "Creature — Zombie Treefolk",
+      "Types": ["Creature"],
+      "Subtypes": ["Zombie", "Treefolk"]
+    },
+    "Oracle": {
+      "RawText": "This spell costs {1} less to cast for each creature card in your graveyard.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "PerObject": {
+                "CardTypes": ["creature"],
+                "Controller": "You",
+                "Zone": "Graveyard"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{7}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 7 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 8
+      },
+      { "Kind": "colors", "Colors": ["G"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "10", "Value": 10 },
+        "Toughness": { "ValueType": "fixed", "Raw": "10", "Value": 10 }
+      }
+    ]
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "Input": {
+    "Name": "Charging Binox",
+    "ManaCost": "{7}{G}",
+    "TypeLine": "Creature — Beast",
+    "OracleText": "Assist (Another player can pay up to {7} of this spell's cost.)\nTrample",
+    "Power": "7",
+    "Toughness": "5",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Charging Binox",
+    "TypeLine": {
+      "Raw": "Creature — Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Assist (Another player can pay up to {7} of this spell's cost.)\nTrample",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Assist",
+          "Effects": [
+            {
+              "EffectType": "alternativePayment",
+              "Method": "DelegatePayment",
+              "Pays": "Generic"
+            }
+          ],
+          "Reminder": {
+            "Text": "(Another player can pay up to {7} of this spell's cost.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{7}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 7
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 8
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}

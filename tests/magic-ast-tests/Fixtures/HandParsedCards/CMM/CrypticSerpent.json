@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "Cryptic Serpent",
+    "ManaCost": "{5}{U}{U}",
+    "TypeLine": "Creature — Serpent",
+    "OracleText": "This spell costs {1} less to cast for each instant and sorcery card in your graveyard.",
+    "Power": "6",
+    "Toughness": "5",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Cryptic Serpent",
+    "TypeLine": {
+      "Raw": "Creature — Serpent",
+      "Types": ["Creature"],
+      "Subtypes": ["Serpent"]
+    },
+    "Oracle": {
+      "RawText": "This spell costs {1} less to cast for each instant and sorcery card in your graveyard.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "PerObject": {
+                "CardTypes": ["instant", "sorcery"],
+                "Controller": "You",
+                "Zone": "Graveyard"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{U}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 5 },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 7
+      },
+      { "Kind": "colors", "Colors": ["U"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "6", "Value": 6 },
+        "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 }
+      }
+    ]
+  }
+}

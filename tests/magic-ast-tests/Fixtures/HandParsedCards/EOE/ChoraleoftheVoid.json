@@ -1,0 +1,125 @@
+{
+  "Input": {
+    "Name": "Chorale of the Void",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Chorale of the Void",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Controller": "You"
+              }
+            }
+          ],
+          "KeywordSource": "Enchant"
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 29,
+            "Length": 157
+          },
+          "RawText": "Whenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Triggered ability parser not yet implemented",
+              "Location": {
+                "Start": 29,
+                "Length": 157
+              },
+              "RawText": "Whenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.",
+              "Pattern": "UnparsedTriggered",
+              "LastAttemptedRule": "TriggeredAbilityParser.Parse",
+              "FailurePosition": 29
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 187,
+            "Length": 152
+          },
+          "RawText": "Void — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Triggered ability parser not yet implemented",
+              "Location": {
+                "Start": 187,
+                "Length": 152
+              },
+              "RawText": "Void — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+              "Pattern": "UnparsedTriggered",
+              "LastAttemptedRule": "TriggeredAbilityParser.Parse",
+              "FailurePosition": 187
+            }
+          ],
+          "AbilityWord": "Void"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

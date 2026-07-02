@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Terravore",
+    "ManaCost": "{1}{G}{G}",
+    "TypeLine": "Creature — Lhurgoyf",
+    "OracleText": "Trample\nTerravore's power and toughness are each equal to the number of land cards in all graveyards.",
+    "Power": "*",
+    "Toughness": "*",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Terravore",
+    "TypeLine": {
+      "Raw": "Creature — Lhurgoyf",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Lhurgoyf"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Trample\nTerravore's power and toughness are each equal to the number of land cards in all graveyards.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "definePT",
+              "Characteristic": "Both",
+              "Value": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "Zone": "Graveyard"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "variable",
+          "Raw": "*"
+        },
+        "Toughness": {
+          "ValueType": "variable",
+          "Raw": "*"
+        }
+      }
+    ]
+  }
+}

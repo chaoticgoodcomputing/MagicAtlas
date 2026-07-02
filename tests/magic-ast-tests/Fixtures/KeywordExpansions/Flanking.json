@@ -1,0 +1,45 @@
+{
+  "Keyword": "Flanking",
+  "Expected": {
+    "Kind": "triggered",
+    "KeywordSource": "Flanking",
+    "Trigger": {
+      "Timing": "Whenever",
+      "Event": "BecomesBlocked",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ],
+        "Characteristics": [
+          {
+            "CharacteristicType": "other",
+            "Description": "withoutFlanking"
+          }
+        ]
+      }
+    },
+    "Effects": [
+      {
+        "EffectType": "modifyPT",
+        "Target": {
+          "Kind": "ThatCreature"
+        },
+        "PowerModifier": {
+          "QuantityType": "literal",
+          "Value": -1
+        },
+        "ToughnessModifier": {
+          "QuantityType": "literal",
+          "Value": -1
+        },
+        "Duration": {
+          "DurationType": "untilTime",
+          "Until": {
+            "Part": "Turn",
+            "Edge": "End"
+          }
+        }
+      }
+    ]
+  }
+}

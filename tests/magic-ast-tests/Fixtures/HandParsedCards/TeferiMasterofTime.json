@@ -1,0 +1,154 @@
+{
+  "Input": {
+    "Name": "Teferi, Master of Time",
+    "ManaCost": "{2}{U}{U}",
+    "TypeLine": "Legendary Planeswalker — Teferi",
+    "OracleText": "You may activate loyalty abilities of Teferi on any player's turn any time you could cast an instant.\n+1: Draw a card, then discard a card.\n−3: Target creature you don't control phases out. (Treat it and anything attached to it as though they don't exist until its controller's next turn.)\n−10: Take two extra turns after this one.",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Teferi, Master of Time",
+    "TypeLine": {
+      "Raw": "Legendary Planeswalker — Teferi",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Planeswalker"
+      ],
+      "Subtypes": [
+        "Teferi"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You may activate loyalty abilities of Teferi on any player's turn any time you could cast an instant.\n+1: Draw a card, then discard a card.\n−3: Target creature you don't control phases out. (Treat it and anything attached to it as though they don't exist until its controller's next turn.)\n−10: Take two extra turns after this one.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "timingModification",
+              "Modification": "Grant",
+              "Timing": "Instant",
+              "WhoseTurn": "AnyTurn",
+              "AppliesTo": {
+                "Kind": "objectActivatedAbility",
+                "PermanentFilter": {
+                  "IsSelf": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            },
+            {
+              "EffectType": "discardCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              },
+              "RevealHand": false,
+              "Random": false
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": 1
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "phaseOut",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "Opponent"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": -3
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "takeExtraTurn",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": 2
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": -10
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}

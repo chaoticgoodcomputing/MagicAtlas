@@ -1,0 +1,151 @@
+{
+  "Input": {
+    "Name": "Contaminated Landscape",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "{T}: Add {C}.\n{T}, Sacrifice this land: Search your library for a basic Plains, Island, or Swamp card, put it onto the battlefield tapped, then shuffle.\nCycling {W}{U}{B} ({W}{U}{B}, Discard this card: Draw a card.)",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": ["B", "U", "W"],
+    "Keywords": ["Cycling"],
+    "Id": "e2312c49-1627-47ad-8113-78a999a97d8d",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Contaminated Landscape",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": ["Land"]
+    },
+    "Oracle": {
+      "RawText": "{T}: Add {C}.\n{T}, Sacrifice this land: Search your library for a basic Plains, Island, or Swamp card, put it onto the battlefield tapped, then shuffle.\nCycling {W}{U}{B} ({W}{U}{B}, Discard this card: Draw a card.)",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{C}"
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["land"],
+                "IsSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "searchLibrary",
+                  "Filter": {
+                    "Supertypes": ["Basic"],
+                    "CardTypes": ["land"],
+                    "Subtypes": ["Plains", "Island", "Swamp"]
+                  },
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Destination": "BattlefieldTapped",
+                  "Revealed": false
+                },
+                {
+                  "EffectType": "shuffle",
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
+              ]
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Cycling",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": ["W"],
+                  "IsPhyrexian": false,
+                  "IsSnow": false
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": ["U"],
+                  "IsPhyrexian": false,
+                  "IsSnow": false
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": ["B"],
+                  "IsPhyrexian": false,
+                  "IsSnow": false
+                }
+              ]
+            },
+            {
+              "CostType": "discard",
+              "Filter": {
+                "CardTypes": ["card"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "U", "W"]
+      }
+    ]
+  }
+}

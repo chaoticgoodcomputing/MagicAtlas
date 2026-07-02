@@ -1,0 +1,6 @@
+{
+  "_note": "§6 self-binding: a self-only filter (the source) still OVERLAPS 'a creature you control' -- the source IS a controlled creature -- so IsSelf never prunes (it is absent from the Intersects floor, like ExcludeSelf). The Subsumes direction is what gates the self/any axis.",
+  "A": { "CardTypes": ["creature"], "IsSelf": true },
+  "B": { "CardTypes": ["creature"], "Controller": "You" },
+  "Expected": "Overlaps"
+}

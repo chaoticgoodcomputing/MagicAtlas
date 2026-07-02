@@ -15,12 +15,14 @@ namespace MagicAtlas.Data;
 public partial class Catalog
 {
   /// <summary>Reference to the default sentence-transformer checkpoint. Populated by
-  /// <c>FineTune.DownloadBaseModel</c>.</summary>
+  /// <c>FineTune.DownloadBaseModel</c>. Sidecar filename intentionally hardcoded to the
+  /// current default variant slug — when swapping base models wholesale, update both this
+  /// path and <c>Flowthru:Flows:FineTune:DefaultVariant</c> together.</summary>
   public IItem<ModelArtifactRef> DefaultEmbeddingModel =>
     CreateItem(() =>
       Item.Of<ModelArtifactRef>("DefaultEmbeddingModel")
         .Json()
-        .AtPath($"{_basePath}/_06_Models/default-minilm-l6-v2.json")
+        .AtPath($"{_basePath}/_06_Models/default-nomic-embed-text-v1-5.json")
         .Build()
     );
 
@@ -30,7 +32,7 @@ public partial class Catalog
     CreateItem(() =>
       Item.Of<ModelArtifactRef>("FineTunedEmbeddingModel")
         .Json()
-        .AtPath($"{_basePath}/_06_Models/mtg-mpnet-v1.json")
+        .AtPath($"{_basePath}/_06_Models/mtg-nomic-v1.json")
         .Build()
     );
 }

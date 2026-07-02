@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "Undying Evil",
+    "ManaCost": "{B}",
+    "TypeLine": "Instant",
+    "OracleText": "Target creature gains undying until end of turn. (When it dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Undying Evil",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Target creature gains undying until end of turn. (When it dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "triggered",
+                "Trigger": {
+                  "Timing": "When",
+                  "Event": "Dies",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ]
+                  }
+                },
+                "InterveningIf": {
+                  "ConditionType": "triggeringObjectCounter",
+                  "CounterType": "+1/+1",
+                  "Present": false
+                },
+                "Effects": [
+                  {
+                    "EffectType": "returnToBattlefield",
+                    "Target": {
+                      "Kind": "It"
+                    },
+                    "Tapped": false,
+                    "UnderControl": {
+                      "Kind": "Owner"
+                    },
+                    "WithCounters": {
+                      "CounterType": "+1/+1",
+                      "Count": {
+                        "QuantityType": "literal",
+                        "Value": 1
+                      }
+                    }
+                  }
+                ],
+                "KeywordSource": "Undying"
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

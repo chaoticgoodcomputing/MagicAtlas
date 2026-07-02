@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>14</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>MagicAST.Interaction</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- mast-interaction → mast-query → magic-ast schema export + the ObjectFilter relation
+         operators (ADR-0001 / ADR-0008). The dependency is one-directional. -->
+    <ProjectReference Include="../mast-query/MagicAST.Query.csproj" />
+  </ItemGroup>
+
+</Project>

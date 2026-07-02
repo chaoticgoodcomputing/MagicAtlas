@@ -1,0 +1,46 @@
+{
+  "Name": "Boggart Harbinger",
+  "Ports": [
+    {
+      "Identity": "Boggart Harbinger::emit:searchlibrary",
+      "Card": "Boggart Harbinger",
+      "Label": "emit:searchlibrary",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": true,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Boggart Harbinger::etb:creature:self",
+      "Card": "Boggart Harbinger",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Boggart Harbinger::etb:creature:self",
+      "To": "Boggart Harbinger::emit:searchlibrary"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Boggart Harbinger::etb:creature:self",
+      "To": "Boggart Harbinger::emit:searchlibrary",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

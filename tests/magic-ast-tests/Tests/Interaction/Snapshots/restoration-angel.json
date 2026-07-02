@@ -1,0 +1,68 @@
+{
+  "Name": "Restoration Angel",
+  "Ports": [
+    {
+      "Identity": "Restoration Angel::emit:blink:creature",
+      "Card": "Restoration Angel",
+      "Label": "emit:blink:creature",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": true,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Restoration Angel::emit:timingmodification",
+      "Card": "Restoration Angel",
+      "Label": "emit:timingmodification",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Restoration Angel::etb:creature:self",
+      "Card": "Restoration Angel",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Restoration Angel::evasion:flying",
+      "Card": "Restoration Angel",
+      "Label": "evasion:flying",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Restoration Angel::etb:creature:self",
+      "To": "Restoration Angel::emit:blink:creature"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Restoration Angel::etb:creature:self",
+      "To": "Restoration Angel::emit:blink:creature",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

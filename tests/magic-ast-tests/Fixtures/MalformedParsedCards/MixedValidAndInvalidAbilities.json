@@ -1,0 +1,134 @@
+{
+  "Input": {
+    "Name": "Partially Parsed Paladin",
+    "ManaCost": "{2}{W}{W}",
+    "TypeLine": "Creature — Human Knight",
+    "OracleText": "Flying\n@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Flying"
+    ]
+  },
+  "Output": {
+    "Name": "Partially Parsed Paladin",
+    "TypeLine": {
+      "Raw": "Creature — Human Knight",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Knight"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying\n@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 47
+          },
+          "RawText": "@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Failed to parse Unparsed ability",
+              "Location": {
+                "Start": 7,
+                "Length": 47
+              },
+              "RawText": "@#$%^&*() QQQQQ ZZZZZ 12345 nonsense gibberish.",
+              "Pattern": "UnparsedUnparsed",
+              "LastAttemptedRule": "FallbackParser.Parse",
+              "FailurePosition": 7
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}

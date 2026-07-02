@@ -103,6 +103,18 @@ public sealed partial class ManaCostParser
       var parts = content.Split('/');
       if (parts.Length == 2)
       {
+        // Check for colorless-hybrid (e.g., C/W — Ulalek, Fused Atrocity / OGW Eldrazi).
+        // CR 107.4c: {C/W} can be paid with one colorless or one white mana.
+        if (parts[0] == "C" && TryParseColor(parts[1], out var cHybridColor))
+        {
+          var symbol = new ManaSymbol
+          {
+            Kind = ManaSymbolKind.ColorlessHybrid,
+            Colors = [cHybridColor],
+          };
+          return (symbol, 1, false);
+        }
+
         // Check for hybrid generic (e.g., 2/W)
         if (
           int.TryParse(parts[0], out var hybridGeneric)

@@ -1,0 +1,142 @@
+{
+  "Input": {
+    "Name": "Karn, the Great Creator",
+    "ManaCost": "{4}",
+    "TypeLine": "Legendary Planeswalker — Karn",
+    "OracleText": "Activated abilities of artifacts your opponents control can't be activated.\n+1: Until your next turn, up to one target noncreature artifact becomes an artifact creature with power and toughness each equal to its mana value.\n−2: You may reveal an artifact card you own from outside the game or choose a face-up artifact card you own in exile. Put that card into your hand.",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Karn, the Great Creator",
+    "TypeLine": {
+      "Raw": "Legendary Planeswalker — Karn",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Planeswalker"
+      ],
+      "Subtypes": [
+        "Karn"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Activated abilities of artifacts your opponents control can't be activated.\n+1: Until your next turn, up to one target noncreature artifact becomes an artifact creature with power and toughness each equal to its mana value.\n−2: You may reveal an artifact card you own from outside the game or choose a face-up artifact card you own in exile. Put that card into your hand.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "AffectedObjects": {
+            "CardTypes": [
+              "artifact"
+            ],
+            "Controller": "Opponent"
+          },
+          "Effects": [
+            {
+              "EffectType": "cantActivateAbilities"
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "becomesCreature",
+              "Subject": {
+                "Kind": "Target",
+                "Quantity": {
+                  "QuantityType": "upTo",
+                  "Maximum": 1,
+                  "Minimum": 0
+                },
+                "Filter": {
+                  "CardTypes": [
+                    "artifact"
+                  ],
+                  "ExcludedCardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "Power": {
+                "QuantityType": "derived",
+                "DerivedFrom": "ManaValue"
+              },
+              "Toughness": {
+                "QuantityType": "derived",
+                "DerivedFrom": "ManaValue"
+              },
+              "Colors": [],
+              "CardTypes": [
+                "artifact",
+                "creature"
+              ],
+              "AddedSubtypes": [],
+              "GainedAbilities": [],
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "Beginning",
+                  "When": "Next",
+                  "Whose": "You"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": 1
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "wish",
+                "CardFilter": {
+                  "CardTypes": [
+                    "artifact"
+                  ],
+                  "Owner": "You"
+                },
+                "Sources": [
+                  "outsideGame",
+                  "exile"
+                ],
+                "FaceUpOnly": true
+              }
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": -2
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

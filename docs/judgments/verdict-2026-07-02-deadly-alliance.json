@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ZNC/DeadlyAlliance.json",
+      "verdict": "PASS",
+      "citations": ["CR 700.8", "CR 207.2"],
+      "reason": "party cost reduction modeled as static costReduction{Amount: literal 1, PerObject: creature/You/InParty:true}; destroy target creature-or-planeswalker preserved; reminder text kept only in verbatim RawText; no unparsed/free-text residual"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilter.cs#InParty",
+      "verdict": "PASS",
+      "citations": ["CR 700.8", "CR 700.6"],
+      "reason": "new boolean party-membership filter axis; doc-comment quotes CR 700.8 verbatim and parallels IsHistoric (CR 700.6); describe-not-execute (counting/cap left to engine)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/PartyCostReductionForEachRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 700.8", "CR 207.2"],
+      "reason": "emits existing costReduction node; strips reminder text (CR 207.2) before end-anchored match; CR citations exist and match modeling"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#costReduction(InParty)",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "projection decision present and sensible — costReduction already registered coarse ('no flow rule consumes it'); InParty is a filter refinement of that inert cost-reduction effect and rides the existing coarse projection; a mana-cost reducer is genuinely inert to the interaction/combo port graph"
+    }
+  ]
+}

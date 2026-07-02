@@ -1,3 +1,6 @@
+# Flowthru runtime cache (step memoization state — not source)
+.flowthru/
+
 # Logs
 logs
 *.log
@@ -278,7 +281,8 @@ apps/atlas/Data/_01_Raw/Datasets/
 apps/atlas/Data/_03_Primary/Datasets/
 apps/atlas/Metadata/
 
-# Python venv + caches for the OracleEmbedding step
+# Python venvs (each Flowthru-Python project owns its own .venv) + caches
+.venv/
 apps/atlas/.venv/
 **/__pycache__/
 *.pyc

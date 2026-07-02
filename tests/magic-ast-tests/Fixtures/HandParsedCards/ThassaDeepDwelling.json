@@ -1,0 +1,182 @@
+{
+  "Input": {
+    "Name": "Thassa, Deep-Dwelling",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Legendary Enchantment Creature — God",
+    "OracleText": "Indestructible\nAs long as your devotion to blue is less than five, Thassa isn't a creature.\nAt the beginning of your end step, exile up to one other target creature you control, then return that card to the battlefield under your control.\n{3}{U}: Tap another target creature.",
+    "Power": "6",
+    "Toughness": "5",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Thassa, Deep-Dwelling",
+    "TypeLine": {
+      "Raw": "Legendary Enchantment Creature — God",
+      "Supertypes": ["Legendary"],
+      "Types": ["Enchantment", "Creature"],
+      "Subtypes": ["God"]
+    },
+    "Oracle": {
+      "RawText": "Indestructible\nAs long as your devotion to blue is less than five, Thassa isn't a creature.\nAt the beginning of your end step, exile up to one other target creature you control, then return that card to the battlefield under your control.\n{3}{U}: Tap another target creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Indestructible",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Indestructible"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "loseType",
+              "Subject": {
+                "Kind": "Self"
+              },
+              "LostType": "creature",
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "quantityComparison",
+                  "Left": {
+                    "QuantityType": "devotion",
+                    "Colors": ["U"]
+                  },
+                  "Operator": "LessThan",
+                  "Right": {
+                    "QuantityType": "literal",
+                    "Value": 5
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "exile",
+                  "Target": {
+                    "Kind": "Target",
+                    "Quantity": {
+                      "QuantityType": "upTo",
+                      "Maximum": 1,
+                      "Minimum": 0
+                    },
+                    "Filter": {
+                      "CardTypes": ["creature"],
+                      "Controller": "You",
+                      "ExcludeSelf": true
+                    }
+                  }
+                },
+                {
+                  "EffectType": "returnToBattlefield",
+                  "Target": {
+                    "Kind": "Designated",
+                    "Filter": {
+                      "Zone": "Exile",
+                      "ExiledWith": {
+                        "Kind": "Self"
+                      }
+                    }
+                  },
+                  "UnderControl": {
+                    "Kind": "You"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": ["U"]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "ExcludeSelf": true
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        }
+      }
+    ]
+  }
+}

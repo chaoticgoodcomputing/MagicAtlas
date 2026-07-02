@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AER/SpinEngine.json",
+      "verdict": "PASS",
+      "citations": ["CR 509.1", "CR 602.1"],
+      "reason": "activated {R} ability models 'target creature can't block this creature this turn' as cantBlock{Target=creature filter, Blocks=Self, Duration=untilTime Turn/End}; timing decomposed into a separate Duration node (not baked into the discriminator); no free-text/unparsed residual; siblings/attributes preserved"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Combat/CantBlockEffect.cs#Blocks",
+      "verdict": "PASS",
+      "citations": ["CR 509.1", "CR 602.1"],
+      "reason": "additive optional Blocks (ObjectReference) names the specific attacker restricted-blocker can't block; null-default preserves existing golds (Copper Carapace = blanket restriction); cited CR 602.1 and CR 509.1 both present verbatim in rules-structure.json and match the modeling"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-spin-engine#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no NEW effect/cost/trigger discriminator introduced — Blocks is a refinement of the existing 'cantBlock' effect, which already carries a known-coarse-projections.json entry ('no flow rule consumes it yet'); coarse is sensible for a combat blocking-restriction that produces no flow/resource edge (siblings cantAttack/mustBlock are likewise coarse)"
+    }
+  ]
+}

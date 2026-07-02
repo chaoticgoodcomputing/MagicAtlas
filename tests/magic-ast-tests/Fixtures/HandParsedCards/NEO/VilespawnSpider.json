@@ -1,0 +1,117 @@
+{
+  "Input": {
+    "Name": "Vilespawn Spider",
+    "ManaCost": "{U}{G}",
+    "TypeLine": "Creature — Spider",
+    "OracleText": "Reach\nWhenever you cast an artifact spell, surveil 1.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": [
+      "U",
+      "G"
+    ],
+    "ColorIdentity": [
+      "U",
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Vilespawn Spider",
+    "TypeLine": {
+      "Raw": "Creature — Spider",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spider"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Reach\nWhenever you cast an artifact spell, surveil 1.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
+            }
+          ],
+          "KeywordSource": "Reach"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell",
+                "artifact"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "surveil",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}{G}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U",
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}

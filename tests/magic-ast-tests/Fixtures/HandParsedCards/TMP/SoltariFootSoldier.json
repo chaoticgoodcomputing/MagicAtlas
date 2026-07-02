@@ -1,0 +1,94 @@
+{
+  "Input": {
+    "Name": "Soltari Foot Soldier",
+    "ManaCost": "{W}",
+    "TypeLine": "Creature — Soltari Soldier",
+    "OracleText": "Shadow (This creature can block or be blocked by only creatures with shadow.)",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Soltari Foot Soldier",
+    "TypeLine": {
+      "Raw": "Creature — Soltari Soldier",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Soltari",
+        "Soldier"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Shadow (This creature can block or be blocked by only creatures with shadow.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Shadow",
+          "Reminder": {
+            "Text": "(This creature can block or be blocked by only creatures with shadow.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {"CharacteristicType": "keyword", "Keyword": "Shadow"}
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}

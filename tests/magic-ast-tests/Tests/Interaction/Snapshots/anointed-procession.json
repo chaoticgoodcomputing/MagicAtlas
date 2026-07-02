@@ -1,0 +1,19 @@
+{
+  "Name": "Anointed Procession",
+  "Ports": [
+    {
+      "Identity": "Anointed Procession::replace:token-creation",
+      "Card": "Anointed Procession",
+      "Label": "replace:token-creation",
+      "Side": "Intercept",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=True|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

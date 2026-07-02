@@ -1,0 +1,71 @@
+{
+  "Keyword": "Afterlife",
+  "Parameter": "1",
+  "Expected": {
+    "Kind": "triggered",
+    "KeywordSource": "Afterlife",
+    "Trigger": {
+      "Timing": "When",
+      "Event": "Dies",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ],
+        "IsSelf": true
+      }
+    },
+    "Effects": [
+      {
+        "EffectType": "createToken",
+        "Player": {
+          "Kind": "You"
+        },
+        "Count": {
+          "QuantityType": "literal",
+          "Value": 1
+        },
+        "Token": {
+          "Power": "1",
+          "Toughness": "1",
+          "Colors": [
+            "W",
+            "B"
+          ],
+          "Types": [
+            "creature"
+          ],
+          "Subtypes": [
+            "Spirit"
+          ],
+          "Abilities": [
+            {
+              "Kind": "static",
+              "KeywordSource": "Flying",
+              "Effects": [
+                {
+                  "EffectType": "evasion",
+                  "CanBeBlockedBy": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Characteristics": [
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Flying"
+                      },
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Reach"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "IsCopy": false
+        }
+      }
+    ]
+  }
+}

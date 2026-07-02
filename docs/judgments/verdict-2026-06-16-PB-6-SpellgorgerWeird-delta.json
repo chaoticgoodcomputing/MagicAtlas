@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WAR/SpellgorgerWeird.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2"],
+      "reason": "DELTA (PB-6 regression-verify target): noncreature spell-cast filter restructured from free-text OtherCharacteristic{noncreature} to ExcludedCardTypes:[creature] + CardTypes:[spell] + Controller:You (established non-type negation path); no new residual; putCounters effect + sibling filters preserved; oracle/P-T (2/2) corrected to real Scryfall; removed from whitelist-freetext consistent with sink now absent"
+    }
+  ]
+}

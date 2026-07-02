@@ -1,0 +1,46 @@
+{
+  "Name": "Lat-Nam Adept",
+  "Ports": [
+    {
+      "Identity": "Lat-Nam Adept::drawscard:object",
+      "Card": "Lat-Nam Adept",
+      "Label": "drawscard:object",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Lat-Nam Adept::emit:counter:\u002B1/\u002B1:self",
+      "Card": "Lat-Nam Adept",
+      "Label": "emit:counter:\u002B1/\u002B1:self",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Lat-Nam Adept::drawscard:object",
+      "To": "Lat-Nam Adept::emit:counter:\u002B1/\u002B1:self"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Lat-Nam Adept::drawscard:object",
+      "To": "Lat-Nam Adept::emit:counter:\u002B1/\u002B1:self",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

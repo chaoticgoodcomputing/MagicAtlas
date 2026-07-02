@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LRW/SylvanMessenger.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.20", "CR 401.4"],
+      "reason": "ETB reveal-and-partition modeled as Trigger{When,Enters,self-creature} + revealTopPutMatchingToHand{Player:You, Count:4, Filter:Subtypes[Elf]}; timing composited (not baked), Trample sibling + attributes preserved, no unparsed/free-text residual, oracle text verbatim, both CR cites match"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/CardFlow/RevealTopPutMatchingToHandEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.20", "CR 401.4"],
+      "reason": "new discriminator names the action (no OnEntry timing swallow); structured Player/Count/Filter fields; any-order remainder baked into discriminator per AbundanceReveal minimal-fields precedent; cited rules exist and match"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#revealTopPutMatchingToHand",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "coarse projection is sensible — library-visibility/card-to-hand selection, no flow rule consumes it, consistent with sibling reveal/look precedent (revealUntil, oracleTopLook, impulse, abundanceReveal all parked coarse); not a combo-loop primitive"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/JUD/KrosanReclamation.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.24", "CR 701.24a", "CR 601.2c", "CR 113.3a"],
+      "reason": "shuffleCardsFromGraveyardIntoLibrary faithfully models 'Target player shuffles up to two target cards from their graveyard into their library' — targeted Player + separately-targeted Cards subset (Zone Graveyard, Controller Target, upTo Max 2/Min 0), describe-not-execute, no baked-in timing; Flashback sibling preserved as alternativeCast; oracle text matches source exactly; no unparsed/free-text residual"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#shuffleCardsFromGraveyardIntoLibrary",
+      "verdict": "PASS",
+      "citations": ["CR 701.24"],
+      "reason": "new discriminator parked coarse consistent with sibling shuffle effects (shuffle/shuffleGraveyardIntoLibrary/shuffleIntoLibrary); no flow rule reads graveyard-recycle shuffle events — sensible inert carve-out, not something a flow rule would clearly want"
+    }
+  ]
+}

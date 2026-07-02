@@ -1,0 +1,6 @@
+{
+  "_note": "§6 self-binding: a generic creature you control (the sac fodder) is not provably THE source, so a 'when this creature dies' (IsSelf) trigger is NOT subsumed by it -> No. This is the verdict that downgrades the ~144 corpus self-death cross-card loops from false-GREEN to honest Amber.",
+  "Sub": { "CardTypes": ["creature"], "Controller": "You" },
+  "Sup": { "CardTypes": ["creature"], "IsSelf": true },
+  "Expected": "No"
+}

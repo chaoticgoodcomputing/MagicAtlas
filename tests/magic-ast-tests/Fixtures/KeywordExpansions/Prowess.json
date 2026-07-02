@@ -1,0 +1,14 @@
+{
+  "Keyword": "Prowess",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Prowess"
+      }
+    ],
+    "KeywordSource": "Prowess"
+  }
+}

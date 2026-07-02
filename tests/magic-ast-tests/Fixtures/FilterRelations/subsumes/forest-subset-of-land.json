@@ -1,0 +1,6 @@
+{
+  "_note": "Closed pool: every Forest is a land (single owner) → Yes.",
+  "Sub": { "Subtypes": ["Forest"] },
+  "Sup": { "CardTypes": ["land"] },
+  "Expected": "Yes"
+}

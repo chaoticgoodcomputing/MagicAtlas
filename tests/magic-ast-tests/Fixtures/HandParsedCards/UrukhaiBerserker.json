@@ -1,0 +1,96 @@
+{
+  "Input": {
+    "Name": "Uruk-hai Berserker",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Orc Berserker",
+    "OracleText": "When this creature enters, the Ring tempts you.",
+    "Power": "3",
+    "Toughness": "2",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Uruk-hai Berserker",
+    "TypeLine": {
+      "Raw": "Creature — Orc Berserker",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Orc",
+        "Berserker"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, the Ring tempts you.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "ringTemptsYou"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

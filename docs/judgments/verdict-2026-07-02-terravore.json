@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/JUD/Terravore.json",
+      "verdict": "PASS",
+      "citations": ["CR 604.3", "CR 604.3a"],
+      "reason": "CDA P/T modeled as definePT Characteristic:Both over a count Quantity of CardTypes:[land] Zone:Graveyard (no Controller/Owner axis = all graveyards); faithful to oracle text, describe-not-execute, no baked timing; Trample sibling + creatureStats(*/*) preserved; no unparsed/free-text residual"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M13/KrenkosEnforcer.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "PB-3 delta: Intimidate's two free-text OtherCharacteristic residuals (artifact / shares-a-color) replaced by structured axes CardTypes:[creature,artifact] + SharesColorWith:{Self}; faithful to real oracle text; ability/KeywordSource/Reminder preserved, no new residual, no regression; whitelist entry removed. Intimidate is a deprecated keyword absent from current CR data, no citation claimed (not a FAIL)."
+    }
+  ]
+}

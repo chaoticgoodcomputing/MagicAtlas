@@ -1,0 +1,66 @@
+{
+  "Input": {
+    "Name": "Nim Lasher",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Zombie",
+    "OracleText": "This creature gets +1/+0 for each artifact you control.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Nim Lasher",
+    "TypeLine": {
+      "Raw": "Creature — Zombie",
+      "Types": ["Creature"],
+      "Subtypes": ["Zombie"]
+    },
+    "Oracle": {
+      "RawText": "This creature gets +1/+0 for each artifact you control.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": { "Kind": "Self" },
+              "PowerModifier": {
+                "QuantityType": "count",
+                "CountOf": { "CardTypes": ["artifact"], "Controller": "You" }
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "Input": {
+    "Name": "Gravelgill Axeshark",
+    "ManaCost": "{4}{U/B}",
+    "TypeLine": "Creature — Merfolk Soldier",
+    "OracleText": "Persist (When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "B",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Gravelgill Axeshark",
+    "TypeLine": {
+      "Raw": "Creature — Merfolk Soldier",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Merfolk",
+        "Soldier"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Persist (When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "permanent"
+              ],
+              "IsSelf": true
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "triggeringObjectCounter",
+            "CounterType": "-1/-1",
+            "Present": false
+          },
+          "Effects": [
+            {
+              "EffectType": "returnToBattlefield",
+              "Target": {
+                "Kind": "Self"
+              },
+              "Tapped": false,
+              "UnderControl": {
+                "Kind": "Owner"
+              },
+              "WithCounters": {
+                "CounterType": "-1/-1",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                }
+              }
+            }
+          ],
+          "KeywordSource": "Persist",
+          "Reminder": {
+            "Text": "(When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{U/B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "U",
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}

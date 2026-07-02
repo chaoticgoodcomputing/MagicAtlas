@@ -1,0 +1,88 @@
+{
+  "Input": {
+    "Name": "Diabolic Tutor",
+    "ManaCost": "{2}{B}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Search your library for a card, put that card into your hand, then shuffle.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Diabolic Tutor",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Supertypes": [],
+      "Types": [
+        "Sorcery"
+      ],
+      "Subtypes": []
+    },
+    "Oracle": {
+      "RawText": "Search your library for a card, put that card into your hand, then shuffle.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "searchLibrary",
+              "Filter": {
+                "CardTypes": [
+                  "card"
+                ]
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Destination": "Hand",
+              "Revealed": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

@@ -1,46 +1,29 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────
-# Bootstrap the bits that aren't in git and can't be pulled by the pipeline
-# itself: the Python venv (sentence-transformers + UMAP), and the atlas-api's
-# Scryfall oracle-cards seed file at dumps/oracle-cards.json.
+# Bootstrap the ONE bit that isn't in git and can't be pulled by a pipeline or
+# the running app: the Python venv (sentence-transformers + UMAP). Everything
+# else now self-fetches over HTTP — a fresh clone needs no browser or curl.
 #
-# What's NO LONGER in this script (handled by the Flowthru pipeline directly):
-#   • Pipeline's RawCards / RawCardSymbols / RawRules — the atlas-flows lib
-#     now auto-fetches all three over HTTP, with Flowthru's conditional-GET
-#     caching under tests/atlas-flow-test/.http-cache/.
+# What's handled by the Flowthru pipelines directly (no manual step):
+#   • atlas-flows: RawCards / RawCardSymbols auto-fetch over HTTP (with
+#     Flowthru's conditional-GET cache under tests/atlas-flow-test/.http-cache/).
+#   • mtg-rules: the comprehensive-rules text auto-fetches over HTTP.
+#   • magic-ast-tests: the Commander Spellbook variants.json dump loads as a
+#     Flowthru HTTP catalog item (CsbVariantsRaw), cached the same way.
 #
-# What's NOT in this script (because the running API handles it):
-#   • Rulings, Sets, and card-Symbology — AtlasSeeder fetches these from
-#     Scryfall's HTTP API on first API startup when the DB tables are empty.
+# What's handled by the running API (no manual step):
+#   • Cards, Rulings, Sets, Symbology — AtlasSeeder streams all four from
+#     Scryfall's HTTP API on first startup when the DB tables are empty.
 #   • atlas_points — produced by running the OracleEmbedding Flowthru flow
 #     (see the "Run the pipeline" section below).
 #
-# Idempotent: re-running won't re-download if files already exist.
+# Idempotent: re-running won't recreate the venv if it already exists.
 # ─────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DUMPS="$REPO_ROOT/dumps"
 
-echo "→ Creating data directories"
-mkdir -p "$DUMPS"
-
-# ── 1. Scryfall oracle-cards bulk (~165 MB) for atlas-api seeder ─────
-# The atlas-api's AtlasSeeder reads dumps/oracle-cards.json on first start
-# to populate its card table. The Flowthru pipeline auto-fetches its own
-# copy through Flowthru.Extensions.Http and doesn't share this file.
-# TODO: migrate the API seeder to HTTP-direct too, and remove this step.
-if [[ -f "$DUMPS/oracle-cards.json" ]]; then
-  echo "✓ dumps/oracle-cards.json already present"
-else
-  echo "→ Resolving Scryfall oracle-cards bulk download URL..."
-  URL=$(curl -s https://api.scryfall.com/bulk-data/oracle-cards \
-    | python3 -c "import json,sys; print(json.load(sys.stdin)['download_uri'])")
-  echo "→ Downloading $URL"
-  curl -L --progress-bar -o "$DUMPS/oracle-cards.json" "$URL"
-fi
-
-# ── 2. Python venv for the OracleEmbedding step ──────────────────────
+# ── Python venv for the OracleEmbedding step ─────────────────────────
 # Lives alongside the lib's pyproject.toml so the Flowthru host (configured by
 # tests/atlas-flow-test/Program.cs) can resolve both module search paths and the venv
 # from a single libs/atlas-flows location.
@@ -72,10 +55,11 @@ echo "Bootstrap complete. To bring the atlas online end-to-end:"
 echo ""
 echo "  1. docker compose -f apps/atlas-api/docker-compose.yml up -d"
 echo "  2. dotnet run --project tests/atlas-flow-test"
-echo "       (auto-fetches Scryfall bulk + symbology + MTG rules over HTTP;"
+echo "       (auto-fetches the Scryfall oracle bulk + symbology over HTTP;"
 echo "        first run downloads the BERT model ~90 MB; UMAP takes ~2 min)"
 echo "  3. dotnet run --project apps/atlas-api"
-echo "       (seeds all five tables on first run from Scryfall + atlas-flow-test outputs)"
+echo "       (seeds all five tables on first run — cards/rulings/sets/symbology"
+echo "        stream from Scryfall over HTTP, atlas_points from atlas-flow-test)"
 echo "  4. cd apps/atlas-web && pnpm install && pnpm dev"
 echo "       (open http://localhost:5173)"
 echo "───────────────────────────────────────────────────────────────"

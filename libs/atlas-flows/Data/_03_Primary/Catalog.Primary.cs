@@ -4,36 +4,13 @@ using MagicAtlas.Data._03_Primary.Schemas;
 namespace MagicAtlas.Data;
 
 /// <summary>
-/// Primary data catalog entries (Layer 3).
-/// Contains domain-specific data models cleansed and transformed for MTG analysis.
+/// Primary data catalog entries (Layer 3). Domain-cleansed, business-keyed, model-agnostic
+/// tables — the single source of truth for downstream consumers.
 /// </summary>
 public partial class Catalog
 {
   /// <summary>
-  /// Parsed hierarchical rules structure.
-  /// </summary>
-  public IItem<RulesStructure> ParsedRules =>
-    CreateItem(() =>
-      Item.Of<RulesStructure>("ParsedRules")
-        .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/rules-structure.json")
-        .Build()
-    );
-
-  /// <summary>
-  /// Parsed glossary as term-definition pairs.
-  /// </summary>
-  public IItem<GlossaryEntries> ParsedGlossary =>
-    CreateItem(() =>
-      Item.Of<GlossaryEntries>("ParsedGlossary")
-        .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/glossary.json")
-        .Build()
-    );
-
-  /// <summary>
-  /// Filtered card core data (analysis-relevant fields).
-  /// Persisted to disk as JSON.
+  /// Filtered card core data (analysis-relevant fields). Persisted to disk as JSON.
   /// </summary>
   public IItem<IEnumerable<CardCoreData>> FilteredCardCoreData =>
     CreateItem(() =>
@@ -44,8 +21,7 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Filtered card metadata (non-analysis fields).
-  /// Persisted to disk as JSON (metadata is not flat tabular data).
+  /// Filtered card metadata (non-analysis fields). Persisted to disk as JSON.
   /// </summary>
   public IItem<IEnumerable<CardMetadata>> FilteredCardMetadata =>
     CreateItem(() =>
@@ -56,90 +32,36 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Minimal oracle-text projection fed to the Python embedding step. Persisted (not memory-only)
-  /// because the Clustering flow's <c>generate_ctfidf_labels</c> step re-reads the per-fragment
-  /// text long after the embedding step has run, and we want that step to be runnable in
-  /// isolation (e.g. when re-labeling with a different backend).
+  /// Sorted distinct set of Scryfall keyword strings observed across the filtered card corpus.
+  /// Derived from <c>FilteredCardCoreData.Keywords</c>; used by <c>ProjectOracleLines</c> for
+  /// barrel detection. Currently has no downstream consumer beyond barrel-detection's own
+  /// internals; kept as a foundational reference artifact.
   /// </summary>
-  public IItem<IEnumerable<OracleInput>> OracleInputs =>
+  public IItem<KeywordVocabulary> KeywordVocabulary =>
     CreateItem(() =>
-      Item.Of<IEnumerable<OracleInput>>("OracleInputs")
+      Item.Of<KeywordVocabulary>("KeywordVocabulary")
         .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/oracle-inputs.json")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/keyword-vocabulary.json")
         .Build()
     );
 
   /// <summary>
-  /// Sentence-transformer (all-MiniLM-L6-v2, 384-dim float32) embeddings of each oracle-text
-  /// fragment. The shared intermediate between the 2D-UMAP display reduction and the 5D-UMAP +
-  /// HDBSCAN clustering reduction — BERT encode runs once, both reductions read this file.
-  /// Parquet (~80 MB) because JSON would be unworkable at ~50K × 384 floats.
+  /// One row per oracle-text line. The pipeline's central join key: every downstream artifact
+  /// (encoded vectors, atlas points) keys on <c>LineId</c> and reaches back to <c>CardId</c>
+  /// via this table.
   /// </summary>
-  public IItem<IEnumerable<BertEmbedding>> BertEmbeddings =>
+  public IItem<IEnumerable<OracleLine>> OracleLines =>
     CreateItem(() =>
-      Item.Of<IEnumerable<BertEmbedding>>("BertEmbeddings")
-        .Parquet()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/bert-embeddings.parquet")
-        .Build()
-    );
-
-  /// <summary>
-  /// 2D UMAP projection of oracle-text BERT embeddings — consumed by the atlas-api.
-  /// Lives in the harness's Primary layer under traditional Flowthru conventions; the API loads
-  /// it via its <c>Atlas:AtlasPointsPath</c> setting, decoupled from DB ingestion.
-  /// </summary>
-  public IItem<IEnumerable<AtlasPoint>> AtlasPoints =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<AtlasPoint>>("AtlasPoints")
+      Item.Of<IEnumerable<OracleLine>>("OracleLines")
         .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/atlas-points.json")
-        .Build()
-    );
-
-  /// <summary>
-  /// Per-point cluster assignments produced by the Clustering flow's HDBSCAN step over a 5D-UMAP
-  /// reduction of <see cref="BertEmbeddings"/>. One row per fragment, joinable to
-  /// <see cref="AtlasPoints"/> / <see cref="OracleInputs"/> on <c>point_id</c>.
-  /// </summary>
-  public IItem<IEnumerable<ClusterAssignment>> ClusterAssignments =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<ClusterAssignment>>("ClusterAssignments")
-        .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/cluster-assignments.json")
-        .Build()
-    );
-
-  /// <summary>
-  /// Per-cluster labels. Backend-agnostic schema (see <see cref="ClusterLabel"/>) so this single
-  /// catalog item can hold output from c-TF-IDF today and an LLM labeler tomorrow without
-  /// downstream code changes.
-  /// </summary>
-  public IItem<IEnumerable<ClusterLabel>> ClusterLabels =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<ClusterLabel>>("ClusterLabels")
-        .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/cluster-labels.json")
-        .Build()
-    );
-
-  /// <summary>
-  /// 5D UMAP-reduced view of <see cref="BertEmbeddings"/> — the shared intermediate between the
-  /// Clustering flow's HDBSCAN step and the ModelEvaluations flow's centroid-distance metric.
-  /// Hoisted out of the clusterer so a model change can be evaluated without re-running the
-  /// (slow) UMAP, and so HDBSCAN parameters can be retuned in isolation.
-  /// </summary>
-  public IItem<IEnumerable<ClusteringEmbedding>> ClusteringEmbeddings =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<ClusteringEmbedding>>("ClusteringEmbeddings")
-        .Parquet()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/clustering-embeddings.parquet")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/oracle-lines.json")
         .Build()
     );
 
   /// <summary>
   /// Card-level oracle text with reminder parentheticals intact — the input shape the FineTune
   /// flow's training-pair builder needs to extract reminder-text paraphrase pairs. Sibling to
-  /// <see cref="OracleInputs"/>, which is fragment-level with parentheticals stripped.
+  /// <see cref="OracleLines"/>, which is line-level with parentheticals stripped.
   /// </summary>
   public IItem<IEnumerable<CardOracleText>> CardOracleTexts =>
     CreateItem(() =>
@@ -151,9 +73,9 @@ public partial class Catalog
 
   /// <summary>
   /// Training corpus for the fine-tuned embedding model — positive pairs (tier 1+2) and
-  /// hard-negative triplets (tier 3) merged from glossary/CR auto-extraction, oracle-text
-  /// reminder paraphrases, template-based triplet mining, and curated overrides.
-  /// See <see cref="TrainingPair"/>.
+  /// hard-negative triplets (tier 3) derived from glossary/CR auto-extraction, oracle-text
+  /// reminder paraphrases, and template-based seed triplets. All signal is MTG-derived; no
+  /// manual curated overrides. See <see cref="TrainingPair"/>.
   /// </summary>
   public IItem<IEnumerable<TrainingPair>> TrainingPairs =>
     CreateItem(() =>
@@ -163,60 +85,96 @@ public partial class Catalog
         .Build()
     );
 
-  // -------- Fine-tuned variant siblings --------
-  // Same schemas as the default-variant items above; separate catalog entries so both pipelines
-  // can run in parallel and so downstream consumers can target one variant explicitly. Renaming
-  // the default items would cascade through the atlas-api and the public AtlasPoints path, so we
-  // leave the unqualified names as the default-variant aliases and namespace only the new
-  // sibling items.
-
-  /// <summary>BERT vectors produced by the fine-tuned MTG-tuned embedding model.
-  /// Same schema as <see cref="BertEmbeddings"/>; downstream steps treat them interchangeably.</summary>
-  public IItem<IEnumerable<BertEmbedding>> FineTunedBertEmbeddings =>
+  /// <summary>
+  /// Same as <see cref="TrainingPairs"/>, but with hard negatives mined via base-model
+  /// k-NN attached to every previously negative-less pair. The fine-tune step consumes this
+  /// instead of <see cref="TrainingPairs"/> so MNR loss sees real contrastive triplets
+  /// rather than relying on random in-batch sampling. See <c>mine_hard_negatives.py</c>
+  /// for the mining procedure and citations.
+  /// </summary>
+  public IItem<IEnumerable<TrainingPair>> TrainingPairsMined =>
     CreateItem(() =>
-      Item.Of<IEnumerable<BertEmbedding>>("FineTunedBertEmbeddings")
+      Item.Of<IEnumerable<TrainingPair>>("TrainingPairsMined")
+        .Json()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/training-pairs-mined.json")
+        .Build()
+    );
+
+  /// <summary>Persisted encoder cache — one row per unique oracle-text string. EmbedOracleText
+  /// dedups OracleLines.Text, runs the model once per unique text, writes the result here. The
+  /// 2D UMAP step broadcasts cached vectors back to per-line rows via OracleLines join.</summary>
+  public IItem<IEnumerable<EncodedText>> EncodedTexts =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<EncodedText>>("EncodedTexts")
         .Parquet()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-bert-embeddings.parquet")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/encoded-texts.parquet")
         .Build()
     );
 
-  /// <summary>5D UMAP of <see cref="FineTunedBertEmbeddings"/>. Same schema as
-  /// <see cref="ClusteringEmbeddings"/>.</summary>
-  public IItem<IEnumerable<ClusteringEmbedding>> FineTunedClusteringEmbeddings =>
+  /// <summary>Sibling of <see cref="EncodedTexts"/> produced under the BASE (un-fine-tuned)
+  /// embedding model. Lets the FineTuneEval flow A/B-compare the geometry of the corpus under
+  /// each model variant. Not consumed by the explorer pipeline.</summary>
+  public IItem<IEnumerable<EncodedText>> EncodedTextsBase =>
     CreateItem(() =>
-      Item.Of<IEnumerable<ClusteringEmbedding>>("FineTunedClusteringEmbeddings")
+      Item.Of<IEnumerable<EncodedText>>("EncodedTextsBase")
         .Parquet()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-clustering-embeddings.parquet")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/encoded-texts-base.parquet")
         .Build()
     );
 
-  /// <summary>2D atlas points produced from <see cref="FineTunedBertEmbeddings"/>. Same schema
-  /// as <see cref="AtlasPoints"/>.</summary>
-  public IItem<IEnumerable<AtlasPoint>> FineTunedAtlasPoints =>
+  /// <summary>Encoder cache for the union of (anchor, positive, negative) strings appearing in
+  /// <see cref="TrainingPairs"/>, encoded under the FINE-TUNED model. Many of these strings
+  /// (glossary definitions, CR section bodies) are not in the oracle-line corpus and therefore
+  /// not in <see cref="EncodedTexts"/>, so they need their own cached encoding for the
+  /// objective-tier health metrics.</summary>
+  public IItem<IEnumerable<EncodedText>> EncodedTrainingTextsFineTuned =>
     CreateItem(() =>
-      Item.Of<IEnumerable<AtlasPoint>>("FineTunedAtlasPoints")
-        .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-atlas-points.json")
+      Item.Of<IEnumerable<EncodedText>>("EncodedTrainingTextsFineTuned")
+        .Parquet()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/encoded-training-texts-finetuned.parquet")
         .Build()
     );
 
-  /// <summary>Per-point cluster assignments from clustering the fine-tuned variant. Same schema
-  /// as <see cref="ClusterAssignments"/>.</summary>
-  public IItem<IEnumerable<ClusterAssignment>> FineTunedClusterAssignments =>
+  /// <summary>Sibling of <see cref="EncodedTrainingTextsFineTuned"/> under the BASE model.
+  /// Together they let FineTuneEval compare per-training-pair cosines and triplet margins
+  /// across the two model variants.</summary>
+  public IItem<IEnumerable<EncodedText>> EncodedTrainingTextsBase =>
     CreateItem(() =>
-      Item.Of<IEnumerable<ClusterAssignment>>("FineTunedClusterAssignments")
-        .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-cluster-assignments.json")
+      Item.Of<IEnumerable<EncodedText>>("EncodedTrainingTextsBase")
+        .Parquet()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/encoded-training-texts-base.parquet")
         .Build()
     );
 
-  /// <summary>Per-cluster labels for the fine-tuned variant. Same schema as
-  /// <see cref="ClusterLabels"/>.</summary>
-  public IItem<IEnumerable<ClusterLabel>> FineTunedClusterLabels =>
+  /// <summary>A small deterministic sample (~3k rows) of <see cref="EncodedTexts"/> used for
+  /// FineTuneEval geometry-tier metrics. Sampling upstream of the eval step keeps the Python
+  /// step's JSON-marshalled input under the System.Text.Json size limit (passing the full
+  /// ~30k-row encoded cache by value blows that cap).</summary>
+  public IItem<IEnumerable<EncodedText>> EncodedTextsSampled =>
     CreateItem(() =>
-      Item.Of<IEnumerable<ClusterLabel>>("FineTunedClusterLabels")
+      Item.Of<IEnumerable<EncodedText>>("EncodedTextsSampled")
+        .Parquet()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/encoded-texts-sampled.parquet")
+        .Build()
+    );
+
+  /// <summary>Base-model sibling of <see cref="EncodedTextsSampled"/> — same sample size,
+  /// same row indices into the source corpus so geometry comparison is over identical lines.</summary>
+  public IItem<IEnumerable<EncodedText>> EncodedTextsBaseSampled =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<EncodedText>>("EncodedTextsBaseSampled")
+        .Parquet()
+        .AtPath($"{_basePath}/_03_Primary/Datasets/encoded-texts-base-sampled.parquet")
+        .Build()
+    );
+
+  /// <summary>2D atlas points (unsupervised UMAP projection of EncodedTexts). The atlas viz
+  /// surface — consumed by Reporting.BuildAtlasPlot.</summary>
+  public IItem<IEnumerable<AtlasPoint>> AtlasPoints =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<AtlasPoint>>("AtlasPoints")
         .Json()
-        .AtPath($"{_basePath}/_03_Primary/Datasets/fine-tuned-cluster-labels.json")
+        .AtPath($"{_basePath}/_03_Primary/Datasets/atlas-points.json")
         .Build()
     );
 }

@@ -1,0 +1,95 @@
+{
+  "Input": {
+    "Name": "Eternal Scourge",
+    "ManaCost": "{3}",
+    "TypeLine": "Creature — Eldrazi Horror",
+    "OracleText": "You may cast this card from exile.\nWhen this creature becomes the target of a spell or ability an opponent controls, exile this creature.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Eternal Scourge",
+    "TypeLine": {
+      "Raw": "Creature — Eldrazi Horror",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Eldrazi",
+        "Horror"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You may cast this card from exile.\nWhen this creature becomes the target of a spell or ability an opponent controls, exile this creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "alternativeCast",
+              "FromZone": "Exile"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "BecomesTarget",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Controller": "Opponent",
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "It"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

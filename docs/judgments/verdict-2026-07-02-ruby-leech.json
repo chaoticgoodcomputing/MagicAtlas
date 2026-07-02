@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NEM/RubyLeech.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2", "CR 601.2f", "CR 118.7"],
+      "reason": "self-taxing colored cost-increase modeled as static costIncrease with Amount 0 + ManaSymbols[colored R], filter CardTypes[spell]/Colors[R]/Controller You; colored {R} not flattened to generic {1}; describe-not-execute, no baked timing; First-strike sibling intact (combatDamageTiming/First); no unparsed/free-text residual"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-ruby-leech#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new port-graph discriminator introduced — costIncrease effect type pre-exists and is already parked in known-coarse-projections.json ('no flow rule consumes it yet'); a pure cast-tax produces no resource/trigger, so coarse is genuinely sensible; ManaSymbols is a colored-vs-generic refinement on an existing coarse effect"
+    }
+  ]
+}

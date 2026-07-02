@@ -1,0 +1,71 @@
+{
+  "Input": {
+    "Name": "Red Room Recruit",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Human Spy Villain",
+    "OracleText": "When this creature enters, it connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)",
+    "Power": "1",
+    "Toughness": "2",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Red Room Recruit",
+    "TypeLine": {
+      "Raw": "Creature — Human Spy Villain",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Spy", "Villain"]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, it connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "connive",
+              "Target": { "Kind": "It" }
+            }
+          ],
+          "Reminder": {
+            "Text": "Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["B"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

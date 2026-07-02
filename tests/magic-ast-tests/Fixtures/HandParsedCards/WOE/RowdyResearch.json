@@ -1,0 +1,63 @@
+{
+  "Input": {
+    "Name": "Rowdy Research",
+    "ManaCost": "{6}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "This spell costs {1} less to cast for each creature that attacked this turn.\nDraw three cards.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Rowdy Research",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "This spell costs {1} less to cast for each creature that attacked this turn.\nDraw three cards.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "PerObject": {
+                "CardTypes": ["creature"],
+                "History": {
+                  "PredicateType": "other",
+                  "Description": "attacked this turn"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": { "QuantityType": "literal", "Value": 3 },
+              "Player": { "Kind": "You" }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{6}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 6 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 7
+      },
+      { "Kind": "colors", "Colors": ["U"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U"] }
+    ]
+  }
+}

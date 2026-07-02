@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "The One Ring",
+    "ManaCost": "{4}",
+    "TypeLine": "Legendary Artifact",
+    "OracleText": "Indestructible\nWhen The One Ring enters, if you cast it, you gain protection from everything until your next turn.\nAt the beginning of your upkeep, you lose 1 life for each burden counter on The One Ring.\n{T}: Put a burden counter on The One Ring, then draw a card for each burden counter on The One Ring.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "The One Ring",
+    "TypeLine": {
+      "Raw": "Legendary Artifact",
+      "Supertypes": ["Legendary"],
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "Indestructible\nWhen The One Ring enters, if you cast it, you gain protection from everything until your next turn.\nAt the beginning of your upkeep, you lose 1 life for each burden counter on The One Ring.\n{T}: Put a burden counter on The One Ring, then draw a card for each burden counter on The One Ring.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Indestructible",
+          "Effects": [
+            { "EffectType": "keywordAbility", "Keyword": "Indestructible" }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": { "CardTypes": ["artifact"], "IsSelf": true }
+          },
+          "InterveningIf": { "ConditionType": "castThisObject" },
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": { "Kind": "You" },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Protection",
+                "Effects": [
+                  {
+                    "EffectType": "protection",
+                    "From": [{ "Kind": "Everything" }]
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": { "Part": "Turn", "Edge": "Beginning", "When": "Next", "Whose": "You" }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": { "Part": "Upkeep", "Edge": "Beginning", "Whose": "You" }
+          },
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Player": { "Kind": "You" },
+              "Amount": {
+                "QuantityType": "counterCount",
+                "CounterType": "burden",
+                "On": { "Kind": "Self" }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [{ "CostType": "tap" }],
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "putCounters",
+                  "Target": { "Kind": "Self" },
+                  "CounterType": "burden",
+                  "Count": { "QuantityType": "literal", "Value": 1 }
+                },
+                {
+                  "EffectType": "drawCards",
+                  "Player": { "Kind": "You" },
+                  "Count": {
+                    "QuantityType": "counterCount",
+                    "CounterType": "burden",
+                    "On": { "Kind": "Self" }
+                  }
+                }
+              ]
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [{ "Kind": "generic", "GenericAmount": 4 }],
+        "ManaValue": 4
+      },
+      { "Kind": "colors", "Colors": [] },
+      { "Kind": "colorIdentity", "ColorIdentity": [] }
+    ]
+  }
+}

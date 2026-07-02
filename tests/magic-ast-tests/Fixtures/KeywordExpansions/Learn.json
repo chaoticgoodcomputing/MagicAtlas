@@ -1,0 +1,14 @@
+{
+  "Keyword": "Learn",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Learn"
+      }
+    ],
+    "KeywordSource": "Learn"
+  }
+}

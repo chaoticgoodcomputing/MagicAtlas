@@ -1,0 +1,184 @@
+{
+  "Input": {
+    "Name": "Ugin, the Ineffable",
+    "ManaCost": "{6}",
+    "TypeLine": "Legendary Planeswalker — Ugin",
+    "OracleText": "Colorless spells you cast cost {2} less to cast.\n+1: Exile the top card of your library face down and look at it. Create a 2/2 colorless Spirit creature token. When that token leaves the battlefield, put the exiled card into your hand.\n−3: Destroy target permanent that's one or more colors.",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Ugin, the Ineffable",
+    "TypeLine": {
+      "Raw": "Legendary Planeswalker — Ugin",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Planeswalker"
+      ],
+      "Subtypes": [
+        "Ugin"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Colorless spells you cast cost {2} less to cast.\n+1: Exile the top card of your library face down and look at it. Create a 2/2 colorless Spirit creature token. When that token leaves the battlefield, put the exiled card into your hand.\n−3: Destroy target permanent that's one or more colors.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": [
+              "spell"
+            ],
+            "IsColorless": true,
+            "Controller": "You"
+          }
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Designated",
+                "Filter": {
+                  "CardTypes": [
+                    "card"
+                  ],
+                  "Controller": "You",
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "top"
+                    }
+                  ],
+                  "Zone": "Library"
+                }
+              },
+              "IsFaceDown": true
+            },
+            {
+              "EffectType": "lookAtCards",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Zone": "Exile"
+            },
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "2",
+                "Toughness": "2",
+                "Colors": [],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Spirit"
+                ],
+                "IsCopy": false
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            },
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "When",
+                  "Event": "LeavesTheBattlefield",
+                  "Filter": {
+                    "IsToken": true,
+                    "Controller": "You"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "returnToHand",
+                    "Target": {
+                      "Kind": "Designated",
+                      "Filter": {
+                        "ExiledWith": {
+                          "Kind": "Self"
+                        },
+                        "Zone": "Exile"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": 1
+        },
+        {
+          "Kind": "activated",
+          "Costs": [],
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "one or more colors"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false,
+          "LoyaltyCost": -3
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{6}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 6
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "Input": {
+    "Name": "Dryad of the Ilysian Grove",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Enchantment Creature — Nymph Dryad",
+    "OracleText": "You may play an additional land on each of your turns.\nLands you control are every basic land type in addition to their other types.",
+    "Power": "2",
+    "Toughness": "4",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Dryad of the Ilysian Grove",
+    "TypeLine": {
+      "Raw": "Enchantment Creature — Nymph Dryad",
+      "Types": [
+        "Enchantment",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Nymph",
+        "Dryad"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You may play an additional land on each of your turns.\nLands you control are every basic land type in addition to their other types.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "playAdditionalLand"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "AddedSubtypes": [
+                "Plains",
+                "Island",
+                "Swamp",
+                "Mountain",
+                "Forest"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}

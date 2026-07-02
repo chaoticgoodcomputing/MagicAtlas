@@ -1,0 +1,208 @@
+{
+  "Input": {
+    "Name": "Thraben Gargoyle // Stonewing Antagonizer",
+    "TypeLine": "Artifact Creature — Gargoyle // Artifact Creature — Gargoyle Horror",
+    "ColorIdentity": [],
+    "Keywords": [
+      "Flying",
+      "Transform",
+      "Defender"
+    ],
+    "Id": "f2687683-2986-4e22-97d9-7820c870475b",
+    "Layout": "transform",
+    "CardFaces": [
+      {
+        "Name": "Thraben Gargoyle",
+        "ManaCost": "{1}",
+        "TypeLine": "Artifact Creature — Gargoyle",
+        "OracleText": "Defender\n{6}: Transform this creature.",
+        "Power": "2",
+        "Toughness": "2",
+        "Colors": []
+      },
+      {
+        "Name": "Stonewing Antagonizer",
+        "ManaCost": "",
+        "TypeLine": "Artifact Creature — Gargoyle Horror",
+        "OracleText": "Flying",
+        "Power": "4",
+        "Toughness": "2",
+        "Colors": []
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Thraben Gargoyle // Stonewing Antagonizer",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Gargoyle // Artifact Creature — Gargoyle Horror",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Gargoyle",
+        "//",
+        "Artifact",
+        "Creature",
+        "—",
+        "Gargoyle",
+        "Horror"
+      ]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "layout",
+        "Layout": "transform"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Thraben Gargoyle",
+        "TypeLine": {
+          "Raw": "Artifact Creature — Gargoyle",
+          "Types": [
+            "Artifact",
+            "Creature"
+          ],
+          "Subtypes": [
+            "Gargoyle"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Defender\n{6}: Transform this creature.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "KeywordSource": "Defender",
+              "Effects": [
+                {
+                  "EffectType": "keywordAbility",
+                  "Keyword": "Defender"
+                }
+              ]
+            },
+            {
+              "Kind": "activated",
+              "Costs": [
+                {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 6
+                    }
+                  ]
+                }
+              ],
+              "Effects": [
+                {
+                  "EffectType": "transform",
+                  "Target": {
+                    "Kind": "Self"
+                  }
+                }
+              ],
+              "IsManaAbility": false
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{1}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              }
+            ],
+            "ManaValue": 1
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 2,
+              "Raw": "2"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 2,
+              "Raw": "2"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Stonewing Antagonizer",
+        "TypeLine": {
+          "Raw": "Artifact Creature — Gargoyle Horror",
+          "Types": [
+            "Artifact",
+            "Creature"
+          ],
+          "Subtypes": [
+            "Gargoyle",
+            "Horror"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Flying",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "KeywordSource": "Flying",
+              "Effects": [
+                {
+                  "EffectType": "evasion",
+                  "CanBeBlockedBy": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Characteristics": [
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Flying"
+                      },
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Reach"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 4,
+              "Raw": "4"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 2,
+              "Raw": "2"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

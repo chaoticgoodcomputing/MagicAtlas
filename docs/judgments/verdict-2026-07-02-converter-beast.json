@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MOM/ConverterBeast.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.53", "CR 603.6a", "CR 207.2a", "CR 111.10i"],
+      "reason": "ETB trigger (Enters + IsSelf creature filter) composed with a plain incubate effect carrying literal Count 5; token internals kept as verbatim reminder text; describe-not-execute, no baked-in timing, no unparsed residual, siblings/attributes intact"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#incubate",
+      "verdict": "PASS",
+      "citations": ["CR 701.53a"],
+      "reason": "new discriminator incubate parked coarse with justified reason; Incubator token needs {2} to transform before it is a creature and no flow rule reads Incubator-token creation — sibling of coarse amass/investigate; coarse choice is sensible"
+    }
+  ]
+}

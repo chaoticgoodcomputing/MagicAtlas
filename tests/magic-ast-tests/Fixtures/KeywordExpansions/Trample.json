@@ -1,0 +1,14 @@
+{
+  "Keyword": "Trample",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Trample"
+      }
+    ],
+    "KeywordSource": "Trample"
+  }
+}

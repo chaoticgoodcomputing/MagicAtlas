@@ -1,5 +1,6 @@
 namespace MagicAST;
 
+using System.Linq;
 using System.Text.Json.Serialization;
 using MagicAST.AST;
 using MagicAST.Diagnostics;
@@ -12,25 +13,21 @@ public sealed record ParseResult
   /// <summary>
   /// The parsed AST, if parsing succeeded at all.
   /// </summary>
-  [JsonPropertyName("output")]
   public required CardOracle Output { get; init; }
 
   /// <summary>
   /// The overall parse status.
   /// </summary>
-  [JsonPropertyName("status")]
   public required ParseStatus Status { get; init; }
 
   /// <summary>
   /// Diagnostics from parsing (errors, warnings, info).
   /// </summary>
-  [JsonPropertyName("diagnostics")]
   public required IReadOnlyList<Diagnostic> Diagnostics { get; init; }
 
   /// <summary>
   /// Metrics about the parse operation.
   /// </summary>
-  [JsonPropertyName("metrics")]
   public required ParseMetrics Metrics { get; init; }
 }
 
@@ -61,30 +58,38 @@ public sealed record ParseMetrics
   /// <summary>
   /// Total number of abilities found.
   /// </summary>
-  [JsonPropertyName("totalAbilities")]
   public required int TotalAbilities { get; init; }
 
   /// <summary>
   /// Number of abilities fully parsed.
   /// </summary>
-  [JsonPropertyName("parsedAbilities")]
   public required int ParsedAbilities { get; init; }
 
   /// <summary>
   /// Number of abilities that failed to parse.
   /// </summary>
-  [JsonPropertyName("failedAbilities")]
   public required int FailedAbilities { get; init; }
 
   /// <summary>
   /// Parse duration in milliseconds.
   /// </summary>
-  [JsonPropertyName("durationMs")]
   public required double DurationMs { get; init; }
+
+  /// <summary>
+  /// Residual-debt tally for this parse (ADR 0001 forcing-function): free-text
+  /// residuals reachable in the AST, keyed by kind — an <c>IResidual</c> node's
+  /// type name, or <c>Type.Field</c> for a <c>[FreeTextField]</c>. Empty when the
+  /// AST carries no residual debt. Distinct from <see cref="FailedAbilities"/>,
+  /// which counts total ability-level parse failures; residuals are the
+  /// not-yet-structured debt hiding inside otherwise-parsed ASTs.
+  /// </summary>
+  public required IReadOnlyDictionary<string, int> ResidualCounts { get; init; }
 
   /// <summary>
   /// Percentage of abilities successfully parsed.
   /// </summary>
-  [JsonPropertyName("successRate")]
   public double SuccessRate => TotalAbilities == 0 ? 0 : (double)ParsedAbilities / TotalAbilities;
+
+  /// <summary>Total residual occurrences across all kinds.</summary>
+  public int ResidualTotal => ResidualCounts.Values.Sum();
 }

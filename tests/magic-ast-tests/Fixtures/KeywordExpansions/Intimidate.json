@@ -1,0 +1,22 @@
+{
+  "Keyword": "Intimidate",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "evasion",
+        "CanBeBlockedBy": {
+          "CardTypes": [
+            "creature",
+            "artifact"
+          ],
+          "SharesColorWith": {
+            "Kind": "Self"
+          }
+        }
+      }
+    ],
+    "KeywordSource": "Intimidate"
+  }
+}

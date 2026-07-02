@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GTC/IllnessInTheRanks.json",
+      "verdict": "PASS",
+      "citations": ["CR 111.1"],
+      "reason": "DELTA: structured the token residual {CharacteristicType:other, Description:token} into IsToken:true on the Each filter; faithful to real oracle 'Creature tokens get -1/-1.' (CardTypes:[creature] co-filter and modifyPT -1/-1 preserved); no new free-text; no out-of-scope residual remains (token was the sole residual on this single-ability gold)"
+    }
+  ]
+}

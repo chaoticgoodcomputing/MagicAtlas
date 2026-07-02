@@ -1,0 +1,25 @@
+{
+  "Keyword": "Kicker",
+  "Parameter": "{2}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Kicker",
+    "Effects": [
+      {
+        "EffectType": "additionalCastCost",
+        "AdditionalCost": {
+          "Cost": {
+            "CostType": "mana",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              }
+            ]
+          },
+          "IsOptional": true
+        }
+      }
+    ]
+  }
+}

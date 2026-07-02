@@ -33,8 +33,34 @@ public partial record FineTuneConfig
 
   // ── SentenceTransformer training-loop knobs ──
 
+  /// <summary>
+  /// Number of fine-tune epochs. Nomic Embed's own technical report is explicit:
+  /// "training for multiple epochs hurts performance" — they used a single epoch on a much
+  /// larger corpus than ours.
+  /// <para>
+  /// Source: <i>Nomic Embed: Training a Reproducible Long Context Text Embedder</i>,
+  /// Nussbaum et al., arxiv:2402.01613 §3.1.
+  /// </para>
+  /// </summary>
   public int TrainNumEpochs { get; init; }
+
+  /// <summary>
+  /// Effective batch size for the contrastive loss. With MultipleNegativesRankingLoss family
+  /// losses, each anchor's "negatives" are the OTHER items in the same batch — so batch size
+  /// is the dominant lever on negative-sample quality, NOT just a memory/throughput knob.
+  /// <para>
+  /// sbert.net's training overview recommends a floor of 16–64; Nomic's reference training
+  /// used a 16,384 global batch. The Cached variant of MNR (see
+  /// <c>fine_tune_embedding_model.py</c>) lets us run at the recommended effective batch size
+  /// without exceeding GPU memory by chunking the loss internally.
+  /// </para>
+  /// <para>
+  /// Sources: <see href="https://sbert.net/docs/sentence_transformer/training_overview.html"/>
+  /// and Nomic Embed paper arxiv:2402.01613 §3.1.
+  /// </para>
+  /// </summary>
   public int TrainPerDeviceBatchSize { get; init; }
+
   public double TrainWarmupRatio { get; init; }
   public double TrainLearningRate { get; init; }
   public int TrainLoggingSteps { get; init; }

@@ -1,0 +1,64 @@
+{
+  "Input": {
+    "Name": "Giltgrove Stalker",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Merfolk Warrior",
+    "OracleText": "This creature can't be blocked by creatures with power 2 or less.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Giltgrove Stalker",
+    "TypeLine": {
+      "Raw": "Creature — Merfolk Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Merfolk", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "This creature can't be blocked by creatures with power 2 or less.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "BlockedByFilter": {
+                "CardTypes": ["creature"],
+                "PowerComparison": {
+                  "Operator": "LessThanOrEqual",
+                  "Value": 2
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 2, "Raw": "2" },
+        "Toughness": { "ValueType": "fixed", "Value": 1, "Raw": "1" }
+      }
+    ]
+  }
+}

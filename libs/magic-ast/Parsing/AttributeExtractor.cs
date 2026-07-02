@@ -1,7 +1,10 @@
 namespace MagicAST.Parsing;
 
 using System.Text.RegularExpressions;
+using MagicAST.AST;
 using MagicAST.AST.Costs;
+using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
 
 /// <summary>
 /// Extracts card attributes from a CardInputDTO.
@@ -29,24 +32,33 @@ public sealed partial class AttributeExtractor
         {
           Raw = input.ManaCost,
           Symbols = parsedCost.Symbols,
-          ManaValue = parsedCost.ManaValue > 0 ? parsedCost.ManaValue : null,
+          // Variable mana costs (containing {X}/{Y}/{Z}) have no determinate
+          // mana value outside the stack — the X portion is undefined until
+          // the spell is cast (Rule 107.3). Surface IsVariable as the
+          // canonical signal and suppress the partial-literal ManaValue so
+          // downstream consumers don't treat it as the spell's total cost.
+          ManaValue = parsedCost.IsVariable
+            ? null
+            : (parsedCost.ManaValue > 0 ? parsedCost.ManaValue : null),
           IsVariable = parsedCost.IsVariable,
         }
       );
     }
 
-    // Colors
-    if (input.Colors is { Count: > 0 })
-    {
-      attributes.Add(new ColorsAttribute { Colors = input.Colors });
-    }
+    // Colors — always emit, even when empty. An empty Colors[] array is the
+    // canonical representation of a colorless card (CR 105.1: colorlessness is
+    // the absence of color, not a color value). Doctrine: present-with-empty
+    // is the descriptive shape, not absent-attribute.
+    attributes.Add(new ColorsAttribute { Colors = input.Colors ?? [] });
 
-    // Color identity (computed from mana cost + mana symbols in rules text)
-    var colorIdentity = ComputeColorIdentity(input);
-    if (colorIdentity.Count > 0)
-    {
-      attributes.Add(new ColorIdentityAttribute { ColorIdentity = colorIdentity });
-    }
+    // Color identity is DERIVED, not echoed from source data (CR 903.4): it is a
+    // computed property — the colors of mana symbols printed in the card's mana
+    // cost and rules text, across every face (CR 903.4d), reminder text ignored
+    // (CR 903.4c) — not anything supplied by the source database. Derived from the
+    // PRINTED text (not the decomposed AST) so a keyword's definitional mana
+    // (Firebending's reminder-only {R}) is excluded while its printed cost symbols
+    // (Cycling {U}) still count. Always WUBRG-ordered; empty for colorless cards.
+    attributes.Add(new ColorIdentityAttribute { ColorIdentity = ColorIdentityDeriver.Derive(input) });
 
     // Creature stats (power/toughness)
     if (!string.IsNullOrWhiteSpace(input.Power) && !string.IsNullOrWhiteSpace(input.Toughness))
@@ -72,6 +84,48 @@ public sealed partial class AttributeExtractor
       attributes.Add(new LayoutAttribute { Layout = input.Layout });
     }
 
+    // Additional costs encoded in oracle text.
+    // "As an additional cost to cast this spell, sacrifice a [type]."
+    // These lines are skipped by ClauseSplitter (no oracle ability emitted);
+    // we surface them here as AdditionalCostsAttribute on the card.
+    var additionalCostsAttr = TryExtractAdditionalCosts(input.OracleText);
+    if (additionalCostsAttr is not null)
+    {
+      attributes.Add(additionalCostsAttr);
+    }
+
+    // Bestow's alternative casting cost (CR 702.103a: "you pay [cost] rather than
+    // its mana cost" — an alternative cost). The keyword's static ability (the
+    // becomes-Aura / enchant-creature mode) is emitted separately by
+    // BestowKeyword's combinator into Oracle.Abilities; here we surface only the
+    // cost on the card as an AlternativeCostsAttribute.
+    var alternativeCostsAttr = TryExtractBestowCost(input.OracleText);
+    if (alternativeCostsAttr is not null)
+    {
+      attributes.Add(alternativeCostsAttr);
+    }
+
+    // Borderpost cycle's alternative cost (CR 118.9: "You may [action] rather than pay
+    // [this object]'s mana cost" is an alternative cost). The static ability functions
+    // while the spell is on the stack (CR 604.5), so — like Bestow's cost above — it is
+    // hosted on the card's cost attributes rather than surfaced as an oracle ability.
+    var borderpostAlternativeCostAttr = TryExtractBorderpostAlternativeCost(input.OracleText);
+    if (borderpostAlternativeCostAttr is not null)
+    {
+      attributes.Add(borderpostAlternativeCostAttr);
+    }
+
+    // Red "free spell" family's pitch alternative cost (Cave-In, Force of Will, ...).
+    // CR 118.9: "You may [action] rather than pay [this object]'s mana cost" is an
+    // alternative cost; CR 604.5: it functions while the spell is on the stack — so,
+    // like Bestow's and the Borderpost cycle's costs above, it is hosted on the card's
+    // cost attributes rather than surfaced as an oracle ability.
+    var pitchAlternativeCostAttr = TryExtractPitchAlternativeCost(input.OracleText);
+    if (pitchAlternativeCostAttr is not null)
+    {
+      attributes.Add(pitchAlternativeCostAttr);
+    }
+
     return attributes;
   }
 
@@ -93,7 +147,14 @@ public sealed partial class AttributeExtractor
         {
           Raw = face.ManaCost,
           Symbols = parsedCost.Symbols,
-          ManaValue = parsedCost.ManaValue > 0 ? parsedCost.ManaValue : null,
+          // Variable mana costs (containing {X}/{Y}/{Z}) have no determinate
+          // mana value outside the stack — the X portion is undefined until
+          // the spell is cast (Rule 107.3). Surface IsVariable as the
+          // canonical signal and suppress the partial-literal ManaValue so
+          // downstream consumers don't treat it as the spell's total cost.
+          ManaValue = parsedCost.IsVariable
+            ? null
+            : (parsedCost.ManaValue > 0 ? parsedCost.ManaValue : null),
           IsVariable = parsedCost.IsVariable,
         }
       );
@@ -126,70 +187,232 @@ public sealed partial class AttributeExtractor
     return attributes;
   }
 
-  /// <summary>
-  /// Computes color identity from the card's mana cost and oracle text.
-  /// Color identity includes all colored mana symbols anywhere on the card.
-  /// </summary>
-  private List<string> ComputeColorIdentity(CardInputDTO input)
-  {
-    var colors = new HashSet<string>();
-
-    // Add colors from mana cost
-    if (!string.IsNullOrWhiteSpace(input.ManaCost))
-    {
-      AddManaSymbolColors(input.ManaCost, colors);
-    }
-
-    // Add colors from oracle text (mana symbols in abilities)
-    if (!string.IsNullOrWhiteSpace(input.OracleText))
-    {
-      AddManaSymbolColors(input.OracleText, colors);
-    }
-
-    // Return in WUBRG order
-    return OrderColors(colors);
-  }
-
-  [GeneratedRegex(@"\{([^}]+)\}")]
-  private static partial Regex ManaSymbolRegex();
+  // "As an additional cost to cast this spell, sacrifice a <type>."
+  // or "sacrifice <N> <type>s" — currently only "sacrifice a" (quantity=1) is
+  // handled, which covers the entire family-B corpus.
+  [GeneratedRegex(
+    @"^As an additional cost to cast this spell,\s+sacrifice\s+a\s+(?<type>[a-z]+)\.",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex AdditionalSacrificePrefix();
 
   /// <summary>
-  /// Extracts colors from mana symbols in a string.
+  /// Scans oracle text for "As an additional cost to cast this spell, sacrifice a [type]."
+  /// prefix lines and returns an AdditionalCostsAttribute when found, or null when absent.
+  /// Handles the sacrifice-a-permanent family; other cost shapes (discard, pay life) are
+  /// not yet recognised here and are left unparsed until a future batch extends this method.
   /// </summary>
-  private static void AddManaSymbolColors(string text, HashSet<string> colors)
+  private AdditionalCostsAttribute? TryExtractAdditionalCosts(string? oracleText)
   {
-    var matches = ManaSymbolRegex().Matches(text);
-    foreach (Match match in matches)
+    if (string.IsNullOrWhiteSpace(oracleText))
     {
-      var content = match.Groups[1].Value.ToUpperInvariant();
+      return null;
+    }
 
-      // Check each character for color letters
-      foreach (var c in content)
+    // Oracle text is newline-separated; additional-cost lines are always the first line.
+    var firstLine = oracleText.Split('\n')[0].Trim();
+
+    var sacrificeMatch = AdditionalSacrificePrefix().Match(firstLine);
+    if (sacrificeMatch.Success)
+    {
+      var cardType = sacrificeMatch.Groups["type"].Value.ToLowerInvariant();
+      var sacrificeCost = new AdditionalCost
       {
-        var colorCode = c switch
+        Cost = new SacrificeCost
         {
-          'W' => "W",
-          'U' => "U",
-          'B' => "B",
-          'R' => "R",
-          'G' => "G",
-          _ => null,
-        };
-        if (colorCode != null)
-        {
-          colors.Add(colorCode);
-        }
-      }
+          Filter = new ObjectFilter { CardTypes = [cardType] },
+          Quantity = LiteralQuantity.Of(1),
+        },
+        SourceSpan = new TextSpan(0, firstLine.Length),
+      };
+
+      return new AdditionalCostsAttribute { Costs = [sacrificeCost] };
     }
+
+    // Kicker (CR 702.33) is NOT extracted here. It is a static ability — its combinator
+    // (KickerKeyword) emits a StaticAbility{KeywordSource:"Kicker", AdditionalCastCostEffect}
+    // into Oracle.Abilities, carrying the keyword identity the anonymous
+    // AdditionalCostsAttribute would lose. Surfacing it here too would double-count the cost.
+
+    return null;
   }
 
+  // "Bestow {cost}" — the keyword line is always the card's first paragraph.
+  [GeneratedRegex(
+    @"^Bestow\s+(?<cost>(?:\{[^}]+\})+)",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex BestowPrefix();
+
   /// <summary>
-  /// Orders colors in WUBRG order.
+  /// Scans oracle text for a "Bestow {cost}" line and returns an
+  /// <see cref="AlternativeCostsAttribute"/> carrying the bestow casting cost, or
+  /// null when absent. CR 702.103a: "you pay [cost] rather than its mana cost" —
+  /// the bestow cost is an alternative cost, so it is hosted on the card's cost
+  /// attributes rather than in an oracle ability. The SourceSpan is zero-width
+  /// (Start 0, Length 0): the cost is synthesised from the keyword expansion and
+  /// carries no meaningful source offset.
   /// </summary>
-  private static List<string> OrderColors(HashSet<string> colors)
+  private AlternativeCostsAttribute? TryExtractBestowCost(string? oracleText)
   {
-    var order = new[] { "W", "U", "B", "R", "G" };
-    return order.Where(colors.Contains).ToList();
+    if (string.IsNullOrWhiteSpace(oracleText))
+    {
+      return null;
+    }
+
+    var firstLine = oracleText.Split('\n')[0].Trim();
+    var match = BestowPrefix().Match(firstLine);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var parsed = _manaCostParser.Parse(match.Groups["cost"].Value);
+
+    var cost = new AlternativeCost
+    {
+      Cost = new ManaCost { Symbols = parsed.Symbols },
+      SourceSpan = new TextSpan(0, 0),
+    };
+
+    return new AlternativeCostsAttribute { Costs = [cost] };
+  }
+
+  // "You may pay {cost} and return a basic land you control to its owner's hand rather
+  // than pay this spell's mana cost." — the Borderpost cycle's alternative cost. Kept
+  // narrow to this specific sentence (not a generalised "rather than pay this spell's
+  // mana cost" matcher) so it does not swallow other keyword-driven alternative costs
+  // handled elsewhere (e.g. Bestow, above).
+  [GeneratedRegex(
+    @"^You may pay (?<cost>(?:\{[^}]+\})+) and return a basic land you control to its owner's hand rather than pay this spell's mana cost\.?$",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex BorderpostAlternativeCostPrefix();
+
+  /// <summary>
+  /// Scans oracle text for the Borderpost cycle's "You may pay {1} and return a basic
+  /// land you control to its owner's hand rather than pay this spell's mana cost." line
+  /// and returns an <see cref="AlternativeCostsAttribute"/> carrying the composite cost
+  /// (mana + return-a-basic-land), or null when absent.
+  ///
+  /// <para>
+  /// CR 118.9: "Some spells have alternative costs. ... Alternative costs are usually
+  /// phrased, 'You may [action] rather than pay [this object's] mana cost,' ..." CR
+  /// 604.5: "... abilities that say ... 'You may pay [cost] rather than pay [this
+  /// object]'s mana cost' ... work while a spell is on the stack." The line is
+  /// therefore a card-level cost attribute, not an oracle ability — mirroring
+  /// <see cref="TryExtractBestowCost"/> above. Unlike Bestow's synthesised zero-width
+  /// span, this cost is parsed directly from prose, so its SourceSpan covers the line
+  /// (matching <see cref="TryExtractAdditionalCosts"/>'s convention).
+  /// </para>
+  /// </summary>
+  private AlternativeCostsAttribute? TryExtractBorderpostAlternativeCost(string? oracleText)
+  {
+    if (string.IsNullOrWhiteSpace(oracleText))
+    {
+      return null;
+    }
+
+    var firstLine = oracleText.Split('\n')[0].Trim();
+    var match = BorderpostAlternativeCostPrefix().Match(firstLine);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var parsed = _manaCostParser.Parse(match.Groups["cost"].Value);
+
+    var cost = new AlternativeCost
+    {
+      Cost = new CompositeCost
+      {
+        Costs =
+        [
+          new ManaCost { Symbols = parsed.Symbols },
+          new ReturnToHandCost
+          {
+            Target = new ObjectReference
+            {
+              Kind = ObjectReferenceKind.Any,
+              Filter = new ObjectFilter
+              {
+                CardTypes = ["land"],
+                Supertypes = ["Basic"],
+                Controller = ControllerFilter.You,
+              },
+            },
+          },
+        ],
+      },
+      SourceSpan = new TextSpan(0, firstLine.Length),
+    };
+
+    return new AlternativeCostsAttribute { Costs = [cost] };
+  }
+
+  // "You may exile a [color] card from your hand rather than pay this spell's mana
+  // cost." — the red "free spell" family's pitch alternative cost (Cave-In, Force of
+  // Will, Misdirection, ...). Kept narrow to this specific sentence so it does not
+  // swallow other "rather than pay this spell's mana cost" costs handled elsewhere
+  // (Bestow, Borderpost).
+  [GeneratedRegex(
+    @"^You may exile a (?<color>white|blue|black|red|green) card from your hand rather than pay this spell's mana cost\.?$",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex PitchAlternativeCostPrefix();
+
+  /// <summary>
+  /// Scans oracle text for the red "free spell" family's "You may exile a [color] card
+  /// from your hand rather than pay this spell's mana cost." line and returns an
+  /// <see cref="AlternativeCostsAttribute"/> carrying the exile cost, or null when
+  /// absent.
+  ///
+  /// <para>
+  /// CR 118.9: "Some spells have alternative costs. ... Alternative costs are usually
+  /// phrased, 'You may [action] rather than pay [this object's] mana cost,' ..." CR
+  /// 118.9a: "Only one alternative cost can be applied to any one spell as it's being
+  /// cast." CR 604.5: "... abilities that say ... 'You may pay [cost] rather than pay
+  /// [this object]'s mana cost' ... work while a spell is on the stack." The line is
+  /// therefore a card-level cost attribute, not an oracle ability — mirroring
+  /// <see cref="TryExtractBorderpostAlternativeCost"/> above.
+  /// </para>
+  /// </summary>
+  private AlternativeCostsAttribute? TryExtractPitchAlternativeCost(string? oracleText)
+  {
+    if (string.IsNullOrWhiteSpace(oracleText))
+    {
+      return null;
+    }
+
+    var firstLine = oracleText.Split('\n')[0].Trim();
+    var match = PitchAlternativeCostPrefix().Match(firstLine);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var colorCode = match.Groups["color"].Value.ToLowerInvariant() switch
+    {
+      "white" => "W",
+      "blue" => "U",
+      "black" => "B",
+      "red" => "R",
+      "green" => "G",
+      _ => throw new InvalidOperationException("Unreachable: regex only matches the five color words."),
+    };
+
+    var cost = new AlternativeCost
+    {
+      Cost = new ExileCost
+      {
+        Filter = new ObjectFilter { CardTypes = ["card"], Colors = [colorCode] },
+        Quantity = LiteralQuantity.Of(1),
+        FromZone = Zone.Hand,
+      },
+      SourceSpan = new TextSpan(0, firstLine.Length),
+    };
+
+    return new AlternativeCostsAttribute { Costs = [cost] };
   }
 
   /// <summary>

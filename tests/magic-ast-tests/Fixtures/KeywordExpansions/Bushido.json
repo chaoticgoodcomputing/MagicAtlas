@@ -1,0 +1,40 @@
+{
+  "Keyword": "Bushido",
+  "Parameter": "2",
+  "Expected": {
+    "Kind": "triggered",
+    "KeywordSource": "Bushido",
+    "Trigger": {
+      "Timing": "Whenever",
+      "Event": "BlocksOrBecomesBlocked",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ]
+      }
+    },
+    "Effects": [
+      {
+        "EffectType": "modifyPT",
+        "Target": {
+          "Kind": "It"
+        },
+        "PowerModifier": {
+          "QuantityType": "literal",
+          "Value": 2
+        },
+        "ToughnessModifier": {
+          "QuantityType": "literal",
+          "Value": 2
+        },
+        "Duration": {
+          "DurationType": "untilTime",
+          "Until": {
+            "Part": "Turn",
+            "Edge": "End"
+          }
+        }
+      }
+    ]
+  }
+}

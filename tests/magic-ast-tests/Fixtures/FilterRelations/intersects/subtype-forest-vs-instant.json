@@ -1,0 +1,6 @@
+{
+  "_note": "Closed land pool: Forest forces card type land; land ⊥ instant (110.4) → Disjoint.",
+  "A": { "Subtypes": ["Forest"] },
+  "B": { "CardTypes": ["instant"] },
+  "Expected": "Disjoint"
+}

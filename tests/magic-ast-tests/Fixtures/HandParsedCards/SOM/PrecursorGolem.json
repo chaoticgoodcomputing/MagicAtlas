@@ -1,0 +1,126 @@
+{
+  "Input": {
+    "Name": "Precursor Golem",
+    "ManaCost": "{5}",
+    "TypeLine": "Artifact Creature — Golem",
+    "OracleText": "When this creature enters, create two 3/3 colorless Golem artifact creature tokens.\nWhenever a spell or ability targets only Precursor Golem, that player copies it for each other Golem they control. Each copy targets a different one of those Golems.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Precursor Golem",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Golem",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Golem"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, create two 3/3 colorless Golem artifact creature tokens.\nWhenever a spell or ability targets only Precursor Golem, that player copies it for each other Golem they control. Each copy targets a different one of those Golems.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Token": {
+                "Power": "3",
+                "Toughness": "3",
+                "Colors": [
+                  "C"
+                ],
+                "Types": [
+                  "artifact",
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Golem"
+                ],
+                "IsCopy": false
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 84,
+            "Length": 165
+          },
+          "RawText": "Whenever a spell or ability targets only Precursor Golem, that player copies it for each other Golem they control. Each copy targets a different one of those Golems.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Triggered ability parser not yet implemented",
+              "Location": {
+                "Start": 84,
+                "Length": 165
+              },
+              "RawText": "Whenever a spell or ability targets only Precursor Golem, that player copies it for each other Golem they control. Each copy targets a different one of those Golems.",
+              "Pattern": "ComplexTargeting",
+              "LastAttemptedRule": "TriggeredAbilityParser.Parse",
+              "FailurePosition": 84
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

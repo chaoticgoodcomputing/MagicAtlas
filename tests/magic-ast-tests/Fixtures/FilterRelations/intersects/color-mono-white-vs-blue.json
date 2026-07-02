@@ -1,0 +1,6 @@
+{
+  "_note": "A monocolored object has exactly one color; it cannot be both white (A) and blue (B) → Disjoint.",
+  "A": { "IsMonocolored": true, "Colors": ["W"] },
+  "B": { "Colors": ["U"] },
+  "Expected": "Disjoint"
+}

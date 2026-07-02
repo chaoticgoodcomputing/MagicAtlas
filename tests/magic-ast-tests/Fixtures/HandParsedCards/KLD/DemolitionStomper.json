@@ -1,0 +1,96 @@
+{
+  "Input": {
+    "Name": "Demolition Stomper",
+    "ManaCost": "{6}",
+    "TypeLine": "Artifact — Vehicle",
+    "OracleText": "This Vehicle can't be blocked by creatures with power 2 or less.\nCrew 5 (Tap any number of creatures you control with total power 5 or more: This Vehicle becomes an artifact creature until end of turn.)",
+    "Power": "10",
+    "Toughness": "7",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Demolition Stomper",
+    "TypeLine": {
+      "Raw": "Artifact — Vehicle",
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Vehicle"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This Vehicle can't be blocked by creatures with power 2 or less.\nCrew 5 (Tap any number of creatures you control with total power 5 or more: This Vehicle becomes an artifact creature until end of turn.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "BlockedByFilter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "PowerComparison": {
+                  "Operator": "LessThanOrEqual",
+                  "Value": 2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Crew",
+          "Effects": [
+            {
+              "EffectType": "crew",
+              "Power": {
+                "QuantityType": "literal",
+                "Value": 5
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(Tap any number of creatures you control with total power 5 or more: This Vehicle becomes an artifact creature until end of turn.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{6}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 6
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 10,
+          "Raw": "10"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 7,
+          "Raw": "7"
+        }
+      }
+    ]
+  }
+}

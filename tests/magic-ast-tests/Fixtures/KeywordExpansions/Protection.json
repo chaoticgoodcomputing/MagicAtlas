@@ -1,0 +1,19 @@
+{
+  "Keyword": "Protection",
+  "Parameter": "from red",
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "protection",
+        "From": [
+          {
+            "Kind": "Color",
+            "Value": "R"
+          }
+        ]
+      }
+    ],
+    "KeywordSource": "Protection"
+  }
+}

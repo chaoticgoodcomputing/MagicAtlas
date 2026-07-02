@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NEM/Disrupt.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.6a", "CR 701.6b", "CR 118.1"],
+      "reason": "counter-unless-pays tax modeled as PreventableEffect(preventable) wrapping counterSpell with UnlessClause{Controller, {1}}; 'instant or sorcery spell' as structured CardTypes disjunction ['spell','instant','sorcery']; sibling Draw a card preserved; no unparsed/free-text residual"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/CounterTypeOrTypeUnlessPaysRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.6a", "CR 701.6b", "CR 118.1"],
+      "reason": "doc-comment CR citations all exist verbatim in rules-structure.json and match the counter + pay-cost modeling; composes existing sibling conventions"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-disrupt#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — pure composition of pre-existing PreventableEffect/CounterSpellEffect/UnlessClause nodes; no PortWalk projection decision required (diff adds no AST/PortGraph/known-coarse files)"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MOR/GravelgillAxeshark.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.10", "CR 702.79"],
+      "reason": "Persist intervening-if restructured OtherCondition->TriggeringObjectCounterCondition{CounterType:'-1/-1',Present:false}, faithful to Scryfall oracle and CR Persist; routed through existing ConditionParser.Parse (no new arm); rest of ability byte-identical (Trigger{Dies}/Filter/ReturnToBattlefield/WithCounters/UnderControl/KeywordSource:Persist preserved); no new free-text/unparsed residual; off-axis attribute reorder (colors->[B,U], IsVariable default) not a regression; removed from whitelist-freetext.json"
+    }
+  ]
+}

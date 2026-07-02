@@ -1,0 +1,115 @@
+{
+  "Input": {
+    "Name": "Young Wolf",
+    "ManaCost": "{G}",
+    "TypeLine": "Creature — Wolf",
+    "OracleText": "Undying (When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Young Wolf",
+    "TypeLine": {
+      "Raw": "Creature — Wolf",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Wolf"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Undying (When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "triggeringObjectCounter",
+            "CounterType": "+1/+1",
+            "Present": false
+          },
+          "Effects": [
+            {
+              "EffectType": "returnToBattlefield",
+              "Target": {
+                "Kind": "It"
+              },
+              "Tapped": false,
+              "UnderControl": {
+                "Kind": "Owner"
+              },
+              "WithCounters": {
+                "CounterType": "+1/+1",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                }
+              }
+            }
+          ],
+          "KeywordSource": "Undying",
+          "Reminder": {
+            "Text": "(When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}

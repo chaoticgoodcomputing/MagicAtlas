@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AggressiveMammoth.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.19"],
+      "reason": "DELTA: regen re-pins gold to the real two-line Scryfall oracle (Trample + 'Other creatures you control have trample'); the committed gold's third line 'Creatures with power less than Aggressive Mammoth's power can't block it' was a fabrication absent from the real card (Scryfall dump + live API), so removing the spurious cantBeBlocked ability is a correction not a regression; no PowerComparison was needed because the lesser-power clause does not exist; no NEW free-text introduced; the remaining 'other' OtherCharacteristic on the gainAbility filter is the Slice-6-owned residual and stays whitelisted as expected"
+    }
+  ]
+}

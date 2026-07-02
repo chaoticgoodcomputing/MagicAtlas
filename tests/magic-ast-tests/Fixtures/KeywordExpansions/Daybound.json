@@ -1,0 +1,14 @@
+{
+  "Keyword": "Daybound",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "dayNight",
+        "Phase": "Daybound"
+      }
+    ],
+    "KeywordSource": "Daybound"
+  }
+}

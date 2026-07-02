@@ -1,0 +1,100 @@
+{
+  "Input": {
+    "Name": "Sanctum of Stone Fangs",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Legendary Enchantment — Shrine",
+    "OracleText": "At the beginning of your first main phase, each opponent loses X life and you gain X life, where X is the number of Shrines you control.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Sanctum of Stone Fangs",
+    "TypeLine": {
+      "Raw": "Legendary Enchantment — Shrine",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Shrine"
+      ]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of your first main phase, each opponent loses X life and you gain X life, where X is the number of Shrines you control.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "PrecombatMain",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "count",
+                "CountOf": { "Subtypes": ["Shrine"], "Controller": "You" }
+              },
+              "Player": {
+                "Kind": "EachOpponent"
+              }
+            },
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "count",
+                "CountOf": { "Subtypes": ["Shrine"], "Controller": "You" }
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

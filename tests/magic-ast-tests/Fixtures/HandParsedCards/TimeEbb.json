@@ -1,0 +1,51 @@
+{
+  "Input": {
+    "Name": "Time Ebb",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Put target creature on top of its owner's library.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Time Ebb",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Put target creature on top of its owner's library.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "putOnTopOfLibrary",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {"Kind": "generic", "GenericAmount": 2},
+          {"Kind": "colored", "Colors": ["U"]}
+        ],
+        "ManaValue": 3
+      },
+      {"Kind": "colors", "Colors": ["U"]},
+      {"Kind": "colorIdentity", "ColorIdentity": ["U"]}
+    ]
+  }
+}

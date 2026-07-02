@@ -1,0 +1,59 @@
+{
+  "Input": {
+    "Name": "Mishra's Helix",
+    "ManaCost": "{4}",
+    "TypeLine": "Artifact",
+    "OracleText": "{X}, {T}: Tap X target lands.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Mishra's Helix",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "{X}, {T}: Tap X target lands.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "variable" }
+              ]
+            },
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": { "CardTypes": ["land"] }
+              },
+              "Count": { "QuantityType": "variable", "Name": "X" }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 }
+        ],
+        "ManaValue": 4
+      },
+      { "Kind": "colors", "Colors": [] },
+      { "Kind": "colorIdentity", "ColorIdentity": [] }
+    ]
+  }
+}

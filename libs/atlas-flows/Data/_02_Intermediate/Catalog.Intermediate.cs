@@ -22,41 +22,22 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Processed cards with strong types — ~35k card objects with full type safety. Stored
-  /// in-memory only: persisting CardCollection to JSON fails because the record uses init-only
-  /// properties that System.Text.Json's default deserializer can't round-trip. The
-  /// <c>.Memory()</c> adapter is deliberately non-fingerprintable, which cascades uncacheable
-  /// through every downstream step in the 0.18.x cache plan — fix would require swapping to a
-  /// serializer-friendly schema (or writing custom JsonConverters) so the item can be
-  /// disk-persisted and fingerprinted.
+  /// Processed cards with strong types — ~35k card objects with full type safety. Disk-backed
+  /// JSON so the 0.18.x cache plan can fingerprint it (in-memory items are deliberately
+  /// non-fingerprintable, cascading uncacheable through every downstream step).
   /// </summary>
   public IItem<CardCollection> ProcessedCards =>
-    CreateItem(() => Item.Of<CardCollection>("ProcessedCards").Memory().Build());
-
-  /// <summary>
-  /// Introduction section.
-  /// </summary>
-  public IItem<string> Intro =>
     CreateItem(() =>
-      Item.Of<string>("Intro")
-        .Text()
-        .AtPath($"{_basePath}/_02_Intermediate/Datasets/RulesSections/intro.txt")
+      Item.Of<CardCollection>("ProcessedCards")
+        .Json()
+        .AtPath($"{_basePath}/_02_Intermediate/Datasets/processed-cards.json")
         .Build()
     );
 
   /// <summary>
-  /// Table of contents section.
-  /// </summary>
-  public IItem<string> TableOfContents =>
-    CreateItem(() =>
-      Item.Of<string>("TableOfContents")
-        .Text()
-        .AtPath($"{_basePath}/_02_Intermediate/Datasets/RulesSections/toc.txt")
-        .Build()
-    );
-
-  /// <summary>
-  /// Rules section (numbered rules only).
+  /// Rules section (numbered rules only). Produced by the standalone <c>mtg-rules</c> project and
+  /// vendored into this project's <c>_02_Intermediate</c> layer; consumed by the FineTune
+  /// training-pair builder.
   /// </summary>
   public IItem<string> RulesText =>
     CreateItem(() =>
@@ -67,24 +48,14 @@ public partial class Catalog
     );
 
   /// <summary>
-  /// Glossary section.
+  /// Glossary section. Produced by the standalone <c>mtg-rules</c> project and vendored into this
+  /// project's <c>_02_Intermediate</c> layer; consumed by the FineTune training-pair builder.
   /// </summary>
   public IItem<string> GlossaryText =>
     CreateItem(() =>
       Item.Of<string>("GlossaryText")
         .Text()
         .AtPath($"{_basePath}/_02_Intermediate/Datasets/RulesSections/glossary.txt")
-        .Build()
-    );
-
-  /// <summary>
-  /// Credits section.
-  /// </summary>
-  public IItem<string> Credits =>
-    CreateItem(() =>
-      Item.Of<string>("Credits")
-        .Text()
-        .AtPath($"{_basePath}/_02_Intermediate/Datasets/RulesSections/credits.txt")
         .Build()
     );
 }

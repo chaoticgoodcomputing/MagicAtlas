@@ -6,20 +6,20 @@ using MagicAtlas.Flows.Ingest.Nodes;
 namespace MagicAtlas.Flows.Ingest;
 
 /// <summary>
-/// Owns the upstream HTTP boundary for the atlas pipelines. Three independent source steps fetch
-/// raw MTG data from public endpoints and persist it into the catalog's <c>_01_Raw</c> layer:
+/// Owns the upstream Scryfall HTTP boundary for the atlas pipelines. Two independent source steps
+/// fetch raw card data from public endpoints and persist it into the catalog's <c>_01_Raw</c>
+/// layer. (The MTG comprehensive rules text moved to the standalone <c>mtg-rules</c> project,
+/// which publishes the structured rules + glossary + type ontology this project vendors.)
 /// </summary>
 /// <list type="bullet">
 /// <item><b>FetchOracleCardsBulk</b> — Scryfall's daily bulk-cards JSON (~165 MB, ~35K cards) via
 /// the metadata-then-download two-step at <c>api.scryfall.com/bulk-data/oracle-cards</c>.</item>
 /// <item><b>FetchCardSymbols</b> — Scryfall's card-symbology JSON at
 /// <c>api.scryfall.com/symbology</c>.</item>
-/// <item><b>FetchRulesText</b> — MTG comprehensive rules text, located by scraping
-/// <c>magic.wizards.com/en/rules</c> for the current dated <c>.txt</c> URL.</item>
 /// </list>
 /// <remarks>
 /// Splitting these fetches off into a dedicated flow gives the downstream flows
-/// (<c>CardProcessing</c>, <c>RulesProcessing</c>, <c>OracleEmbedding</c>) a clean separation
+/// (<c>CardProcessing</c>, <c>OracleEmbedding</c>) a clean separation
 /// between "where the data came from" and "how the data is processed." Runs as
 /// <c>nx run atlas-flow-test:run -- --flow Ingest</c>, or as part of any wider slice via
 /// <c>--to &lt;some downstream item&gt;</c>.
@@ -47,11 +47,6 @@ public static class IngestFlow
         outputs: catalog.RawCardSymbols
       );
 
-      pipeline.AddStep<string>(
-        label: "FetchRulesText",
-        transform: FetchRulesTextNode.Create(httpClient),
-        outputs: catalog.RawRules
-      );
     });
   }
 }

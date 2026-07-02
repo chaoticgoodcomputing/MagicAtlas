@@ -1,0 +1,99 @@
+{
+  "Input": {
+    "Name": "Tar Pit Warrior",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Cyclops Warrior",
+    "OracleText": "When this creature becomes the target of a spell or ability, sacrifice it.",
+    "Power": "3",
+    "Toughness": "4",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Tar Pit Warrior",
+    "TypeLine": {
+      "Raw": "Creature — Cyclops Warrior",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cyclops",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature becomes the target of a spell or ability, sacrifice it.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "BecomesTarget",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "It"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LeechingBite.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2c", "CR 115.4", "CR 109.5"],
+      "reason": "dual-target combat trick modeled as two modifyPT effects; first Target creature +1/+1, second 'another target creature' -1/-1 via ExcludeSelf=true, each with untilTime EndOfTurn as a separate Duration composite (no baked-in timing); faithful to oracle text, no unparsed/free-text residual, no regression (net-new fixture, siblings/out-of-axis attrs correct); matches accepted sibling gold M21/RookieMistake.json convention"
+    }
+  ]
+}

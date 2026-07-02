@@ -1,0 +1,30 @@
+{
+  "Name": "Aggressive Mammoth",
+  "Ports": [
+    {
+      "Identity": "Aggressive Mammoth::emit:gainability",
+      "Card": "Aggressive Mammoth",
+      "Label": "emit:gainability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Aggressive Mammoth::emit:keywordability",
+      "Card": "Aggressive Mammoth",
+      "Label": "emit:keywordability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

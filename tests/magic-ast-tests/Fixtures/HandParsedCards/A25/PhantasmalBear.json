@@ -1,0 +1,95 @@
+{
+  "Input": {
+    "Name": "Phantasmal Bear",
+    "ManaCost": "{U}",
+    "TypeLine": "Creature — Bear Illusion",
+    "OracleText": "When this creature becomes the target of a spell or ability, sacrifice it.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Phantasmal Bear",
+    "TypeLine": {
+      "Raw": "Creature — Bear Illusion",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Bear",
+        "Illusion"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature becomes the target of a spell or ability, sacrifice it.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "BecomesTarget",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "It"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

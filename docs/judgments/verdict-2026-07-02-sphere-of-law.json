@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SphereofLaw.json",
+      "verdict": "PASS",
+      "citations": ["CR 615.10", "CR 615.1", "CR 615.1a", "CR 615.2"],
+      "reason": "static ReplacementEffect watching a color-filtered DamageEvent (Source.Colors=[R], AffectedObjects.Controller=You) with inner preventDamage Amount 2 / Target You; faithful to oracle text, no baked-in timing, no unparsed residual; CR 615.10 example is this exact template with N=1"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-sphere-of-law#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (reuses existing preventDamage/damage-event/replacement nodes; color+controller are ObjectFilter fields), so the PortWalk projection ratchet is not triggered and no new projection decision is required"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Everglades.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.21a", "CR 305.6", "CR 110.5", "CR 108.3"],
+      "reason": "Karoo ETB 'sacrifice it unless you return an untapped Swamp' modeled as Trigger(When/Enters/land/IsSelf) + preventable{Inner:sacrifice(It), Unless: returnToHand of an untapped Swamp you control}; fully structured, no free text/unparsed, oracle text exact, enters-tapped static + {T} mana ability siblings preserved"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-everglades#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator/AST node introduced — composes pre-existing preventable/sacrifice/returnToHand nodes and the tapped/untapped characteristic (all already in gold fixtures); no PortWalk projection decision required"
+    }
+  ]
+}

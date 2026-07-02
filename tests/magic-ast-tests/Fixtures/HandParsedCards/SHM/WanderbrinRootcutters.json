@@ -1,0 +1,106 @@
+{
+  "Input": {
+    "Name": "Wanderbrine Rootcutters",
+    "ManaCost": "{2}{U/B}{U/B}",
+    "TypeLine": "Creature — Merfolk Rogue",
+    "OracleText": "This creature can't be blocked by green creatures.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "B",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Wanderbrine Rootcutters",
+    "TypeLine": {
+      "Raw": "Creature — Merfolk Rogue",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Merfolk",
+        "Rogue"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature can't be blocked by green creatures.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "BlockedByFilter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Colors": [
+                  "G"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U/B}{U/B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "U",
+              "B"
+            ]
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "U",
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U",
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

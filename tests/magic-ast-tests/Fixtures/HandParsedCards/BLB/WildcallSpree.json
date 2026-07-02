@@ -1,0 +1,123 @@
+{
+  "Input": {
+    "Name": "Wildcall",
+    "ManaCost": "{X}{G}{G}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Create a 1/1 green Squirrel creature token.\n+ {2} — Create X 1/1 green Squirrel creature tokens.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Wildcall",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Spree (Choose one or more additional costs.)\n+ {1} — Create a 1/1 green Squirrel creature token.\n+ {2} — Create X 1/1 green Squirrel creature tokens.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Spree",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Spree"
+            }
+          ],
+          "Reminder": {
+            "Text": "(Choose one or more additional costs.)"
+          }
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 45,
+            "Length": 51
+          },
+          "RawText": "+ {1} — Create a 1/1 green Squirrel creature token.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Static ability parser not yet implemented",
+              "Location": {
+                "Start": 45,
+                "Length": 51
+              },
+              "RawText": "+ {1} — Create a 1/1 green Squirrel creature token.",
+              "Pattern": "AmbiguousStructure",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 45
+            }
+          ]
+        },
+        {
+          "Kind": "unparsed",
+          "SourceSpan": {
+            "Start": 97,
+            "Length": 52
+          },
+          "RawText": "+ {2} — Create X 1/1 green Squirrel creature tokens.",
+          "Diagnostics": [
+            {
+              "Severity": "error",
+              "Message": "Static ability parser not yet implemented",
+              "Location": {
+                "Start": 97,
+                "Length": 52
+              },
+              "RawText": "+ {2} — Create X 1/1 green Squirrel creature tokens.",
+              "Pattern": "AmbiguousStructure",
+              "LastAttemptedRule": "StaticAbilityParser.Parse",
+              "FailurePosition": 97
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{X}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "IsVariable": true
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}

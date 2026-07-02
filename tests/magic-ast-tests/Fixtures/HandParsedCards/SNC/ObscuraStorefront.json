@@ -1,0 +1,96 @@
+{
+  "Input": {
+    "Name": "Obscura Storefront",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "When this land enters, sacrifice it. When you do, search your library for a basic Plains, Island, or Swamp card, put it onto the battlefield tapped, then shuffle and you gain 1 life.",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Obscura Storefront",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": ["Land"]
+    },
+    "Oracle": {
+      "RawText": "When this land enters, sacrifice it. When you do, search your library for a basic Plains, Island, or Swamp card, put it onto the battlefield tapped, then shuffle and you gain 1 life.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["land"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "It"
+              }
+            },
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "When",
+                  "Event": "Sacrifices",
+                  "Filter": {
+                    "CardTypes": ["land"],
+                    "IsSelf": true
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "searchLibrary",
+                    "Filter": {
+                      "Supertypes": ["Basic"],
+                      "CardTypes": ["land"],
+                      "Subtypes": ["Plains", "Island", "Swamp"]
+                    },
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Destination": "BattlefieldTapped",
+                    "Revealed": false
+                  },
+                  {
+                    "EffectType": "shuffle",
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  },
+                  {
+                    "EffectType": "gainLife",
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M14/UnhallowedPact.json",
+      "verdict": "PASS",
+      "citations": ["CR 303.4", "CR 702.5"],
+      "reason": "DELTA PB-1: 'enchanted creature' Dies-trigger filter residual Other(\"enchanted\") replaced with structured IsEnchanted:true (+CardTypes:[creature]); oracle text matches Scryfall verbatim; no new free-text/unparsed residual; no dropped/inverted ability (static enchantRestriction + triggered Dies->returnToBattlefield preserved); whitelist OtherCharacteristic entry correctly removed"
+    }
+  ]
+}

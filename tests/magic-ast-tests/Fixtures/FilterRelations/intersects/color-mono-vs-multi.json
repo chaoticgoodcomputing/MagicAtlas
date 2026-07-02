@@ -1,0 +1,5 @@
+{
+  "A": { "IsMonocolored": true },
+  "B": { "IsMulticolored": true },
+  "Expected": "Disjoint"
+}

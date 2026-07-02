@@ -1,0 +1,6 @@
+{
+  "_note": "Panel correction (seat 3): kindred is partition-neutral (308.1) so never Disjoint, but a Kindred Land is admissible, not provably existent — so Unknown, not a false Overlaps. Same straddle treatment as Shapeshifter-vs-instant.",
+  "A": { "CardTypes": ["kindred"] },
+  "B": { "CardTypes": ["land"] },
+  "Expected": "Unknown"
+}

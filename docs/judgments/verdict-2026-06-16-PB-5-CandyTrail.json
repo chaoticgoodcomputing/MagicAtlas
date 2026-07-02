@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WOE/CandyTrail.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.22", "CR 701.16", "CR 120 (draw)", "CR 119 (gain life)"],
+      "reason": "Re-point to real Candy Trail (Artifact — Food Clue, Scryfall-exact); activated body 'gain 3 life and draw a card' splits into two structured effects gainLife{3} + drawCards{1} (no dropped conjunct, no residual); ETB scry 2 trigger + cost {2},{T},Sacrifice this all structured; zero unparsed; whitelist entry removed"
+    }
+  ]
+}

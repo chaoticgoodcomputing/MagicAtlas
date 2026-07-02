@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "Spellbook",
+    "ManaCost": "{0}",
+    "TypeLine": "Artifact — Book",
+    "OracleText": "You have no maximum hand size.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Spellbook",
+    "TypeLine": {
+      "Raw": "Artifact — Book",
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Book"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You have no maximum hand size.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "noMaxHandSize"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{0}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 0
+          }
+        ],
+        "ManaValue": 0
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

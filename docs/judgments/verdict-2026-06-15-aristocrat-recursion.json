@@ -1,0 +1,30 @@
+{
+  "judgment": "aristocrat graveyard-recursion flow arm",
+  "date": "2026-06-15",
+  "judge": "interaction-judge",
+  "scope": "cast-from-graveyard recast arm: emit:returntobattlefield:self + pay:mana co-cost; FlowFeasible (returntobattlefield,sac)/(returntobattlefield,etb); §8 mana-balance + co-cost conjunction tiering",
+  "result": "PASS",
+  "items": [
+    {
+      "target": "GREEN — Gravecrawler + Pitiless Plunderer + Ashnod's Altar (aristocrat recursion)",
+      "verdict": "PASS",
+      "reason": "Genuinely reliable infinite loop. Recast cost is the TRUE {B} (one pay:mana:black, qty 1) — RecastManaCost reads the card's own mana-cost symbols since AlternativeCastEffect.Cost is null (CR 601.3e); the scope doc's {1}{B} was the corrected factual error. Per iteration the loop produces Ashnod's {C}{C} (emit:mana:colorless x2) + one Pitiless Treasure (emit:mana:any). ManaBalanced per-colour: the {B} pip is covered by the Treasure's any-pool (CR 107.4 — colourless can't pay {B}, but 'any' can, ManaColorFeeds true); colourless surplus + leftover cover zero generic need. Balanced=true, Productive=true (non-mana outputs: re-entered creature, Treasure surplus), Firable=true, CoCostsSatisfied=true (Gravecrawler's pay:mana:black is loop-fed by Pitiless emit:mana:any; Ashnod's sac has no co-cost). The 7 edges are all GREEN; every emitted re-entered Gravecrawler (a creature) Subsumes both Ashnod's 'sac a creature' and Pitiless's controlled dies-trigger. Attribution spans all 3 cards. Engine FindCycles (unbounded) tiers GREEN; the bench reads AMBER only because the 7-hop cycle exceeds LengthBound=5 — a length artefact, not a tiering error. The §8-B one-shot-self-removal carve-out is correctly a no-op here (no ltb:...:self consume is on this cycle; the death is captured by Pitiless's :controlled trigger), so the GREEN does not even depend on it. Unit pin AristocratRecursionScopeTest passes GREEN."
+    },
+    {
+      "target": "AMBER — Warren Soultrader + Gravecrawler + Blood Artist (and Warren variants)",
+      "verdict": "PASS",
+      "reason": "AMBER is the honest tier, but NOT for the scope/test-doc's stated reason (a mana shortfall of 1 Treasure vs {1}{B}=2). That reason is wrong twice: the recast is {B}=1 (one Treasure covers it fully — no mana shortfall), and the actual floor is the UNFED 'Pay 1 life' co-cost. Warren's sac ability carries two costs — sac:creature:another and pay:life (the payLife cost routes through the generic pay:<other> fallback to a pay:life consume). CoCostMap groups them as siblings; when the cycle traverses the sac cost, ConjunctionHolds requires the pay:life sibling to be loop-fed — and it cannot be: there is no (life,pay) flow arm (only (life,trigger)), so Blood Artist's emit:life:gain feeds the drain trigger, never a pay:life cost. CoCostsSatisfied=false -> AMBER. This is CR-sound: CR 118.3/119.4 make paying life a real resource gate ('a player can't pay a cost without having the necessary resources... a player with only 1 life can't pay a cost of 2 life'); MAST has no life-as-resource ledger and cannot certify the loop refills the paid life each iteration from filters alone. This is the relational/runtime-referent class of sound AMBER, not a false negative. The Warren+Zulaport sibling is the same shape; the recast arm does not over-promote it to GREEN."
+    },
+    {
+      "target": "False-positive guard / negative control",
+      "verdict": "PASS",
+      "reason": "The recast arm fires ONLY on a real cast-from-graveyard permission. EmitPort gates the emit:returntobattlefield:self projection on EffectType=='alternativeCast' AND FromZone=='Graveyard' (PortGraph.cs:388-391). A Gravecrawler stripped of the alternativeCast static (only the inert cantBlock remains) + Ashnod's free sac produces NO recursion cycle — no recast emit, no (returntobattlefield,sac) edge, no loop. A vanilla graveyard creature stays dead; a naive 'anything in a graveyard refuels a sac' arm is not what was built. The Subject is always non-null (the card's self-filter), so the edge never hits the scalar null-default GREEN (anti-pattern 3); RecastSatisfies prunes a type-Disjoint consume (a creature can't be a Treasure-artifact sac fodder). Adversarial probe confirmed via the live pin Gravecrawler_without_recast_permission_manufactures_no_cycle_the_false_positive_guard (passes)."
+    }
+  ],
+  "notes": [
+    "All 3 unit pins in AristocratRecursionScopeTest are now LIVE (no [Ignore] attribute present despite the stale class-doc claim) and pass: GREEN, AMBER, negative control.",
+    "The GREEN snapshot (gravecrawler-x-pitiless-plunderer-x-ashnod-s-altar-aristocrat-recursion-green.json) encodes the TRUE recast cost pay:mana:black (single {B} pip), confirming the implementer corrected the scope doc's {1}{B} factual error.",
+    "DOC DRIFT (non-blocking, route to docs): the test-class XML doc comments and the scope doc still describe the recast as {1}{B} and attribute the Warren AMBER to a mana shortfall. The ENGINE behaviour is correct ({B} cost, AMBER via unfed pay:life co-cost); only the prose is stale.",
+    "CR data files are under libs/mtg-rules/Data/_03_Primary/Datasets/ (not tests/atlas-flow-test/...) — the instructed path is stale but the corpus is present and readable."
+  ]
+}

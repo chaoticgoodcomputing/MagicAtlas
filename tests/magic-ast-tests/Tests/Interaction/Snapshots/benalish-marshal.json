@@ -1,0 +1,19 @@
+{
+  "Name": "Benalish Marshal",
+  "Ports": [
+    {
+      "Identity": "Benalish Marshal::modify:pt",
+      "Card": "Benalish Marshal",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

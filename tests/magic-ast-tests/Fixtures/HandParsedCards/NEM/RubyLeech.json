@@ -1,0 +1,117 @@
+{
+  "Input": {
+    "Name": "Ruby Leech",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature — Leech",
+    "OracleText": "First strike\nRed spells you cast cost {R} more to cast.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Ruby Leech",
+    "TypeLine": {
+      "Raw": "Creature — Leech",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Leech"
+      ]
+    },
+    "Oracle": {
+      "RawText": "First strike\nRed spells you cast cost {R} more to cast.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "First"
+            }
+          ],
+          "KeywordSource": "First strike"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costIncrease",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "ManaSymbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                }
+              ]
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": [
+              "spell"
+            ],
+            "Colors": [
+              "R"
+            ],
+            "Controller": "You"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

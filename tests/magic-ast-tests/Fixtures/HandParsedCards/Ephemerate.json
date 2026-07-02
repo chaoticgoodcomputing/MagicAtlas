@@ -1,0 +1,103 @@
+{
+  "Input": {
+    "Name": "Ephemerate",
+    "ManaCost": "{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Exile target creature you control, then return it to the battlefield under its owner's control.\nRebound (If you cast this spell from your hand, exile it as it resolves. At the beginning of your next upkeep, you may cast this card from exile without paying its mana cost.)",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Ephemerate",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Exile target creature you control, then return it to the battlefield under its owner's control.\nRebound (If you cast this spell from your hand, exile it as it resolves. At the beginning of your next upkeep, you may cast this card from exile without paying its mana cost.)",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "exile",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": ["creature"],
+                      "Controller": "You"
+                    }
+                  }
+                },
+                {
+                  "EffectType": "returnToBattlefield",
+                  "Target": {
+                    "Kind": "Designated",
+                    "Filter": {
+                      "Zone": "Exile",
+                      "ExiledWith": {
+                        "Kind": "Self"
+                      }
+                    }
+                  },
+                  "UnderControl": {
+                    "Kind": "Owner"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Rebound",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Rebound"
+            }
+          ],
+          "Reminder": {
+            "Text": "(If you cast this spell from your hand, exile it as it resolves. At the beginning of your next upkeep, you may cast this card from exile without paying its mana cost.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}

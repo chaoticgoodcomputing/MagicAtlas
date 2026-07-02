@@ -5,9 +5,14 @@ using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects;
 using MagicAST.AST.Effects.CardFlow;
+using MagicAST.AST.Effects.Control;
 using MagicAST.AST.Effects.Counter;
+using MagicAST.AST.Effects.Combat;
+using MagicAST.AST.Effects.Damage;
+using MagicAST.AST.Effects.Keyword;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.Effects.Resource;
+using MagicAST.AST.Effects.ZoneChange;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 using MagicAST.Parsing.Tokens;
@@ -20,10 +25,45 @@ using Superpower.Model;
 /// - Complex activated abilities: {3}{B}{B}: Creatures you control gain lifelink until end of turn.
 /// - Loyalty abilities: +2: Discard up to two cards, then draw that many cards.
 /// </summary>
-public sealed partial class ActivatedAbilityParser
+[OracleAbilityParser(AbilityKind.Activated)]
+public sealed partial class ActivatedAbilityParser : IAbilityParser
 {
-  private readonly ManaCostParser _manaCostParser = new();
-  private readonly OracleTokenizer _tokenizer = new();
+  private readonly FallbackParser _fallback = new();
+
+  // Registry dispatch (Phase 5): reflection-discovered cost- and effect-component
+  // rules, each in its own file under Parsers/Activated/Rules/. Static so the
+  // instance ParseCosts/ParseEffects dispatchers can reach them; discovered once
+  // at type-init. Priorities are migrated order-preserving from the legacy
+  // ParseCosts/ParseEffects chains (Priority = 1000 - chain index).
+  private static readonly IReadOnlyList<DiscoveredRule<Activated.IActivatedEffectRule>> _effectRules =
+    RuleRegistry.Discover<Activated.IActivatedEffectRule, Activated.ActivatedEffectRuleAttribute>(
+      "ActivatedAbilityParser"
+    );
+
+  private static readonly IReadOnlyList<DiscoveredRule<Activated.IActivatedCostRule>> _costRules =
+    RuleRegistry.Discover<Activated.IActivatedCostRule, Activated.ActivatedCostRuleAttribute>(
+      "ActivatedAbilityParser"
+    );
+
+  /// <inheritdoc/>
+  public IReadOnlyList<Ability> Parse(OracleClause clause, ClauseClassification classification)
+  {
+    var parsed = TryParse(clause, classification);
+    if (parsed is not null)
+    {
+      return [parsed];
+    }
+    return
+    [
+      _fallback.Parse(
+        clause,
+        classification,
+        "Activated ability parser not yet implemented",
+        lastAttemptedRule: "ActivatedAbilityParser.Parse",
+        failurePosition: clause.SourceSpan.Start
+      ),
+    ];
+  }
 
   /// <summary>
   /// Attempts to parse an activated ability from a clause.
@@ -32,6 +72,27 @@ public sealed partial class ActivatedAbilityParser
   public ActivatedAbility? TryParse(OracleClause clause, ClauseClassification classification)
   {
     var text = clause.RawText;
+
+    // Strip surrounding parens from parenthetical-wrapped abilities like
+    // "({T}: Add {B} or {R}.)" so cost/effect parsing proceeds on the inner text.
+    if (text.StartsWith('(') && text.EndsWith(')'))
+    {
+      text = text[1..^1].Trim();
+    }
+
+    // Peel the em-dash prefix ("Metalcraft — ", …) if the classifier detected an
+    // ability word or printed label. The label is mechanically inert (CR 207.2c) but
+    // its "Word — " prefix must be stripped before cost/effect splitting, otherwise
+    // the text before the colon includes the label and the cost parse fails.
+    var dashPrefix = classification.DashPrefix;
+    if (dashPrefix is not null)
+    {
+      var emDashIndex = text.IndexOf('—');
+      if (emDashIndex >= 0)
+      {
+        text = text[(emDashIndex + 1)..].TrimStart();
+      }
+    }
 
     // Find the colon that separates cost from effect
     var colonIndex = text.IndexOf(':');
@@ -51,25 +112,249 @@ public sealed partial class ActivatedAbilityParser
       return null;
     }
 
+    // Strip trailing parenthetical reminder text (Rule 207.2) before effect
+    // parsing. Reminder text follows the effect sentence as "(explanation...)" —
+    // e.g. "Create a Treasure token. (It's an artifact with ...)".
+    // MUST run before ExtractActivationRestrictions: when the reminder is the
+    // final sentence (e.g. the Phyrexian "({B/P} can be paid with either {B} or
+    // 2 life.)" — CR 107.4f), restriction extraction inspects the parenthetical,
+    // fails to match "Activate only as a sorcery", and bails — leaving the
+    // restriction sentence glued to the effect.
+    StripTrailingReminder(ref effectPart);
+
+    // Extract a trailing "Any player may activate this ability." permission
+    // sentence (CR 602.2's "unless the object specifically says otherwise" branch)
+    // before restriction/effect parsing. MUST run before ExtractActivationRestrictions
+    // for the same reason as StripTrailingReminder: if left glued to the effect text,
+    // TryParseMultiEffectSentences will try (and fail) to parse it as a second effect,
+    // degrading the whole ability to UnparsedEffect.
+    var whoMayActivate = ExtractActivationPermission(ref effectPart);
+
+    // Extract trailing "Activate only as ..." restriction sentences from
+    // effectPart before effect parsing. These are not effects — they constrain
+    // when the ability can be activated (Rule 602.5). Stripping them prevents
+    // TryParseMultiEffectSentences from failing when it encounters them.
+    // Also extracts "Activate only if [condition]" into a structured Condition
+    // (ADR 0007 — conditions are one union; CR 602.5c).
+    var restrictions = ExtractActivationRestrictions(ref effectPart, out var activationCondition);
+
     // Parse effects
     var effects = ParseEffects(effectPart);
     if (effects == null || effects.Count == 0)
     {
-      return null;
+      // Cost parsed but the effect didn't. Surface as an Activated ability
+      // carrying a structured UnparsedEffect so the cost-half still lands in
+      // the AST (matches the malformed-fixture contract: the Tap cost is
+      // still real even when the right-hand side is garbage).
+      var effectSpan = new MagicAST.AST.TextSpan(
+        clause.SourceSpan.Start + colonIndex + 1,
+        Math.Max(0, clause.RawText.Length - (colonIndex + 1))
+      );
+      var unparsedEffect = new MagicAST.AST.Effects.Core.UnparsedEffect
+      {
+        SourceSpan = effectSpan,
+        RawText = effectPart,
+      };
+      // CR 702.177a: inject OnlyOnce for Exhaust abilities even when the effect is unparsed.
+      if (classification.AbilityWord?.Equals("Exhaust", StringComparison.OrdinalIgnoreCase) == true)
+      {
+        var existing = restrictions ?? [];
+        restrictions = [..existing, ActivationRestriction.OnlyOnce];
+      }
+      return new ActivatedAbility
+      {
+        Costs = costs,
+        Effects = [unparsedEffect],
+        Restrictions = restrictions,
+        ActivationCondition = activationCondition,
+        WhoMayActivate = whoMayActivate,
+        IsManaAbility = false,
+        LoyaltyCost = classification.LoyaltyCost,
+        AbilityWord = classification.AbilityWord,
+      };
     }
 
     // Determine if this is a mana ability
     var isManaAbility = IsManaAbility(costs, effects);
+
+    // CR 702.177a: "Exhaust — [Cost]: [Effect]" means "[Cost]: [Effect]. Activate only once."
+    // The "Activate only once" restriction is implied by the keyword and not printed as a
+    // separate "Activate only …" sentence in the oracle text, so ExtractActivationRestrictions
+    // cannot see it. Inject it here when the AbilityWord identifies this as an Exhaust ability.
+    if (classification.AbilityWord?.Equals("Exhaust", StringComparison.OrdinalIgnoreCase) == true)
+    {
+      var existing = restrictions ?? [];
+      restrictions = [..existing, ActivationRestriction.OnlyOnce];
+    }
 
     // Build the activated ability
     return new ActivatedAbility
     {
       Costs = costs,
       Effects = effects,
+      Restrictions = restrictions,
+      ActivationCondition = activationCondition,
+      WhoMayActivate = whoMayActivate,
       IsManaAbility = isManaAbility,
       LoyaltyCost = classification.LoyaltyCost,
       AbilityWord = classification.AbilityWord,
     };
+  }
+
+  // Anchored regex for "Activate only if [condition]." — must start at the
+  // beginning of the candidate sentence (after trimming) so it cannot match
+  // a substring of a longer clause.
+  private static readonly Regex _activateOnlyIfPattern = new(
+    @"^[Aa]ctivate\s+(?:this\s+ability\s+)?only\s+if\s+(?<cond>.+?)\.?\s*$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  /// <summary>
+  /// Strips trailing "Activate only as a sorcery." / "Activate only once each turn." /
+  /// "Activate only if [condition]." sentences from <paramref name="effectPart"/> and
+  /// returns the parsed <see cref="ActivationRestriction"/> list (null if none found).
+  /// Also extracts "Activate only if [condition]" into a structured
+  /// <see cref="MagicAST.AST.Abilities.Condition"/> via <paramref name="activationCondition"/>
+  /// (ADR 0007; CR 602.5c). Modifies <paramref name="effectPart"/> in-place to remove
+  /// the extracted sentences.
+  /// </summary>
+  private static IReadOnlyList<ActivationRestriction>? ExtractActivationRestrictions(
+    ref string effectPart,
+    out Condition? activationCondition
+  )
+  {
+    var restrictions = new List<ActivationRestriction>();
+    activationCondition = null;
+
+    // Greedily strip "Activate only as ..." / "Activate only if ..." sentences
+    // from the end of effectPart. These always appear after the real effect sentence(s).
+    string? remaining = effectPart;
+    while (remaining is not null)
+    {
+      // Match the last sentence (after the final ". ")
+      var lastDotSpace = remaining.LastIndexOf(". ", StringComparison.Ordinal);
+      string candidate;
+      string? prefix;
+      if (lastDotSpace >= 0)
+      {
+        candidate = remaining[(lastDotSpace + 2)..].Trim();
+        prefix = remaining[..lastDotSpace].Trim();
+      }
+      else
+      {
+        candidate = remaining.Trim();
+        prefix = null;
+      }
+
+      // Try "Activate only if [condition]" first — it produces a structured Condition,
+      // not an ActivationRestriction enum value.
+      var ifMatch = _activateOnlyIfPattern.Match(candidate);
+      if (ifMatch.Success)
+      {
+        var conditionPhrase = ifMatch.Groups["cond"].Value.Trim();
+        activationCondition = ConditionParser.Parse(conditionPhrase);
+        remaining = prefix;
+        continue;
+      }
+
+      var restriction = TryParseActivationRestriction(candidate);
+      if (restriction is null)
+      {
+        break;
+      }
+      restrictions.Add(restriction.Value);
+      remaining = prefix;
+    }
+
+    if (restrictions.Count == 0 && activationCondition is null)
+    {
+      return null;
+    }
+
+    restrictions.Reverse(); // restore original order (we iterated from the end)
+    effectPart = remaining ?? string.Empty;
+    return restrictions.Count > 0 ? restrictions : null;
+  }
+
+  // Anchored regex for "Any player may activate this ability." — must match the
+  // ENTIRE candidate sentence (after trimming) so it cannot match a substring of a
+  // longer clause. CR 602.2: "unless the object specifically says otherwise."
+  private static readonly Regex _anyPlayerMayActivatePattern = new(
+    @"^[Aa]ny\s+player\s+may\s+activate(?:\s+this\s+ability)?\.?$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  /// <summary>
+  /// Strips a trailing "Any player may activate this ability." sentence from
+  /// <paramref name="effectPart"/> (CR 602.1's "Activation instructions" slot; CR
+  /// 602.2's "unless the object specifically says otherwise" branch), mutating it
+  /// in place. Returns <see cref="ActivationPermission.AnyPlayer"/> when the
+  /// sentence is found and stripped, else null (leaving the default
+  /// controller-only permission implicit).
+  /// </summary>
+  private static ActivationPermission? ExtractActivationPermission(ref string effectPart)
+  {
+    var lastDotSpace = effectPart.LastIndexOf(". ", StringComparison.Ordinal);
+    string candidate;
+    string? prefix;
+    if (lastDotSpace >= 0)
+    {
+      candidate = effectPart[(lastDotSpace + 2)..].Trim();
+      prefix = effectPart[..lastDotSpace].Trim();
+    }
+    else
+    {
+      candidate = effectPart.Trim();
+      prefix = null;
+    }
+
+    if (!_anyPlayerMayActivatePattern.IsMatch(candidate))
+    {
+      return null;
+    }
+
+    effectPart = prefix ?? string.Empty;
+    return ActivationPermission.AnyPlayer;
+  }
+
+  /// <summary>
+  /// Strips a trailing parenthetical "(reminder text)" from <paramref name="effectPart"/>,
+  /// mutating it in place (via ref). Reminder text in oracle cards (Rule 207.2) follows
+  /// the effect sentence as "(explanation...)" and has no rules meaning.
+  /// Only strips the LAST parenthetical so mid-text parens are left intact.
+  /// </summary>
+  private static void StripTrailingReminder(ref string effectPart)
+  {
+    var m = Regex.Match(effectPart, @"\s*\(([^)]+)\)\s*\.?\s*$");
+    if (m.Success)
+    {
+      effectPart = effectPart[..m.Index].Trim();
+    }
+  }
+
+  private static ActivationRestriction? TryParseActivationRestriction(string sentence)
+  {
+    var trimmed = sentence.Trim().TrimEnd('.');
+    var lower = trimmed.ToLowerInvariant();
+    if (lower == "activate only as a sorcery" || lower == "activate this ability only as a sorcery")
+    {
+      return ActivationRestriction.OnlyAsSorcery;
+    }
+    // CR 602.5a: by default activated abilities can be activated any time you could cast an instant;
+    // "Activate only as an instant" is an explicit instant-speed restriction (Lion's Eye Diamond).
+    if (lower == "activate only as an instant" || lower == "activate this ability only as an instant")
+    {
+      return ActivationRestriction.OnlyAsInstant;
+    }
+    if (lower.Contains("activate only during your turn") || lower.Contains("activate this ability only during your turn"))
+    {
+      return ActivationRestriction.OnlyDuringYourTurn;
+    }
+    if (lower.Contains("activate only once each turn") || lower.Contains("activate this ability only once each turn"))
+    {
+      return ActivationRestriction.OnlyOnceEachTurn;
+    }
+    return null;
   }
 
   /// <summary>
@@ -92,38 +377,27 @@ public sealed partial class ActivatedAbilityParser
 
     foreach (var component in costComponents)
     {
-      // Try mana cost first (e.g., "{1}", "{2}{G}", "{T}")
-      if (component.Contains('{'))
+      // Registry-first dispatch (Phase 5): try reflection-discovered cost rules in
+      // priority order; first non-null wins. Shapes not yet extracted fall through
+      // to the legacy chain below.
+      Cost? registryCost = null;
+      foreach (var entry in _costRules)
       {
-        var manaCost = TryParseManaCostComponent(component);
-        if (manaCost != null)
+        registryCost = entry.Rule.TryMatch(component);
+        if (registryCost is not null)
         {
-          costs.Add(manaCost);
-          hasParsedAnyCost = true;
-          continue;
+          break;
         }
       }
-
-      // Try sacrifice cost (e.g., "Sacrifice another creature", "Sacrifice X Squirrels")
-      var sacrificeCost = TryParseSacrificeCost(component);
-      if (sacrificeCost != null)
+      if (registryCost is not null)
       {
-        costs.Add(sacrificeCost);
-        hasParsedAnyCost = true;
-        continue;
-      }
-
-      // Try discard cost (e.g., "Discard a card", "Discard a legendary card")
-      var discardCost = TryParseDiscardCost(component);
-      if (discardCost != null)
-      {
-        costs.Add(discardCost);
+        costs.Add(registryCost);
         hasParsedAnyCost = true;
         continue;
       }
 
       // If we can't parse this component, the whole cost parse fails
-      // (We should be able to understand all cost components)
+      // (we should be able to understand all cost components).
     }
 
     // If we couldn't parse any costs, return null to signal failure
@@ -136,85 +410,102 @@ public sealed partial class ActivatedAbilityParser
   /// </summary>
   private List<Effect>? ParseEffects(string effectPart)
   {
-    // Try different effect types in sequence
-
-    // Add mana
-    var addManaEffect = TryParseAddManaEffect(effectPart);
-    if (addManaEffect != null)
+    // First, try multi-sentence dispatch: "X. Y." where each sentence is a
+    // distinct effect. Recombine the parsed list when both sentences parse
+    // successfully; fall through to the single-effect path otherwise.
+    var multi = TryParseMultiEffectSentences(effectPart);
+    if (multi is not null)
     {
-      return new List<Effect> { addManaEffect };
+      return multi;
     }
 
-    // Scry
-    var scryEffect = TryParseScryEffect(effectPart);
-    if (scryEffect != null)
+    // Next, try the multi-effect rule path (mirrors IMultiSpellRule): a single
+    // ", then"-joined sentence that expands to a flat sibling list — e.g. Sensei's
+    // Divining Top's "Draw a card, then put this artifact on top of its owner's
+    // library." This runs BEFORE the single-effect loop so a greedy single-effect
+    // rule (e.g. DrawCardsEffectRule, which matches on any "draw") can't claim the
+    // sentence and silently drop the second clause.
+    var multiRuleEffects = TryParseMultiRuleEffects(effectPart);
+    if (multiRuleEffects is not null)
     {
-      return new List<Effect> { scryEffect };
+      return multiRuleEffects;
     }
 
-    // Draw cards
-    var drawEffect = TryParseDrawCardsEffect(effectPart);
-    if (drawEffect != null)
+    // Registry-first dispatch (Phase 5): try reflection-discovered effect rules in
+    // priority order; first non-null wins. Shapes not yet extracted fall through to
+    // the legacy chain below.
+    foreach (var entry in _effectRules)
     {
-      return new List<Effect> { drawEffect };
+      var effect = entry.Rule.TryMatch(effectPart);
+      if (effect is not null)
+      {
+        return new List<Effect> { effect };
+      }
     }
 
-    // Discard cards
-    var discardEffect = TryParseDiscardCardsEffect(effectPart);
-    if (discardEffect != null)
-    {
-      return new List<Effect> { discardEffect };
-    }
-
-    // Put counters
-    var putCounterEffect = TryParsePutCountersEffect(effectPart);
-    if (putCounterEffect != null)
-    {
-      return new List<Effect> { putCounterEffect };
-    }
-
-    // Gain ability
-    var gainAbilityEffect = TryParseGainAbilityEffect(effectPart);
-    if (gainAbilityEffect != null)
-    {
-      return new List<Effect> { gainAbilityEffect };
-    }
-
-    // For now, we can't parse other effect types
-    // Return null to signal that we need to fall back to unparsed
+    // No rule recognised the effect; signal fall-back to unparsed.
     return null;
   }
 
   /// <summary>
-  /// Tries to parse "Add {mana}" effects.
-  /// Pattern: "Add {G}", "Add {C}{C}{C}", "Add {W}{U}{B}{R}{G}", etc.
+  /// Tries each discovered effect rule that also implements
+  /// <see cref="Activated.IMultiActivatedEffectRule"/> in priority order, returning
+  /// the first non-null flat effect list. Mirrors the spell parser's
+  /// <c>TryParseMultiSpellRuleEffects</c>: a single ", then"-joined sentence whose
+  /// two clauses are sibling effects is recognized whole by one rule rather than
+  /// split by the dispatcher (because not every ", then" is a join). Returns null
+  /// when no multi-rule fires.
   /// </summary>
-  private AddManaEffect? TryParseAddManaEffect(string effectText)
+  private List<Effect>? TryParseMultiRuleEffects(string effectPart)
   {
-    // Normalize whitespace
-    effectText = effectText.Trim();
+    var trimmed = effectPart.Trim().TrimEnd('.').Trim();
+    foreach (var entry in _effectRules)
+    {
+      if (entry.Rule is not Activated.IMultiActivatedEffectRule multiRule)
+      {
+        continue;
+      }
+      if (multiRule.TryMatchMulti(trimmed, out var effects) && effects is not null)
+      {
+        return effects.ToList();
+      }
+    }
+    return null;
+  }
 
-    // Pattern: "Add" followed by mana symbols, optionally ending with "."
-    if (!effectText.StartsWith("Add ", StringComparison.OrdinalIgnoreCase))
+  /// <summary>
+  /// Splits an effect half on sentence boundaries (". ") and parses each
+  /// sentence via <see cref="ParseEffects(string)"/> recursively. Returns
+  /// the concatenated effects when every sentence parses, otherwise null
+  /// so the caller falls back to the single-effect path.
+  /// </summary>
+  private List<Effect>? TryParseMultiEffectSentences(string effectPart)
+  {
+    // Quick reject for single-sentence inputs to avoid infinite recursion on
+    // the head-sentence path that the recursive ParseEffects call retreads.
+    var trimmed = effectPart.Trim().TrimEnd('.').Trim();
+    var pieces = Regex.Split(trimmed, @"\.\s+");
+    if (pieces.Length < 2)
     {
       return null;
     }
 
-    // Extract the mana portion (everything after "Add" and before optional ".")
-    var manaText = effectText[4..].Trim();
-    if (manaText.EndsWith('.'))
+    var combined = new List<Effect>();
+    foreach (var piece in pieces)
     {
-      manaText = manaText[..^1].Trim();
+      var sentence = piece.Trim();
+      if (sentence.Length == 0)
+      {
+        continue;
+      }
+      var parsed = ParseEffects(sentence + ".");
+      if (parsed is null || parsed.Count == 0)
+      {
+        return null;
+      }
+      combined.AddRange(parsed);
     }
-
-    // The mana text should be a sequence of mana symbols like "{G}" or "{C}{C}{C}"
-    // We'll just pass it through as-is since AddManaEffect.Mana is a string
-    if (string.IsNullOrWhiteSpace(manaText) || !manaText.Contains('{'))
-    {
-      return null;
-    }
-
-    return new AddManaEffect { Mana = manaText, AnyColor = false };
+    return combined.Count > 0 ? combined : null;
   }
 
   /// <summary>
@@ -226,8 +517,11 @@ public sealed partial class ActivatedAbilityParser
   /// </summary>
   private static bool IsManaAbility(IReadOnlyList<Cost> costs, IReadOnlyList<Effect> effects)
   {
-    // Check if any effect is an AddManaEffect
-    var hasAddManaEffect = effects.Any(e => e is AddManaEffect);
+    // Check if any effect could add mana. A CompositeEffect that bundles several
+    // AddManaEffects ("Add {B}, then add an additional {B} …" — ADR 0009 S4)
+    // still satisfies CR 605.1a: it could add mana when it resolves, so look one
+    // level into composites.
+    var hasAddManaEffect = effects.Any(EffectAddsMana);
 
     // For now, simple heuristic: if it adds mana and doesn't have complex targeting,
     // it's probably a mana ability
@@ -235,457 +529,16 @@ public sealed partial class ActivatedAbilityParser
   }
 
   /// <summary>
-  /// Checks if a token kind represents a mana symbol.
+  /// Whether an effect could add mana — directly an <see cref="AddManaEffect"/>,
+  /// or a <see cref="MagicAST.AST.Effects.Core.CompositeEffect"/> any of whose
+  /// members could (CR 605.1a).
   /// </summary>
-  private static bool IsManaToken(OracleToken kind)
-  {
-    return kind == OracleToken.GenericMana
-      || kind == OracleToken.VariableMana
-      || kind == OracleToken.WhiteMana
-      || kind == OracleToken.BlueMana
-      || kind == OracleToken.BlackMana
-      || kind == OracleToken.RedMana
-      || kind == OracleToken.GreenMana
-      || kind == OracleToken.ColorlessMana
-      || kind == OracleToken.HybridMana
-      || kind == OracleToken.PhyrexianMana
-      || kind == OracleToken.TwoHybridMana
-      || kind == OracleToken.HybridPhyrexianMana
-      || kind == OracleToken.SnowMana;
-  }
-
-  /// <summary>
-  /// Converts an OracleToken to a ManaSymbol.
-  /// </summary>
-  private ManaSymbol? ConvertTokenToManaSymbol(Token<OracleToken> token)
-  {
-    var content = token.ToStringValue().Trim('{', '}').ToUpperInvariant();
-
-    // Use ManaCostParser to parse the symbol
-    var parsed = _manaCostParser.Parse($"{{{content}}}");
-    return parsed.Symbols.FirstOrDefault();
-  }
-
-  #region Cost Component Parsers
-
-  /// <summary>
-  /// Tries to parse a mana cost component like "{1}", "{2}{G}", "{T}", "{Q}".
-  /// Returns ManaCost, TapCost, or UntapCost depending on the symbols.
-  /// </summary>
-  private Cost? TryParseManaCostComponent(string costText)
-  {
-    costText = costText.Trim();
-
-    // Check for tap symbol
-    if (costText == "{T}")
+  private static bool EffectAddsMana(Effect effect) =>
+    effect switch
     {
-      return new TapCost();
-    }
-
-    // Check for untap symbol
-    if (costText == "{Q}")
-    {
-      return new UntapCost();
-    }
-
-    // Try to parse as mana cost using ManaCostParser
-    try
-    {
-      var parsed = _manaCostParser.Parse(costText);
-      if (parsed.Symbols.Count > 0)
-      {
-        return new ManaCost { Symbols = parsed.Symbols };
-      }
-    }
-    catch
-    {
-      // Parsing failed, return null
-    }
-
-    return null;
-  }
-
-  /// <summary>
-  /// Tries to parse sacrifice costs like "Sacrifice another creature", "Sacrifice X Squirrels".
-  /// Reuses shared pattern logic with sacrifice effects.
-  /// </summary>
-  private SacrificeCost? TryParseSacrificeCost(string costText)
-  {
-    costText = costText.Trim();
-    var lower = costText.ToLowerInvariant();
-
-    if (!lower.StartsWith("sacrifice"))
-    {
-      return null;
-    }
-
-    // Parse using shared pattern helpers
-    var (quantity, filter) = ParseSacrificePattern(costText);
-    if (filter == null)
-    {
-      return null;
-    }
-
-    return new SacrificeCost { Filter = filter, Quantity = quantity };
-  }
-
-  /// <summary>
-  /// Tries to parse discard costs like "Discard a card", "Discard a legendary card".
-  /// Reuses shared pattern logic with discard effects.
-  /// </summary>
-  private DiscardCost? TryParseDiscardCost(string costText)
-  {
-    costText = costText.Trim();
-    var lower = costText.ToLowerInvariant();
-
-    if (!lower.StartsWith("discard"))
-    {
-      return null;
-    }
-
-    // Parse using shared pattern helpers
-    var (quantity, filter) = ParseDiscardPattern(costText);
-
-    return new DiscardCost { Filter = filter, Quantity = quantity };
-  }
-
-  #endregion
-
-  #region Shared Pattern Parsers (used by both costs and effects)
-
-  /// <summary>
-  /// Parses "sacrifice [quantity] [filter]" patterns.
-  /// Returns (quantity, filter) tuple that can be used for both costs and effects.
-  /// </summary>
-  private (Quantity quantity, ObjectFilter? filter) ParseSacrificePattern(string text)
-  {
-    var lower = text.ToLowerInvariant();
-
-    // Parse quantity
-    Quantity quantity;
-    if (lower.Contains(" x "))
-    {
-      quantity = VariableQuantity.X;
-    }
-    else
-    {
-      var count = ParseNumberWord(text) ?? 1;
-      quantity = LiteralQuantity.Of(count);
-    }
-
-    // Parse filter
-    ObjectFilter? filter = null;
-    if (lower.Contains("another creature"))
-    {
-      filter = new ObjectFilter { CardTypes = ["creature"], Characteristics = ["another"] };
-    }
-    else if (lower.Contains("this creature") || lower.Contains("this permanent"))
-    {
-      filter = new ObjectFilter { CardTypes = ["creature"] };
-    }
-    else if (lower.Contains("creature"))
-    {
-      filter = new ObjectFilter { CardTypes = ["creature"] };
-    }
-    else if (lower.Contains("artifact"))
-    {
-      filter = new ObjectFilter { CardTypes = ["artifact"] };
-    }
-    else
-    {
-      // Try to extract the type from the text
-      // Pattern: "Sacrifice [count] [type]"
-      var match = Regex.Match(
-        text,
-        @"(?:Sacrifice|sacrifice) (?:a |an |X )?(\w+)",
-        RegexOptions.IgnoreCase
-      );
-      if (match.Success)
-      {
-        var type = match.Groups[1].Value.ToLowerInvariant();
-        // Handle plurals (e.g., "Squirrels" -> "Squirrel")
-        if (type.EndsWith("s") && type != "this")
-        {
-          type = type[..^1];
-        }
-        filter = new ObjectFilter { Subtypes = [type] };
-      }
-    }
-
-    return (quantity, filter);
-  }
-
-  /// <summary>
-  /// Parses "discard [quantity] [filter]" patterns.
-  /// Returns (quantity, filter) tuple that can be used for both costs and effects.
-  /// </summary>
-  private (Quantity quantity, ObjectFilter filter) ParseDiscardPattern(string text)
-  {
-    var lower = text.ToLowerInvariant();
-
-    // Parse quantity
-    var count = ParseNumberWord(text) ?? 1;
-    var quantity = LiteralQuantity.Of(count);
-
-    // Parse filter
-    ObjectFilter filter;
-    if (lower.Contains("legendary card"))
-    {
-      filter = new ObjectFilter { Supertypes = ["Legendary"], CardTypes = ["card"] };
-    }
-    else
-    {
-      filter = new ObjectFilter { CardTypes = ["card"] };
-    }
-
-    return (quantity, filter);
-  }
-
-  #endregion
-
-  #region Effect Parsers
-
-  /// <summary>
-  /// Tries to parse "Scry N" effects.
-  /// Pattern: "Scry 2", "Scry 1", etc.
-  /// </summary>
-  private ScryEffect? TryParseScryEffect(string effectText)
-  {
-    effectText = effectText.Trim().TrimEnd('.');
-
-    var match = Regex.Match(effectText, @"^Scry\s+(\d+)$", RegexOptions.IgnoreCase);
-    if (!match.Success)
-    {
-      return null;
-    }
-
-    var count = int.Parse(match.Groups[1].Value);
-    return new ScryEffect { Count = LiteralQuantity.Of(count) };
-  }
-
-  /// <summary>
-  /// Tries to parse "Draw N cards" effects.
-  /// Patterns: "Draw two cards", "Draw a card", "Each other player draws a card"
-  /// </summary>
-  private DrawCardsEffect? TryParseDrawCardsEffect(string effectText)
-  {
-    effectText = effectText.Trim().TrimEnd('.');
-    var lower = effectText.ToLowerInvariant();
-
-    // Pattern: "draw [count] card(s)"
-    if (!lower.Contains("draw"))
-    {
-      return null;
-    }
-
-    // Determine player
-    ObjectReference player;
-    if (lower.Contains("each other player"))
-    {
-      player = new ObjectReference { Kind = ObjectReferenceKind.EachOpponent };
-    }
-    else if (lower.Contains("you"))
-    {
-      player = ObjectReference.You();
-    }
-    else
-    {
-      // Default to "you"
-      player = ObjectReference.You();
-    }
-
-    // Parse count
-    var count = ParseNumberWord(effectText) ?? 1;
-
-    return new DrawCardsEffect { Count = LiteralQuantity.Of(count), Player = player };
-  }
-
-  /// <summary>
-  /// Tries to parse "Discard N cards" effects.
-  /// Patterns: "Discard up to two cards", "Discard a legendary card"
-  /// </summary>
-  private DiscardCardsEffect? TryParseDiscardCardsEffect(string effectText)
-  {
-    effectText = effectText.Trim().TrimEnd('.');
-    var lower = effectText.ToLowerInvariant();
-
-    if (!lower.Contains("discard"))
-    {
-      return null;
-    }
-
-    // Parse "up to N"
-    var upToMatch = Regex.Match(effectText, @"up to (\w+)", RegexOptions.IgnoreCase);
-    int count;
-    if (upToMatch.Success)
-    {
-      count = ParseNumberWord(upToMatch.Groups[1].Value) ?? 1;
-    }
-    else
-    {
-      count = ParseNumberWord(effectText) ?? 1;
-    }
-
-    // Check for filter (e.g., "a legendary card")
-    ObjectFilter? filter = null;
-    if (lower.Contains("legendary"))
-    {
-      filter = new ObjectFilter { Supertypes = ["legendary"] };
-    }
-
-    return new DiscardCardsEffect
-    {
-      Count = LiteralQuantity.Of(count),
-      Player = ObjectReference.You(),
-      Filter = filter,
-      Random = false,
+      AddManaEffect => true,
+      MagicAST.AST.Effects.Core.CompositeEffect composite => composite.Effects.Any(EffectAddsMana),
+      _ => false,
     };
-  }
 
-  /// <summary>
-  /// Tries to parse "Put N +1/+1 counters on [target]" effects.
-  /// Patterns: "Put a +1/+1 counter on this creature", "Put a +1/+1 counter on target creature you control"
-  /// </summary>
-  private PutCountersEffect? TryParsePutCountersEffect(string effectText)
-  {
-    effectText = effectText.Trim().TrimEnd('.');
-    var lower = effectText.ToLowerInvariant();
-
-    if (!lower.Contains("put") || !lower.Contains("counter"))
-    {
-      return null;
-    }
-
-    // Parse counter type
-    string counterType;
-    if (lower.Contains("+1/+1"))
-    {
-      counterType = "+1/+1";
-    }
-    else if (lower.Contains("-1/-1"))
-    {
-      counterType = "-1/-1";
-    }
-    else
-    {
-      return null; // Unknown counter type
-    }
-
-    // Parse count
-    var count = ParseNumberWord(effectText) ?? 1;
-
-    // Parse target
-    ObjectReference target;
-    if (lower.Contains("this creature") || lower.Contains("this permanent"))
-    {
-      target = ObjectReference.Self();
-    }
-    else if (lower.Contains("target creature you control"))
-    {
-      target = new ObjectReference
-      {
-        Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You },
-      };
-    }
-    else if (lower.Contains("target creature"))
-    {
-      target = new ObjectReference
-      {
-        Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter { CardTypes = ["creature"] },
-      };
-    }
-    else
-    {
-      // Default to self
-      target = ObjectReference.Self();
-    }
-
-    return new PutCountersEffect
-    {
-      Target = target,
-      CounterType = counterType,
-      Count = LiteralQuantity.Of(count),
-    };
-  }
-
-  /// <summary>
-  /// Tries to parse "Creatures you control gain [ability] until end of turn" effects.
-  /// Pattern: "Creatures you control gain lifelink until end of turn"
-  /// </summary>
-  private GainAbilityEffect? TryParseGainAbilityEffect(string effectText)
-  {
-    effectText = effectText.Trim().TrimEnd('.');
-    var lower = effectText.ToLowerInvariant();
-
-    if (!lower.Contains("gain"))
-    {
-      return null;
-    }
-
-    // Pattern: "Creatures you control gain [ability]"
-    var match = Regex.Match(
-      effectText,
-      @"Creatures you control gain (\w+)",
-      RegexOptions.IgnoreCase
-    );
-    if (!match.Success)
-    {
-      return null;
-    }
-
-    var ability = match.Groups[1].Value;
-
-    return new GainAbilityEffect
-    {
-      Target = new ObjectReference
-      {
-        Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You },
-      },
-      AbilityText = ability,
-    };
-  }
-
-  /// <summary>
-  /// Parses number words like "one", "two", "three" into integers.
-  /// Returns null if no number word is found.
-  /// </summary>
-  private int? ParseNumberWord(string text)
-  {
-    var lower = text.ToLowerInvariant();
-
-    if (lower.Contains("two"))
-      return 2;
-    if (lower.Contains("three"))
-      return 3;
-    if (lower.Contains("four"))
-      return 4;
-    if (lower.Contains("five"))
-      return 5;
-    if (lower.Contains("six"))
-      return 6;
-    if (lower.Contains("seven"))
-      return 7;
-    if (lower.Contains("eight"))
-      return 8;
-    if (lower.Contains("nine"))
-      return 9;
-    if (lower.Contains("ten"))
-      return 10;
-    if (lower.Contains("one") || lower.Contains(" a ") || lower.Contains("an "))
-      return 1;
-
-    // Try to find a digit
-    var digitMatch = Regex.Match(text, @"\b(\d+)\b");
-    if (digitMatch.Success)
-    {
-      return int.Parse(digitMatch.Groups[1].Value);
-    }
-
-    return null;
-  }
-
-  #endregion
 }

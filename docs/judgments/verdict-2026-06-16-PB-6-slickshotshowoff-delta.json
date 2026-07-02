@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/OTJ/SlickshotShowOff.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "PB-6 regression target: noncreature-spell trigger filter now structured as CardTypes=[spell] + ExcludedCardTypes=[creature] + Controller=You via the established ObjectFilter negation path; OtherCharacteristic{noncreature} free-text residual removed; whitelist entry dropped (bonus clean); no new residual, no dropped/inverted ability (Flying evasion, Haste, +2/+0 cast trigger, Plot all preserved); no AbilityWord concern on this card"
+    }
+  ]
+}

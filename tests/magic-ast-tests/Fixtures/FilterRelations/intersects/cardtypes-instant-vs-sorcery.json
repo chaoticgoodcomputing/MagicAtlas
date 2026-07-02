@@ -1,0 +1,6 @@
+{
+  "_note": "Panel correction: no rule forbids one object being both; none is printed → Unknown, not Disjoint.",
+  "A": { "CardTypes": ["instant"] },
+  "B": { "CardTypes": ["sorcery"] },
+  "Expected": "Unknown"
+}

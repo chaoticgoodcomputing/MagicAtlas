@@ -1,19 +1,17 @@
-"""Encode each oracle-text fragment to a sentence-transformer vector using the default
-sentence-transformer model. The fine-tuned variant lives in `embed_oracle_text_finetuned.py`
-and imports `_embed_impl` from here — split into two files so each @step decorator can be
-picked up by Flowthru's Python source generator, which only registers the first @step per .py
-file for the cache plan.
+"""Deduplicate oracle lines by Text, encode each unique string once with the FineTunedEmbeddingModel,
+and emit an EncodedTexts row per unique input. This is the persisted encoder cache — the 5D
+UMAP step consumes (OracleLines + EncodedTexts) and broadcasts the cached vectors back to per-line
+rows just before jitter+UMAP.
 
 Inputs:
-    fragments: DataFrame of OracleInput rows (point_id, card_id, text, text_type). Reminder-
-               text parentheticals are already stripped upstream in ProjectOracleInputNode, so
-               the model sees the bare mechanical text.
-    model_ref: ModelArtifactRef record — { Path, RepoId, Variant }. The Python step loads
-               directly from `Path` on disk; model bytes don't transit Flowthru's marshaller.
+    lines:     DataFrame of OracleLine rows (line_id, card_id, text). Used only for the unique
+               Text values; the line-level id is reattached downstream in the UMAP step's join.
+    model_ref: ModelArtifactRef record — { Path, RepoId, Variant }. The model bytes don't
+               transit Flowthru's marshaller; the Python step loads from `Path` on disk.
     config:    OracleEmbeddingConfig record — uses `EmbedBatchSize`.
 
-Output: DataFrame [point_id, card_id, text_type, embedding] — embedding packed as a
-        little-endian byte blob (see BertEmbedding.cs).
+Output: DataFrame [text, embedding] — one row per unique text, embedding packed as a
+        little-endian float16 byte blob (see EncodedText.cs).
 """
 from __future__ import annotations
 
@@ -26,49 +24,62 @@ from flowthru import step
 logger = logging.getLogger(__name__)
 
 
-def _embed_impl(fragments: pd.DataFrame, model_ref: dict, config: dict) -> pd.DataFrame:
+def _embed_impl(lines: pd.DataFrame, model_ref: dict, config: dict) -> pd.DataFrame:
     from sentence_transformers import SentenceTransformer
 
     model_path = model_ref["Path"]
     variant = model_ref.get("Variant", "?")
     batch_size = int(config["EmbedBatchSize"])
+
+    # Deduplicate by text. The encoder workload becomes O(unique_texts) instead of O(lines) —
+    # for ~50k lines we typically see ~30k unique texts after stripping reminder parentheticals,
+    # and once synthetic per-keyword lines land (Phase 2) the keyword strings dedupe down to a
+    # few hundred. The cache is persisted, so warm runs short-circuit entirely via Flowthru's
+    # step cache when the unique-text set is unchanged.
+    unique_texts = (
+        lines["text"].fillna("").astype(str).drop_duplicates().tolist()
+    )
     logger.info(
-        "Input: %d fragments across %d cards; model=%s @ %s",
-        len(fragments), fragments["card_id"].nunique(), variant, model_path,
+        "Input: %d lines across %d cards; %d unique texts; model=%s @ %s",
+        len(lines), lines["card_id"].nunique(), len(unique_texts), variant, model_path,
     )
 
-    model = SentenceTransformer(model_path)
+    # Nomic models ship custom modeling code (`modeling_hf_nomic.py`) — `trust_remote_code=True`
+    # is required for SentenceTransformer to wire that in at load time.
+    model = SentenceTransformer(model_path, trust_remote_code=True)
+    dim = (
+        model.get_embedding_dimension()
+        if hasattr(model, "get_embedding_dimension")
+        else model.get_sentence_embedding_dimension()
+    )
 
-    texts = fragments["text"].fillna("").astype(str).tolist()
-    dim = model.get_embedding_dimension() if hasattr(model, "get_embedding_dimension") else model.get_sentence_embedding_dimension()
-    logger.info("Encoding %d fragments (dim=%d, batch=%d)...", len(texts), dim, batch_size)
+    # Nomic v1.5 is trained with task-prefix conditioning: `clustering: ...` selects the
+    # representation tuned for embedding-space clustering (vs `search_query:`/`search_document:`
+    # for retrieval). The prefix is applied to encoder input only; the output `text` column
+    # stays raw so downstream joins on `OracleLines.text` work unchanged.
+    prefixed = [f"clustering: {t}" for t in unique_texts]
+
+    logger.info("Encoding %d unique texts (dim=%d, batch=%d)...", len(unique_texts), dim, batch_size)
     embeddings = model.encode(
-        texts,
+        prefixed,
         batch_size=batch_size,
         show_progress_bar=True,
         convert_to_numpy=True,
         normalize_embeddings=True,
     ).astype(np.float16)
-    logger.info("Embeddings shape: %s (dtype %s)", embeddings.shape, embeddings.dtype)
+    logger.info("Encoded shape: %s (dtype %s)", embeddings.shape, embeddings.dtype)
 
     # Pack each row's float16s into a little-endian byte blob (2 bytes/elem). float16 halves
-    # the embedding payload (critical for the 768-dim mpnet variant: float32 × 54k rows hits
-    # System.Text.Json's value-length limit at the C# ↔ Python boundary, ~226 MB). Precision
-    # loss is negligible for normalized embeddings used in similarity / clustering. Schema
-    # change: byte[] vector blob is now (dim × 2) bytes per row instead of (dim × 4).
+    # the embedding payload (critical for the 768-dim mpnet variant: float32 × ~30k unique
+    # texts can hit System.Text.Json's value-length limit at the C# ↔ Python boundary).
     blobs = [vec.astype("<f2").tobytes() for vec in embeddings]
-    return pd.DataFrame({
-        "point_id": fragments["point_id"],
-        "card_id": fragments["card_id"],
-        "text_type": fragments["text_type"],
-        "embedding": blobs,
-    })
+    return pd.DataFrame({"text": unique_texts, "embedding": blobs})
 
 
 @step(
-    inputs=["OracleInputs", "DefaultEmbeddingModel", "OracleEmbeddingConfig"],
-    outputs="BertEmbeddings",
+    inputs=["OracleLines", "DefaultEmbeddingModel", "OracleEmbeddingConfig"],
+    outputs="EncodedTexts",
     cacheable=True,
 )
-def embed_oracle_text(fragments: pd.DataFrame, model_ref: dict, config: dict) -> pd.DataFrame:
-    return _embed_impl(fragments, model_ref, config)
+def embed_oracle_text(lines: pd.DataFrame, model_ref: dict, config: dict) -> pd.DataFrame:
+    return _embed_impl(lines, model_ref, config)

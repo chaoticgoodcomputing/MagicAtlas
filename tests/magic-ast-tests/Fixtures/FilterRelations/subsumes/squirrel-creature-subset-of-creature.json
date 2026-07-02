@@ -1,0 +1,6 @@
+{
+  "_note": "Well-formed producer carries the card type explicitly → reliable. (The Chatterfang Squirrel token is a 'Squirrel creature'.)",
+  "Sub": { "Subtypes": ["Squirrel"], "CardTypes": ["creature"] },
+  "Sup": { "CardTypes": ["creature"] },
+  "Expected": "Yes"
+}

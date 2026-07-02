@@ -1,0 +1,60 @@
+{
+  "_doc": "Explicit whitelist of golds permitted to carry an IUnparsed node (UnparsedAbility/UnparsedEffect). STATELESS INVARIANT (GoldFixtureUnparsedTests): any gold NOT listed here must be unparsed-free, else loud failure; a listed gold that no longer carries an unparsed node fails too (remove it). ADR-0001 goal (b): a gold must never assert a parse failure as truth. Each entry is a NAMED, justified carve-out (tag debt = slated for a burndown slice, see libs/magic-ast/docs/gold-burndown-plan.md; tag irreducible = permanent). De-ratcheted from the in-test KnownUnparsedGold HashSet 2026-06-16. TARGET: empty.",
+  "entries": [
+    {
+      "card": "BLB/WildcallSpree",
+      "tag": "debt",
+      "reason": "PB-8 unparsed grammar gap"
+    },
+    {
+      "card": "DGM/WearTear",
+      "tag": "debt",
+      "reason": "PB-8 unparsed grammar gap"
+    },
+    {
+      "card": "EOE/ChoraleoftheVoid",
+      "tag": "debt",
+      "reason": "PB-8 unparsed grammar gap"
+    },
+    {
+      "card": "EOE/ElegyAcolyte",
+      "tag": "debt",
+      "reason": "PB-8 unparsed grammar gap"
+    },
+    {
+      "card": "EOE/Hylderblade",
+      "tag": "debt",
+      "reason": "PB-8 unparsed grammar gap"
+    },
+    {
+      "card": "EOE/PlasmaBolt",
+      "tag": "debt",
+      "reason": "PB-8 unparsed grammar gap"
+    },
+    {
+      "card": "EOE/TragicTrajectory",
+      "tag": "debt",
+      "reason": "PB-8 unparsed grammar gap"
+    },
+    {
+      "card": "LRW/WindbriskHeights",
+      "tag": "debt",
+      "reason": "PB-8 unparsed grammar gap"
+    },
+    {
+      "card": "ONS/IxidorRealitySculptor",
+      "tag": "debt",
+      "reason": "PB-8 unparsed grammar gap"
+    },
+    {
+      "card": "SOM/PrecursorGolem",
+      "tag": "debt",
+      "reason": "PB-8 unparsed grammar gap"
+    },
+    {
+      "card": "WHO/BillPotts",
+      "tag": "debt",
+      "reason": "PB-8 unparsed grammar gap"
+    }
+  ]
+}

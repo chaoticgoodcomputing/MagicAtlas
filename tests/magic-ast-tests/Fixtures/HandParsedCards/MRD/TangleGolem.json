@@ -1,0 +1,59 @@
+{
+  "Input": {
+    "Name": "Tangle Golem",
+    "ManaCost": "{7}",
+    "TypeLine": "Artifact Creature — Golem",
+    "OracleText": "Affinity for Forests (This spell costs {1} less to cast for each Forest you control.)",
+    "Power": "5",
+    "Toughness": "4",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Tangle Golem",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Golem",
+      "Types": ["Artifact", "Creature"],
+      "Subtypes": ["Golem"]
+    },
+    "Oracle": {
+      "RawText": "Affinity for Forests (This spell costs {1} less to cast for each Forest you control.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Affinity",
+          "Reminder": {
+            "Text": "(This spell costs {1} less to cast for each Forest you control.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "PerObject": {
+                "Subtypes": ["Forest"],
+                "Controller": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{7}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 7 }
+        ],
+        "ManaValue": 7
+      },
+      { "Kind": "colors", "Colors": [] },
+      { "Kind": "colorIdentity", "ColorIdentity": [] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
+        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+      }
+    ]
+  }
+}

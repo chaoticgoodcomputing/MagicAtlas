@@ -7,13 +7,16 @@ namespace MagicAtlas.Api.Seed;
 
 /// <summary>
 /// Seeds the <c>atlas</c> schema from Scryfall sources:
-/// cards (local bulk file), rulings (bulk download), sets, and symbology.
+/// cards (oracle-cards bulk), rulings (bulk download), sets, and symbology.
 /// </summary>
 /// <remarks>
 /// <para>Each table seeds independently and is idempotent-by-emptiness — if any rows exist in a given
 /// table, that table is skipped. To re-seed, truncate the table (or drop the schema) and restart.</para>
-/// <para>Cards read from a local bulk file (~150 MB) because the download is slow and large. Rulings,
-/// sets, and symbology are fetched on-demand from Scryfall's HTTPS API (tens of MB combined).</para>
+/// <para>Cards prefer a local bulk file when <c>Atlas:ScryfallBulkPath</c> is configured and the file
+/// exists (a fast path for machines that already have it); otherwise they stream from Scryfall's
+/// oracle-cards bulk over HTTPS — the same two-stage (metadata → <c>download_uri</c> → stream)
+/// download the rulings seed uses. Rulings, sets, and symbology always fetch on-demand from Scryfall's
+/// HTTPS API. No manual download is required — a fresh clone self-seeds on first run.</para>
 /// </remarks>
 public sealed class AtlasSeeder
 {
@@ -66,18 +69,12 @@ public sealed class AtlasSeeder
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(_cardsBulkPath) || !File.Exists(_cardsBulkPath))
-        {
-            _logger.LogWarning(
-                "Scryfall cards bulk file not found at '{Path}'. Card catalog will be empty. " +
-                "Download oracle-cards.json from https://scryfall.com/docs/api/bulk-data.",
-                _cardsBulkPath ?? "<unset>");
-            return;
-        }
+        // Prefer a local bulk file when one is configured and present (fast path for machines that
+        // already have it). Otherwise stream the oracle-cards bulk straight from Scryfall over HTTPS —
+        // the same two-stage (metadata → download_uri → stream) fetch the rulings seed uses. No manual
+        // curl, no browser: a fresh clone self-seeds.
+        await using var stream = await OpenCardsBulkStreamAsync(ct);
 
-        _logger.LogInformation("Seeding cards from {Path}...", _cardsBulkPath);
-
-        await using var stream = File.OpenRead(_cardsBulkPath);
         var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
         var batch = new List<CardRow>(capacity: 250);
@@ -106,6 +103,32 @@ public sealed class AtlasSeeder
         }
 
         _logger.LogInformation("Cards: {Total} rows.", total);
+    }
+
+    /// <summary>
+    /// Opens the oracle-cards bulk as a stream: the local file at <c>Atlas:ScryfallBulkPath</c> when
+    /// it exists, else Scryfall's HTTPS bulk download (resolve the rotating <c>download_uri</c> from
+    /// the stable metadata endpoint, then stream it). Caller owns disposal.
+    /// </summary>
+    private async Task<Stream> OpenCardsBulkStreamAsync(CancellationToken ct)
+    {
+        if (!string.IsNullOrWhiteSpace(_cardsBulkPath) && File.Exists(_cardsBulkPath))
+        {
+            _logger.LogInformation("Seeding cards from local bulk file {Path}...", _cardsBulkPath);
+            return File.OpenRead(_cardsBulkPath);
+        }
+
+        var http = _httpFactory.CreateClient("scryfall");
+
+        _logger.LogInformation("Resolving Scryfall oracle-cards bulk URL...");
+        var bulkInfo = await http.GetFromJsonAsync<BulkDataInfo>(
+            "https://api.scryfall.com/bulk-data/oracle-cards", ct)
+            ?? throw new InvalidOperationException("Failed to resolve oracle-cards bulk-data info.");
+
+        _logger.LogInformation("Downloading oracle-cards from {Uri} ({SizeMb} MB)...",
+            bulkInfo.DownloadUri, bulkInfo.Size / (1024 * 1024));
+
+        return await http.GetStreamAsync(bulkInfo.DownloadUri, ct);
     }
 
     // ── Rulings ──────────────────────────────────────────────────────────

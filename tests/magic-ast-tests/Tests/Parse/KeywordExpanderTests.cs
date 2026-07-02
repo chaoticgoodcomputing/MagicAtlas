@@ -1,0 +1,173 @@
+namespace MagicAST.Tests;
+
+using MagicAST.AST.Abilities;
+using MagicAST.AST.Effects;
+using MagicAST.AST.Effects.Combat;
+using MagicAST.AST.Effects.Damage;
+using MagicAST.AST.Effects.Keyword;
+using MagicAST.AST.References;
+using MagicAST.Keywords;
+using MagicAST.Tests.Infrastructure;
+
+/// <summary>
+/// Tests for the keyword expansion system.
+/// </summary>
+[TestFixture]
+public class KeywordExpanderTests
+{
+  private KeywordExpander _expander = null!;
+
+  [SetUp]
+  public void SetUp()
+  {
+    _expander = KeywordExpander.CreateDefault();
+  }
+
+  [Test]
+  public void Flying_ExpandsToEvasionEffect()
+  {
+      var ability = _expander.Expand("Flying");
+
+      Assert.That(ability, Is.InstanceOf<StaticAbility>());
+      var staticAbility = (StaticAbility)ability;
+
+      Assert.That(staticAbility.KeywordSource, Is.EqualTo(KeywordAbility.Flying));
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<EvasionEffect>());
+
+      var evasion = (EvasionEffect)staticAbility.Effects[0];
+      Assert.That(evasion.CanBeBlockedBy, Is.Not.Null);
+      Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item(Characteristic.HasKeyword(KeywordAbility.Flying)));
+      Assert.That(evasion.CanBeBlockedBy!.Characteristics, Contains.Item(Characteristic.HasKeyword(KeywordAbility.Reach)));
+  }
+
+  [Test]
+  public void FirstStrike_ExpandsToCombatDamageTimingEffect()
+  {
+      var ability = _expander.Expand("First strike");
+
+      Assert.That(ability, Is.InstanceOf<StaticAbility>());
+      var staticAbility = (StaticAbility)ability;
+
+      Assert.That(staticAbility.KeywordSource, Is.EqualTo(KeywordAbility.FirstStrike));
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<CombatDamageTimingEffect>());
+
+      var timing = (CombatDamageTimingEffect)staticAbility.Effects[0];
+      Assert.That(timing.Timing, Is.EqualTo(CombatDamageTiming.First));
+  }
+
+  [Test]
+  public void DoubleStrike_ExpandsToCombatDamageTimingBoth()
+  {
+      var ability = _expander.Expand("Double strike");
+
+      Assert.That(ability, Is.InstanceOf<StaticAbility>());
+      var staticAbility = (StaticAbility)ability;
+
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<CombatDamageTimingEffect>());
+
+      var timing = (CombatDamageTimingEffect)staticAbility.Effects[0];
+      Assert.That(timing.Timing, Is.EqualTo(CombatDamageTiming.Both));
+  }
+
+  [Test]
+  public void Lifelink_ExpandsToLifelinkEffect()
+  {
+      var ability = _expander.Expand("Lifelink");
+
+      Assert.That(ability, Is.InstanceOf<StaticAbility>());
+      var staticAbility = (StaticAbility)ability;
+
+      Assert.That(staticAbility.KeywordSource, Is.EqualTo(KeywordAbility.Lifelink));
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<LifelinkEffect>());
+  }
+
+  [Test]
+  public void Vigilance_ExpandsToVigilanceEffect()
+  {
+      var ability = _expander.Expand("Vigilance");
+
+      Assert.That(ability, Is.InstanceOf<StaticAbility>());
+      var staticAbility = (StaticAbility)ability;
+
+      Assert.That(staticAbility.KeywordSource, Is.EqualTo(KeywordAbility.Vigilance));
+      var kae = (MagicAST.AST.Effects.Keyword.KeywordAbilityEffect)staticAbility.Effects[0];
+      Assert.That(kae.Keyword, Is.EqualTo(MagicAST.AST.References.KeywordAbility.Vigilance));
+  }
+
+  [Test]
+  public void Protection_FromSingleColor_ExpandsCorrectly()
+  {
+      var ability = _expander.Expand("Protection", "red");
+
+      Assert.That(ability, Is.InstanceOf<StaticAbility>());
+      var staticAbility = (StaticAbility)ability;
+
+      Assert.That(staticAbility.KeywordSource, Is.EqualTo(KeywordAbility.Protection));
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<ProtectionEffect>());
+
+      var protection = (ProtectionEffect)staticAbility.Effects[0];
+      Assert.That(protection.From, Has.Count.EqualTo(1));
+      Assert.That(protection.From[0].Kind, Is.EqualTo(ProtectionQualityKind.Color));
+      Assert.That(protection.From[0].Value, Is.EqualTo("R"));
+  }
+
+  [Test]
+  public void Protection_FromMultipleSubtypes_ExpandsCorrectly()
+  {
+      var ability = _expander.Expand("Protection", "Demons and from Dragons");
+
+      Assert.That(ability, Is.InstanceOf<StaticAbility>());
+      var staticAbility = (StaticAbility)ability;
+
+      Assert.That(staticAbility.Effects[0], Is.InstanceOf<ProtectionEffect>());
+
+      var protection = (ProtectionEffect)staticAbility.Effects[0];
+      Assert.That(protection.From, Has.Count.EqualTo(2));
+
+      Assert.That(protection.From[0].Kind, Is.EqualTo(ProtectionQualityKind.Subtype));
+      Assert.That(protection.From[0].Value, Is.EqualTo("Demons"));
+
+      Assert.That(protection.From[1].Kind, Is.EqualTo(ProtectionQualityKind.Subtype));
+      Assert.That(protection.From[1].Value, Is.EqualTo("Dragons"));
+  }
+
+  [Test]
+  public void Protection_FromEverything_ExpandsCorrectly()
+  {
+      var ability = _expander.Expand("Protection", "everything");
+
+      var protection = (ProtectionEffect)((StaticAbility)ability).Effects[0];
+
+      Assert.That(protection.From, Has.Count.EqualTo(1));
+      Assert.That(protection.From[0].Kind, Is.EqualTo(ProtectionQualityKind.Everything));
+      Assert.That(protection.From[0].Value, Is.Null);
+  }
+
+  [Test]
+  public void CanExpand_ReturnsTrueForRegisteredKeywords()
+  {
+      Assert.That(_expander.CanExpand("Flying"), Is.True);
+      Assert.That(_expander.CanExpand("flying"), Is.True); // case insensitive
+      Assert.That(_expander.CanExpand("FLYING"), Is.True);
+      Assert.That(_expander.CanExpand("Protection"), Is.True);
+  }
+
+  [Test]
+  public void CanExpand_ReturnsFalseForUnknownKeywords()
+  {
+      Assert.That(_expander.CanExpand("NotAKeyword"), Is.False);
+      Assert.That(_expander.CanExpand("DefinitelyNotAKeyword"), Is.False);
+  }
+
+  [Test]
+  public void Expand_ThrowsForUnknownKeyword()
+  {
+      Assert.Throws<KeyNotFoundException>(() => _expander.Expand("NotAKeyword"));
+  }
+
+  [Test]
+  public void Expand_ThrowsWhenParameterRequiredButMissing()
+  {
+      Assert.Throws<ArgumentException>(() => _expander.Expand("Protection"));
+  }
+}

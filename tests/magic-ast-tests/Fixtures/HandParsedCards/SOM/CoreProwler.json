@@ -1,0 +1,102 @@
+{
+  "Input": {
+    "Name": "Core Prowler",
+    "ManaCost": "{4}",
+    "TypeLine": "Artifact Creature — Phyrexian Horror",
+    "OracleText": "Infect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)\nWhen this creature dies, proliferate. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [
+      "Proliferate",
+      "Infect"
+    ],
+    "Id": "05414ba7-0f59-4c73-931c-e599d149d3ba",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Core Prowler",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Phyrexian Horror",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Horror"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Infect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)\nWhen this creature dies, proliferate. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Infect",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Infect"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "proliferate"
+            }
+          ],
+          "Reminder": {
+            "Text": "Choose any number of permanents and/or players, then give each another counter of each kind already there."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

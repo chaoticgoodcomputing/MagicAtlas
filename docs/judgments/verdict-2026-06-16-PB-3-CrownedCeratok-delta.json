@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CrownedCeratok.json",
+      "verdict": "PASS",
+      "citations": ["CR 122.1"],
+      "reason": "slice's counter-characteristic axis: free-text OtherCharacteristic{'with a +1/+1 counter'} structured into CounterCharacteristic{CounterType:'+1/+1'}, faithful to oracle 'with a +1/+1 counter on it'; no new residual; Trample + gainAbility + Each-filter siblings preserved; removed from whitelist"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CrownedCeratok.json#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "new CharacteristicKind 'counter' is an ObjectFilter sub-predicate (no firability change), not a new firable effect/trigger/cost; projection ratchet does not require a top-level PortWalk entry and none is parked insensibly in known-coarse-projections.json"
+    }
+  ]
+}

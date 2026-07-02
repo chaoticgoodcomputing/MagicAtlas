@@ -1,0 +1,18 @@
+{
+  "Name": "Lightning Bolt",
+  "Oracle": {
+    "RawText": "Lightning Bolt deals 3 damage to any target.",
+    "Abilities": [
+      {
+        "Kind": "spell",
+        "Effects": [
+          {
+            "EffectType": "dealDamage",
+            "Amount": { "QuantityType": "literal", "Value": 3 },
+            "Target": { "Kind": "AnyTarget" }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "burn.spot",
+  "intent": "Direct damage to a single chosen target.",
+  "pattern": {
+    "$descendant": {
+      "$type": "dealDamage",
+      "Target": { "$capture": "victim", "Kind": { "$in": ["AnyTarget", "Target"] } }
+    }
+  }
+}

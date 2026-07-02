@@ -1,0 +1,106 @@
+{
+  "Input": {
+    "Name": "Mudbrawler Raiders",
+    "ManaCost": "{2}{R/G}{R/G}",
+    "TypeLine": "Creature — Goblin Warrior",
+    "OracleText": "This creature can't be blocked by blue creatures.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "G",
+      "R"
+    ],
+    "ColorIdentity": [
+      "G",
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Mudbrawler Raiders",
+    "TypeLine": {
+      "Raw": "Creature — Goblin Warrior",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature can't be blocked by blue creatures.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "BlockedByFilter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Colors": [
+                  "U"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R/G}{R/G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "R",
+              "G"
+            ]
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "R",
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

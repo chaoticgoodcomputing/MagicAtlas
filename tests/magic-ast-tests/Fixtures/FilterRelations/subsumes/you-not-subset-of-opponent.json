@@ -1,0 +1,6 @@
+{
+  "_note": "Satisfiable sub, disjoint from sup → No.",
+  "Sub": { "Controller": "You" },
+  "Sup": { "Controller": "Opponent" },
+  "Expected": "No"
+}

@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ROE/BearUmbra.json",
+      "verdict": "PASS",
+      "citations": ["CR 303.4", "CR 702.5", "CR 702.89"],
+      "reason": "DELTA PB-1: Input re-pointed to real Scryfall text (verified exact match to oracle-cards.json); corrupt 'enchanted creature attacks' Aura-trigger + Other('enchanted') residual restructured into gainAbility on Target{EnchantedOrEquipped} granting a triggered ability whose filter is IsSelf:true (granted-ability source self-ref, not a separate enchanted filter), plus modifyPT +2/+2 on EnchantedOrEquipped; keyword corrected obsolete 'Totem armor' -> current 'Umbra armor' with reminder text; removed from whitelist-freetext. No new free-text/unparsed residual (residual scan empty); no dropped/inverted ability; sibling effects preserved."
+    }
+  ]
+}

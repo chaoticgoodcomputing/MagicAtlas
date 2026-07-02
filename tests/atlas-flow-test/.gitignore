@@ -20,3 +20,5 @@ Data/**
 
 # Un-ignore all .gitkeep files anywhere
 !**/.gitkeep
+
+.flowthru

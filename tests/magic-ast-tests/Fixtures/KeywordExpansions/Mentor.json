@@ -1,0 +1,47 @@
+{
+  "Keyword": "Mentor",
+  "Expected": {
+    "Kind": "triggered",
+    "Trigger": {
+      "Timing": "Whenever",
+      "Event": "Attacks",
+      "Filter": {
+        "CardTypes": [
+          "creature"
+        ]
+      }
+    },
+    "Effects": [
+      {
+        "EffectType": "putCounters",
+        "Target": {
+          "Kind": "Target",
+          "Filter": {
+            "CardTypes": [
+              "creature"
+            ],
+            "Characteristics": [
+              {
+                "CharacteristicType": "combatState",
+                "State": "Attacking"
+              }
+            ],
+            "PowerComparison": {
+              "Operator": "LessThan",
+              "RelativeTo": {
+                "Kind": "Self"
+              },
+              "RelativeCharacteristic": "Power"
+            }
+          }
+        },
+        "CounterType": "+1/+1",
+        "Count": {
+          "QuantityType": "literal",
+          "Value": 1
+        }
+      }
+    ],
+    "KeywordSource": "Mentor"
+  }
+}

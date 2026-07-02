@@ -1,0 +1,106 @@
+{
+  "Input": {
+    "Name": "Krenko's Enforcer",
+    "ManaCost": "{1}{R}{R}",
+    "TypeLine": "Creature — Goblin Warrior",
+    "OracleText": "Intimidate (This creature can't be blocked except by artifact creatures and/or creatures that share a color with it.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Krenko's Enforcer",
+    "TypeLine": {
+      "Raw": "Creature — Goblin Warrior",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Intimidate (This creature can't be blocked except by artifact creatures and/or creatures that share a color with it.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature",
+                  "artifact"
+                ],
+                "SharesColorWith": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          ],
+          "KeywordSource": "Intimidate",
+          "Reminder": {
+            "Text": "(This creature can't be blocked except by artifact creatures and/or creatures that share a color with it.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

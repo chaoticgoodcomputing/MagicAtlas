@@ -1,0 +1,14 @@
+{
+  "Keyword": "Partner",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "partner",
+        "PartnerType": "Partner"
+      }
+    ],
+    "KeywordSource": "Partner"
+  }
+}

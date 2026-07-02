@@ -1,0 +1,13 @@
+{
+  "Keyword": "Increment",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "increment"
+      }
+    ],
+    "KeywordSource": "Increment"
+  }
+}

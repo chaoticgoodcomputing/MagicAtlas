@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FDN/GiantCindermaw.json",
+      "verdict": "PASS",
+      "citations": ["CR 119.7", "CR 604.1", "CR 611.1", "CR 119.3"],
+      "reason": "'Players can't gain life' modeled as a static ability carrying cantGainLife scoped to EachPlayer; discriminator matches CR 119.7 terminology, no baked-in timing, describe-not-execute; Trample sibling + attributes preserved, no unparsed/free-text residual"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#cantGainLife",
+      "verdict": "PASS",
+      "citations": ["CR 119.7"],
+      "reason": "new discriminator cantGainLife parked coarse with a plausible justification — a rules-of-the-game restriction static (sibling of cantBeCast/cantCastMoreThanNSpells), genuinely inert for combo-cycle discovery; no flow rule consumes life-gain-lock, so coarse is sensible"
+    }
+  ]
+}

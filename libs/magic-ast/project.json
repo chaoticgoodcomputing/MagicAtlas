@@ -28,6 +28,46 @@
         "command": "dotnet csharpier {projectRoot} --check",
         "cwd": "{workspaceRoot}"
       }
+    },
+    "glossary": {
+      "//": "Regenerate libs/magic-ast/GLOSSARY.md from AST type XML doc comments.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/generate-glossary.py",
+        "cwd": "libs/magic-ast"
+      }
+    },
+    "glossary:check": {
+      "//": "Verify GLOSSARY.md is up to date; fails the build if stale.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/generate-glossary.py --check",
+        "cwd": "libs/magic-ast"
+      }
+    },
+    "lint-discriminators": {
+      "//": "Discriminator governance lint (alignment initiative 02): per-family duplicate (hard fail) + new near-duplicate vs baseline without justification (soft fail). Run after every merge group in the TDD loop.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/lint-discriminators.py",
+        "cwd": "libs/magic-ast"
+      }
+    },
+    "lint-discriminators:baseline": {
+      "//": "Rewrite schema/discriminator-baseline.json from current source. Run after a clean lint per merge group so 'new' stays well-defined.",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/lint-discriminators.py --update-baseline",
+        "cwd": "libs/magic-ast"
+      }
+    },
+    "schema": {
+      "//": "Regenerate libs/magic-ast/schema/ast-schema.json from the current node model (reflection).",
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dotnet test ../../tests/magic-ast-tests --filter \"FullyQualifiedName~Regenerate_schema_export\"",
+        "cwd": "libs/magic-ast"
+      }
     }
   },
   "tags": [ "type:library", "scope:magic-ast" ]

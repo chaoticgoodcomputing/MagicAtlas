@@ -1,0 +1,89 @@
+{
+  "Input": {
+    "Name": "Secure the Wastes",
+    "ManaCost": "{X}{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Create X 1/1 white Warrior creature tokens.",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Id": "bca35012-ecfa-475f-b405-d3143ce99eef",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Secure the Wastes",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Create X 1/1 white Warrior creature tokens.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "variable",
+                "Name": "X"
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": [
+                  "W"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Warrior"
+                ],
+                "IsCopy": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{X}{W}",
+        "Symbols": [
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "IsVariable": true
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}

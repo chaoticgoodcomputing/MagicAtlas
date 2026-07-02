@@ -1,0 +1,6 @@
+{
+  "_note": "Supertypes are orthogonal (205.4b) — Legendary + Snow can coexist → Overlaps.",
+  "A": { "Supertypes": ["Legendary"] },
+  "B": { "Supertypes": ["Snow"] },
+  "Expected": "Overlaps"
+}

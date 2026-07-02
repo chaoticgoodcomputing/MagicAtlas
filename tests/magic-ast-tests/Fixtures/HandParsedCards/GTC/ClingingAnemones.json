@@ -1,0 +1,100 @@
+{
+  "Input": {
+    "Name": "Clinging Anemones",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Creature — Jellyfish",
+    "OracleText": "Defender\nEvolve (Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)",
+    "Power": "1",
+    "Toughness": "4",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Clinging Anemones",
+    "TypeLine": {
+      "Raw": "Creature — Jellyfish",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Jellyfish"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Defender\nEvolve (Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Defender",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Defender"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Evolve",
+          "Reminder": {
+            "Text": "(Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Evolve"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}

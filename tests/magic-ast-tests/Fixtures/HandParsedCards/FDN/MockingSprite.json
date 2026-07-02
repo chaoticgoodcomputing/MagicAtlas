@@ -1,0 +1,69 @@
+{
+  "Input": {
+    "Name": "Mocking Sprite",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Creature — Faerie Rogue",
+    "OracleText": "Flying\nInstant and sorcery spells you cast cost {1} less to cast.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Mocking Sprite",
+    "TypeLine": {
+      "Raw": "Creature — Faerie Rogue",
+      "Types": ["Creature"],
+      "Subtypes": ["Faerie", "Rogue"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nInstant and sorcery spells you cast cost {1} less to cast.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 1 }
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": ["instant", "sorcery"],
+            "Controller": "You"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3
+      },
+      { "Kind": "colors", "Colors": ["U"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 2, "Raw": "2" },
+        "Toughness": { "ValueType": "fixed", "Value": 1, "Raw": "1" }
+      }
+    ]
+  }
+}

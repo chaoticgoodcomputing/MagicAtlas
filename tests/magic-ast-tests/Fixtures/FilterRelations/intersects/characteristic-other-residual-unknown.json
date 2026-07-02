@@ -1,0 +1,6 @@
+{
+  "_note": "The OtherCharacteristic residual (the IUnparsed analog) is undecidable → Unknown.",
+  "A": { "Characteristics": [{ "CharacteristicType": "other", "Description": "an oddly-worded predicate" }] },
+  "B": { "CardTypes": ["creature"] },
+  "Expected": "Unknown"
+}

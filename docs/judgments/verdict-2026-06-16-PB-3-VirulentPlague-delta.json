@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DTK/VirulentPlague.json",
+      "verdict": "PASS",
+      "citations": ["CR 111"],
+      "reason": "structured-characteristic slice replaced free-text Characteristics:[{other,token}] with the IsToken:true ObjectFilter axis (CR 111 tokens), faithful to 'Creature tokens get -2/-2.'; CardTypes:[creature] and modifyPT -2/-2 preserved; manaCost gains IsVariable:false serialization-only delta; no new residual, no regression"
+    }
+  ]
+}

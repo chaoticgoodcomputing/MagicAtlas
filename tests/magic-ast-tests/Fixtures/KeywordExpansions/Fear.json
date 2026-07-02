@@ -1,0 +1,22 @@
+{
+  "Keyword": "Fear",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "evasion",
+        "CanBeBlockedBy": {
+          "CardTypes": [
+            "creature",
+            "artifact"
+          ],
+          "Colors": [
+            "B"
+          ]
+        }
+      }
+    ],
+    "KeywordSource": "Fear"
+  }
+}

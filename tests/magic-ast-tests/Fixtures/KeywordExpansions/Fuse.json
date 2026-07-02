@@ -1,0 +1,14 @@
+{
+  "Keyword": "Fuse",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Fuse"
+      }
+    ],
+    "KeywordSource": "Fuse"
+  }
+}

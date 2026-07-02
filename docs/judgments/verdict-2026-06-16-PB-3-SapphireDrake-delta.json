@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SapphireDrake.json",
+      "verdict": "PASS",
+      "citations": ["CR 122", "CR 122.1"],
+      "reason": "Slice structured the structured-characteristic residual {CharacteristicType:other, Description:'with a +1/+1 counter'} into CounterCharacteristic {CharacteristicType:counter, CounterType:'+1/+1'} inside the gainAbility Each-filter, faithful to oracle 'Each creature you control with a +1/+1 counter on it has flying.'; co-occurring CardTypes:[creature] + Controller:You preserved; both static abilities intact; no new free-text/unparsed residual; de-whitelisted; no out-of-scope residual remains on this gold."
+    }
+  ]
+}

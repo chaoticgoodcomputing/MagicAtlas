@@ -1,0 +1,128 @@
+{
+  "Input": {
+    "Name": "Fleetfoot Dancer",
+    "ManaCost": "{1}{R}{G}{W}",
+    "TypeLine": "Creature — Elf Druid",
+    "OracleText": "Trample, lifelink, haste",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "G",
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "G",
+      "R",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Fleetfoot Dancer",
+    "TypeLine": {
+      "Raw": "Creature — Elf Druid",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Druid"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Trample, lifelink, haste",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ],
+          "KeywordSource": "Trample"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "lifelink"
+            }
+          ],
+          "KeywordSource": "Lifelink"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
+            }
+          ],
+          "KeywordSource": "Haste"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{G}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G",
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W",
+          "R",
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}

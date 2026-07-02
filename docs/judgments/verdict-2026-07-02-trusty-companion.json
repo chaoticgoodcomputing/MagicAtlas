@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AKH/TrustyCompanion.json",
+      "verdict": "PASS",
+      "citations": ["CR 508.1", "CR 508.1c"],
+      "reason": "'This creature can't attack alone.' modeled as static cantAttack effect with structured Alone:true (not free-text); Vigilance sibling + attributes preserved; oracle text faithful; CR 508.1 example is verbatim this restriction"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-trusty-companion#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no NEW discriminator introduced — cantAttack effect type and Alone field pre-exist at base; branch only adds a parser rule; pre-existing known-coarse-projections entry for cantAttack is sensible (attack restriction is inert to the flow graph, no flow rule consumes it)"
+    }
+  ]
+}

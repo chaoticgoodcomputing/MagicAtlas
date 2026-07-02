@@ -1,0 +1,130 @@
+{
+  "Input": {
+    "Name": "Gaddock Teeg",
+    "ManaCost": "{G}{W}",
+    "TypeLine": "Legendary Creature — Kithkin Advisor",
+    "OracleText": "Noncreature spells with mana value 4 or greater can't be cast.\nNoncreature spells with {X} in their mana costs can't be cast.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "G",
+      "W"
+    ],
+    "ColorIdentity": [
+      "W",
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Gaddock Teeg",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Kithkin Advisor",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kithkin",
+        "Advisor"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Noncreature spells with mana value 4 or greater can't be cast.\nNoncreature spells with {X} in their mana costs can't be cast.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeCast"
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": [
+              "spell"
+            ],
+            "ExcludedCardTypes": [
+              "creature"
+            ],
+            "ManaValueComparison": {
+              "Operator": "GreaterThanOrEqual",
+              "Value": 4
+            }
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeCast"
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": [
+              "spell"
+            ],
+            "ExcludedCardTypes": [
+              "creature"
+            ],
+            "Characteristics": [
+              {
+                "CharacteristicType": "other",
+                "Description": "with {X} in their mana costs"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W",
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

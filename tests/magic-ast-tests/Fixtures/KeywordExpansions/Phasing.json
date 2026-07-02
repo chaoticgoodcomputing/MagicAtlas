@@ -1,0 +1,14 @@
+{
+  "Keyword": "Phasing",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "keywordAbility",
+        "Keyword": "Phasing"
+      }
+    ],
+    "KeywordSource": "Phasing"
+  }
+}

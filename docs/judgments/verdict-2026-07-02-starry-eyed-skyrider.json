@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/StarryEyedSkyrider.json#attack-trigger",
+      "verdict": "PASS",
+      "citations": ["CR 603.1", "CR 611.2a", "CR 514.2", "CR 109.5", "CR 702.9a", "CR 702.9b"],
+      "reason": "attack-triggered grant-flying modeled as triggered ability (Trigger Whenever/Attacks/IsSelf) + separate gainAbility effect: Target creature, Controller You, ExcludeSelf ('another'), GainedAbility = structured flying evasion (702.9), Duration untilTime end-of-turn; timing not baked into effect; faithful to oracle text"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-starry-eyed-skyrider#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced; branch adds two parser rules that reuse pre-existing GainAbilityEffect/gainAbility, Attacks trigger event, and CombatState.Attacking — no PortWalk projection decision required"
+    }
+  ]
+}

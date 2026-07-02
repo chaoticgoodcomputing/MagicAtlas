@@ -1,0 +1,11 @@
+<!--
+  Override the repo-root CheckNxModuleBoundaries target — the hardcoded pnpm hash in the root
+  Directory.Build.targets has drifted out of date with the current node_modules layout (the
+  @nx-dotnet/core package is no longer installed). Nx still enforces module boundaries via
+  `nx build` / `nx affected` directly; the MSBuild target is the redundant path. Mirrors every
+  other project's local override (see libs/atlas-flows/Directory.Build.targets) — this project was
+  extracted without it. Re-enable when the root path is repaired or replaced with a pnpm-stable resolver.
+-->
+<Project>
+  <Target Name="CheckNxModuleBoundaries" BeforeTargets="Build" />
+</Project>

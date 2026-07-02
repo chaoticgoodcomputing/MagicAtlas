@@ -1,0 +1,57 @@
+{
+  "Name": "Blessing",
+  "Ports": [
+    {
+      "Identity": "Blessing::emit:enchantrestriction",
+      "Card": "Blessing",
+      "Label": "emit:enchantrestriction",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Blessing::modify:pt",
+      "Card": "Blessing",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Blessing::pay:mana:white",
+      "Card": "Blessing",
+      "Label": "pay:mana:white",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Blessing::pay:mana:white",
+      "To": "Blessing::modify:pt"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Blessing::pay:mana:white",
+      "To": "Blessing::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

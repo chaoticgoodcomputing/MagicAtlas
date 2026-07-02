@@ -1,0 +1,126 @@
+{
+  "Input": {
+    "Name": "Dread Slag",
+    "ManaCost": "{3}{B}{R}",
+    "TypeLine": "Creature — Horror",
+    "OracleText": "Trample\nThis creature gets -4/-4 for each card in your hand.",
+    "Power": "9",
+    "Toughness": "9",
+    "Colors": [
+      "B",
+      "R"
+    ],
+    "ColorIdentity": [
+      "B",
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Dread Slag",
+    "TypeLine": {
+      "Raw": "Creature — Horror",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Horror"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Trample\nThis creature gets -4/-4 for each card in your hand.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "derived",
+                  "DerivedFrom": "CardsInHand"
+                },
+                "Operation": "multiply",
+                "Operand": -4
+              },
+              "ToughnessModifier": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "derived",
+                  "DerivedFrom": "CardsInHand"
+                },
+                "Operation": "multiply",
+                "Operand": -4
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "9",
+          "Value": 9
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "9",
+          "Value": 9
+        }
+      }
+    ]
+  }
+}

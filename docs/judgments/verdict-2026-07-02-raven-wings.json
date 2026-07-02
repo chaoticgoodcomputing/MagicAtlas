@@ -1,0 +1,10 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/RavenWings.json",
+      "verdict": "PASS",
+      "citations": ["CR 205.1b", "CR 613.1d", "CR 613.1f", "CR 613.4c", "CR 702.6"],
+      "reason": "Compound static line 'gets +1/+0, has flying, and is a Bird in addition to its other types' decomposes into three composable effects on EnchantedOrEquipped: modifyPT +1/+0 (ModifyPTEffect, not a set), gainAbility Flying (structured evasion CanBeBlockedBy Flying/Reach), and addType AddedSubtypes:[Bird] (additive per CR 205.1b, correctly NOT ChangeSubtype). No timing baked in (Kind:static, no Duration), no free-text/unparsed residual, Equip sibling ability preserved; all cited CR rules exist verbatim in rules-structure.json. No new discriminator introduced (parser+fixture only; AddTypeEffect/modifyPT/gainAbility/OnlyAsSorcery pre-exist on base), so no projection decision required."
+    }
+  ]
+}

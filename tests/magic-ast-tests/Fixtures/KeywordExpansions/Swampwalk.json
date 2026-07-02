@@ -1,0 +1,21 @@
+{
+  "Keyword": "Swampwalk",
+  "Parameter": null,
+  "Expected": {
+    "Kind": "static",
+    "Effects": [
+      {
+        "EffectType": "evasion",
+        "UnblockableCondition": {
+          "ConditionType": "DefendingPlayerControls",
+          "PermanentFilter": {
+            "Subtypes": [
+              "Swamp"
+            ]
+          }
+        }
+      }
+    ],
+    "KeywordSource": "Swampwalk"
+  }
+}

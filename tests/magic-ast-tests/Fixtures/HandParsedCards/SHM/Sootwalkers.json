@@ -1,0 +1,106 @@
+{
+  "Input": {
+    "Name": "Sootwalkers",
+    "ManaCost": "{2}{B/R}{B/R}",
+    "TypeLine": "Creature — Elemental Rogue",
+    "OracleText": "This creature can't be blocked by white creatures.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "B",
+      "R"
+    ],
+    "ColorIdentity": [
+      "B",
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Sootwalkers",
+    "TypeLine": {
+      "Raw": "Creature — Elemental Rogue",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental",
+        "Rogue"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature can't be blocked by white creatures.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "BlockedByFilter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Colors": [
+                  "W"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B/R}{B/R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "B",
+              "R"
+            ]
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "B",
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
