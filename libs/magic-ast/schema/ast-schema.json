@@ -1850,6 +1850,14 @@
           ]
         },
         {
+          "Type": "PutOnBottomOfLibraryEffect",
+          "Discriminator": "putOnBottomOfLibrary",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
           "Type": "PutOnTopOfLibraryEffect",
           "Discriminator": "putOnTopOfLibrary",
           "IsUnparsed": false,

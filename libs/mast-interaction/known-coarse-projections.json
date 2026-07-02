@@ -131,6 +131,7 @@
     "prototype": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "putIntoLibraryAtPosition": "zone-change to Nth-from-top position (CR 401.7) — library insertion with ordinal; no flow rule reads positional library insertions yet; consciously inert for interaction recall",
     "putFromHandOntoBattlefield": "Kaalia of the Vast hand-to-battlefield zone change (CR 400.7) — enters tapped and attacking that opponent; no interaction flow rule reads hand-to-battlefield cheat effects yet; consciously inert for recall",
+    "putOnBottomOfLibrary": "zone-change to the bottom of a library (CR 400.7 / 401) — graveyard-to-library-bottom recursion-denial effect (Barkform Harvester); no interaction flow rule reads library-bottom insertions yet; consciously inert for interaction recall (same coarse precedent as sibling putOnTopOfLibrary)",
     "putOnTopOfLibrary": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "recover": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "regenerate": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",

@@ -219,6 +219,7 @@
     "OracleEffect:putCounters",
     "OracleEffect:putFromHandOntoBattlefield",
     "OracleEffect:putIntoLibraryAtPosition",
+    "OracleEffect:putOnBottomOfLibrary",
     "OracleEffect:putOnTopOfLibrary",
     "OracleEffect:recover",
     "OracleEffect:regenerate",
