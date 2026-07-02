@@ -1,0 +1,112 @@
+{
+  "Input": {
+    "Name": "Goblin Tunneler",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature — Goblin Rogue",
+    "OracleText": "{T}: Target creature with power 2 or less can't be blocked this turn.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Goblin Tunneler",
+    "TypeLine": {
+      "Raw": "Creature — Goblin Rogue",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin",
+        "Rogue"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: Target creature with power 2 or less can't be blocked this turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "PowerComparison": {
+                    "Operator": "LessThanOrEqual",
+                    "Value": 2
+                  }
+                }
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}
