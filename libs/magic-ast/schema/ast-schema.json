@@ -1900,6 +1900,16 @@
           ]
         },
         {
+          "Type": "RevealTopPutMatchingToHandEffect",
+          "Discriminator": "revealTopPutMatchingToHand",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Filter",
+            "Player"
+          ]
+        },
+        {
           "Type": "RevealUntilEffect",
           "Discriminator": "revealUntil",
           "IsUnparsed": false,
@@ -2512,5 +2522,5 @@
       ]
     }
   ],
-  "SchemaHash": "731e91f2d0ae676275c24f4083bfe1667adce2b0f7b98f505815407291139be7"
+  "SchemaHash": "ba527d5990f791cc2f59809a28d08509389563bb5f4cf99a569236e6b5546576"
 }
