@@ -1,0 +1,166 @@
+{
+  "Input": {
+    "Name": "Plaxmanta",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Creature — Beast",
+    "OracleText": "Flash\nWhen this creature enters, creatures you control gain shroud until end of turn. (They can't be the targets of spells or abilities.)\nWhen this creature enters, sacrifice it unless {G} was spent to cast it.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "G",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Plaxmanta",
+    "TypeLine": {
+      "Raw": "Creature — Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flash\nWhen this creature enters, creatures you control gain shroud until end of turn. (They can't be the targets of spells or abilities.)\nWhen this creature enters, sacrifice it unless {G} was spent to cast it.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flash",
+          "Effects": [
+            {
+              "EffectType": "timingModification",
+              "Modification": "Grant",
+              "Timing": "Instant"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Shroud",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Shroud"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "They can't be the targets of spells or abilities."
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "manaSpentToCast",
+                "Color": "G",
+                "WasSpent": false
+              },
+              "Then": {
+                "EffectType": "sacrifice",
+                "Target": {
+                  "Kind": "It"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G",
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
