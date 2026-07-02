@@ -290,6 +290,12 @@
           ]
         },
         {
+          "Type": "BeenAttackedThisStepCondition",
+          "Discriminator": "beenAttackedThisStep",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CardTypeDiversityCondition",
           "Discriminator": "cardTypeDiversity",
           "IsUnparsed": false,
