@@ -887,6 +887,15 @@
           ]
         },
         {
+          "Type": "CantHaveOrGainKeywordEffect",
+          "Discriminator": "cantHaveOrGainKeyword",
+          "IsUnparsed": false,
+          "Fields": [
+            "Keyword",
+            "Target"
+          ]
+        },
+        {
           "Type": "CastWithoutPayingEffect",
           "Discriminator": "castWithoutPaying",
           "IsUnparsed": false,
@@ -2503,5 +2512,5 @@
       ]
     }
   ],
-  "SchemaHash": "a43b886f58e3e47580a5c7f13f619c3ca31f7b4df5effb08b8068c1e8b3fc875"
+  "SchemaHash": "731e91f2d0ae676275c24f4083bfe1667adce2b0f7b98f505815407291139be7"
 }

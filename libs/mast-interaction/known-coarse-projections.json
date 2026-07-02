@@ -30,6 +30,7 @@
     "cantBeCountered": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "cantBlock": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "cantCastMoreThanNSpells": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "cantHaveOrGainKeyword": "CR 113.11 can't-have keyword lock (Archetype cycle — Archetype of Imagination) — an ability-suppression continuous effect; sibling of loseAbility/gainAbility/keywordAbility which are all coarse; no flow rule reads ability-denial yet; consciously inert for interaction recall",
     "castWithoutPaying": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "champion": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "changeColor": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
