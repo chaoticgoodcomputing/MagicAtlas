@@ -1,0 +1,138 @@
+{
+  "Input": {
+    "Name": "Mistvein Borderpost",
+    "ManaCost": "{1}{U}{B}",
+    "TypeLine": "Artifact",
+    "OracleText": "You may pay {1} and return a basic land you control to its owner's hand rather than pay this spell's mana cost.\nThis artifact enters tapped.\n{T}: Add {U} or {B}.",
+    "Colors": [
+      "B",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Mistvein Borderpost",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You may pay {1} and return a basic land you control to its owner's hand rather than pay this spell's mana cost.\nThis artifact enters tapped.\n{T}: Add {U} or {B}.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "When": "asThisEnters"
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{U} or {B}",
+              "AnyColor": false
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "B"
+        ]
+      },
+      {
+        "Kind": "alternativeCosts",
+        "Costs": [
+          {
+            "Cost": {
+              "CostType": "composite",
+              "Costs": [
+                {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 1
+                    }
+                  ]
+                },
+                {
+                  "CostType": "returnToHand",
+                  "Target": {
+                    "Kind": "Any",
+                    "Filter": {
+                      "CardTypes": [
+                        "land"
+                      ],
+                      "Supertypes": [
+                        "Basic"
+                      ],
+                      "Controller": "You"
+                    }
+                  }
+                }
+              ]
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 111
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

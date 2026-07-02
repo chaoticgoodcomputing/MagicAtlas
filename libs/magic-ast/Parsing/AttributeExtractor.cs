@@ -105,6 +105,16 @@ public sealed partial class AttributeExtractor
       attributes.Add(alternativeCostsAttr);
     }
 
+    // Borderpost cycle's alternative cost (CR 118.9: "You may [action] rather than pay
+    // [this object]'s mana cost" is an alternative cost). The static ability functions
+    // while the spell is on the stack (CR 604.5), so — like Bestow's cost above — it is
+    // hosted on the card's cost attributes rather than surfaced as an oracle ability.
+    var borderpostAlternativeCostAttr = TryExtractBorderpostAlternativeCost(input.OracleText);
+    if (borderpostAlternativeCostAttr is not null)
+    {
+      attributes.Add(borderpostAlternativeCostAttr);
+    }
+
     return attributes;
   }
 
@@ -252,6 +262,78 @@ public sealed partial class AttributeExtractor
     {
       Cost = new ManaCost { Symbols = parsed.Symbols },
       SourceSpan = new TextSpan(0, 0),
+    };
+
+    return new AlternativeCostsAttribute { Costs = [cost] };
+  }
+
+  // "You may pay {cost} and return a basic land you control to its owner's hand rather
+  // than pay this spell's mana cost." — the Borderpost cycle's alternative cost. Kept
+  // narrow to this specific sentence (not a generalised "rather than pay this spell's
+  // mana cost" matcher) so it does not swallow other keyword-driven alternative costs
+  // handled elsewhere (e.g. Bestow, above).
+  [GeneratedRegex(
+    @"^You may pay (?<cost>(?:\{[^}]+\})+) and return a basic land you control to its owner's hand rather than pay this spell's mana cost\.?$",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex BorderpostAlternativeCostPrefix();
+
+  /// <summary>
+  /// Scans oracle text for the Borderpost cycle's "You may pay {1} and return a basic
+  /// land you control to its owner's hand rather than pay this spell's mana cost." line
+  /// and returns an <see cref="AlternativeCostsAttribute"/> carrying the composite cost
+  /// (mana + return-a-basic-land), or null when absent.
+  ///
+  /// <para>
+  /// CR 118.9: "Some spells have alternative costs. ... Alternative costs are usually
+  /// phrased, 'You may [action] rather than pay [this object's] mana cost,' ..." CR
+  /// 604.5: "... abilities that say ... 'You may pay [cost] rather than pay [this
+  /// object]'s mana cost' ... work while a spell is on the stack." The line is
+  /// therefore a card-level cost attribute, not an oracle ability — mirroring
+  /// <see cref="TryExtractBestowCost"/> above. Unlike Bestow's synthesised zero-width
+  /// span, this cost is parsed directly from prose, so its SourceSpan covers the line
+  /// (matching <see cref="TryExtractAdditionalCosts"/>'s convention).
+  /// </para>
+  /// </summary>
+  private AlternativeCostsAttribute? TryExtractBorderpostAlternativeCost(string? oracleText)
+  {
+    if (string.IsNullOrWhiteSpace(oracleText))
+    {
+      return null;
+    }
+
+    var firstLine = oracleText.Split('\n')[0].Trim();
+    var match = BorderpostAlternativeCostPrefix().Match(firstLine);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var parsed = _manaCostParser.Parse(match.Groups["cost"].Value);
+
+    var cost = new AlternativeCost
+    {
+      Cost = new CompositeCost
+      {
+        Costs =
+        [
+          new ManaCost { Symbols = parsed.Symbols },
+          new ReturnToHandCost
+          {
+            Target = new ObjectReference
+            {
+              Kind = ObjectReferenceKind.Any,
+              Filter = new ObjectFilter
+              {
+                CardTypes = ["land"],
+                Supertypes = ["Basic"],
+                Controller = ControllerFilter.You,
+              },
+            },
+          },
+        ],
+      },
+      SourceSpan = new TextSpan(0, firstLine.Length),
     };
 
     return new AlternativeCostsAttribute { Costs = [cost] };
