@@ -2005,6 +2005,14 @@
           ]
         },
         {
+          "Type": "ShuffleGraveyardIntoLibraryEffect",
+          "Discriminator": "shuffleGraveyardIntoLibrary",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
           "Type": "ShuffleIntoLibraryEffect",
           "Discriminator": "shuffleIntoLibrary",
           "IsUnparsed": false,
@@ -2533,5 +2541,5 @@
       ]
     }
   ],
-  "SchemaHash": "ba527d5990f791cc2f59809a28d08509389563bb5f4cf99a569236e6b5546576"
+  "SchemaHash": "b7aebb4861a0d7fc74960978a629bab277472c38be62750bd4ff1c417f0aa196"
 }
