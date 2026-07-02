@@ -211,6 +211,18 @@ public sealed class ClauseSplitter
         continue;
       }
 
+      // Red "free spell" family's pitch alternative-cost line ("You may exile a red
+      // card from your hand rather than pay this spell's mana cost.") is a
+      // card-casting annotation (CR 118.9 alternative cost; CR 604.5 — functions while
+      // the spell is on the stack), not an oracle ability. AttributeExtractor parses
+      // the cost and emits AlternativeCostsAttribute instead. Skipping here prevents a
+      // spurious UnparsedAbility/UnparsedSpell failure in Oracle.Abilities for the
+      // cost line.
+      if (IsPitchAlternativeCostPrefix(paragraphText))
+      {
+        continue;
+      }
+
       // Kicker (CR 702.33) is NOT skipped here. It is a static ability whose
       // keyword combinator (KickerKeyword) decomposes the line into a
       // StaticAbility{KeywordSource:"Kicker", AdditionalCastCostEffect} via the
@@ -483,6 +495,13 @@ public sealed class ClauseSplitter
     text.StartsWith("You may pay", StringComparison.OrdinalIgnoreCase)
     && text.Contains(
       "and return a basic land you control to its owner's hand rather than pay this spell's mana cost",
+      StringComparison.OrdinalIgnoreCase
+    );
+
+  private static bool IsPitchAlternativeCostPrefix(string text) =>
+    text.StartsWith("You may exile a", StringComparison.OrdinalIgnoreCase)
+    && text.Contains(
+      "card from your hand rather than pay this spell's mana cost",
       StringComparison.OrdinalIgnoreCase
     );
 

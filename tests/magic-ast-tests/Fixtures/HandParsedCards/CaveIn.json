@@ -1,0 +1,133 @@
+{
+  "Input": {
+    "Name": "Cave-In",
+    "ManaCost": "{3}{R}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "You may exile a red card from your hand rather than pay this spell's mana cost.\nCave-In deals 2 damage to each creature and each player.",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Cave-In",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You may exile a red card from your hand rather than pay this spell's mana cost.\nCave-In deals 2 damage to each creature and each player.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "dealDamage",
+                  "Source": {
+                    "Kind": "Self"
+                  },
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "Target": {
+                    "Kind": "Each",
+                    "Filter": {
+                      "CardTypes": [
+                        "creature"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "EffectType": "dealDamage",
+                  "Source": {
+                    "Kind": "Self"
+                  },
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "Target": {
+                    "Kind": "EachPlayer"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "alternativeCosts",
+        "Costs": [
+          {
+            "Cost": {
+              "CostType": "exile",
+              "Filter": {
+                "CardTypes": [
+                  "card"
+                ],
+                "Colors": [
+                  "R"
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "FromZone": "Hand"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 79
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

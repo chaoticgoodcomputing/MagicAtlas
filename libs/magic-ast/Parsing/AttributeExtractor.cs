@@ -115,6 +115,17 @@ public sealed partial class AttributeExtractor
       attributes.Add(borderpostAlternativeCostAttr);
     }
 
+    // Red "free spell" family's pitch alternative cost (Cave-In, Force of Will, ...).
+    // CR 118.9: "You may [action] rather than pay [this object]'s mana cost" is an
+    // alternative cost; CR 604.5: it functions while the spell is on the stack — so,
+    // like Bestow's and the Borderpost cycle's costs above, it is hosted on the card's
+    // cost attributes rather than surfaced as an oracle ability.
+    var pitchAlternativeCostAttr = TryExtractPitchAlternativeCost(input.OracleText);
+    if (pitchAlternativeCostAttr is not null)
+    {
+      attributes.Add(pitchAlternativeCostAttr);
+    }
+
     return attributes;
   }
 
@@ -332,6 +343,71 @@ public sealed partial class AttributeExtractor
             },
           },
         ],
+      },
+      SourceSpan = new TextSpan(0, firstLine.Length),
+    };
+
+    return new AlternativeCostsAttribute { Costs = [cost] };
+  }
+
+  // "You may exile a [color] card from your hand rather than pay this spell's mana
+  // cost." — the red "free spell" family's pitch alternative cost (Cave-In, Force of
+  // Will, Misdirection, ...). Kept narrow to this specific sentence so it does not
+  // swallow other "rather than pay this spell's mana cost" costs handled elsewhere
+  // (Bestow, Borderpost).
+  [GeneratedRegex(
+    @"^You may exile a (?<color>white|blue|black|red|green) card from your hand rather than pay this spell's mana cost\.?$",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex PitchAlternativeCostPrefix();
+
+  /// <summary>
+  /// Scans oracle text for the red "free spell" family's "You may exile a [color] card
+  /// from your hand rather than pay this spell's mana cost." line and returns an
+  /// <see cref="AlternativeCostsAttribute"/> carrying the exile cost, or null when
+  /// absent.
+  ///
+  /// <para>
+  /// CR 118.9: "Some spells have alternative costs. ... Alternative costs are usually
+  /// phrased, 'You may [action] rather than pay [this object's] mana cost,' ..." CR
+  /// 118.9a: "Only one alternative cost can be applied to any one spell as it's being
+  /// cast." CR 604.5: "... abilities that say ... 'You may pay [cost] rather than pay
+  /// [this object]'s mana cost' ... work while a spell is on the stack." The line is
+  /// therefore a card-level cost attribute, not an oracle ability — mirroring
+  /// <see cref="TryExtractBorderpostAlternativeCost"/> above.
+  /// </para>
+  /// </summary>
+  private AlternativeCostsAttribute? TryExtractPitchAlternativeCost(string? oracleText)
+  {
+    if (string.IsNullOrWhiteSpace(oracleText))
+    {
+      return null;
+    }
+
+    var firstLine = oracleText.Split('\n')[0].Trim();
+    var match = PitchAlternativeCostPrefix().Match(firstLine);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var colorCode = match.Groups["color"].Value.ToLowerInvariant() switch
+    {
+      "white" => "W",
+      "blue" => "U",
+      "black" => "B",
+      "red" => "R",
+      "green" => "G",
+      _ => throw new InvalidOperationException("Unreachable: regex only matches the five color words."),
+    };
+
+    var cost = new AlternativeCost
+    {
+      Cost = new ExileCost
+      {
+        Filter = new ObjectFilter { CardTypes = ["card"], Colors = [colorCode] },
+        Quantity = LiteralQuantity.Of(1),
+        FromZone = Zone.Hand,
       },
       SourceSpan = new TextSpan(0, firstLine.Length),
     };
