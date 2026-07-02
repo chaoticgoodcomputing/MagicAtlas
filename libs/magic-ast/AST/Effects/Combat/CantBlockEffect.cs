@@ -49,6 +49,18 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// "Enchanted creature can't block." Mirrors
 /// <see cref="CantAttackEffect.Target"/>.
 /// </para>
+/// <para>
+/// The optional <see cref="Blocks"/> field names the specific attacker the
+/// restricted creature can't block, for activated lure-restriction effects
+/// like Spin Engine's "{R}: Target creature can't block this creature this
+/// turn." — the exact negative dual of <see cref="MustBlockEffect.Blocks"/>
+/// (Tangle Angler's "Target creature blocks this creature this turn if
+/// able."). There, <c>Target</c> is the restricted (would-be) blocker and
+/// <c>Blocks</c> is <see cref="ObjectReference.Self"/> (the activating
+/// creature). It is additive and optional so existing golds (Copper
+/// Carapace) that omit it are unaffected — null means a blanket restriction
+/// (can't block anything), not a restriction against a named attacker.
+/// </para>
 /// </remarks>
 [OracleEffect("cantBlock")]
 public sealed record CantBlockEffect : ContinuousEffect
@@ -60,6 +72,13 @@ public sealed record CantBlockEffect : ContinuousEffect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectReference? Target { get; init; }
+
+  /// <summary>
+  /// The specific attacker the restricted creature can't block, if the
+  /// oracle text names one (e.g. "can't block this creature"). Null = blanket
+  /// restriction (can't block anything), as with Copper Carapace.
+  /// </summary>
+  public ObjectReference? Blocks { get; init; }
 
   /// <summary>
   /// "alone" qualifier: when <c>true</c>, the oracle line reads "can't block
