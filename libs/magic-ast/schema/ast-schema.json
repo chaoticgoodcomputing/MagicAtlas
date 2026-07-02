@@ -282,6 +282,14 @@
       "DiscriminatorKey": "ConditionType",
       "Types": [
         {
+          "Type": "AllCondition",
+          "Discriminator": "all",
+          "IsUnparsed": false,
+          "Fields": [
+            "Conditions"
+          ]
+        },
+        {
           "Type": "CardTypeDiversityCondition",
           "Discriminator": "cardTypeDiversity",
           "IsUnparsed": false,
@@ -974,6 +982,14 @@
           "IsUnparsed": false,
           "Fields": [
             "Cost"
+          ]
+        },
+        {
+          "Type": "ConniveEffect",
+          "Discriminator": "connive",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
           ]
         },
         {
@@ -2473,5 +2489,5 @@
       ]
     }
   ],
-  "SchemaHash": "8a9278f701de983adc4b1d43933b054043a0bfd7cff292087e09db8b3088dc50"
+  "SchemaHash": "6525fa183bd0015e50b1966dafce0f0933855365465f22130109b884e926bc5e"
 }
