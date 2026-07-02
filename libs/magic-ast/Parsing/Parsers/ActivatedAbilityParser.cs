@@ -122,6 +122,14 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     // restriction sentence glued to the effect.
     StripTrailingReminder(ref effectPart);
 
+    // Extract a trailing "Any player may activate this ability." permission
+    // sentence (CR 602.2's "unless the object specifically says otherwise" branch)
+    // before restriction/effect parsing. MUST run before ExtractActivationRestrictions
+    // for the same reason as StripTrailingReminder: if left glued to the effect text,
+    // TryParseMultiEffectSentences will try (and fail) to parse it as a second effect,
+    // degrading the whole ability to UnparsedEffect.
+    var whoMayActivate = ExtractActivationPermission(ref effectPart);
+
     // Extract trailing "Activate only as ..." restriction sentences from
     // effectPart before effect parsing. These are not effects — they constrain
     // when the ability can be activated (Rule 602.5). Stripping them prevents
@@ -159,6 +167,7 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
         Effects = [unparsedEffect],
         Restrictions = restrictions,
         ActivationCondition = activationCondition,
+        WhoMayActivate = whoMayActivate,
         IsManaAbility = false,
         LoyaltyCost = classification.LoyaltyCost,
         AbilityWord = classification.AbilityWord,
@@ -185,6 +194,7 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       Effects = effects,
       Restrictions = restrictions,
       ActivationCondition = activationCondition,
+      WhoMayActivate = whoMayActivate,
       IsManaAbility = isManaAbility,
       LoyaltyCost = classification.LoyaltyCost,
       AbilityWord = classification.AbilityWord,
@@ -264,6 +274,47 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     restrictions.Reverse(); // restore original order (we iterated from the end)
     effectPart = remaining ?? string.Empty;
     return restrictions.Count > 0 ? restrictions : null;
+  }
+
+  // Anchored regex for "Any player may activate this ability." — must match the
+  // ENTIRE candidate sentence (after trimming) so it cannot match a substring of a
+  // longer clause. CR 602.2: "unless the object specifically says otherwise."
+  private static readonly Regex _anyPlayerMayActivatePattern = new(
+    @"^[Aa]ny\s+player\s+may\s+activate(?:\s+this\s+ability)?\.?$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
+  /// <summary>
+  /// Strips a trailing "Any player may activate this ability." sentence from
+  /// <paramref name="effectPart"/> (CR 602.1's "Activation instructions" slot; CR
+  /// 602.2's "unless the object specifically says otherwise" branch), mutating it
+  /// in place. Returns <see cref="ActivationPermission.AnyPlayer"/> when the
+  /// sentence is found and stripped, else null (leaving the default
+  /// controller-only permission implicit).
+  /// </summary>
+  private static ActivationPermission? ExtractActivationPermission(ref string effectPart)
+  {
+    var lastDotSpace = effectPart.LastIndexOf(". ", StringComparison.Ordinal);
+    string candidate;
+    string? prefix;
+    if (lastDotSpace >= 0)
+    {
+      candidate = effectPart[(lastDotSpace + 2)..].Trim();
+      prefix = effectPart[..lastDotSpace].Trim();
+    }
+    else
+    {
+      candidate = effectPart.Trim();
+      prefix = null;
+    }
+
+    if (!_anyPlayerMayActivatePattern.IsMatch(candidate))
+    {
+      return null;
+    }
+
+    effectPart = prefix ?? string.Empty;
+    return ActivationPermission.AnyPlayer;
   }
 
   /// <summary>

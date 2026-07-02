@@ -34,6 +34,17 @@ public sealed record ActivatedAbility : Ability
   public IReadOnlyList<ActivationRestriction>? Restrictions { get; init; }
 
   /// <summary>
+  /// Who is permitted to activate this ability. Null/omitted means the default:
+  /// only the object's controller (or owner, if it lacks a controller) may activate
+  /// it — CR 602.2. Set to <see cref="ActivationPermission.AnyPlayer"/> when the
+  /// object "specifically says otherwise" (CR 602.2), e.g. "Any player may activate
+  /// this ability." This is a permission BROADENING, distinct from
+  /// <see cref="ActivationRestriction"/> (which narrows who/when may activate).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ActivationPermission? WhoMayActivate { get; init; }
+
+  /// <summary>
   /// A structured game-state predicate that must be true to activate this ability.
   /// "Activate only if [condition]" — e.g., "Activate only if you control three or
   /// more artifacts" (Mox Opal / Metalcraft). Uses the same <see cref="Condition"/>
@@ -90,4 +101,23 @@ public enum ActivationRestriction
 
   /// <summary>Other restriction captured as raw text</summary>
   Other,
+}
+
+/// <summary>
+/// Who may activate an activated ability. CR 602.2: "Only an object's controller
+/// (or its owner, if it doesn't have a controller) can activate its activated
+/// ability unless the object specifically says otherwise." CR 602.1: activated
+/// abilities are written as "[Cost]: [Effect.] [Activation instructions (if any).]" —
+/// this enum models the "Activation instructions" slot for permission-broadening
+/// text like "Any player may activate this ability."
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum ActivationPermission
+{
+  /// <summary>Default: only the controller (or owner) may activate — CR 602.2.</summary>
+  Controller,
+
+  /// <summary>"Any player may activate this ability." — CR 602.2's "unless the
+  /// object specifically says otherwise" branch.</summary>
+  AnyPlayer,
 }
