@@ -153,6 +153,22 @@ public sealed record ObjectFilter
   public bool? IsHistoric { get; init; }
 
   /// <summary>
+  /// Filters to objects in the controlling player's party — CR 700.8: "Some cards
+  /// refer to a player's party. A player's party consists of up to one Cleric
+  /// creature that player controls, up to one Rogue creature they control, up to
+  /// one Warrior creature they control, and up to one Wizard creature they
+  /// control." A named CR 700-level game grouping, not a card type or subtype: it
+  /// cannot be expressed on the existing type axes without falsely asserting
+  /// "Party" is a printed subtype. Parallels <see cref="IsHistoric"/> (CR 700.6)
+  /// as a boolean game-quality axis on the filter — the "up to one each of the
+  /// four classes, capped at four" counting is engine territory (descriptive-not-
+  /// engine doctrine); the AST records only that the filter is scoped to party
+  /// membership.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? InParty { get; init; }
+
+  /// <summary>
   /// Filters to multicolored objects (those with two or more colors). Rule 105.5
   /// ("An object is multicolored if it has two or more colors"). Parallel axis to
   /// <see cref="IsColorless"/> — distinct from the "has any of these colors" semantics
