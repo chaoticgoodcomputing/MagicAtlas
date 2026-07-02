@@ -1606,6 +1606,7 @@
           "Discriminator": "mustBlock",
           "IsUnparsed": false,
           "Fields": [
+            "Blocks",
             "Target"
           ]
         },

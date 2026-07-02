@@ -50,6 +50,16 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// "All creatures block each combat if able" use an <c>ObjectReference</c>
 /// with kind <c>Each</c> and a creature filter.
 /// </para>
+/// <para>
+/// The optional <see cref="Blocks"/> field names the specific attacker the
+/// forced blocker must block, for activated "lure" effects like Tangle
+/// Angler's "{G}: Target creature blocks this creature this turn if able." —
+/// there, <c>Target</c> is the forced blocker and <c>Blocks</c> is
+/// <c>ObjectReference.Self()</c> (the activating creature). It is additive
+/// and optional so existing golds (Culling Mark, static "blocks each combat")
+/// that omit it are unaffected — null means no named attacker (the blocker
+/// blocks anything able).
+/// </para>
 /// </remarks>
 [OracleEffect("mustBlock")]
 public sealed record MustBlockEffect : ContinuousEffect
@@ -61,4 +71,12 @@ public sealed record MustBlockEffect : ContinuousEffect
   /// "All creatures block each combat if able."
   /// </summary>
   public required ObjectReference Target { get; init; }
+
+  /// <summary>
+  /// The specific attacker that <see cref="Target"/> must block, if the
+  /// oracle text names one (e.g. "blocks this creature this turn"). Null
+  /// means no named attacker — the forced blocker blocks anything able, as
+  /// with Culling Mark's "Target creature blocks this turn if able."
+  /// </summary>
+  public ObjectReference? Blocks { get; init; }
 }

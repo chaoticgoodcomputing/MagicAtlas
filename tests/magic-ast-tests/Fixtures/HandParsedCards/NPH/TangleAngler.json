@@ -1,0 +1,131 @@
+{
+  "Input": {
+    "Name": "Tangle Angler",
+    "ManaCost": "{3}{G}",
+    "TypeLine": "Creature — Phyrexian Horror",
+    "OracleText": "Infect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)\n{G}: Target creature blocks this creature this turn if able.",
+    "Power": "1",
+    "Toughness": "5",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Tangle Angler",
+    "TypeLine": {
+      "Raw": "Creature — Phyrexian Horror",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Horror"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Infect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)\n{G}: Target creature blocks this creature this turn if able.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Infect",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Infect"
+            }
+          ],
+          "Reminder": {
+            "Text": "(This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)"
+          }
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "mustBlock",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "Blocks": {
+                "Kind": "Self"
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
