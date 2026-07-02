@@ -1,0 +1,176 @@
+{
+  "Input": {
+    "Name": "Wasteland Viper",
+    "ManaCost": "{G}",
+    "TypeLine": "Creature — Snake",
+    "OracleText": "Deathtouch\nBloodrush — {G}, Discard this card: Target attacking creature gets +1/+2 and gains deathtouch until end of turn.",
+    "Power": "1",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Wasteland Viper",
+    "TypeLine": {
+      "Raw": "Creature — Snake",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Snake"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Deathtouch\nBloodrush — {G}, Discard this card: Target attacking creature gets +1/+2 and gains deathtouch until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Deathtouch"
+            }
+          ],
+          "KeywordSource": "Deathtouch"
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
+              ]
+            },
+            {
+              "CostType": "discard",
+              "Filter": {
+                "CardTypes": [
+                  "card"
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "modifyPT",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Characteristics": [
+                        {
+                          "CharacteristicType": "combatState",
+                          "State": "Attacking"
+                        }
+                      ]
+                    }
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "Duration": {
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
+                  }
+                },
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "It"
+                  },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "KeywordSource": "Deathtouch",
+                    "Effects": [
+                      {
+                        "EffectType": "keywordAbility",
+                        "Keyword": "Deathtouch"
+                      }
+                    ]
+                  },
+                  "Duration": {
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "IsManaAbility": false,
+          "AbilityWord": "Bloodrush"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
