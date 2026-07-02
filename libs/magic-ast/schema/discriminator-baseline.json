@@ -9,11 +9,17 @@
     "CharacteristicKind:other",
     "CharacteristicKind:tapped",
     "ConditionKind:all",
+    "ConditionKind:beenAttackedThisStep",
     "ConditionKind:cardTypeDiversity",
     "ConditionKind:castThisObject",
     "ConditionKind:count",
     "ConditionKind:diedThisWay",
     "ConditionKind:keywordCostPaid",
+<<<<<<< HEAD
+=======
+    "ConditionKind:manaSpentToCast",
+    "ConditionKind:mostCommonColor",
+>>>>>>> 233ce586 (chore(mast): advance discriminator baseline after merging mast-tdd/2026-07-02-cave-in)
     "ConditionKind:objectHasSubtype",
     "ConditionKind:other",
     "ConditionKind:precedingActionPerformed",
@@ -157,6 +163,7 @@
     "OracleEffect:hideaway",
     "OracleEffect:impulse",
     "OracleEffect:increment",
+    "OracleEffect:incubate",
     "OracleEffect:investigate",
     "OracleEffect:keywordAbility",
     "OracleEffect:legendRuleSuppression",
