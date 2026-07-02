@@ -41,6 +41,7 @@
     "combatDamageTiming": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "commanderDesignation": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "conditionalPay": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "connive": "CR 701.50a Connive keyword action (draw-then-discard with conditional +1/+1 counter) — mirrors the explore coarse fallback; no flow rule consumes it yet; consciously inert for interaction recall",
     "costIncrease": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "costReduction": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "counterSpell": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
