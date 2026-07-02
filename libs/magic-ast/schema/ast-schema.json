@@ -905,6 +905,14 @@
           ]
         },
         {
+          "Type": "CantGainLifeEffect",
+          "Discriminator": "cantGainLife",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
           "Type": "CantHaveOrGainKeywordEffect",
           "Discriminator": "cantHaveOrGainKeyword",
           "IsUnparsed": false,
