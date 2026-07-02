@@ -6,9 +6,9 @@ using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.References;
 
 /// <summary>
-/// "Target creature becomes [color] until end of turn." — layer-5 color-changing
-/// continuous effect (CR 105.3). Recognizes the standard activated-ability pattern
-/// on a target creature.
+/// "Target creature/permanent becomes [color] until end of turn." — layer-5
+/// color-changing continuous effect (CR 105.3). Recognizes the standard
+/// activated-ability pattern on a target creature or permanent.
 ///
 /// <para>
 /// CR 105.3 (verbatim): "Effects may change an object's color or give a color to
@@ -26,7 +26,7 @@ using MagicAST.AST.References;
 public sealed class ChangeColorEffectRule : IActivatedEffectRule
 {
   private static readonly Regex _pattern = new(
-    @"^Target\s+creature\s+becomes\s+(?<color>white|blue|black|red|green|colorless)\s+until\s+end\s+of\s+turn$",
+    @"^Target\s+(?<object>creature|permanent)\s+becomes\s+(?<color>white|blue|black|red|green|colorless)\s+until\s+end\s+of\s+turn$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -56,12 +56,14 @@ public sealed class ChangeColorEffectRule : IActivatedEffectRule
       return null;
     }
 
+    var objectNoun = match.Groups["object"].Value.ToLowerInvariant();
+
     return new ChangeColorEffect
     {
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter { CardTypes = ["creature"] },
+        Filter = new ObjectFilter { CardTypes = [objectNoun] },
       },
       Colors = [colorCode],
       Duration = UntilTimeDuration.EndOfTurn,
