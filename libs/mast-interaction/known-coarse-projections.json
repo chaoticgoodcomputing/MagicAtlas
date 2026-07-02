@@ -145,6 +145,7 @@
     "setCardTypes": "layer-4 card-type declaration (Enduring Tenacity) — no flow rule reads type-setting yet; conscious carve-out (inert for recall).",
     "setLifeTotal": "CR 119.5 life-total assignment (Master of Cruelties — 'that player’s life total becomes 1'); no flow rule reads life-total-set effects yet; consciously inert for interaction recall",
     "shuffle": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "shuffleCardsFromGraveyardIntoLibrary": "CR 701.24 targeted-subset graveyard-into-library recycle (Krosan Reclamation — up to two target cards) — sibling of the coarse 'shuffle'/'shuffleGraveyardIntoLibrary'/'shuffleIntoLibrary' entries; no flow rule reads graveyard-recycle shuffle events yet; consciously inert for interaction recall",
     "shuffleGraveyardIntoLibrary": "CR 400.12 whole-zone graveyard-into-library recycle (Mnemonic Nexus) — sibling of the coarse 'shuffle'/'shuffleIntoLibrary' entries; no flow rule reads graveyard-recycle shuffle events yet; consciously inert for interaction recall",
     "shuffleIntoLibrary": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "siege": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",

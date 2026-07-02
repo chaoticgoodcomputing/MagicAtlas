@@ -2015,6 +2015,15 @@
           ]
         },
         {
+          "Type": "ShuffleCardsFromGraveyardIntoLibraryEffect",
+          "Discriminator": "shuffleCardsFromGraveyardIntoLibrary",
+          "IsUnparsed": false,
+          "Fields": [
+            "Cards",
+            "Player"
+          ]
+        },
+        {
           "Type": "ShuffleGraveyardIntoLibraryEffect",
           "Discriminator": "shuffleGraveyardIntoLibrary",
           "IsUnparsed": false,
