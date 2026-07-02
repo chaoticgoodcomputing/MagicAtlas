@@ -2360,6 +2360,12 @@
           "Fields": []
         },
         {
+          "Type": "DomainQuantity",
+          "Discriminator": "domain",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "KeywordCostPaidCountQuantity",
           "Discriminator": "keywordCostPaidCount",
           "IsUnparsed": false,
@@ -2489,5 +2495,5 @@
       ]
     }
   ],
-  "SchemaHash": "6525fa183bd0015e50b1966dafce0f0933855365465f22130109b884e926bc5e"
+  "SchemaHash": "9f0323e759c74d813342ee9cb5d0a2e3c8a4caf16ffb140029af490458b0f495"
 }
