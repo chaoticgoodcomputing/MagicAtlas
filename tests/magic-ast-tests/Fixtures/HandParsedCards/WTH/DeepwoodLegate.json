@@ -1,0 +1,160 @@
+{
+  "Input": {
+    "Name": "Deepwood Legate",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Creature — Shade",
+    "OracleText": "If an opponent controls a Forest and you control a Swamp, you may cast this spell without paying its mana cost.\n{B}: This creature gets +1/+1 until end of turn.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Deepwood Legate",
+    "TypeLine": {
+      "Raw": "Creature — Shade",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Shade"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If an opponent controls a Forest and you control a Swamp, you may cast this spell without paying its mana cost.\n{B}: This creature gets +1/+1 until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Condition": {
+            "ConditionType": "all",
+            "Conditions": [
+              {
+                "ConditionType": "count",
+                "Filter": {
+                  "Subtypes": [
+                    "Forest"
+                  ],
+                  "Controller": "Opponent"
+                },
+                "Count": {
+                  "Operator": "GreaterThanOrEqual",
+                  "Value": 1
+                }
+              },
+              {
+                "ConditionType": "count",
+                "Filter": {
+                  "Subtypes": [
+                    "Swamp"
+                  ],
+                  "Controller": "You"
+                },
+                "Count": {
+                  "Operator": "GreaterThanOrEqual",
+                  "Value": 1
+                }
+              }
+            ]
+          },
+          "Effects": [
+            {
+              "EffectType": "castWithoutPaying",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}
