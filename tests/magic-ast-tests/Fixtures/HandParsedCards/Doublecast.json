@@ -1,0 +1,66 @@
+{
+  "Input": {
+    "Name": "Doublecast",
+    "ManaCost": "{R}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy.",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Doublecast",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"],
+      "Subtypes": []
+    },
+    "Oracle": {
+      "RawText": "When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "When",
+                  "Event": "SpellCast",
+                  "Filter": { "CardTypes": ["spell", "instant", "sorcery"], "Controller": "You" }
+                },
+                "Window": {
+                  "DurationType": "untilTime",
+                  "Until": { "Part": "Turn", "Edge": "End" }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "copy",
+                    "Target": { "Kind": "It" },
+                    "MayChooseNewTargets": true
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{R}{R}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["R"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["R"] }
+    ]
+  }
+}
