@@ -475,17 +475,21 @@ internal static class StaticRuleHelpers
   /// <summary>
   /// Parses an object-count phrase — the noun phrase that follows "for each" or
   /// "the number of" — into a structured <see cref="ObjectFilter"/>. Handles the
-  /// two shapes in the count corpus:
+  /// shapes in the count corpus:
   /// <list type="bullet">
   /// <item>"&lt;type/subtype&gt; you control" — e.g. "lands you control",
   ///   "legendary creature you control", "Mountain you control".</item>
   /// <item>"&lt;subtype&gt; [and &lt;subtype&gt;] attached to it" — e.g.
   ///   "Aura attached to it", "Aura and Equipment attached to it".</item>
+  /// <item>"&lt;type&gt; cards in all graveyards" — e.g. "land cards in all
+  ///   graveyards" (Terravore) — a typed count across every player's graveyard;
+  ///   no Controller/Owner axis, mirroring the all-graveyards convention used
+  ///   by <c>ExileAllRule.GraveyardPattern</c>.</item>
   /// </list>
   /// The leading noun(s) are classified supertype → card type → subtype, mirroring
   /// <see cref="BuildTypeSpellFilter"/>. Plurals are singularized for matching and
   /// emit the canonical singular type/subtype. Returns <see langword="null"/> for a
-  /// phrase that does not match either shape (honest fallback).
+  /// phrase that does not match any shape (honest fallback).
   /// </summary>
   internal static ObjectFilter? BuildObjectCountFilter(string phrase)
   {
@@ -511,6 +515,27 @@ internal static class StaticRuleHelpers
         Subtypes = subtypes,
         AttachedTo = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
       };
+    }
+
+    // "<type> cards in all graveyards" — typed count across every player's
+    // graveyard (Terravore's characteristic-defining ability; CR 604.3). The
+    // trailing "card"/"cards" head noun is stripped before classification so
+    // only the leading type noun (e.g. "land") is fed to
+    // ClassifyTypeNounPhrase — feeding the whole "land cards" phrase would
+    // wrongly classify "cards" itself as a subtype. Absence of a Controller
+    // axis is the established "all graveyards"/all-players encoding, mirroring
+    // ExileAllRule.GraveyardPattern's "all <type> cards from all graveyards".
+    var allGraveyardsMatch = Regex.Match(
+      text,
+      @"^(?<type>.+?)\s+cards?\s+in\s+all\s+graveyards$",
+      RegexOptions.IgnoreCase
+    );
+    if (allGraveyardsMatch.Success)
+    {
+      var filter = ClassifyTypeNounPhrase(allGraveyardsMatch.Groups["type"].Value);
+      return filter is null
+        ? null
+        : filter with { Zone = Zone.Graveyard };
     }
 
     // "<nouns> you control" — board count.
