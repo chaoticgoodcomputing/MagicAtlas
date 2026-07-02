@@ -1,0 +1,106 @@
+{
+  "Input": {
+    "Name": "Everglades",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "This land enters tapped.\nWhen this land enters, sacrifice it unless you return an untapped Swamp you control to its owner's hand.\n{T}: Add {C}{B}.",
+    "Colors": [],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Everglades",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": ["Land"]
+    },
+    "Oracle": {
+      "RawText": "This land enters tapped.\nWhen this land enters, sacrifice it unless you return an untapped Swamp you control to its owner's hand.\n{T}: Add {C}{B}.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "When": "asThisEnters"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["land"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "sacrifice",
+                "Target": {
+                  "Kind": "It"
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "You"
+                },
+                "Cost": {
+                  "CostType": "returnToHand",
+                  "Target": {
+                    "Kind": "Any",
+                    "Filter": {
+                      "CardTypes": ["land"],
+                      "Subtypes": ["Swamp"],
+                      "Controller": "You",
+                      "Characteristics": [
+                        {
+                          "CharacteristicType": "tapped",
+                          "Tapped": false
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{C}{B}",
+              "AnyColor": false
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}
