@@ -2334,6 +2334,14 @@
           "Fields": []
         },
         {
+          "Type": "AtLeastQuantity",
+          "Discriminator": "atLeast",
+          "IsUnparsed": false,
+          "Fields": [
+            "Minimum"
+          ]
+        },
+        {
           "Type": "CalculatedQuantity",
           "Discriminator": "calculated",
           "IsUnparsed": false,

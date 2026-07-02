@@ -887,6 +887,30 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "One or more target creatures become [color] until end of turn." — a one-or-more
+    // targeting spell (CR 115.1) applying a layer-5 color-changing continuous effect
+    // (CR 105.3 / CR 613.1e) to each target for the turn (Dwarven Song). The "target"
+    // keyword plus the "until end of turn" duration mark this as a one-shot imperative
+    // spell effect (Rule 113.3a), not a declarative static. Fully anchored on the whole
+    // "One or more target creatures become [color] until end of turn" phrase so it cannot
+    // capture any sibling clause; the trailing period is optional. Without this the line
+    // defaults to Static, where StaticAbilityParser stalls on the complex targeting.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*One\s+or\s+more\s+target\s+creatures?\s+become\s+(white|blue|black|red|green|colorless)\s+until\s+end\s+of\s+turn\.?\s*$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Mass P/T-modification spell shapes with "until end of turn" — one-shot imperative
     // spell effects (Rule 113.3a). The "until end of turn" duration is the distinguishing
     // marker between these spell forms and their permanent-static counterparts (e.g.,
