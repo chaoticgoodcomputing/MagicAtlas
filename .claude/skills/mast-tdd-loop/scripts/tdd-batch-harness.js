@@ -346,7 +346,7 @@ const consolidate = await agent(
     `1. FULL CORE ring once: \`${SUITE}\` — 0 failed REQUIRED (catches any joint regression the targeted between-merge gates skipped). ` +
     `If RED: identify the offending merged branch (the PortWalkSentinelSnapshot diff usually localizes it), \`git revert\` it, re-run until green, report which task was backed out.\n` +
     `2. \`nx run magic-ast:glossary\` && \`git add libs/magic-ast/GLOSSARY.md && git commit --no-verify -m "chore(mast): regenerate GLOSSARY after batch ${BATCH} (${TODAY})"\` (also commit any advanced schema/discriminator-baseline).\n` +
-    `3. \`nx run mast:run\` (refresh corpus-wide parser triage).\n` +
+    `3. Refresh corpus-wide parser triage — FORCE a re-parse (Flowthru's ParseCorpus cache is CODE-BLIND: it will no-op against the new parser and report STALE coverage unless the cache is cleared first): \`rm -f tests/magic-ast-tests/Data/_07_ModelOutput/Datasets/parse-records.json && nx run mast:run\`.\n` +
     `4. \`nx run bench:recall\` — HALT-report if any combo tier regressed from its pin in combo-expected-tiers.json; note the Green/Amber/missed summary.\n` +
     `5. \`nx run mast:worktree-clean\` (reap this batch's worktrees + merged mast-tdd/* branches).\n` +
     `Report: CORE ring pass/fail + count, any backed-out task, the NEW triage card-coverage % (from Data/_08_Reporting/triage-report.json GlobalMetrics.CardCoverage.Pct), and the recall Green/Amber/missed numbers.`,
