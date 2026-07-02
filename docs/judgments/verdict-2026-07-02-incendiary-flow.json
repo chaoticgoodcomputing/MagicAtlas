@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/KLD/IncendiaryFlow.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 614.6", "CR 700.4", "CR 607.1"],
+      "reason": "Faithful decomposition: sentence 1 = SpellAbility dealDamage(3, AnyTarget, Self); sentence 2 = StaticAbility replacement watching DeathEvent(creature dealt damage this way by Self), OriginalEventOccurs=false, Replacement=exile It. Describe-not-execute, no baked-in timing, no unparsed. Oracle text verified verbatim; all four cited CR rules exist and match. Only free text is DealtDamageByPredicate.Timeframe=\"this way\" on the provenance/linked-ability-window axis (same debt family as SengirBats, whitelisted, CR 607.1) — a different axis, not this task's exile-replacement axis."
+    },
+    {
+      "target": "mast-tdd/2026-07-02-incendiary-flow#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "No new discriminator introduced — dealDamage, replacement, death, exile, dealtDamageBy all pre-exist (DealDamageEffect, ReplacementEffect, DeathEvent, ExileEffect, DealtDamageByPredicate); no PortGraph/known-coarse-projections change required or expected."
+    }
+  ]
+}

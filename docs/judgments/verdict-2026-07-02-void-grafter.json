@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/OGW/VoidGrafter.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.1", "CR 115.1", "CR 702.11a", "CR 702.11b", "CR 611.1", "CR 514.2", "CR 109.5"],
+      "reason": "ETB 'another target creature you control gains hexproof until end of turn' modeled as triggered gainAbility: Target creature Controller=You ExcludeSelf=true, GainedAbility static hexproof keyword, Duration untilTime Turn/End; timing lives in the Trigger node not the effect; Devoid + Flash siblings preserved; no unparsed/free-text residual; oracle text verbatim; all cited CR rules exist and match"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/AnotherTargetCreatureYouControlGainsKeywordUntilEndOfTurnRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.1", "CR 115.1", "CR 611.1", "CR 514.2", "CR 702.11a", "CR 702.11b", "CR 109.4", "CR 109.5"],
+      "reason": "parser rule maps the clause onto pre-existing GainAbilityEffect + ObjectFilter(ExcludeSelf/Controller) + UntilTimeDuration.EndOfTurn; bails (returns false) on unrecognized keyword so no free-text escape hatch; all doc-comment CR cites verified present in rules-structure.json"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-void-grafter#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — effect type gainAbility, filter fields ExcludeSelf/Controller, UntilTimeDuration.EndOfTurn and KeywordAbility.Hexproof all pre-exist on base; no PortGraph/known-coarse-projections change required; projection ratchet N/A"
+    }
+  ]
+}

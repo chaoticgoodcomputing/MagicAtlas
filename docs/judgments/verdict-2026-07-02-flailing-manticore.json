@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ODY/FlailingManticore.json",
+      "verdict": "PASS",
+      "citations": ["CR 602.2", "CR 602.1b"],
+      "reason": "both {1} pump/shrink activated abilities carry WhoMayActivate: AnyPlayer, faithful to 'Any player may activate this ability'; permission sentence fully extracted (no free-text/unparsed residual); Flying + first strike + both activated siblings preserved; oracle text matches oracle-cards.json exactly"
+    },
+    {
+      "target": "libs/magic-ast/AST/Abilities/ActivatedAbility.cs#WhoMayActivate/ActivationPermission",
+      "verdict": "PASS",
+      "citations": ["CR 602.2", "CR 602.1b"],
+      "reason": "ActivationPermission.AnyPlayer models CR 602.2's 'unless the object specifically says otherwise' branch as a permission BROADENING distinct from ActivationRestriction; discriminator 'AnyPlayer' matches CR terminology; cited rules exist and match"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-flailing-manticore#projection:ActivationPermission.AnyPlayer",
+      "verdict": "PASS",
+      "citations": ["CR 602.2"],
+      "reason": "activation-permission broadening is sensibly inert for interaction recall — no flow rule reads who-may-activate events, and single-controller combo reconstruction is unaffected by opponents also being able to activate; consistent with existing 'no flow rule reads ... permission yet' coarse carve-outs (CR 606.3 loyalty-activation, boast override); nothing insensible parked"
+    }
+  ]
+}

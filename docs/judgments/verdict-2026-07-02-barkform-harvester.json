@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BLB/BarkformHarvester.json",
+      "verdict": "PASS",
+      "citations": ["CR 400.7", "CR 401.2", "CR 401.4", "CR 401.7", "CR 602.1"],
+      "reason": "activated {2} ability models putOnBottomOfLibrary with faithful target filter (CardTypes:[card], Zone:Graveyard, Controller:You) matching 'target card from your graveyard'; describe-not-execute, no baked-in timing; Changeling/Reach siblings + attributes preserved; no unparsed/free-text residual"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#putOnBottomOfLibrary",
+      "verdict": "PASS",
+      "citations": ["CR 400.7", "CR 401"],
+      "reason": "new putOnBottomOfLibrary discriminator parked coarse with justified reason (graveyard-to-library-bottom denial effect; no flow rule reads library-bottom insertions; same precedent as sibling putOnTopOfLibrary) — sensible inert-for-recall choice"
+    }
+  ]
+}

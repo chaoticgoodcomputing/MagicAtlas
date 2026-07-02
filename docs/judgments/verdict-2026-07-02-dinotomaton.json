@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LCI/Dinotomaton.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.111", "CR 115.1", "CR 611.1"],
+      "reason": "ETB grant decomposes into Trigger{When,Enters,IsSelf} + gainAbility(Target creature Controller:You, structured static Menace evasion/MinimumBlockers:2, Duration untilTime Turn/End); timing not baked into effect, no free text, static Menace sibling and out-of-axis nodes preserved"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TargetCreatureYouControlGainsKeywordUntilEndOfTurnRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.111", "CR 115.1", "CR 611.1"],
+      "reason": "doc-comment cites 702.111 (subrules a/b/c quoted verbatim, all present), 115.1 (target), 611.1 (continuous effect w/ duration); all exist in rules-structure.json and match the modeling; builds structured keyword ability, bails rather than emit free text"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-dinotomaton#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses pre-existing gainAbility effect, evasion effect, and Enters trigger event (no AST node changes on branch); no PortWalk projection decision required"
+    }
+  ]
+}
