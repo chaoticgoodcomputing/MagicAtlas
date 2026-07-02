@@ -414,6 +414,9 @@ public enum KeywordAbility
   /// <summary>Prowess (CR 702).</summary>
   Prowess,
 
+  /// <summary>Rampage (CR 702.23).</summary>
+  Rampage,
+
   /// <summary>Rebound (CR 702).</summary>
   Rebound,
 

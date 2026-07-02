@@ -1,0 +1,149 @@
+{
+  "Input": {
+    "Name": "Craw Giant",
+    "ManaCost": "{3}{G}{G}{G}{G}",
+    "TypeLine": "Creature — Giant",
+    "OracleText": "Trample\nRampage 2 (Whenever this creature becomes blocked, it gets +2/+2 until end of turn for each creature blocking it beyond the first.)",
+    "Power": "6",
+    "Toughness": "4",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Craw Giant",
+    "TypeLine": {
+      "Raw": "Creature — Giant",
+      "Supertypes": [],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Giant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Trample\nRampage 2 (Whenever this creature becomes blocked, it gets +2/+2 until end of turn for each creature blocking it beyond the first.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Rampage",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesBlocked",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "It"
+              },
+              "PowerModifier": {
+                "QuantityType": "calculated",
+                "Operand": 2,
+                "Operation": "multiply",
+                "Expression": "for each creature blocking it beyond the first"
+              },
+              "ToughnessModifier": {
+                "QuantityType": "calculated",
+                "Operand": 2,
+                "Operation": "multiply",
+                "Expression": "for each creature blocking it beyond the first"
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(Whenever this creature becomes blocked, it gets +2/+2 until end of turn for each creature blocking it beyond the first.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}{G}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
