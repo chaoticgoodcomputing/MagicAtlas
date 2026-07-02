@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TSP/BreakTies.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.77"],
+      "reason": "Reinforce 1—{W} unpacked as activated ability (KeywordSource Reinforce): costs = mana {W} + discard 1 card, effect = putCounters +1/+1 count 1 on target creature; matches CR 702.77a verbatim expansion; modal sibling (Choose one, 3 modes) preserved and correctly modeled; no unparsed/free-text residual"
+    },
+    {
+      "target": "libs/magic-ast/Keywords/Definitions/ReinforceKeyword.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.77"],
+      "reason": "activated-ability decomposition (mana + DiscardCost this-card + PutCountersEffect literal N) mirrors CyclingKeyword/ScavengeKeyword conventions; doc-comment quotes CR 702.77a/b verbatim and both subrules exist in rules-structure.json"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/KeywordAbility.cs#Reinforce",
+      "verdict": "PASS",
+      "citations": ["CR 702.77"],
+      "reason": "new Reinforce enum member cites CR 702.77, which exists in the rules data; alphabetical placement among sibling keywords, no existing member altered"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-break-ties#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new port-relevant discriminator introduced — Reinforce reuses existing putCounters effect and discard/mana cost types (already projected); KeywordSource is provenance only; no PortWalk projection decision required"
+    }
+  ]
+}

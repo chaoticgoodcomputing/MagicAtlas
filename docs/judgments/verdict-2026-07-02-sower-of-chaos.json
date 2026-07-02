@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SowerOfChaos.json",
+      "verdict": "PASS",
+      "citations": ["CR 602.1", "CR 509.1b"],
+      "reason": "activated ability {2}{R} -> cantBlock effect on target creature (Filter CardTypes:[creature]) with composed until-end-of-turn Duration; timing not baked into discriminator; oracle text verbatim; no unparsed/free-text residual; siblings/attributes intact"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-sower-of-chaos#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced -- reuses pre-existing cantBlock (CantBlockEffect, present at base 176e495); branch only adds an activated-ability parser path, so no new PortWalk projection decision is required"
+    }
+  ]
+}

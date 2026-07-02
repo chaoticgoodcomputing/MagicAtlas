@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M13/GoblinTunneler.json",
+      "verdict": "PASS",
+      "citations": ["CR 509.1b", "CR 602.5"],
+      "reason": "activated {T} ability -> cantBeBlocked on Target creature with structured PowerComparison(LessThanOrEqual, 2); 'this turn' carried as a separate untilTime(Turn/End) Duration, not baked into the effect discriminator; no free-text/unparsed residual; oracle text verbatim; new fixture so no sibling regression"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-goblin-tunneler#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced -- reuses existing cantBeBlocked OracleEffect and existing ObjectFilter.PowerComparison field; branch adds only a parser rule, so no PortWalk projection decision is required"
+    }
+  ]
+}

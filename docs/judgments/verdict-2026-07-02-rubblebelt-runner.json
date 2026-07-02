@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GTC/RubblebeltRunner.json",
+      "verdict": "PASS",
+      "citations": ["CR 509.1b", "CR 111.1"],
+      "reason": "static cantBeBlocked evasion restriction with BlockedByFilter{CardTypes:[creature], IsToken:true} faithfully models 'can't be blocked by creature tokens'; token encoded as predicate axis not a card type; no timing, no free-text/unparsed residual, siblings/out-of-axis nodes intact; both cited rules exist and match"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-rubblebelt-runner#projection",
+      "verdict": "PASS",
+      "citations": ["CR 509.1b"],
+      "reason": "no new discriminator introduced — reuses pre-existing cantBeBlocked effectType and pre-existing ObjectFilter.IsToken axis; cantBeBlocked already carries a coarse projection decision in known-coarse-projections.json, sensible since an evasion restriction is inert for interaction/flow reconstruction"
+    }
+  ]
+}

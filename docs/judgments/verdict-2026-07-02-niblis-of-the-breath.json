@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DKA/NiblisOfTheBreath.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.26a", "CR 701.26b"],
+      "reason": "activated {U},{T} ability models 'you may tap or untap target creature' as optional-wrapper over tapOrUntap effect targeting a creature filter; faithful, describe-not-execute, no baked timing, no free-text/unparsed residual, Flying sibling + attributes preserved"
+    },
+    {
+      "target": "mast-tdd/2026-07-02-niblis-of-the-breath#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — tapOrUntap EffectType + node pre-exist on base with a present, sensible coarse projection entry in known-coarse-projections.json; branch adds only a new activated-position parser rule + fixture"
+    }
+  ]
+}

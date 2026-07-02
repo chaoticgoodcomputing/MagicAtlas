@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/schema/ast-schema.json#DomainQuantity",
+      "verdict": "PASS",
+      "citations": ["CR 207.2", "CR 305.6", "CR 613.4", "CR 700.5"],
+      "reason": "purely additive discriminator 'domain' (field-less DomainQuantity); references the number of distinct basic land types (CR 305.6) rather than pre-resolving; no other schema entries touched"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/KavuScout.json",
+      "verdict": "PASS",
+      "citations": ["CR 207.2", "CR 305.6", "CR 613.4"],
+      "reason": "static ability, AbilityWord 'Domain' (CR 207.2c ability word), modifyPT Self with PowerModifier QuantityType 'domain' (+1/land-type) and Toughness literal 0; faithful to oracle, no free-text/unparsed residual, no baked-in timing"
+    }
+  ]
+}
