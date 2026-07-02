@@ -302,6 +302,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "KLD/IncendiaryFlow",
+      "sink": "Timeframe",
+      "tag": "debt",
+      "reason": "DealtDamageByPredicate.Timeframe free-text (\"this way\") — deferred enum structuring of the damage-provenance/linked-ability window (CR 607.1); same family as SengirBats"
+    },
+    {
       "card": "KTK/AbzanSkycaptain",
       "sink": "OtherCondition",
       "tag": "debt",
