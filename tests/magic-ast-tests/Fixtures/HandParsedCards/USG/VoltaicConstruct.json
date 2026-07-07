@@ -1,0 +1,71 @@
+{
+  "Input": {
+    "Name": "Voltaic Construct",
+    "ManaCost": "{4}",
+    "TypeLine": "Artifact Creature — Golem Construct",
+    "OracleText": "{2}: Untap target artifact creature.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Voltaic Construct",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Golem Construct",
+      "Types": ["Artifact", "Creature"],
+      "Subtypes": ["Golem", "Construct"]
+    },
+    "Oracle": {
+      "RawText": "{2}: Untap target artifact creature.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 2 }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["artifact", "creature"]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
