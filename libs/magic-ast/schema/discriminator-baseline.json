@@ -14,12 +14,10 @@
     "ConditionKind:castThisObject",
     "ConditionKind:count",
     "ConditionKind:diedThisWay",
+    "ConditionKind:escaped",
     "ConditionKind:keywordCostPaid",
-<<<<<<< HEAD
-=======
     "ConditionKind:manaSpentToCast",
     "ConditionKind:mostCommonColor",
->>>>>>> 233ce586 (chore(mast): advance discriminator baseline after merging mast-tdd/2026-07-02-cave-in)
     "ConditionKind:objectHasSubtype",
     "ConditionKind:other",
     "ConditionKind:precedingActionPerformed",
@@ -102,6 +100,7 @@
     "OracleEffect:cantBlock",
     "OracleEffect:cantCastAdditionalSpellsThisTurn",
     "OracleEffect:cantCastMoreThanNSpells",
+    "OracleEffect:cantGainLife",
     "OracleEffect:cantHaveOrGainKeyword",
     "OracleEffect:castWithoutPaying",
     "OracleEffect:champion",
@@ -232,6 +231,7 @@
     "OracleEffect:revealTopPutMatchingToHand",
     "OracleEffect:revealUntil",
     "OracleEffect:ringTemptsYou",
+    "OracleEffect:ripple",
     "OracleEffect:rollDie",
     "OracleEffect:rollResultsTable",
     "OracleEffect:sacrifice",
@@ -241,11 +241,8 @@
     "OracleEffect:setCardTypes",
     "OracleEffect:setLifeTotal",
     "OracleEffect:shuffle",
-<<<<<<< HEAD
-=======
     "OracleEffect:shuffleCardsFromGraveyardIntoLibrary",
     "OracleEffect:shuffleGraveyardIntoLibrary",
->>>>>>> 437eace6 (chore(mast): advance discriminator baseline for krosan-reclamation merge)
     "OracleEffect:shuffleIntoLibrary",
     "OracleEffect:siege",
     "OracleEffect:skipUntap",
@@ -277,6 +274,7 @@
     "OracleEffect:winTheGame",
     "OracleEffect:wish",
     "OracleQuantity:anyAmount",
+    "OracleQuantity:atLeast",
     "OracleQuantity:calculated",
     "OracleQuantity:count",
     "OracleQuantity:counterCount",
@@ -301,6 +299,7 @@
     "OracleReplacementEvent:mill",
     "OracleReplacementEvent:spellCopy",
     "OracleReplacementEvent:tokenCreation",
+    "OracleReplacementEvent:turnPart",
     "OracleReplacementEvent:untap",
     "OracleReplacementEvent:zoneChange"
   ]
