@@ -174,6 +174,19 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
         },
       };
     }
+    else if (lower.Contains("target creature an opponent controls"))
+    {
+      // "put a +1/+1 counter on target creature an opponent controls" — the target is
+      // restricted to a creature controlled by an opponent (CR 109.5 controller filter),
+      // distinct from the unrestricted "target creature" fallthrough below. Mirrors the
+      // Controller=Opponent shape used for other targeted effects on this same surface
+      // phrase (e.g. Banisher Priest's "exile target creature an opponent controls").
+      target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Target,
+        Filter = new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.Opponent },
+      };
+    }
     else if (lower.Contains("target creature"))
     {
       target = new ObjectReference
