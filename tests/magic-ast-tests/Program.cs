@@ -144,6 +144,16 @@ public class Program
             + "each combo by blocking layer (parse vs reconstruction) → Data/_08_Reporting/interaction-triage-report.json."
         );
 
+      // The interaction-value overlay (allComboBlockingCards) that the triage
+      // flow fuses into its yield-cluster ranking. Produced by a prior
+      // InteractionTriage run; read by path (loose coupling) so a first run
+      // without it simply falls back to the pre-fusion fractional-yield order.
+      var interactionTriageReportPath = Path.Combine(
+        dataPath,
+        "_08_Reporting",
+        "interaction-triage-report.json"
+      );
+
       flowthru
         .RegisterFlow<Catalog>(
           "MagicAstTriage",
@@ -152,7 +162,8 @@ public class Program
               catalog,
               httpClient,
               ratchetBaselinePath,
-              handParsedFixturesRoot
+              handParsedFixturesRoot,
+              interactionTriageReportPath
             )
         )
         .WithDescription(
@@ -163,7 +174,8 @@ public class Program
       flowthru
         .RegisterFlow<Catalog>(
           "PortLabelCensus",
-          catalog => LabelCensusFlow.Create(catalog, ontologyPath)
+          catalog =>
+            LabelCensusFlow.Create(catalog, ontologyPath, interactionTriageReportPath)
         )
         .WithDescription(
           "Parses + PortWalk-projects every corpus card and aggregates the distinct port-label space → "

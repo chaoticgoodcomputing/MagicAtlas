@@ -87,6 +87,42 @@ public partial record YieldClusterSummary
   public required double FractionalYield { get; init; }
 
   /// <summary>
+  /// Fractional combo-blocking count for this cluster: the sum, over every card
+  /// with a line in this cluster, of <c>blockedComboCount / (distinct templates
+  /// on that card)</c>. Same 1/N attribution as <see cref="FractionalYield"/>,
+  /// so a card split across several unparsed templates shares its combo credit
+  /// across them rather than double-counting. Zero when no InteractionTriage
+  /// value map was available at report time.
+  /// </summary>
+  public double ComboBlockedCount { get; init; }
+
+  /// <summary>
+  /// Fractional combo-popularity mass this cluster unblocks: the same 1/N-weighted
+  /// sum of each member card's <c>popularityMass</c> (total popularity of the
+  /// combos it gates). This is the downstream-value signal — how much real,
+  /// popularity-weighted combo coverage is waiting behind this parser surface.
+  /// </summary>
+  public double ComboPopularityMass { get; init; }
+
+  /// <summary>
+  /// The interaction-value boost factor, <c>log10(1 + ComboPopularityMass)</c>.
+  /// Compresses the wide popularity-mass range into a bounded, additive weight
+  /// (mass 0 → 0, mass 1M → ~6). A cluster that unblocks no known combos scores 0.
+  /// </summary>
+  public double InteractionValueScore { get; init; }
+
+  /// <summary>
+  /// PRIMARY ranking key when a value map is present:
+  /// <c>FractionalYield × (1 + InteractionValueScore)</c>. Blends parse-proximity
+  /// (how close this surface is to flipping whole cards) with downstream combo
+  /// value (how much popular-combo coverage it unblocks). Degrades EXACTLY to
+  /// <see cref="FractionalYield"/> when no InteractionTriage value map is present
+  /// (InteractionValueScore = 0), so the surface is backward-compatible: a run
+  /// without the interaction overlay ranks identically to the pre-fusion loop.
+  /// </summary>
+  public double FusedScore { get; init; }
+
+  /// <summary>
   /// The most common <c>Diagnostic.Pattern</c> among this cluster's lines —
   /// the "where it fails" hint. Tells a sub-agent which parser this template
   /// bails in (e.g. "UnparsedTriggered") without being the cluster key itself.

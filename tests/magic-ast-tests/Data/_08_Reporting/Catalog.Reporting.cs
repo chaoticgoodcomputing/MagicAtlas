@@ -108,6 +108,13 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/combo-instances.json")
       .Build());
 
+  /// <summary>The wide reconstruction-recall measurement (co-produced with D4; measurement, never a gate).</summary>
+  public IItem<ExtendedRecallReport> ExtendedRecall =>
+    CreateItem(() => Item.Of<ExtendedRecallReport>("ExtendedRecall")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/extended-recall-report.json")
+      .Build());
+
   /// <summary>D2 — the family subway map (stations + realized-combo-annotated directed lines).</summary>
   public IItem<ResourceGraph> ResourceGraph =>
     CreateItem(() => Item.Of<ResourceGraph>("ResourceGraph")

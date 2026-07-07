@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using MagicAST;
 using MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
+using MagicAtlas.Ast.Tests.Flows.Common;
 
 namespace MagicAtlas.Ast.Tests.Flows.MagicAstTriage.Clustering;
 
@@ -27,14 +28,22 @@ public static class YieldClusterAnalyzer
   /// <summary>
   /// Cluster all unparsed lines by normalized template, compute per-template
   /// proximity-weighted fractional yield and dominant diagnostic, and return the
-  /// top-<paramref name="batchSize"/> clusters ranked by fractional yield.
+  /// top-<paramref name="batchSize"/> clusters ranked by fused score (parse
+  /// proximity × downstream combo value).
   /// </summary>
+  /// <param name="cardComboValue">
+  /// Per-card combo-blocking value keyed by card name (from InteractionTriage).
+  /// Pass an empty map to disable the fusion — the ranking then reduces to the
+  /// pre-fusion fractional-yield order.
+  /// </param>
   public static IReadOnlyList<YieldClusterSummary> ComputeTopYieldClusters(
     IEnumerable<ParseRecord> records,
     int batchSize,
-    IReadOnlySet<string> handParsedNames
+    IReadOnlySet<string> handParsedNames,
+    IReadOnlyDictionary<string, CardComboValue>? cardComboValue = null
   )
   {
+    cardComboValue ??= new Dictionary<string, CardComboValue>(StringComparer.Ordinal);
     // 1) Per-card unparsed-line list. Card is "unparsed" if it has any line
     //    with at least one diagnostic. Unit of clustering is the oracle line.
     var unparsedCards = new List<UnparsedCard>();
@@ -109,6 +118,48 @@ public static class YieldClusterAnalyzer
         templateToFractionalYield[t] += weight;
     }
 
+    // 5a′) Per-template fractional downstream combo value. Same 1/N attribution
+    //      as fractional yield: each card carrying a line in template T donates
+    //      (its blocked-combo count / mass) ÷ (distinct templates on the card)
+    //      to T. A card blocking many popular combos, one template from parsing,
+    //      lifts that template's fused score; a card whose combo value is split
+    //      across several unparsed templates shares the credit rather than
+    //      double-counting it. Cards absent from the value map (parse fine, or
+    //      block no combo) contribute 0 — so with an empty map every template's
+    //      combo value is 0 and the fused score collapses to fractional yield.
+    var cardIdToName = new Dictionary<string, string>(StringComparer.Ordinal);
+    foreach (var card in unparsedCards)
+      cardIdToName[card.ScryfallId] = card.CardName;
+
+    var templateToComboCount = byTemplate.ToDictionary(b => b.TemplateId, _ => 0.0);
+    var templateToComboMass = byTemplate.ToDictionary(b => b.TemplateId, _ => 0.0);
+    foreach (var (cardId, templates) in cardToTemplates)
+    {
+      if (templates.Count == 0)
+        continue;
+      if (
+        !cardIdToName.TryGetValue(cardId, out var name)
+        || !cardComboValue.TryGetValue(name, out var value)
+      )
+        continue;
+      var weight = 1.0 / templates.Count;
+      foreach (var t in templates)
+      {
+        templateToComboCount[t] += value.BlockedComboCount * weight;
+        templateToComboMass[t] += value.PopularityMass * weight;
+      }
+    }
+
+    // Fused score: parse-proximity yield scaled by an interaction-value boost.
+    // log10 keeps the wide popularity-mass range bounded and additive; the
+    // (1 + boost) form means a zero-combo-value cluster keeps its raw yield.
+    var templateToFusedScore = byTemplate.ToDictionary(
+      b => b.TemplateId,
+      b =>
+        templateToFractionalYield.GetValueOrDefault(b.TemplateId)
+        * (1.0 + Math.Log10(1.0 + templateToComboMass.GetValueOrDefault(b.TemplateId)))
+    );
+
     // 5b) Per-template dominant (pattern, rule): the most common diagnostic key
     //     across the cluster's lines — the "where it fails" navigation hint.
     var templateToDominant = byTemplate.ToDictionary(
@@ -116,16 +167,20 @@ public static class YieldClusterAnalyzer
       b => ComputeDominantDiagnostic(b.Lines)
     );
 
-    // 6) Rank clusters by proximity-weighted fractional yield (primary), with
-    //    whole-card DirectYield then raw line count as tiebreaks, and emit the
-    //    top batchSize. Fractional yield is the right ranking axis here because
-    //    it surfaces templates that are the last-or-near-last missing piece
-    //    across many partially-complete cards — exactly the families a coarse,
-    //    whole-card-flip ranking buries. Overlap is handled implicitly: a card
-    //    split across N templates contributes 1/N to each, so co-occurring
-    //    templates are discounted rather than both claiming the full card.
+    // 6) Rank clusters by FUSED score (primary): proximity-weighted fractional
+    //    yield scaled by the popularity-mass of the combos the cluster unblocks.
+    //    Fractional yield alone surfaces templates that are the last-or-near-last
+    //    missing piece across many partially-complete cards; the fused score adds
+    //    the downstream objective — a surface that flips cards AND unblocks
+    //    popular combos outranks one that only flips cards. With an empty value
+    //    map the boost is 0 and this reduces EXACTLY to the prior fractional-yield
+    //    order (fractional yield is kept as the first tiebreak to make that
+    //    reduction exact). Overlap is handled implicitly: a card split across N
+    //    templates contributes 1/N to each axis, so co-occurring templates are
+    //    discounted rather than both claiming the full card.
     var ranked = byTemplate
-      .OrderByDescending(b => templateToFractionalYield.GetValueOrDefault(b.TemplateId))
+      .OrderByDescending(b => templateToFusedScore.GetValueOrDefault(b.TemplateId))
+      .ThenByDescending(b => templateToFractionalYield.GetValueOrDefault(b.TemplateId))
       .ThenByDescending(b => templateToDirectYield.GetValueOrDefault(b.TemplateId))
       .ThenByDescending(b => b.Lines.Count)
       .Take(batchSize)
@@ -158,6 +213,9 @@ public static class YieldClusterAnalyzer
 
       var (dominantPattern, dominantRule, dominantShare) = templateToDominant[bucket.TemplateId];
 
+      var comboMass = templateToComboMass.GetValueOrDefault(bucket.TemplateId);
+      var interactionValueScore = Math.Log10(1.0 + comboMass);
+
       summaries.Add(new YieldClusterSummary
       {
         Rank = i + 1,
@@ -166,6 +224,10 @@ public static class YieldClusterAnalyzer
         CardCount = templateToCardIds[bucket.TemplateId].Count,
         DirectYield = templateToDirectYield.GetValueOrDefault(bucket.TemplateId),
         FractionalYield = templateToFractionalYield.GetValueOrDefault(bucket.TemplateId),
+        ComboBlockedCount = templateToComboCount.GetValueOrDefault(bucket.TemplateId),
+        ComboPopularityMass = comboMass,
+        InteractionValueScore = interactionValueScore,
+        FusedScore = templateToFusedScore.GetValueOrDefault(bucket.TemplateId),
         DominantPattern = dominantPattern,
         DominantLastAttemptedRule = dominantRule,
         DominantShare = dominantShare,

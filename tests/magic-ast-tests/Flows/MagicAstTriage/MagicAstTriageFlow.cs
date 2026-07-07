@@ -23,7 +23,8 @@ public static class MagicAstTriageFlow
     Catalog catalog,
     HttpClient httpClient,
     string ratchetBaselinePath,
-    string handParsedFixturesRoot
+    string handParsedFixturesRoot,
+    string? interactionTriageReportPath = null
   )
   {
     return FlowBuilder.CreateFlow("MagicAstTriage", pipeline =>
@@ -50,7 +51,11 @@ public static class MagicAstTriageFlow
 
       pipeline.AddStep<IEnumerable<ParseRecord>, TriageReport>(
         label: "AggregateTriageReport",
-        transform: AggregateTriageReportStep.Create(ratchetBaselinePath, handParsedFixturesRoot),
+        transform: AggregateTriageReportStep.Create(
+          ratchetBaselinePath,
+          handParsedFixturesRoot,
+          interactionTriageReportPath
+        ),
         inputs: catalog.ParseRecords,
         outputs: catalog.TriageReport
       );

@@ -6,6 +6,7 @@ using MagicAST.Interaction;
 using MagicAST.Parsing;
 using MagicAtlas.Ast.Tests.Data._02_Intermediate.Schemas;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
+using MagicAtlas.Ast.Tests.Flows.Common;
 
 namespace MagicAtlas.Ast.Tests.Flows.LabelCensus.Steps;
 
@@ -31,10 +32,14 @@ public static class CensusStep
     "token", "mana", "life", "counter", "untap", "returntobattlefield", "copy",
   };
 
-  public static Func<IEnumerable<MastCardInput>, PortLabelCensus> Create(string ontologyPath) =>
+  public static Func<IEnumerable<MastCardInput>, PortLabelCensus> Create(
+    string ontologyPath,
+    string? interactionTriageReportPath = null
+  ) =>
     cards =>
     {
       var ontology = JsonSerializer.Deserialize<TypeOntology>(File.ReadAllText(ontologyPath))!;
+      var comboValue = CardComboValueLoader.Load(interactionTriageReportPath);
       var walk = new PortWalk(ontology);
       var parser = new OracleParser();
       var labelToCards = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
@@ -75,6 +80,13 @@ public static class CensusStep
         return true;
       }
 
+      // A projection gap is a coarse EMIT label — an edge-role emission (emit:<x>
+      // fallback or emit:unparsed) that no flow arm reads, so the card projects but
+      // forms no edge. These are exactly the labels a new PortWalk arm would light
+      // up. (Non-emit edge roles are always cycle-relevant, so they are never gaps.)
+      static bool IsProjectionGap(string label) =>
+        label.StartsWith("emit:", StringComparison.Ordinal) && !CycleRelevant(label);
+
       var distinct = labelToCards.Keys.ToList();
       var cycleRelevant = distinct.Count(CycleRelevant);
 
@@ -97,6 +109,35 @@ public static class CensusStep
         .Select(kv => new LabelCardCount { Label = kv.Key, CardCount = kv.Value.Count })
         .ToList();
 
+      // Projection pick surface: coarse emit labels an edge role would carry but
+      // that no flow arm reads (emit:<x> fallbacks + emit:unparsed), ranked by the
+      // combo-popularity mass of the cards carrying them. One PortWalk arm projects
+      // every card with the label, so the mass is the un-split value a single
+      // projection unit unblocks. Cards with no combo value contribute 0.
+      var topProjectionGaps = labelToCards
+        .Where(kv => IsProjectionGap(kv.Key))
+        .Select(kv =>
+        {
+          var valuedCards = kv.Value
+            .Select(name => (name, value: comboValue.GetValueOrDefault(name)))
+            .Where(x => x.value is not null)
+            .OrderByDescending(x => x.value!.PopularityMass)
+            .ToList();
+          return new ProjectionGap
+          {
+            Label = kv.Key,
+            CardCount = kv.Value.Count,
+            ComboBlockedCards = valuedCards.Count,
+            ComboPopularityMass = valuedCards.Sum(x => x.value!.PopularityMass),
+            ExampleCards = valuedCards.Take(5).Select(x => x.name).ToList(),
+          };
+        })
+        .OrderByDescending(g => g.ComboPopularityMass)
+        .ThenByDescending(g => g.CardCount)
+        .ThenBy(g => g.Label, StringComparer.Ordinal)
+        .Take(30)
+        .ToList();
+
       return new PortLabelCensus
       {
         GeneratedAt = DateTime.UtcNow,
@@ -109,6 +150,7 @@ public static class CensusStep
           cycleRelevant == 0 ? 0 : Math.Round((double)walked / cycleRelevant, 2),
         ByRole = byRole,
         TopLabels = topLabels,
+        TopProjectionGaps = topProjectionGaps,
       };
     };
 }

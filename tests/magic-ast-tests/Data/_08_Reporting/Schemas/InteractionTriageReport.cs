@@ -43,6 +43,16 @@ public partial record InteractionTriageReport
   /// <summary>Cards blocking the most popular combos — the priority overlay for the mast-tdd-loop.</summary>
   [SerializedLabel("topComboBlockingCards")]
   public List<CardGap> TopComboBlockingCards { get; init; } = [];
+
+  /// <summary>
+  /// The FULL, untruncated per-card blocking overlay — the machine-facing value
+  /// map that the MagicAstTriage flow joins against its yield clusters to compute
+  /// each cluster's <see cref="YieldClusterSummary.FusedScore"/> (parse-proximity
+  /// weighted by the combo-popularity mass it unblocks). <see cref="TopComboBlockingCards"/>
+  /// is the human-readable top slice of this same list.
+  /// </summary>
+  [SerializedLabel("allComboBlockingCards")]
+  public List<CardGap> AllComboBlockingCards { get; init; } = [];
 }
 
 /// <summary>One combo on a triage queue — its id, popularity, cards, results, and (if blocked) the blocking cards.</summary>
@@ -82,4 +92,14 @@ public partial record CardGap
 
   [SerializedLabel("maxComboPopularity")]
   public int MaxComboPopularity { get; init; }
+
+  /// <summary>
+  /// Sum of the popularity of every combo this card blocks — the card's total
+  /// downstream combo-value mass. Preferred over <see cref="MaxComboPopularity"/>
+  /// as the fusion weight because it rewards cards that gate MANY combos, not
+  /// just one very popular one. <c>long</c> to avoid overflow when a staple
+  /// (e.g. Lotus Petal) blocks hundreds of combos.
+  /// </summary>
+  [SerializedLabel("popularityMass")]
+  public long PopularityMass { get; init; }
 }

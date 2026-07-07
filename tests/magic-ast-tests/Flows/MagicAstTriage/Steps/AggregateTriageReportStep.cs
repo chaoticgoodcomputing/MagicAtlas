@@ -2,6 +2,7 @@ using System.Text.Json;
 using Flowthru.Step;
 using MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
+using MagicAtlas.Ast.Tests.Flows.Common;
 using MagicAtlas.Ast.Tests.Flows.MagicAstTriage.Clustering;
 
 namespace MagicAtlas.Ast.Tests.Flows.MagicAstTriage.Steps;
@@ -52,13 +53,15 @@ public static class AggregateTriageReportStep
 
   public static Func<IEnumerable<ParseRecord>, TriageReport> Create(
     string ratchetBaselinePath,
-    string handParsedFixturesRoot
+    string handParsedFixturesRoot,
+    string? interactionTriageReportPath = null
   ) =>
     records =>
     {
       var all = records.ToList();
       var handParsedNames = LoadHandParsedCardNames(handParsedFixturesRoot);
       var ratchet = ReadRatchetCoverage(ratchetBaselinePath);
+      var cardComboValue = CardComboValueLoader.Load(interactionTriageReportPath);
 
       // --- Indices over the corpus ---
       var allLines = all.SelectMany(r => r.Lines.Select(l => (record: r, line: l))).ToList();
@@ -298,7 +301,8 @@ public static class AggregateTriageReportStep
       var topYieldClusters = YieldClusterAnalyzer.ComputeTopYieldClusters(
         all,
         YieldClusterSurfaceDepth,
-        handParsedNames
+        handParsedNames,
+        cardComboValue
       );
 
       return new TriageReport
