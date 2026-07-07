@@ -1897,6 +1897,15 @@
           ]
         },
         {
+          "Type": "RedirectDamageEffect",
+          "Discriminator": "redirectDamage",
+          "IsUnparsed": false,
+          "Fields": [
+            "From",
+            "To"
+          ]
+        },
+        {
           "Type": "RegenerateEffect",
           "Discriminator": "regenerate",
           "IsUnparsed": false,
@@ -2621,5 +2630,5 @@
       ]
     }
   ],
-  "SchemaHash": "af967e2eb1cb6366bcbd5b4459ab1c9d0cc0936fc870e78d9f2a96597cdc65ba"
+  "SchemaHash": "10b1d1f1a2346ec6cb82a3301766f6af44e873deb95f9950dde20e412d2feae5"
 }

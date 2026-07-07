@@ -1,0 +1,124 @@
+{
+  "Input": {
+    "Name": "Warrior en-Kor",
+    "ManaCost": "{W}{W}",
+    "TypeLine": "Creature — Kor Warrior Knight",
+    "OracleText": "{0}: The next 1 damage that would be dealt to this creature this turn is dealt to target creature you control instead.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Warrior en-Kor",
+    "TypeLine": {
+      "Raw": "Creature — Kor Warrior Knight",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kor",
+        "Warrior",
+        "Knight"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{0}: The next 1 damage that would be dealt to this creature this turn is dealt to target creature you control instead.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 0
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "redirectDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "From": {
+                "Kind": "Self"
+              },
+              "To": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
