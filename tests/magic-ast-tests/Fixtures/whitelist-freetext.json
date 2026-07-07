@@ -302,6 +302,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "MH3/PestRescuer",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'you don't control a Pest creature token' is a control-count intervening-if gate with no current structured-condition arm; deferred exactly as ISD/VillagersOfEstwald's intervening-if on the same 'At the beginning of each upkeep, if …' trigger shape"
+    },
+    {
       "card": "KLD/IncendiaryFlow",
       "sink": "Timeframe",
       "tag": "debt",
