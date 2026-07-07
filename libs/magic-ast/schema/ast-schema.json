@@ -2599,6 +2599,14 @@
           "Fields": []
         },
         {
+          "Type": "TurnPartEvent",
+          "Discriminator": "turnPart",
+          "IsUnparsed": false,
+          "Fields": [
+            "Part"
+          ]
+        },
+        {
           "Type": "UntapEvent",
           "Discriminator": "untap",
           "IsUnparsed": false,
@@ -2613,5 +2621,5 @@
       ]
     }
   ],
-  "SchemaHash": "734dc9055a25c1500758a15de10b6187f60cef1f24f7ad5151dc3e14d82fea48"
+  "SchemaHash": "af967e2eb1cb6366bcbd5b4459ab1c9d0cc0936fc870e78d9f2a96597cdc65ba"
 }
