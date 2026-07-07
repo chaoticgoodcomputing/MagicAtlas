@@ -221,6 +221,7 @@
     "OracleEffect:putOnBottomOfLibrary",
     "OracleEffect:putOnTopOfLibrary",
     "OracleEffect:recover",
+    "OracleEffect:redirectDamage",
     "OracleEffect:regenerate",
     "OracleEffect:removeCounters",
     "OracleEffect:renown",
