@@ -329,11 +329,26 @@
           ]
         },
         {
+          "Type": "EscapedCondition",
+          "Discriminator": "escaped",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "KeywordCostPaidCondition",
           "Discriminator": "keywordCostPaid",
           "IsUnparsed": false,
           "Fields": [
             "Keyword"
+          ]
+        },
+        {
+          "Type": "ManaSpentToCastCondition",
+          "Discriminator": "manaSpentToCast",
+          "IsUnparsed": false,
+          "Fields": [
+            "Color",
+            "WasSpent"
           ]
         },
         {
@@ -2598,5 +2613,5 @@
       ]
     }
   ],
-  "SchemaHash": "b7aebb4861a0d7fc74960978a629bab277472c38be62750bd4ff1c417f0aa196"
+  "SchemaHash": "734dc9055a25c1500758a15de10b6187f60cef1f24f7ad5151dc3e14d82fea48"
 }
