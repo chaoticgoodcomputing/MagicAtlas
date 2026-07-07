@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/LifeGainDoublingReplacementRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 119.3"],
+      "reason": "models 'gain twice that much life instead' as a static ReplacementEffect (not a trigger): Event=lifeChange/gain/You, OriginalEventOccurs=false for 'instead', doubling carried as typed ReplacementModifier{Type:'double'} not baked into a discriminator; CR 614.1 verbatim matches, CR 119.3 grounds the life-gain event"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/CreaturesYouControlGainKeywordsUntilEndOfTurnRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 113.10", "CR 113.6"],
+      "reason": "splits 'gain flying and lifelink until end of turn' on ' and ' into one GainAbilityEffect per keyword (each Each/creature/you-control target + until-end-of-turn Duration), fixing the single-keyword rule's unanchored 'gain (\\w+)' lossy drop; single-keyword siblings (Vito) split to a one-element list producing the identical prior shape, so no mislabel; CR 113.10 grounds 'gains ability'"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LEG/TheWindCrystal.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 702.9", "CR 702.15"],
+      "reason": "all three lines faithful and no unparsed/diagnostics escape: line1 costReduction (no dropped sibling), line2 double life-gain replacement (OriginalEventOccurs:false, Modifier double), line3 carries BOTH flying (evasion, blockable by flying/reach) and lifelink, each with untilTime Turn/End duration — the lossy 'and lifelink' drop is genuinely fixed, not re-hidden"
+    },
+    {
+      "target": "mast-tdd/2026-07-07-lifegain-double#projection-decision",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — 'double' modifier value, replacement/gainAbility/lifeChange/evasion/lifelink discriminators all pre-existing (siblings to Mill/NoncombatDamage doubling and GainAbilityEffectRule); no PortWalk projection decision required by the ratchet"
+    }
+  ]
+}
