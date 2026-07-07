@@ -1,0 +1,115 @@
+{
+  "Input": {
+    "Name": "Symbiotic Deployment",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Skip your draw step.\n{1}, Tap two untapped creatures you control: Draw a card.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Symbiotic Deployment",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Skip your draw step.\n{1}, Tap two untapped creatures you control: Draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "turnPart",
+                "Part": "Draw",
+                "Whose": "You"
+              },
+              "OriginalEventOccurs": false
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
+              ]
+            },
+            {
+              "CostType": "tapPermanents",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Controller": "You"
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
