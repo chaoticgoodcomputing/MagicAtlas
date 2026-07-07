@@ -98,6 +98,12 @@
       "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) — no clean structured node"
     },
     {
+      "card": "BNG/EpharaGodOfThePolis",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — upkeep intervening-if 'you had another creature enter the battlefield under your control last turn' is a last-turn history predicate with no structured node yet (line 3; out of scope for the devotion-gated status family targeting line 2)"
+    },
+    {
       "card": "BNG/SnakeOfTheGoldenGrove",
       "sink": "OtherCondition",
       "tag": "debt",
