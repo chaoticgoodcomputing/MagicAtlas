@@ -37,6 +37,25 @@ public partial record ParseRecord
   public required IReadOnlyList<LineOutcome> Lines { get; init; }
 
   /// <summary>
+  /// True when the parse dropped structure WITHOUT emitting an
+  /// <c>UnparsedAbility</c> — a lossy-but-clean parse (see
+  /// <c>LossyParseAnalyzer</c>). Such a card looks clean to the per-line
+  /// diagnostics but silently under-represents its oracle text, so it is a risky
+  /// exemplar for a family whose target line is NOT the lossy one. Detected via a
+  /// trigger deficit (trigger openers in the text &gt; TriggeredAbility nodes
+  /// produced). Defaults false; a card with an honest UnparsedAbility is not
+  /// "lossy" (its failure is already visible).
+  /// </summary>
+  public bool SuspectedLossy { get; init; }
+
+  /// <summary>
+  /// The size of the trigger deficit (trigger openers minus produced
+  /// TriggeredAbility nodes) — 0 for a faithful parse. Surfaced for the triage
+  /// diagnostic and to rank which lossy cards dropped the most.
+  /// </summary>
+  public int DroppedTriggers { get; init; }
+
+  /// <summary>
   /// Residual-debt tally for this card's parse (ADR 0001 forcing-function): the
   /// not-yet-structured free-text residuals reachable in the AST, keyed by kind.
   /// Empty when the card carries no residual debt. Distinct from the per-line

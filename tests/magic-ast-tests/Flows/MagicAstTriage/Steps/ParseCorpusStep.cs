@@ -66,6 +66,13 @@ public static class ParseCorpusStep
     var unparsedNodes = ResidualWalker.CollectUnparsed(result.Output);
     var lines = AttributeLines(oracleText, unparsedNodes);
 
+    // Lossy-but-clean detection: a trigger deficit means a clause collapsed
+    // structure without emitting an UnparsedAbility (the per-line diagnostics
+    // can't see it). Only meaningful when the card ISN'T already visibly failing
+    // on that content — but computing it unconditionally is harmless and lets the
+    // exemplar ranking de-prioritise these risky "clean-looking" cards.
+    var lossy = LossyParseAnalyzer.Analyze(oracleText, abilities);
+
     return new ParseRecord
     {
       ScryfallId = input.ScryfallId,
@@ -74,6 +81,8 @@ public static class ParseCorpusStep
       TotalAbilities = totalAbilities,
       ParsedAbilities = parsedAbilities,
       Lines = lines,
+      SuspectedLossy = lossy.SuspectedLossy,
+      DroppedTriggers = lossy.DroppedTriggers,
       Residuals = result
         .Metrics.ResidualCounts.Select(kv => new ResidualKindCount { Kind = kv.Key, Count = kv.Value })
         .ToList(),

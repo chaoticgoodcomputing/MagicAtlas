@@ -167,6 +167,18 @@ public partial record YieldExemplar
   /// <summary>How many OTHER unparsed templates this card has (lower = cleaner fixture).</summary>
   public required int OtherUnparsedClusters { get; init; }
 
+  /// <summary>
+  /// True if this card's parse is <b>lossy-but-clean</b> — it dropped structure
+  /// (a trigger deficit) WITHOUT an <c>UnparsedAbility</c>, so <c>OtherUnparsedClusters</c>
+  /// understates its risk: a non-target line may have silently collapsed (e.g.
+  /// Keranos's reveal-triggers → a bare damage spell). Exemplars with this set are
+  /// ranked LAST within a cluster — prefer a genuinely-clean single-line card. When
+  /// no such alternative exists, a flagged exemplar is still shown (with this
+  /// warning) so the orchestrator authors the WHOLE-card gold and verifies each
+  /// line rather than trusting "the other lines parse". See <c>LossyParseAnalyzer</c>.
+  /// </summary>
+  public bool LossyRisk { get; init; }
+
   /// <summary>True if this card already has a hand-parsed fixture under <c>HandParsedCards/</c>.</summary>
   public required bool AlreadyHandParsed { get; init; }
 
@@ -196,6 +208,16 @@ public partial record GlobalMetrics
 
   /// <summary>Total residual occurrences across all kinds, corpus-wide.</summary>
   public required int TotalResidualDebt { get; init; }
+
+  /// <summary>
+  /// Count of cards that look FULLY parsed (no unparsed line) yet are
+  /// <b>lossy-but-clean</b> — a trigger deficit shows they silently dropped
+  /// structure (see <c>LossyParseAnalyzer</c>). This is the size of the blind spot
+  /// the per-line diagnostics miss: these cards would be picked as "clean"
+  /// exemplars but under-represent their oracle text. Should trend DOWN as the
+  /// dropping rules (over-greedy collapses) are fixed. Defaults 0.
+  /// </summary>
+  public int SuspectedLossyCleanCards { get; init; }
 }
 
 /// <summary>A passing-out-of-total ratio plus its percent form.</summary>

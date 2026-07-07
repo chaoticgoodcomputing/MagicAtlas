@@ -76,6 +76,13 @@ public static class AggregateTriageReportStep
       var totalAbilities = all.Sum(r => r.TotalAbilities);
       var parsedAbilities = all.Sum(r => r.ParsedAbilities);
 
+      // Lossy-but-clean blind spot: cards with NO unparsed line that nonetheless
+      // dropped structure (a trigger deficit). These are exactly the cards the
+      // clean-exemplar signal would over-trust.
+      var suspectedLossyClean = all.Count(r =>
+        r.SuspectedLossy && r.Lines.All(l => l.Patterns.Count == 0)
+      );
+
       // Corpus-wide residual debt (ADR 0001), aggregated by kind, descending.
       var residualDebt = all.SelectMany(r => r.Residuals)
         .GroupBy(rc => rc.Kind, StringComparer.Ordinal)
@@ -317,6 +324,7 @@ public static class AggregateTriageReportStep
           HandParsedCoverage = ratchet,
           ResidualDebt = residualDebt,
           TotalResidualDebt = totalResidualDebt,
+          SuspectedLossyCleanCards = suspectedLossyClean,
         },
         TopYieldClusters = topYieldClusters,
         TopGaps = topGaps,

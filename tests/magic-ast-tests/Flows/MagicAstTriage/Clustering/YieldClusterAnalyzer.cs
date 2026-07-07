@@ -52,7 +52,9 @@ public static class YieldClusterAnalyzer
       var lines = rec.Lines.Where(l => l.Patterns.Count > 0).ToList();
       if (lines.Count == 0)
         continue;
-      unparsedCards.Add(new UnparsedCard(rec.ScryfallId, rec.CardName, rec.Input, lines));
+      unparsedCards.Add(
+        new UnparsedCard(rec.ScryfallId, rec.CardName, rec.Input, lines, rec.SuspectedLossy)
+      );
     }
 
     // 2) Tokenize each unparsed line to its template, carrying the line's
@@ -191,13 +193,16 @@ public static class YieldClusterAnalyzer
     {
       var bucket = ranked[i];
 
-      // Exemplar selection: distinct cards with fewest other unparsed
-      // templates, then shortest oracle line.
+      // Exemplar selection: prefer genuinely-clean cards. A lossy-but-clean card
+      // (SuspectedLossy — a non-target line silently collapsed) is ranked LAST
+      // even if its OtherUnparsedClusters is 0, because that count can't see the
+      // silent drop; then fewest other unparsed templates, then shortest line.
       var exemplars = bucket.Lines
         .Select(l => new { Line = l, OtherClusters = cardToTemplates[l.Card.ScryfallId].Count - 1 })
         .GroupBy(x => x.Line.Card.ScryfallId)
         .Select(g => g.First())
-        .OrderBy(x => x.OtherClusters)
+        .OrderBy(x => x.Line.Card.SuspectedLossy)
+        .ThenBy(x => x.OtherClusters)
         .ThenBy(x => x.Line.OracleLine.Length)
         .Take(MaxExemplars)
         .Select(x => new YieldExemplar
@@ -206,6 +211,7 @@ public static class YieldClusterAnalyzer
           ScryfallId = x.Line.Card.ScryfallId,
           OracleLine = x.Line.OracleLine,
           OtherUnparsedClusters = x.OtherClusters,
+          LossyRisk = x.Line.Card.SuspectedLossy,
           AlreadyHandParsed = handParsedNames.Contains(x.Line.Card.CardName),
           Input = x.Line.Card.Input,
         })
@@ -404,7 +410,8 @@ public static class YieldClusterAnalyzer
     string ScryfallId,
     string CardName,
     CardInputDTO Input,
-    IReadOnlyList<LineOutcome> Lines
+    IReadOnlyList<LineOutcome> Lines,
+    bool SuspectedLossy
   );
 
   private sealed record LineEntry(
