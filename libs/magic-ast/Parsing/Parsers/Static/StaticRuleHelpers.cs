@@ -538,6 +538,26 @@ internal static class StaticRuleHelpers
         : filter with { Zone = Zone.Graveyard };
     }
 
+    // "<type> cards in your graveyard" — typed count scoped to the
+    // controller's own graveyard (Salvage Slasher's characteristic-defining
+    // P/T bonus, CR 604.3; the layer-7c modifier itself is CR 613.4c). Distinct
+    // from the "all graveyards" case above by the added Controller axis
+    // (mirrors the "you control" board-count case's Controller.You), matching
+    // the established Controller+Zone shape already used for cost-reduction
+    // counts over "your graveyard" (Ghoultree, Cryptic Serpent).
+    var yourGraveyardMatch = Regex.Match(
+      text,
+      @"^(?<type>.+?)\s+cards?\s+in\s+your\s+graveyard$",
+      RegexOptions.IgnoreCase
+    );
+    if (yourGraveyardMatch.Success)
+    {
+      var filter = ClassifyTypeNounPhrase(yourGraveyardMatch.Groups["type"].Value);
+      return filter is null
+        ? null
+        : filter with { Zone = Zone.Graveyard, Controller = ControllerFilter.You };
+    }
+
     // "<nouns> you control" — board count.
     var controlMatch = Regex.Match(
       text,

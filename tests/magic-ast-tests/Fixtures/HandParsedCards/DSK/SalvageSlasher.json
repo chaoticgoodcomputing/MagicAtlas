@@ -1,0 +1,105 @@
+{
+  "Input": {
+    "Name": "Salvage Slasher",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Artifact Creature — Human Rogue",
+    "OracleText": "This creature gets +1/+0 for each artifact card in your graveyard.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Salvage Slasher",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Human Rogue",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Rogue"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature gets +1/+0 for each artifact card in your graveyard.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "CardTypes": [
+                    "artifact"
+                  ],
+                  "Controller": "You",
+                  "Zone": "Graveyard"
+                }
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}
