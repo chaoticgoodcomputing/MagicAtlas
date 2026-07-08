@@ -1,0 +1,126 @@
+{
+  "Input": {
+    "Name": "Ruin Ghost",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Spirit",
+    "OracleText": "{W}, {T}: Exile target land you control, then return it to the battlefield under your control.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Ruin Ghost",
+    "TypeLine": {
+      "Raw": "Creature — Spirit",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spirit"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{W}, {T}: Exile target land you control, then return it to the battlefield under your control.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                }
+              ]
+            },
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "Controller": "You"
+                }
+              }
+            },
+            {
+              "EffectType": "returnToBattlefield",
+              "Target": {
+                "Kind": "Designated",
+                "Filter": {
+                  "Zone": "Exile",
+                  "ExiledWith": {
+                    "Kind": "Self"
+                  }
+                }
+              },
+              "UnderControl": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
