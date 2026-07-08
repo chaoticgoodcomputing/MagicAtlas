@@ -8,18 +8,20 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// Spell-resolution rule for the tutor pattern:
-/// "Search your library for a [type] card, put (that card|it) into your hand, then shuffle."
+/// "Search your library for a [type] card, [reveal it,] put (that card|it) into your hand, then shuffle."
 ///
 /// Handles:
 /// <list type="bullet">
 ///   <item>"a card" — any card (Filter.CardTypes = ["card"])</item>
 ///   <item>"a [type] card" — typed filter, e.g. "a creature card",
 ///   "a basic land card" (type word(s) parsed into CardTypes / Supertypes)</item>
+///   <item>an optional "reveal it," clause before the put-to-hand clause
+///   (e.g. Lay of the Land) — sets <c>Revealed = true</c> when present.</item>
 /// </list>
 ///
 /// All variants map to a single <see cref="SearchLibraryEffect"/> with
-/// <c>Destination = Hand</c>. The put-to-hand and shuffle clauses are folded
-/// into the effect per the existing convention established by
+/// <c>Destination = Hand</c>. The optional reveal, put-to-hand, and shuffle
+/// clauses are folded into the effect per the existing convention established by
 /// <c>SearchBasicLandTriggeredRule</c> and the Solemn Simulacrum fixture.
 /// Rule 701.23 (Search).
 /// </summary>
@@ -31,9 +33,11 @@ public sealed class SearchLibraryToHandRule : ISpellRule
   //   "a creature card"        → filter = "creature"
   //   "a basic land card"      → filter = "basic land"
   //   "a basic Forest card"    → filter = "basic Forest"
+  // The optional <reveal> group captures a "reveal it," clause sitting between the
+  // filter and the put-to-hand clause; its presence sets Revealed = true.
   private static readonly Regex _pattern = new(
     @"^Search\s+your\s+library\s+for\s+a\s+(?<filter>(?:[A-Za-z]+\s+)+)?card,\s*"
-    + @"put\s+(?:that\s+card|it)\s+into\s+your\s+hand,\s*then\s+shuffle$",
+    + @"(?<reveal>reveal\s+it,\s*)?put\s+(?:that\s+card|it)\s+into\s+your\s+hand,\s*then\s+shuffle$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -67,7 +71,7 @@ public sealed class SearchLibraryToHandRule : ISpellRule
       Filter = filter,
       Count = LiteralQuantity.Of(1),
       Destination = SearchDestination.Hand,
-      Revealed = false,
+      Revealed = m.Groups["reveal"].Success,
     };
     return true;
   }
