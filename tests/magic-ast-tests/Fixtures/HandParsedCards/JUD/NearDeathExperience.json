@@ -1,0 +1,105 @@
+{
+  "Input": {
+    "Name": "Near-Death Experience",
+    "ManaCost": "{2}{W}{W}{W}",
+    "TypeLine": "Enchantment",
+    "OracleText": "At the beginning of your upkeep, if you have exactly 1 life, you win the game.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Near-Death Experience",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of your upkeep, if you have exactly 1 life, you win the game.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "quantityComparison",
+            "Left": {
+              "QuantityType": "derived",
+              "DerivedFrom": "LifeTotal",
+              "Source": "you"
+            },
+            "Operator": "Equal",
+            "Right": {
+              "QuantityType": "literal",
+              "Value": 1
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "winTheGame",
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}

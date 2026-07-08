@@ -64,6 +64,22 @@ public static class ConditionParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
+  /// "you have exactly 1 life" / "that player has 10 or less life" — a life-total
+  /// threshold predicate (Near-Death Experience's upkeep intervening-if: "At the
+  /// beginning of your upkeep, if you have exactly 1 life, you win the game.").
+  /// Structured to a <see cref="QuantityComparisonCondition"/> whose left operand
+  /// is a <see cref="DerivedQuantity"/> keyed on <see cref="DerivedKind.LifeTotal"/>
+  /// (the <c>Source</c> pronoun carries whose life total — "you"/"that player" —
+  /// mirroring the "it" pronoun convention used elsewhere for derived quantities)
+  /// rather than left as a free-text <see cref="OtherCondition"/> residual.
+  /// CR 119.1: "Each player begins the game with a starting life total of 20."
+  /// Anchored (^…$).
+  /// </summary>
+  private static readonly Regex LifeTotal = new(
+    @"^(?<who>you|that\s+player)\s+(?:have|has)\s+(?:exactly\s+)?(?<quant>\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer|less))?\s+life$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// "it had a +1/+1 counter on it" / "it had no +1/+1 counters on it" — the dying/triggering object's
   /// counter-gate (Basri's Lieutenant, Persist "had no -1/-1", Undying "had no +1/+1"). Structured to
   /// <see cref="TriggeringObjectCounterCondition"/> rather than left as a free-text residual.
@@ -226,6 +242,29 @@ public static class ConditionParser
       {
         Filter = filter,
         Count = Quant(hm.Groups["quant"].Value, hm.Groups["dir"].Value),
+      };
+    }
+
+    if (LifeTotal.Match(body) is { Success: true } lt)
+    {
+      var value = NumberWords.TryGetValue(lt.Groups["quant"].Value, out var lv)
+        ? lv
+        : int.Parse(lt.Groups["quant"].Value);
+      var op = lt.Groups["dir"].Value.ToLowerInvariant() switch
+      {
+        "more" => ComparisonOperator.GreaterThanOrEqual,
+        "fewer" or "less" => ComparisonOperator.LessThanOrEqual,
+        _ => ComparisonOperator.Equal,
+      };
+      return new QuantityComparisonCondition
+      {
+        Left = new DerivedQuantity
+        {
+          DerivedFrom = DerivedKind.LifeTotal,
+          Source = lt.Groups["who"].Value.ToLowerInvariant(),
+        },
+        Operator = op,
+        Right = new LiteralQuantity { Value = value },
       };
     }
 
