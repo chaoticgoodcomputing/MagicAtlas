@@ -2312,6 +2312,12 @@
           ]
         },
         {
+          "Type": "VentureIntoTheDungeonEffect",
+          "Discriminator": "ventureIntoTheDungeon",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "WarpEffect",
           "Discriminator": "warp",
           "IsUnparsed": false,
@@ -2639,5 +2645,5 @@
       ]
     }
   ],
-  "SchemaHash": "cd69e54eaeea5be0075b887d9ff8ba1cefd46d1659e9d4c8efb9ea8e3e00f3c4"
+  "SchemaHash": "0d13351a5a41ac6f6fb309e7fc6225faf2870ff14d9caa1f328bb44ffb13efd0"
 }

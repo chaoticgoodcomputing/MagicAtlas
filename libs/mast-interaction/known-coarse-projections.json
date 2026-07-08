@@ -187,7 +187,8 @@
     "abundanceReveal": "Abundance reveal-until-land/nonland replacement (CR 614 replacement of a draw) — bespoke library-visibility action; no flow rule projects it yet, consciously inert for recall",
     "putAdditionalCounterOfChosenKind": "Ichormoon Gauntlet triggered effect (CR 122.1 counters) — player chooses a counter kind already on the target permanent and places one additional counter of that kind; no flow rule reads counter-duplication events yet; consciously inert for interaction recall",
     "earthbend": "earthbend N (CR 701.66) — puts +1/+1 counters on a land you control, making it a 0/0 creature; bespoke keyword action, no flow rule projects it yet, consciously inert",
-    "unlockDoor": "unlock a door of a Room (CR 709.5) — assigns an unlocked designation; bespoke Room-mechanic action, no flow rule reads door state yet, consciously inert"
+    "unlockDoor": "unlock a door of a Room (CR 709.5) — assigns an unlocked designation; bespoke Room-mechanic action, no flow rule reads door state yet, consciously inert",
+    "ventureIntoTheDungeon": "Venture into the Dungeon keyword action (CR 701.49) — moves the controller's venture marker through a dungeon card (outside-the-game command-zone object); the resulting room abilities live on dungeon cards absent from the interaction corpus, so no flow rule reads venture events yet; consciously inert for interaction recall (mirrors the amass/explore/connive keyword-action carve-outs)"
   },
   "costType": {
     "composite": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
