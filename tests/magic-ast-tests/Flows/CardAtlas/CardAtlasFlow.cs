@@ -39,16 +39,18 @@ public static class CardAtlasFlow
           outputs: (catalog.CardMeta, catalog.CardPorts)
         );
 
-        // D4 — per-combo reconstructed loops (named cards + tier + result).
+        // D4 — per-combo reconstructed loops (named cards + tier + result), plus the wide
+        // reconstruction-recall measurement co-produced from the same per-combo pass.
         pipeline.AddStep<
           IEnumerable<Combo>,
           IEnumerable<MastCardInput>,
-          IEnumerable<ComboInstanceRow>
+          IEnumerable<ComboInstanceRow>,
+          ExtendedRecallReport
         >(
           label: "ReconstructCombos",
           transform: ReconstructCombosStep.Create(ontologyPath),
           inputs: (catalog.Combos, catalog.CardInputs),
-          outputs: catalog.ComboInstances
+          outputs: (catalog.ComboInstances, catalog.ExtendedRecall)
         );
 
         // D2 + D3 — the family rollups (aggregated from D1 + D4, no re-materialize).

@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MH3/PestRescuer.json#static-replacement",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 119.3"],
+      "reason": "life-gain augmentation modeled as Kind:static ReplacementEffect (not a triggered 'whenever you gain life'); Event=LifeChangeEvent{gain, Controller:You}, OriginalEventOccurs:true, Modifier=ReplacementModifier{plus, literal 1} — augmentation semantics correct, '+1' typed not free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/LifeGainAugmentationReplacementRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 119.3"],
+      "reason": "both cited rules exist in rules-structure.json and match the modeling verbatim; emits a static replacement watching the life-gain event, mirrors SpellCopyAugmentationReplacementRule's OriginalEventOccurs=true augmentation pattern"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MH3/PestRescuer.json#token-triggered-ability",
+      "verdict": "PASS",
+      "citations": ["CR 603.1", "CR 119.3"],
+      "reason": "granted 'When this token dies, you gain 1 life' structured faithfully: Trigger{When, Dies, IsSelf:true} separate from GainLifeEffect{literal 1, You} — trigger != effect, no timing baked into effect (CR 603.1); dies matches glossary/CR 700.4"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/CreateTokenWithDiesGainLifeAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.1", "CR 119.3"],
+      "reason": "reuses base-token helpers so token characteristics match CreateTokenRule; attaches the previously-dropped quoted ability as a structured TriggeredAbility; cited CR 119.3 exists and matches"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/whitelist-freetext.json#MH3/PestRescuer",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "justified PB-7 carve-out: the ISD/VillagersOfEstwaldHowlpackOfEstwald OtherCondition debt entry genuinely exists with the identical 'At the beginning of each upkeep, if <cond>' trigger shape and same InterveningIf{ConditionType:other, Text} free-text sink; 'you don't control a Pest creature token' is the same structural class of intervening-if condition with no structured-condition arm yet"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MH3/PestRescuer.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 603.1"],
+      "reason": "both card lines present (triggered + static); no unparsed/UnparsedEffect/Diagnostics nodes; only verbatim-by-design Raw fields (TypeLine, ManaCost, P/T); no dropped sibling effect; no describe-vs-execute conflation"
+    },
+    {
+      "target": "mast-tdd/2026-07-07-lifegain-replacement#projection-decision",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new PortWalk-tracked discriminator (effect/cost type, trigger event, restriction) introduced — reuses replacement/lifeChange/gainLife/createToken/Dies; the new ReplacementModifier.Type='plus' is a leaf-level typed amount-scaling descriptor within an already-projected ReplacementEffect, inert to flow, so no semantic PortGraph case is warranted (diff touches no PortGraph/PortWalk/known-coarse files)"
+    }
+  ]
+}

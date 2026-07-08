@@ -10,11 +10,12 @@ using MagicAST.Parsing;
 using MagicAST.Parsing.Parsers.Activated;
 
 /// <summary>
-/// Parses Ward keyword abilities in three cost forms:
+/// Parses Ward keyword abilities in four cost forms:
 /// <list type="bullet">
 /// <item>Mana cost: "Ward {N}" — e.g. "Ward {2}"</item>
 /// <item>Life cost: "Ward—Pay N life." — e.g. "Ward—Pay 7 life."</item>
 /// <item>Sacrifice cost: "Ward—Sacrifice a [filter]." — e.g. "Ward—Sacrifice a Food."</item>
+/// <item>Discard cost: "Ward—Discard a card." — e.g. "Ward—Discard a card." (Sunset Saboteur)</item>
 /// </list>
 /// CR 702.21a: "Ward is a triggered ability. Ward [cost] means 'Whenever this permanent
 /// becomes the target of a spell or ability an opponent controls, counter that spell or
@@ -42,6 +43,13 @@ public sealed class WardKeywordRule : IStaticRule
   // Anchored at both ends so it cannot match as a substring of a more-specific pattern.
   private static readonly Regex SacrificeCostPattern = new(
     @"^\s*Ward—(?<saccost>Sacrifice\s+an?\s+.+?)[.\s]*(?<rest>(?:\([^)]+\))?)\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches: "Ward—Discard a card." (em-dash separated NON-mana discard cost, CR 702.21a).
+  // Anchored at both ends so it cannot match as a substring of a more-specific sibling.
+  private static readonly Regex DiscardCostPattern = new(
+    @"^\s*Ward—(?<disccost>Discard\s+.+?)[.\s]*(?<rest>(?:\([^)]+\))?)\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -100,24 +108,42 @@ public sealed class WardKeywordRule : IStaticRule
       {
         // Try sacrifice cost form: "Ward—Sacrifice a [filter]."
         var sacMatch = SacrificeCostPattern.Match(clause.RawText);
-        if (!sacMatch.Success)
+        if (sacMatch.Success)
         {
-          return null;
+          var sacCostText = sacMatch.Groups["saccost"].Value.Trim();
+          var (quantity, filter) = ActivatedRuleHelpers.ParseSacrificePattern(sacCostText);
+          if (filter is null)
+          {
+            return null;
+          }
+
+          wardCost = new SacrificeCost { Filter = filter, Quantity = quantity };
+
+          var rest = sacMatch.Groups["rest"].Value.Trim();
+          if (rest.StartsWith('(') && rest.EndsWith(')'))
+          {
+            reminder = new Parenthetical { Text = rest };
+          }
         }
-
-        var sacCostText = sacMatch.Groups["saccost"].Value.Trim();
-        var (quantity, filter) = ActivatedRuleHelpers.ParseSacrificePattern(sacCostText);
-        if (filter is null)
+        else
         {
-          return null;
-        }
+          // Try discard cost form: "Ward—Discard a card." (non-mana cost, CR 702.21a)
+          var discMatch = DiscardCostPattern.Match(clause.RawText);
+          if (!discMatch.Success)
+          {
+            return null;
+          }
 
-        wardCost = new SacrificeCost { Filter = filter, Quantity = quantity };
+          var discCostText = discMatch.Groups["disccost"].Value.Trim();
+          var (discQuantity, discFilter) = ActivatedRuleHelpers.ParseDiscardPattern(discCostText);
 
-        var rest = sacMatch.Groups["rest"].Value.Trim();
-        if (rest.StartsWith('(') && rest.EndsWith(')'))
-        {
-          reminder = new Parenthetical { Text = rest };
+          wardCost = new DiscardCost { Filter = discFilter, Quantity = discQuantity };
+
+          var rest = discMatch.Groups["rest"].Value.Trim();
+          if (rest.StartsWith('(') && rest.EndsWith(')'))
+          {
+            reminder = new Parenthetical { Text = rest };
+          }
         }
       }
     }

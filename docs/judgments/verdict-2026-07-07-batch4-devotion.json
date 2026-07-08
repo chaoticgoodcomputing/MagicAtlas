@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/DevotionConditionalLoseCreatureTypeRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 700.5", "CR 700.5a", "CR 205.1a"],
+      "reason": "optional anchored (?:\\s+and\\s+(?<color2>...))? group broadens the ^...$ Theros-god template to two-colour gods without altering single-colour parses; DevotionQuantity{Colors:[W,U]} descriptively matches CR 700.5 two-colour devotion; LoseTypeEffect{Self,creature}+AsLongAsDuration+QuantityComparison LessThan is the correct composite; all cited rules exist and match"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/whitelist-freetext.json#BNG/EpharaGodOfThePolis:OtherCondition",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "justified debt carve-out for line-3 intervening-if 'you had another creature enter ... last turn' last-turn history predicate; structurally equivalent to the pre-existing BNG/SnakeOfTheGoldenGrove and BoromirWardenoftheTower OtherCondition/debt entries; surrounding trigger+draw are fully structured, only the history predicate is free text — not hiding parseable structure"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BNG/EpharaGodOfThePolis.json",
+      "verdict": "PASS",
+      "citations": ["CR 700.5", "CR 205.1a", "CR 604.3"],
+      "reason": "three abilities all structured: Indestructible keywordAbility; loseType Self/creature gated on DevotionQuantity{[W,U]}<7 (line 2); and a FULL triggered ability for line 3 (beginning-of-upkeep trigger + InterveningIf + drawCards 1) — no unparsed/diagnostic/dropped-sibling nodes; only free text is the whitelisted OtherCondition intervening-if"
+    }
+  ]
+}

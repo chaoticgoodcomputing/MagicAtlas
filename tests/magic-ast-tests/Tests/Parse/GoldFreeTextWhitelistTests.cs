@@ -38,6 +38,12 @@ public class GoldFreeTextWhitelistTests
     ("CharacteristicType", "other", "OtherCharacteristic"),
     ("ConditionType", "other", "OtherCondition"),
     ("PredicateType", "other", "OtherHistoryPredicate"),
+    // Fidelity-ladder L1 residual: a recognised ability shell whose effect interior
+    // is held verbatim (the shell fallback). Detected by its EffectType discriminator
+    // (its FreeTextField JSON key "Text" is too generic — Parenthetical reuses it),
+    // so a gold carrying an L1 shell must name (card, "UnstructuredEffect") here —
+    // accounted debt, burned down when the interior is structured (L1 → L2).
+    ("EffectType", "unstructured", "UnstructuredEffect"),
   ];
 
   // card → the set of free-text sinks that card's gold carries (one walk over the corpus).

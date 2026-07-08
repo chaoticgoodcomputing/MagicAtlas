@@ -7,37 +7,51 @@
     "Power": null,
     "Toughness": null,
     "Colors": [],
-    "ColorIdentity": ["W"]
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Windbrisk Heights",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "Hideaway 4 (When this land enters, look at the top four cards of your library, exile one face down, then put the rest on the bottom in a random order.)\n{T}: Add {W}.\n{W}, {T}: You may play the exiled card without paying its mana cost if you attacked with three or more creatures this turn.",
       "Abilities": [
         {
           "Kind": "static",
-          "KeywordSource": "Hideaway",
           "Effects": [
             {
               "EffectType": "hideaway",
-              "Amount": { "QuantityType": "literal", "Value": 4 }
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 4
+              }
             }
-          ]
+          ],
+          "KeywordSource": "Hideaway",
+          "Reminder": {
+            "Text": "(When this land enters, look at the top four cards of your library, exile one face down, then put the rest on the bottom in a random order.)"
+          }
         },
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
               "EffectType": "addMana",
               "Mana": "{W}",
-              "AnyColor": false
+              "AnyColor": false,
+              "AnyType": false,
+              "OfChosenColor": false
             }
           ],
           "IsManaAbility": true
@@ -48,18 +62,29 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["W"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                }
               ]
             },
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
-              "EffectType": "unparsed",
-              "SourceSpan": { "Start": 175, "Length": 114 },
-              "RawText": "You may play the exiled card without paying its mana cost if you attacked with three or more creatures this turn."
+              "EffectType": "unstructured",
+              "Text": "You may play the exiled card without paying its mana cost if you attacked with three or more creatures this turn.",
+              "SourceSpan": {
+                "Start": 175,
+                "Length": 114
+              }
             }
-          ]
+          ],
+          "IsManaAbility": false
         }
       ]
     },
@@ -70,7 +95,9 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

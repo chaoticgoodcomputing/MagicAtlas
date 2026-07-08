@@ -47,6 +47,56 @@ public partial record TriageReport
   /// parser bail points regardless of whether they exclusively flip whole cards.
   /// </summary>
   public required IReadOnlyList<GapEntry> TopGapsByLineFrequency { get; init; }
+
+  /// <summary>
+  /// The L1→L2 BURN-DOWN pick surface — fragment families over the <c>UnstructuredEffect</c> residual
+  /// interiors (the deferred effect text held by L1 ability shells). Where <see cref="TopYieldClusters"/>
+  /// closes L0 parse gaps (whole cards that don't parse), this closes L1 residual debt: each cluster is a
+  /// normalized effect FRAGMENT (not a whole line), so a single new effect rule closes it across every
+  /// shell that carries it — families that compose. Ranked by the same fused combo-value score. This is
+  /// the surface the shell fallback UNLOCKED: with most cards now at L1, the residual interiors are the
+  /// real remaining work, and clustering the exactly-delimited fragments concentrates it far more than
+  /// whole-line templates could. Empty on a report generated before residual capture landed.
+  /// </summary>
+  public IReadOnlyList<ResidualClusterSummary> TopResidualClusters { get; init; } = [];
+}
+
+/// <summary>One fragment family in the L1→L2 residual burn-down surface — a normalized effect interior.</summary>
+[FlowthruSchema]
+public partial record ResidualClusterSummary
+{
+  /// <summary>Position in the fused-score ranking (1-indexed).</summary>
+  public required int Rank { get; init; }
+
+  /// <summary>Placeholder-normalized effect fragment (the residual interior template) that defines this family.</summary>
+  public required string Template { get; init; }
+
+  /// <summary>Total <c>UnstructuredEffect</c> residual instances matching this template across the corpus.</summary>
+  public required int FragmentCount { get; init; }
+
+  /// <summary>Distinct cards carrying at least one residual of this template.</summary>
+  public required int CardCount { get; init; }
+
+  /// <summary>Combo-popularity mass of the cards carrying this residual family (the downstream-value axis).</summary>
+  public required double ComboPopularityMass { get; init; }
+
+  /// <summary>
+  /// Primary ranking key: <c>FragmentCount × (1 + log10(1 + ComboPopularityMass))</c> — how many L1→L2
+  /// upgrades this one effect rule yields, weighted by the combo value it unblocks. Degrades to raw
+  /// FragmentCount with no value map.
+  /// </summary>
+  public required double FusedScore { get; init; }
+
+  /// <summary>A few example residual fragments (verbatim) + their cards — where to look to build the rule.</summary>
+  public required IReadOnlyList<ResidualExemplar> Exemplars { get; init; }
+}
+
+/// <summary>A verbatim residual fragment and the card it came from.</summary>
+[FlowthruSchema]
+public partial record ResidualExemplar
+{
+  public required string CardName { get; init; }
+  public required string Fragment { get; init; }
 }
 
 /// <summary>
@@ -85,6 +135,42 @@ public partial record YieldClusterSummary
   /// cards. This is the PRIMARY ranking key for the cluster surface.
   /// </summary>
   public required double FractionalYield { get; init; }
+
+  /// <summary>
+  /// Fractional combo-blocking count for this cluster: the sum, over every card
+  /// with a line in this cluster, of <c>blockedComboCount / (distinct templates
+  /// on that card)</c>. Same 1/N attribution as <see cref="FractionalYield"/>,
+  /// so a card split across several unparsed templates shares its combo credit
+  /// across them rather than double-counting. Zero when no InteractionTriage
+  /// value map was available at report time.
+  /// </summary>
+  public double ComboBlockedCount { get; init; }
+
+  /// <summary>
+  /// Fractional combo-popularity mass this cluster unblocks: the same 1/N-weighted
+  /// sum of each member card's <c>popularityMass</c> (total popularity of the
+  /// combos it gates). This is the downstream-value signal — how much real,
+  /// popularity-weighted combo coverage is waiting behind this parser surface.
+  /// </summary>
+  public double ComboPopularityMass { get; init; }
+
+  /// <summary>
+  /// The interaction-value boost factor, <c>log10(1 + ComboPopularityMass)</c>.
+  /// Compresses the wide popularity-mass range into a bounded, additive weight
+  /// (mass 0 → 0, mass 1M → ~6). A cluster that unblocks no known combos scores 0.
+  /// </summary>
+  public double InteractionValueScore { get; init; }
+
+  /// <summary>
+  /// PRIMARY ranking key when a value map is present:
+  /// <c>FractionalYield × (1 + InteractionValueScore)</c>. Blends parse-proximity
+  /// (how close this surface is to flipping whole cards) with downstream combo
+  /// value (how much popular-combo coverage it unblocks). Degrades EXACTLY to
+  /// <see cref="FractionalYield"/> when no InteractionTriage value map is present
+  /// (InteractionValueScore = 0), so the surface is backward-compatible: a run
+  /// without the interaction overlay ranks identically to the pre-fusion loop.
+  /// </summary>
+  public double FusedScore { get; init; }
 
   /// <summary>
   /// The most common <c>Diagnostic.Pattern</c> among this cluster's lines —
@@ -131,6 +217,18 @@ public partial record YieldExemplar
   /// <summary>How many OTHER unparsed templates this card has (lower = cleaner fixture).</summary>
   public required int OtherUnparsedClusters { get; init; }
 
+  /// <summary>
+  /// True if this card's parse is <b>lossy-but-clean</b> — it dropped structure
+  /// (a trigger deficit) WITHOUT an <c>UnparsedAbility</c>, so <c>OtherUnparsedClusters</c>
+  /// understates its risk: a non-target line may have silently collapsed (e.g.
+  /// Keranos's reveal-triggers → a bare damage spell). Exemplars with this set are
+  /// ranked LAST within a cluster — prefer a genuinely-clean single-line card. When
+  /// no such alternative exists, a flagged exemplar is still shown (with this
+  /// warning) so the orchestrator authors the WHOLE-card gold and verifies each
+  /// line rather than trusting "the other lines parse". See <c>LossyParseAnalyzer</c>.
+  /// </summary>
+  public bool LossyRisk { get; init; }
+
   /// <summary>True if this card already has a hand-parsed fixture under <c>HandParsedCards/</c>.</summary>
   public required bool AlreadyHandParsed { get; init; }
 
@@ -160,6 +258,52 @@ public partial record GlobalMetrics
 
   /// <summary>Total residual occurrences across all kinds, corpus-wide.</summary>
   public required int TotalResidualDebt { get; init; }
+
+  /// <summary>
+  /// Count of cards that look FULLY parsed (no unparsed line) yet are
+  /// <b>lossy-but-clean</b> — a trigger deficit shows they silently dropped
+  /// structure (see <c>LossyParseAnalyzer</c>). This is the size of the blind spot
+  /// the per-line diagnostics miss: these cards would be picked as "clean"
+  /// exemplars but under-represent their oracle text. Should trend DOWN as the
+  /// dropping rules (over-greedy collapses) are fixed. Defaults 0.
+  /// </summary>
+  public int SuspectedLossyCleanCards { get; init; }
+
+  /// <summary>
+  /// The fidelity ladder histogram — the honest coverage picture that separates
+  /// what <see cref="CardCoverage"/> conflates. <c>CardCoverage</c> (no
+  /// <c>IUnparsed</c>) counts L1 + L2 together; this splits them: <b>L0</b> cards
+  /// carry an unstructured hole, <b>L1</b> cards are typed shells with a deferred
+  /// residual interior (accounted, not dropped), <b>L2</b> cards are fully
+  /// structured. <see cref="L2Coverage"/> is the strict "fully structured" number
+  /// and is the anti-gaming headline: growing L1 (e.g. via shell fallbacks) must
+  /// not inflate L2. Card coverage → 100% is reached by driving L0 → L1; real
+  /// progress is L1 → L2 (residual burn-down). Defaults to an all-zero histogram
+  /// on a report generated before the ladder landed.
+  /// </summary>
+  public FidelityHistogram Fidelity { get; init; } = new();
+
+  /// <summary>Strictly-structured cards (fidelity L2: no holes AND no residuals) over the corpus.</summary>
+  public CoverageStat L2Coverage { get; init; } = new()
+  {
+    Passing = 0,
+    Total = 0,
+    Pct = 0,
+  };
+}
+
+/// <summary>Corpus card counts by fidelity level (L0 hole / L1 residual shell / L2 fully structured).</summary>
+[FlowthruSchema]
+public partial record FidelityHistogram
+{
+  /// <summary>Cards with an <c>IUnparsed</c> hole somewhere in the AST.</summary>
+  public int L0 { get; init; }
+
+  /// <summary>Cards with no hole but at least one <c>IResidual</c> (deferred interior / free text).</summary>
+  public int L1 { get; init; }
+
+  /// <summary>Fully structured cards — no holes, no residuals.</summary>
+  public int L2 { get; init; }
 }
 
 /// <summary>A passing-out-of-total ratio plus its percent form.</summary>

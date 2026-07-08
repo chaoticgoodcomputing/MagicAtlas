@@ -1,0 +1,170 @@
+{
+  "Input": {
+    "Name": "Pest Rescuer",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Creature — Dryad Druid",
+    "OracleText": "At the beginning of each upkeep, if you don't control a Pest creature token, create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"\nIf you would gain life, you gain that much life plus 1 instead.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Pest Rescuer",
+    "TypeLine": {
+      "Raw": "Creature — Dryad Druid",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dryad",
+        "Druid"
+      ]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of each upkeep, if you don't control a Pest creature token, create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"\nIf you would gain life, you gain that much life plus 1 instead.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "you don't control a Pest creature token"
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": [
+                  "B",
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Pest"
+                ],
+                "Abilities": [
+                  {
+                    "Kind": "triggered",
+                    "Trigger": {
+                      "Timing": "When",
+                      "Event": "Dies",
+                      "Filter": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "IsSelf": true
+                      }
+                    },
+                    "Effects": [
+                      {
+                        "EffectType": "gainLife",
+                        "Amount": {
+                          "QuantityType": "literal",
+                          "Value": 1
+                        },
+                        "Player": {
+                          "Kind": "You"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "IsCopy": false
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "lifeChange",
+                "ChangeType": "gain",
+                "Controller": {
+                  "Kind": "You"
+                }
+              },
+              "OriginalEventOccurs": true,
+              "Modifier": {
+                "Type": "plus",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

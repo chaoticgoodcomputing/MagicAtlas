@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/AST/Effects/Damage/RedirectDamageEffect.cs#RedirectDamageEffect",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 614.9", "CR 602.1"],
+      "reason": "new redirectDamage : ContinuousEffect is the redirection sibling of PreventDamageEffect; Amount/From/To all typed, Duration inherited to carry 'this turn'; faithful to the CR 614.9 redirection effect (damage 'is dealt to ... instead')"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Damage/RedirectDamageEffect.cs#citations",
+      "verdict": "PASS",
+      "citations": ["CR 602.1", "CR 614.1"],
+      "reason": "both cited rules exist in rules-structure.json and match; 602.1 is the [Cost]:[Effect] activated-ability shape, 614.1 the replacement-effect ('instead') doctrine — glossary 'Redirection Effect' pinpoints CR 614.9, a subrule of the cited 614.1"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#redirectDamage",
+      "verdict": "PASS",
+      "citations": ["CR 614.9"],
+      "reason": "consciously-inert is defensible, not false-inert: the damage flow arm is source-keyed (emit/trigger Subject = the damage SOURCE), redirect reroutes the RECIPIENT of in-flight damage and originates no source-keyed emit; the recipient-perspective consumer it would feed (CreatureDealtDamage) is itself parked coarse, so no live flow rule can consume a redirectDamage emit today"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TMP/WarriorEnKor.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.9", "CR 602.1"],
+      "reason": "gold models the sole {0} activated ability with typed redirectDamage: Amount literal 1, From Self, To Target creature+Controller You, Duration untilTime Turn/End; no unparsed/diagnostics/free-text, no dropped sibling"
+    }
+  ]
+}

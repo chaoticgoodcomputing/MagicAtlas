@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects;
+using MagicAST.AST.Effects.Core;
 using MagicAST.AST.Effects.Modification;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
@@ -56,6 +57,28 @@ public sealed class SpellAbilityParser : IAbilityParser
     var dispatch = TryParseEffects(effectsText);
     if (dispatch.Effects is null || dispatch.Effects.Count == 0)
     {
+      // L1 shell fallback (fidelity ladder): the clause is a recognised spell
+      // ability but its effect interior didn't parse. Land the SpellAbility shell
+      // with the interior held verbatim as an UnstructuredEffect residual (L1)
+      // instead of collapsing to a whole-ability UnparsedAbility (L0) — the
+      // ability KIND is accounted and the text is preserved with zero silent loss.
+      // Gated on classification confidence so genuinely unstructurable text isn't
+      // fabricated into a spurious spell shell (stays L0).
+      if (!string.IsNullOrWhiteSpace(effectsText) && classification.Confidence > 0.5)
+      {
+        return
+        [
+          new SpellAbility
+          {
+            Effects = new List<Effect>
+            {
+              new UnstructuredEffect { Text = effectsText, SourceSpan = clause.SourceSpan },
+            },
+            AbilityWord = classification.AbilityWord,
+            Instructions = instructions,
+          },
+        ];
+      }
       return
       [
         _fallback.Parse(

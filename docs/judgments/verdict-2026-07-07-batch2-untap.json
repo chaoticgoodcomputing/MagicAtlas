@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/UntapTargetCardTypeActivatedEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 602.1", "CR 205.1", "CR 205.1a", "CR 205.2a"],
+      "reason": "Broadened end-anchored regex captures adjacent card-type words as a conjunctive CardTypes list; end-anchor + type-only alternation excludes 'or' disjunctions and trailing qualifiers, so no sibling untap line is newly mislabeled (verified against corpus). Multi-type conjunction matches CR 205.1 ('artifact land creatures'); activated shape matches CR 602.1."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/USG/VoltaicConstruct.json",
+      "verdict": "PASS",
+      "citations": ["CR 602.1", "CR 205.1a"],
+      "reason": "Gold models '{2}: Untap target artifact creature.' as activated ability: mana cost {2}, reused UntapEffect, Target filter CardTypes ['artifact','creature'] (conjunctive, both types per CR 205.1), IsManaAbility:false (adds no mana, CR 602.1). No unparsed/UnparsedEffect/free-text-with-structure; untap already projects to emit:untap carrying the filter as Subject."
+    }
+  ]
+}

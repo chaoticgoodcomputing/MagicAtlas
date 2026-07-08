@@ -22,7 +22,7 @@ public static class ReconstructCombosStep
 {
   public static Func<
     (IEnumerable<Combo> Combos, IEnumerable<MastCardInput> CardInputs),
-    IEnumerable<ComboInstanceRow>
+    (IEnumerable<ComboInstanceRow> Rows, ExtendedRecallReport Recall)
   > Create(string ontologyPath) =>
     inputs =>
     {
@@ -56,12 +56,18 @@ public static class ReconstructCombosStep
       var rows = new List<ComboInstanceRow>();
       var reconstructed = 0;
       var parseReadyCombos = 0;
+      // Wide-recall tallies (measurement tier — see ExtendedRecallReport).
+      var green = 0;
+      var amber = 0;
+      long parseReadyMass = 0;
+      long reconstructedMass = 0;
 
       foreach (var combo in inputs.Combos)
       {
         if (combo.Cards.Count < 2 || !combo.Cards.All(c => ParseReady(c.Name)))
           continue;
         parseReadyCombos++;
+        parseReadyMass += combo.Popularity;
 
         var graphs = combo.Cards.Select(c => GraphFor(c.Name)).ToList();
         var edges = engine.Materialize(graphs); // tiny — a single combo's 2–5 cards
@@ -76,6 +82,12 @@ public static class ReconstructCombosStep
         if (cycles.Count == 0)
           continue;
         reconstructed++;
+        reconstructedMass += combo.Popularity;
+        // Per-combo best (lowest) tier across all its spanning cycles.
+        if (cycles.Min(cy => (int)cy.Tier) == (int)CertaintyTier.Green)
+          green++;
+        else
+          amber++;
 
         var results = string.Join("; ", combo.Results);
         // One row per distinct family-signature the combo realizes; keep the best-tier representative.
@@ -103,8 +115,26 @@ public static class ReconstructCombosStep
       }
 
       Console.Error.WriteLine(
-        $"[ReconstructCombos] {parseReadyCombos} parse-ready combos → {reconstructed} reconstructed → {rows.Count} combo-instance rows"
+        $"[ReconstructCombos] {parseReadyCombos} parse-ready combos → {reconstructed} reconstructed "
+          + $"({green} green / {amber} amber / {parseReadyCombos - reconstructed} missed) → {rows.Count} combo-instance rows"
       );
-      return rows;
+
+      var recall = new ExtendedRecallReport
+      {
+        GeneratedAt = DateTime.UtcNow,
+        ProjectionReadyCombos = parseReadyCombos,
+        Reconstructed = reconstructed,
+        Green = green,
+        Amber = amber,
+        Missed = parseReadyCombos - reconstructed,
+        RecallAtGreen = parseReadyCombos == 0 ? 0.0 : (double)green / parseReadyCombos,
+        RecallAtAmber = parseReadyCombos == 0 ? 0.0 : (double)reconstructed / parseReadyCombos,
+        ProjectionReadyPopularityMass = parseReadyMass,
+        ReconstructedPopularityMass = reconstructedMass,
+        PopularityWeightedRecall =
+          parseReadyMass == 0 ? 0.0 : (double)reconstructedMass / parseReadyMass,
+      };
+
+      return (rows, recall);
     };
 }

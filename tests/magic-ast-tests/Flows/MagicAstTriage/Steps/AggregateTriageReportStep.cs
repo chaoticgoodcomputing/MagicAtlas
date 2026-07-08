@@ -2,6 +2,7 @@ using System.Text.Json;
 using Flowthru.Step;
 using MagicAtlas.Ast.Tests.Data._07_ModelOutput.Schemas;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
+using MagicAtlas.Ast.Tests.Flows.Common;
 using MagicAtlas.Ast.Tests.Flows.MagicAstTriage.Clustering;
 
 namespace MagicAtlas.Ast.Tests.Flows.MagicAstTriage.Steps;
@@ -52,13 +53,15 @@ public static class AggregateTriageReportStep
 
   public static Func<IEnumerable<ParseRecord>, TriageReport> Create(
     string ratchetBaselinePath,
-    string handParsedFixturesRoot
+    string handParsedFixturesRoot,
+    string? interactionTriageReportPath = null
   ) =>
     records =>
     {
       var all = records.ToList();
       var handParsedNames = LoadHandParsedCardNames(handParsedFixturesRoot);
       var ratchet = ReadRatchetCoverage(ratchetBaselinePath);
+      var cardComboValue = CardComboValueLoader.Load(interactionTriageReportPath);
 
       // --- Indices over the corpus ---
       var allLines = all.SelectMany(r => r.Lines.Select(l => (record: r, line: l))).ToList();
@@ -72,6 +75,18 @@ public static class AggregateTriageReportStep
       // multi-line abilities aren't double-counted across the lines they span.
       var totalAbilities = all.Sum(r => r.TotalAbilities);
       var parsedAbilities = all.Sum(r => r.ParsedAbilities);
+
+      // Lossy-but-clean blind spot: cards with NO unparsed line that nonetheless
+      // dropped structure (a trigger deficit). These are exactly the cards the
+      // clean-exemplar signal would over-trust.
+      var suspectedLossyClean = all.Count(r =>
+        r.SuspectedLossy && r.Lines.All(l => l.Patterns.Count == 0)
+      );
+
+      // Fidelity ladder histogram: the honest split of what CardCoverage conflates.
+      var l0 = all.Count(r => r.FidelityLevel == 0);
+      var l1 = all.Count(r => r.FidelityLevel == 1);
+      var l2 = all.Count(r => r.FidelityLevel == 2);
 
       // Corpus-wide residual debt (ADR 0001), aggregated by kind, descending.
       var residualDebt = all.SelectMany(r => r.Residuals)
@@ -298,7 +313,16 @@ public static class AggregateTriageReportStep
       var topYieldClusters = YieldClusterAnalyzer.ComputeTopYieldClusters(
         all,
         YieldClusterSurfaceDepth,
-        handParsedNames
+        handParsedNames,
+        cardComboValue
+      );
+
+      // The L1→L2 burn-down surface: fragment families over the UnstructuredEffect
+      // residual interiors the shell fallback produced.
+      var topResidualClusters = YieldClusterAnalyzer.ComputeTopResidualClusters(
+        all,
+        YieldClusterSurfaceDepth,
+        cardComboValue
       );
 
       return new TriageReport
@@ -313,10 +337,14 @@ public static class AggregateTriageReportStep
           HandParsedCoverage = ratchet,
           ResidualDebt = residualDebt,
           TotalResidualDebt = totalResidualDebt,
+          SuspectedLossyCleanCards = suspectedLossyClean,
+          Fidelity = new FidelityHistogram { L0 = l0, L1 = l1, L2 = l2 },
+          L2Coverage = StatOf(l2, totalCards),
         },
         TopYieldClusters = topYieldClusters,
         TopGaps = topGaps,
         TopGapsByLineFrequency = topGapsByFreq,
+        TopResidualClusters = topResidualClusters,
       };
     };
 

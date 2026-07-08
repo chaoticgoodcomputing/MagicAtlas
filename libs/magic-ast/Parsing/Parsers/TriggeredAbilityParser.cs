@@ -288,6 +288,32 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     var effects = ParseEffects(effectPart, trigger);
     if (effects == null || effects.Count == 0)
     {
+      // L1 shell fallback (fidelity ladder). The trigger parsed but its effect
+      // interior did not. Rather than collapse the WHOLE ability to an
+      // UnparsedAbility (fidelity L0 — a hole that discards the parsed trigger),
+      // land the real triggered shell with the deferred interior carried as an
+      // UnstructuredEffect residual (fidelity L1): the parsed trigger stays (and
+      // gives the interaction graph its consume-side ports), the effect text is
+      // preserved verbatim and accounted as residual debt — zero silent loss.
+      // Only when there is genuine effect text to hold; an empty interior is a
+      // true failure and stays L0 (return null).
+      if (!string.IsNullOrWhiteSpace(effectPart))
+      {
+        return new TriggeredAbility
+        {
+          Trigger = trigger,
+          AdditionalTrigger = additionalTrigger,
+          AdditionalTriggers = additionalTriggers,
+          InterveningIf = interveningIf,
+          Effects = new List<Effect>
+          {
+            new UnstructuredEffect { Text = effectPart, SourceSpan = clause.SourceSpan },
+          },
+          Reminder = reminder,
+          AbilityWord = abilityWord,
+          Restrictions = triggeredRestrictions,
+        };
+      }
       return null;
     }
 
