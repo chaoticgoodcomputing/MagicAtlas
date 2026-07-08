@@ -23,7 +23,7 @@ using MagicAST.AST.References;
 /// a <c>Self</c> reference): this rule is the single-target ("return TARGET …
 /// card") counterpart, fully anchored (^…$) so it cannot match either sibling.
 ///
-/// CR 701.19 (Return: move an object from where it is to another zone);
+/// CR 400.7 (an object that moves from one zone to another becomes a new object);
 /// CR 404.1 (graveyard); CR 115.1 (target); CR 110.5b (entering tapped).
 /// </summary>
 [TriggeredRule(Priority = 70)]
