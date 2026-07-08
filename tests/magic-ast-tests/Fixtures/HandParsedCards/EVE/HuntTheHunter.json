@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Hunt the Hunter",
+    "ManaCost": "{G}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Target green creature you control gets +2/+2 until end of turn. It fights target green creature an opponent controls.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Hunt the Hunter",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Target green creature you control gets +2/+2 until end of turn. It fights target green creature an opponent controls.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Colors": [
+                    "G"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            },
+            {
+              "EffectType": "fight",
+              "Controlled": {
+                "Kind": "It"
+              },
+              "Opposed": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Colors": [
+                    "G"
+                  ],
+                  "Controller": "Opponent"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
