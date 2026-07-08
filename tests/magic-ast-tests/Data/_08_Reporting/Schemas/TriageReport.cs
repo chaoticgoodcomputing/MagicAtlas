@@ -47,6 +47,56 @@ public partial record TriageReport
   /// parser bail points regardless of whether they exclusively flip whole cards.
   /// </summary>
   public required IReadOnlyList<GapEntry> TopGapsByLineFrequency { get; init; }
+
+  /// <summary>
+  /// The L1→L2 BURN-DOWN pick surface — fragment families over the <c>UnstructuredEffect</c> residual
+  /// interiors (the deferred effect text held by L1 ability shells). Where <see cref="TopYieldClusters"/>
+  /// closes L0 parse gaps (whole cards that don't parse), this closes L1 residual debt: each cluster is a
+  /// normalized effect FRAGMENT (not a whole line), so a single new effect rule closes it across every
+  /// shell that carries it — families that compose. Ranked by the same fused combo-value score. This is
+  /// the surface the shell fallback UNLOCKED: with most cards now at L1, the residual interiors are the
+  /// real remaining work, and clustering the exactly-delimited fragments concentrates it far more than
+  /// whole-line templates could. Empty on a report generated before residual capture landed.
+  /// </summary>
+  public IReadOnlyList<ResidualClusterSummary> TopResidualClusters { get; init; } = [];
+}
+
+/// <summary>One fragment family in the L1→L2 residual burn-down surface — a normalized effect interior.</summary>
+[FlowthruSchema]
+public partial record ResidualClusterSummary
+{
+  /// <summary>Position in the fused-score ranking (1-indexed).</summary>
+  public required int Rank { get; init; }
+
+  /// <summary>Placeholder-normalized effect fragment (the residual interior template) that defines this family.</summary>
+  public required string Template { get; init; }
+
+  /// <summary>Total <c>UnstructuredEffect</c> residual instances matching this template across the corpus.</summary>
+  public required int FragmentCount { get; init; }
+
+  /// <summary>Distinct cards carrying at least one residual of this template.</summary>
+  public required int CardCount { get; init; }
+
+  /// <summary>Combo-popularity mass of the cards carrying this residual family (the downstream-value axis).</summary>
+  public required double ComboPopularityMass { get; init; }
+
+  /// <summary>
+  /// Primary ranking key: <c>FragmentCount × (1 + log10(1 + ComboPopularityMass))</c> — how many L1→L2
+  /// upgrades this one effect rule yields, weighted by the combo value it unblocks. Degrades to raw
+  /// FragmentCount with no value map.
+  /// </summary>
+  public required double FusedScore { get; init; }
+
+  /// <summary>A few example residual fragments (verbatim) + their cards — where to look to build the rule.</summary>
+  public required IReadOnlyList<ResidualExemplar> Exemplars { get; init; }
+}
+
+/// <summary>A verbatim residual fragment and the card it came from.</summary>
+[FlowthruSchema]
+public partial record ResidualExemplar
+{
+  public required string CardName { get; init; }
+  public required string Fragment { get; init; }
 }
 
 /// <summary>

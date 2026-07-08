@@ -244,6 +244,79 @@ public static class YieldClusterAnalyzer
     return summaries;
   }
 
+  /// <summary>
+  /// The L1→L2 burn-down surface: cluster the <c>UnstructuredEffect</c> residual fragments (deferred
+  /// effect interiors of L1 shells) by normalized template — the fragment families the shell fallback
+  /// unlocked. A fragment family composes: one new effect rule closes it across every shell that carries
+  /// it. Ranked by <c>FragmentCount × (1 + log10(1 + comboMass))</c> — closures × downstream combo value,
+  /// the same fusion the parse pick surface uses. Combo mass is NOT fractionally split (like projection,
+  /// one rule lights up every carrier), so a fragment gets the full popularity mass of its distinct cards.
+  /// </summary>
+  public static IReadOnlyList<ResidualClusterSummary> ComputeTopResidualClusters(
+    IEnumerable<ParseRecord> records,
+    int depth,
+    IReadOnlyDictionary<string, CardComboValue>? cardComboValue = null
+  )
+  {
+    cardComboValue ??= new Dictionary<string, CardComboValue>(StringComparer.Ordinal);
+
+    var byTemplate = new Dictionary<string, (List<(string Card, string Frag)> Items, HashSet<string> Cards)>(
+      StringComparer.Ordinal
+    );
+    foreach (var rec in records)
+    {
+      foreach (var frag in rec.ResidualFragments)
+      {
+        if (string.IsNullOrWhiteSpace(frag))
+          continue;
+        var tm = Tokenize(frag, rec.CardName);
+        if (!byTemplate.TryGetValue(tm, out var entry))
+          byTemplate[tm] = entry = (new List<(string, string)>(), new HashSet<string>(StringComparer.Ordinal));
+        entry.Items.Add((rec.CardName, frag));
+        entry.Cards.Add(rec.CardName);
+      }
+    }
+
+    var summaries = new List<(ResidualClusterSummary Summary, double Score)>(byTemplate.Count);
+    foreach (var (template, entry) in byTemplate)
+    {
+      double mass = 0;
+      foreach (var card in entry.Cards)
+        if (cardComboValue.TryGetValue(card, out var v))
+          mass += v.PopularityMass;
+      var fused = entry.Items.Count * (1.0 + Math.Log10(1.0 + mass));
+      var exemplars = entry
+        .Items.GroupBy(x => x.Card, StringComparer.Ordinal)
+        .Select(g => g.First())
+        .OrderBy(x => x.Frag.Length)
+        .Take(MaxExemplars)
+        .Select(x => new ResidualExemplar { CardName = x.Card, Fragment = x.Frag })
+        .ToList();
+      summaries.Add(
+        (
+          new ResidualClusterSummary
+          {
+            Rank = 0,
+            Template = template,
+            FragmentCount = entry.Items.Count,
+            CardCount = entry.Cards.Count,
+            ComboPopularityMass = mass,
+            FusedScore = fused,
+            Exemplars = exemplars,
+          },
+          fused
+        )
+      );
+    }
+
+    return summaries
+      .OrderByDescending(s => s.Score)
+      .ThenByDescending(s => s.Summary.FragmentCount)
+      .Take(depth)
+      .Select((s, i) => s.Summary with { Rank = i + 1 })
+      .ToList();
+  }
+
   // ──────────────────────────────────────────────────────────────────────
   // Tokenization — placeholder substitution rules
   // ──────────────────────────────────────────────────────────────────────

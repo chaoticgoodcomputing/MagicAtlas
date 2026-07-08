@@ -90,6 +90,7 @@ public static class ParseCorpusStep
       ParsedAbilities = parsedAbilities,
       FidelityLevel = fidelityLevel,
       Lines = lines,
+      ResidualFragments = ResidualWalker.CollectUnstructured(result.Output).ToList(),
       SuspectedLossy = lossy.SuspectedLossy,
       DroppedTriggers = lossy.DroppedTriggers,
       Residuals = result

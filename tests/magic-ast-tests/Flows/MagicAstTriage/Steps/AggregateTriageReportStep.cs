@@ -317,6 +317,14 @@ public static class AggregateTriageReportStep
         cardComboValue
       );
 
+      // The L1→L2 burn-down surface: fragment families over the UnstructuredEffect
+      // residual interiors the shell fallback produced.
+      var topResidualClusters = YieldClusterAnalyzer.ComputeTopResidualClusters(
+        all,
+        YieldClusterSurfaceDepth,
+        cardComboValue
+      );
+
       return new TriageReport
       {
         GeneratedAt = DateTime.UtcNow,
@@ -336,6 +344,7 @@ public static class AggregateTriageReportStep
         TopYieldClusters = topYieldClusters,
         TopGaps = topGaps,
         TopGapsByLineFrequency = topGapsByFreq,
+        TopResidualClusters = topResidualClusters,
       };
     };
 

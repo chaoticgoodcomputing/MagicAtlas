@@ -46,6 +46,70 @@ public static class ResidualWalker
     return found;
   }
 
+  /// <summary>
+  /// Collects the verbatim <c>Text</c> of every <see cref="AST.Effects.Core.UnstructuredEffect"/>
+  /// (L1 residual) reachable from <paramref name="root"/> — the deferred effect interiors held by
+  /// ability shells. These are the precise failing fragments for the L1→L2 burn-down triage.
+  /// </summary>
+  public static IReadOnlyList<string> CollectUnstructured(object? root)
+  {
+    var found = new List<string>();
+    UnstructuredWalk(root, found);
+    return found;
+  }
+
+  private static void UnstructuredWalk(object? node, List<string> found)
+  {
+    if (node is null)
+    {
+      return;
+    }
+    if (node is AST.Effects.Core.UnstructuredEffect u)
+    {
+      found.Add(u.Text);
+    }
+    foreach (var prop in PropsOf(node.GetType()))
+    {
+      object? value;
+      try
+      {
+        value = prop.GetValue(node);
+      }
+      catch
+      {
+        continue;
+      }
+      if (value is not null)
+      {
+        UnstructuredDescend(value, found);
+      }
+    }
+  }
+
+  private static void UnstructuredDescend(object value, List<string> found)
+  {
+    if (value is string)
+    {
+      return;
+    }
+    if (value is IEnumerable sequence)
+    {
+      foreach (var item in sequence)
+      {
+        if (item is not null)
+        {
+          UnstructuredDescend(item, found);
+        }
+      }
+      return;
+    }
+    var type = value.GetType();
+    if (type.Assembly == _astAssembly && type is { IsEnum: false, IsValueType: false })
+    {
+      UnstructuredWalk(value, found);
+    }
+  }
+
   private static void CollectWalk(object? node, List<IUnparsed> found)
   {
     if (node is null)

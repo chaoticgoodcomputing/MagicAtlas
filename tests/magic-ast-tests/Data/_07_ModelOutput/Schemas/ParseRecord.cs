@@ -52,6 +52,17 @@ public partial record ParseRecord
   public required IReadOnlyList<LineOutcome> Lines { get; init; }
 
   /// <summary>
+  /// The verbatim text of each <c>UnstructuredEffect</c> residual this card carries — the deferred
+  /// effect interiors held by L1 ability shells (see the fidelity ladder). These are the precise
+  /// FAILING FRAGMENTS the parser could classify but not structure, delimited exactly (unlike a
+  /// whole-line diagnostic). They are the L1→L2 burn-down worklist: clustering these fragments by
+  /// grammar shape (not whole line) is what makes families compose — one new effect rule closes the
+  /// fragment across every shell that carries it. Empty for L0/L2 cards. Feeds
+  /// <c>TriageReport.TopResidualClusters</c>.
+  /// </summary>
+  public IReadOnlyList<string> ResidualFragments { get; init; } = [];
+
+  /// <summary>
   /// True when the parse dropped structure WITHOUT emitting an
   /// <c>UnparsedAbility</c> — a lossy-but-clean parse (see
   /// <c>LossyParseAnalyzer</c>). Such a card looks clean to the per-line

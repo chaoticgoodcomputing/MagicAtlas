@@ -118,6 +118,49 @@ public class YieldClusterFusionTests
       "the combo-unblocking surface should now rank first");
   }
 
+  private static ParseRecord CardWithResiduals(string name, params string[] fragments) =>
+    new()
+    {
+      ScryfallId = name,
+      CardName = name,
+      Input = Input(name),
+      TotalAbilities = 1,
+      ParsedAbilities = 1,
+      Lines = new List<LineOutcome>(),
+      Residuals = new List<ResidualKindCount>(),
+      ResidualFragments = fragments.ToList(),
+    };
+
+  [Test]
+  public void ResidualClusters_GroupByFragmentTemplate_AndFuseComboValue()
+  {
+    // Three cards carry the same effect fragment across different shells; one carries
+    // a different fragment. They must cluster by normalized template, not by card.
+    var records = new[]
+    {
+      CardWithResiduals("Alpha", "create a 1/1 Beast creature token."),
+      CardWithResiduals("Bravo", "create a 2/2 Zombie creature token."),
+      CardWithResiduals("Charlie", "create a 3/3 Elephant creature token."),
+      CardWithResiduals("Delta", "you win the game."),
+    };
+    var value = new Dictionary<string, CardComboValue>(StringComparer.Ordinal)
+    {
+      ["Delta"] = new(BlockedComboCount: 5, PopularityMass: 1_000_000),
+    };
+
+    var clusters = YieldClusterAnalyzer.ComputeTopResidualClusters(records, depth: 50, value);
+
+    var createToken = clusters.Single(c => c.Template.Contains("create"));
+    Assert.That(createToken.FragmentCount, Is.EqualTo(3), "the three token fragments collapse to one family");
+    Assert.That(createToken.CardCount, Is.EqualTo(3));
+
+    var win = clusters.Single(c => c.Template.Contains("win"));
+    // 1 fragment but huge combo mass → fused score can rival the 3-fragment family.
+    Assert.That(win.ComboPopularityMass, Is.EqualTo(1_000_000.0).Within(1e-6));
+    Assert.That(win.FusedScore, Is.GreaterThan(win.FragmentCount),
+      "combo value boosts the fused score above raw fragment count");
+  }
+
   [Test]
   public void ComboValue_IsAttributedFractionallyAcrossACardsTemplates()
   {
