@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Primal Forcemage",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Creature — Elf Shaman",
+    "OracleText": "Whenever another creature you control enters, that creature gets +3/+3 until end of turn.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"]
+  },
+  "Output": {
+    "Name": "Primal Forcemage",
+    "TypeLine": {
+      "Raw": "Creature — Elf Shaman",
+      "Types": ["Creature"],
+      "Subtypes": ["Elf", "Shaman"]
+    },
+    "Oracle": {
+      "RawText": "Whenever another creature you control enters, that creature gets +3/+3 until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "ThatCreature"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
