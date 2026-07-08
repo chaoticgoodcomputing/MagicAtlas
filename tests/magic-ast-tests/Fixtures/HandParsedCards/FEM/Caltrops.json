@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Caltrops",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "Whenever a creature attacks, this artifact deals 1 damage to it.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Caltrops",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever a creature attacks, this artifact deals 1 damage to it.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": {
+                "Kind": "It"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
