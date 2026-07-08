@@ -1,0 +1,127 @@
+{
+  "Input": {
+    "Name": "Kei Takahashi",
+    "ManaCost": "{2}{G}{W}",
+    "TypeLine": "Legendary Creature — Human Cleric",
+    "OracleText": "{T}: Prevent the next 2 damage that would be dealt to target creature this turn.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "G",
+      "W"
+    ],
+    "ColorIdentity": [
+      "G",
+      "W"
+    ],
+    "Keywords": [],
+    "Id": "82703d7c-0759-46ac-b41e-12deeffa10e0",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Kei Takahashi",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Cleric",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: Prevent the next 2 damage that would be dealt to target creature this turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "preventDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
