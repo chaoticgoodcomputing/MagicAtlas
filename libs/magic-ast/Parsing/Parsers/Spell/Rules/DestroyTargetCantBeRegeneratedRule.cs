@@ -12,7 +12,7 @@ using MagicAST.AST.References;
 /// <para>
 /// The two-sentence form is not broken apart into sibling effects; regeneration
 /// prevention is a modifier on the destruction event, not an independent effect
-/// (CR 701.7 — "To destroy a permanent, move it from the battlefield to its owner's
+/// (CR 701.8a — "To destroy a permanent, move it from the battlefield to its owner's
 /// graveyard."). This mirrors <see cref="DestroyAllRule"/>'s "Destroy all [filter].
 /// They can't be regenerated." handling, but for the single-target ("It") pronoun
 /// rather than the mass ("They") pronoun.
