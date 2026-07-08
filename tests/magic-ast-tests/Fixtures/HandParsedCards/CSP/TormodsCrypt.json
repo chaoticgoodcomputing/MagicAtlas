@@ -1,0 +1,84 @@
+{
+  "Input": {
+    "Name": "Tormod's Crypt",
+    "ManaCost": "{0}",
+    "TypeLine": "Artifact",
+    "OracleText": "{T}, Sacrifice this artifact: Exile target player's graveyard.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Tormod's Crypt",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}, Sacrifice this artifact: Exile target player's graveyard.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": [
+                  "artifact"
+                ],
+                "IsSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "card"
+                  ],
+                  "Owner": "Target",
+                  "Zone": "Graveyard"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{0}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 0
+          }
+        ],
+        "ManaValue": 0
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
