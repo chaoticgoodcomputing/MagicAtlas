@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "Fireslinger",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Creature — Human Wizard",
+    "OracleText": "{T}: This creature deals 1 damage to any target and 1 damage to you.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Fireslinger",
+    "TypeLine": {
+      "Raw": "Creature — Human Wizard",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Wizard"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: This creature deals 1 damage to any target and 1 damage to you.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": {
+                "Kind": "AnyTarget"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            },
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": {
+                "Kind": "You"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}
