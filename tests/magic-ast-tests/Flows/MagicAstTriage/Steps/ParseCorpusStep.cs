@@ -66,6 +66,14 @@ public static class ParseCorpusStep
     var unparsedNodes = ResidualWalker.CollectUnparsed(result.Output);
     var lines = AttributeLines(oracleText, unparsedNodes);
 
+    // Fidelity level (worst across the whole card): any IUnparsed hole → L0;
+    // else any IResidual (deferred interior / free-text) → L1; else fully
+    // structured → L2. This is the honest coverage axis — it separates the
+    // residual-carrying cards the legacy "no IUnparsed" test counted as fully
+    // parsed (they are L1, not L2).
+    var debt = ResidualWalker.Analyze(result.Output);
+    var fidelityLevel = debt.Unparsed.Count > 0 ? 0 : (debt.Residuals.Count > 0 ? 1 : 2);
+
     // Lossy-but-clean detection: a trigger deficit means a clause collapsed
     // structure without emitting an UnparsedAbility (the per-line diagnostics
     // can't see it). Only meaningful when the card ISN'T already visibly failing
@@ -80,6 +88,7 @@ public static class ParseCorpusStep
       Input = input.Input,
       TotalAbilities = totalAbilities,
       ParsedAbilities = parsedAbilities,
+      FidelityLevel = fidelityLevel,
       Lines = lines,
       SuspectedLossy = lossy.SuspectedLossy,
       DroppedTriggers = lossy.DroppedTriggers,

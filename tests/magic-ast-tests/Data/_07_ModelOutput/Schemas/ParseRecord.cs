@@ -33,6 +33,21 @@ public partial record ParseRecord
   /// <summary>Card-level count of abilities that were NOT <c>UnparsedAbility</c>.</summary>
   public required int ParsedAbilities { get; init; }
 
+  /// <summary>
+  /// The card's position on the fidelity ladder (worst level across its abilities):
+  /// <list type="bullet">
+  ///   <item><b>0 (L0)</b> — an <see cref="MagicAST.AST.IUnparsed"/> hole is present (a whole
+  ///   ability or effect the parser couldn't structure at all).</item>
+  ///   <item><b>1 (L1)</b> — no hole, but an <see cref="MagicAST.AST.IResidual"/> node is present
+  ///   (a typed shell with deferred interior / free-text residual — accounted, not dropped).</item>
+  ///   <item><b>2 (L2)</b> — fully structured: no holes, no residuals.</item>
+  /// </list>
+  /// This is the honest coverage axis. The legacy "fully parsed" test (no <c>IUnparsed</c>) conflates
+  /// L1 and L2; <see cref="FidelityLevel"/> separates them so residual-carrying cards stop counting as
+  /// truly structured. L3/L4 (projection / GREEN reconstruction) live in the interaction layer, not here.
+  /// </summary>
+  public int FidelityLevel { get; init; }
+
   /// <summary>Per-line outcomes, in oracle-text order. Empty if the card has no oracle text.</summary>
   public required IReadOnlyList<LineOutcome> Lines { get; init; }
 

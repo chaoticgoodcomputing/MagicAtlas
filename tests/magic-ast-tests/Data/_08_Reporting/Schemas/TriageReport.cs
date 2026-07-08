@@ -218,6 +218,42 @@ public partial record GlobalMetrics
   /// dropping rules (over-greedy collapses) are fixed. Defaults 0.
   /// </summary>
   public int SuspectedLossyCleanCards { get; init; }
+
+  /// <summary>
+  /// The fidelity ladder histogram — the honest coverage picture that separates
+  /// what <see cref="CardCoverage"/> conflates. <c>CardCoverage</c> (no
+  /// <c>IUnparsed</c>) counts L1 + L2 together; this splits them: <b>L0</b> cards
+  /// carry an unstructured hole, <b>L1</b> cards are typed shells with a deferred
+  /// residual interior (accounted, not dropped), <b>L2</b> cards are fully
+  /// structured. <see cref="L2Coverage"/> is the strict "fully structured" number
+  /// and is the anti-gaming headline: growing L1 (e.g. via shell fallbacks) must
+  /// not inflate L2. Card coverage → 100% is reached by driving L0 → L1; real
+  /// progress is L1 → L2 (residual burn-down). Defaults to an all-zero histogram
+  /// on a report generated before the ladder landed.
+  /// </summary>
+  public FidelityHistogram Fidelity { get; init; } = new();
+
+  /// <summary>Strictly-structured cards (fidelity L2: no holes AND no residuals) over the corpus.</summary>
+  public CoverageStat L2Coverage { get; init; } = new()
+  {
+    Passing = 0,
+    Total = 0,
+    Pct = 0,
+  };
+}
+
+/// <summary>Corpus card counts by fidelity level (L0 hole / L1 residual shell / L2 fully structured).</summary>
+[FlowthruSchema]
+public partial record FidelityHistogram
+{
+  /// <summary>Cards with an <c>IUnparsed</c> hole somewhere in the AST.</summary>
+  public int L0 { get; init; }
+
+  /// <summary>Cards with no hole but at least one <c>IResidual</c> (deferred interior / free text).</summary>
+  public int L1 { get; init; }
+
+  /// <summary>Fully structured cards — no holes, no residuals.</summary>
+  public int L2 { get; init; }
 }
 
 /// <summary>A passing-out-of-total ratio plus its percent form.</summary>

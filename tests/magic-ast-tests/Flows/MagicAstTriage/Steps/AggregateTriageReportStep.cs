@@ -83,6 +83,11 @@ public static class AggregateTriageReportStep
         r.SuspectedLossy && r.Lines.All(l => l.Patterns.Count == 0)
       );
 
+      // Fidelity ladder histogram: the honest split of what CardCoverage conflates.
+      var l0 = all.Count(r => r.FidelityLevel == 0);
+      var l1 = all.Count(r => r.FidelityLevel == 1);
+      var l2 = all.Count(r => r.FidelityLevel == 2);
+
       // Corpus-wide residual debt (ADR 0001), aggregated by kind, descending.
       var residualDebt = all.SelectMany(r => r.Residuals)
         .GroupBy(rc => rc.Kind, StringComparer.Ordinal)
@@ -325,6 +330,8 @@ public static class AggregateTriageReportStep
           ResidualDebt = residualDebt,
           TotalResidualDebt = totalResidualDebt,
           SuspectedLossyCleanCards = suspectedLossyClean,
+          Fidelity = new FidelityHistogram { L0 = l0, L1 = l1, L2 = l2 },
+          L2Coverage = StatOf(l2, totalCards),
         },
         TopYieldClusters = topYieldClusters,
         TopGaps = topGaps,
