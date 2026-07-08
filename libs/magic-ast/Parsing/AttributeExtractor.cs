@@ -196,6 +196,20 @@ public sealed partial class AttributeExtractor
   )]
   private static partial Regex AdditionalSacrificePrefix();
 
+  // "As an additional cost to cast this spell, sacrifice a[n] <type> or [a[n]] <type>."
+  // A type-disjunction sacrifice cost: the sacrificed permanent may be either card type
+  // (CR 118.8 — additional costs; the "or" between two card types is a disjunctive filter,
+  // modelled as CardTypes=[t1, t2], matching the "an artifact or creature" encoding on
+  // Panharmonicon). The trailing "." is anchored immediately after the second type so this
+  // does NOT capture the distinct alternative-cost shapes ("sacrifice a creature or discard a
+  // card." / "... or pay {3}.") — those have text between the second word and the period and
+  // stay unrecognised here (left for a future batch), exactly as before this branch was added.
+  [GeneratedRegex(
+    @"^As an additional cost to cast this spell,\s+sacrifice\s+an?\s+(?<t1>[a-z]+)\s+or\s+(?:an?\s+)?(?<t2>[a-z]+)\.",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex AdditionalSacrificeDisjunctionPrefix();
+
   /// <summary>
   /// Scans oracle text for "As an additional cost to cast this spell, sacrifice a [type]."
   /// prefix lines and returns an AdditionalCostsAttribute when found, or null when absent.
@@ -227,6 +241,27 @@ public sealed partial class AttributeExtractor
       };
 
       return new AdditionalCostsAttribute { Costs = [sacrificeCost] };
+    }
+
+    // Type-disjunction sacrifice ("sacrifice an artifact or creature.") — one permanent that
+    // is either card type. Checked after the single-type branch above (which requires the
+    // period to fall right after one type word, so it never matches the "X or Y" form).
+    var disjunctionMatch = AdditionalSacrificeDisjunctionPrefix().Match(firstLine);
+    if (disjunctionMatch.Success)
+    {
+      var t1 = disjunctionMatch.Groups["t1"].Value.ToLowerInvariant();
+      var t2 = disjunctionMatch.Groups["t2"].Value.ToLowerInvariant();
+      var disjunctionCost = new AdditionalCost
+      {
+        Cost = new SacrificeCost
+        {
+          Filter = new ObjectFilter { CardTypes = [t1, t2] },
+          Quantity = LiteralQuantity.Of(1),
+        },
+        SourceSpan = new TextSpan(0, firstLine.Length),
+      };
+
+      return new AdditionalCostsAttribute { Costs = [disjunctionCost] };
     }
 
     // Kicker (CR 702.33) is NOT extracted here. It is a static ability — its combinator
