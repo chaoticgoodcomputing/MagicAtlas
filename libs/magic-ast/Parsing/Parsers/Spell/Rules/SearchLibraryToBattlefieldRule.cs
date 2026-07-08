@@ -8,10 +8,13 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// "Search your library for (a basic land card|up to N basic land cards),
-///  put (it|them) onto the battlefield tapped, then shuffle."
+///  put (it|them|that card) onto the battlefield tapped, then shuffle."
 ///
 /// Covers the sorcery ramp pattern (e.g. Rampant Growth, Beneath the Sands).
-/// Always non-optional (no "you may" prefix). Destination is always BattlefieldTapped.
+/// The referent of the "put" clause is written either as a pronoun ("it"/"them")
+/// or as an explicit noun phrase ("that card"); the modern Rampant Growth
+/// wording uses "that card". Always non-optional (no "you may" prefix).
+/// Destination is always BattlefieldTapped.
 /// </summary>
 [SpellRule]
 public sealed class SearchLibraryToBattlefieldRule : ISpellRule
@@ -19,7 +22,7 @@ public sealed class SearchLibraryToBattlefieldRule : ISpellRule
   // Matches singular ("a basic land card") and plural ("up to N basic land cards") forms.
   private static readonly Regex _pattern = new(
     @"^Search\s+your\s+library\s+for\s+(?:(?<upto>up\s+to\s+)?(?<count>[a-z]+|\d+)\s+)?basic\s+land\s+cards?,"
-    + @"\s*put\s+(?:it|them)\s+onto\s+the\s+battlefield\s+tapped,\s*then\s+shuffle$",
+    + @"\s*put\s+(?:it|them|that\s+card)\s+onto\s+the\s+battlefield\s+tapped,\s*then\s+shuffle$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
