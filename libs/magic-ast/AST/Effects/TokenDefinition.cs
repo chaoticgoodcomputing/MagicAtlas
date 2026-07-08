@@ -113,4 +113,20 @@ public sealed record TokenDefinition
       Subtypes = ["Blood"],
       AbilityText = ["{1}, {T}, Discard a card, Sacrifice this artifact: Draw a card."],
     };
+
+  /// <summary>
+  /// A Map token — a colorless artifact predefined token (CR 111.10 — predefined tokens).
+  /// Its predefined activated ability ("{1}, {T}, Sacrifice this token: Target creature you
+  /// control explores. Activate only as a sorcery.") rides on the parenthetical reminder text
+  /// the parser strips (CR 207.2 — reminder text has no rules meaning), so — following the
+  /// Powerstone precedent added clean in <c>CreateTappedPredefinedTokenRule</c> — the ability
+  /// body is NOT re-asserted here as free text. The token is identified structurally by its
+  /// artifact type + named "Map" subtype.
+  /// </summary>
+  public static TokenDefinition Map() =>
+    new()
+    {
+      Types = ["artifact"],
+      Subtypes = ["Map"],
+    };
 }
