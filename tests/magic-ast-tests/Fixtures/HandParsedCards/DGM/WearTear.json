@@ -68,36 +68,27 @@
           ]
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 28,
-            "Length": 48
-          },
-          "RawText": "Deal 2 damage to target enchantment or creature.",
-          "Diagnostics": [
+          "Kind": "spell",
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Spell ability parser couldn't recognise effect",
-              "Location": {
+              "EffectType": "unstructured",
+              "Text": "Deal 2 damage to target enchantment or creature.",
+              "SourceSpan": {
                 "Start": 28,
                 "Length": 48
-              },
-              "RawText": "Deal 2 damage to target enchantment or creature.",
-              "Pattern": "ComplexTargeting",
-              "LastAttemptedRule": "SpellAbilityParser.YouLoseLifeSpellRule",
-              "FailurePosition": 28
+              }
             }
           ]
         },
         {
           "Kind": "static",
-          "KeywordSource": "Fuse",
           "Effects": [
             {
               "EffectType": "keywordAbility",
               "Keyword": "Fuse"
             }
           ],
+          "KeywordSource": "Fuse",
           "Reminder": {
             "Text": "(You may cast one or both halves of this card from your hand.)"
           }

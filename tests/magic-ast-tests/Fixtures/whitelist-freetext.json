@@ -146,6 +146,12 @@
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
+      "card": "DGM/WearTear",
+      "sink": "UnstructuredEffect",
+      "tag": "debt",
+      "reason": "L1 shell fallback (fidelity ladder): ability kind + trigger/cost structured, effect interior held verbatim; burn down to L2 when the grammar lands"
+    },
+    {
       "card": "DKA/SpellSnuff",
       "sink": "Instructions",
       "tag": "irreducible",
@@ -374,6 +380,12 @@
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
     },
     {
+      "card": "LRW/WindbriskHeights",
+      "sink": "UnstructuredEffect",
+      "tag": "debt",
+      "reason": "L1 shell fallback (fidelity ladder): ability kind + trigger/cost structured, effect interior held verbatim; burn down to L2 when the grammar lands"
+    },
+    {
       "card": "LTR/MerryEsquireOfRohan",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -509,7 +521,13 @@
       "card": "ONS/IxidorRealitySculptor",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+      "reason": "L1 shell surfaced a hidden characteristic residual; PB-9 burndown"
+    },
+    {
+      "card": "ONS/IxidorRealitySculptor",
+      "sink": "UnstructuredEffect",
+      "tag": "debt",
+      "reason": "L1 shell fallback (fidelity ladder): ability kind + trigger/cost structured, effect interior held verbatim; burn down to L2 when the grammar lands"
     },
     {
       "card": "OTJ/AlacrianJaguar",

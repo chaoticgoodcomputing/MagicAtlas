@@ -142,18 +142,21 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     var effects = ParseEffects(effectPart);
     if (effects == null || effects.Count == 0)
     {
-      // Cost parsed but the effect didn't. Surface as an Activated ability
-      // carrying a structured UnparsedEffect so the cost-half still lands in
-      // the AST (matches the malformed-fixture contract: the Tap cost is
-      // still real even when the right-hand side is garbage).
+      // Cost parsed but the effect interior didn't. Surface as the real Activated
+      // ability shell carrying the interior as an UnstructuredEffect residual
+      // (fidelity L1) so the cost-half lands in the AST with the effect held
+      // verbatim and ACCOUNTED — not a whole-ability hole (L0), and not a silent
+      // drop. Upgraded from UnparsedEffect (L0) to UnstructuredEffect (L1) as part
+      // of the fidelity ladder; the parsed cost gives the interaction graph its
+      // consume-side ports.
       var effectSpan = new MagicAST.AST.TextSpan(
         clause.SourceSpan.Start + colonIndex + 1,
         Math.Max(0, clause.RawText.Length - (colonIndex + 1))
       );
-      var unparsedEffect = new MagicAST.AST.Effects.Core.UnparsedEffect
+      var unparsedEffect = new MagicAST.AST.Effects.Core.UnstructuredEffect
       {
         SourceSpan = effectSpan,
-        RawText = effectPart,
+        Text = effectPart,
       };
       // CR 702.177a: inject OnlyOnce for Exhaust abilities even when the effect is unparsed.
       if (classification.AbilityWord?.Equals("Exhaust", StringComparison.OrdinalIgnoreCase) == true)
