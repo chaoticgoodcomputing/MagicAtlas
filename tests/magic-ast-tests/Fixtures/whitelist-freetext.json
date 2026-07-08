@@ -518,6 +518,12 @@
       "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
     },
     {
+      "card": "ODY/AshenFirebeast",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref) — 'without flying' keyword-absence predicate, same convention as M10/Falter and IKO/LuminousBroodmoth"
+    },
+    {
       "card": "OGW/ContainmentMembrane",
       "sink": "OtherCondition",
       "tag": "debt",
