@@ -366,6 +366,17 @@ public enum TriggerEvent
   /// <summary>A player discards a card</summary>
   DiscardsCard,
 
+  /// <summary>
+  /// A player mills one or more cards (CR 701.17a: "For a player to mill a number of
+  /// cards, that player puts that many cards from the top of their library into their
+  /// graveyard."). Parallels the other card-flow player-action events
+  /// (<see cref="DrawsCard"/>, <see cref="DiscardsCard"/>): the <see cref="TriggerCondition.Filter"/>
+  /// carries the milling player (Controller = You for "when you mill"). Primary use is
+  /// the reflexive "mill N cards. When you do, …" shape (CR 603.12), where the milling
+  /// action is the reflexive trigger's event.
+  /// </summary>
+  Mills,
+
   // Other
   /// <summary>A player sacrifices a permanent</summary>
   Sacrifices,
