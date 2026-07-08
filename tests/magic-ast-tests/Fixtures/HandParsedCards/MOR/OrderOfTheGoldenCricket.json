@@ -1,0 +1,151 @@
+{
+  "Input": {
+    "Name": "Order of the Golden Cricket",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Kithkin Knight",
+    "OracleText": "Whenever this creature attacks, you may pay {W}. If you do, it gains flying until end of turn.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Order of the Golden Cricket",
+    "TypeLine": {
+      "Raw": "Creature — Kithkin Knight",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kithkin",
+        "Knight"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever this creature attacks, you may pay {W}. If you do, it gains flying until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "colored",
+                      "Colors": [
+                        "W"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "gainAbility",
+                "Target": {
+                  "Kind": "It"
+                },
+                "GainedAbility": {
+                  "Kind": "static",
+                  "KeywordSource": "Flying",
+                  "Effects": [
+                    {
+                      "EffectType": "evasion",
+                      "CanBeBlockedBy": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "Characteristics": [
+                          {
+                            "CharacteristicType": "keyword",
+                            "Keyword": "Flying"
+                          },
+                          {
+                            "CharacteristicType": "keyword",
+                            "Keyword": "Reach"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "Duration": {
+                  "DurationType": "untilTime",
+                  "Until": {
+                    "Part": "Turn",
+                    "Edge": "End"
+                  }
+                }
+              }
+            }
+          ],
+          "Instructions": [
+            "you may pay {W}"
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

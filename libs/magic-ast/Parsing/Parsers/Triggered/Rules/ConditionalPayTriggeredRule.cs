@@ -49,6 +49,7 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
   private static readonly EachOpponentLosesLifeTriggeredRule _eachOpponentLosesLifeRule = new();
   private static readonly ReturnSelfFromGraveyardToBattlefieldRule _returnSelfFromGraveyardRule = new();
   private static readonly TapUntapTargetTriggeredRule _tapUntapTargetRule = new();
+  private static readonly ItGainsKeywordUntilEndOfTurnRule _itGainsKeywordRule = new();
 
   // ── Pattern 1: "you may pay {COST}. If you do, [effect]" ──────────────
   // The cost is one or more {X} symbols; the consequent effect is everything
@@ -135,6 +136,12 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
     // Malachite, Nacre, Onyx) and the tap/tap-or-untap siblings.
     if (_tapUntapTargetRule.TryMatch(text, out var tapUntap) && tapUntap is not null)
       return tapUntap;
+    // "it gains [keyword] until end of turn" (Order of the Golden Cricket: "Whenever
+    // this creature attacks, you may pay {W}. If you do, it gains flying until end
+    // of turn.") — reuse the anaphoric "it" keyword-grant rule as the "if you do"
+    // consequent.
+    if (_itGainsKeywordRule.TryMatch(text, out var itGains) && itGains is not null)
+      return itGains;
 
     // No match: return null so the caller (TryMatch) rejects the whole text
     // rather than emitting a partially-parsed effect. The dispatcher will
