@@ -91,6 +91,19 @@ is what CI runs; the meta-gates are the transition check. See
 [01_deterministic-loop-gates.md](../../../docs/scratch/alignment-session/01_deterministic-loop-gates.md)
 for the full two-ring model. Self-test the gates with `nx run mast:gate-test`.
 
+> [!WARNING]
+> **The edge-diff gate is OFFLINE at current graph scale (2026-07-08).** The fidelity ladder's L1
+> shells added real consume-side ports for thousands of previously portless cards, and the union
+> `card-edges.json` export now exceeds .NET's 2 GB single-stream limit — `MaterializeCardEdges`
+> fails with `FlowIO.LiftAsync: Stream was too long` (and note: the Flowthru CLI currently exits 0
+> despite the failed step — upstream bug candidate). Until fixed, SKIP the Step-0 edge baseline and
+> the Step-8 `gate-corpus-edge-diff.sh` call; rely on `bench:recall` + the judge + targeted sweeps
+> (this gate was already documented as false-positive-prone on broad changes — see memory
+> `corpus-edge-diff-gate-caveats`). Fix paths, in preference order: (1) emit per-card port
+> SIGNATURES from the flow directly (the gate only ever consumed signatures via
+> `tools/corpus-edge-signatures.py` — the 2 GB edge dump was always an intermediate), (2) chunked/
+> streaming serialization upstream in Flowthru, (3) scope the materialization below the stream limit.
+
 ### Step 0 — Pre-flight
 
 - **Permission mode.** You (orchestrator) must be in an executing mode (`default`/`acceptEdits`), NOT plan mode, before dispatching. Sub-agents inherit the parent's permission mode and cannot escape it — a child dispatched from plan mode will *propose* edits instead of making them, no matter what its prompt says. This is the root cause behind stalled "zero-commit" agents; the prompt-level "do not enter plan mode" mandate (Step 3) is the second half of the fix, not the whole fix.
