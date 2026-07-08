@@ -12,17 +12,7 @@
       "reason": "PB-8 unparsed grammar gap"
     },
     {
-      "card": "EOE/ChoraleoftheVoid",
-      "tag": "debt",
-      "reason": "PB-8 unparsed grammar gap"
-    },
-    {
       "card": "EOE/ElegyAcolyte",
-      "tag": "debt",
-      "reason": "PB-8 unparsed grammar gap"
-    },
-    {
-      "card": "EOE/Hylderblade",
       "tag": "debt",
       "reason": "PB-8 unparsed grammar gap"
     },
@@ -48,11 +38,6 @@
     },
     {
       "card": "SOM/PrecursorGolem",
-      "tag": "debt",
-      "reason": "PB-8 unparsed grammar gap"
-    },
-    {
-      "card": "WHO/BillPotts",
       "tag": "debt",
       "reason": "PB-8 unparsed grammar gap"
     }

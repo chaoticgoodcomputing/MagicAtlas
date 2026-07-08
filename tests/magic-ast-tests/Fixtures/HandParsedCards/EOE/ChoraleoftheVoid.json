@@ -2,8 +2,8 @@
   "Input": {
     "Name": "Chorale of the Void",
     "ManaCost": "{3}{B}",
-    "TypeLine": "Enchantment — Aura",
-    "OracleText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+    "TypeLine": "Enchantment \u2014 Aura",
+    "OracleText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid \u2014 At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
     "Power": null,
     "Toughness": null,
     "Colors": [
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Chorale of the Void",
     "TypeLine": {
-      "Raw": "Enchantment — Aura",
+      "Raw": "Enchantment \u2014 Aura",
       "Types": [
         "Enchantment"
       ],
@@ -25,7 +25,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+      "RawText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid \u2014 At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
       "Abilities": [
         {
           "Kind": "static",
@@ -43,46 +43,46 @@
           "KeywordSource": "Enchant"
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 29,
-            "Length": 157
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsEnchanted": true
+            }
           },
-          "RawText": "Whenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.",
-          "Diagnostics": [
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Triggered ability parser not yet implemented",
-              "Location": {
+              "EffectType": "unstructured",
+              "Text": "put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.",
+              "SourceSpan": {
                 "Start": 29,
                 "Length": 157
-              },
-              "RawText": "Whenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.",
-              "Pattern": "UnparsedTriggered",
-              "LastAttemptedRule": "TriggeredAbilityParser.Parse",
-              "FailurePosition": 29
+              }
             }
           ]
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 187,
-            "Length": 152
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
           },
-          "RawText": "Void — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
-          "Diagnostics": [
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Triggered ability parser not yet implemented",
-              "Location": {
+              "EffectType": "unstructured",
+              "Text": "sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+              "SourceSpan": {
                 "Start": 187,
                 "Length": 152
-              },
-              "RawText": "Void — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
-              "Pattern": "UnparsedTriggered",
-              "LastAttemptedRule": "TriggeredAbilityParser.Parse",
-              "FailurePosition": 187
+              }
             }
           ],
           "AbilityWord": "Void"

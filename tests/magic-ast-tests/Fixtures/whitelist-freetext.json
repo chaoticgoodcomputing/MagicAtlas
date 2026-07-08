@@ -182,10 +182,28 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "EOE/ChoraleoftheVoid",
+      "sink": "UnstructuredEffect",
+      "tag": "debt",
+      "reason": "L1 shell fallback (fidelity ladder): trigger structured, effect interior held verbatim; burn down to L2 when the effect grammar lands"
+    },
+    {
       "card": "EOE/ElegyAcolyte",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
+    },
+    {
+      "card": "EOE/Hylderblade",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "L1 shell surfaced a previously-hidden intervening-if condition residual (was buried in the whole-ability UnparsedAbility); PB-7 structured-condition burndown"
+    },
+    {
+      "card": "EOE/Hylderblade",
+      "sink": "UnstructuredEffect",
+      "tag": "debt",
+      "reason": "L1 shell fallback (fidelity ladder): trigger structured, effect interior held verbatim; burn down to L2 when the effect grammar lands"
     },
     {
       "card": "EOE/InsatiableSkittermaw",
@@ -308,12 +326,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "MH3/PestRescuer",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'you don't control a Pest creature token' is a control-count intervening-if gate with no current structured-condition arm; deferred exactly as ISD/VillagersOfEstwald's intervening-if on the same 'At the beginning of each upkeep, if …' trigger shape"
-    },
-    {
       "card": "KLD/IncendiaryFlow",
       "sink": "Timeframe",
       "tag": "debt",
@@ -408,6 +420,12 @@
       "sink": "AbilityText",
       "tag": "irreducible",
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
+    },
+    {
+      "card": "MH3/PestRescuer",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'you don't control a Pest creature token' is a control-count intervening-if gate with no current structured-condition arm; deferred exactly as ISD/VillagersOfEstwald's intervening-if on the same 'At the beginning of each upkeep, if …' trigger shape"
     },
     {
       "card": "MID/HopefulInitiate",
@@ -774,6 +792,12 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'target player has fewer than nine poison counters' (quantity-comparison on poison counters) not yet a structured QuantityComparisonCondition"
+    },
+    {
+      "card": "WHO/BillPotts",
+      "sink": "UnstructuredEffect",
+      "tag": "debt",
+      "reason": "L1 shell fallback (fidelity ladder): trigger structured, effect interior held verbatim; burn down to L2 when the effect grammar lands"
     },
     {
       "card": "WOE/RowdyResearch",
