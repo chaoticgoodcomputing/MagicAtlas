@@ -1,0 +1,112 @@
+{
+  "Input": {
+    "Name": "Searing Meditation",
+    "ManaCost": "{1}{R}{W}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Whenever you gain life, you may pay {2}. If you do, this enchantment deals 2 damage to any target.",
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Searing Meditation",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever you gain life, you may pay {2}. If you do, this enchantment deals 2 damage to any target.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "GainsLife",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    }
+                  ]
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "dealDamage",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                },
+                "Source": {
+                  "Kind": "Self"
+                },
+                "Target": {
+                  "Kind": "AnyTarget"
+                }
+              }
+            }
+          ],
+          "Instructions": [
+            "you may pay {2}"
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
+      }
+    ]
+  }
+}

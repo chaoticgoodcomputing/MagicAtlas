@@ -50,6 +50,7 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
   private static readonly ReturnSelfFromGraveyardToBattlefieldRule _returnSelfFromGraveyardRule = new();
   private static readonly TapUntapTargetTriggeredRule _tapUntapTargetRule = new();
   private static readonly ItGainsKeywordUntilEndOfTurnRule _itGainsKeywordRule = new();
+  private static readonly ThisCreatureDealsDamageToAnyTargetTriggeredRule _selfDealsDamageAnyTargetRule = new();
 
   // ── Pattern 1: "you may pay {COST}. If you do, [effect]" ──────────────
   // The cost is one or more {X} symbols; the consequent effect is everything
@@ -142,6 +143,13 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
     // consequent.
     if (_itGainsKeywordRule.TryMatch(text, out var itGains) && itGains is not null)
       return itGains;
+    // "this enchantment deals N damage to any target" (Searing Meditation, JUD:
+    // "Whenever you gain life, you may pay {2}. If you do, this enchantment deals 2
+    // damage to any target.") — reuse the self-source burn rule as the "if you do"
+    // consequent. The rule also covers the "this creature/permanent/artifact" pronoun
+    // forms, emitting DealDamageEffect { Source = Self, Target = AnyTarget }.
+    if (_selfDealsDamageAnyTargetRule.TryMatch(text, out var selfDamage) && selfDamage is not null)
+      return selfDamage;
 
     // No match: return null so the caller (TryMatch) rejects the whole text
     // rather than emitting a partially-parsed effect. The dispatcher will
