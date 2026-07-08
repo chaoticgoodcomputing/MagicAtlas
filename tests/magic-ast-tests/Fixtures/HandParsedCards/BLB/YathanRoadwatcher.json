@@ -1,0 +1,157 @@
+{
+  "Input": {
+    "Name": "Yathan Roadwatcher",
+    "ManaCost": "{1}{W}{B}{G}",
+    "TypeLine": "Creature — Human Scout",
+    "OracleText": "When this creature enters, if you cast it, mill four cards. When you do, return target creature card with mana value 3 or less from your graveyard to the battlefield.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "B",
+      "G",
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Yathan Roadwatcher",
+    "TypeLine": {
+      "Raw": "Creature — Human Scout",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Scout"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, if you cast it, mill four cards. When you do, return target creature card with mana value 3 or less from your graveyard to the battlefield.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "castThisObject"
+          },
+          "Effects": [
+            {
+              "EffectType": "mill",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 4
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            },
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "When",
+                  "Event": "Mills",
+                  "Filter": {
+                    "Controller": "You"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "returnToBattlefield",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "Controller": "You",
+                        "Zone": "Graveyard",
+                        "ManaValueComparison": {
+                          "Operator": "LessThanOrEqual",
+                          "Value": 3
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}{B}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

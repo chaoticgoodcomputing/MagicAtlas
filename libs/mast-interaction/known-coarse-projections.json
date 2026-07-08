@@ -232,6 +232,7 @@
     "Exiled": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "LeavesGraveyard": "Syr Konrad, the Grim third-clause trigger — fires when a creature card leaves the controller's graveyard by any means (cast, returned to hand, exiled, etc.); no flow rule consumes it yet; consciously inert for interaction recall",
     "LeavesTheBattlefield": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "Mills": "mill keyword-action player event (CR 701.17a) — the reflexive 'mill N cards. When you do, …' event (Yathan Roadwatcher); parallels the other card-flow player-action events (DrawsCard/DiscardsCard/Sacrifices), no flow rule consumes it yet; consciously inert for interaction recall",
     "Mutates": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "Other": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "PlayerDealtDamage": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
