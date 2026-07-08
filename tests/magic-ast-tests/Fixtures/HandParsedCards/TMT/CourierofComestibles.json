@@ -1,0 +1,136 @@
+{
+  "Input": {
+    "Name": "Courier of Comestibles",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Human Citizen",
+    "OracleText": "When this creature enters, you may search your library for a Food card, reveal it, put it into your hand, then shuffle. If you don't put a card into your hand this way, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+    "Power": "1",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Courier of Comestibles",
+    "TypeLine": {
+      "Raw": "Creature — Human Citizen",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Citizen"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, you may search your library for a Food card, reveal it, put it into your hand, then shuffle. If you don't put a card into your hand this way, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "searchLibrary",
+                "Filter": {
+                  "Subtypes": [
+                    "Food"
+                  ]
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Destination": "Hand",
+                "Revealed": true
+              },
+              "IfYouDoNot": {
+                "EffectType": "createToken",
+                "Player": {
+                  "Kind": "You"
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Token": {
+                  "Types": [
+                    "artifact"
+                  ],
+                  "Subtypes": [
+                    "Food"
+                  ],
+                  "IsCopy": false,
+                  "AbilityText": [
+                    "{2}, {T}, Sacrifice this artifact: You gain 3 life."
+                  ]
+                }
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\""
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
