@@ -1,0 +1,99 @@
+{
+  "Input": {
+    "Name": "Fleshmad Steed",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Horse",
+    "OracleText": "Whenever another creature dies, tap this creature.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Fleshmad Steed",
+    "TypeLine": {
+      "Raw": "Creature — Horse",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Horse"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever another creature dies, tap this creature.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
