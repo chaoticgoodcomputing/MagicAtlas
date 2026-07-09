@@ -1,0 +1,121 @@
+{
+  "Input": {
+    "Name": "Rishadan Cutpurse",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Creature — Human Pirate",
+    "OracleText": "When this creature enters, each opponent sacrifices a permanent of their choice unless they pay {1}.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Rishadan Cutpurse",
+    "TypeLine": {
+      "Raw": "Creature — Human Pirate",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Pirate"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, each opponent sacrifices a permanent of their choice unless they pay {1}.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "sacrifice",
+                "Target": {
+                  "Kind": "EachOpponent",
+                  "Filter": {
+                    "CardTypes": [
+                      "permanent"
+                    ]
+                  }
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "EachOpponent"
+                },
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 1
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
