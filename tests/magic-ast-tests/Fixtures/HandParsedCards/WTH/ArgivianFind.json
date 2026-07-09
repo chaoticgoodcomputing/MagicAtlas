@@ -1,0 +1,74 @@
+{
+  "Input": {
+    "Name": "Argivian Find",
+    "ManaCost": "{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Return target artifact or enchantment card from your graveyard to your hand.",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Argivian Find",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Return target artifact or enchantment card from your graveyard to your hand.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "artifact",
+                    "enchantment"
+                  ],
+                  "Zone": "Graveyard",
+                  "Controller": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}
