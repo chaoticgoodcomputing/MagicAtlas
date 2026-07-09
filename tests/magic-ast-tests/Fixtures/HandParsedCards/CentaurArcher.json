@@ -1,0 +1,65 @@
+{
+  "Input": {
+    "Name": "Centaur Archer",
+    "ManaCost": "{1}{R}{G}",
+    "TypeLine": "Creature — Centaur Archer",
+    "OracleText": "{T}: This creature deals 1 damage to target creature with flying.",
+    "Power": "3",
+    "Toughness": "2",
+    "Colors": ["G", "R"],
+    "ColorIdentity": ["G", "R"]
+  },
+  "Output": {
+    "Name": "Centaur Archer",
+    "TypeLine": {
+      "Raw": "Creature — Centaur Archer",
+      "Types": ["Creature"],
+      "Subtypes": ["Centaur", "Archer"]
+    },
+    "Oracle": {
+      "RawText": "{T}: This creature deals 1 damage to target creature with flying.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}]
+                }
+              },
+              "Source": { "Kind": "Self" }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 3
+      },
+      { "Kind": "colors", "Colors": ["G", "R"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["G", "R"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
