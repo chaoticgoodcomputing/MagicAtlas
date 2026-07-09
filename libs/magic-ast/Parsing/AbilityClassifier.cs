@@ -407,6 +407,31 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Prevent all damage that would be dealt to this creature by [source]." —
+    // a permanent, always-on damage-prevention shield printed directly on a
+    // creature (e.g. Champion Lancer: "... by creatures."), CR 604.2 ("Static
+    // abilities create continuous effects, some of which are prevention
+    // effects ..."). "Prevent" heads the generic spell-instruction-verb list
+    // below (Fog-style "Prevent all combat damage ... this turn" IS a genuine
+    // one-shot spell-resolution step), but this shape names its own permanent
+    // ("this creature") as the protected recipient with no turn-bounded
+    // duration — a declarative, continuously-active property of the object,
+    // not an imperative resolution instruction. Intercept before the generic
+    // verb check swallows it (mirrors the "You may cast this card from your
+    // graveyard" intercept above).
+    if (Regex.IsMatch(
+      clause.RawText.TrimStart(),
+      @"^Prevent\s+all\s+damage\s+that\s+would\s+be\s+dealt\s+to\s+this\s+creature\s+by\s+",
+      RegexOptions.IgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Spell-style instruction verbs at clause start: imperative effect
     // descriptions consistent with sorcery/instant resolution (Rule 113.3a).
     // Also fires for modal option bodies dispatched through the registry, where
