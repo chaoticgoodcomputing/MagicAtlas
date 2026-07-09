@@ -1976,6 +1976,16 @@
           ]
         },
         {
+          "Type": "RevealCardsEffect",
+          "Discriminator": "revealCards",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Player",
+            "Zone"
+          ]
+        },
+        {
           "Type": "RevealTopMayPutMatchingRestToGraveyardEffect",
           "Discriminator": "revealTopMayPutMatchingRestToGraveyard",
           "IsUnparsed": false,
@@ -2474,6 +2484,12 @@
           "Fields": []
         },
         {
+          "Type": "CardsRevealedThisWayQuantity",
+          "Discriminator": "cardsRevealedThisWay",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CountQuantity",
           "Discriminator": "count",
           "IsUnparsed": false,
@@ -2664,5 +2680,5 @@
       ]
     }
   ],
-  "SchemaHash": "a4b6955c388c2443c1332638d0a07a9a3df8ddc1516e30b0c146817a4c9a6dc9"
+  "SchemaHash": "8463a0d1d69d1b5bcc2e616543abc74e7f5c47a347d85879f938899b2c7713ef"
 }
