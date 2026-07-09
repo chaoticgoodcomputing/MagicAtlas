@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Savage Surge",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Instant",
+    "OracleText": "Target creature gets +2/+2 until end of turn. Untap that creature.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Savage Surge",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Target creature gets +2/+2 until end of turn. Untap that creature.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            },
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "It"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
