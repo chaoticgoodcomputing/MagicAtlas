@@ -1,0 +1,96 @@
+{
+  "Input": {
+    "Name": "Boomerang Basics",
+    "ManaCost": "{U}",
+    "TypeLine": "Sorcery — Lesson",
+    "OracleText": "Return target nonland permanent to its owner's hand. If you controlled that permanent, draw a card.",
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Boomerang Basics",
+    "TypeLine": {
+      "Raw": "Sorcery — Lesson",
+      "Types": [
+        "Sorcery"
+      ],
+      "Subtypes": [
+        "Lesson"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Return target nonland permanent to its owner's hand. If you controlled that permanent, draw a card.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "ExcludedCardTypes": [
+                    "land"
+                  ]
+                }
+              }
+            },
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              },
+              "Condition": {
+                "ConditionType": "controlledObject",
+                "Reference": {
+                  "Kind": "It"
+                },
+                "Controller": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
