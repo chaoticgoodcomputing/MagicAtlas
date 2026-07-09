@@ -1,0 +1,79 @@
+{
+  "Input": {
+    "Name": "Count on Luck",
+    "ManaCost": "{R}{R}{R}",
+    "TypeLine": "Enchantment",
+    "OracleText": "At the beginning of your upkeep, exile the top card of your library. You may play that card this turn.",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Count on Luck",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of your upkeep, exile the top card of your library. You may play that card this turn.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "impulse",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "RestDestination": "RemainExiled",
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{R}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}
