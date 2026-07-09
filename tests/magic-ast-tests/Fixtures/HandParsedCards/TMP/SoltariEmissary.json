@@ -1,0 +1,130 @@
+{
+  "Input": {
+    "Name": "Soltari Emissary",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Soltari Soldier",
+    "OracleText": "{W}: This creature gains shadow until end of turn. (It can block or be blocked by only creatures with shadow.)",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Soltari Emissary",
+    "TypeLine": {
+      "Raw": "Creature — Soltari Soldier",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Soltari",
+        "Soldier"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{W}: This creature gains shadow until end of turn. (It can block or be blocked by only creatures with shadow.)",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Shadow",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Characteristics": [
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Shadow"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
