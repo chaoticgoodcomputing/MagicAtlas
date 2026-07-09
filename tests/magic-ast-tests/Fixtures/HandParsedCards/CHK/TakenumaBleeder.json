@@ -1,0 +1,120 @@
+{
+  "Input": {
+    "Name": "Takenuma Bleeder",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Ogre Shaman",
+    "OracleText": "Whenever this creature attacks or blocks, you lose 1 life if you don't control a Demon.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Takenuma Bleeder",
+    "TypeLine": {
+      "Raw": "Creature — Ogre Shaman",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Ogre",
+        "Shaman"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever this creature attacks or blocks, you lose 1 life if you don't control a Demon.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "AttacksOrBlocks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "count",
+                "Filter": {
+                  "Subtypes": [
+                    "Demon"
+                  ],
+                  "Controller": "You"
+                },
+                "Count": {
+                  "Operator": "LessThan",
+                  "Value": 1
+                }
+              },
+              "Then": {
+                "EffectType": "loseLife",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
