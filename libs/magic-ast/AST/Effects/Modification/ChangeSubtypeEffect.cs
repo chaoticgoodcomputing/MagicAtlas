@@ -13,7 +13,9 @@ using MagicAST.AST.Effects.Traits;
 /// an effect sets one or more of an object's subtypes, the new subtype(s) replaces
 /// any existing subtypes from the appropriate set"). The new value is either a
 /// literal list (<see cref="Subtypes"/>) or a value the controller picks on
-/// resolution (<see cref="ChosenSubtype"/>) — exactly one of the two is populated.
+/// resolution (<see cref="ChosenSubtype"/>), or a back-reference to a creature type
+/// chosen earlier in the same ability (<see cref="ChosenSubtypeReference"/>) — exactly
+/// one of the three is populated.
 ///
 /// <para>
 /// The static Aura form ("Enchanted land is an Island") carries no
@@ -76,4 +78,23 @@ public sealed record ChangeSubtypeEffect : ContinuousEffect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ChosenCharacteristicKind? ChosenSubtype { get; init; }
+
+  /// <summary>
+  /// Set instead of <see cref="Subtypes"/> / <see cref="ChosenSubtype"/> when the new
+  /// subtype BACK-REFERENCES a characteristic chosen earlier in the SAME ability rather
+  /// than being a literal value or a fresh pick on this effect's resolution —
+  /// "Target creature becomes <em>that</em> type until end of turn" after
+  /// "Choose a creature type other than Wall" (Imagecrafter). The demonstrative
+  /// "that type" points back to the producer <see cref="MagicAST.AST.Effects.Keyword.ChooseCreatureTypeEffect"/>
+  /// sitting earlier in the ability's effect list, so this is the CR 607.1 linked-ability
+  /// consumer side ("two abilities [here, two effects] … one causes … the other one
+  /// directly refers to those actions"). It parallels
+  /// <see cref="ObjectFilter.ChosenCharacteristic"/> (the filter-side back-reference,
+  /// "creatures of the chosen type"): both record a reference to an already-chosen value,
+  /// distinct from <see cref="ChosenSubtype"/>, which is the fresh "the creature type of
+  /// your choice" pick. <see cref="ChosenCharacteristicKind.CreatureType"/> records that
+  /// the referenced value is a creature type, constrained per CR 205.3.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ChosenCharacteristicKind? ChosenSubtypeReference { get; init; }
 }
