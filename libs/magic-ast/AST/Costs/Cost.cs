@@ -84,6 +84,20 @@ public sealed record DiscardCost : Cost
   /// How many must be discarded.
   /// </summary>
   public required Quantity Quantity { get; init; }
+
+  /// <summary>
+  /// True when the card(s) to discard are chosen "at random" rather than by the
+  /// discarding player — e.g. Balduvian Horde's "sacrifice it unless you discard a
+  /// card at random." CR 701.9b: "By default, effects that cause a player to discard
+  /// a card allow the affected player to choose which card to discard. Some effects,
+  /// however, require a random discard or allow another player to choose which card
+  /// is discarded." This flag records the "random discard" variant. Mirrors
+  /// <see cref="MagicAST.AST.Effects.CardFlow.DiscardCardsEffect.Random"/> on the
+  /// cost side. Omitted from serialization when false (the common, non-random case)
+  /// so existing discard-cost fixtures are unaffected.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool Random { get; init; }
 }
 
 /// <summary>
