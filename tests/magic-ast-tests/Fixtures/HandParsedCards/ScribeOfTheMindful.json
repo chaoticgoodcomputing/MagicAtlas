@@ -1,0 +1,88 @@
+{
+  "Input": {
+    "Name": "Scribe of the Mindful",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Creature — Human Cleric",
+    "OracleText": "{1}, {T}, Sacrifice this creature: Return target instant or sorcery card from your graveyard to your hand.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Scribe of the Mindful",
+    "TypeLine": {
+      "Raw": "Creature — Human Cleric",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "{1}, {T}, Sacrifice this creature: Return target instant or sorcery card from your graveyard to your hand.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 1 }
+              ]
+            },
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"],
+                "IsSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["instant", "sorcery"],
+                  "Zone": "Graveyard",
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
