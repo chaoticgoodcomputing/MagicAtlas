@@ -356,6 +356,15 @@ public enum ChosenCharacteristicKind
   /// chosen as the permanent entered — the structured consumer of a CR 607 linked ability whose producer is a
   /// <see cref="MagicAST.AST.Effects.Keyword.ChooseCardTypeEffect"/> (e.g. Cloud Key).</summary>
   CardType,
+
+  /// <summary>"the basic land type of your choice" — one of the five basic land types (Plains, Island, Swamp,
+  /// Mountain, Forest) chosen as an effect resolves (Reef Shaman: "{T}: Target land becomes the basic land type
+  /// of your choice until end of turn."). Constrained per CR 305.6 ("If an object uses the words 'basic land
+  /// type,' it's referring to one of these subtypes"). Used on <see cref="Effects.Modification.ChangeSubtypeEffect.ChosenSubtype"/>
+  /// as the fresh-choice land-type analogue of <see cref="CreatureType"/>; setting a land's subtype to a basic
+  /// land type is governed by CR 305.7 (the land loses its old land types and gains the corresponding mana
+  /// abilities).</summary>
+  BasicLandType,
 }
 
 /// <summary>
