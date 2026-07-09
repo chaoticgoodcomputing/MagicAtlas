@@ -644,6 +644,12 @@
       "reason": "may-pay-cost effort structuring — deferred adjunct (same as Nim Deathmantle/Ulalek; the ConditionalPayEffect.Cost carries the structured {2})"
     },
     {
+      "card": "JUD/Mirari",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as RingsOfBrighthearth/SearingMeditation; the ConditionalPayEffect.Cost carries the structured {3})"
+    },
+    {
       "card": "RoadOfReturn",
       "sink": "OtherCharacteristic",
       "tag": "debt",
