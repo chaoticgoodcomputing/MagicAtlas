@@ -312,6 +312,15 @@
           "Fields": []
         },
         {
+          "Type": "ControlledObjectCondition",
+          "Discriminator": "controlledObject",
+          "IsUnparsed": false,
+          "Fields": [
+            "Controller",
+            "Reference"
+          ]
+        },
+        {
           "Type": "CountCondition",
           "Discriminator": "count",
           "IsUnparsed": false,
@@ -2655,5 +2664,5 @@
       ]
     }
   ],
-  "SchemaHash": "7c8bcd5756e2e7955baa42dcf8c34f211ee657cd72175b9790279af6b78ab826"
+  "SchemaHash": "a4b6955c388c2443c1332638d0a07a9a3df8ddc1516e30b0c146817a4c9a6dc9"
 }
