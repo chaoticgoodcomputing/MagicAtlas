@@ -1,0 +1,88 @@
+{
+  "Input": {
+    "Name": "Skullcap Snail",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Fungus Snail",
+    "OracleText": "When this creature enters, target opponent exiles a card from their hand.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Skullcap Snail",
+    "TypeLine": {
+      "Raw": "Creature — Fungus Snail",
+      "Types": ["Creature"],
+      "Subtypes": ["Fungus", "Snail"]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, target opponent exiles a card from their hand.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["card"],
+                  "Owner": "Opponent",
+                  "Zone": "Hand"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}
