@@ -1,0 +1,56 @@
+{
+  "Input": {
+    "Name": "Despark",
+    "ManaCost": "{W}{B}",
+    "TypeLine": "Instant",
+    "OracleText": "Exile target permanent with mana value 4 or greater.",
+    "Colors": ["B", "W"],
+    "ColorIdentity": ["B", "W"]
+  },
+  "Output": {
+    "Name": "Despark",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Exile target permanent with mana value 4 or greater.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["permanent"],
+                  "ManaValueComparison": { "Operator": "GreaterThanOrEqual", "Value": 4 }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}{B}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "B"]
+      }
+    ]
+  }
+}
