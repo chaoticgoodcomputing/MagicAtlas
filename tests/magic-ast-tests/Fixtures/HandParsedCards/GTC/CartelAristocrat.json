@@ -1,0 +1,133 @@
+{
+  "Input": {
+    "Name": "Cartel Aristocrat",
+    "ManaCost": "{W}{B}",
+    "TypeLine": "Creature — Human Advisor",
+    "OracleText": "Sacrifice another creature: This creature gains protection from the color of your choice until end of turn.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "B",
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Cartel Aristocrat",
+    "TypeLine": {
+      "Raw": "Creature — Human Advisor",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Advisor"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Sacrifice another creature: This creature gains protection from the color of your choice until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "ExcludeSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Protection",
+                "Effects": [
+                  {
+                    "EffectType": "protection",
+                    "From": [
+                      {
+                        "Kind": "ChosenColor"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W",
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
