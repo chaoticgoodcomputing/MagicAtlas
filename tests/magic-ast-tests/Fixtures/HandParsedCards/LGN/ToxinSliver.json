@@ -1,0 +1,101 @@
+{
+  "Input": {
+    "Name": "Toxin Sliver",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Creature — Sliver",
+    "OracleText": "Whenever a Sliver deals combat damage to a creature, destroy that creature. It can't be regenerated.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Toxin Sliver",
+    "TypeLine": {
+      "Raw": "Creature — Sliver",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Sliver"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever a Sliver deals combat damage to a creature, destroy that creature. It can't be regenerated.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToCreature",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Subtypes": [
+                "Sliver"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "ThatCreature"
+              },
+              "CantBeRegenerated": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
