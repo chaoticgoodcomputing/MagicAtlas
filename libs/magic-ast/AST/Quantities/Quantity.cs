@@ -296,6 +296,19 @@ public sealed record CalculatedQuantity : Quantity
   public Quantity? BaseQuantity { get; init; }
 
   /// <summary>
+  /// The other quantity operand for a binary operation whose right-hand side is
+  /// itself a full <see cref="Quantity"/> rather than the scalar <see cref="Operand"/> —
+  /// e.g. "3 minus the number of cards in their hand" (Rackling): a
+  /// <see cref="LiteralQuantity"/> 3 as <see cref="BaseQuantity"/>, <c>Operation="subtract"</c>,
+  /// and a <see cref="CountQuantity"/> here. Optional; used when the second operand is a
+  /// game-state count/derivation the scalar <see cref="Operand"/> cannot express (that field
+  /// only holds an integer, as in "the base count × N"). Mutually exclusive with
+  /// <see cref="Operand"/> and <see cref="Expression"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Quantity? OperandQuantity { get; init; }
+
+  /// <summary>
   /// The operation: half, double, triple, etc.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
