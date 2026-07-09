@@ -530,6 +530,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "ONS/FrenziedGoblin",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/OrderOfTheGoldenCricket; the ConditionalPayEffect.Cost carries the structured {R})"
+    },
+    {
       "card": "ONS/IxidorRealitySculptor",
       "sink": "OtherCharacteristic",
       "tag": "debt",

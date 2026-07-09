@@ -51,6 +51,7 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
   private static readonly TapUntapTargetTriggeredRule _tapUntapTargetRule = new();
   private static readonly ItGainsKeywordUntilEndOfTurnRule _itGainsKeywordRule = new();
   private static readonly ThisCreatureDealsDamageToAnyTargetTriggeredRule _selfDealsDamageAnyTargetRule = new();
+  private static readonly CantBlockThisTurnTriggeredRule _cantBlockThisTurnRule = new();
 
   // ── Pattern 1: "you may pay {COST}. If you do, [effect]" ──────────────
   // The cost is one or more {X} symbols; the consequent effect is everything
@@ -150,6 +151,13 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
     // forms, emitting DealDamageEffect { Source = Self, Target = AnyTarget }.
     if (_selfDealsDamageAnyTargetRule.TryMatch(text, out var selfDamage) && selfDamage is not null)
       return selfDamage;
+    // "target [filter] can't block this turn" (Frenzied Goblin, ONS: "Whenever
+    // this creature attacks, you may pay {R}. If you do, target creature can't
+    // block this turn.") — reuse the anchored blocker-restriction rule as the
+    // "if you do" consequent, emitting CantBlockEffect { Target = target creature,
+    // Duration = end of turn }.
+    if (_cantBlockThisTurnRule.TryMatch(text, out var cantBlock) && cantBlock is not null)
+      return cantBlock;
 
     // No match: return null so the caller (TryMatch) rejects the whole text
     // rather than emitting a partially-parsed effect. The dispatcher will
