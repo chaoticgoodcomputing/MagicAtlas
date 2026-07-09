@@ -1,0 +1,118 @@
+{
+  "Input": {
+    "Name": "Scent of Nightshade",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Instant",
+    "OracleText": "Reveal any number of black cards in your hand. Target creature gets -X/-X until end of turn, where X is the number of cards revealed this way.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Scent of Nightshade",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Reveal any number of black cards in your hand. Target creature gets -X/-X until end of turn, where X is the number of cards revealed this way.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "revealCards",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "anyAmount"
+              },
+              "Zone": "Hand",
+              "Filter": {
+                "CardTypes": [
+                  "card"
+                ],
+                "Colors": [
+                  "B"
+                ]
+              }
+            },
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "cardsRevealedThisWay"
+                },
+                "Operation": "multiply",
+                "Operand": -1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "cardsRevealedThisWay"
+                },
+                "Operation": "multiply",
+                "Operand": -1
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}
