@@ -95,6 +95,21 @@ public enum ObjectReferenceKind
   /// <summary>"the defending player"</summary>
   DefendingPlayer,
 
+  /// <summary>
+  /// "the player or planeswalker that creature is attacking" — the single defending object
+  /// (a player OR a planeswalker) that the trigger's attacking creature has been declared
+  /// attacking (CR 508.1b: "the active player announces which player, planeswalker, or battle
+  /// each of the chosen creatures is attacking"). Distinct from <see cref="DefendingPlayer"/>:
+  /// that names the defending <em>player</em> (the person, or the controller of an attacked
+  /// planeswalker/battle — CR 508.1); this names the attacked object itself, which may be the
+  /// planeswalker rather than any player. NOT a <see cref="Choice"/> — the recipient is fixed by
+  /// the attack declaration, not chosen at resolution — so the "or" is the two possible kinds of
+  /// the one determined object, not a chooser's alternatives (Cavalcade of Calamity). The "that
+  /// creature" back-reference is the trigger's attacking creature (mirrors <see cref="ThatCreature"/>);
+  /// a linked reference (ADR 0004 reference-not-resolution), not a threaded binding.
+  /// </summary>
+  AttackedPlayerOrPlaneswalker,
+
   /// <summary>"enchanted creature", "equipped creature"</summary>
   EnchantedOrEquipped,
 
