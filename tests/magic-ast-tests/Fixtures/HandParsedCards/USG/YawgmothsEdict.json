@@ -1,0 +1,88 @@
+{
+  "Input": {
+    "Name": "Yawgmoth's Edict",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Whenever an opponent casts a white spell, that player loses 1 life and you gain 1 life.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Yawgmoth's Edict",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "Whenever an opponent casts a white spell, that player loses 1 life and you gain 1 life.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": ["spell"],
+              "Colors": ["W"],
+              "Controller": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "loseLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "ThatPlayer"
+                  }
+                },
+                {
+                  "EffectType": "gainLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}
