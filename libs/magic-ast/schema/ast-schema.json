@@ -1967,6 +1967,16 @@
           ]
         },
         {
+          "Type": "RevealTopMayPutMatchingRestToGraveyardEffect",
+          "Discriminator": "revealTopMayPutMatchingRestToGraveyard",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Filter",
+            "Player"
+          ]
+        },
+        {
           "Type": "RevealTopPutMatchingToHandEffect",
           "Discriminator": "revealTopPutMatchingToHand",
           "IsUnparsed": false,
@@ -2645,5 +2655,5 @@
       ]
     }
   ],
-  "SchemaHash": "0d13351a5a41ac6f6fb309e7fc6225faf2870ff14d9caa1f328bb44ffb13efd0"
+  "SchemaHash": "7c8bcd5756e2e7955baa42dcf8c34f211ee657cd72175b9790279af6b78ab826"
 }
