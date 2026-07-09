@@ -1,0 +1,74 @@
+{
+  "Input": {
+    "Name": "Reef Shaman",
+    "ManaCost": "{U}",
+    "TypeLine": "Creature — Merfolk Shaman",
+    "OracleText": "{T}: Target land becomes the basic land type of your choice until end of turn.",
+    "Power": "0",
+    "Toughness": "2",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Reef Shaman",
+    "TypeLine": {
+      "Raw": "Creature — Merfolk Shaman",
+      "Types": ["Creature"],
+      "Subtypes": ["Merfolk", "Shaman"]
+    },
+    "Oracle": {
+      "RawText": "{T}: Target land becomes the basic land type of your choice until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "changeSubtype",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["land"]
+                }
+              },
+              "ChosenSubtype": "BasicLandType",
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "0", "Value": 0 },
+        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+      }
+    ]
+  }
+}
