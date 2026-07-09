@@ -15,8 +15,9 @@ using MagicAST.AST.References;
 ///   <item>"a card" — any card (Filter.CardTypes = ["card"])</item>
 ///   <item>"a [type] card" — typed filter, e.g. "a creature card",
 ///   "a basic land card" (type word(s) parsed into CardTypes / Supertypes)</item>
-///   <item>an optional "reveal it," clause before the put-to-hand clause
-///   (e.g. Lay of the Land) — sets <c>Revealed = true</c> when present.</item>
+///   <item>an optional reveal clause ("reveal it," or "reveal that card,")
+///   before the put-to-hand clause (e.g. Lay of the Land, Eladamri's Call) —
+///   sets <c>Revealed = true</c> when present.</item>
 /// </list>
 ///
 /// All variants map to a single <see cref="SearchLibraryEffect"/> with
@@ -33,11 +34,12 @@ public sealed class SearchLibraryToHandRule : ISpellRule
   //   "a creature card"        → filter = "creature"
   //   "a basic land card"      → filter = "basic land"
   //   "a basic Forest card"    → filter = "basic Forest"
-  // The optional <reveal> group captures a "reveal it," clause sitting between the
-  // filter and the put-to-hand clause; its presence sets Revealed = true.
+  // The optional <reveal> group captures a "reveal it," / "reveal that card,"
+  // clause sitting between the filter and the put-to-hand clause; its presence
+  // sets Revealed = true.
   private static readonly Regex _pattern = new(
     @"^Search\s+your\s+library\s+for\s+a\s+(?<filter>(?:[A-Za-z]+\s+)+)?card,\s*"
-    + @"(?<reveal>reveal\s+it,\s*)?put\s+(?:that\s+card|it)\s+into\s+your\s+hand,\s*then\s+shuffle$",
+    + @"(?<reveal>reveal\s+(?:it|that\s+card),\s*)?put\s+(?:that\s+card|it)\s+into\s+your\s+hand,\s*then\s+shuffle$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
