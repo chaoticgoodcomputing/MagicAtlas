@@ -12,6 +12,7 @@
     "ConditionKind:beenAttackedThisStep",
     "ConditionKind:cardTypeDiversity",
     "ConditionKind:castThisObject",
+    "ConditionKind:controlledObject",
     "ConditionKind:count",
     "ConditionKind:diedThisWay",
     "ConditionKind:escaped",
