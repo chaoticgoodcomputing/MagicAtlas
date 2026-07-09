@@ -1,0 +1,92 @@
+{
+  "Input": {
+    "Name": "Gerrard's Wisdom",
+    "ManaCost": "{2}{W}{W}",
+    "TypeLine": "Sorcery",
+    "OracleText": "You gain 2 life for each card in your hand.",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Gerrard's Wisdom",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You gain 2 life for each card in your hand.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "count",
+                  "CountOf": {
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "Zone": "Hand",
+                    "Controller": "You"
+                  }
+                },
+                "Operation": "multiply",
+                "Operand": 2
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}
