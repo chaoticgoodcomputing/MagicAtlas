@@ -229,6 +229,7 @@
     "OracleEffect:replacement",
     "OracleEffect:returnToBattlefield",
     "OracleEffect:returnToHand",
+    "OracleEffect:revealTopMayPutMatchingRestToGraveyard",
     "OracleEffect:revealTopPutMatchingToHand",
     "OracleEffect:revealUntil",
     "OracleEffect:ringTemptsYou",
