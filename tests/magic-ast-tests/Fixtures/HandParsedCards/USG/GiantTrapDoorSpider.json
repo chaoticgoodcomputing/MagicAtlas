@@ -1,0 +1,89 @@
+{
+  "Input": {
+    "Name": "Giant Trap Door Spider",
+    "ManaCost": "{1}{R}{G}",
+    "TypeLine": "Creature — Spider",
+    "OracleText": "{1}{R}{G}, {T}: Exile this creature and target creature without flying that's attacking you.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": ["G", "R"],
+    "ColorIdentity": ["G", "R"],
+    "Keywords": [],
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Giant Trap Door Spider",
+    "TypeLine": {
+      "Raw": "Creature — Spider",
+      "Types": ["Creature"],
+      "Subtypes": ["Spider"]
+    },
+    "Oracle": {
+      "RawText": "{1}{R}{G}, {T}: Exile this creature and target creature without flying that's attacking you.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 1 },
+                { "Kind": "colored", "Colors": ["R"] },
+                { "Kind": "colored", "Colors": ["G"] }
+              ]
+            },
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Self"
+              }
+            },
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Characteristics": [
+                    { "CharacteristicType": "other", "Description": "withoutFlying" },
+                    { "CharacteristicType": "other", "Description": "attackingYou" }
+                  ]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G", "R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R", "G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+      }
+    ]
+  }
+}

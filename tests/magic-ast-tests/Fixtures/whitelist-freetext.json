@@ -794,6 +794,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "USG/GiantTrapDoorSpider",
+      "sink": "OtherCharacteristic",
+      "tag": "debt",
+      "reason": "PB-9 misc structured-characteristic (keyword-absence/combat-defender) — 'without flying' keyword-absence predicate (same convention as M10/Falter and ODY/AshenFirebeast) and 'that's attacking you' combat-defender predicate (no CombatStateCharacteristic defender axis; deferred whole per ADR 0001)"
+    },
+    {
       "card": "USG/GoblinWarBuggy",
       "sink": "OtherCondition",
       "tag": "debt",
