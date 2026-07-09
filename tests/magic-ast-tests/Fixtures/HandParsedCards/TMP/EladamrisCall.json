@@ -1,0 +1,84 @@
+{
+  "Input": {
+    "Name": "Eladamri's Call",
+    "ManaCost": "{G}{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Search your library for a creature card, reveal that card, put it into your hand, then shuffle.",
+    "Colors": [
+      "G",
+      "W"
+    ],
+    "ColorIdentity": [
+      "G",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Eladamri's Call",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Search your library for a creature card, reveal that card, put it into your hand, then shuffle.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "searchLibrary",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ]
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Destination": "Hand",
+              "Revealed": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G",
+          "W"
+        ]
+      }
+    ]
+  }
+}
