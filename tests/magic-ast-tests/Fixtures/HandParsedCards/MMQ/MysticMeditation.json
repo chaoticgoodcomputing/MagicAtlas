@@ -1,0 +1,70 @@
+{
+  "Input": {
+    "Name": "Mystic Meditation",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Draw three cards. Then discard two cards unless you discard a creature card.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Mystic Meditation",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Draw three cards. Then discard two cards unless you discard a creature card.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": { "QuantityType": "literal", "Value": 3 },
+              "Player": { "Kind": "You" }
+            },
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "discardCards",
+                "Count": { "QuantityType": "literal", "Value": 2 },
+                "Player": { "Kind": "You" },
+                "Random": false
+              },
+              "Unless": {
+                "Player": { "Kind": "You" },
+                "Cost": {
+                  "CostType": "discard",
+                  "Filter": { "CardTypes": ["creature"] },
+                  "Quantity": { "QuantityType": "literal", "Value": 1 }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
