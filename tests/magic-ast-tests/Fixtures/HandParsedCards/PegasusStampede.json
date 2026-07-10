@@ -1,0 +1,171 @@
+{
+  "Input": {
+    "Name": "Pegasus Stampede",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Buyback—Sacrifice a land. (You may sacrifice a land in addition to any other costs as you cast this spell. If you do, put this card into your hand as it resolves.)\nCreate a 1/1 white Pegasus creature token with flying.",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Buyback"
+    ],
+    "Id": "7418d65f-1017-4f98-b039-db4228769454",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Pegasus Stampede",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Buyback—Sacrifice a land. (You may sacrifice a land in addition to any other costs as you cast this spell. If you do, put this card into your hand as it resolves.)\nCreate a 1/1 white Pegasus creature token with flying.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Buyback",
+          "Reminder": {
+            "Text": "(You may sacrifice a land in addition to any other costs as you cast this spell. If you do, put this card into your hand as it resolves.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "sacrifice",
+                  "Filter": {
+                    "CardTypes": [
+                      "land"
+                    ]
+                  },
+                  "Quantity": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                },
+                "IsOptional": true
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Buyback",
+          "Condition": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Buyback"
+          },
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "zoneChange",
+                "DestinationZone": "Graveyard",
+                "OriginZone": "Stack"
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "returnToHand",
+                "Target": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": [
+                  "W"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Pegasus"
+                ],
+                "Abilities": [
+                  {
+                    "Kind": "static",
+                    "KeywordSource": "Flying",
+                    "Effects": [
+                      {
+                        "EffectType": "evasion",
+                        "CanBeBlockedBy": {
+                          "CardTypes": [
+                            "creature"
+                          ],
+                          "Characteristics": [
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Flying"
+                            },
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Reach"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "IsCopy": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}

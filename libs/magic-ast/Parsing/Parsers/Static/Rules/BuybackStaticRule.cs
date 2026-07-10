@@ -9,6 +9,7 @@ using MagicAST.AST.Effects.Replacement;
 using MagicAST.AST.Effects.ZoneChange;
 using MagicAST.AST.References;
 using MagicAST.Parsing;
+using MagicAST.Parsing.Parsers.Activated;
 
 /// <summary>
 /// Decomposes a "Buyback [cost]" oracle line into the two static abilities defined by
@@ -33,6 +34,17 @@ using MagicAST.Parsing;
 /// </para>
 ///
 /// <para>
+/// The buyback cost is usually mana ("Buyback {3}") but CR 702.27a's "[cost]" also covers
+/// non-mana costs, printed with an em dash rather than trailing the keyword directly —
+/// "Buyback—Sacrifice a land." (Pegasus Stampede). Both forms share the same two-ability
+/// decomposition; only the <see cref="Cost"/> payload of ability 1 differs. The non-mana
+/// cost text is delegated to the shared
+/// <see cref="ActivatedRuleHelpers.ParseSacrificePattern"/> helper (same primitive an
+/// activation cost "Sacrifice a land" would use) rather than re-deriving sacrifice-cost
+/// parsing here.
+/// </para>
+///
+/// <para>
 /// Ability 2 is a zone-change replacement effect (CR 614 / 702.27a): the spell would go
 /// from the stack to the graveyard as it resolves, but instead goes to its owner's hand.
 /// Modeled with the existing replacement primitives — <see cref="ReplacementEffect"/> over
@@ -46,41 +58,73 @@ public sealed class BuybackStaticRule : IStaticRule
 {
   // Matches: "Buyback {cost}" with optional trailing reminder text.
   // The cost group captures one or more mana symbols, e.g. "{3}".
-  private static readonly Regex _pattern = new(
+  private static readonly Regex _manaPattern = new(
     @"^\s*Buyback\s+(?<cost>(?:\{[^}]+\})+)\s*(?<reminder>\(.*\))?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Matches: "Buyback—[non-mana cost text]." with optional trailing reminder text, e.g.
+  // "Buyback—Sacrifice a land. (…)" (Pegasus Stampede). The em dash (—) separates the
+  // keyword from a prose cost rather than mana symbols directly abutting it; the cost
+  // clause ends at the period, before any parenthetical reminder.
+  private static readonly Regex _nonManaPattern = new(
+    @"^\s*Buyback\s*[—-]\s*(?<cost>[^.(]+)\.\s*(?<reminder>\(.*\))?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
   /// <inheritdoc/>
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
   {
-    var match = _pattern.Match(clause.RawText);
-    if (!match.Success)
-    {
-      return null;
-    }
+    Cost cost;
+    Parenthetical? reminder = null;
 
-    var costStr = match.Groups["cost"].Value;
-    ManaCost cost;
-    try
+    var manaMatch = _manaPattern.Match(clause.RawText);
+    if (manaMatch.Success)
     {
-      var parsed = new ManaCostParser().Parse(costStr);
-      if (parsed.Symbols.Count == 0)
+      var costStr = manaMatch.Groups["cost"].Value;
+      try
+      {
+        var parsed = new ManaCostParser().Parse(costStr);
+        if (parsed.Symbols.Count == 0)
+        {
+          return null;
+        }
+        cost = new ManaCost { Symbols = parsed.Symbols };
+      }
+      catch
       {
         return null;
       }
-      cost = new ManaCost { Symbols = parsed.Symbols };
-    }
-    catch
-    {
-      return null;
-    }
 
-    Parenthetical? reminder = null;
-    var reminderGroup = match.Groups["reminder"];
-    if (reminderGroup.Success && reminderGroup.Value.Length > 0)
+      var reminderGroup = manaMatch.Groups["reminder"];
+      if (reminderGroup.Success && reminderGroup.Value.Length > 0)
+      {
+        reminder = new Parenthetical { Text = reminderGroup.Value };
+      }
+    }
+    else
     {
-      reminder = new Parenthetical { Text = reminderGroup.Value };
+      // Non-mana form: "Buyback—Sacrifice a land." Delegate the cost text to the shared
+      // sacrifice-cost primitive (same one an activation cost "Sacrifice a land" uses).
+      var nonManaMatch = _nonManaPattern.Match(clause.RawText);
+      if (!nonManaMatch.Success)
+      {
+        return null;
+      }
+
+      var costText = nonManaMatch.Groups["cost"].Value.Trim();
+      var (quantity, filter) = ActivatedRuleHelpers.ParseSacrificePattern(costText);
+      if (filter == null)
+      {
+        return null;
+      }
+      cost = new SacrificeCost { Filter = filter, Quantity = quantity };
+
+      var reminderGroup = nonManaMatch.Groups["reminder"];
+      if (reminderGroup.Success && reminderGroup.Value.Length > 0)
+      {
+        reminder = new Parenthetical { Text = reminderGroup.Value };
+      }
     }
 
     // Ability 1 (CR 702.27a, first clause): the additional-cast-cost static ability.
