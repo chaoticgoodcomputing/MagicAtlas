@@ -74,6 +74,15 @@ public enum DerivedKind
   Toughness,
   ManaValue,
   LifeTotal,
+  /// <summary>
+  /// A player's STARTING life total — the fixed value set at the beginning of the game
+  /// (CR 119.1: "Each player begins the game with a starting life total of 20." — 40 in
+  /// Commander per CR 903.7), as distinct from <see cref="LifeTotal"/> (the player's
+  /// CURRENT life total, which changes as the game progresses). Bane, Lord of Darkness:
+  /// "your life total is less than or equal to half your starting life total" compares
+  /// the current total against a fraction of this fixed reference value.
+  /// </summary>
+  StartingLifeTotal,
   CardsInHand,
   CardsInGraveyard,
   /// <summary>The number of cards in a player's library. CR 401.1 (the library zone).</summary>

@@ -80,6 +80,25 @@ public static class ConditionParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
+  /// "your life total is less than or equal to half your starting life total" — the
+  /// God-template life-threshold predicate (Bane, Lord of Darkness: "As long as your life
+  /// total is less than or equal to half your starting life total, Bane has
+  /// indestructible."). CR 119.1: "Each player begins the game with a starting life total
+  /// of 20." (format-dependent — CR 903.7 sets 40 for Commander); "starting life total" is
+  /// the FIXED value set at the beginning of the game, distinct from the player's CURRENT
+  /// life total (<see cref="DerivedKind.LifeTotal"/>) that changes as the game progresses.
+  /// Structured to a <see cref="QuantityComparisonCondition"/> whose <c>Right</c> operand
+  /// is a <see cref="CalculatedQuantity"/> halving a <see cref="DerivedQuantity"/> keyed on
+  /// the new <see cref="DerivedKind.StartingLifeTotal"/> — the sibling shape of the plain
+  /// <see cref="LifeTotal"/> predicate above, generalised to a comparison operator phrase
+  /// ("is less than or equal to") and a derived (not literal) right-hand side. Anchored
+  /// (^…$).
+  /// </summary>
+  private static readonly Regex LifeTotalVsHalfStarting = new(
+    @"^(?<who>your|that\s+player's)\s+life\s+total\s+is\s+(?<op>less\s+than\s+or\s+equal\s+to|greater\s+than\s+or\s+equal\s+to|less\s+than|greater\s+than|equal\s+to)\s+half\s+(?:your|their)\s+starting\s+life\s+total$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// "it had a +1/+1 counter on it" / "it had no +1/+1 counters on it" — the dying/triggering object's
   /// counter-gate (Basri's Lieutenant, Persist "had no -1/-1", Undying "had no +1/+1"). Structured to
   /// <see cref="TriggeringObjectCounterCondition"/> rather than left as a free-text residual.
@@ -265,6 +284,31 @@ public static class ConditionParser
         },
         Operator = op,
         Right = new LiteralQuantity { Value = value },
+      };
+    }
+
+    if (LifeTotalVsHalfStarting.Match(body) is { Success: true } lths)
+    {
+      var who = lths.Groups["who"].Value.StartsWith("your", StringComparison.OrdinalIgnoreCase)
+        ? "you"
+        : "that player";
+      var op = lths.Groups["op"].Value.ToLowerInvariant() switch
+      {
+        "less than or equal to" => ComparisonOperator.LessThanOrEqual,
+        "greater than or equal to" => ComparisonOperator.GreaterThanOrEqual,
+        "less than" => ComparisonOperator.LessThan,
+        "greater than" => ComparisonOperator.GreaterThan,
+        _ => ComparisonOperator.Equal,
+      };
+      return new QuantityComparisonCondition
+      {
+        Left = new DerivedQuantity { DerivedFrom = DerivedKind.LifeTotal, Source = who },
+        Operator = op,
+        Right = new CalculatedQuantity
+        {
+          Operation = "half",
+          BaseQuantity = new DerivedQuantity { DerivedFrom = DerivedKind.StartingLifeTotal, Source = who },
+        },
       };
     }
 
