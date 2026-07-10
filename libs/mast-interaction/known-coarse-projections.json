@@ -101,6 +101,7 @@
     "lookAtTopCardAnyTime": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "loseAbility": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "loseType": "Theros God conditional creature-type loss (DevotionConditionalLoseCreatureTypeRule) \u2014 a layer-4 type-removing continuous effect; no flow rule reads type-loss yet; inert for interaction recall; conscious named carve-out",
+    "maxHandSize": "CR 402.2 maximum-hand-size SET static (The Ten Rings 'Your maximum hand size is ten.') \u2014 a rules-of-the-game numeric restriction, sibling of noMaxHandSize/cantDrawCards/cantGainLife which are all coarse restriction statics; no flow rule reads hand-size-limit events yet; consciously inert for interaction recall",
     "mayPlayFromExile": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "mayPlayFromGraveyard": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "mayPlayFromLibrary": "baseline coarse fallback \u2014 Mystic Forge play-from-top permission; no flow rule reads library-cast permission yet; conscious named carve-out",

@@ -52,15 +52,19 @@ public static class ConditionParser
 
   /// <summary>
   /// "that player has two or fewer cards in hand" / "you have N or more cards in
-  /// hand" — a hand-size predicate (Prickle Faeries' upkeep intervening-if). The
-  /// possessive subject maps to the owner of the counted cards (hand membership is
-  /// by ownership, CR 108.3): "that player" → <see cref="ControllerFilter.ThatPlayer"/>
-  /// (the player whose step fired the trigger, CR 109.5), "you/your" → You. Structured
-  /// to a <see cref="CountCondition"/> over the Hand zone rather than left as a
-  /// free-text residual.
+  /// hand" / "you have fewer than ten cards in hand" (The Ten Rings) — a hand-size
+  /// predicate (Prickle Faeries' upkeep intervening-if). The possessive subject maps
+  /// to the owner of the counted cards (hand membership is by ownership, CR 108.3):
+  /// "that player" → <see cref="ControllerFilter.ThatPlayer"/> (the player whose
+  /// step fired the trigger, CR 109.5), "you/your" → You. Structured to a
+  /// <see cref="CountCondition"/> over the Hand zone rather than left as a free-text
+  /// residual. Covers both the trailing "N or more/fewer" suffix form and the
+  /// strict leading "fewer than N"/"more than N" prefix form (a plain
+  /// <see cref="ComparisonOperator.LessThan"/>/<see cref="ComparisonOperator.GreaterThan"/>,
+  /// distinct from the suffix form's inclusive "or fewer"/"or more").
   /// </summary>
   private static readonly Regex HandSize = new(
-    @"^(?<who>that\s+player|you|your)\s+(?:has|have)\s+(?<quant>a|an|\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer))?\s+cards?\s+in\s+(?:hand|their\s+hand|your\s+hand)$",
+    @"^(?<who>that\s+player|you|your)\s+(?:has|have)\s+(?:(?<prefixdir>fewer|more)\s+than\s+)?(?<quant>a|an|\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer))?\s+cards?\s+in\s+(?:hand|their\s+hand|your\s+hand)$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
@@ -222,9 +226,27 @@ public static class ConditionParser
       ["green"] = "G",
     };
 
+  /// <summary>
+  /// The most recent hand-size upper-bound threshold parsed by <see cref="Parse"/>'s
+  /// <see cref="HandSize"/> arm (e.g. 10 for "fewer than ten cards in hand"), for a
+  /// paired effect rule that needs the numeral — see the hand-off note on the
+  /// <see cref="HandSize"/> match site in <see cref="Parse"/>. The consumer (e.g.
+  /// <c>DrawCardsEqualToHandSizeDifferenceRule</c>) reads and clears it immediately
+  /// after, in the same synchronous ability parse, mirroring the
+  /// <c>AttacksPlayerAndIsntBlockedConditionRule.PendingInterveningIf</c> hand-off.
+  /// </summary>
+  [ThreadStatic]
+  public static int? PendingHandSizeUpperBound;
+
   /// <summary>Parse a condition phrase; never throws — unrecognised phrases become a residual.</summary>
   public static Condition Parse(string phrase)
   {
+    // Reset the hand-off from any earlier, unrelated Parse call on this thread —
+    // only the HandSize match (if any) made by THIS call should reach the paired
+    // effect rule that runs immediately afterward. Set again below if this call's
+    // body matches HandSize with an upper-bound comparison.
+    PendingHandSizeUpperBound = null;
+
     var verbatim = phrase.Trim();
     // Strip a leading "if " / "as long as " connector before matching the predicate.
     var body = Regex.Replace(verbatim, @"^(if|as\s+long\s+as)\s+", "", RegexOptions.IgnoreCase).Trim();
@@ -280,10 +302,42 @@ public static class ConditionParser
         Zone = Zone.Hand,
         Owner = owner,
       };
+
+      Comparison count;
+      if (hm.Groups["prefixdir"].Success)
+      {
+        // Strict leading form: "fewer than N"/"more than N" (no "or").
+        var value = NumberWords.TryGetValue(hm.Groups["quant"].Value, out var pv)
+          ? pv
+          : int.Parse(hm.Groups["quant"].Value);
+        var op = hm.Groups["prefixdir"].Value.Equals("fewer", StringComparison.OrdinalIgnoreCase)
+          ? ComparisonOperator.LessThan
+          : ComparisonOperator.GreaterThan;
+        count = new Comparison { Operator = op, Value = value };
+      }
+      else
+      {
+        count = Quant(hm.Groups["quant"].Value, hm.Groups["dir"].Value);
+      }
+
+      // Communicate the upper-bound threshold to a paired effect rule that needs
+      // the numeral to build a "draw cards equal to the difference" quantity (The
+      // Ten Rings: "if you have fewer than ten cards in hand, draw cards equal to
+      // the difference" — the effect rule only sees the post-intervening-if effect
+      // fragment, so the numeral this condition just parsed is handed off here).
+      // Only set for an upper-bound (LessThan/LessThanOrEqual): "the difference"
+      // reads as threshold-minus-count, which only makes sense against an upper
+      // bound. Mirrors the AttacksPlayerAndIsntBlockedConditionRule.PendingInterveningIf
+      // cross-rule hand-off pattern used elsewhere in the triggered-ability pipeline.
+      if (count.Operator is ComparisonOperator.LessThan or ComparisonOperator.LessThanOrEqual && count.Value is int threshold)
+      {
+        PendingHandSizeUpperBound = threshold;
+      }
+
       return new CountCondition
       {
         Filter = filter,
-        Count = Quant(hm.Groups["quant"].Value, hm.Groups["dir"].Value),
+        Count = count,
       };
     }
 
