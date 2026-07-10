@@ -578,6 +578,12 @@
       "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
     },
     {
+      "card": "OteclanLandmark",
+      "sink": "UnstructuredEffect",
+      "tag": "debt",
+      "reason": "L1 shell fallback (fidelity ladder): back-face attack trigger structured (Whenever this creature attacks), effect interior 'target attacking creature without flying gains flying until end of turn' held verbatim; distinct gainAbility target-filter family (attacking + without-flying), burn down to L2 when that grammar lands"
+    },
+    {
       "card": "PIP/NukaColaVendingMachine",
       "sink": "AbilityText",
       "tag": "irreducible",
