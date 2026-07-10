@@ -209,6 +209,7 @@
   "costType": {
     "composite": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "discard": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "drawCards": "cumulative upkeep's per-age-counter draw-a-card cost (CR 702.24a) on Psychic Vortex \u2014 sibling of the coarse payLife/payEnergy flat upkeep-tax costs; no flow rule reads a card draw paid as a cost yet (mirrors the coarse drawCards EffectType); consciously inert for interaction recall",
     "exile": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "forage": "Forage keyword-action cost (CR 701.61a \u2014 exile three cards from your graveyard or sacrifice a Food); no flow rule consumes forage activation-cost events yet; consciously inert for interaction recall",
     "payLife": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
