@@ -1131,6 +1131,30 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "[Self] deals damage equal to the sacrificed creature's power to any target." —
+    // Thud's self-by-name spell-resolution shape: the additional-cost sacrifice
+    // (parsed separately by AttributeExtractor into AdditionalCostsAttribute) feeds a
+    // CR 607.1 linked-ability back-reference ("the sacrificed creature"). No numeric
+    // amount token between "deals" and "damage" — the amount is a derived reference —
+    // so this falls outside the generic "[Self] deals N damage to ..." pattern below and
+    // would otherwise default to Static and stall in StaticAbilityParser.
+    if (
+      !clause.Tokens.Any(t => t.Kind == OracleToken.QuotedText)
+      && Regex.IsMatch(
+        clause.RawText,
+        @"^\s*[A-Z]\S*(?:\s+\S+)*?\s+deals\s+damage\s+equal\s+to\s+the\s+sacrificed\s+creature's\s+power\s+to\s+any\s+target\b",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "[Self] deals N damage to ..." — self-by-name spell-resolution dealDamage.
     // Take Down's modal options ("Take Down deals 4 damage to target creature
     // with flying.") open with the card's own name rather than a recognised
