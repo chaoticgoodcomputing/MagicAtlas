@@ -1,0 +1,65 @@
+{
+  "Input": {
+    "Name": "Torpor Orb",
+    "ManaCost": "{2}",
+    "TypeLine": "Artifact",
+    "OracleText": "Creatures entering don't cause abilities to trigger.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "dbf02a38-d10d-463e-ab99-e7fd848a1bd3",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Torpor Orb",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Creatures entering don't cause abilities to trigger.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "abilityTrigger",
+                "CausedByEntering": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "OriginalEventOccurs": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
