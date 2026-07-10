@@ -87,6 +87,13 @@ public enum ActivationRestriction
   /// <summary>"Activate only during your turn"</summary>
   OnlyDuringYourTurn,
 
+  /// <summary>"Activate only during your upkeep." — a step-scoped timing restriction
+  /// (CR 602.5: "A player can't begin to activate an ability that's prohibited from
+  /// being activated."). Strictly narrower than <see cref="OnlyDuringYourTurn"/>: the
+  /// ability may be activated only during the upkeep step of the controller's turn
+  /// (Magus of the Mirror).</summary>
+  OnlyDuringYourUpkeep,
+
   /// <summary>"Activate only once each turn"</summary>
   OnlyOnceEachTurn,
 
