@@ -1023,6 +1023,12 @@
           ]
         },
         {
+          "Type": "CantPreventDamageEffect",
+          "Discriminator": "cantPreventDamage",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CastWithoutPayingEffect",
           "Discriminator": "castWithoutPaying",
           "IsUnparsed": false,
@@ -1589,7 +1595,6 @@
           "Discriminator": "loseAbility",
           "IsUnparsed": false,
           "Fields": [
-            "AbilityText",
             "Target"
           ]
         },
@@ -1899,6 +1904,14 @@
           "Discriminator": "playAdditionalLand",
           "IsUnparsed": false,
           "Fields": []
+        },
+        {
+          "Type": "PlayWithHandsRevealedEffect",
+          "Discriminator": "playWithHandsRevealed",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
         },
         {
           "Type": "PlayWithTopRevealedEffect",
@@ -2214,6 +2227,16 @@
             "Destination",
             "Filter",
             "Revealed"
+          ]
+        },
+        {
+          "Type": "SetBasePTEffect",
+          "Discriminator": "setBasePT",
+          "IsUnparsed": false,
+          "Fields": [
+            "Power",
+            "Target",
+            "Toughness"
           ]
         },
         {
@@ -2823,5 +2846,5 @@
       ]
     }
   ],
-  "SchemaHash": "57a7646f6a7f2160a842614fdc02c92c0cd59939a0d0c80c91cfe92999795666"
+  "SchemaHash": "32ee032c43a35756a6787c146fffb6c40f38bfcd335c89ddecab881c79352c27"
 }
