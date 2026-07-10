@@ -468,6 +468,18 @@ internal static class StaticRuleHelpers
         KeywordSource = KeywordAbility.Riot,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Riot }],
       },
+      // Infect (Rule 702.90a: "Infect is a static ability."): this creature deals
+      // damage to creatures in the form of -1/-1 counters and to players in the
+      // form of poison counters (Rule 702.90b-c). MAST records the keyword's
+      // presence via the same KeywordAbilityEffect shape as the other parameterless
+      // markers; the damage-redirection semantics are engine territory. Enables the
+      // "Enchanted/Equipped creature has infect" grant shape (BareKeywordGrantRule
+      // Arm 1), mirroring how it already grants Defender/Deathtouch/etc.
+      "infect" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Infect,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Infect }],
+      },
       _ => null,
     };
   }
