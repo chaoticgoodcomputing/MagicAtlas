@@ -530,6 +530,14 @@
           ]
         },
         {
+          "Type": "ActivatedAbilityAdder",
+          "Discriminator": "activatedAbilityAdder",
+          "IsUnparsed": false,
+          "Fields": [
+            "Ability"
+          ]
+        },
+        {
           "Type": "ColorAdder",
           "Discriminator": "colorAdder",
           "IsUnparsed": false,
@@ -1042,6 +1050,12 @@
           "Fields": []
         },
         {
+          "Type": "CantBeRegeneratedEffect",
+          "Discriminator": "cantBeRegenerated",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CantBlockEffect",
           "Discriminator": "cantBlock",
           "IsUnparsed": false,
@@ -1107,6 +1121,14 @@
         {
           "Type": "CantLoseGameForZeroLifeEffect",
           "Discriminator": "cantLoseGameForZeroLife",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
+          "Type": "CantPlayLandsEffect",
+          "Discriminator": "cantPlayLands",
           "IsUnparsed": false,
           "Fields": [
             "Player"
@@ -3013,5 +3035,5 @@
       ]
     }
   ],
-  "SchemaHash": "508840b488c1d22c976792668702dc812b98a938974a390e3e412617dc6c1a3d"
+  "SchemaHash": "1dab031c92a8be7138f908460cfdc0a2592085e8b6a3e8a00eead3f9a710f54b"
 }
