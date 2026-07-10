@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "target": "mast-tdd/2026-07-10-snow-grant-until-eot",
+      "verdict": "PASS",
+      "citations": ["CR 107.4h"],
+      "reason": "OracleToken.SnowMana added to IsCostToken as a token-kind enum (not a text regex) so {S}: classifies as activated; no sibling collision. Both lines modeled: {T} cantBlock target creature until EOT + {S} gainAbility Haste until EOT."
+    },
+    {
+      "target": "mast-tdd/2026-07-10-take-extra-turn",
+      "verdict": "PASS",
+      "citations": ["CR 500.7", "CR 113.3a"],
+      "reason": "Reuses existing TakeExtraTurnEffect (Player=You). Classifier intercept anchored ^Take...extra turn(s) after this one at TrimStart; loyalty/activated forms are prefixed and intercepted earlier so they never match ^Take. Corpus sweep: no non-spell clause begins bare with this frame."
+    },
+    {
+      "target": "mast-tdd/2026-07-10-choose-color-as-enters",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 615.1", "CR 607"],
+      "reason": "chooseColor modeled as static with When:asThisEnters (not triggered) per CR 614.12; line-3 shield preventDamage binds the chosen color via structured ChosenCharacteristic:Color (not free text) — the structured CR 607 consumer side. ChooseColorOnEntryRule/classifier widen to Aura/enchanted-creature verified non-colliding: corpus has only 3 enchanted-creature prevention Auras, all static, no this-turn one-shot variant."
+    },
+    {
+      "target": "mast-tdd/2026-07-10-disturb-keyword",
+      "verdict": "PASS",
+      "citations": ["CR 702.146a", "CR 712.8c", "CR 614.1"],
+      "reason": "AlternativeCastEffect.Transformed is an additive bool distinguishing Disturb (cast transformed from graveyard) from Flashback (cast as printed). Disturb keyword: alternativeCast FromZone Graveyard, Cost, Transformed=true. Back-face exile-replacement anchored to self-by-name (^If <Name> ... from anywhere, exile it instead$); excludes lowercase-subject siblings Dryad Militant / Rest in Peace. No unparsed nodes on either face."
+    },
+    {
+      "target": "mast-tdd/2026-07-10-cleave-keyword",
+      "verdict": "PASS",
+      "citations": ["CR 702.148a"],
+      "reason": "Cleave alt-cast cost correct: FromZone Hand (cost-only, does not change casting zone), mirrors Flashback. Bracketed-destroy SpellRule requires literal square brackets around the state qualifier, disjoint from the unbracketed DestroyTargetStateQualifiedRule sibling. Bracket-removal second static ability left unmodeled per Overload precedent."
+    },
+    {
+      "target": "mast-tdd/2026-07-10-dont-untap-static",
+      "verdict": "FAIL",
+      "citations": ["CR 502.3", "CR 109.5"],
+      "reason": "Line-2 trigger 'At the beginning of each player's upkeep' omits the Whose scope on the phase event, whereas the established fixture convention always sets it (Whose:You / Whose:Opponent / Whose:EnchantedPlayer). Dropping it loses the each-player symmetric-untap-lock semantics and leaves the effect's Controller:ThatPlayer antecedent (CR 109.5 'that player = whose step fired') dangling. Fix: set Event.Whose=Any. NOTE: the two new rules (doesntUntap reuse + untap reuse, subjects generalized via Each/CardTypes, both anchored) are themselves correct."
+    },
+    {
+      "target": "mast-tdd/2026-07-10-opponents-cant-gain-life",
+      "verdict": "PASS",
+      "citations": ["CR 119.7"],
+      "reason": "CantGainLifeRule dispatches 'Players can't gain life'->EachPlayer and 'Your opponents can't gain life'->EachOpponent on the existing CantGainLifeEffect.Player field. Both patterns anchored ^...$. Corpus sweep: 'this turn' variants (Atarka's Command, Roiling Vortex) and the singular 'Your opponent can't gain life or remove poison counters' (Quest Compleated Beast) are correctly excluded; no over-match."
+    }
+  ]
+}

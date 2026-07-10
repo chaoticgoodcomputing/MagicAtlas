@@ -1,0 +1,112 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/OverlordOfTheBalemurk.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.176a"],
+      "reason": "four impending abilities modeled faithfully (alt-cast; enters-with-5-time-counters replacement gated on keywordCostPaid; not-a-creature loseType with asLongAs gate; end-step remove-a-time-counter trigger with intervening-if); mill+return line preserves non-Avatar (ExcludedSubtypes), creature/planeswalker (CardTypes), from-your-graveyard (Zone+Controller You), to hand"
+    },
+    {
+      "target": "libs/magic-ast/AST/Abilities/ObjectHasCounterCondition.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.176a"],
+      "reason": "present-tense counter predicate (Subject + CounterType), correctly shaped and distinguished from the dies-trigger look-back condition"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/ImpendingStaticRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.176a", "CR 614.1c", "CR 603.4"],
+      "reason": "4-ability decomposition from existing primitives; timing carried by StaticTimingKind.AsThisEnters / trigger clock, not baked into any effect discriminator"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/MillThenOptionalReturnFromGraveyardToHandRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.17a", "CR 115.1"],
+      "reason": "anchored full-sentence pattern; type-disjunction + ExcludedSubtypes + Zone/Controller filters preserved; anchoring prevents sibling mill/return mislabel"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-impending-keyword#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "sole new discriminator objectHasCounter is a Condition predicate (not an effect/cost/trigger/restriction port discriminator); no PortWalk projection required — sensible"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/InnerSanctum.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.24a", "CR 615.1"],
+      "reason": "cumulative upkeep decomposed to upkeep trigger -> putCounters age 1 -> preventable sacrifice unless scaledCost(payLife 2 x counterCount age); line-2 prevent-all-damage-to-creatures-you-control full L2; on-battlefield intervening-if is whitelisted PB-7 OtherCondition debt (same bucket as Echo)"
+    },
+    {
+      "target": "libs/magic-ast/AST/Costs/ScaledCost.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.24a"],
+      "reason": "well-shaped PerUnit(Cost) x Count(Quantity); generalizes ScaledManaCost to non-mana per-unit costs"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/CumulativeUpkeepPayLifeStaticRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.24a"],
+      "reason": "anchored life-cost template; faithful age-counter pay-per-counter-or-sacrifice decomposition mirroring Echo"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/PreventAllDamageToCreaturesYouControlStaticRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 615.1", "CR 604.2"],
+      "reason": "anchored full-line + anchored classifier intercept; PreventDamage All=true Target=Each{creature,Controller You}, always-on static, no source restriction"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-cumulative-upkeep#projection",
+      "verdict": "PASS",
+      "citations": ["CR 702.24a"],
+      "reason": "scaledCost coarse-projection entry is sensible — an unless-side counter-scaled payment resource, sibling of scaledMana's existing coarse status, genuinely inert for interaction recall (no flow rule reads counter-unless payments)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NorinSwiftSurvivalist.json",
+      "verdict": "PASS",
+      "citations": ["CR 509.1b", "CR 201.5"],
+      "reason": "line-1 'Norin can't block.' correctly Target=null=Self (own name, no literal name in AST); line-2 becomes-blocked trigger -> optional exile(it) + optional mayPlayTargetFromExile(it) until end of turn"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/CardFlow/MayPlayTargetFromExileEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.13a", "CR 305.1", "CR 601.2"],
+      "reason": "one-shot exile-then-play permission via It back-reference + inherited Duration; correctly distinguished from filtered MayPlayFromExileEffect"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/YouMayExileItTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.13a"],
+      "reason": "anchored '^you may exile it$'; OptionalEffect-wrapped exile, mutually exclusive with ExileSelfTriggeredRule"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-self-cant-block#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "mayPlayTargetFromExile coarse-projection entry is sensible — exile-then-play-window grant, sibling of mayCastTargetFromGraveyard/mayPlayFromExile coarse status; no flow rule projects such grants yet"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/CantBlockRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 509.1b", "CR 201.5"],
+      "reason": "SIBLING-MISLABEL OVERFIT: self-by-name regex matches 8 non-self board-wide/typed restrictions (Bedlam & Tazeem 'Creatures can't block.', Razorjaw Oni 'Black creatures', Frenetic Raptor 'Beasts', Siege Elemental 'Untapped creatures', Magistrate's Veto 'White creatures and blue creatures', Bothersome Quasit 'Goaded creatures your opponents control', Spitting Dilophosaurus 'Creatures your opponents control with -1/-1 counters') and collapses each to Target=null=Self; classifier defaults these to Static and no filtered static rule catches them, so CantBlockRule steals them; nonsensical for non-creature enchantments Bedlam/Magistrate's Veto. Exclusion list (This/Enchanted/Equipped/Target/Each/All/Other/Any/That) omits every creature-type/color/state subject"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/OteclanLandmark.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.167a"],
+      "reason": "Craft ability full L2: mana {2}{W} + ExileCost(self, Battlefield) + ExileCost(artifact, Owner You, ExcludeSelf, Anywhere) + ReturnToBattlefield(Self, Owner, Transformed) + OnlyAsSorcery; dual-zone materials as Owner=You+FromZone=Anywhere over-approximates the zone (disclosed, no cross-zone disjunction axis) but captures type/another/ownership; back-face 'attacking creature without flying gains flying' UnstructuredEffect is whitelisted L1 grammar-gap debt, not laziness on the Craft target"
+    },
+    {
+      "target": "libs/magic-ast/Keywords/Definitions/CraftKeyword.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.167a"],
+      "reason": "decomposed purely from existing primitives; single-word-materials combinator, uncoverable materials fall through unparsed (no lossy mis-parse); reminder preserved"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-craft-keyword#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new effect/cost/trigger/restriction discriminator (schema unchanged; +Craft is a KeywordSource reference); no PortWalk projection required — sensible"
+    }
+  ]
+}
