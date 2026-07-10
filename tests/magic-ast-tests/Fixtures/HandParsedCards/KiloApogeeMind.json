@@ -1,0 +1,101 @@
+{
+  "Input": {
+    "Name": "Kilo, Apogee Mind",
+    "ManaCost": "{U}{R}{W}",
+    "TypeLine": "Legendary Artifact Creature — Robot Artificer",
+    "OracleText": "Haste\nWhenever Kilo becomes tapped, proliferate. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["R", "U", "W"],
+    "ColorIdentity": ["R", "U", "W"],
+    "Keywords": ["Haste", "Proliferate"],
+    "Id": "307a859e-eb80-4af6-b731-92e4767b5100",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Kilo, Apogee Mind",
+    "TypeLine": {
+      "Raw": "Legendary Artifact Creature — Robot Artificer",
+      "Supertypes": ["Legendary"],
+      "Types": ["Artifact", "Creature"],
+      "Subtypes": ["Robot", "Artificer"]
+    },
+    "Oracle": {
+      "RawText": "Haste\nWhenever Kilo becomes tapped, proliferate. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
+            }
+          ],
+          "KeywordSource": "Haste"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesTapped",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "proliferate"
+            }
+          ],
+          "Reminder": {
+            "Text": "Choose any number of permanents and/or players, then give each another counter of each kind already there."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}{R}{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R", "U", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R", "U", "W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
