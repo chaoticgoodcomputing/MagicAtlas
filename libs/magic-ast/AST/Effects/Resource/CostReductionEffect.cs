@@ -2,6 +2,7 @@ namespace MagicAST.AST.Effects.Resource;
 
 using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
+using MagicAST.AST.Costs;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
@@ -15,9 +16,21 @@ using MagicAST.AST.Effects.Traits;
 public sealed record CostReductionEffect : Effect
 {
   /// <summary>
-  /// The amount of the reduction.
+  /// The amount of the reduction (the generic-mana component of the total
+  /// reduction).
   /// </summary>
   public required Quantity Amount { get; init; }
+
+  /// <summary>
+  /// Specific colored/colorless mana symbols removed from the total cost when
+  /// the reduction is not purely generic — "Those spells cost {R} less to
+  /// cast" (Defiler of Instinct). Total reduction = <see cref="Amount"/>
+  /// (generic component) + these symbols; CR 601.2f. Null when the reduction
+  /// is purely generic (the common case), preserving existing encodings. The
+  /// cost-reduction sibling of <see cref="CostIncreaseEffect.ManaSymbols"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<ManaSymbol>? ManaSymbols { get; init; }
 
   /// <summary>
   /// The class of <i>other</i> abilities/spells whose cost this reduces — Strong

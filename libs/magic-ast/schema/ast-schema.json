@@ -291,6 +291,12 @@
       "DiscriminatorKey": "ConditionType",
       "Types": [
         {
+          "Type": "AdditionalCostPaidCondition",
+          "Discriminator": "additionalCostPaid",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "AllCondition",
           "Discriminator": "all",
           "IsUnparsed": false,
@@ -1398,6 +1404,15 @@
           "IsUnparsed": false,
           "Fields": [
             "Value"
+          ]
+        },
+        {
+          "Type": "GrantAdditionalCostEffect",
+          "Discriminator": "grantAdditionalCost",
+          "IsUnparsed": false,
+          "Fields": [
+            "AdditionalCost",
+            "AffectedSpells"
           ]
         },
         {
@@ -2707,5 +2722,5 @@
       ]
     }
   ],
-  "SchemaHash": "558a923104f60a818749561dbf92268dac00c015d1158c96bc426a68d963b8d2"
+  "SchemaHash": "2775602cf4227411fd58aa8234488942c50baac633dcd5fcb2c466eade071bac"
 }
