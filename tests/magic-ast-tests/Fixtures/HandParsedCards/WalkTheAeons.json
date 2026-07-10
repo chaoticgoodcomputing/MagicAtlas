@@ -1,0 +1,124 @@
+{
+  "Input": {
+    "Name": "Walk the Aeons",
+    "ManaCost": "{4}{U}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Buyback—Sacrifice three Islands. (You may sacrifice three Islands in addition to any other costs as you cast this spell. If you do, put this card into your hand as it resolves.)\nTarget player takes an extra turn after this one.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": ["Buyback"],
+    "Id": "794d09ae-a995-482f-848e-7f99477bd6f3",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Walk the Aeons",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Buyback—Sacrifice three Islands. (You may sacrifice three Islands in addition to any other costs as you cast this spell. If you do, put this card into your hand as it resolves.)\nTarget player takes an extra turn after this one.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Buyback",
+          "Reminder": {
+            "Text": "(You may sacrifice three Islands in addition to any other costs as you cast this spell. If you do, put this card into your hand as it resolves.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "sacrifice",
+                  "Filter": {
+                    "Subtypes": [
+                      "Island"
+                    ]
+                  },
+                  "Quantity": {
+                    "QuantityType": "literal",
+                    "Value": 3
+                  }
+                },
+                "IsOptional": true
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Buyback",
+          "Condition": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Buyback"
+          },
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "zoneChange",
+                "DestinationZone": "Graveyard",
+                "OriginZone": "Stack"
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "returnToHand",
+                "Target": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "takeExtraTurn",
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
