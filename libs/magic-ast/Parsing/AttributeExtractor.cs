@@ -236,11 +236,21 @@ public sealed partial class AttributeExtractor
   )]
   private static partial Regex AdditionalSacrificeDisjunctionPrefix();
 
+  // "As an additional cost to cast this spell, pay [amount] life." — the Fire
+  // Covenant / Wing Shards mandatory pay-life additional cost family. Amount is
+  // X/Y/Z (a variable the controller announces as the spell is cast, CR 601.2b),
+  // a literal digit run, or a number word (one..ten).
+  [GeneratedRegex(
+    @"^As an additional cost to cast this spell,\s+pay\s+(?<amount>[XYZ]|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life\.$",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex AdditionalPayLifePrefix();
+
   /// <summary>
   /// Scans oracle text for "As an additional cost to cast this spell, sacrifice a [type]."
   /// prefix lines and returns an AdditionalCostsAttribute when found, or null when absent.
-  /// Handles the sacrifice-a-permanent family; other cost shapes (discard, pay life) are
-  /// not yet recognised here and are left unparsed until a future batch extends this method.
+  /// Handles the sacrifice-a-permanent and pay-life families; other cost shapes (discard, ...)
+  /// are not yet recognised here and are left unparsed until a future batch extends this method.
   /// </summary>
   private AdditionalCostsAttribute? TryExtractAdditionalCosts(string? oracleText)
   {
@@ -267,6 +277,23 @@ public sealed partial class AttributeExtractor
       };
 
       return new AdditionalCostsAttribute { Costs = [sacrificeCost] };
+    }
+
+    // "As an additional cost to cast this spell, pay [amount] life." — CR 601.2f:
+    // "The total cost is the mana cost or alternative cost ..., plus all additional
+    // costs and cost increases ..." The life payment itself is a PayLifeCost; the
+    // amount is most commonly the linked variable X (CR 601.2b — the controller
+    // announces the value of a variable cost as the spell is cast).
+    var payLifeMatch = AdditionalPayLifePrefix().Match(firstLine);
+    if (payLifeMatch.Success)
+    {
+      var payLifeCost = new AdditionalCost
+      {
+        Cost = new PayLifeCost { Amount = ParseAdditionalCostAmount(payLifeMatch.Groups["amount"].Value) },
+        SourceSpan = new TextSpan(0, firstLine.Length),
+      };
+
+      return new AdditionalCostsAttribute { Costs = [payLifeCost] };
     }
 
     // Type-disjunction sacrifice ("sacrifice an artifact or creature.") — one permanent that
@@ -296,6 +323,32 @@ public sealed partial class AttributeExtractor
     // AdditionalCostsAttribute would lose. Surfacing it here too would double-count the cost.
 
     return null;
+  }
+
+  /// <summary>
+  /// Parses an additional-cost amount token — X/Y/Z (a variable announced as the
+  /// spell is cast, CR 601.2b), a literal digit run, or a number word (one..ten) —
+  /// into the corresponding <see cref="Quantity"/>.
+  /// </summary>
+  private static Quantity ParseAdditionalCostAmount(string token)
+  {
+    if (token.Length == 1 && char.IsLetter(token[0]))
+    {
+      return new VariableQuantity { Name = token.ToUpperInvariant() };
+    }
+
+    if (int.TryParse(token, out var digits))
+    {
+      return LiteralQuantity.Of(digits);
+    }
+
+    var amount = token.ToLowerInvariant() switch
+    {
+      "one" => 1, "two" => 2, "three" => 3, "four" => 4, "five" => 5,
+      "six" => 6, "seven" => 7, "eight" => 8, "nine" => 9, "ten" => 10,
+      _ => throw new InvalidOperationException("Unreachable: regex only matches recognised amount tokens."),
+    };
+    return LiteralQuantity.Of(amount);
   }
 
   // "Bestow {cost}" — the keyword line is always the card's first paragraph.

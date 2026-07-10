@@ -1116,6 +1116,31 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "[Self] deals N damage divided as you choose among any number of target
+    // creatures." — Fire Covenant's divided-damage burn shape. The literal word
+    // immediately after "damage" is "divided" rather than "to", so it falls
+    // outside the sibling "[Self] deals N damage to ..." pattern above and would
+    // otherwise default to Static (a continuous-effect ability kind, CR 604) and
+    // stall in StaticAbilityParser — this is a one-shot spell-resolution effect
+    // (Rule 113.3a; CR 601.2d — dividing an effect among targets is a spellcasting
+    // announcement, not a continuous static ability).
+    if (
+      !clause.Tokens.Any(t => t.Kind == OracleToken.QuotedText)
+      && Regex.IsMatch(
+        clause.RawText,
+        @"^\s*[A-Z]\S*(?:\s+\S+)*?\s+deals?\s+\S+\s+damage\s+divided\s+.*\bamong\b",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "This spell can't be countered." is a property of the resolving spell;
     // route it to the spell parser so the EffectType lands inside
     // SpellAbility.Effects rather than as a top-level static. Other
