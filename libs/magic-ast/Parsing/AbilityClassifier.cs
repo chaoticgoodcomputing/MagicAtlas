@@ -1043,6 +1043,30 @@ public sealed class AbilityClassifier
       };
     }
 
+    // Mass P/T-modification spell shapes with "until end of turn" where the modifiers
+    // are the spell's announced X/Y/Z rather than a literal digit — same subject list
+    // as the literal-digit block above, e.g. "All creatures get +X/-X until end of
+    // turn." (Flowstone Slide). Disjoint from that block by construction (\d+ never
+    // matches an X/Y/Z letter), so it is a sibling regex, not an edit to it. Without
+    // this rule the line defaults to Static and stalls in StaticAbilityParser the same
+    // way the literal-digit shape did before that block was added.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*(Creatures\s+you\s+control|Creatures\s+your\s+opponents\s+control|All\s+creatures|Attacking\s+creatures|Blocking\s+creatures)"
+        + @"\s+get\s+[+\-][XYZ]/[+\-][XYZ]\s+until\s+end\s+of\s+turn",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Mass P/T-modification-plus-keyword-grant spell shape with "until end of turn" —
     // a composite one-shot imperative spell effect (Rule 113.3a) that both changes P/T
     // and grants a keyword in the same sentence, e.g. "Creatures you control get +1/+1
