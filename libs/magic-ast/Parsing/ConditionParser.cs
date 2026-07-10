@@ -227,6 +227,17 @@ public static class ConditionParser
     };
 
   /// <summary>
+  /// "it targets a blue spell" — Mystical Dispute's conditional self-cost-reduction
+  /// gate (CR 118.7). Anchored on the "[color] spell" tail so it cannot collide with
+  /// the "it targets a tapped creature/permanent" sibling (a distinct free-text arm
+  /// consumed only by <see cref="ConditionalSpellCostReductionRule"/>'s own regex,
+  /// not handled here).
+  /// </summary>
+  private static readonly Regex ItTargetsColoredSpell = new(
+    @"^it\s+targets\s+an?\s+(?<color>white|blue|black|red|green)\s+spell$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// The most recent hand-size upper-bound threshold parsed by <see cref="Parse"/>'s
   /// <see cref="HandSize"/> arm (e.g. 10 for "fewer than ten cards in hand"), for a
   /// paired effect rule that needs the numeral — see the hand-off note on the
@@ -491,6 +502,19 @@ public static class ConditionParser
         Color = ColorWordToCode[mcc.Groups["color"].Value],
         IncludeTies = body.Contains("tied", StringComparison.OrdinalIgnoreCase),
         Among = NounToFilter(mcc.Groups["noun"].Value.Trim()),
+      };
+    }
+
+    if (ItTargetsColoredSpell.Match(body) is { Success: true } itcs)
+    {
+      return new TargetsFilterCondition
+      {
+        Subject = "It",
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["spell"],
+          Colors = [ColorWordToCode[itcs.Groups["color"].Value]],
+        },
       };
     }
 

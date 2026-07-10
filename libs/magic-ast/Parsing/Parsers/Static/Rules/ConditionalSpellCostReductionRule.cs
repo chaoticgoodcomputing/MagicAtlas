@@ -15,6 +15,7 @@ public sealed class ConditionalSpellCostReductionRule : IStaticRule
         + @"during\s+(?:your\s+turn|each\s+(?:opponent|player)'?s\s+turn|combat)"
         + @"|if\s+you\s+control\s+an?\s+[A-Z][A-Za-z]+"
         + @"|if\s+it\s+targets\s+a\s+tapped\s+(?:creature|permanent)"
+        + @"|if\s+it\s+targets\s+an?\s+(?:white|blue|black|red|green)\s+spell"
         + @")\.?\s*$",
       RegexOptions.IgnoreCase
     );
