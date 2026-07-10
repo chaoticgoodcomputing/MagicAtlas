@@ -1,0 +1,197 @@
+{
+  "Input": {
+    "Name": "Guide of Souls",
+    "ManaCost": "{W}",
+    "TypeLine": "Creature — Human Cleric",
+    "OracleText": "Whenever another creature you control enters, you gain 1 life and get {E} (an energy counter).\nWhenever you attack, you may pay {E}{E}{E}. When you do, put two +1/+1 counters and a flying counter on target attacking creature. It becomes an Angel in addition to its other types.",
+    "Power": "1",
+    "Toughness": "2",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [],
+    "Id": "76c3cad2-1e25-4abe-878d-9194de6fcc27",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Guide of Souls",
+    "TypeLine": {
+      "Raw": "Creature — Human Cleric",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever another creature you control enters, you gain 1 life and get {E} (an energy counter).\nWhenever you attack, you may pay {E}{E}{E}. When you do, put two +1/+1 counters and a flying counter on target attacking creature. It becomes an Angel in addition to its other types.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "gainLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                },
+                {
+                  "EffectType": "gainEnergy",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
+              ]
+            }
+          ],
+          "Reminder": {
+            "Text": "an energy counter"
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "payEnergy",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 3
+                  }
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "putCounters",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "Characteristics": [
+                          {
+                            "CharacteristicType": "combatState",
+                            "State": "Attacking"
+                          }
+                        ]
+                      }
+                    },
+                    "CounterType": "+1/+1",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    }
+                  },
+                  {
+                    "EffectType": "putCounters",
+                    "Target": {
+                      "Kind": "It"
+                    },
+                    "CounterType": "flying",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    }
+                  },
+                  {
+                    "EffectType": "addType",
+                    "Target": {
+                      "Kind": "It"
+                    },
+                    "AddedSubtypes": [
+                      "Angel"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
