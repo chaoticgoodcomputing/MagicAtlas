@@ -18,6 +18,17 @@ public sealed record SearchLibraryEffect : Effect
   public required Quantity Count { get; init; }
 
   /// <summary>
+  /// Whose library is searched. Omitted (null) for the overwhelmingly common
+  /// "search YOUR library" case (Rule 701.23a's default subject — the
+  /// controller of the searching ability), matching every pre-existing fixture.
+  /// Present only when the oracle names a different searcher, e.g. "that player
+  /// ... searches their library" (Maralen of the Mornsong's each-player's-draw-step
+  /// trigger) → <see cref="ObjectReferenceKind.ThatPlayer"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? Player { get; init; }
+
+  /// <summary>
   /// Zones searched, e.g. "your library and/or graveyard". When omitted, the
   /// search is library-only (the default Rule 701.23 case, and the shape every
   /// pre-existing fixture carries). Present only when the oracle names additional
