@@ -1,0 +1,233 @@
+{
+  "Input": {
+    "Name": "Éowyn, Lady of Rohan",
+    "ManaCost": "{2}{W}",
+    "TypeLine": "Legendary Creature — Human Noble",
+    "OracleText": "At the beginning of combat on your turn, target creature gains your choice of first strike or vigilance until end of turn. If that creature is equipped, it gains first strike and vigilance until end of turn instead.\nEquip abilities you activate cost {1} less to activate.",
+    "Power": "2",
+    "Toughness": "4",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": [],
+    "Id": "e59710c4-24de-419e-a8a0-e8392d450c23",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Éowyn, Lady of Rohan",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Noble",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Noble"]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of combat on your turn, target creature gains your choice of first strike or vigilance until end of turn. If that creature is equipped, it gains first strike and vigilance until end of turn instead.\nEquip abilities you activate cost {1} less to activate.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Combat",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "modal",
+              "ModeSelection": {
+                "Minimum": 1,
+                "Maximum": 1
+              },
+              "Modes": [
+                {
+                  "Ability": {
+                    "Kind": "spell",
+                    "Effects": [
+                      {
+                        "EffectType": "gainAbility",
+                        "Target": {
+                          "Kind": "Target",
+                          "Filter": {
+                            "CardTypes": ["creature"]
+                          }
+                        },
+                        "GainedAbility": {
+                          "Kind": "static",
+                          "KeywordSource": "First strike",
+                          "Effects": [
+                            {
+                              "EffectType": "combatDamageTiming",
+                              "Timing": "First"
+                            }
+                          ]
+                        },
+                        "Duration": {
+                          "DurationType": "untilTime",
+                          "Until": {
+                            "Part": "Turn",
+                            "Edge": "End"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Ability": {
+                    "Kind": "spell",
+                    "Effects": [
+                      {
+                        "EffectType": "gainAbility",
+                        "Target": {
+                          "Kind": "Target",
+                          "Filter": {
+                            "CardTypes": ["creature"]
+                          }
+                        },
+                        "GainedAbility": {
+                          "Kind": "static",
+                          "KeywordSource": "Vigilance",
+                          "Effects": [
+                            {
+                              "EffectType": "keywordAbility",
+                              "Keyword": "Vigilance"
+                            }
+                          ]
+                        },
+                        "Duration": {
+                          "DurationType": "untilTime",
+                          "Until": {
+                            "Part": "Turn",
+                            "Edge": "End"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "objectIsEquipped",
+                "Reference": {
+                  "Kind": "It"
+                }
+              },
+              "Then": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "gainAbility",
+                    "Target": {
+                      "Kind": "It"
+                    },
+                    "GainedAbility": {
+                      "Kind": "static",
+                      "KeywordSource": "First strike",
+                      "Effects": [
+                        {
+                          "EffectType": "combatDamageTiming",
+                          "Timing": "First"
+                        }
+                      ]
+                    },
+                    "Duration": {
+                      "DurationType": "untilTime",
+                      "Until": {
+                        "Part": "Turn",
+                        "Edge": "End"
+                      }
+                    }
+                  },
+                  {
+                    "EffectType": "gainAbility",
+                    "Target": {
+                      "Kind": "It"
+                    },
+                    "GainedAbility": {
+                      "Kind": "static",
+                      "KeywordSource": "Vigilance",
+                      "Effects": [
+                        {
+                          "EffectType": "keywordAbility",
+                          "Keyword": "Vigilance"
+                        }
+                      ]
+                    },
+                    "Duration": {
+                      "DurationType": "untilTime",
+                      "Until": {
+                        "Part": "Turn",
+                        "Edge": "End"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "AppliesTo": {
+                "Kind": "activatedAbility",
+                "Keyword": "Equip",
+                "Controller": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}
