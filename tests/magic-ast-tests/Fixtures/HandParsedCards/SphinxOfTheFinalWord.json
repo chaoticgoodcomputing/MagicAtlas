@@ -1,0 +1,113 @@
+{
+  "Input": {
+    "Name": "Sphinx of the Final Word",
+    "ManaCost": "{5}{U}{U}",
+    "TypeLine": "Creature — Sphinx",
+    "OracleText": "This spell can't be countered.\nFlying\nHexproof (This creature can't be the target of spells or abilities your opponents control.)\nInstant and sorcery spells you control can't be countered.",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": ["Flying", "Hexproof"],
+    "Id": "6071239e-0b85-4c54-bef8-d9456eb8d8fc",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Sphinx of the Final Word",
+    "TypeLine": {
+      "Raw": "Creature — Sphinx",
+      "Types": ["Creature"],
+      "Subtypes": ["Sphinx"]
+    },
+    "Oracle": {
+      "RawText": "This spell can't be countered.\nFlying\nHexproof (This creature can't be the target of spells or abilities your opponents control.)\nInstant and sorcery spells you control can't be countered.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "cantBeCountered"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Hexproof",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Hexproof"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "AffectedObjects": {
+            "CardTypes": ["instant", "sorcery"],
+            "Controller": "You"
+          },
+          "Effects": [
+            {
+              "EffectType": "cantBeCountered"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{U}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 5 },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}
