@@ -1,0 +1,164 @@
+{
+  "Input": {
+    "Name": "Gimli of the Glittering Caves",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Legendary Creature — Dwarf Warrior",
+    "OracleText": "Double strike\nWhenever another legendary creature you control enters, put a +1/+1 counter on Gimli.\nWhenever Gimli deals combat damage to a player, create a Treasure token.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Treasure",
+      "Double strike"
+    ],
+    "Id": "5afc0319-9e17-4e81-a0b6-e76645bacb04",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Gimli of the Glittering Caves",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Dwarf Warrior",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dwarf",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Double strike\nWhenever another legendary creature you control enters, put a +1/+1 counter on Gimli.\nWhenever Gimli deals combat damage to a player, create a Treasure token.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Double strike",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "Both"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Supertypes": [
+                "Legendary"
+              ],
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Types": [
+                  "artifact"
+                ],
+                "Subtypes": [
+                  "Treasure"
+                ],
+                "AbilityText": [
+                  "{T}, Sacrifice this artifact: Add one mana of any color."
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
+      }
+    ]
+  }
+}
