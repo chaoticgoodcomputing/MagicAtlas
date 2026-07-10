@@ -35,6 +35,15 @@ using MagicAST.AST.Triggers;
 ///     Controller: You when "you tap"; Any when "a player taps".
 ///   </item>
 ///   <item>
+///     Named-subtype passive (any controller): "a Forest is tapped for mana" (Vernal Bloom) —
+///     passive voice like the enchanted-subject variant above, but naming a land subtype
+///     directly instead of "enchanted land", and with no controller restriction at all (any
+///     player's Forest triggers it, not just "you" or an enchanted one). Modeled as
+///     <c>CardTypes: ["land"], Subtypes: [word]</c>, no <c>IsEnchanted</c> and no
+///     <c>Controller</c>. No specific mana symbol is recorded (<see cref="TriggerCondition.ProducedMana"/>
+///     is null) — the trigger fires for any mana the named land produces.
+///   </item>
+///   <item>
 ///     Creature any-mana: "you tap a creature for mana" (Leyline of Abundance) — the trigger
 ///     fires on any mana production by tapping a creature (<c>CardTypes: ["creature"]</c>). No
 ///     specific symbol is recorded (<see cref="TriggerCondition.ProducedMana"/> is null) — the
@@ -95,6 +104,17 @@ public sealed class TapForManaConditionRule : ITriggerConditionRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // "a Forest is tapped for mana" — Vernal Bloom shape. Passive voice naming a land subtype
+  // directly (not "enchanted land"), with no controller qualifier at all — any player's
+  // matching land triggers it. Anchored on "a <Subtype> is tapped for mana" (start-of-clause
+  // "a", not "enchanted" or "you"/"a player tap[s]"), so it cannot collide with the enchanted
+  // or subject-tap variants above/below. Only matches known land subtypes (capitalised),
+  // mirroring the "you tap a Swamp for mana" guard.
+  private static readonly Regex _subtypeIsTappedForAnyManaPattern = new(
+    @"\ba\s+(?<subtype>[A-Z][A-Za-z]+)\s+is\s+tapped\s+for\s+mana\s*$",
+    RegexOptions.Compiled
+  );
+
   // "you tap a creature for mana" — Leyline of Abundance shape. No "permanent" word
   // appears (the tapped object is explicitly "a creature"), so this is checked before
   // the "permanent" guard below, mirroring the land variant above. No specific mana
@@ -144,6 +164,26 @@ public sealed class TapForManaConditionRule : ITriggerConditionRule
           IsEnchanted = true,
         },
         // ProducedMana is null — the trigger fires for any mana the enchanted land produces.
+      };
+    }
+
+    // "a Forest is tapped for mana" — Vernal Bloom. Checked before the "permanent" guard
+    // and before the subject-tap variants because this shape is passive voice naming a land
+    // subtype directly, with no controller qualifier. Only matches known land subtypes, to
+    // avoid over-generalizing to arbitrary capitalised nouns.
+    var subtypePassive = _subtypeIsTappedForAnyManaPattern.Match(triggerText.Trim());
+    if (subtypePassive.Success && LandSubtypes.Contains(subtypePassive.Groups["subtype"].Value))
+    {
+      return new TriggerCondition
+      {
+        Timing = timing,
+        Event = TriggerEvent.TapsForMana,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["land"],
+          Subtypes = [subtypePassive.Groups["subtype"].Value],
+        },
+        // ProducedMana is null — the trigger fires for any mana the named land produces.
       };
     }
 
