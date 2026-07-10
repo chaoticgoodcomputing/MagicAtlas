@@ -1,0 +1,133 @@
+{
+  "Input": {
+    "Name": "Tajuru Paragon",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Elf",
+    "OracleText": "Tajuru Paragon is also a Cleric, Rogue, Warrior, and Wizard.\nKicker {3}\nWhen this creature enters, if it was kicked, reveal the top six cards of your library. You may put a card that shares a creature type with it from among them into your hand. Put the rest on the bottom of your library in a random order.",
+    "Power": "3",
+    "Toughness": "2",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": ["Kicker"],
+    "Id": "a045dd0f-953a-4022-8f29-0758f2b6ccaa",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Tajuru Paragon",
+    "TypeLine": {
+      "Raw": "Creature — Elf",
+      "Types": ["Creature"],
+      "Subtypes": ["Elf"]
+    },
+    "Oracle": {
+      "RawText": "Tajuru Paragon is also a Cleric, Rogue, Warrior, and Wizard.\nKicker {3}\nWhen this creature enters, if it was kicked, reveal the top six cards of your library. You may put a card that shares a creature type with it from among them into your hand. Put the rest on the bottom of your library in a random order.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "Self"
+              },
+              "AddedSubtypes": ["Cleric", "Rogue", "Warrior", "Wizard"]
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 3
+                    }
+                  ]
+                },
+                "IsOptional": true,
+                "Repeatable": false
+              }
+            }
+          ],
+          "KeywordSource": "Kicker"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Kicker"
+          },
+          "Effects": [
+            {
+              "EffectType": "revealTopMayPutSharesCreatureTypeRestToBottom",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 6
+              },
+              "Filter": {
+                "SharesCreatureTypeWith": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
