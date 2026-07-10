@@ -97,6 +97,7 @@
     "mayPlayFromGraveyard": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "mayPlayFromLibrary": "baseline coarse fallback — Mystic Forge play-from-top permission; no flow rule reads library-cast permission yet; conscious named carve-out",
     "mayPlayFromTopOfLibrary": "no semantic projection yet — coarse fallback no flow rule consumes; explicit named carve-out",
+    "mayPlayTargetFromExile": "one-shot play-a-specific-just-exiled-card permission bounded by a stated turn window (CR 305.1/601.2 play/cast + 701.13a exile) — sibling of mayCastTargetFromGraveyard/mayPlayFromExile, same family, same coarse status; no flow rule projects exile-then-play-window grants yet; consciously inert for interaction recall (Norin, Swift Survivalist)",
     "manaPersists": "CR 106.4/500.5 mana-pool-emptying override (Birgi, God of Storytelling) — extends the lifetime of triggered mana past step/phase boundaries; no interaction flow rule reads mana-persistence grants yet; consciously inert for interaction recall",
     "megamorph": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "mill": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",

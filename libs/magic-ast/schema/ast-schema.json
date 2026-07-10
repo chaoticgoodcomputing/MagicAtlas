@@ -291,12 +291,6 @@
       "DiscriminatorKey": "ConditionType",
       "Types": [
         {
-          "Type": "AdditionalCostPaidCondition",
-          "Discriminator": "additionalCostPaid",
-          "IsUnparsed": false,
-          "Fields": []
-        },
-        {
           "Type": "AllCondition",
           "Discriminator": "all",
           "IsUnparsed": false,
@@ -383,15 +377,6 @@
             "Among",
             "Color",
             "IncludeTies"
-          ]
-        },
-        {
-          "Type": "ObjectHasCounterCondition",
-          "Discriminator": "objectHasCounter",
-          "IsUnparsed": false,
-          "Fields": [
-            "CounterType",
-            "Subject"
           ]
         },
         {
@@ -595,31 +580,12 @@
           ]
         },
         {
-          "Type": "RevealCost",
-          "Discriminator": "reveal",
-          "IsUnparsed": false,
-          "Fields": [
-            "Filter",
-            "Quantity",
-            "Zone"
-          ]
-        },
-        {
           "Type": "SacrificeCost",
           "Discriminator": "sacrifice",
           "IsUnparsed": false,
           "Fields": [
             "Filter",
             "Quantity"
-          ]
-        },
-        {
-          "Type": "ScaledCost",
-          "Discriminator": "scaledCost",
-          "IsUnparsed": false,
-          "Fields": [
-            "Count",
-            "PerUnit"
           ]
         },
         {
@@ -1427,28 +1393,11 @@
           ]
         },
         {
-          "Type": "GoadedEffect",
-          "Discriminator": "goaded",
-          "IsUnparsed": false,
-          "Fields": [
-            "Target"
-          ]
-        },
-        {
           "Type": "GraftEffect",
           "Discriminator": "graft",
           "IsUnparsed": false,
           "Fields": [
             "Value"
-          ]
-        },
-        {
-          "Type": "GrantAdditionalCostEffect",
-          "Discriminator": "grantAdditionalCost",
-          "IsUnparsed": false,
-          "Fields": [
-            "AdditionalCost",
-            "AffectedSpells"
           ]
         },
         {
@@ -1622,6 +1571,12 @@
           "Fields": [
             "Actions"
           ]
+        },
+        {
+          "Type": "MayPlayTargetFromExileEffect",
+          "Discriminator": "mayPlayTargetFromExile",
+          "IsUnparsed": false,
+          "Fields": []
         },
         {
           "Type": "MegamorphEffect",
@@ -2025,14 +1980,6 @@
           "Fields": [
             "Event",
             "OriginalEventOccurs"
-          ]
-        },
-        {
-          "Type": "RetainUnspentManaEffect",
-          "Discriminator": "retainUnspentMana",
-          "IsUnparsed": false,
-          "Fields": [
-            "Color"
           ]
         },
         {
@@ -2766,5 +2713,5 @@
       ]
     }
   ],
-  "SchemaHash": "99e80c04a7cf96b682044ccb63d3d8e34ec76e004df6ffd86007b00c848c41f8"
+  "SchemaHash": "02ebf27a7010fa7bf4bc80319a3363192146ab571a276ea0eb2b2712803050c5"
 }
