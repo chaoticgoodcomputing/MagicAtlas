@@ -1977,6 +1977,14 @@
           ]
         },
         {
+          "Type": "RetainUnspentManaEffect",
+          "Discriminator": "retainUnspentMana",
+          "IsUnparsed": false,
+          "Fields": [
+            "Color"
+          ]
+        },
+        {
           "Type": "ReturnToBattlefieldEffect",
           "Discriminator": "returnToBattlefield",
           "IsUnparsed": false,
@@ -2707,5 +2715,5 @@
       ]
     }
   ],
-  "SchemaHash": "558a923104f60a818749561dbf92268dac00c015d1158c96bc426a68d963b8d2"
+  "SchemaHash": "ebaeec8c08edf27ac0ab4616e1171cda55ba3c9d35ee9b9464f5cd7248b52507"
 }
