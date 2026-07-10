@@ -1,0 +1,113 @@
+{
+  "Input": {
+    "Name": "Manaweft Sliver",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Sliver",
+    "OracleText": "Sliver creatures you control have \"{T}: Add one mana of any color.\"",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": [],
+    "Id": "e51629ac-51d5-47cb-a7fc-315b34dd82ce",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Manaweft Sliver",
+    "TypeLine": {
+      "Raw": "Creature — Sliver",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Sliver"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Sliver creatures you control have \"{T}: Add one mana of any color.\"",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Sliver"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "tap"
+                  }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "addMana",
+                    "Mana": "",
+                    "AnyColor": true
+                  }
+                ],
+                "IsManaAbility": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}
