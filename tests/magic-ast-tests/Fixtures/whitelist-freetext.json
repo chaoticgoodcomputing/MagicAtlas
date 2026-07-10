@@ -734,6 +734,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "Sanar",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
       "card": "SelvalaHeartoftheWilds",
       "sink": "OtherCondition",
       "tag": "debt",

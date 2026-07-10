@@ -1,0 +1,191 @@
+{
+  "Input": {
+    "Name": "Sanar, Unfinished Genius // Wild Idea",
+    "ManaCost": "{U}{R} // {3}{U}{R}",
+    "TypeLine": "Legendary Creature — Goblin Sorcerer // Sorcery",
+    "Power": "0",
+    "Toughness": "4",
+    "Colors": ["R", "U"],
+    "ColorIdentity": ["R", "U"],
+    "Keywords": ["Treasure", "Prepared"],
+    "Id": "173157aa-712d-44f2-89ba-dd2511a07f26",
+    "Layout": "prepare",
+    "CardFaces": [
+      {
+        "Name": "Sanar, Unfinished Genius",
+        "ManaCost": "{U}{R}",
+        "TypeLine": "Legendary Creature — Goblin Sorcerer",
+        "OracleText": "Sanar enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\n{T}: Create a Treasure token. Activate only if you've cast an instant or sorcery spell this turn.",
+        "Power": "0",
+        "Toughness": "4"
+      },
+      {
+        "Name": "Wild Idea",
+        "ManaCost": "{3}{U}{R}",
+        "TypeLine": "Sorcery",
+        "OracleText": "Search your library for an instant or sorcery card, reveal it, put it into your hand, then shuffle."
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Sanar, Unfinished Genius // Wild Idea",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Goblin Sorcerer // Sorcery",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Goblin", "Sorcerer", "//", "Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}{R} // {3}{U}{R}",
+        "Symbols": [
+          {"Kind": "colored", "Colors": ["U"]},
+          {"Kind": "colored", "Colors": ["R"]},
+          {"Kind": "generic", "GenericAmount": 3},
+          {"Kind": "colored", "Colors": ["U"]},
+          {"Kind": "colored", "Colors": ["R"]}
+        ],
+        "ManaValue": 7,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U", "R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {"ValueType": "fixed", "Value": 0, "Raw": "0"},
+        "Toughness": {"ValueType": "fixed", "Value": 4, "Raw": "4"}
+      },
+      {
+        "Kind": "layout",
+        "Layout": "prepare"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Sanar, Unfinished Genius",
+        "TypeLine": {
+          "Raw": "Legendary Creature — Goblin Sorcerer",
+          "Supertypes": ["Legendary"],
+          "Types": ["Creature"],
+          "Subtypes": ["Goblin", "Sorcerer"]
+        },
+        "Oracle": {
+          "RawText": "Sanar enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\n{T}: Create a Treasure token. Activate only if you've cast an instant or sorcery spell this turn.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "keywordAbility",
+                  "Keyword": "Prepared"
+                }
+              ],
+              "KeywordSource": "Prepared"
+            },
+            {
+              "Kind": "activated",
+              "Costs": [
+                {"CostType": "tap"}
+              ],
+              "Effects": [
+                {
+                  "EffectType": "createToken",
+                  "Player": {"Kind": "You"},
+                  "Count": {"QuantityType": "literal", "Value": 1},
+                  "Token": {
+                    "Types": ["artifact"],
+                    "Subtypes": ["Treasure"],
+                    "AbilityText": [
+                      "{T}, Sacrifice this artifact: Add one mana of any color."
+                    ],
+                    "IsCopy": false
+                  }
+                }
+              ],
+              "ActivationCondition": {
+                "ConditionType": "count",
+                "Filter": {
+                  "CardTypes": ["spell", "instant", "sorcery"],
+                  "Controller": "You",
+                  "History": {
+                    "PredicateType": "castThisTurn",
+                    "Caster": "You"
+                  }
+                },
+                "Count": {"Operator": "GreaterThanOrEqual", "Value": 1}
+              },
+              "IsManaAbility": false
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{U}{R}",
+            "Symbols": [
+              {"Kind": "colored", "Colors": ["U"]},
+              {"Kind": "colored", "Colors": ["R"]}
+            ],
+            "ManaValue": 2,
+            "IsVariable": false
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {"ValueType": "fixed", "Value": 0, "Raw": "0"},
+            "Toughness": {"ValueType": "fixed", "Value": 4, "Raw": "4"}
+          }
+        ]
+      },
+      {
+        "Name": "Wild Idea",
+        "TypeLine": {
+          "Raw": "Sorcery",
+          "Types": ["Sorcery"]
+        },
+        "Oracle": {
+          "RawText": "Search your library for an instant or sorcery card, reveal it, put it into your hand, then shuffle.",
+          "Abilities": [
+            {
+              "Kind": "spell",
+              "Effects": [
+                {
+                  "EffectType": "searchLibrary",
+                  "Filter": {
+                    "CardTypes": ["instant", "sorcery"]
+                  },
+                  "Count": {"QuantityType": "literal", "Value": 1},
+                  "Destination": "Hand",
+                  "Revealed": true
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{3}{U}{R}",
+            "Symbols": [
+              {"Kind": "generic", "GenericAmount": 3},
+              {"Kind": "colored", "Colors": ["U"]},
+              {"Kind": "colored", "Colors": ["R"]}
+            ],
+            "ManaValue": 5,
+            "IsVariable": false
+          }
+        ]
+      }
+    ]
+  }
+}
