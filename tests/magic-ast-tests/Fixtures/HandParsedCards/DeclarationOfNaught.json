@@ -1,0 +1,76 @@
+{
+  "Input": {
+    "Name": "Declaration of Naught",
+    "ManaCost": "{U}{U}",
+    "TypeLine": "Enchantment",
+    "OracleText": "As this enchantment enters, choose a card name.\n{U}: Counter target spell with the chosen name.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "2e67d62f-9629-463b-a445-4181f6fafd0f",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Declaration of Naught",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "As this enchantment enters, choose a card name.\n{U}: Counter target spell with the chosen name.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "When": "asThisEnters",
+          "Effects": [
+            { "EffectType": "chooseCardName" }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["U"] }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "counterSpell",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["spell"],
+                  "ChosenCharacteristic": "CardName"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}

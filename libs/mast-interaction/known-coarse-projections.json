@@ -45,6 +45,7 @@
     "changeSubtype": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "changeTarget": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "chooseBasicLandType": "basic-land-type-choice declaration (Roots of Life shape, CR 607/614.12) \u2014 choice is consumed by ChosenCharacteristicKind.BasicLandType trigger filter; no flow rule reads basic-land-type-choice events yet; consciously inert for interaction recall, sibling of chooseCardType/chooseColor/chooseCreatureType",
+    "chooseCardName": "card-name-choice declaration (Declaration of Naught shape, CR 607/614.12) \u2014 choice is consumed by ChosenCharacteristicKind.CardName on the paired counter-spell activated ability's Target filter; no flow rule reads card-name-choice events yet; consciously inert for interaction recall, sibling of chooseCardType/chooseColor/chooseCreatureType/choosePlayer",
     "chooseCardType": "card-type-choice declaration (Cloud Key shape, CR 607/614.1c) \u2014 choice is consumed by ChosenCharacteristicKind.CardType cost-reduction filter; no flow rule reads card-type-choice events yet; consciously inert for interaction recall",
     "chooseColor": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "chooseCreatureType": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
