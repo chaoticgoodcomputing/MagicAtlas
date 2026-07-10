@@ -2,6 +2,7 @@ namespace MagicAST.Parsing;
 
 using System.Text.RegularExpressions;
 using MagicAST.AST;
+using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
@@ -135,6 +136,20 @@ public sealed partial class AttributeExtractor
     if (sacrificeAlternativeCostAttr is not null)
     {
       attributes.Add(sacrificeAlternativeCostAttr);
+    }
+
+    // Commander-conditional free-cast family (Deadly Rollick, ...). CR 118.9: "You
+    // may [action] rather than pay [this object's] mana cost" is an alternative
+    // cost; CR 604.5: it functions while the spell is on the stack — so, like
+    // Bestow's, Borderpost's, Pitch's, and the Sacrifice family's costs above, it
+    // is hosted on the card's cost attributes rather than surfaced as an oracle
+    // ability.
+    var commanderFreeCastAlternativeCostAttr = TryExtractCommanderFreeCastAlternativeCost(
+      input.OracleText
+    );
+    if (commanderFreeCastAlternativeCostAttr is not null)
+    {
+      attributes.Add(commanderFreeCastAlternativeCostAttr);
     }
 
     return attributes;
@@ -524,6 +539,75 @@ public sealed partial class AttributeExtractor
           IsToken = false,
         },
         Quantity = LiteralQuantity.Of(1),
+      },
+      SourceSpan = new TextSpan(0, firstLine.Length),
+    };
+
+    return new AlternativeCostsAttribute { Costs = [cost] };
+  }
+
+  // "If you control a commander, you may cast this spell without paying its mana
+  // cost." — the commander-conditional free-cast family (Deadly Rollick, ...).
+  // Anchored (^…$, whole line) so it does not swallow other alternative-cost
+  // lines handled elsewhere (Bestow, Borderpost, Pitch, Sacrifice).
+  [GeneratedRegex(
+    @"^If you control a commander, you may cast this spell without paying its mana cost\.?$",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex CommanderFreeCastAlternativeCostPrefix();
+
+  /// <summary>
+  /// Scans oracle text for the commander-conditional free-cast family's "If you
+  /// control a commander, you may cast this spell without paying its mana cost."
+  /// line and returns an <see cref="AlternativeCostsAttribute"/> carrying a
+  /// zero-symbol <see cref="ManaCost"/> gated on a <see cref="CountCondition"/>,
+  /// or null when absent.
+  ///
+  /// <para>
+  /// CR 118.9 (verbatim): "Some spells have alternative costs. ... Alternative
+  /// costs are usually phrased, ... 'You may cast [this object] without paying
+  /// its mana cost.'" CR 903 (Commander format) supplies the gating fact "you
+  /// control a commander" — a board-state count, not a game action — so it is
+  /// recorded as a <see cref="CountCondition"/> on
+  /// <see cref="AlternativeCost.Condition"/> (the field this record type carries
+  /// for exactly this purpose) rather than folded into the cost itself. The
+  /// filter shape (Commander-supertype creature, controller You, count ≥ 1)
+  /// mirrors the one <c>ModalAbilityParser</c> builds for the sibling "If you
+  /// control a commander as you cast this spell, you may choose both instead."
+  /// mode-expansion condition. The alternative <see cref="Cost"/> is a
+  /// zero-symbol <see cref="ManaCost"/> — "without paying its mana cost" reads as
+  /// paying no mana at all, distinct from an explicit "{0}" cost (Rooftop Storm's
+  /// "You may pay {0} rather than pay the mana cost", handled by the
+  /// <c>GrantAlternativeCostRule</c> static rule, which targets OTHER spells
+  /// rather than this card's own casting cost).
+  /// </para>
+  /// </summary>
+  private AlternativeCostsAttribute? TryExtractCommanderFreeCastAlternativeCost(string? oracleText)
+  {
+    if (string.IsNullOrWhiteSpace(oracleText))
+    {
+      return null;
+    }
+
+    var firstLine = oracleText.Split('\n')[0].Trim();
+    var match = CommanderFreeCastAlternativeCostPrefix().Match(firstLine);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var cost = new AlternativeCost
+    {
+      Cost = new ManaCost { Symbols = [] },
+      Condition = new CountCondition
+      {
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Supertypes = ["Commander"],
+          Controller = ControllerFilter.You,
+        },
+        Count = new Comparison { Operator = ComparisonOperator.GreaterThanOrEqual, Value = 1 },
       },
       SourceSpan = new TextSpan(0, firstLine.Length),
     };
