@@ -1,0 +1,195 @@
+{
+  "Input": {
+    "Name": "Phenomenon Investigators",
+    "ManaCost": "{2}{U}{B}",
+    "TypeLine": "Creature — Human Detective",
+    "OracleText": "As this creature enters, choose Believe or Doubt.\n• Believe — Whenever a nontoken creature you control dies, create a 2/2 black Horror enchantment creature token.\n• Doubt — At the beginning of your end step, you may return a nonland permanent you own to your hand. If you do, draw a card.",
+    "Power": "3",
+    "Toughness": "4",
+    "Colors": [
+      "B",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "U"
+    ],
+    "Keywords": [],
+    "Id": "57195155-6bdf-43c3-9f2e-11c31aef6b9c",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Phenomenon Investigators",
+    "TypeLine": {
+      "Raw": "Creature — Human Detective",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Detective"
+      ]
+    },
+    "Oracle": {
+      "RawText": "As this creature enters, choose Believe or Doubt.\n• Believe — Whenever a nontoken creature you control dies, create a 2/2 black Horror enchantment creature token.\n• Doubt — At the beginning of your end step, you may return a nonland permanent you own to your hand. If you do, draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "When": "asThisEnters",
+          "Effects": [
+            {
+              "EffectType": "chooseNamedOption",
+              "Options": [
+                "Believe",
+                "Doubt"
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsToken": false,
+              "Controller": "You"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "chosenMode",
+            "Mode": "Believe"
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "2",
+                "Toughness": "2",
+                "Colors": [
+                  "B"
+                ],
+                "Types": [
+                  "enchantment",
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Horror"
+                ],
+                "IsCopy": false
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "chosenMode",
+            "Mode": "Doubt"
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "returnToHand",
+                "Target": {
+                  "Kind": "Any",
+                  "Filter": {
+                    "CardTypes": [
+                      "permanent"
+                    ],
+                    "ExcludedCardTypes": [
+                      "land"
+                    ],
+                    "Owner": "You"
+                  }
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "drawCards",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}

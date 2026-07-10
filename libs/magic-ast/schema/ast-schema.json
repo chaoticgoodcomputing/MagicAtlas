@@ -333,6 +333,14 @@
           "Fields": []
         },
         {
+          "Type": "ChosenModeCondition",
+          "Discriminator": "chosenMode",
+          "IsUnparsed": false,
+          "Fields": [
+            "Mode"
+          ]
+        },
+        {
           "Type": "ControlledObjectCondition",
           "Discriminator": "controlledObject",
           "IsUnparsed": false,
@@ -361,12 +369,6 @@
         {
           "Type": "EscapedCondition",
           "Discriminator": "escaped",
-          "IsUnparsed": false,
-          "Fields": []
-        },
-        {
-          "Type": "GiftPromisedCondition",
-          "Discriminator": "giftPromised",
           "IsUnparsed": false,
           "Fields": []
         },
@@ -1149,6 +1151,14 @@
           "Fields": []
         },
         {
+          "Type": "ChooseNamedOptionEffect",
+          "Discriminator": "chooseNamedOption",
+          "IsUnparsed": false,
+          "Fields": [
+            "Options"
+          ]
+        },
+        {
           "Type": "ChoosePlayerEffect",
           "Discriminator": "choosePlayer",
           "IsUnparsed": false,
@@ -1522,14 +1532,6 @@
           "Fields": [
             "Amount",
             "Player"
-          ]
-        },
-        {
-          "Type": "GiftEffect",
-          "Discriminator": "gift",
-          "IsUnparsed": false,
-          "Fields": [
-            "Gifted"
           ]
         },
         {
@@ -2919,5 +2921,5 @@
       ]
     }
   ],
-  "SchemaHash": "9b8a63f57b68d7151e79f18c3488b7beb4625f45824b2d29ca9f4b28d7d81fb2"
+  "SchemaHash": "3cdb27e8add049f7b7b811bca8339ba59f5455d6bd521867ce30e2af90fd9bfa"
 }
