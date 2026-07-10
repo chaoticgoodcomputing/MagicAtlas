@@ -580,6 +580,16 @@
           ]
         },
         {
+          "Type": "RevealCost",
+          "Discriminator": "reveal",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Quantity",
+            "Zone"
+          ]
+        },
+        {
           "Type": "SacrificeCost",
           "Discriminator": "sacrifice",
           "IsUnparsed": false,
@@ -2707,5 +2717,5 @@
       ]
     }
   ],
-  "SchemaHash": "558a923104f60a818749561dbf92268dac00c015d1158c96bc426a68d963b8d2"
+  "SchemaHash": "8b40e78e44d7a64fa875f52c6110f762a3443289b1fa0e1c2e1b6c5de79a956d"
 }
