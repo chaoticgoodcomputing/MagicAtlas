@@ -115,3 +115,25 @@ public sealed record TriggeredAbilityAdder : CopyModification
   /// </summary>
   public required TriggeredAbility Ability { get; init; }
 }
+
+/// <summary>
+/// "except it has [activated ability]" — adds a fully-structured ACTIVATED ability
+/// to the copy token (CR 707.2 copiable values). The activated analogue of
+/// <see cref="TriggeredAbilityAdder"/>: used when the "except" clause is a quoted
+/// activated ability such as <c>"{2}, {T}, Sacrifice this token: You gain 3 life."</c>
+/// (Brenard, Ginger Sculptor) — a full "[Cost]: [Effect]" ability (CR 602.1) whose
+/// cost list and effect are rules-meaningful and therefore cannot be held as free
+/// text in <see cref="AbilityAdder.AbilityText"/>.
+/// Rule CR 707.2: "when copying an object, the copy acquires the copiable values
+/// of the original object's characteristics … abilities listed in the definition
+/// of that object" — an "except it has [ability]" clause overrides the printed
+/// abilities the token would otherwise inherit.
+/// </summary>
+[CopyModificationKind("activatedAbilityAdder")]
+public sealed record ActivatedAbilityAdder : CopyModification
+{
+  /// <summary>
+  /// The structured activated ability added to the copy token.
+  /// </summary>
+  public required ActivatedAbility Ability { get; init; }
+}
