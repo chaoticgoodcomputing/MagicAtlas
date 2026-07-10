@@ -201,6 +201,7 @@
     "payLife": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "removeCounters": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "returnToHand": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "reveal": "'Morph—Reveal a [color] card in your hand' non-mana turn-face-up cost variant (CR 702.37a: the printed morph cost paid to turn a face-down permanent face up) — an information-disclosure cost; the revealed card stays in the controller's hand (no zone change, no resource loss), so it originates no cross-card resource a flow rule consumes (same coarse precedent as the sibling revealCards effectType); no flow rule reads reveal-cost payment yet; consciously inert for interaction recall (Horde Ambusher)",
     "scaledMana": "count-scaled mana payment (CR 118.1) — the 'pays {1} for each card revealed this way' unless-cost on Scent of Brine's counter; a preventing payment whose total is (per-unit mana) × a game-state count, sibling of the coarse flat 'mana'/'payLife'/'payEnergy' payment costs on the unless side; no flow rule reads counter-unless payment resources yet; consciously inert for interaction recall",
     "selfMana": "no semantic projection yet — coarse fallback no flow rule consumes; explicit named carve-out",
     "tapPermanents": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",

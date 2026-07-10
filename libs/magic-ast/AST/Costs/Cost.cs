@@ -101,6 +101,34 @@ public sealed record DiscardCost : Cost
 }
 
 /// <summary>
+/// "Reveal a [color] card in your hand" — a non-mana cost, most commonly the alternative
+/// "turn face up" cost variant of Morph (CR 702.37a): "Morph—Reveal a red card in your
+/// hand" rather than a mana morph cost. Distinct from the general
+/// <see cref="MagicAST.AST.Effects.CardFlow.RevealCardsEffect"/> (an effect that reveals
+/// cards as part of resolving a spell/ability): this is the COST paid, modelled with the
+/// same Filter/Quantity/Zone shape as <see cref="DiscardCost"/> and <see cref="ExileCost"/>.
+/// </summary>
+[OracleCost("reveal")]
+public sealed record RevealCost : Cost
+{
+  /// <summary>
+  /// Which card(s) qualify to be revealed — "a red card" is <c>CardTypes=["card"]</c> +
+  /// <c>Colors=["R"]</c>.
+  /// </summary>
+  public required ObjectFilter Filter { get; init; }
+
+  /// <summary>
+  /// How many cards must be revealed — "a … card" is a single card.
+  /// </summary>
+  public required Quantity Quantity { get; init; }
+
+  /// <summary>
+  /// The zone the revealed card(s) come from — <see cref="Zone.Hand"/> for "in your hand".
+  /// </summary>
+  public required Zone Zone { get; init; }
+}
+
+/// <summary>
 /// "Pay N life".
 /// </summary>
 [OracleCost("payLife")]
