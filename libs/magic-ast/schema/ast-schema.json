@@ -365,6 +365,12 @@
           "Fields": []
         },
         {
+          "Type": "GiftPromisedCondition",
+          "Discriminator": "giftPromised",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "KeywordCostPaidCondition",
           "Discriminator": "keywordCostPaid",
           "IsUnparsed": false,
@@ -1519,6 +1525,14 @@
           ]
         },
         {
+          "Type": "GiftEffect",
+          "Discriminator": "gift",
+          "IsUnparsed": false,
+          "Fields": [
+            "Gifted"
+          ]
+        },
+        {
           "Type": "GoadedEffect",
           "Discriminator": "goaded",
           "IsUnparsed": false,
@@ -1674,15 +1688,6 @@
           "Discriminator": "manaPersists",
           "IsUnparsed": false,
           "Fields": []
-        },
-        {
-          "Type": "MaxHandSizeEffect",
-          "Discriminator": "maxHandSize",
-          "IsUnparsed": false,
-          "Fields": [
-            "Player",
-            "Value"
-          ]
         },
         {
           "Type": "MayCastTargetFromGraveyardEffect",
@@ -2914,5 +2919,5 @@
       ]
     }
   ],
-  "SchemaHash": "bddb06a3c69eb9f80d25582df2fb1c2c75c613dc3393419caef64e80df81ef46"
+  "SchemaHash": "9b8a63f57b68d7151e79f18c3488b7beb4625f45824b2d29ca9f4b28d7d81fb2"
 }

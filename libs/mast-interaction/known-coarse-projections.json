@@ -87,6 +87,7 @@
     "gainAbility": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "gainControl": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "gainEnergy": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "gift": "Gift keyword payoff (CR 702.174b/e, Wildfire Howl) \u2014 wraps the gifted effect (a card-draw by the chosen opponent); the opponent-draw downside is not a combo engine and no flow rule reads gift payoffs yet; consciously inert for interaction recall, sibling of the coarse choosePlayer player-choice declaration it pairs with",
     "goaded": "CR 701.15b goaded designation (Bloodthirsty Blade) \u2014 an attack-requirement/attack-direction designation, sibling of the already-coarse mustAttack/cantAttack combat-restriction family; no flow rule reads the goaded designation yet; consciously inert for interaction recall",
     "graft": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "harmonize": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
