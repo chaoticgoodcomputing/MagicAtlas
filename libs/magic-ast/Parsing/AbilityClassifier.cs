@@ -48,6 +48,16 @@ public sealed record ClauseClassification
   /// For loyalty abilities, the loyalty cost (+N, -N, or 0).
   /// </summary>
   public int? LoyaltyCost { get; init; }
+
+  /// <summary>
+  /// For a <b>variable</b> loyalty ability ("−X: …") — the magnitude of loyalty
+  /// removed, carried as a <see cref="MagicAST.AST.Quantities.VariableQuantity"/>.
+  /// The tokenizer's loyalty-symbol reader only accepts a numeric cost, so the
+  /// "−X:" form is recognized from the clause's raw text instead; this field
+  /// threads the parsed X to <see cref="MagicAST.AST.Abilities.ActivatedAbility.VariableLoyaltyCost"/>.
+  /// Mutually exclusive with <see cref="LoyaltyCost"/>.
+  /// </summary>
+  public MagicAST.AST.Quantities.Quantity? VariableLoyaltyCost { get; init; }
 }
 
 /// <summary>
@@ -236,6 +246,19 @@ public sealed class AbilityClassifier
     if (loyaltyClassification != null)
     {
       return loyaltyClassification with { AbilityWord = abilityWord };
+    }
+
+    // Variable-loyalty ability: "−X: …" (Chandra, Hope's Beacon). The tokenizer's
+    // loyalty-symbol reader (OracleTokenizer.TryTokenizeLoyaltySymbol) requires a
+    // numeric cost after the sign, so "−X" never produces a LoyaltyDown token —
+    // the '−' is dropped and 'X' tokenizes as a bare word. Recognize the form from
+    // the raw clause text so the ability routes to the activated (loyalty) parser
+    // with its variable cost preserved. CR 606.5 — a loyalty cost that removes X
+    // counters. Every printed variable-loyalty ability is a removal ("−X").
+    var variableLoyalty = TryClassifyAsVariableLoyalty(clause.RawText);
+    if (variableLoyalty != null)
+    {
+      return variableLoyalty with { AbilityWord = abilityWord };
     }
 
     // Parenthetical-wrapped activated ability: "({T}: Add {B} or {R}.)" on dual
@@ -1903,6 +1926,40 @@ public sealed class AbilityClassifier
     }
 
     return null;
+  }
+
+  // Anchored "−X:" / "-X:" variable-loyalty prefix. Only the minus (removal) form
+  // is matched: every printed variable-loyalty ability removes X counters (there is
+  // no printed "+X:" loyalty). Requires the sign, a single variable letter, and a
+  // colon at the very start of the clause so it cannot match a substring.
+  private static readonly Regex _variableLoyaltyPattern = new(
+    @"^\s*[−-](?<var>[XYZ])\s*:",
+    RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// Classifies a "−X: …" clause as a variable-loyalty activated ability. Reads the
+  /// raw text (not the token stream) because the tokenizer drops the '−' and leaves
+  /// only a bare 'X' word — see the call-site comment in <see cref="Classify"/>.
+  /// Returns null when the clause is not a variable-loyalty ability.
+  /// </summary>
+  private static ClauseClassification? TryClassifyAsVariableLoyalty(string rawText)
+  {
+    var m = _variableLoyaltyPattern.Match(rawText);
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    return new ClauseClassification
+    {
+      Kind = AbilityKind.Activated,
+      Confidence = 0.98,
+      VariableLoyaltyCost = new MagicAST.AST.Quantities.VariableQuantity
+      {
+        Name = m.Groups["var"].Value,
+      },
+    };
   }
 
   /// <summary>
