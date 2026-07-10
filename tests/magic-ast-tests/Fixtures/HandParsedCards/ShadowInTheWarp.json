@@ -1,0 +1,104 @@
+{
+  "Input": {
+    "Name": "Shadow in the Warp",
+    "ManaCost": "{1}{R}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "The first creature spell you cast each turn costs {2} less to cast.\nWhenever an opponent casts their first noncreature spell each turn, this enchantment deals 2 damage to that player.",
+    "Colors": ["G", "R"],
+    "ColorIdentity": ["G", "R"],
+    "Keywords": [],
+    "Id": "bd60cd99-1511-4903-b678-ff5a1853a742",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Shadow in the Warp",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "The first creature spell you cast each turn costs {2} less to cast.\nWhenever an opponent casts their first noncreature spell each turn, this enchantment deals 2 damage to that player.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": ["spell", "creature"],
+            "Controller": "You",
+            "History": {
+              "PredicateType": "castThisTurn",
+              "Caster": "You",
+              "Ordinal": 1
+            }
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": ["spell"],
+              "ExcludedCardTypes": ["creature"],
+              "Controller": "Opponent"
+            },
+            "Ordinal": 1,
+            "PerTurn": true
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Source": {
+                "Kind": "Self"
+              },
+              "Target": {
+                "Kind": "ThatPlayer"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G", "R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G", "R"]
+      }
+    ]
+  }
+}
