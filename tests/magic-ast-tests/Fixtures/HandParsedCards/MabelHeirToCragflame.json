@@ -1,0 +1,267 @@
+{
+  "Input": {
+    "Name": "Mabel, Heir to Cragflame",
+    "ManaCost": "{1}{R}{W}",
+    "TypeLine": "Legendary Creature — Mouse Soldier",
+    "OracleText": "Other Mice you control get +1/+1.\nWhen Mabel enters, create Cragflame, a legendary colorless Equipment artifact token with \"Equipped creature gets +1/+1 and has vigilance, trample, and haste\" and equip {2}.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ],
+    "Keywords": [],
+    "Id": "be6627fd-729d-44f2-b6bf-5299f49d1e3d",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Mabel, Heir to Cragflame",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Mouse Soldier",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Mouse",
+        "Soldier"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Other Mice you control get +1/+1.\nWhen Mabel enters, create Cragflame, a legendary colorless Equipment artifact token with \"Equipped creature gets +1/+1 and has vigilance, trample, and haste\" and equip {2}.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Mouse"
+                  ],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Name": "Cragflame",
+                "Colors": [
+                  "C"
+                ],
+                "Types": [
+                  "artifact"
+                ],
+                "Subtypes": [
+                  "Equipment"
+                ],
+                "Supertypes": [
+                  "Legendary"
+                ],
+                "Abilities": [
+                  {
+                    "Kind": "static",
+                    "Effects": [
+                      {
+                        "EffectType": "modifyPT",
+                        "Target": {
+                          "Kind": "EnchantedOrEquipped"
+                        },
+                        "PowerModifier": {
+                          "QuantityType": "literal",
+                          "Value": 1
+                        },
+                        "ToughnessModifier": {
+                          "QuantityType": "literal",
+                          "Value": 1
+                        }
+                      },
+                      {
+                        "EffectType": "gainAbility",
+                        "Target": {
+                          "Kind": "EnchantedOrEquipped"
+                        },
+                        "GainedAbility": {
+                          "Kind": "static",
+                          "Effects": [
+                            {
+                              "EffectType": "keywordAbility",
+                              "Keyword": "Vigilance"
+                            }
+                          ],
+                          "KeywordSource": "Vigilance"
+                        }
+                      },
+                      {
+                        "EffectType": "gainAbility",
+                        "Target": {
+                          "Kind": "EnchantedOrEquipped"
+                        },
+                        "GainedAbility": {
+                          "Kind": "static",
+                          "Effects": [
+                            {
+                              "EffectType": "keywordAbility",
+                              "Keyword": "Trample"
+                            }
+                          ],
+                          "KeywordSource": "Trample"
+                        }
+                      },
+                      {
+                        "EffectType": "gainAbility",
+                        "Target": {
+                          "Kind": "EnchantedOrEquipped"
+                        },
+                        "GainedAbility": {
+                          "Kind": "static",
+                          "Effects": [
+                            {
+                              "EffectType": "keywordAbility",
+                              "Keyword": "Haste"
+                            }
+                          ],
+                          "KeywordSource": "Haste"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "Kind": "activated",
+                    "KeywordSource": "Equip",
+                    "Costs": [
+                      {
+                        "CostType": "mana",
+                        "Symbols": [
+                          {
+                            "Kind": "generic",
+                            "GenericAmount": 2
+                          }
+                        ]
+                      }
+                    ],
+                    "Effects": [
+                      {
+                        "EffectType": "attach",
+                        "Target": {
+                          "Kind": "Target",
+                          "Filter": {
+                            "CardTypes": [
+                              "creature"
+                            ],
+                            "Controller": "You"
+                          }
+                        }
+                      }
+                    ],
+                    "Restrictions": [
+                      "OnlyAsSorcery"
+                    ],
+                    "IsManaAbility": false
+                  }
+                ],
+                "IsCopy": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}

@@ -39,6 +39,18 @@ public sealed record TokenDefinition
   public IReadOnlyList<string>? Subtypes { get; init; }
 
   /// <summary>
+  /// Supertypes of the token (e.g. "Legendary" — CR 205.4a). Mirrors the
+  /// <c>Supertypes</c> field on the card's own <c>TypeLine</c>/<c>ObjectFilter</c>
+  /// (CR 205.4a: "Legendary" and other supertypes). Some named tokens are printed
+  /// with an explicit supertype in their creation text (e.g. "create Cragflame, a
+  /// legendary colorless Equipment artifact token …" — Mabel, Heir to Cragflame),
+  /// distinct from <see cref="Types"/>/<see cref="Subtypes"/> (CR 205.4b:
+  /// supertypes are not card types or subtypes).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? Supertypes { get; init; }
+
+  /// <summary>
   /// Name of the token if specified.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
