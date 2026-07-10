@@ -1,0 +1,201 @@
+namespace MagicAST.Parsing.Parsers.Static;
+
+using System.Text.RegularExpressions;
+using MagicAST.AST.Abilities;
+using MagicAST.AST.Effects;
+using MagicAST.AST.Effects.Modification;
+using MagicAST.AST.References;
+
+/// <summary>
+/// "As long as enchanted permanent is a creature, it has flying."
+/// "As long as enchanted permanent is an Equipment, it has "Equipped creature has flying.""
+///
+/// <para>
+/// A conditional continuous grant gated on the enchanted permanent's OWN card
+/// type/subtype (CR 611.2c — the condition is checked continuously). Paradigm
+/// card: Rune of Flight, whose two grants share the same "enchanted permanent
+/// is a/an [type]" gate but differ in what "it has" carries — a bare keyword
+/// (arm 1) or a quoted static ability (arm 2).
+/// </para>
+///
+/// <para>
+/// The gate word disambiguates card type vs. subtype (CR 205.2a vs. CR 205.3m):
+/// a lowercase noun ("creature", "artifact") is a main card type →
+/// <see cref="ObjectHasCardTypeCondition"/>; a capitalised noun ("Equipment",
+/// "Vehicle") is a subtype → <see cref="ObjectHasSubtypeCondition"/>, reusing the
+/// existing "if it's a [Subtype]" node rather than inventing a duplicate. Both
+/// conditions are wrapped in one <see cref="AsLongAsDuration"/> shared by the
+/// produced <see cref="GainAbilityEffect"/> (mirrors the Wingcrafter "As long as
+/// [X], [target] has flying" shape).
+/// </para>
+///
+/// <para>
+/// Arm 2's quoted body ("Equipped creature has flying") is itself the ordinary
+/// static Equipment-grant shape (CR 301.5d — "Equipped creature has [ability]"),
+/// so it is parsed inline into a nested <see cref="StaticAbility"/> whose own
+/// effect targets <c>EnchantedOrEquipped</c> — the same reference the outer grant
+/// uses, since "equipped creature" from the newly-granted ability's perspective is
+/// still the creature attached to the Equipment.
+/// </para>
+///
+/// <para>
+/// Both arms target <c>EnchantedOrEquipped</c> (the enchanted permanent itself),
+/// NOT <c>Self</c> — this rule sits above <see cref="AsLongAsStaticGrantRule"/>
+/// (Priority 968), whose generic "it has [keyword]" sub-parser would otherwise
+/// mis-map the "it" back-reference to the Aura itself rather than the enchanted
+/// permanent the pronoun actually names. The regex is fully anchored (^…$) so it
+/// cannot fire as a substring of a broader sibling clause.
+/// </para>
+///
+/// CR 611.2c (verbatim): "If the effect is conditional ... the effect stops
+/// applying if the condition it's based on stops applying." CR 301.5d: an
+/// Equipment's ability "may be an ability that's expressed as 'Equipped creature
+/// gains [ability]' or 'Equipped creature has [ability]'."
+/// </summary>
+[StaticRule(Priority = 976)]
+public sealed class AsLongAsEnchantedTypeKeywordGrantRule : IStaticRule
+{
+  // Arm 1: "As long as enchanted permanent is a/an <type>, it has <keyword>."
+  private static readonly Regex _bareKeywordPattern = new(
+    @"^\s*As\s+long\s+as\s+enchanted\s+permanent\s+is\s+an?\s+(?<type>[A-Za-z]+),\s*"
+    + @"it\s+has\s+(?<kw>[A-Za-z][A-Za-z\s]*?)\s*\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // Arm 2: "As long as enchanted permanent is a/an <type>, it has "<quoted body>"."
+  // Accepts both straight (") and curly (“ ”) quote marks.
+  private static readonly Regex _quotedAbilityPattern = new(
+    "^\\s*As\\s+long\\s+as\\s+enchanted\\s+permanent\\s+is\\s+an?\\s+(?<type>[A-Za-z]+),\\s*"
+    + "it\\s+has\\s+[\"\\u201C\\u201D](?<body>[^\"\\u201C\\u201D]+)[\"\\u201C\\u201D]\\.?\\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  // The nested quoted body's own shape: "Equipped creature has <keyword>."
+  private static readonly Regex _equippedHasKeywordPattern = new(
+    @"^\s*Equipped\s+creature\s+has\s+(?<kw>[A-Za-z][A-Za-z\s]*?)\s*\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
+  {
+    var rawText = StaticRuleHelpers.StripReminderText(clause.RawText);
+    var enchanted = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped };
+
+    // Arm 2 first: the quoted-body form is a strict superset shape of arm 1's
+    // "it has <keyword>" tail (both start identically up to "it has "), so the
+    // quote-anchored pattern must be tried before the bare-keyword pattern can
+    // mistakenly attempt (and fail) to consume the quoted text as a keyword name.
+    var quotedMatch = _quotedAbilityPattern.Match(rawText);
+    if (quotedMatch.Success)
+    {
+      var body = quotedMatch.Groups["body"].Value.Trim();
+      var grantedAbility = TryParseEquippedHasBody(body);
+      if (grantedAbility is null)
+      {
+        return null;
+      }
+
+      var condition = BuildTypeCondition(quotedMatch.Groups["type"].Value.Trim());
+      var duration = new AsLongAsDuration { Condition = condition };
+
+      return
+      [
+        new StaticAbility
+        {
+          Effects =
+          [
+            new GainAbilityEffect
+            {
+              Target = enchanted,
+              GainedAbility = grantedAbility,
+              Duration = duration,
+            },
+          ],
+        },
+      ];
+    }
+
+    // Arm 1: bare keyword grant.
+    var bareMatch = _bareKeywordPattern.Match(rawText);
+    if (bareMatch.Success)
+    {
+      var keyword = bareMatch.Groups["kw"].Value.Trim();
+      var grantedKeywordAbility = StaticRuleHelpers.MapKeywordToStaticAbility(keyword);
+      if (grantedKeywordAbility is null)
+      {
+        return null;
+      }
+
+      var condition = BuildTypeCondition(bareMatch.Groups["type"].Value.Trim());
+      var duration = new AsLongAsDuration { Condition = condition };
+
+      return
+      [
+        new StaticAbility
+        {
+          Effects =
+          [
+            new GainAbilityEffect
+            {
+              Target = enchanted,
+              GainedAbility = grantedKeywordAbility,
+              Duration = duration,
+            },
+          ],
+        },
+      ];
+    }
+
+    return null;
+  }
+
+  /// <summary>
+  /// Disambiguates the gate noun into a card-type or subtype check (CR 205.2a vs.
+  /// CR 205.3m) by oracle capitalisation convention: main card types are always
+  /// printed lowercase ("creature", "artifact"), subtypes referenced this way are
+  /// capitalised ("Equipment", "Vehicle").
+  /// </summary>
+  private static Condition BuildTypeCondition(string typeWord)
+  {
+    const string subject = "EnchantedOrEquipped";
+    if (char.IsUpper(typeWord[0]))
+    {
+      return new ObjectHasSubtypeCondition { Subtype = typeWord, Subject = subject };
+    }
+
+    return new ObjectHasCardTypeCondition { CardType = typeWord.ToLowerInvariant(), Subject = subject };
+  }
+
+  /// <summary>
+  /// Parses the quoted body's "Equipped creature has &lt;keyword&gt;." shape into a
+  /// nested static ability (CR 301.5d) — the ordinary bare-Equipment-grant form,
+  /// scoped narrowly to the single-keyword case Rune of Flight needs.
+  /// </summary>
+  private static Ability? TryParseEquippedHasBody(string body)
+  {
+    var match = _equippedHasKeywordPattern.Match(body);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var keyword = match.Groups["kw"].Value.Trim();
+    var grantedAbility = StaticRuleHelpers.MapKeywordToStaticAbility(keyword);
+    if (grantedAbility is null)
+    {
+      return null;
+    }
+
+    return new StaticAbility
+    {
+      Effects =
+      [
+        new GainAbilityEffect
+        {
+          Target = new ObjectReference { Kind = ObjectReferenceKind.EnchantedOrEquipped },
+          GainedAbility = grantedAbility,
+        },
+      ],
+    };
+  }
+}
