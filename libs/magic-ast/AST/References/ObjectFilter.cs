@@ -284,6 +284,25 @@ public sealed record ObjectFilter
   public Zone? Zone { get; init; }
 
   /// <summary>
+  /// Zone EXCLUDED by a "from anywhere other than [zone]" qualifier. Parallel
+  /// negation axis to <see cref="Zone"/>, mirroring <see cref="ExcludedCardTypes"/>
+  /// over <see cref="CardTypes"/>.
+  ///
+  /// <para>
+  /// On a <c>CardTypes=["spell"]</c> filter this names the zone the spell was CAST
+  /// FROM rather than its current zone — a spell's current zone is always the stack
+  /// (CR 111.6/109.5), so a stated zone other than <see cref="Zone.Stack"/> on a
+  /// spell filter is unambiguous shorthand for the pre-cast origin zone (Savvy
+  /// Trader: "Spells you cast from anywhere other than your hand cost {1} less to
+  /// cast" → <c>CardTypes=["spell"], ExcludedZone=Hand</c>; CR 601.2f cost
+  /// reduction). Parallels <see cref="MagicAST.AST.Effects.CardFlow.AlternativeCastEffect.FromZone"/>
+  /// (the positive "you may cast this from [zone]" permission's origin-zone axis).
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Zone? ExcludedZone { get; init; }
+
+  /// <summary>
   /// Power comparison.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
