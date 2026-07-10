@@ -252,6 +252,15 @@
           ]
         },
         {
+          "Type": "ExtremeStatCharacteristic",
+          "Discriminator": "extremeStat",
+          "IsUnparsed": false,
+          "Fields": [
+            "Extreme",
+            "Stat"
+          ]
+        },
+        {
           "Type": "KeywordCharacteristic",
           "Discriminator": "keyword",
           "IsUnparsed": false,
@@ -2689,5 +2698,5 @@
       ]
     }
   ],
-  "SchemaHash": "12d2251b40fa15eaaeba47c4c7e8c3f1796e26a1489924dc6966ce4fb5d4a64e"
+  "SchemaHash": "5c91217e97415fa711ab7e239687166962e9155adf54bcc0e5ee931233059fb2"
 }

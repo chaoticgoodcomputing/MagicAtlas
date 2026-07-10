@@ -1,0 +1,70 @@
+{
+  "Input": {
+    "Name": "Blot Out",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Instant",
+    "OracleText": "Target opponent exiles a creature or planeswalker they control with the greatest mana value among creatures and planeswalkers they control.",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Blot Out",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Target opponent exiles a creature or planeswalker they control with the greatest mana value among creatures and planeswalkers they control.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Player": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["opponent"]
+                }
+              },
+              "Target": {
+                "Kind": "Any",
+                "Filter": {
+                  "CardTypes": ["creature", "planeswalker"],
+                  "Controller": "Target",
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "extremeStat",
+                      "Stat": "ManaValue",
+                      "Extreme": "Greatest"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}
