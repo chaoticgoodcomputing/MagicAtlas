@@ -1,0 +1,151 @@
+{
+  "Input": {
+    "Name": "Psychatog",
+    "ManaCost": "{1}{U}{B}",
+    "TypeLine": "Creature — Atog",
+    "OracleText": "Discard a card: This creature gets +1/+1 until end of turn.\nExile two cards from your graveyard: This creature gets +1/+1 until end of turn.",
+    "Power": "1",
+    "Toughness": "2",
+    "Colors": ["B", "U"],
+    "ColorIdentity": ["B", "U"],
+    "Keywords": [],
+    "Id": "f60911a4-2eb6-4f20-a1c1-2fc5a29c35b5",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Psychatog",
+    "TypeLine": {
+      "Raw": "Creature — Atog",
+      "Types": ["Creature"],
+      "Subtypes": ["Atog"]
+    },
+    "Oracle": {
+      "RawText": "Discard a card: This creature gets +1/+1 until end of turn.\nExile two cards from your graveyard: This creature gets +1/+1 until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "discard",
+              "Filter": {
+                "CardTypes": ["card"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "exile",
+              "Filter": {
+                "CardTypes": ["card"],
+                "Controller": "You"
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "FromZone": "Graveyard"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
