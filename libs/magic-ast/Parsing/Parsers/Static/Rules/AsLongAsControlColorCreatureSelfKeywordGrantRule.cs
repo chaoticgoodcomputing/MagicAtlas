@@ -20,7 +20,8 @@ using MagicAST.AST.References;
 /// -1/-1 counter on it.'"
 ///
 /// <para>
-/// CR 611.2 (conditional continuous effect): the granted keyword applies only while
+/// CR 611.3a (continuous effect from a static ability, not "locked in" — it "applies at
+/// any given moment to whatever its text indicates"): the granted keyword applies only while
 /// the stated condition is true. The condition is a <see cref="CountCondition"/>
 /// over an <see cref="ObjectFilter"/> keyed on <c>CardTypes:["creature"]</c>,
 /// <c>Colors:[&lt;color&gt;]</c>, and <c>Controller: You</c> — "you control a

@@ -392,6 +392,15 @@
           ]
         },
         {
+          "Type": "ObjectHasCardTypeCondition",
+          "Discriminator": "objectHasCardType",
+          "IsUnparsed": false,
+          "Fields": [
+            "CardType",
+            "Subject"
+          ]
+        },
+        {
           "Type": "ObjectHasCounterCondition",
           "Discriminator": "objectHasCounter",
           "IsUnparsed": false,
@@ -540,6 +549,14 @@
           "IsUnparsed": false,
           "Fields": [
             "Filter",
+            "Quantity"
+          ]
+        },
+        {
+          "Type": "DrawCardsCost",
+          "Discriminator": "drawCards",
+          "IsUnparsed": false,
+          "Fields": [
             "Quantity"
           ]
         },
@@ -1029,6 +1046,14 @@
           ]
         },
         {
+          "Type": "CantLoseGameEffect",
+          "Discriminator": "cantLoseGame",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
           "Type": "CantLoseGameForZeroLifeEffect",
           "Discriminator": "cantLoseGameForZeroLife",
           "IsUnparsed": false,
@@ -1041,6 +1066,14 @@
           "Discriminator": "cantPreventDamage",
           "IsUnparsed": false,
           "Fields": []
+        },
+        {
+          "Type": "CantWinGameEffect",
+          "Discriminator": "cantWinGame",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
         },
         {
           "Type": "CastWithoutPayingEffect",
@@ -1106,6 +1139,12 @@
         {
           "Type": "ChooseCreatureTypeEffect",
           "Discriminator": "chooseCreatureType",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "ChoosePlayerEffect",
+          "Discriminator": "choosePlayer",
           "IsUnparsed": false,
           "Fields": []
         },
@@ -2866,5 +2905,5 @@
       ]
     }
   ],
-  "SchemaHash": "24696db134cc0e80048ffa8d4c805d953f55d0f520adc1ba73933c017da547a4"
+  "SchemaHash": "a8baecf6cf47f0d50e9c508376b89cb7493f819c1d1712dff2e9017e781e8a11"
 }

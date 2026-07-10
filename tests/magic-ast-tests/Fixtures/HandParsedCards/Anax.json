@@ -47,8 +47,7 @@
             "Filter": {
               "CardTypes": ["creature"],
               "IsToken": false,
-              "Controller": "You",
-              "ExcludeSelf": true
+              "Controller": "You"
             }
           },
           "Effects": [

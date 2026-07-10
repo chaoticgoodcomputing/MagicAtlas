@@ -82,16 +82,36 @@ public sealed class SubtypeCreaturesHaveKeywordListRule : IStaticRule
     RegexOptions.Compiled
   );
 
-  // Capitalised words that precede "creatures you control have" but are NOT a
-  // creature subtype — each is a structural qualifier already owned by a more
-  // specific sibling rule (see class doc). Declining here (rather than
-  // reordering priorities) keeps this rule's regex free to stay maximally
-  // general without shadowing those siblings' distinct filter shapes.
+  // Capitalised words that can precede "creatures you control have …" but are NOT
+  // creature subtypes. The subject-capture group is a bare "any capitalised word"
+  // ([A-Z][a-z]+), so it would otherwise fabricate a bogus subtype from a color
+  // (CR 105.1), supertype (205.4a), a co-card-type qualifier ("Artifact/Land
+  // creatures", 205.2b dual types), a permanent-state adjective, or a structural
+  // qualifier — none of which are 205.3 creature subtypes. These four categories
+  // are a CLOSED vocabulary, so an allow-anything-else guard is sound: any real
+  // creature subtype (Sliver, Human, Golem, Dragon, …) is absent from this set and
+  // passes through. A corpus sweep of "<Cap> creatures you control have …" over
+  // all 31k cards surfaced exactly these non-subtype words (states Equipped/
+  // Enchanted/Modified/Tapped were the genuinely-new mis-parses this rule would
+  // otherwise introduce, e.g. Dalakos, Crafter of Wonders → bogus Subtypes:["Equipped"]).
+  // Where a more specific sibling owns the clause (Other → BareKeywordGrantRule
+  // Arm 3; Nontoken → NontokenCreaturesHaveKeywordRule; Attacking →
+  // AttackingObjectsHaveKeywordRule) declining here also prevents shadowing.
   private static readonly HashSet<string> _reservedNonSubtypeWords = new(StringComparer.Ordinal)
   {
-    "Other",
-    "Nontoken",
-    "Attacking",
+    // Colors (CR 105.1) + color qualifiers.
+    "White", "Blue", "Black", "Red", "Green",
+    "Colorless", "Multicolored", "Monocolored",
+    // Supertypes (CR 205.4a) + negations.
+    "Basic", "Legendary", "Snow", "World", "Nonlegendary",
+    // Co-card-type qualifiers ("Artifact/Enchantment/Land creatures", CR 205.2b).
+    "Artifact", "Enchantment", "Land",
+    "Nonartifact", "Nonland", "Noncreature",
+    // Permanent-state / status adjectives.
+    "Tapped", "Untapped", "Attacking", "Blocking", "Blocked", "Unblocked",
+    "Enchanted", "Equipped", "Modified", "Monstrous", "Renowned",
+    // Structural qualifiers (self-exclusion / token partition).
+    "Other", "Another", "Nontoken", "Token",
   };
 
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)

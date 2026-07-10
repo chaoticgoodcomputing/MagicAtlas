@@ -9,8 +9,9 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// specific card type.
 ///
 /// <para>
-/// CR 611.2c: "If the effect is conditional ... the effect stops applying if the
-/// condition it's based on stops applying." Card types are checked continuously
+/// CR 611.3a: a continuous effect from a static ability "isn't 'locked in'; it applies
+/// at any given moment to whatever its text indicates" — so a type-gated grant stops
+/// applying the moment the object no longer has the type. Card types are checked continuously
 /// against the object's current characteristics (CR 205.2a — creature, artifact,
 /// enchantment, land, etc. are the card types). MAST records the condition as
 /// written — reference-not-resolution (ADR 0004): the engine reads the object's

@@ -324,9 +324,16 @@ internal static class TriggeredRuleHelpers
     // creature you control dies"). The intervening "nontoken" word means the plain
     // ".Contains(\"another creature\")" check below never fires for this phrase, so the
     // exclusion is captured here instead.
+    //
+    // Disjunction guard (mirrors Guard 2 in the plain-creature branch below): a self-by-name
+    // disjunction "<Name> or another nontoken creature you control dies" (Anax, Hardened in
+    // the Forge) is SELF-INCLUSIVE — the source triggers it via the name clause — so it must
+    // NOT set ExcludeSelf. Only an unconditional "another nontoken creature" (no "or another"
+    // partner) excludes the source.
     if (lower.Contains("nontoken creature"))
     {
-      var excludeSelf = lower.Contains("another nontoken creature") ? (bool?)true : null;
+      var isDisjunction = lower.Contains("or another nontoken creature");
+      var excludeSelf = (!isDisjunction && lower.Contains("another nontoken creature")) ? (bool?)true : null;
       return new ObjectFilter { CardTypes = ["creature"], IsToken = false, Controller = controller, ExcludeSelf = excludeSelf };
     }
 

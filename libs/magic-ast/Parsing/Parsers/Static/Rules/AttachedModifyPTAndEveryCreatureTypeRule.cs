@@ -17,7 +17,7 @@ using MagicAST.AST.References;
 /// (+N/+M, CR 613.4c — a layer-7c power/toughness-modifying continuous effect)
 /// and a <see cref="GainAbilityEffect"/> granting the Changeling
 /// characteristic-defining ability (CR 205.3m — creature types are a subset of
-/// subtypes; CR 702.6 — Changeling as an ability grant), BOTH targeting the
+/// subtypes; CR 702.73a — Changeling as an ability grant), BOTH targeting the
 /// same attached subject "Enchanted/Equipped creature". One oracle clause
 /// generates one continuous effect from one static ability, so the two
 /// effects share a single ability rather than being split into two abilities
