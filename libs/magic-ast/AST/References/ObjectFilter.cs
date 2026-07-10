@@ -193,6 +193,20 @@ public sealed record ObjectFilter
   public bool? IsMulticolored { get; init; }
 
   /// <summary>
+  /// Filters to face-down objects — CR 708.1: "Some cards allow spells and permanents
+  /// to be face down." A face-down spell or permanent's copiable characteristics are
+  /// replaced (typically the 2/2 no-name/no-text default of CR 708.2a) regardless of
+  /// its printed card. A named game-state axis, not a card type or subtype: it cannot
+  /// be expressed on the existing type axes without falsely asserting "face-down" is a
+  /// printed characteristic. Parallels <see cref="IsColorless"/> / <see cref="IsHistoric"/>
+  /// as a boolean game-quality axis on the filter (Obscuring Aether: "Face-down creature
+  /// spells you cast cost {1} less to cast." → <c>CardTypes=["spell","creature"],
+  /// IsFaceDown=true, Controller=You</c>).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsFaceDown { get; init; }
+
+  /// <summary>
   /// Filters to monocolored objects (those with exactly one color). Rule 105.3
   /// ("An object is the color or colors of the mana symbols in its mana cost,
   /// regardless of the cost of that mana ... If an object has exactly one of
