@@ -1,0 +1,99 @@
+{
+  "Input": {
+    "Name": "Leyline of Punishment",
+    "ManaCost": "{2}{R}{R}",
+    "TypeLine": "Enchantment",
+    "OracleText": "If this card is in your opening hand, you may begin the game with it on the battlefield.\nPlayers can't gain life.\nDamage can't be prevented.",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [],
+    "Id": "51a2eec5-f892-4466-b6c6-960626ba5640",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Leyline of Punishment",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If this card is in your opening hand, you may begin the game with it on the battlefield.\nPlayers can't gain life.\nDamage can't be prevented.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "openingHand"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantGainLife",
+              "Player": {
+                "Kind": "EachPlayer"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantPreventDamage"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
+    ]
+  }
+}
