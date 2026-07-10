@@ -1,0 +1,102 @@
+{
+  "Input": {
+    "Name": "Gavony Ironwright",
+    "ManaCost": "{2}{W}",
+    "TypeLine": "Creature — Human Soldier",
+    "OracleText": "Fateful hour — As long as you have 5 or less life, other creatures you control get +1/+4.",
+    "Power": "1",
+    "Toughness": "4",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": ["Fateful hour"],
+    "Id": "05d8de75-b169-4426-94a4-b19cdfdffd89",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Gavony Ironwright",
+    "TypeLine": {
+      "Raw": "Creature — Human Soldier",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "Fateful hour — As long as you have 5 or less life, other creatures you control get +1/+4.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "AbilityWord": "Fateful hour",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 4
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "quantityComparison",
+                  "Left": {
+                    "QuantityType": "derived",
+                    "DerivedFrom": "LifeTotal",
+                    "Source": "you"
+                  },
+                  "Operator": "LessThanOrEqual",
+                  "Right": {
+                    "QuantityType": "literal",
+                    "Value": 5
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}
