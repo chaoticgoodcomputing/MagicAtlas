@@ -1,0 +1,166 @@
+{
+  "Input": {
+    "Name": "Gateway Shade",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Shade",
+    "OracleText": "{B}: This creature gets +1/+1 until end of turn.\nTap an untapped Gate you control: This creature gets +2/+2 until end of turn.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
+    "Keywords": [],
+    "Id": "aa33fc15-3a4f-48bc-be7c-fdec1cb49c10",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Gateway Shade",
+    "TypeLine": {
+      "Raw": "Creature — Shade",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Shade"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{B}: This creature gets +1/+1 until end of turn.\nTap an untapped Gate you control: This creature gets +2/+2 until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tapPermanents",
+              "Filter": {
+                "CardTypes": [
+                  "land"
+                ],
+                "Subtypes": [
+                  "Gate"
+                ],
+                "Controller": "You"
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}
