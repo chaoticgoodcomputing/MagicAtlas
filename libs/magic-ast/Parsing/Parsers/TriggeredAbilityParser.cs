@@ -445,6 +445,23 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       restrictions.Add(TriggeredAbilityRestriction.OnlyOnceEachTurn);
     }
 
+    // "This ability triggers only once each turn." — CR 603.2h's other phrasing,
+    // capping how often the ability triggers rather than the action taken on
+    // resolution (Chandra, Hope's Beacon's copy trigger). Anchored to the end of the
+    // effect text so it strips only a trailing restriction sentence. Both phrasings
+    // map to OnlyOnceEachTurn.
+    var abilityOnceEachTurn = Regex.Match(
+      effectPart,
+      @"\s*\bThis\s+ability\s+triggers\s+only\s+once\s+each\s+turn\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (abilityOnceEachTurn.Success)
+    {
+      effectPart = effectPart[..abilityOnceEachTurn.Index].Trim();
+      restrictions ??= [];
+      restrictions.Add(TriggeredAbilityRestriction.OnlyOnceEachTurn);
+    }
+
     return restrictions;
   }
 

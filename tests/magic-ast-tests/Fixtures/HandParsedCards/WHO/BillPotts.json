@@ -50,12 +50,15 @@
           "Effects": [
             {
               "EffectType": "unstructured",
-              "Text": "copy that spell or ability. You may choose new targets for the copy. This ability triggers only once each turn.",
+              "Text": "copy that spell or ability. You may choose new targets for the copy.",
               "SourceSpan": {
                 "Start": 0,
                 "Length": 239
               }
             }
+          ],
+          "Restrictions": [
+            "OnlyOnceEachTurn"
           ]
         },
         {

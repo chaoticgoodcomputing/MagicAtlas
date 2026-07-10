@@ -186,12 +186,18 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
         WhoMayActivate = whoMayActivate,
         IsManaAbility = false,
         LoyaltyCost = classification.LoyaltyCost,
+        VariableLoyaltyCost = classification.VariableLoyaltyCost,
         AbilityWord = classification.AbilityWord,
       };
     }
 
-    // Determine if this is a mana ability
-    var isManaAbility = IsManaAbility(costs, effects);
+    // Determine if this is a mana ability. CR 605.1a: a mana ability "is not a
+    // loyalty ability", so a loyalty ability that adds mana (Chandra, Hope's
+    // Beacon's "+2: Add two mana …") is NEVER a mana ability regardless of its
+    // effect.
+    var isLoyaltyAbility =
+      classification.LoyaltyCost.HasValue || classification.VariableLoyaltyCost is not null;
+    var isManaAbility = !isLoyaltyAbility && IsManaAbility(costs, effects);
 
     // CR 702.177a: "Exhaust — [Cost]: [Effect]" means "[Cost]: [Effect]. Activate only once."
     // The "Activate only once" restriction is implied by the keyword and not printed as a
@@ -213,6 +219,7 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       WhoMayActivate = whoMayActivate,
       IsManaAbility = isManaAbility,
       LoyaltyCost = classification.LoyaltyCost,
+      VariableLoyaltyCost = classification.VariableLoyaltyCost,
       AbilityWord = classification.AbilityWord,
     };
   }
@@ -425,8 +432,10 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   {
     var costs = new List<Cost>();
 
-    // Handle loyalty abilities (costs are empty, loyalty is tracked separately)
-    if (classification.LoyaltyCost.HasValue)
+    // Handle loyalty abilities (costs are empty, loyalty is tracked separately on
+    // LoyaltyCost / VariableLoyaltyCost). A variable "−X" cost never reaches the
+    // cost-component parser as a symbol, so short-circuit here too.
+    if (classification.LoyaltyCost.HasValue || classification.VariableLoyaltyCost is not null)
     {
       return costs;
     }
