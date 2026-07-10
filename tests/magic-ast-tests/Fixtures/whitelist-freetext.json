@@ -764,6 +764,12 @@
       "reason": "PB-7 structured-condition buckets — 'this is the fourth time this ability has resolved this turn' is an ordinal ability-history predicate; no structured NthTimeAbilityResolvedCondition node exists yet (same family as LCI/NissaResurgentAnimist)"
     },
     {
+      "card": "SerendibDjinn",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets — 'you sacrifice an Island this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound on the land sacrificed by the ability's own preceding effect; same family as Spelunking's 'you put a Cave onto the battlefield this way', requires a new SacrificeSubtypeThisWayCondition arm with no current peer"
+    },
+    {
       "card": "SmotheringTithe",
       "sink": "AbilityText",
       "tag": "irreducible",
