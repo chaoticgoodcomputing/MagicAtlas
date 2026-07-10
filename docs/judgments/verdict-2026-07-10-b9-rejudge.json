@@ -1,0 +1,37 @@
+{
+  "shard": "rejudge",
+  "batch": 9,
+  "date": "2026-07-10",
+  "headSha": "0e811565521043e4d8276f88ed29a8aae8be85c5",
+  "items": [
+    {
+      "family": "N20",
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/HaveControllerCreateTappedAttackingTokenRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.12"],
+      "reason": "optional 'you may' now cites CR 118.12 ('[A player] may [do something]…') which exists and covers the optional idiom; old 116.1b removed (CR 116 = Special Actions, has no 116.1b); no residual 116.1b/116"
+    },
+    {
+      "family": "N18",
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/OptionalSacrificeReturnWithCountersBecomeMonarchEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 725", "CR 118.12"],
+      "reason": "monarch now cites CR 725 ('The Monarch', 725.1 'The monarch is a designation a player can have'); CR 716 = Class Cards (correctly not monarch); no residual 716; 'you may…if you do' correctly cites 118.12"
+    },
+    {
+      "family": "N01",
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantedLandWouldBeDestroyedSacrificeGrantIndestructibleRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 303.4c"],
+      "reason": "'this Aura' self-reference now cites CR 109.2 (object descriptions; subrule 109.2d is a literal 'this scheme' self-reference — in-family, not contradictory) plus 303.4c (Aura, exists); no residual 700.4/111.7"
+    },
+    {
+      "family": "N03-N20-combined",
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SubtypeAttacksConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 508", "CR 205.3m", "CR 603.1", "CR 109.5"],
+      "reason": "exactly one class on HEAD; regex right-anchored on attacks$ produces both golds (Knights'Charge Subtypes:[Knight],Controller:You; Najeela Subtypes:[Warrior],Controller:null); optional 'you control'→ControllerFilter.You, 'another'→ExcludeSelf; case-sensitive subtype declines lowercase 'a creature attacks'; no over-capture of 'attacks and isn't blocked'"
+    }
+  ],
+  "overall": "PASS"
+}
