@@ -333,6 +333,14 @@
           "Fields": []
         },
         {
+          "Type": "ChosenModeCondition",
+          "Discriminator": "chosenMode",
+          "IsUnparsed": false,
+          "Fields": [
+            "Mode"
+          ]
+        },
+        {
           "Type": "ControlledObjectCondition",
           "Discriminator": "controlledObject",
           "IsUnparsed": false,
@@ -1141,6 +1149,14 @@
           "Discriminator": "chooseCreatureType",
           "IsUnparsed": false,
           "Fields": []
+        },
+        {
+          "Type": "ChooseNamedOptionEffect",
+          "Discriminator": "chooseNamedOption",
+          "IsUnparsed": false,
+          "Fields": [
+            "Options"
+          ]
         },
         {
           "Type": "ChoosePlayerEffect",
@@ -2905,5 +2921,5 @@
       ]
     }
   ],
-  "SchemaHash": "a8baecf6cf47f0d50e9c508376b89cb7493f819c1d1712dff2e9017e781e8a11"
+  "SchemaHash": "3cdb27e8add049f7b7b811bca8339ba59f5455d6bd521867ce30e2af90fd9bfa"
 }
