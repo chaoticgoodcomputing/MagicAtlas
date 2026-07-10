@@ -1,0 +1,82 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/KorBlademaster.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.4", "CR 702.6", "CR 611.3"],
+      "reason": "double strike (combatDamageTiming Both) + equipped-Warrior anthem grant via Each filter Subtypes:[Warrior]+equipped-state+You; no unparsed nodes"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/Characteristic.cs#EquippedStateCharacteristic",
+      "verdict": "PASS",
+      "citations": ["CR 702.6", "CR 704.5n"],
+      "reason": "equipped-state filter characteristic, discriminator 'equipped', correct analogue of TappedStateCharacteristic; NOTE bare marker (Fields:[]) diverges from L19's bool-field form -- see merge-reconciliation finding"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DalakosCrafterOfWonders.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.9", "CR 702.10", "CR 605.1a", "CR 702.6"],
+      "reason": "equipped-creature anthem grants flying (evasion CanBeBlockedBy flying/reach, CR 702.9b) + haste; restricted mana ability {C}{C} reuses AddManaEffect.SpendRestriction; no unparsed nodes"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/Characteristic.cs#EquippedStateCharacteristic(L19)",
+      "verdict": "PASS",
+      "citations": ["CR 702.6", "CR 704.5n"],
+      "reason": "equipped-state characteristic with bool Equipped + 'unequipped' FromLabel; superset of L02's node -- canonical form for merge, but L02's fixture must add Equipped:true"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/AddFixedManaWithSpendRestrictionEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 605.1a", "CR 106.5"],
+      "reason": "anchored fixed-mana + verbatim SpendRestriction (pre-existing field, UnclaimedTerritory/FoodChain convention); disjoint from any-color AddManaEffectRule; broad-but-correct sibling capture, no misparse"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SeeDouble.json",
+      "verdict": "PASS",
+      "citations": ["CR 707", "CR 707.10", "CR 700.2d", "CR 108.3"],
+      "reason": "cantBeCopied spell static + modal ChooseOne with ModeSelectionOverride (CountCondition Owner:Opponent Zone:Graveyard >=8) -> ChooseOneOrBoth; modes copy-target-spell (MayChooseNewTargets) + copy-target-creature token; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Keyword/CantBeCopiedEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 707"],
+      "reason": "fieldless self-spell can't-be-copied static, correct sibling of CantBeCounteredEffect; CR 707 'Copying Objects' exists and matches"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#cantBeCopied",
+      "verdict": "PASS",
+      "citations": ["CR 707"],
+      "reason": "coarse projection sensible: preventive on-stack restriction, no emit/consume; sibling cantBeCountered likewise coarse; no flow rule reads copy-prohibition"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Excruciator.json",
+      "verdict": "PASS",
+      "citations": ["CR 615.1"],
+      "reason": "single static damageCantBePrevented Source:Self, faithful to 'Damage that would be dealt by this creature can't be prevented.'; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Damage/DamageCantBePreventedEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 615.1", "CR 611.1", "CR 604.1"],
+      "reason": "source-scoped prevention-lock, required Source ObjectReference; correct sibling of global CantPreventDamageEffect; anchored rule disjoint from Leyline global form"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#damageCantBePrevented",
+      "verdict": "PASS",
+      "citations": ["CR 615.1"],
+      "reason": "coarse projection sensible: preventive prohibition, its global sibling cantPreventDamage is also coarse; no flow rule reads prevention-lock"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PithingNeedle.json",
+      "verdict": "PASS",
+      "citations": ["CR 602.5", "CR 605.1a", "CR 607", "CR 614.12"],
+      "reason": "chooseCardName producer (When:asThisEnters plain effect, correct timing decomposition) + cantActivateAbilities consumer scoped by AffectedObjects.ChosenCharacteristic:CardName (structured linked-var, not free text) with ExceptManaAbilities:true carve-out"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Timing/CantActivateAbilitiesEffect.cs#ExceptManaAbilities",
+      "verdict": "PASS",
+      "citations": ["CR 605.1a", "CR 605.1b"],
+      "reason": "additive nullable bool ExceptManaAbilities (JsonIgnore WhenWritingNull); backward-compatible with Collector Ouphe/Karn/Arrest siblings; anchored new rule cannot divert them"
+    }
+  ]
+}
