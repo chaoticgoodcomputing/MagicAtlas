@@ -1,0 +1,81 @@
+{
+  "Input": {
+    "Name": "Nature's Revolt",
+    "ManaCost": "{3}{G}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "All lands are 2/2 creatures that are still lands.",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": [],
+    "Id": "e0c9b948-63f9-458d-82ae-69ebe2ac9fe0",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Nature's Revolt",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "All lands are 2/2 creatures that are still lands.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "becomesCreature",
+              "Subject": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["land"]
+                }
+              },
+              "Power": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Toughness": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Colors": [],
+              "CardTypes": ["land", "creature"],
+              "AddedSubtypes": [],
+              "GainedAbilities": []
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
