@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Vigor.json",
+      "verdict": "PASS",
+      "citations": ["CR 615.5"],
+      "reason": "PutCounters Count.DerivedFrom now DamagePrevented (no residual DamageDealt); faithful to 'for each 1 damage prevented this way' and consistent with P15's DerivedKind.DamagePrevented"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilterRelations.cs",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "SharesPermanentTypeWith now registered in both soundness floors (UndecidedAxis + SupUndecidedAxis) and OperatorPropertyTests.IsRelational, mirroring SharesCardTypeWith; no residual gap (core ring green at 7243)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/GainLifeAndGetEnergyTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 119.3"],
+      "reason": "stray CR 701.20 (Reveal) dropped; CR 119.3 ('if an effect causes a player to gain life...') is the correct gain-life rule; no residual 701.20"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ExileNonlandCardFromHandImprintTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 406.6"],
+      "reason": "CR 702.38 (Amplify) removed; Imprint correctly recharacterized as an ability word with linked-ability exile cite CR 406.6 (object exiles cards + second ability refers to 'the exiled cards', linked per 607); no residual 702.38"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Core/LoseTheGameEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 104.3e"],
+      "reason": "104.3a (concede) -> 104.3e ('An effect may state that a player loses the game.') matches the modeled effect; no residual 104.3a"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/NonlandCreatureTypeGrantRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 205.1b"],
+      "reason": "205.1a (sets/replaces card type) -> 205.1b (retains a prior card/supertype/subtype) matches the type-retention modeling; no residual 205.1a"
+    }
+  ]
+}
