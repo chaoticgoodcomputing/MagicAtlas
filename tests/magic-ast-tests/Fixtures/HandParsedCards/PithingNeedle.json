@@ -1,0 +1,63 @@
+{
+  "Input": {
+    "Name": "Pithing Needle",
+    "ManaCost": "{1}",
+    "TypeLine": "Artifact",
+    "OracleText": "As this artifact enters, choose a card name.\nActivated abilities of sources with the chosen name can't be activated unless they're mana abilities.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "776899f8-e977-42b7-8b54-6f726a349e3c",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Pithing Needle",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "As this artifact enters, choose a card name.\nActivated abilities of sources with the chosen name can't be activated unless they're mana abilities.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "When": "asThisEnters",
+          "Effects": [
+            { "EffectType": "chooseCardName" }
+          ]
+        },
+        {
+          "Kind": "static",
+          "AffectedObjects": {
+            "ChosenCharacteristic": "CardName"
+          },
+          "Effects": [
+            {
+              "EffectType": "cantActivateAbilities",
+              "ExceptManaAbilities": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
