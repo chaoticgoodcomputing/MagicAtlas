@@ -1,0 +1,89 @@
+{
+  "Input": {
+    "Name": "Melira's Keepers",
+    "ManaCost": "{4}{G}",
+    "TypeLine": "Creature — Human Warrior",
+    "OracleText": "This creature can't have counters put on it.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [],
+    "Id": "d9a935b4-347c-46d9-a7c5-8c5079948959",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Melira's Keepers",
+    "TypeLine": {
+      "Raw": "Creature — Human Warrior",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Warrior"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature can't have counters put on it.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantHaveCounters"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
