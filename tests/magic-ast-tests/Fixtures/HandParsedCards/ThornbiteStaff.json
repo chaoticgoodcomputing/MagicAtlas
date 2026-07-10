@@ -1,0 +1,127 @@
+{
+  "Input": {
+    "Name": "Thornbite Staff",
+    "ManaCost": "{2}",
+    "TypeLine": "Kindred Artifact — Shaman Equipment",
+    "OracleText": "Equipped creature has \"{2}, {T}: This creature deals 1 damage to any target\" and \"Whenever a creature dies, untap this creature.\"\nWhenever a Shaman creature enters, you may attach this Equipment to it.\nEquip {4}",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": ["Equip"],
+    "Id": "c1ab3225-64a9-411e-b22b-1869e958b8e5",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Thornbite Staff",
+    "TypeLine": {
+      "Raw": "Kindred Artifact — Shaman Equipment",
+      "Types": ["Kindred", "Artifact"],
+      "Subtypes": ["Shaman", "Equipment"]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature has \"{2}, {T}: This creature deals 1 damage to any target\" and \"Whenever a creature dies, untap this creature.\"\nWhenever a Shaman creature enters, you may attach this Equipment to it.\nEquip {4}",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": { "Kind": "EnchantedOrEquipped" },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "mana",
+                    "Symbols": [{ "Kind": "generic", "GenericAmount": 2 }]
+                  },
+                  { "CostType": "tap" }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "dealDamage",
+                    "Amount": { "QuantityType": "literal", "Value": 1 },
+                    "Target": { "Kind": "AnyTarget" },
+                    "Source": { "Kind": "Self" }
+                  }
+                ],
+                "IsManaAbility": false
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": { "Kind": "EnchantedOrEquipped" },
+              "GainedAbility": {
+                "Kind": "triggered",
+                "Trigger": {
+                  "Timing": "Whenever",
+                  "Event": "Dies",
+                  "Filter": { "CardTypes": ["creature"] }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "untap",
+                    "Target": { "Kind": "Self" }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Subtypes": ["Shaman"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "attach",
+                "Target": { "Kind": "It" }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [{ "Kind": "generic", "GenericAmount": 4 }]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Restrictions": ["OnlyAsSorcery"],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [{ "Kind": "generic", "GenericAmount": 2 }],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      { "Kind": "colors", "Colors": [] },
+      { "Kind": "colorIdentity", "ColorIdentity": [] }
+    ]
+  }
+}
