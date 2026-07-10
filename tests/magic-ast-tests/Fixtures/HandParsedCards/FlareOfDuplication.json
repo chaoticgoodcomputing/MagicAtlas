@@ -1,0 +1,93 @@
+{
+  "Input": {
+    "Name": "Flare of Duplication",
+    "ManaCost": "{1}{R}{R}",
+    "TypeLine": "Instant",
+    "OracleText": "You may sacrifice a nontoken red creature rather than pay this spell's mana cost.\nCopy target instant or sorcery spell. You may choose new targets for the copy.",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": [],
+    "Id": "497a10c6-131b-464e-95e4-e47708a24d48",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Flare of Duplication",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "You may sacrifice a nontoken red creature rather than pay this spell's mana cost.\nCopy target instant or sorcery spell. You may choose new targets for the copy.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["instant", "sorcery"],
+                  "Zone": "Stack"
+                }
+              },
+              "MayChooseNewTargets": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "alternativeCosts",
+        "Costs": [
+          {
+            "Cost": {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"],
+                "Colors": ["R"],
+                "IsToken": false
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 81
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

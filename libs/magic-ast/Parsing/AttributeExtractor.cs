@@ -126,6 +126,17 @@ public sealed partial class AttributeExtractor
       attributes.Add(pitchAlternativeCostAttr);
     }
 
+    // "Sacrifice a creature" alternative-cost family (Flare of Duplication, ...). CR
+    // 118.9: "You may [action] rather than pay [this object]'s mana cost" is an
+    // alternative cost; CR 604.5: it functions while the spell is on the stack — so,
+    // like Bestow's, Borderpost's, and the Pitch family's costs above, it is hosted on
+    // the card's cost attributes rather than surfaced as an oracle ability.
+    var sacrificeAlternativeCostAttr = TryExtractSacrificeAlternativeCost(input.OracleText);
+    if (sacrificeAlternativeCostAttr is not null)
+    {
+      attributes.Add(sacrificeAlternativeCostAttr);
+    }
+
     return attributes;
   }
 
@@ -443,6 +454,76 @@ public sealed partial class AttributeExtractor
         Filter = new ObjectFilter { CardTypes = ["card"], Colors = [colorCode] },
         Quantity = LiteralQuantity.Of(1),
         FromZone = Zone.Hand,
+      },
+      SourceSpan = new TextSpan(0, firstLine.Length),
+    };
+
+    return new AlternativeCostsAttribute { Costs = [cost] };
+  }
+
+  // "You may sacrifice a nontoken [color] creature rather than pay this spell's mana
+  // cost." — the "sacrifice a creature" alternative-cost family (Flare of Duplication,
+  // ...). Kept narrow to this specific sentence so it does not swallow other "rather
+  // than pay this spell's mana cost" costs handled elsewhere (Bestow, Borderpost, Pitch).
+  [GeneratedRegex(
+    @"^You may sacrifice a nontoken (?<color>white|blue|black|red|green) creature rather than pay this spell's mana cost\.?$",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex SacrificeAlternativeCostPrefix();
+
+  /// <summary>
+  /// Scans oracle text for the "sacrifice a creature" alternative-cost family's "You
+  /// may sacrifice a nontoken [color] creature rather than pay this spell's mana cost."
+  /// line and returns an <see cref="AlternativeCostsAttribute"/> carrying the sacrifice
+  /// cost, or null when absent.
+  ///
+  /// <para>
+  /// CR 118.9: "Some spells have alternative costs. An alternative cost is a cost
+  /// listed in a spell's text, or applied to it from another effect, that its
+  /// controller may pay rather than paying the spell's mana cost. Alternative costs
+  /// are usually phrased, 'You may [action] rather than pay [this object's] mana
+  /// cost,' ..." CR 604.5: "... abilities that say ... 'You may pay [cost] rather than
+  /// pay [this object]'s mana cost' ... work while a spell is on the stack." The line
+  /// is therefore a card-level cost attribute, not an oracle ability — mirroring
+  /// <see cref="TryExtractPitchAlternativeCost"/> above. The "nontoken" qualifier is
+  /// recorded on the filter's <c>IsToken</c> axis (CR 111) rather than dropped.
+  /// </para>
+  /// </summary>
+  private AlternativeCostsAttribute? TryExtractSacrificeAlternativeCost(string? oracleText)
+  {
+    if (string.IsNullOrWhiteSpace(oracleText))
+    {
+      return null;
+    }
+
+    var firstLine = oracleText.Split('\n')[0].Trim();
+    var match = SacrificeAlternativeCostPrefix().Match(firstLine);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var colorCode = match.Groups["color"].Value.ToLowerInvariant() switch
+    {
+      "white" => "W",
+      "blue" => "U",
+      "black" => "B",
+      "red" => "R",
+      "green" => "G",
+      _ => throw new InvalidOperationException("Unreachable: regex only matches the five color words."),
+    };
+
+    var cost = new AlternativeCost
+    {
+      Cost = new SacrificeCost
+      {
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Colors = [colorCode],
+          IsToken = false,
+        },
+        Quantity = LiteralQuantity.Of(1),
       },
       SourceSpan = new TextSpan(0, firstLine.Length),
     };
