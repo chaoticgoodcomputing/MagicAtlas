@@ -477,6 +477,29 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Prevent all damage that would be dealt to you." (Glacial Chasm) — the same
+    // always-on damage-prevention shield as the three intercepts above, scoped to
+    // the controlling player ("you") rather than a creature or Equipment/Aura
+    // recipient, with no "by [source]" qualifier. CR 604.2: a permanent,
+    // continuously-active static ability, not an imperative one-shot
+    // spell-resolution step, even though "Prevent" heads the generic
+    // spell-instruction-verb list below. Anchored on "to you" immediately after
+    // "dealt" (word-boundary, no trailing "control") so it cannot collide with the
+    // "creatures you control" sibling above. Intercept here for the same reason as
+    // the three siblings above.
+    if (Regex.IsMatch(
+      clause.RawText.TrimStart(),
+      @"^Prevent\s+all\s+damage\s+that\s+would\s+be\s+dealt\s+to\s+you\b",
+      RegexOptions.IgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Spell-style instruction verbs at clause start: imperative effect
     // descriptions consistent with sorcery/instant resolution (Rule 113.3a).
     // Also fires for modal option bodies dispatched through the registry, where

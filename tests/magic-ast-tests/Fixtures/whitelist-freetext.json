@@ -966,6 +966,12 @@
       "sink": "AbilityText",
       "tag": "irreducible",
       "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
+      "card": "GlacialChasm",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — cumulative upkeep's CR 702.24a intervening-if 'this permanent is on the battlefield', same residual category as InnerSanctum's and PsychicVortex's (sibling cumulative-upkeep printings)."
     }
   ]
 }

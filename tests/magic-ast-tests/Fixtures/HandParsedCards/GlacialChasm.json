@@ -1,0 +1,131 @@
+{
+  "Input": {
+    "Name": "Glacial Chasm",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "Cumulative upkeep—Pay 2 life. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhen this land enters, sacrifice a land.\nCreatures you control can't attack.\nPrevent all damage that would be dealt to you.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": ["Cumulative upkeep"],
+    "Id": "0c008129-daba-46bc-829c-d2c0c13ecdd3",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Glacial Chasm",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": ["Land"]
+    },
+    "Oracle": {
+      "RawText": "Cumulative upkeep—Pay 2 life. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhen this land enters, sacrifice a land.\nCreatures you control can't attack.\nPrevent all damage that would be dealt to you.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Cumulative upkeep",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "this permanent is on the battlefield"
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": { "Kind": "Self" },
+              "CounterType": "age",
+              "Count": { "QuantityType": "literal", "Value": 1 }
+            },
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "sacrifice",
+                "Target": { "Kind": "Self" }
+              },
+              "Unless": {
+                "Player": { "Kind": "Controller" },
+                "Cost": {
+                  "CostType": "scaledCost",
+                  "PerUnit": {
+                    "CostType": "payLife",
+                    "Amount": { "QuantityType": "literal", "Value": 2 }
+                  },
+                  "Count": {
+                    "QuantityType": "counterCount",
+                    "CounterType": "age",
+                    "On": { "Kind": "Self" }
+                  }
+                }
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)"
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["land"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "Any",
+                "Filter": {
+                  "CardTypes": ["land"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantAttack",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "preventDamage",
+              "All": true,
+              "Target": { "Kind": "You" }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
