@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Semblance Anvil",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "Imprint — When this artifact enters, you may exile a nonland card from your hand.\nSpells you cast that share a card type with the exiled card cost {2} less to cast.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": ["Imprint"],
+    "Id": "0380b46d-1660-404d-9d11-705d8809ea46",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Semblance Anvil",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Imprint — When this artifact enters, you may exile a nonland card from your hand.\nSpells you cast that share a card type with the exiled card cost {2} less to cast.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "AbilityWord": "Imprint",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "artifact"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "exile",
+                "Target": {
+                  "Kind": "Any",
+                  "Filter": {
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "ExcludedCardTypes": [
+                      "land"
+                    ],
+                    "Controller": "You",
+                    "Zone": "Hand"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": [
+              "spell"
+            ],
+            "Controller": "You",
+            "SharesCardTypeWith": {
+              "Kind": "Any",
+              "Filter": {
+                "Zone": "Exile",
+                "ExiledWith": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

@@ -161,6 +161,21 @@ public sealed record ObjectFilter
   public ObjectReference? SharesNameWith { get; init; }
 
   /// <summary>
+  /// Relational card-type axis: filters to objects that share a card type with a referenced
+  /// object — "Spells you cast that share a card type with the exiled card cost {2} less to
+  /// cast" (Semblance Anvil, CR 118.7 cost reduction). CR 110.4 (card types: artifact,
+  /// creature, enchantment, instant, land, planeswalker, sorcery, etc.). Parallels
+  /// <see cref="SharesCreatureTypeWith"/> (the creature-subtype sibling, CR 205.3) and
+  /// <see cref="SharesColorWith"/> (the color sibling): the card types to match are those the
+  /// referenced object CURRENTLY has, resolved by a consumer, not a literal
+  /// <see cref="CardTypes"/> list. The referent is typically the card exiled by a linked
+  /// Imprint ability (CR 702.38) — an <see cref="ObjectReference"/> with Zone.Exile +
+  /// ExiledWith: Self (ADR 0004 "reference not resolution").
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? SharesCardTypeWith { get; init; }
+
+  /// <summary>
   /// Filters to colorless objects (those with no colors at all). Rule 105.1.
   /// Mutually exclusive with <see cref="Colors"/> in practice (a card cannot
   /// be both colorless and have a color).
