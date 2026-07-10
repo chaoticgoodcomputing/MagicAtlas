@@ -1573,6 +1573,12 @@
           ]
         },
         {
+          "Type": "MayPlayTargetFromExileEffect",
+          "Discriminator": "mayPlayTargetFromExile",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "MegamorphEffect",
           "Discriminator": "megamorph",
           "IsUnparsed": false,
@@ -2707,5 +2713,5 @@
       ]
     }
   ],
-  "SchemaHash": "558a923104f60a818749561dbf92268dac00c015d1158c96bc426a68d963b8d2"
+  "SchemaHash": "02ebf27a7010fa7bf4bc80319a3363192146ab571a276ea0eb2b2712803050c5"
 }
