@@ -111,6 +111,17 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
       @"\bon\s+each\s+other\s+(?<subtype>[A-Za-z]+)\s+creature\s+you\s+control\b",
       RegexOptions.IgnoreCase
     );
+    // "put a +1/+1 counter on each other creature you control" — bare mass-counter
+    // shape with no subtype restriction (Primeval Protector). The eachOtherMatch
+    // pattern above requires a subtype word between "other" and "creature"; its
+    // subtype group can never match the literal "creature" that follows it here
+    // (there is no word between "other" and "creature"), so the two patterns
+    // cannot collide.
+    var eachOtherBareMatch = Regex.Match(
+      text,
+      @"\bon\s+each\s+other\s+creature\s+you\s+control\b",
+      RegexOptions.IgnoreCase
+    );
     if (eachOtherMatch.Success)
     {
       var subtype = eachOtherMatch.Groups["subtype"].Value;
@@ -123,6 +134,19 @@ public sealed class PutCountersTriggeredRule : ITriggeredRule
         {
           CardTypes = ["creature"],
           Subtypes = [subtype],
+          Controller = ControllerFilter.You,
+          ExcludeSelf = true,
+        },
+      };
+    }
+    else if (eachOtherBareMatch.Success)
+    {
+      target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
           Controller = ControllerFilter.You,
           ExcludeSelf = true,
         },

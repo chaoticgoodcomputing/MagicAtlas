@@ -1,0 +1,128 @@
+{
+  "Input": {
+    "Name": "Primeval Protector",
+    "ManaCost": "{10}{G}",
+    "TypeLine": "Creature — Avatar",
+    "OracleText": "This spell costs {1} less to cast for each creature your opponents control.\nWhen this creature enters, put a +1/+1 counter on each other creature you control.",
+    "Power": "10",
+    "Toughness": "10",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": [],
+    "Id": "15ab4c3b-323a-47c6-b675-447d16def3d5",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Primeval Protector",
+    "TypeLine": {
+      "Raw": "Creature — Avatar",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Avatar"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This spell costs {1} less to cast for each creature your opponents control.\nWhen this creature enters, put a +1/+1 counter on each other creature you control.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "PerObject": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Controller": "Opponent"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{10}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 10
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 11,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 10,
+          "Raw": "10"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 10,
+          "Raw": "10"
+        }
+      }
+    ]
+  }
+}
