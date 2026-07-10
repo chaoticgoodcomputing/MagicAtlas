@@ -546,6 +546,24 @@
           ]
         },
         {
+          "Type": "ConditionalModification",
+          "Discriminator": "conditionalModification",
+          "IsUnparsed": false,
+          "Fields": [
+            "Condition",
+            "Modification"
+          ]
+        },
+        {
+          "Type": "CounterAdder",
+          "Discriminator": "counterAdder",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "CounterType"
+          ]
+        },
+        {
           "Type": "PowerToughnessOverride",
           "Discriminator": "powerToughnessOverride",
           "IsUnparsed": false,
@@ -3035,5 +3053,5 @@
       ]
     }
   ],
-  "SchemaHash": "1dab031c92a8be7138f908460cfdc0a2592085e8b6a3e8a00eead3f9a710f54b"
+  "SchemaHash": "c7ae663ab41b267345e2117b3fbee4b8339ebe95d6e38bbe64a54584972624c5"
 }

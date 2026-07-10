@@ -1,0 +1,126 @@
+{
+  "Input": {
+    "Name": "Spark Double",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Creature — Illusion",
+    "OracleText": "You may have this creature enter as a copy of a creature or planeswalker you control, except it enters with an additional +1/+1 counter on it if it's a creature, it enters with an additional loyalty counter on it if it's a planeswalker, and it isn't legendary.",
+    "Power": "0",
+    "Toughness": "0",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "c41b9ba2-0006-4d8e-b600-efe81ff5e0cc",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Spark Double",
+    "TypeLine": {
+      "Raw": "Creature — Illusion",
+      "Types": ["Creature"],
+      "Subtypes": ["Illusion"]
+    },
+    "Oracle": {
+      "RawText": "You may have this creature enter as a copy of a creature or planeswalker you control, except it enters with an additional +1/+1 counter on it if it's a creature, it enters with an additional loyalty counter on it if it's a planeswalker, and it isn't legendary.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "becomesCopy",
+                "Subject": {
+                  "Kind": "Self"
+                },
+                "CopyTarget": {
+                  "Kind": "Any",
+                  "Filter": {
+                    "CardTypes": ["creature", "planeswalker"],
+                    "Controller": "You"
+                  }
+                },
+                "Modifications": [
+                  {
+                    "ModificationType": "conditionalModification",
+                    "Condition": {
+                      "ConditionType": "objectHasCardType",
+                      "CardType": "creature",
+                      "Subject": "Self"
+                    },
+                    "Modification": {
+                      "ModificationType": "counterAdder",
+                      "CounterType": "+1/+1",
+                      "Count": {
+                        "QuantityType": "literal",
+                        "Value": 1
+                      }
+                    }
+                  },
+                  {
+                    "ModificationType": "conditionalModification",
+                    "Condition": {
+                      "ConditionType": "objectHasCardType",
+                      "CardType": "planeswalker",
+                      "Subject": "Self"
+                    },
+                    "Modification": {
+                      "ModificationType": "counterAdder",
+                      "CounterType": "loyalty",
+                      "Count": {
+                        "QuantityType": "literal",
+                        "Value": 1
+                      }
+                    }
+                  },
+                  {
+                    "ModificationType": "supertypeRemover",
+                    "Supertypes": ["Legendary"]
+                  }
+                ]
+              }
+            }
+          ],
+          "When": "asThisEnters"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        }
+      }
+    ]
+  }
+}
