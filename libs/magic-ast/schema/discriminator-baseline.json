@@ -109,6 +109,7 @@
     "OracleEffect:cantBlock",
     "OracleEffect:cantCastAdditionalSpellsThisTurn",
     "OracleEffect:cantCastMoreThanNSpells",
+    "OracleEffect:cantDrawCards",
     "OracleEffect:cantGainLife",
     "OracleEffect:cantHaveOrGainKeyword",
     "OracleEffect:cantLoseGameForZeroLife",
