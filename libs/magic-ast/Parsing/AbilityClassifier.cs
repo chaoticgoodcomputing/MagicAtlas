@@ -538,6 +538,34 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "The next time a source of your choice would deal damage to you this turn,
+    // prevent that damage. …" — the uncoloured one-shot prevention shield printed as
+    // a spell (instant) resolution effect (Intervention Pact, Reverse Damage,
+    // Invulnerability, New Way Forward, Deflecting Palm). The clause opens with the
+    // resolution instruction "The next time …" (not an imperative verb, so
+    // StartsWithSpellInstructionVerb below misses it), which otherwise falls through
+    // to the Static default and stalls in StaticAbilityParser. Route it to the spell
+    // parser, where PreventNextDamageFromChosenSourceSpellRule builds the
+    // PreventDamageEffect and any trailing "You gain life …" sentence is dispatched to
+    // its own spell rule. ANCHORED at clause start: the activated cost-gated forms
+    // (Circle/Rune of Protection, Pentagram, Righteous Aura) open with "{cost}:" and
+    // are already routed to the activated parser above, so they never reach here.
+    if (
+      Regex.IsMatch(
+        clause.RawText.TrimStart(),
+        @"^The\s+next\s+time\s+a\s+source\s+of\s+your\s+choice\s+would\s+deal\s+damage\s+to\s+you\s+this\s+turn,\s+prevent\s+that\s+damage\b",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Spell-style instruction verbs at clause start: imperative effect
     // descriptions consistent with sorcery/instant resolution (Rule 113.3a).
     // Also fires for modal option bodies dispatched through the registry, where
