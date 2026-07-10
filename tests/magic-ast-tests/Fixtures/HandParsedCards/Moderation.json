@@ -1,0 +1,91 @@
+{
+  "Input": {
+    "Name": "Moderation",
+    "ManaCost": "{1}{W}{U}",
+    "TypeLine": "Enchantment",
+    "OracleText": "You can't cast more than one spell each turn.\nWhenever you cast a spell, draw a card.",
+    "Colors": ["U", "W"],
+    "ColorIdentity": ["U", "W"],
+    "Keywords": [],
+    "Id": "c41b3d7a-f8e1-46b8-a689-6125dcd9cb17",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Moderation",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You can't cast more than one spell each turn.\nWhenever you cast a spell, draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantCastMoreThanNSpells",
+              "Player": {
+                "Kind": "You"
+              },
+              "MaxPerPeriod": 1,
+              "Period": "eachTurn"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U", "W"]
+      }
+    ]
+  }
+}
