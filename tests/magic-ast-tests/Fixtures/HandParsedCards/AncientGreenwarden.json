@@ -1,0 +1,143 @@
+{
+  "Input": {
+    "Name": "Ancient Greenwarden",
+    "ManaCost": "{4}{G}{G}",
+    "TypeLine": "Creature — Elemental",
+    "OracleText": "Reach (This creature can block creatures with flying.)\nYou may play lands from your graveyard.\nIf a land entering causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.",
+    "Power": "5",
+    "Toughness": "7",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Reach"
+    ],
+    "Id": "12a0bf5c-a165-48f1-9a57-3a7cc9f3b0f9",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Ancient Greenwarden",
+    "TypeLine": {
+      "Raw": "Creature — Elemental",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Reach (This creature can block creatures with flying.)\nYou may play lands from your graveyard.\nIf a land entering causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Reach"
+            }
+          ],
+          "KeywordSource": "Reach",
+          "Reminder": {
+            "Text": "(This creature can block creatures with flying.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "mayPlayFromGraveyard",
+              "Cards": {
+                "CardTypes": [
+                  "land"
+                ],
+                "Zone": "Graveyard",
+                "Controller": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "abilityTrigger",
+                "AffectedObjects": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Controller": "You"
+                },
+                "CausedByEntering": {
+                  "CardTypes": [
+                    "land"
+                  ]
+                }
+              },
+              "OriginalEventOccurs": true,
+              "Modifier": {
+                "Type": "additionalTime"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 7,
+          "Raw": "7"
+        }
+      }
+    ]
+  }
+}
