@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Fierce Retribution",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Instant",
+    "OracleText": "Cleave {5}{W} (You may cast this spell for its cleave cost. If you do, remove the words in square brackets.)\nDestroy target [attacking] creature.",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": ["Cleave"],
+    "Id": "9597b163-5c6b-4f64-b1f1-5f1fa2e23e5d",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Fierce Retribution",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Cleave {5}{W} (You may cast this spell for its cleave cost. If you do, remove the words in square brackets.)\nDestroy target [attacking] creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Cleave",
+          "Effects": [
+            {
+              "EffectType": "alternativeCast",
+              "FromZone": "Hand",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 5
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": ["W"]
+                  }
+                ]
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(You may cast this spell for its cleave cost. If you do, remove the words in square brackets.)"
+          }
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "combatState",
+                      "State": "Attacking"
+                    }
+                  ]
+                }
+              },
+              "CantBeRegenerated": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}

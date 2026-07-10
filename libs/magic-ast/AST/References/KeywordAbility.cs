@@ -95,6 +95,11 @@ public enum KeywordAbility
   /// <summary>Changeling (CR 702).</summary>
   Changeling,
 
+  /// <summary>Cleave (CR 702.148a). Parameterized — the alternative cleave cost is
+  /// carried by the expanded <see cref="MagicAST.AST.Effects.CardFlow.AlternativeCastEffect"/>,
+  /// not this identity.</summary>
+  Cleave,
+
   /// <summary>Choose a Background (CR 702).</summary>
   [JsonStringEnumMemberName("Choose a Background")]
   ChooseABackground,
