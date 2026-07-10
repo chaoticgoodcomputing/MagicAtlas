@@ -1,0 +1,180 @@
+{
+  "Input": {
+    "Name": "Dalakos, Crafter of Wonders",
+    "ManaCost": "{1}{U}{R}",
+    "TypeLine": "Legendary Creature — Merfolk Artificer",
+    "OracleText": "{T}: Add {C}{C}. Spend this mana only to cast artifact spells or activate abilities of artifacts.\nEquipped creatures you control have flying and haste.",
+    "Power": "2",
+    "Toughness": "4",
+    "Colors": ["R", "U"],
+    "ColorIdentity": ["R", "U"],
+    "Keywords": [],
+    "Id": "57ea0ba2-3ccf-4313-ad1d-161272c48851",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Dalakos, Crafter of Wonders",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Merfolk Artificer",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Merfolk",
+        "Artificer"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: Add {C}{C}. Spend this mana only to cast artifact spells or activate abilities of artifacts.\nEquipped creatures you control have flying and haste.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{C}{C}",
+              "SpendRestriction": "cast artifact spells or activate abilities of artifacts"
+            }
+          ],
+          "IsManaAbility": true
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You",
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "equipped",
+                      "Equipped": true
+                    }
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Characteristics": [
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Flying"
+                        },
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Reach"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "KeywordSource": "Flying"
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You",
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "equipped",
+                      "Equipped": true
+                    }
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Haste"
+                  }
+                ],
+                "KeywordSource": "Haste"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}

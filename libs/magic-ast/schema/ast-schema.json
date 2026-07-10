@@ -252,6 +252,14 @@
           ]
         },
         {
+          "Type": "EquippedStateCharacteristic",
+          "Discriminator": "equipped",
+          "IsUnparsed": false,
+          "Fields": [
+            "Equipped"
+          ]
+        },
+        {
           "Type": "ExtremeStatCharacteristic",
           "Discriminator": "extremeStat",
           "IsUnparsed": false,
@@ -2982,5 +2990,5 @@
       ]
     }
   ],
-  "SchemaHash": "e235551cdc5d7e9ee76fc5a99fd4d8701280254a57a020fbea2eff2d262b8250"
+  "SchemaHash": "52055ea38277e02da927d5ad7e03d797d9c1530c528a59360390fe89d7fe3d64"
 }
