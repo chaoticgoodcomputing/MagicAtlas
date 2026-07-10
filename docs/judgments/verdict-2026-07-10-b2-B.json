@@ -1,0 +1,130 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/RootsOfLife.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 305.6", "CR 607", "CR 603.2"],
+      "reason": "as-enters static (When:asThisEnters) + plain chooseBasicLandType effect recording literal Options subset [Island,Swamp]; line-2 trigger binds ChosenCharacteristic:BasicLandType (structured CR 607 back-ref, not free text); no sibling mislabel on becomes-tapped"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Keyword/ChooseBasicLandTypeEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 305.6", "CR 607"],
+      "reason": "plain choice-declaration effect; Options records the game-affecting printed subset (unlike full-set chooseCardType); timing kept separate on the StaticAbility"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/ChooseBasicLandTypeOnEntryRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 305.6"],
+      "reason": "emits StaticAbility When=AsThisEnters + plain ChooseBasicLandTypeEffect; anchored to basic-land-type words; sibling ChooseColorOnEntryRule untouched (not an edit)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/LandOfChosenTypeBecomesTappedConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 607"],
+      "reason": "anchored to 'a land of the chosen type ... becomes tapped'; structured ChosenCharacteristic:BasicLandType filter; tried before generic BecomesTappedConditionRule so no drop; no sibling mislabel"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#chooseBasicLandType",
+      "verdict": "PASS",
+      "citations": ["CR 607", "CR 614.12"],
+      "reason": "coarse projection is sensible: a basic-land-type-choice declaration is inert for interaction recall (no flow rule reads choice events); consistent with coarse siblings chooseCardType/chooseColor/chooseCreatureType"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FloatingShield.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.16b", "CR 607", "CR 205.3h", "CR 701.21a"],
+      "reason": "all 4 lines parse; 'the chosen color' modeled as ChosenCharacteristic:Color (definite CR 607 back-ref to the once-bound color) on both the enchanted-creature grant and the sac-activated grant, correctly distinct from ChosenColor's fresh per-resolution choice; DoesNotRemoveThisAura preserved"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Keyword/ProtectionQualityKind.cs#ChosenCharacteristic",
+      "verdict": "PASS",
+      "citations": ["CR 607", "CR 614.12"],
+      "reason": "new enum value is the definite CR 607 back-reference to a single already-bound value, doc-distinct from ChosenColor (fresh choice each resolution, Mother of Runes)"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Keyword/ProtectionQuality.cs#ChosenCharacteristic",
+      "verdict": "PASS",
+      "citations": ["CR 607"],
+      "reason": "ChosenCharacteristicKind axis field mirrors ObjectFilter.ChosenCharacteristic; structured, not free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/SacrificeThisAuraCostRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.21a", "CR 205.3h"],
+      "reason": "Aura enchantment-subtype sac cost as CardTypes=[enchantment]+Subtypes=[Aura]+IsSelf; anchored '^Sacrifice this Aura$' above shared helper so no sibling sac cost mislabeled"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/TargetGainsProtectionFromChosenColorActivatedEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.16b", "CR 607"],
+      "reason": "grants protection-from ChosenCharacteristic:Color to plain target creature until EOT; anchored, distinct from 'the color of your choice' ChosenColor sibling; carries no you-control filter matching oracle"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantedHasProtectionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.16b", "CR 607"],
+      "reason": "own-file edit adds 'the chosen color' -> ProtectionQualityKind.ChosenCharacteristic branch; distinct from ChosenColor; leaves existing color/Everything branches intact"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BaneLordOfDarkness.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.12a", "CR 611.2", "CR 119.1", "CR 109.5"],
+      "reason": "static asLongAs (LifeTotal current <= half StartingLifeTotal) + indestructible grant on Self; line-2 dies-trigger creature IsToken=false Controller=You ExcludeSelf=true; optional(Chooser=target opponent, Inner=you draw, IfYouDoNot=you-may put creature with toughness<=ThatCreature); no unparsed, no free text"
+    },
+    {
+      "target": "libs/magic-ast/AST/Quantities/Quantity.cs#StartingLifeTotal",
+      "verdict": "PASS",
+      "citations": ["CR 119.1", "CR 903.7"],
+      "reason": "new DerivedKind for the fixed starting life total, correctly distinct from the current LifeTotal"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/ConditionParser.cs#LifeTotalVsHalfStarting",
+      "verdict": "PASS",
+      "citations": ["CR 119.1"],
+      "reason": "Left=DerivedKind.LifeTotal (current), Right=CalculatedQuantity half of DerivedKind.StartingLifeTotal; operator mapped faithfully; anchored"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/TriggeredRuleHelpers.cs#nontoken-another",
+      "verdict": "PASS",
+      "citations": ["CR 111", "CR 109.5"],
+      "reason": "ExcludeSelf set ONLY when literal 'another nontoken creature' present, else null (byte-identical to prior behavior for plain 'nontoken creature'); corpus grep confirms no existing fixture ('a nontoken creature', 'other target nontoken creature') regresses"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/AsLongAsLifeThresholdSelfKeywordGrantRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.2", "CR 702.12a", "CR 201.5"],
+      "reason": "card-name subject resolves to Self back-ref; condition parsed to QuantityComparison wrapped in AsLongAsDuration; anchored, disjoint from AsLongAsStaticGrantRule pronoun forms"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TargetOpponentMayDrawElsePutCreatureFromHandRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 109.5"],
+      "reason": "faithful optional nesting (opponent chooser / you-draw inner / IfYouDoNot you-may put-from-hand with ThatCreature toughness comparison); anchored, priority above lossy DrawCardsTriggeredRule that previously swallowed chooser+fallback"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FireCovenant.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2d", "CR 601.2f", "CR 601.2b"],
+      "reason": "spell dealDamage Amount=X, Divided=true, Target=creature anyAmount; additional-cost PayLifeCost Amount=X IsOptional=false; matches 601.2d divide-among-targets verbatim and 601.2f additional-cost"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Damage/DealDamageEffect.cs#Divided",
+      "verdict": "PASS",
+      "citations": ["CR 601.2d"],
+      "reason": "additive bool records the divide-among-targets fact (601.2d verbatim in doc-comment); structured, not a free-text or timing-baking shortcut; no new discriminator introduced"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/AbilityClassifier.cs#deals-damage-divided",
+      "verdict": "PASS",
+      "citations": ["CR 601.2d", "CR 113.3a"],
+      "reason": "routes 'deals N damage divided ... among' to Spell; anchored on the literal 'divided ... among' surface so it does not reroute sibling 'deals N damage to' cards; excludes quoted text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/AttributeExtractor.cs#pay-X-life",
+      "verdict": "PASS",
+      "citations": ["CR 601.2f", "CR 601.2b"],
+      "reason": "pay-X-life additional cost reuses PayLifeCost with VariableQuantity X; anchored '^As an additional cost to cast this spell, pay ... life.$'; leaves the sacrifice family branch intact"
+    }
+  ]
+}

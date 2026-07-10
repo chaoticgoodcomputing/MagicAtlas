@@ -1,0 +1,94 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/MayPlayLandsAndCastSpellsFromTopOfLibraryRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 604.2", "CR 305.1", "CR 601.2"],
+      "reason": "reuses MayPlayFromTopOfLibraryEffect with Actions [PlayLands,CastSpells], SpellAltCost null; anchored ^...$ so disjoint from Bolas's Citadel/lands-only/Reality Chip siblings; all cited rules present and matching"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MagusOfTheFuture.json",
+      "verdict": "PASS",
+      "citations": ["CR 604.2"],
+      "reason": "playWithTopRevealed + mayPlayFromTopOfLibrary(PlayLands,CastSpells) via reused nodes; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/AsLongAsInGraveyardKeywordGrantRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 112.6a", "CR 113.6a", "CR 113.6b"],
+      "reason": "doc-comment cites CR 112.6a for the graveyard-functioning-ability grounding, but 112.6a is absent from rules-structure.json (rule 112 = 'Spells', only 112.1-112.4); the correct rule is CR 113.6a (characteristic-defining) / 113.6b (states which zones it functions in) under 113 'Abilities'. Modeling itself (IsSelf+Zone.Graveyard CountCondition + AllCondition + AsLongAsDuration + GainAbilityEffect trample) is sound and 702.19a is correct, but the primary citation is nonexistent"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Brawn.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.19a"],
+      "reason": "trample keyword line + gainAbility(Each creature you control) trample gated by AsLongAsDuration(AllCondition[self-in-graveyard, control-a-Forest]); structured, no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SubtypeCreatureEntersConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 603.6a", "CR 205.3m"],
+      "reason": "trigger condition creature+Rogue subtype with no controller qualifier (disjoint from you-control/another siblings), anchored end-$; cited rules present"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/AttachThisEquipmentToItTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.3", "CR 603.6a"],
+      "reason": "AttachEffect Target=It back-reference wrapped Optional; anchored ^...$ bare 'attach this <type> to it', cannot steal compound siblings"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CloakAndDagger.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.6a", "CR 701.3"],
+      "reason": "line-1 shroud compound (modifyPT + gainAbility Shroud) and Equip {3} activated (attach target creature you control, OnlyAsSorcery) via existing rules; trigger + optional attach-to-It; reminder text dropped; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Keywords/Definitions/EquipNonManaCostKeyword.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.6a"],
+      "reason": "em-dash non-mana equip cost, reuses KeywordAbility.Equip + DiscardCost + AttachEffect(target creature you control) + OnlyAsSorcery; 702.6a verbatim matches; combinator requires Equip EmDash Discard so it cannot steal other Equip- sibling forms"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MurderersAxe.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.6a"],
+      "reason": "modifyPT +2/+2 + Equip-Discard a card (discard cost qty 1, attach target creature you control, OnlyAsSorcery); no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/AttachedModifyPTAndDoesntUntapRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.6", "CR 502.3", "CR 611.3"],
+      "reason": "one StaticAbility with ModifyPTEffect + DoesntUntapEffect both on EnchantedOrEquipped; anchored ^...$; 502.3 verbatim matches; sibling of AttachedModifyPTAndGoadedRule"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/T45PowerArmor.json",
+      "verdict": "PASS",
+      "citations": ["CR 502.3", "CR 122.1b"],
+      "reason": "target doesn't-untap line is full L2 (modifyPT +3/+3 + doesntUntap 'its controller's'); ETB energy gain + upkeep trigger parse structured; upkeep consequent is a whitelisted UnstructuredEffect (tag debt) for a genuine gap - no choice-among-enumerated-named-counter-types node exists (menace/trample/lifelink keyword counters, CR 122.1b). NOTE: whitelist reason miscites CR 122.1e (loyalty counters) where it means 122.1b (keyword counters) - same-parent subrule-letter slip, not a FAIL per scope; and the free-text over-captures modellable pay/if-you-do/untap alongside the genuine gap"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/ArtifactsActivatedAbilitiesLockedRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 602.5", "CR 604.2", "CR 611.1"],
+      "reason": "symmetric lock: AffectedObjects=artifact filter with NO Controller (correct for Collector Ouphe, affects all artifacts) + CantActivateAbilitiesEffect; anchored ^...$; 602.5 verbatim matches; disjoint from opponent-scoped sibling"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CollectorOuphe.json",
+      "verdict": "PASS",
+      "citations": ["CR 602.5"],
+      "reason": "static AffectedObjects=artifact + cantActivateAbilities; symmetric, no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/ControlledCreaturesWithCounterHaveKeywordRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 604.2", "CR 702.19a", "CR 122.1"],
+      "reason": "new sibling file (did NOT edit F12 ControlledFilterHaveKeywordListRule); gainAbility(Each creature you control) with structured CounterCharacteristic filter (+1/+1) granting trample; anchored ^...$; counter presence structured not free-text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Badgermole.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.19a", "CR 122.1"],
+      "reason": "earthbend 2 ETB (reused earthbend effect, reminder captured) + static gainAbility with CounterCharacteristic(+1/+1) filter granting trample; no unparsed, no sibling mislabel"
+    }
+  ]
+}
