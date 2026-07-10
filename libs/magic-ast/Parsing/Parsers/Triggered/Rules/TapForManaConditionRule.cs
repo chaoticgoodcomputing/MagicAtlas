@@ -27,6 +27,13 @@ using MagicAST.AST.Triggers;
 ///     card type. No specific symbol is recorded (<see cref="TriggerCondition.ProducedMana"/> is
 ///     null) — the trigger fires for any mana the enchanted land produces.
 ///   </item>
+///   <item>
+///     Land any-mana: "a player taps a land for mana" (Dictate of Karametra) — the trigger fires
+///     on any mana production by ANY player tapping a land (<c>CardTypes: ["land"]</c>, no
+///     nonland exclusion — the mirror-image of the Kinnan nonland-permanent variant above). No
+///     specific symbol is recorded (<see cref="TriggerCondition.ProducedMana"/> is null).
+///     Controller: You when "you tap"; Any when "a player taps".
+///   </item>
 /// </list>
 ///
 /// CR 106.12: "To 'tap [a permanent] for mana' is to activate a mana ability of that permanent
@@ -64,6 +71,15 @@ public sealed class TapForManaConditionRule : ITriggerConditionRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // "a player taps a land for mana" — Dictate of Karametra shape. No "permanent" word appears
+  // (the tapped object is explicitly "a land"), so this is checked before the "permanent" guard
+  // below. No specific mana symbol; no nonland exclusion (mirrors the Kinnan nonland-permanent
+  // variant, but for lands rather than nonland permanents).
+  private static readonly Regex _tapLandForAnyManaPattern = new(
+    @"\b(?<subject>you|a\s+player)\s+tap[s]?\s+a\s+land\s+for\s+mana\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   public TriggerCondition? Match(string triggerText, string lower, TriggerTiming timing)
   {
     if (!lower.Contains("tap"))
@@ -86,6 +102,29 @@ public sealed class TapForManaConditionRule : ITriggerConditionRule
           IsEnchanted = true,
         },
         // ProducedMana is null — the trigger fires for any mana the enchanted land produces.
+      };
+    }
+
+    // "a player taps a land for mana" — Dictate of Karametra. Checked before the
+    // "permanent" guard because this shape names "a land", not "a permanent".
+    var l = _tapLandForAnyManaPattern.Match(triggerText.Trim());
+    if (l.Success)
+    {
+      var subject = l.Groups["subject"].Value.Trim();
+      var controller = subject.Equals("you", System.StringComparison.OrdinalIgnoreCase)
+        ? ControllerFilter.You
+        : ControllerFilter.Any;
+
+      return new TriggerCondition
+      {
+        Timing = timing,
+        Event = TriggerEvent.TapsForMana,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["land"],
+          Controller = controller,
+        },
+        // ProducedMana is null — the trigger fires for any mana type.
       };
     }
 
