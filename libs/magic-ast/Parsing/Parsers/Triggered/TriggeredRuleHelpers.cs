@@ -381,6 +381,24 @@ internal static class TriggeredRuleHelpers
       return new ObjectFilter { CardTypes = ["artifact"], Controller = controller, ExcludeSelf = excludeSelf };
     }
 
+    // "a nonartifact permanent" / "another nonartifact permanent" — CR 110.4 (the six permanent
+    // types) / CR 301 (the artifact card type). A permanent that lacks the artifact card type,
+    // modeled via the general non-[type] negation axis (CardTypes=["permanent"] +
+    // ExcludedCardTypes=["artifact"]), mirroring the "nontoken creature" branch above. Checked
+    // before the plain "a permanent"/"another permanent" branch below so the artifact exclusion
+    // is never lost (Cloudstone Curio: "Whenever a nonartifact permanent you control enters, ...").
+    if (lower.Contains("nonartifact permanent"))
+    {
+      var excludeSelf = lower.Contains("another nonartifact permanent") ? (bool?)true : null;
+      return new ObjectFilter
+      {
+        CardTypes = ["permanent"],
+        ExcludedCardTypes = ["artifact"],
+        Controller = controller,
+        ExcludeSelf = excludeSelf,
+      };
+    }
+
     // Permanent ETB triggers: "Whenever a permanent enters, ..."
     if (lower.Contains("a permanent") || lower.Contains("another permanent"))
     {
