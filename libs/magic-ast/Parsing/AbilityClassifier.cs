@@ -446,6 +446,35 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Take an extra turn after this one." / "Take two extra turns after this
+    // one." — a one-shot spell-resolution effect that schedules additional
+    // turn(s) (CR 500.7: "Some effects can give a player extra turns. They do
+    // this by adding the turns directly after the specified turn."). "Take" is
+    // not in the generic <see cref="_spellInstructionVerbs"/> allowlist (too
+    // broad to allowlist bare — "Take" isn't otherwise a common spell verb),
+    // so without this intercept the clause defaults to Static and stalls in
+    // the unimplemented static-ability parser. Anchored to the specific
+    // "extra turn(s) after this one" frame so it doesn't swallow unrelated
+    // "Take ..." phrasings. The loyalty-ability and activated-cost forms
+    // ("−N: Take an extra turn after this one.") are already intercepted
+    // earlier by <see cref="TryClassifyAsLoyalty"/> / <see cref="IsActivatedAbilityPattern"/>,
+    // so this only fires for the bare spell-body form (e.g. Temporal Manipulation).
+    if (
+      Regex.IsMatch(
+        clause.RawText.TrimStart(),
+        @"^Take\s+(?:an|one|two|three|\S+)\s+extra\s+turns?\s+after\s+this\s+one",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Lines beginning with "Until end of turn, ..." are resolution
     // instructions on the spell, not declarative statics — the duration
     // clause is parsed as part of the effect by SpellAbilityParser.
