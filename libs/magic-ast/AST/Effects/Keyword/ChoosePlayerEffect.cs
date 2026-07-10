@@ -1,6 +1,8 @@
 namespace MagicAST.AST.Effects.Keyword;
 
+using System.Text.Json.Serialization;
 using MagicAST.AST.Effects.Traits;
+using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
@@ -28,4 +30,18 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 [OracleEffect("choosePlayer")]
 public sealed record ChoosePlayerEffect : Effect
 {
+  /// <summary>
+  /// Restricts the pool of players eligible to be chosen — "choose an opponent"
+  /// (The Rack, CR 614.12 as-enters replacement binding) sets this to
+  /// <see cref="ControllerFilter.Opponent"/>. Null for the unrestricted "choose a
+  /// player" printing (Sawhorn Nemesis), which may choose any player including
+  /// the controller. Reuses <see cref="ControllerFilter"/> — the same closed
+  /// player-identity vocabulary <see cref="MagicAST.AST.References.GameTime.Whose"/>
+  /// and <see cref="MagicAST.AST.Effects.Replacement.TurnPartEvent.Whose"/> already
+  /// use for "whose turn/step" — rather than a free-text restriction string,
+  /// because "opponent" is a closed, structured concept the AST already names,
+  /// not open-ended prose.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ControllerFilter? Scope { get; init; }
 }

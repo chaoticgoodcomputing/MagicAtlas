@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "The Rack",
+    "ManaCost": "{1}",
+    "TypeLine": "Artifact",
+    "OracleText": "As this artifact enters, choose an opponent.\nAt the beginning of the chosen player's upkeep, this artifact deals X damage to that player, where X is 3 minus the number of cards in their hand.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "696d1e25-5c25-4522-b085-90d49fe23a18",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "The Rack",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "As this artifact enters, choose an opponent.\nAt the beginning of the chosen player's upkeep, this artifact deals X damage to that player, where X is 3 minus the number of cards in their hand.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "choosePlayer",
+              "Scope": "Opponent"
+            }
+          ],
+          "When": "asThisEnters"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "ChosenPlayer"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "literal",
+                  "Value": 3
+                },
+                "Operation": "subtract",
+                "OperandQuantity": {
+                  "QuantityType": "count",
+                  "CountOf": {
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "Owner": "ThatPlayer",
+                    "Zone": "Hand"
+                  }
+                }
+              },
+              "Target": {
+                "Kind": "ThatPlayer"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
