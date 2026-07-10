@@ -428,6 +428,14 @@
           ]
         },
         {
+          "Type": "ObjectIsEquippedCondition",
+          "Discriminator": "objectIsEquipped",
+          "IsUnparsed": false,
+          "Fields": [
+            "Reference"
+          ]
+        },
+        {
           "Type": "OtherCondition",
           "Discriminator": "other",
           "IsUnparsed": false,
@@ -2905,5 +2913,5 @@
       ]
     }
   ],
-  "SchemaHash": "a8baecf6cf47f0d50e9c508376b89cb7493f819c1d1712dff2e9017e781e8a11"
+  "SchemaHash": "31ccde356f98d5ed7483250416e9c6e2f2880607c8cc53949c388a0288a53adc"
 }
