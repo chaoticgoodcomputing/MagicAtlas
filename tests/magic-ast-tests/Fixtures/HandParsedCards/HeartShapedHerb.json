@@ -1,0 +1,127 @@
+{
+  "Input": {
+    "Name": "Heart-Shaped Herb",
+    "ManaCost": "{4}",
+    "TypeLine": "Artifact",
+    "OracleText": "If a source an opponent controls would deal damage to you, prevent 1 of that damage.\n{2}, {T}, Sacrifice this artifact: You may sacrifice a creature. If you do, return that card to the battlefield under its owner's control with three +1/+1 counters on it and you become the monarch.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "1725b91a-bac4-4f91-b2b5-bb66086b54a3",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Heart-Shaped Herb",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "If a source an opponent controls would deal damage to you, prevent 1 of that damage.\n{2}, {T}, Sacrifice this artifact: You may sacrifice a creature. If you do, return that card to the battlefield under its owner's control with three +1/+1 counters on it and you become the monarch.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "damage",
+                "Source": {
+                  "Controller": "Opponent"
+                },
+                "AffectedObjects": {
+                  "Controller": "You"
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "preventDamage",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Target": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 2 }
+              ]
+            },
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["artifact"],
+                "IsSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "sacrifice",
+                "Target": { "Kind": "You" },
+                "Filter": { "CardTypes": ["creature"] }
+              },
+              "IfYouDo": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "returnToBattlefield",
+                    "Target": { "Kind": "It" },
+                    "Tapped": false,
+                    "UnderControl": { "Kind": "Owner" },
+                    "WithCounters": {
+                      "CounterType": "+1/+1",
+                      "Count": { "QuantityType": "literal", "Value": 3 }
+                    }
+                  },
+                  {
+                    "EffectType": "becomeMonarch",
+                    "Player": { "Kind": "You" }
+                  }
+                ]
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
