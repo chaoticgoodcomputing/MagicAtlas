@@ -812,6 +812,12 @@
       "reason": "PB-7 structured-condition buckets — 'you put a Cave onto the battlefield this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound; requires a new PutSubtypeThisWayCondition arm with no current peer"
     },
     {
+      "card": "StopCold",
+      "sink": "AbilityText",
+      "tag": "debt",
+      "reason": "PB-9 LoseAbilityEffect residual — 'all abilities' has no structured ability-scope node yet; same family as AnimateDead's 'enchant creature card in a graveyard' and VraskaBetrayalsSting's 'all other abilities'"
+    },
+    {
       "card": "SwiftReconfiguration",
       "sink": "OtherCharacteristic",
       "tag": "debt",
