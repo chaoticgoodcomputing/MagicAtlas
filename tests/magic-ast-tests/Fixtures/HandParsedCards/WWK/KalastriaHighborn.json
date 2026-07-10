@@ -1,0 +1,148 @@
+{
+  "Input": {
+    "Name": "Kalastria Highborn",
+    "ManaCost": "{B}{B}",
+    "TypeLine": "Creature — Vampire Shaman",
+    "OracleText": "Whenever this creature or another Vampire you control dies, you may pay {B}. If you do, target player loses 2 life and you gain 2 life.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Kalastria Highborn",
+    "TypeLine": {
+      "Raw": "Creature — Vampire Shaman",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire",
+        "Shaman"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever this creature or another Vampire you control dies, you may pay {B}. If you do, target player loses 2 life and you gain 2 life.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Subtypes": [
+                "Vampire"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "colored",
+                      "Colors": [
+                        "B"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "loseLife",
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    },
+                    "Player": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": [
+                          "player"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "EffectType": "gainLife",
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    },
+                    "Player": {
+                      "Kind": "You"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "Instructions": [
+            "you may pay {B}"
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
