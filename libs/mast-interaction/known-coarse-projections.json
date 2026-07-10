@@ -4,6 +4,7 @@
     "activateLoyaltyAbilityAsThough": "CR 606.3 loyalty-activation permission grant — resets the once-per-turn restriction for a planeswalker's loyalty abilities; no flow rule reads loyalty-activation permission events yet; consciously inert for interaction recall",
     "adapt": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "grantAlternativeCost": "alternative-cost grant (CR 118.9 'you may pay [cost] rather than pay the mana cost') — a cost-replacement permission; no interaction flow rule reads alternative-cost grants yet; consciously inert for interaction recall (Rooftop Storm)",
+    "grantAdditionalCost": "additional-cost grant (CR 601.2f 'plus all additional costs') for a filtered class of OTHER spells the controller casts — a cost-addition permission, sibling of grantAlternativeCost; no interaction flow rule reads additional-cost grants yet; consciously inert for interaction recall (Defiler of Instinct)",
     "addType": "additive card-type/subtype grant (CR 205.1a 'in addition to their other types') — type-line characteristic, no interaction flow rule reads additive type grants yet; consciously inert for interaction recall",
     "additionalCastCost": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "allMustBlock": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
