@@ -149,4 +149,7 @@ public enum ObjectReferenceKind
 
   /// <summary>"the encoded creature" — the creature a ciphered spell is encoded on (CR 702.99); its combat damage triggers casting a copy. Paired with <see cref="Effects.ZoneChange.ExileEffect.EncodedOn"/> on the production side.</summary>
   Encoded,
+
+  /// <summary>"that permanent" — the permanent named by a becomes-unattached trigger condition (CR 701.3d: "becoming unattached [from that object or player]"), e.g. "Whenever this Equipment becomes unattached from a permanent, sacrifice that permanent" (Stitcher's Graft). Permanent analogue of <see cref="ThatCreature"/>/<see cref="ThatPlayer"/> — refers back to the object the trigger's <see cref="MagicAST.AST.Triggers.TriggerCondition"/> Filter identified (the object detached FROM), not the ability's own source (<see cref="Self"/>). Kept distinct from <see cref="ThatCreature"/> because the oracle text itself types the detached-from object generically as a permanent, not narrowed to creature (CR 301.5c: "An Equipment that equips an illegal or nonexistent permanent becomes unattached from that permanent but remains on the battlefield").</summary>
+  ThatPermanent,
 }

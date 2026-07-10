@@ -1,0 +1,115 @@
+{
+  "Input": {
+    "Name": "Stitcher's Graft",
+    "ManaCost": "{1}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "Equipped creature gets +3/+3.\nWhenever equipped creature attacks, it doesn't untap during its controller's next untap step.\nWhenever this Equipment becomes unattached from a permanent, sacrifice that permanent.\nEquip {2}",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": ["Equip"],
+    "Id": "a5dad4be-599b-4c4d-a957-3fe6b52b4141",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Stitcher's Graft",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": ["Artifact"],
+      "Subtypes": ["Equipment"]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature gets +3/+3.\nWhenever equipped creature attacks, it doesn't untap during its controller's next untap step.\nWhenever this Equipment becomes unattached from a permanent, sacrifice that permanent.\nEquip {2}",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": { "Kind": "EnchantedOrEquipped" },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 3
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsEquipped": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "doesntUntap",
+              "Target": { "Kind": "It" },
+              "WhoseUntapStep": "its controller's next"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesUnattached",
+            "Filter": {
+              "CardTypes": ["permanent"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": { "Kind": "ThatPermanent" }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "generic", "GenericAmount": 2 }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Restrictions": ["OnlyAsSorcery"],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 }
+        ],
+        "ManaValue": 1
+      },
+      { "Kind": "colors", "Colors": [] },
+      { "Kind": "colorIdentity", "ColorIdentity": [] }
+    ]
+  }
+}
