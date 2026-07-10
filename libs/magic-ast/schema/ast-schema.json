@@ -845,6 +845,15 @@
           ]
         },
         {
+          "Type": "AddColorEffect",
+          "Discriminator": "addColor",
+          "IsUnparsed": false,
+          "Fields": [
+            "Colors",
+            "Target"
+          ]
+        },
+        {
           "Type": "AddManaEffect",
           "Discriminator": "addMana",
           "IsUnparsed": false,
@@ -1801,6 +1810,14 @@
           ]
         },
         {
+          "Type": "LoseTheGameEffect",
+          "Discriminator": "loseTheGame",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
           "Type": "LoseTypeEffect",
           "Discriminator": "loseType",
           "IsUnparsed": false,
@@ -2297,6 +2314,14 @@
           "IsUnparsed": false,
           "Fields": [
             "Tapped",
+            "Target"
+          ]
+        },
+        {
+          "Type": "ReturnToGraveyardEffect",
+          "Discriminator": "returnToGraveyard",
+          "IsUnparsed": false,
+          "Fields": [
             "Target"
           ]
         },
@@ -2950,6 +2975,12 @@
           "Fields": []
         },
         {
+          "Type": "OpponentCountQuantity",
+          "Discriminator": "opponentCount",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "RemainderQuantity",
           "Discriminator": "remainder",
           "IsUnparsed": false,
@@ -3037,6 +3068,12 @@
           ]
         },
         {
+          "Type": "ManaProductionEvent",
+          "Discriminator": "manaProduction",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "MillEvent",
           "Discriminator": "mill",
           "IsUnparsed": false,
@@ -3077,5 +3114,5 @@
       ]
     }
   ],
-  "SchemaHash": "01cfdc8b0f1f4dddfc847c145cf5ebed67d246bea97720018ce05ba9c81277d4"
+  "SchemaHash": "17ce92b6dd4988e76854730a4e892b5d83366cd8ed4f3a3264a704ee71fa9adf"
 }

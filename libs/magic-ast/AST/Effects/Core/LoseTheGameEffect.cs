@@ -5,7 +5,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// <summary>
 /// "You lose the game." — an absolute game-ending effect where the named player
 /// immediately loses. The mirror of <see cref="WinTheGameEffect"/>: a card effect
-/// that states a player loses the game (CR 104.3a: "A player still in the game
+/// that states a player loses the game (CR 104.3e: "A player still in the game
 /// loses the game as a result of … an effect that states that the player loses the
 /// game.").
 ///

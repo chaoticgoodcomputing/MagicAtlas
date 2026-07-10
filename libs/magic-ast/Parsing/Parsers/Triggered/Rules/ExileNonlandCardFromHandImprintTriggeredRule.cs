@@ -11,8 +11,9 @@ using MagicAST.AST.References;
 /// (Semblance Anvil, Mirrodin Besieged / MBS:224).
 ///
 /// <para>
-/// CR 702.38 (Imprint): an imprint ability exiles a card from the controller's hand onto
-/// this permanent so a second ability may reference it. The exile is a one-shot effect
+/// Imprint is an ability word (flavor, not a CR keyword in this ruleset): an imprint
+/// ability exiles a card from the controller's hand onto this permanent so a second ability
+/// may reference the exiled card (a linked ability, CR 406.6). The exile is a one-shot effect
 /// (Rule 701.13) from Zone.Hand: the controller chooses an eligible card from their hand
 /// (not a targeted card — the word "target" does not appear) and exiles it. The choice is
 /// modelled as <see cref="ObjectReferenceKind.Any"/> (controller-choice reference, CR 109.5)

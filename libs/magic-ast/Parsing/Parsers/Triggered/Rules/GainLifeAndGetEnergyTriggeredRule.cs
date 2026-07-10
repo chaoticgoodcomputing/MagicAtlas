@@ -21,7 +21,7 @@ using MagicAST.AST.References;
 /// </para>
 ///
 /// <para>
-/// CR 119.3 / CR 701.20 (gain life); CR 107.14 (energy counters — the {E} symbol
+/// CR 119.3 (gain life); CR 107.14 (energy counters — the {E} symbol
 /// represents one energy counter each); CR 122.1 (counters are a player/permanent
 /// resource marker). The trailing reminder "(an energy counter)" is normally stripped by
 /// <c>TriggeredAbilityParser.ExtractTrailingReminder</c> upstream; an optional trailing

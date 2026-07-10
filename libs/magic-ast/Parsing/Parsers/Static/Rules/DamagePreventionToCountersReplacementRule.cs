@@ -32,7 +32,7 @@ using MagicAST.AST.References;
 ///   <c>PreventDamageEffect</c> (All=true) targeting "that creature" — the
 ///   affected creature, referenced anaphorically as <c>It</c> (CR 109.2); and
 ///   (2) a <c>PutCountersEffect</c> placing "+1/+1" counters on that same
-///   creature (<c>It</c>) with a <c>DerivedQuantity(DamageDealt)</c> count —
+///   creature (<c>It</c>) with a <c>DerivedQuantity(DamagePrevented)</c> count —
 ///   "for each 1 damage prevented this way" = the prevented damage amount
 ///   (CR 615.5), mirroring how the sibling
 ///   <c>DamagePreventionAndMillReplacementRule</c> (The Mindskinner) records
@@ -101,12 +101,12 @@ public sealed class DamagePreventionToCountersReplacementRule : IStaticRule
                 },
                 // "Put a +1/+1 counter on that creature for each 1 damage
                 // prevented this way" — additional effect (CR 615.5). Count =
-                // the prevented damage amount (DerivedFrom: DamageDealt).
+                // the prevented damage amount (DerivedFrom: DamagePrevented).
                 new MagicAST.AST.Effects.Counter.PutCountersEffect
                 {
                   Target = new ObjectReference { Kind = ObjectReferenceKind.It },
                   CounterType = "+1/+1",
-                  Count = new DerivedQuantity { DerivedFrom = DerivedKind.DamageDealt },
+                  Count = new DerivedQuantity { DerivedFrom = DerivedKind.DamagePrevented },
                 },
               ],
             },

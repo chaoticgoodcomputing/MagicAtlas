@@ -64,7 +64,7 @@
                     "CounterType": "+1/+1",
                     "Count": {
                       "QuantityType": "derived",
-                      "DerivedFrom": "DamageDealt"
+                      "DerivedFrom": "DamagePrevented"
                     }
                   }
                 ]
