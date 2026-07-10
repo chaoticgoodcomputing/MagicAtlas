@@ -1,0 +1,22 @@
+{
+  "shard": "rejudge",
+  "batch": 7,
+  "date": "2026-07-10",
+  "items": [
+    {
+      "family": "L18",
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ReturnTargetTypeOrSubtypeFromGraveyardToHandTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 400.7", "CR 404.1", "CR 402.1", "CR 205.3"],
+      "reason": "spurious CR 701.10 (=Double, a keyword action) removed; doc-comment now correctly frames return-to-hand as ordinary zone movement (CR 400.7 exists, is the zone-change rule) 'not a CR 701 keyword action'; only residual '701' is that correct negation. 404.1 graveyard source / 402.1 hand dest / 205.3 subtype-OR all present and accurate."
+    },
+    {
+      "family": "L02/L19-reconcile",
+      "target": "libs/magic-ast/AST/References/Characteristic.cs#EquippedStateCharacteristic",
+      "verdict": "PASS",
+      "citations": ["CR 702.6"],
+      "reason": "exactly ONE EquippedStateCharacteristic definition = superset record with required bool Equipped; FromLabel 'equipped'=>{Equipped=true}, 'unequipped'=>{Equipped=false}; no duplicate, no bare-marker remnant, no conflict markers. L02 rule EquippedSubtypeCreaturesHaveKeywordRule emits new EquippedStateCharacteristic{Equipped=true}. KorBlademaster.json gold serializes {CharacteristicType:'equipped',Equipped:true} identical to Dalakos shape; both golds remain faithful (Kor: creature+Subtypes:[Warrior]+equipped:true gainAbility double strike; Dalakos: equipped:true anthem flying/haste). CR 702.6 Equip cited and present."
+    }
+  ],
+  "overall": "PASS"
+}
