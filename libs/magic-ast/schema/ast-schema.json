@@ -499,6 +499,15 @@
           ]
         },
         {
+          "Type": "TargetsFilterCondition",
+          "Discriminator": "targetsFilter",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Subject"
+          ]
+        },
+        {
           "Type": "TriggeringAbilityIsManaCondition",
           "Discriminator": "triggeringAbilityIsMana",
           "IsUnparsed": false,
@@ -3035,5 +3044,5 @@
       ]
     }
   ],
-  "SchemaHash": "1dab031c92a8be7138f908460cfdc0a2592085e8b6a3e8a00eead3f9a710f54b"
+  "SchemaHash": "be806ad7f11ce6e492b4ec9a5d326d46a39d875e163c664b290896fb7d82cf76"
 }

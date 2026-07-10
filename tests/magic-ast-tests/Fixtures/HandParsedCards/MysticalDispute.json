@@ -1,0 +1,77 @@
+{
+  "Input": {
+    "Name": "Mystical Dispute",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "This spell costs {2} less to cast if it targets a blue spell.\nCounter target spell unless its controller pays {3}.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "fbe04cb8-a8b9-4241-baae-b398a2509a3a",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Mystical Dispute",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "This spell costs {2} less to cast if it targets a blue spell.\nCounter target spell unless its controller pays {3}.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            }
+          ],
+          "Condition": {
+            "ConditionType": "targetsFilter",
+            "Subject": "It",
+            "Filter": {
+              "CardTypes": ["spell"],
+              "Colors": ["U"]
+            }
+          }
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": { "Kind": "Target", "Filter": { "CardTypes": ["spell"] } }
+              },
+              "Unless": {
+                "Player": { "Kind": "Controller" },
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [ { "Kind": "generic", "GenericAmount": 3 } ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3
+      },
+      { "Kind": "colors", "Colors": ["U"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U"] }
+    ]
+  }
+}
