@@ -77,6 +77,19 @@ public sealed record CastThisTurnPredicate : HistoryPredicate
   /// Who cast the spells being counted.
   /// </summary>
   public required ControllerFilter Caster { get; init; }
+
+  /// <summary>
+  /// Optional ordinal qualifier selecting which occurrence in the turn's cast
+  /// sequence this predicate names — e.g. "the first creature spell you cast
+  /// each turn" → <c>Ordinal = 1</c> (Shadow in the Warp's cost-reduction static
+  /// ability). Mirrors <see cref="MagicAST.AST.Triggers.TriggerCondition.Ordinal"/>'s
+  /// descriptive-only convention: MAST records which occurrence the oracle text
+  /// names, leaving the per-turn tally and reset to the engine. Null means every
+  /// matching spell counts (the default, unordered usage for storm/Aetherflux-style
+  /// <see cref="MagicAST.AST.Quantities.CountQuantity"/> counts).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? Ordinal { get; init; }
 }
 
 /// <summary>
