@@ -1,0 +1,156 @@
+{
+  "Input": {
+    "Name": "Fury",
+    "ManaCost": "{3}{R}{R}",
+    "TypeLine": "Creature — Elemental Incarnation",
+    "OracleText": "Double strike\nWhen this creature enters, it deals 4 damage divided as you choose among any number of target creatures and/or planeswalkers.\nEvoke—Exile a red card from your hand.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": ["Evoke", "Double strike"],
+    "Id": "932d0fb9-382d-464a-9427-b91fa2398cdb",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Fury",
+    "TypeLine": {
+      "Raw": "Creature — Elemental Incarnation",
+      "Types": ["Creature"],
+      "Subtypes": ["Elemental", "Incarnation"]
+    },
+    "Oracle": {
+      "RawText": "Double strike\nWhen this creature enters, it deals 4 damage divided as you choose among any number of target creatures and/or planeswalkers.\nEvoke—Exile a red card from your hand.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Double strike",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "Both"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Source": {
+                "Kind": "It"
+              },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 4
+              },
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature", "planeswalker"]
+                },
+                "Quantity": {
+                  "QuantityType": "anyAmount"
+                }
+              },
+              "Divided": true
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Evoke",
+          "Effects": [
+            {
+              "EffectType": "alternativeCast",
+              "FromZone": "Hand",
+              "Cost": {
+                "CostType": "exile",
+                "Filter": {
+                  "CardTypes": ["card"],
+                  "Colors": ["R"]
+                },
+                "Quantity": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "FromZone": "Hand"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Evoke",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters"
+          },
+          "InterveningIf": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Evoke"
+          },
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
