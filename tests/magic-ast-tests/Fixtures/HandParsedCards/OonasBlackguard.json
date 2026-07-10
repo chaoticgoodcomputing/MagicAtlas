@@ -1,0 +1,111 @@
+{
+  "Input": {
+    "Name": "Oona's Blackguard",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Faerie Rogue",
+    "OracleText": "Flying\nEach other Rogue creature you control enters with an additional +1/+1 counter on it.\nWhenever a creature you control with a +1/+1 counter on it deals combat damage to a player, that player discards a card.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": ["Flying"],
+    "Id": "4677d5d1-de04-4631-8fcf-5ff754d701b1",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Oona's Blackguard",
+    "TypeLine": {
+      "Raw": "Creature — Faerie Rogue",
+      "Types": ["Creature"],
+      "Subtypes": ["Faerie", "Rogue"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nEach other Rogue creature you control enters with an additional +1/+1 counter on it.\nWhenever a creature you control with a +1/+1 counter on it deals combat damage to a player, that player discards a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": [
+                  { "CharacteristicType": "keyword", "Keyword": "Flying" },
+                  { "CharacteristicType": "keyword", "Keyword": "Reach" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "When": "asObjectEnters",
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Subtypes": ["Rogue"],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": { "QuantityType": "literal", "Value": 1 }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Controller": "You",
+              "Characteristics": [
+                { "CharacteristicType": "counter", "CounterType": "+1/+1" }
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "discardCards",
+              "Count": { "QuantityType": "literal", "Value": 1 },
+              "Player": { "Kind": "ThatPlayer" },
+              "RevealHand": false,
+              "Random": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}
