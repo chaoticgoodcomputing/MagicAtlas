@@ -1,0 +1,106 @@
+{
+  "Input": {
+    "Name": "Vastwood Zendikon",
+    "ManaCost": "{4}{G}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant land\nEnchanted land is a 6/4 green Elemental creature. It's still a land.\nWhen enchanted land dies, return that card to its owner's hand.",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": ["Enchant"],
+    "Id": "d00cb59d-de35-45b2-a7f8-f8c1e821f6ee",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Vastwood Zendikon",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant land\nEnchanted land is a 6/4 green Elemental creature. It's still a land.\nWhen enchanted land dies, return that card to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": ["land"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "becomesCreature",
+              "Subject": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "Power": {
+                "QuantityType": "literal",
+                "Value": 6
+              },
+              "Toughness": {
+                "QuantityType": "literal",
+                "Value": 4
+              },
+              "Colors": ["G"],
+              "CardTypes": ["land", "creature"],
+              "AddedSubtypes": ["Elemental"],
+              "GainedAbilities": []
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": ["land"],
+              "IsEnchanted": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "It"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
