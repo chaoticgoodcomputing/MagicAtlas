@@ -350,6 +350,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — cumulative upkeep's CR 702.24a intervening-if 'this permanent is on the battlefield', same residual category as the Echo-keyword intervening-if on TSP/Stingscourger et al."
     },
     {
+      "card": "PsychicVortex",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — cumulative upkeep's CR 702.24a intervening-if 'this permanent is on the battlefield', same residual category as InnerSanctum's (the sibling draw-cost cumulative-upkeep printing)."
+    },
+    {
       "card": "KLD/IncendiaryFlow",
       "sink": "Timeframe",
       "tag": "debt",

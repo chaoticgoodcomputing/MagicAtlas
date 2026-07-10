@@ -141,6 +141,25 @@ public sealed record PayLifeCost : Cost
 }
 
 /// <summary>
+/// "Draw a card" / "Draw N cards" paid as a COST rather than resolved as an
+/// effect — e.g. the per-age-counter upkeep price on Psychic Vortex's
+/// "Cumulative upkeep—Draw a card." (CR 702.24a: cumulative upkeep's "[cost]"
+/// slot can be templated with any cost, not just mana or life). Distinct from
+/// <see cref="MagicAST.AST.Effects.CardFlow.DrawCardsEffect"/> (a resolving
+/// effect that draws cards as part of an ability's resolution): here drawing
+/// is itself the tax paid to avoid a consequence (mirrors the flat
+/// <see cref="PayLifeCost"/> / <see cref="PayEnergyCost"/> shape — count only,
+/// no filter/zone, since "a card"/"N cards" always comes from the player's own
+/// library, CR 121.1).
+/// </summary>
+[OracleCost("drawCards")]
+public sealed record DrawCardsCost : Cost
+{
+  /// <summary>How many cards must be drawn.</summary>
+  public required Quantity Quantity { get; init; }
+}
+
+/// <summary>
 /// "Exile [filter] from [zone]".
 /// </summary>
 [OracleCost("exile")]
