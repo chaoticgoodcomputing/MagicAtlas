@@ -36,8 +36,8 @@ using MagicAST.AST.References;
 ///
 /// <para>
 /// <b>"sacrifice this Aura"</b> → <see cref="SacrificeEffect"/> with
-/// <c>Target = Self</c> (CR 700.4: "this [object]" in an object's own text is that
-/// object, here the Aura naming itself by its own type line).
+/// <c>Target = Self</c> (CR 109.2: "this [object]" / "this permanent" in an object's own
+/// text refers to that object, here the Aura naming itself).
 /// </para>
 ///
 /// <para>
@@ -64,7 +64,7 @@ using MagicAST.AST.References;
 /// Rule 614.1 (replacement effects — "If [event] would happen, [alternative]
 /// instead"); Rule 701.19 is NOT invoked here (no "regenerate" keyword action, an
 /// explicit sacrifice + grant instead); Rule 702.12b (indestructible: "can't be
-/// destroyed"); Rule 111.7 / 303.4c (Aura's own "this Aura" self-reference).
+/// destroyed"); Rule 109.2 / 303.4c (Aura's own "this Aura" self-reference).
 /// </summary>
 [StaticRule]
 public sealed class EnchantedLandWouldBeDestroyedSacrificeGrantIndestructibleRule : IStaticRule

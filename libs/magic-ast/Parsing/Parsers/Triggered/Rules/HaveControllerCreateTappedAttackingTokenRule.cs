@@ -28,7 +28,7 @@ using MagicAST.AST.References;
 [TriggeredRule(Priority = 60)]
 public sealed class HaveControllerCreateTappedAttackingTokenRule : ITriggeredRule
 {
-  // Optional "you may " (CR 116.1b) then the mandatory "have its controller create" head.
+  // Optional "you may " (CR 118.12) then the mandatory "have its controller create" head.
   private static readonly Regex _headPattern = new(
     @"^(?<optional>you\s+may\s+)?have\s+its\s+controller\s+create\s+(?<token>.+)$",
     RegexOptions.Compiled | RegexOptions.IgnoreCase

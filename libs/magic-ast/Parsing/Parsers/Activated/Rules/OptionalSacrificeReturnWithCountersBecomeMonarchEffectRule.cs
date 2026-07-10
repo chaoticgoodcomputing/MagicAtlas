@@ -18,7 +18,7 @@ using MagicAST.AST.References;
 /// <see cref="OptionalEffect"/> whose <c>Inner</c> is the optional sacrifice and
 /// whose <c>IfYouDo</c> is the gated payoff.
 ///
-/// CR 716 (the monarch): "The monarch is a desig­nation a player can have… only one
+/// CR 725 (the monarch): "The monarch is a desig­nation a player can have… only one
 /// player is the monarch at any given time." — the "you become the monarch" clause
 /// is a <see cref="BecomeMonarchEffect"/> naming the ability's controller (You).
 ///
