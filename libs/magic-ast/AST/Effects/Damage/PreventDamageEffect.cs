@@ -49,6 +49,16 @@ public sealed record PreventDamageEffect : ContinuousEffect
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
   public bool CombatOnly { get; init; }
 
+  /// <summary>
+  /// True if only noncombat damage is prevented (oracle says "noncombat
+  /// damage" — e.g. Magebane Armor's "Prevent all noncombat damage that would
+  /// be dealt to equipped creature."). Mirrors <see cref="CombatOnly"/> for the
+  /// opposite damage class; False/absent means all damage (regardless of
+  /// source type) is prevented.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool NoncombatOnly { get; init; }
+
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectReference? Source { get; init; }
 

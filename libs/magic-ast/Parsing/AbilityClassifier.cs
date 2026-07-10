@@ -455,6 +455,28 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Prevent all [noncombat] damage that would be dealt to equipped creature."
+    // (Magebane Armor) — the same always-on damage-prevention shield as the two
+    // intercepts above, scoped to the Equipment's attached permanent rather than
+    // "this/enchanted creature" or "creatures you control", and optionally
+    // qualified to a single damage type ("noncombat"). CR 604.2: a permanent,
+    // continuously-active static ability, not an imperative one-shot
+    // spell-resolution step, even though "Prevent" heads the generic
+    // spell-instruction-verb list below. Intercept here for the same reason as
+    // the two siblings above.
+    if (Regex.IsMatch(
+      clause.RawText.TrimStart(),
+      @"^Prevent\s+all\s+(?:noncombat\s+)?damage\s+that\s+would\s+be\s+dealt\s+to\s+equipped\s+creature\b",
+      RegexOptions.IgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Spell-style instruction verbs at clause start: imperative effect
     // descriptions consistent with sorcery/instant resolution (Rule 113.3a).
     // Also fires for modal option bodies dispatched through the registry, where

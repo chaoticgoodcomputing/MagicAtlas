@@ -494,6 +494,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "MagebaneArmor",
+      "sink": "AbilityText",
+      "tag": "debt",
+      "reason": "PB-9 LoseAbilityEffect residual — 'flying' names the removed keyword verbatim; no structured keyword-scoped lose-ability node yet (mirrors AnimateDead/VraskaBetrayalsSting)"
+    },
+    {
       "card": "MalachiteTalisman",
       "sink": "Instructions",
       "tag": "irreducible",
