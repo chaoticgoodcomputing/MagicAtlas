@@ -1,0 +1,101 @@
+{
+  "Input": {
+    "Name": "Gauntlets of Light",
+    "ManaCost": "{2}{W}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nEnchanted creature gets +0/+2 and assigns combat damage equal to its toughness rather than its power.\nEnchanted creature has \"{2}{W}: Untap this creature.\"",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": ["Enchant"],
+    "Id": "da0d5436-b881-45ac-b8ec-248d88714021",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Gauntlets of Light",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nEnchanted creature gets +0/+2 and assigns combat damage equal to its toughness rather than its power.\nEnchanted creature has \"{2}{W}: Untap this creature.\"",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": ["creature"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": { "Kind": "EnchantedOrEquipped" },
+              "PowerModifier": { "QuantityType": "literal", "Value": 0 },
+              "ToughnessModifier": { "QuantityType": "literal", "Value": 2 }
+            },
+            {
+              "EffectType": "assignDamageAsToughness",
+              "AppliesTo": { "Kind": "EnchantedOrEquipped" }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": { "Kind": "EnchantedOrEquipped" },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  {
+                    "CostType": "mana",
+                    "Symbols": [
+                      { "Kind": "generic", "GenericAmount": 2 },
+                      { "Kind": "colored", "Colors": ["W"] }
+                    ]
+                  }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "untap",
+                    "Target": { "Kind": "Self" }
+                  }
+                ],
+                "IsManaAbility": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}
