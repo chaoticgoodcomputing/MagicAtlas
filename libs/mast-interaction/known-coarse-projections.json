@@ -187,6 +187,7 @@
     "transform": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "transmute": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "tribute": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "turnFaceDown": "CR 708.2a face-down state flip (Obscuring Aether, Wall of Deceit un-morph grants) \u2014 sibling of \"transform\", which is also coarse; no flow rule reads face-down-state-change events yet; consciously inert for interaction recall",
     "typecycling": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "unattach": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "unearth": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",

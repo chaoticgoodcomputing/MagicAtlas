@@ -428,14 +428,6 @@
           ]
         },
         {
-          "Type": "ObjectIsEquippedCondition",
-          "Discriminator": "objectIsEquipped",
-          "IsUnparsed": false,
-          "Fields": [
-            "Reference"
-          ]
-        },
-        {
           "Type": "OtherCondition",
           "Discriminator": "other",
           "IsUnparsed": false,
@@ -2497,6 +2489,14 @@
           ]
         },
         {
+          "Type": "TurnFaceDownEffect",
+          "Discriminator": "turnFaceDown",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
           "Type": "TypecyclingEffect",
           "Discriminator": "typecycling",
           "IsUnparsed": false,
@@ -2913,5 +2913,5 @@
       ]
     }
   ],
-  "SchemaHash": "31ccde356f98d5ed7483250416e9c6e2f2880607c8cc53949c388a0288a53adc"
+  "SchemaHash": "7ae526a54270dcb08feeecd1c936bc0da6da36da730408c81f39777bea2cbab3"
 }
