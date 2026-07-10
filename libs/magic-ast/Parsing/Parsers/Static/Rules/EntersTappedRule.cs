@@ -24,6 +24,18 @@ public sealed class EntersTappedRule : IStaticRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // Anchored to the exact "Creatures and nonbasic lands ..." surface phrase so it
+  // cannot steal any sibling: "Artifacts and creatures your opponents control enter
+  // tapped." (Blind Obedience), "Artifacts, creatures, and lands your opponents
+  // control enter tapped." (Kismet), "Nonbasic lands your opponents control enter
+  // tapped." (Archon of Emeria), "Snow lands your opponents control enter tapped."
+  // (Reidane), and the bare "Creatures your opponents control enter tapped." handled
+  // by _entersTappedOpponentsCreaturesPattern above.
+  private static readonly Regex _entersTappedOpponentsCreaturesAndNonbasicLandsPattern = new(
+    @"^\s*Creatures\s+and\s+nonbasic\s+lands\s+your\s+opponents\s+control\s+enter\s+tapped\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
   {
     // "Enters tapped" is the composite "as this enters, tap it": the timing
@@ -98,6 +110,36 @@ public sealed class EntersTappedRule : IStaticRule
               Filter = new ObjectFilter
               {
                 CardTypes = ["creature"],
+                Controller = ControllerFilter.Opponent,
+              },
+            },
+          }],
+        },
+      ];
+    }
+
+    // Arm 4: "Creatures and nonbasic lands your opponents control enter tapped."
+    // (Thalia, Heretic Cathar; Thalia and The Gitrog Monster). Generalizes Arm 3's
+    // creature-only filter to a two-type disjunction (creature OR land), with the
+    // "nonbasic" qualifier scoped to the land half via the supertype-negation axis:
+    // a nonbasic land is a land without the "basic" supertype (CR 205.4c). Same
+    // AsObjectEnters + TapEffect(Each+filter) composite as Arm 3 (CR 614.1d).
+    if (_entersTappedOpponentsCreaturesAndNonbasicLandsPattern.IsMatch(clause.RawText))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          When = StaticTimingKind.AsObjectEnters,
+          Effects = [new MagicAST.AST.Effects.Control.TapEffect
+          {
+            Target = new ObjectReference
+            {
+              Kind = ObjectReferenceKind.Each,
+              Filter = new ObjectFilter
+              {
+                CardTypes = ["creature", "land"],
+                ExcludedSupertypes = ["Basic"],
                 Controller = ControllerFilter.Opponent,
               },
             },
