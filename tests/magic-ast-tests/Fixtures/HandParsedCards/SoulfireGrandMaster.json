@@ -1,0 +1,198 @@
+{
+  "Input": {
+    "Name": "Soulfire Grand Master",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Human Monk",
+    "OracleText": "Lifelink\nInstant and sorcery spells you control have lifelink.\n{2}{U/R}{U/R}: The next time you cast an instant or sorcery spell from your hand this turn, put that card into your hand instead of into your graveyard as it resolves.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "U",
+      "W"
+    ],
+    "Keywords": [
+      "Lifelink"
+    ],
+    "Id": "fc3a4e7d-6667-4c2f-b6b4-484f401b0455",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Soulfire Grand Master",
+    "TypeLine": {
+      "Raw": "Creature — Human Monk",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Monk"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Lifelink\nInstant and sorcery spells you control have lifelink.\n{2}{U/R}{U/R}: The next time you cast an instant or sorcery spell from your hand this turn, put that card into your hand instead of into your graveyard as it resolves.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Lifelink",
+          "Effects": [
+            {
+              "EffectType": "lifelink"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "spell",
+                    "instant",
+                    "sorcery"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Lifelink",
+                "Effects": [
+                  {
+                    "EffectType": "lifelink"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "hybrid",
+                  "Colors": [
+                    "U",
+                    "R"
+                  ]
+                },
+                {
+                  "Kind": "hybrid",
+                  "Colors": [
+                    "U",
+                    "R"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "When",
+                  "Event": "SpellCast",
+                  "Filter": {
+                    "CardTypes": [
+                      "spell",
+                      "instant",
+                      "sorcery"
+                    ],
+                    "Controller": "You",
+                    "Zone": "Hand"
+                  }
+                },
+                "Window": {
+                  "DurationType": "untilTime",
+                  "Until": {
+                    "Part": "Turn",
+                    "Edge": "End"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "replacement",
+                    "Event": {
+                      "EventType": "zoneChange",
+                      "OriginZone": "Stack",
+                      "DestinationZone": "Graveyard"
+                    },
+                    "OriginalEventOccurs": false,
+                    "Replacement": {
+                      "EffectType": "returnToHand",
+                      "Target": {
+                        "Kind": "It"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "U",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
