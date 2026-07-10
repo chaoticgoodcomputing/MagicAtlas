@@ -34,7 +34,7 @@ using MagicAST.AST.Triggers;
 /// </para>
 ///
 /// <para>
-/// CR 509 (Combat Damage Step): combat damage assignment is the game event.
+/// CR 510 (Combat Damage Step): combat damage assignment is the game event.
 /// CR 603.2: "Whenever a game event or game state matches a triggered ability's
 /// trigger event, that ability automatically triggers."
 /// </para>
