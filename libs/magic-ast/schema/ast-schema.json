@@ -2123,6 +2123,16 @@
           ]
         },
         {
+          "Type": "RevealTopMayPutSharesCreatureTypeRestToBottomEffect",
+          "Discriminator": "revealTopMayPutSharesCreatureTypeRestToBottom",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Filter",
+            "Player"
+          ]
+        },
+        {
           "Type": "RevealTopPutMatchingToHandEffect",
           "Discriminator": "revealTopPutMatchingToHand",
           "IsUnparsed": false,
@@ -2813,5 +2823,5 @@
       ]
     }
   ],
-  "SchemaHash": "a70a6cce775055ce6e8ac81afef78fe06e1611325f086986905a39361fd17c04"
+  "SchemaHash": "57a7646f6a7f2160a842614fdc02c92c0cd59939a0d0c80c91cfe92999795666"
 }

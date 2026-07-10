@@ -154,6 +154,20 @@ public sealed record ObjectFilter
   public bool? IsColorless { get; init; }
 
   /// <summary>
+  /// Relational creature-type axis: filters to objects that share a creature type with a
+  /// referenced object (CR 205.3m: creature types are a subset of the subtype axis). Tajuru
+  /// Paragon's kicked-ETB reveal: "You may put a card that shares a creature type with it
+  /// from among them into your hand," where the reference is the source creature
+  /// (<c>{Kind: Self}</c>). Distinct from <see cref="Subtypes"/> (absolute "has any of these
+  /// literal subtypes"): the creature type(s) to match are those of the referenced object,
+  /// resolved by a consumer, not card-text literals. Parallels the relational
+  /// <see cref="SharesColorWith"/> axis (the creature-type analogue of the color-sharing
+  /// predicate).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? SharesCreatureTypeWith { get; init; }
+
+  /// <summary>
   /// Filters to historic objects — those that have the legendary supertype, the
   /// artifact card type, or the Saga subtype (CR 700.6: "The term historic refers
   /// to an object that has the legendary supertype, the artifact card type, or the
