@@ -1,0 +1,86 @@
+{
+  "Input": {
+    "Name": "Dictate of Karametra",
+    "ManaCost": "{3}{G}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Flash\nWhenever a player taps a land for mana, that player adds one mana of any type that land produced.",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": ["Flash"],
+    "Id": "d5114607-df8f-4e44-8ef5-b6af89964bbc",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Dictate of Karametra",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "Flash\nWhenever a player taps a land for mana, that player adds one mana of any type that land produced.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flash",
+          "Effects": [
+            {
+              "EffectType": "timingModification",
+              "Modification": "Grant",
+              "Timing": "Instant"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "TapsForMana",
+            "Filter": {
+              "CardTypes": ["land"],
+              "Controller": "Any"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "",
+              "AnyType": true,
+              "Player": {
+                "Kind": "ThatPlayer"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
