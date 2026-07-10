@@ -692,6 +692,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — 'during your turn' timing scope on the opponents' cast-prohibition, same bucket as RazorkinNeedlehead's suffix-form 'during your turn'"
     },
     {
+      "card": "MyrelShieldOfArgive",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — 'during your turn' timing scope shared by BOTH the cast-prohibition and the activate-prohibition, same bucket as DragonlordDromoka/RazorkinNeedlehead's 'during your turn'"
+    },
+    {
       "card": "JUD/SearingMeditation",
       "sink": "Instructions",
       "tag": "irreducible",
