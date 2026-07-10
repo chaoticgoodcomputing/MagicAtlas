@@ -77,6 +77,19 @@ public sealed class CostReductionForEachRule : IStaticRule
         Characteristics = [Characteristic.InCombat(CombatState.Attacking)],
       };
     }
+    // "creature your opponents control" — Primeval Protector's opponent-creature-count
+    // discount (CR 118.7: an effect can reduce the total cost to pay when casting a
+    // spell). The count scales with a plain filtered creature count over all
+    // opponents' creatures, distinct from the Domain-reduction sibling
+    // (PartyCostReductionForEachRule) which counts basic land types instead.
+    else if (filterPhrase == "creature your opponents control")
+    {
+      perObject = new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Controller = ControllerFilter.Opponent,
+      };
+    }
 
     if (perObject is null)
     {
