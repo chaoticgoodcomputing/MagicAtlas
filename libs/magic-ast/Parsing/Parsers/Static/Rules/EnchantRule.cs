@@ -87,6 +87,24 @@ public sealed class EnchantRule : IStaticRule
       return new ObjectFilter { CardTypes = [d.ToLowerInvariant()], Controller = controller };
     }
 
+    // Color-exclusion shape: "non<color> <type>" (e.g. "nonblack creature", Armor of
+    // Thorns) — CR 105.2c: the "non" prefix negates a color characteristic. Routed
+    // through the shared QualifierAxisMapper so the "non<color>" → ExcludedColors
+    // handling stays consistent with how the same negation is folded elsewhere
+    // (e.g. DestroyTargetNonblackCreatureEffectRule's ExcludedColors=["B"]).
+    var nonColorMatch = Regex.Match(
+      d,
+      @"^non(?<color>white|blue|black|red|green)\s+(?<type>creature|land|permanent|artifact|enchantment|planeswalker)$",
+      RegexOptions.IgnoreCase
+    );
+    if (nonColorMatch.Success)
+    {
+      var typeName = nonColorMatch.Groups["type"].Value.ToLowerInvariant();
+      var qualifier = "non" + nonColorMatch.Groups["color"].Value.ToLowerInvariant();
+      var baseFilter = new ObjectFilter { CardTypes = [typeName], Controller = controller };
+      return QualifierAxisMapper.Apply(baseFilter, [qualifier]);
+    }
+
     // Disjunctive type shape: "typeA or typeB" (e.g. "artifact or creature").
     // Both halves must be recognised simple card types for the structured encoding.
     var orMatch = Regex.Match(d, @"^(?<a>[A-Za-z]+)\s+or\s+(?<b>[A-Za-z]+)$", RegexOptions.IgnoreCase);
