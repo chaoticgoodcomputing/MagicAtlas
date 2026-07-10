@@ -116,6 +116,11 @@ public enum KeywordAbility
   /// <summary>Convoke (CR 702).</summary>
   Convoke,
 
+  /// <summary>Craft (CR 702.167). An activated ability on double-faced cards that
+  /// exiles this permanent plus [materials] to return this card transformed under its
+  /// owner's control, sorcery-speed only.</summary>
+  Craft,
+
   /// <summary>Crew (CR 702).</summary>
   Crew,
 
