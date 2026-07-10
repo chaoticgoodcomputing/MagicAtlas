@@ -1,0 +1,82 @@
+{
+  "Input": {
+    "Name": "Excruciator",
+    "ManaCost": "{6}{R}{R}",
+    "TypeLine": "Creature — Avatar",
+    "OracleText": "Damage that would be dealt by this creature can't be prevented.",
+    "Power": "7",
+    "Toughness": "7",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": [],
+    "Id": "a3c98460-e8b8-45d6-9bf0-7600b234964b",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Excruciator",
+    "TypeLine": {
+      "Raw": "Creature — Avatar",
+      "Types": ["Creature"],
+      "Subtypes": ["Avatar"]
+    },
+    "Oracle": {
+      "RawText": "Damage that would be dealt by this creature can't be prevented.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "damageCantBePrevented",
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{6}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 6
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 8,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 7,
+          "Raw": "7"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 7,
+          "Raw": "7"
+        }
+      }
+    ]
+  }
+}
