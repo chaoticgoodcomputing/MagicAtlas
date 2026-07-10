@@ -37,4 +37,25 @@ public sealed record DealDamageEffect : Effect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public bool? IsCombat { get; init; }
+
+  /// <summary>
+  /// "divided as you choose among" — true when <see cref="Amount"/> is a single total
+  /// that the controller splits across the (plural) members of <see cref="Target"/>
+  /// at announcement, rather than each target member independently receiving the
+  /// full <see cref="Amount"/> (Fire Covenant: "Fire Covenant deals X damage divided
+  /// as you choose among any number of target creatures.").
+  ///
+  /// <para>
+  /// CR 601.2d (verbatim): "If the spell requires the player to divide or distribute
+  /// an effect (such as damage or counters) among one or more targets, the player
+  /// announces the division. Each of these targets must receive at least one of
+  /// whatever is being divided." MAST records the division as a fact about the
+  /// effect's shape (reference-not-resolution, ADR 0004); the engine enforces the
+  /// "at least one" minimum and validates the announced split. False (omitted) for
+  /// the overwhelming majority of damage effects, which deal the full <see cref="Amount"/>
+  /// to a single target or independently to every member of a filtered population.
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool Divided { get; init; }
 }
