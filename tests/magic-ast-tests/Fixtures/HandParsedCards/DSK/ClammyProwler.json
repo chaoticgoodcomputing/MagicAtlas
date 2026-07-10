@@ -1,0 +1,85 @@
+{
+  "Input": {
+    "Name": "Clammy Prowler",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Enchantment Creature — Horror",
+    "OracleText": "Whenever this creature attacks, another target attacking creature can't be blocked this turn.",
+    "Power": "2",
+    "Toughness": "5",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Clammy Prowler",
+    "TypeLine": {
+      "Raw": "Enchantment Creature — Horror",
+      "Types": ["Enchantment", "Creature"],
+      "Subtypes": ["Horror"]
+    },
+    "Oracle": {
+      "RawText": "Whenever this creature attacks, another target attacking creature can't be blocked this turn.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "ExcludeSelf": true,
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "combatState",
+                      "State": "Attacking"
+                    }
+                  ]
+                }
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 }
+      }
+    ]
+  }
+}
