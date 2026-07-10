@@ -39,6 +39,16 @@ public sealed class DealsCombatDamageConditionRule : ITriggerConditionRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // Matches "with a <counterType> counter(s) on it" inside a trigger subject
+  // phrase, e.g. "a creature you control with a +1/+1 counter on it deals combat
+  // damage to a player" (Oona's Blackguard). Tried BEFORE _withKeywordPattern
+  // (which only captures a single lowercase word and would otherwise truncate
+  // this multi-word phrase to just "a"). CR 122 (counters).
+  private static readonly Regex _withCounterPattern = new(
+    @"\bwith\s+(?:a|an|\d+|one|two|three|four|five)\s+(?<counterType>[+-]\d+/[+-]\d+|[a-z]+)\s+counters?\s+on\s+it\b(?=.*\bdeals\b)",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   // Matches the "[CardName] deals combat damage" shape where the card refers to
   // itself by its printed name (CR 201.4). The name is one or more capitalised
   // words (optionally separated by function words such as "of", "the", "a",
@@ -94,21 +104,35 @@ public sealed class DealsCombatDamageConditionRule : ITriggerConditionRule
       return null;
     }
 
-    // "a creature you control with [keyword] deals combat damage to a player" —
-    // augment the filter with the keyword characteristic. Only promote to a
-    // structured KeywordCharacteristic when the label is a known keyword ability
-    // (Characteristic.FromLabel returns KeywordCharacteristic for recognised
-    // keywords, OtherCharacteristic for unknowns). The unknown-label case is
-    // dropped here: the caller gets no Characteristics rather than a free-text
-    // residual, satisfying the no-free-text invariant for this structured axis.
-    var withMatch = _withKeywordPattern.Match(lower);
-    if (withMatch.Success)
+    // "a creature you control with a [counterType] counter on it deals combat
+    // damage to a player" (Oona's Blackguard) — augment the filter with a
+    // structured CounterCharacteristic (CR 122). Tried before the single-word
+    // keyword bolt-on below, since the counter phrase is multi-word and the
+    // keyword regex would otherwise match only the leading "a".
+    var withCounterMatch = _withCounterPattern.Match(lower);
+    if (withCounterMatch.Success)
     {
-      var kwLabel = withMatch.Groups["kw"].Value;
-      var characteristic = Characteristic.FromLabel(kwLabel);
-      if (characteristic is KeywordCharacteristic kc)
+      var counterType = withCounterMatch.Groups["counterType"].Value;
+      filter = filter with { Characteristics = [new CounterCharacteristic { CounterType = counterType }] };
+    }
+    else
+    {
+      // "a creature you control with [keyword] deals combat damage to a player" —
+      // augment the filter with the keyword characteristic. Only promote to a
+      // structured KeywordCharacteristic when the label is a known keyword ability
+      // (Characteristic.FromLabel returns KeywordCharacteristic for recognised
+      // keywords, OtherCharacteristic for unknowns). The unknown-label case is
+      // dropped here: the caller gets no Characteristics rather than a free-text
+      // residual, satisfying the no-free-text invariant for this structured axis.
+      var withMatch = _withKeywordPattern.Match(lower);
+      if (withMatch.Success)
       {
-        filter = filter with { Characteristics = [kc] };
+        var kwLabel = withMatch.Groups["kw"].Value;
+        var characteristic = Characteristic.FromLabel(kwLabel);
+        if (characteristic is KeywordCharacteristic kc)
+        {
+          filter = filter with { Characteristics = [kc] };
+        }
       }
     }
 
