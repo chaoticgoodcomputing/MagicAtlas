@@ -1,0 +1,91 @@
+{
+  "Input": {
+    "Name": "Call of the Wild",
+    "ManaCost": "{2}{G}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "{2}{G}{G}: Reveal the top card of your library. If it's a creature card, put it onto the battlefield. Otherwise, put it into your graveyard.",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Call of the Wild",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{2}{G}{G}: Reveal the top card of your library. If it's a creature card, put it onto the battlefield. Otherwise, put it into your graveyard.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": ["G"]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": ["G"]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "revealTopCardMatchToBattlefieldElseGraveyard",
+              "Player": {
+                "Kind": "You"
+              },
+              "Filter": {
+                "CardTypes": ["creature"]
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
