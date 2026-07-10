@@ -76,6 +76,27 @@ public sealed class MayCastFromTopOfLibraryRule : IStaticRule
     ];
   }
 
+  // The printed card types a "[type] spells" eligibility class can name (CR 300.1 /
+  // 205.2a). Used to (a) validate a bare lowercase word is a real type before
+  // emitting CardTypes=[word], and (b) validate the remainder of a "non<type>" word
+  // before negating it — so a non-type word (or a bogus "noncreature"-as-a-type)
+  // declines the match rather than fabricating a nonexistent card type.
+  private static readonly HashSet<string> KnownCardTypes = new(StringComparer.OrdinalIgnoreCase)
+  {
+    "artifact",
+    "creature",
+    "enchantment",
+    "instant",
+    "sorcery",
+    "planeswalker",
+    "battle",
+    "land",
+    "kindred",
+    "tribal",
+  };
+
+  private static bool IsCardType(string word) => KnownCardTypes.Contains(word);
+
   private static ObjectFilter? BuildSpellFilter(string word)
   {
     // "Colorless" is the absence of any color (CR 105.1): IsColorless=true
@@ -91,9 +112,36 @@ public sealed class MayCastFromTopOfLibraryRule : IStaticRule
       };
     }
 
+    // A lowercase "non<type>" word (e.g. "noncreature spells") is a NEGATED card
+    // type, not a card type named "noncreature" (CR 205.2a lists no such type).
+    // The codebase convention is CardTypes=["card"] + ExcludedCardTypes=[type]:
+    // "any card that is not a <type>" (Madame Web, Clairvoyant — "Spider spells and
+    // noncreature spells"). Only strip "non" when the remainder is a real card
+    // type; otherwise fall through and let an unknown word decline the match.
+    if (word.Length > 3
+        && word.StartsWith("non", StringComparison.OrdinalIgnoreCase)
+        && char.IsLower(word, 0))
+    {
+      var excluded = word.Substring(3).ToLowerInvariant();
+      if (IsCardType(excluded))
+      {
+        return new ObjectFilter
+        {
+          CardTypes = ["card"],
+          ExcludedCardTypes = [excluded],
+          Zone = Zone.Library,
+          Controller = ControllerFilter.You,
+        };
+      }
+    }
+
     // A lowercase word is a printed card type (e.g. "artifact spells").
     if (char.IsLower(word, 0))
     {
+      if (!IsCardType(word.ToLowerInvariant()))
+      {
+        return null;
+      }
       return new ObjectFilter
       {
         CardTypes = [word.ToLowerInvariant()],

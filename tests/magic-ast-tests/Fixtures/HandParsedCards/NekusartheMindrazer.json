@@ -34,7 +34,8 @@
             "Timing": "At",
             "Event": {
               "Part": "Draw",
-              "Edge": "Beginning"
+              "Edge": "Beginning",
+              "Whose": "Any"
             }
           },
           "Effects": [

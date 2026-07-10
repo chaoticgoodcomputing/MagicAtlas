@@ -44,7 +44,8 @@
             "Timing": "At",
             "Event": {
               "Part": "Upkeep",
-              "Edge": "Beginning"
+              "Edge": "Beginning",
+              "Whose": "Any"
             }
           },
           "Effects": [

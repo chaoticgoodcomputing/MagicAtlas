@@ -75,6 +75,16 @@ public sealed class PhaseTriggerConditionRule : ITriggerConditionRule
     {
       whose = ControllerFilter.Opponent;
     }
+    else if (lower.Contains("each player"))
+    {
+      // "at the beginning of each player's upkeep" — the clock point recurs on
+      // EVERY player's phase, not just the controller's (Hokori, Dust Drinker;
+      // Genju of the Fields). Any records the each-player symmetry; leaving Whose
+      // unset would collapse it to the controller's phase and dangle any
+      // downstream "that player" (ControllerFilter.ThatPlayer) antecedent that
+      // refers back to whichever player's step fired the trigger (CR 109.5).
+      whose = ControllerFilter.Any;
+    }
 
     return new TriggerCondition
     {
