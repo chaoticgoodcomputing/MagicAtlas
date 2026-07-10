@@ -1,0 +1,90 @@
+{
+  "Input": {
+    "Name": "Lich's Tomb",
+    "ManaCost": "{4}",
+    "TypeLine": "Artifact",
+    "OracleText": "You don't lose the game for having 0 or less life.\nWhenever you lose life, sacrifice a permanent for each 1 life you lost. (Damage causes loss of life.)",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "ca24a105-e32a-4b2c-99bf-cfd85bae6229",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Lich's Tomb",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You don't lose the game for having 0 or less life.\nWhenever you lose life, sacrifice a permanent for each 1 life you lost. (Damage causes loss of life.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantLoseGameForZeroLife",
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "LosesLife",
+            "Filter": {
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "You",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ]
+                }
+              },
+              "Count": {
+                "QuantityType": "derived",
+                "DerivedFrom": "LifeLost"
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "Damage causes loss of life."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
