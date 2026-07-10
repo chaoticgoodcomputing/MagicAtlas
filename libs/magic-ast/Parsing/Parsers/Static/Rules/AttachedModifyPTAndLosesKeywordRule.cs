@@ -86,13 +86,22 @@ public sealed class AttachedModifyPTAndLosesKeywordRule : IStaticRule
             PowerModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(power),
             ToughnessModifier = MagicAST.AST.Quantities.LiteralQuantity.Of(toughness),
           },
-          new LoseAbilityEffect
-          {
-            Target = Subject(),
-            AbilityText = keyword,
-          },
+          BuildLoseKeyword(Subject(), keyword),
         ],
       },
     ];
+  }
+
+  // "loses [keyword]" — when the removed ability is a single named keyword expressible
+  // by the KeywordAbility enum, record the STRUCTURED value (LoseAbilityEffect.Keyword)
+  // rather than the free-text AbilityText escape hatch. AbilityText remains for genuine
+  // ability SCOPES ("all abilities") the enum can't capture. (De-string initiative PB-9.)
+  private static LoseAbilityEffect BuildLoseKeyword(ObjectReference target, string keyword)
+  {
+    if (System.Enum.TryParse<KeywordAbility>(keyword.Replace(" ", string.Empty), ignoreCase: true, out var kw))
+    {
+      return new LoseAbilityEffect { Target = target, Keyword = kw };
+    }
+    return new LoseAbilityEffect { Target = target, AbilityText = keyword };
   }
 }

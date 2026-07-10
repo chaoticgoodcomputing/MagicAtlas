@@ -11,9 +11,9 @@ using MagicAST.AST.References;
 /// also a Cleric, Rogue, Warrior, and Wizard.").
 ///
 /// <para>
-/// CR 205.1a (verbatim): "Some effects change an object's card type, subtype, and/or
-/// supertype but specify that the object retains a prior card type, subtype, and/or
-/// supertype. In such cases, all the object's prior card types, subtypes, and supertypes
+/// CR 205.1b (verbatim): "Some effects change an object's card type, supertype, or
+/// subtype but specify that the object retains a prior card type, supertype, or
+/// subtype. In such cases, all the object's prior card types, supertypes, and subtypes
 /// are retained, and the effect causes the object to gain or lose other card types,
 /// subtypes, and/or supertypes." CR 205.3: creature subtypes appear after a long dash on
 /// the type line and are drawn from the creature-type list. "Is also a" is the additive

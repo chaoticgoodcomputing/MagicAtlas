@@ -16,7 +16,7 @@ using MagicAST.AST.References;
 /// "the rest" in the second and third sentences are back-references to the reveal in the
 /// first — so this rule matches all three sentences as a single fragment and emits one
 /// <see cref="RevealTopMayPutSharesCreatureTypeRestToBottomEffect"/>. CR 701.20 (Reveal);
-/// CR 205.3m (creature types); CR 400.4 (the remainder placed on the bottom in a random
+/// CR 205.3m (creature types); CR 401.4 (the remainder placed on the bottom in a random
 /// order).
 /// </para>
 ///

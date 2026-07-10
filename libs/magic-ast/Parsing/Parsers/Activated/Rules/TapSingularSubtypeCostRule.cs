@@ -8,7 +8,7 @@ using MagicAST.AST.References;
 /// <summary>
 /// Tap-a-singular-subtype cost: "Tap an untapped Gate you control",
 /// "Tap a untapped Elf you control" — the spelled-out "Tap …" verb used as an
-/// activation cost (CR 118.3 / 602.5; CR 701.20 tap/untap) where the count is
+/// activation cost (CR 118.3 / 602.5; CR 701.26 tap/untap) where the count is
 /// the indefinite article ("a"/"an") rather than a number word, and the tapped
 /// permanent is identified by subtype rather than (or in addition to) card type.
 /// e.g. Gateway Shade: "Tap an untapped Gate you control: This creature gets
@@ -35,7 +35,7 @@ using MagicAST.AST.References;
 /// </para>
 ///
 /// <para>
-/// The "untapped" qualifier is implicit in any tap cost (CR 701.20a: a permanent
+/// The "untapped" qualifier is implicit in any tap cost (CR 701.26a: a permanent
 /// must be untapped to be tapped to pay the cost), so it is not encoded as a
 /// separate axis on the emitted <see cref="TapPermanentsCost"/> — matching the
 /// Conspire / <see cref="TapPermanentsCostRule"/> / <see cref="TapSubtypesCostRule"/>

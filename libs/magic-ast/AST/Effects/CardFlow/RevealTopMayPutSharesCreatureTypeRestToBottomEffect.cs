@@ -15,7 +15,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// cards that shares a creature type with the source object (<see cref="ObjectFilter.SharesCreatureTypeWith"/>,
 /// CR 205.3m) into their hand — an optional, player-chosen selection, not "all matching" —
 /// and every remaining revealed card goes to the bottom of the controller's library in a
-/// RANDOM order. CR 400.4: cards placed on the bottom of a library "in a random order" are
+/// RANDOM order. CR 401.4: cards placed at a specific position in a library "in a random order" are
 /// shuffled among themselves before being placed.
 /// </para>
 ///
