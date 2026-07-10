@@ -57,6 +57,7 @@
     "OracleCost:removeCounters",
     "OracleCost:returnToHand",
     "OracleCost:sacrifice",
+    "OracleCost:scaledMana",
     "OracleCost:selfMana",
     "OracleCost:tap",
     "OracleCost:tapPermanents",
