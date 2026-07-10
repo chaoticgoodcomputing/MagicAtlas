@@ -10,13 +10,24 @@ using MagicAST.AST.Abilities;
 /// enters, choose a color." — Prismatic Ward, an Enchantment — Aura), so the
 /// noun alternation lists every noun observed on this template rather than a
 /// single fixed word.
+///
+/// <para>
+/// Some printings (e.g. Hall of Triumph, a Legendary Artifact) self-reference by
+/// their own card name rather than "this [type]": "As Hall of Triumph enters,
+/// choose a color." CR 201.5: text that refers to the object it's on by name
+/// means just that particular object — the same self-reference as "this
+/// permanent", just spelled with the name instead. The alternate branch mirrors
+/// the structural self-by-name match used by
+/// <see cref="SelfNameEntersTappedRule"/> (capitalized name words, optional
+/// comma-epithet) rather than requiring the literal card name at parse time.
+/// </para>
 /// </summary>
 [StaticRule(Priority = 960)]
 public sealed class ChooseColorOnEntryRule : IStaticRule
 {
   private static readonly Regex _chooseColorOnEntryPattern = new(
-    @"^\s*As\s+this\s+(?:permanent|land|creature|artifact|enchantment|Aura)\s+enters,\s+choose\s+a\s+color(?:\s+(?<restriction>other\s+than\s+[a-z]+?))?\.?\s*$",
-    RegexOptions.IgnoreCase | RegexOptions.Compiled
+    @"^\s*As\s+(?:this\s+(?:permanent|land|creature|artifact|enchantment|Aura)|[A-Z][A-Za-z'\-]+(?:,\s+[A-Z][A-Za-z'\-]+)*(?:\s+[A-Za-z'\-]+)*)\s+enters,\s+choose\s+a\s+color(?:\s+(?<restriction>other\s+than\s+[a-z]+?))?\.?\s*$",
+    RegexOptions.Compiled
   );
 
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
