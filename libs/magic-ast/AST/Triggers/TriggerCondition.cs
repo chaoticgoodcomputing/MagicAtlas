@@ -128,6 +128,34 @@ public sealed record TriggerCondition
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public int? MinimumCount { get; init; }
+
+  /// <summary>
+  /// True when the trigger event only counts if it occurs during the
+  /// ability's controller's own turn — "during your turn" (Thran Vigil:
+  /// "Whenever one or more artifact and/or creature cards leave your
+  /// graveyard <i>during your turn</i>, ..."). This narrows the WINDOW in
+  /// which the event must occur for the ability to trigger.
+  ///
+  /// <para>
+  /// Distinct from <see cref="PerTurn"/> (which scopes an <see cref="Ordinal"/>
+  /// reset, not the event window) and from
+  /// <see cref="MagicAST.AST.Abilities.TriggeredAbilityRestriction.OnlyDuringYourTurn"/>
+  /// (a restriction carried by a trailing standalone sentence AFTER the
+  /// resolution clause — CR 603.2h, "Do this only during your turn.") — here
+  /// the qualifier is grammatically part of the trigger condition clause
+  /// itself, so it lives on the condition rather than on the ability.
+  /// </para>
+  ///
+  /// <para>
+  /// CR 603.2: "Whenever a game event or game state matches a triggered
+  /// ability's trigger event, that ability automatically triggers." This
+  /// field narrows which occurrences of the event match. Null when no turn
+  /// qualifier is present (the default: any occurrence of the event
+  /// triggers, regardless of whose turn it is).
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? DuringYourTurn { get; init; }
 }
 
 /// <summary>
