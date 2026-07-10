@@ -14,8 +14,9 @@ using MagicAST.AST.References;
 /// creatures you control have trample."
 ///
 /// <para>
-/// CR 112.6a: an ability can function from a graveyard (or another zone) if it's
-/// written to do so or if the ability is characteristic-defining; MAST does not model
+/// CR 113.6a/113.6b: an ability's text can establish that it functions from a zone other
+/// than the battlefield (113.6b lists the zones in which an ability can function, including
+/// the graveyard when the ability says so); MAST does not model
 /// zone-functioning machinery itself (ADR 0003/0004 describe-not-execute) — it simply
 /// records that the condition's first conjunct is a state check on the source card's
 /// OWN current zone (<c>ObjectFilter.IsSelf</c> + <c>Zone.Graveyard</c>), composed with
@@ -103,7 +104,7 @@ public sealed class AsLongAsInGraveyardKeywordGrantRule : IStaticRule
     }
 
     // Conjunct 1: "this card is in your graveyard" — the graveyard-functional zone
-    // check (CR 112.6a) on the source card itself.
+    // check (CR 113.6a/113.6b) on the source card itself.
     var inGraveyard = new CountCondition
     {
       Filter = new ObjectFilter
