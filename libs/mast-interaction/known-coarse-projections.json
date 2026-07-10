@@ -30,6 +30,7 @@
     "cantBeBlocked": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "cantBeCast": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "cantBeCountered": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "cantBeCopied": "CR 707 self-spell can't-be-copied static on the stack (See Double) \u2014 a negative/preventive property that forbids a copy being made of this spell, not an emit/consume event; sibling of cantBeCountered which is likewise a coarse on-the-stack self-spell restriction; no flow rule reads copy-prohibition yet; consciously inert for interaction recall",
     "cantBlock": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "cantCastMoreThanNSpells": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "cantDrawCards": "CR 121 (drawing a card) global draw-lock static (Maralen of the Mornsong 'Players can't draw cards.') \u2014 a rules-of-the-game prohibition, not an emit/consume event; sibling of cantGainLife/cantBeCast/cantCastMoreThanNSpells/noMaxHandSize which are all coarse restriction statics; no flow rule reads draw-lock yet; consciously inert for interaction recall",
