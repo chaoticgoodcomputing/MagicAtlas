@@ -404,6 +404,15 @@
           ]
         },
         {
+          "Type": "ObjectInZoneCondition",
+          "Discriminator": "objectInZone",
+          "IsUnparsed": false,
+          "Fields": [
+            "Reference",
+            "Zone"
+          ]
+        },
+        {
           "Type": "OtherCondition",
           "Discriminator": "other",
           "IsUnparsed": false,
@@ -715,6 +724,14 @@
           ]
         },
         {
+          "Type": "ActivateAbilitiesAsThoughHasteEffect",
+          "Discriminator": "activateAbilitiesAsThoughHaste",
+          "IsUnparsed": false,
+          "Fields": [
+            "AppliesTo"
+          ]
+        },
+        {
           "Type": "ActivateLoyaltyAbilityAsThoughEffect",
           "Discriminator": "activateLoyaltyAbilityAsThough",
           "IsUnparsed": false,
@@ -998,6 +1015,14 @@
           ]
         },
         {
+          "Type": "CantLoseGameForZeroLifeEffect",
+          "Discriminator": "cantLoseGameForZeroLife",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
           "Type": "CastWithoutPayingEffect",
           "Discriminator": "castWithoutPaying",
           "IsUnparsed": false,
@@ -1036,6 +1061,14 @@
           "IsUnparsed": false,
           "Fields": [
             "Spell"
+          ]
+        },
+        {
+          "Type": "ChooseBasicLandTypeEffect",
+          "Discriminator": "chooseBasicLandType",
+          "IsUnparsed": false,
+          "Fields": [
+            "Options"
           ]
         },
         {
@@ -2653,6 +2686,12 @@
           ]
         },
         {
+          "Type": "ManaSpentToCastQuantity",
+          "Discriminator": "manaSpentToCast",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "UpToQuantity",
           "Discriminator": "upTo",
           "IsUnparsed": false,
@@ -2774,5 +2813,5 @@
       ]
     }
   ],
-  "SchemaHash": "ad10965a7fc572a801e10260c4848d1876a22e457a78ac990c2028f9a860841e"
+  "SchemaHash": "a70a6cce775055ce6e8ac81afef78fe06e1611325f086986905a39361fd17c04"
 }
