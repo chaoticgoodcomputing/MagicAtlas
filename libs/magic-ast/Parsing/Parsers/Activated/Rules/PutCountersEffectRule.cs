@@ -8,7 +8,8 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// "Put N +1/+1 (or -1/-1) counters on [target]" — "Put a +1/+1 counter on this
-/// creature", "Put a +1/+1 counter on target creature you control".
+/// creature", "Put a +1/+1 counter on target creature you control", "Put a +1/+1
+/// counter on each creature you control" (Leyline of Abundance).
 ///
 /// <para>Also handles named counters in the activated path — "Put a storage
 /// counter on this land", "Put a charge counter on this artifact" (the storage-
@@ -20,6 +21,16 @@ using MagicAST.AST.References;
 [ActivatedEffectRule(Priority = 996)]
 public sealed class PutCountersEffectRule : IActivatedEffectRule
 {
+  // "on each <type> you control" — bare (non-"other") mass-counter shape, e.g.
+  // "Put a +1/+1 counter on each creature you control" (Leyline of Abundance, Gavony
+  // Township, Shalai, Voice of Plenty). End-anchored (see usage below) so it can only
+  // claim the target clause when "you control" is the FINAL word of the effect text —
+  // it will not match as a substring inside a longer compound sentence.
+  private static readonly Regex _eachTypeYouControlPattern = new(
+    @"\bon\s+each\s+(?<type>creature|artifact|enchantment|land|planeswalker|permanent)\s+you\s+control$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   public Effect? TryMatch(string effectText)
   {
     effectText = effectText.Trim().TrimEnd('.');
@@ -86,6 +97,25 @@ public sealed class PutCountersEffectRule : IActivatedEffectRule
           Subtypes = [subtype],
           Controller = ControllerFilter.You,
           ExcludeSelf = true,
+        },
+      };
+    }
+    else if (_eachTypeYouControlPattern.Match(effectText) is { Success: true } eachTypeMatch)
+    {
+      // "put a +1/+1 counter on each creature you control" (Leyline of Abundance and
+      // many other mass-counter activated/loyalty abilities, e.g. Gavony Township,
+      // Shalai, Voice of Plenty). End-anchored so it can NOT match a substring of a
+      // longer compound sentence (e.g. Ajani Steadfast's "... on each creature you
+      // control and a loyalty counter on each other planeswalker you control" — the
+      // trailing clause means this pattern does not match at all, leaving that shape
+      // unaffected/unclaimed rather than silently mis-targeted).
+      target = new ObjectReference
+      {
+        Kind = ObjectReferenceKind.Each,
+        Filter = new ObjectFilter
+        {
+          CardTypes = [eachTypeMatch.Groups["type"].Value.ToLowerInvariant()],
+          Controller = ControllerFilter.You,
         },
       };
     }

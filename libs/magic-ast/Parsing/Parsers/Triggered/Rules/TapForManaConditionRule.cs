@@ -34,6 +34,13 @@ using MagicAST.AST.Triggers;
 ///     specific symbol is recorded (<see cref="TriggerCondition.ProducedMana"/> is null).
 ///     Controller: You when "you tap"; Any when "a player taps".
 ///   </item>
+///   <item>
+///     Creature any-mana: "you tap a creature for mana" (Leyline of Abundance) — the trigger
+///     fires on any mana production by tapping a creature (<c>CardTypes: ["creature"]</c>). No
+///     specific symbol is recorded (<see cref="TriggerCondition.ProducedMana"/> is null) — the
+///     mirror-image of the Dictate of Karametra land variant above, for creatures rather than
+///     lands. Controller: You when "you tap"; Any when "a player taps".
+///   </item>
 /// </list>
 ///
 /// CR 106.12: "To 'tap [a permanent] for mana' is to activate a mana ability of that permanent
@@ -80,6 +87,16 @@ public sealed class TapForManaConditionRule : ITriggerConditionRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // "you tap a creature for mana" — Leyline of Abundance shape. No "permanent" word
+  // appears (the tapped object is explicitly "a creature"), so this is checked before
+  // the "permanent" guard below, mirroring the land variant above. No specific mana
+  // symbol; no nonland exclusion needed (the creature card type is already narrower
+  // than "nonland permanent").
+  private static readonly Regex _tapCreatureForAnyManaPattern = new(
+    @"\b(?<subject>you|a\s+player)\s+tap[s]?\s+a\s+creature\s+for\s+mana\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   public TriggerCondition? Match(string triggerText, string lower, TriggerTiming timing)
   {
     if (!lower.Contains("tap"))
@@ -122,6 +139,29 @@ public sealed class TapForManaConditionRule : ITriggerConditionRule
         Filter = new ObjectFilter
         {
           CardTypes = ["land"],
+          Controller = controller,
+        },
+        // ProducedMana is null — the trigger fires for any mana type.
+      };
+    }
+
+    // "you tap a creature for mana" — Leyline of Abundance. Checked before the
+    // "permanent" guard because this shape names "a creature", not "a permanent".
+    var c = _tapCreatureForAnyManaPattern.Match(triggerText.Trim());
+    if (c.Success)
+    {
+      var subject = c.Groups["subject"].Value.Trim();
+      var controller = subject.Equals("you", System.StringComparison.OrdinalIgnoreCase)
+        ? ControllerFilter.You
+        : ControllerFilter.Any;
+
+      return new TriggerCondition
+      {
+        Timing = timing,
+        Event = TriggerEvent.TapsForMana,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
           Controller = controller,
         },
         // ProducedMana is null — the trigger fires for any mana type.
