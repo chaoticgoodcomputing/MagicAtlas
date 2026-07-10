@@ -491,6 +491,35 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Remove up to three counters from target creature." (Heartless Act) /
+    // "Remove all counters from all permanents ..." (Aether Snap) — a one-shot
+    // counter-removal resolution step (CR 122.3: "If a permanent has both a
+    // +1/+1 counter and a -1/-1 counter on it, N of each are removed …" — removal
+    // is an effect action, not a declarative static). "Remove" is not in the
+    // generic <see cref="_spellInstructionVerbs"/> allowlist (too broad to
+    // allowlist bare — it also heads combat-removal and ante lines), so without
+    // this intercept the clause defaults to Static and stalls in the unimplemented
+    // static-ability parser. Anchored to the "Remove … counter(s) from …" frame so
+    // it only catches counter removal. The activated-cost form ("Remove three spore
+    // counters from this creature: …") is already intercepted earlier by
+    // <see cref="IsActivatedAbilityPattern"/> (the colon), so this fires only for the
+    // bare spell-body / modal-option form.
+    if (
+      Regex.IsMatch(
+        clause.RawText.TrimStart(),
+        @"^Remove\s+.*\bcounters?\b\s+from\b",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "Take an extra turn after this one." / "Take two extra turns after this
     // one." — a one-shot spell-resolution effect that schedules additional
     // turn(s) (CR 500.7: "Some effects can give a player extra turns. They do
