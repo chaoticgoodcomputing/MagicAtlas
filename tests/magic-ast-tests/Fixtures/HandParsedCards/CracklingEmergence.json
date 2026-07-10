@@ -1,0 +1,149 @@
+{
+  "Input": {
+    "Name": "Crackling Emergence",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant land you control\nEnchanted land is a 3/3 red Spirit creature with haste. It's still a land.\nIf enchanted land would be destroyed, instead sacrifice this Aura and that land gains indestructible until end of turn.",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": ["Enchant"],
+    "Id": "6f77f987-ebb7-4105-a67c-0987f50fc676",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Crackling Emergence",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant land you control\nEnchanted land is a 3/3 red Spirit creature with haste. It's still a land.\nIf enchanted land would be destroyed, instead sacrifice this Aura and that land gains indestructible until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": ["land"],
+                "Controller": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "becomesCreature",
+              "Subject": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "Power": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Toughness": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Colors": ["R"],
+              "CardTypes": ["land", "creature"],
+              "AddedSubtypes": ["Spirit"],
+              "GainedAbilities": [
+                {
+                  "Kind": "static",
+                  "KeywordSource": "Haste",
+                  "Effects": [
+                    {
+                      "EffectType": "keywordAbility",
+                      "Keyword": "Haste"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "destruction",
+                "AffectedObjects": {
+                  "CardTypes": ["land"],
+                  "IsEnchanted": true
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "sacrifice",
+                    "Target": {
+                      "Kind": "Self"
+                    }
+                  },
+                  {
+                    "EffectType": "gainAbility",
+                    "Target": {
+                      "Kind": "It"
+                    },
+                    "GainedAbility": {
+                      "Kind": "static",
+                      "KeywordSource": "Indestructible",
+                      "Effects": [
+                        {
+                          "EffectType": "keywordAbility",
+                          "Keyword": "Indestructible"
+                        }
+                      ]
+                    },
+                    "Duration": {
+                      "DurationType": "untilTime",
+                      "Until": {
+                        "Part": "Turn",
+                        "Edge": "End"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}
