@@ -1844,6 +1844,12 @@ public sealed class AbilityClassifier
       || kind == OracleToken.RedMana
       || kind == OracleToken.GreenMana
       || kind == OracleToken.ColorlessMana
+      // Snow mana symbol {S} (CR 107.4h): "a cost that can be paid with one mana
+      // of any type produced by a snow source". A leading "{S}:" (Goblin
+      // Rimerunner) is a mana cost component just like {W}/{U}/…/{C} and must
+      // be recognized so the clause classifies as Activated rather than falling
+      // through to Static.
+      || kind == OracleToken.SnowMana
       || kind == OracleToken.HybridMana
       || kind == OracleToken.PhyrexianMana
       || kind == OracleToken.VariableMana
