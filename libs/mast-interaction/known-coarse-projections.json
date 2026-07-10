@@ -76,6 +76,7 @@
     "gainAbility": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "gainControl": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "gainEnergy": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "goaded": "CR 701.15b goaded designation (Bloodthirsty Blade) — an attack-requirement/attack-direction designation, sibling of the already-coarse mustAttack/cantAttack combat-restriction family; no flow rule reads the goaded designation yet; consciously inert for interaction recall",
     "graft": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "harmonize": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "hasAllAbilitiesOfControlledCreatures": "ability-set grant from battlefield creatures you control (CR 613.1f layer-6, Marvin Murderous Mimic) — grants all activated abilities of a filtered set of controlled permanents; no interaction flow rule reads this dynamic ability-set grant yet; consciously inert for interaction recall",
