@@ -1,0 +1,122 @@
+{
+  "Input": {
+    "Name": "Requisition Raid",
+    "ManaCost": "{W}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Destroy target artifact.\n+ {1} — Destroy target enchantment.\n+ {1} — Put a +1/+1 counter on each creature target player controls.",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": ["Spree"],
+    "Id": "154e9ba9-0d0e-4b0e-acf2-f66a993cf3a2",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Requisition Raid",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Spree (Choose one or more additional costs.)\n+ {1} — Destroy target artifact.\n+ {1} — Destroy target enchantment.\n+ {1} — Put a +1/+1 counter on each creature target player controls.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Spree",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Spree"
+            }
+          ],
+          "Reminder": {
+            "Text": "(Choose one or more additional costs.)"
+          }
+        },
+        {
+          "Kind": "spreeMode",
+          "AdditionalCost": {
+            "CostType": "mana",
+            "Symbols": [
+              { "Kind": "generic", "GenericAmount": 1 }
+            ]
+          },
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["artifact"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "spreeMode",
+          "AdditionalCost": {
+            "CostType": "mana",
+            "Symbols": [
+              { "Kind": "generic", "GenericAmount": 1 }
+            ]
+          },
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["enchantment"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "spreeMode",
+          "AdditionalCost": {
+            "CostType": "mana",
+            "Symbols": [
+              { "Kind": "generic", "GenericAmount": 1 }
+            ]
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "Target"
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}
