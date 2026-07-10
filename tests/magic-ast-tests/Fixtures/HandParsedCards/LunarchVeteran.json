@@ -1,0 +1,254 @@
+{
+  "Input": {
+    "Name": "Lunarch Veteran // Luminous Phantom",
+    "TypeLine": "Creature — Human Cleric // Creature — Spirit Cleric",
+    "ColorIdentity": ["W"],
+    "Keywords": ["Flying", "Transform", "Disturb"],
+    "Id": "438e3302-daf9-436b-8b08-24b3f33295f6",
+    "Layout": "transform",
+    "CardFaces": [
+      {
+        "Name": "Lunarch Veteran",
+        "ManaCost": "{W}",
+        "TypeLine": "Creature — Human Cleric",
+        "OracleText": "Whenever another creature you control enters, you gain 1 life.\nDisturb {1}{W} (You may cast this card from your graveyard transformed for its disturb cost.)",
+        "Power": "1",
+        "Toughness": "1",
+        "Colors": ["W"]
+      },
+      {
+        "Name": "Luminous Phantom",
+        "ManaCost": "",
+        "TypeLine": "Creature — Spirit Cleric",
+        "OracleText": "Flying\nWhenever another creature you control leaves the battlefield, you gain 1 life.\nIf Luminous Phantom would be put into a graveyard from anywhere, exile it instead.",
+        "Power": "1",
+        "Toughness": "1",
+        "Colors": ["W"],
+        "ColorIndicator": ["W"]
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Lunarch Veteran // Luminous Phantom",
+    "TypeLine": {
+      "Raw": "Creature — Human Cleric // Creature — Spirit Cleric",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Cleric", "//", "Creature", "—", "Spirit", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "layout",
+        "Layout": "transform"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Lunarch Veteran",
+        "TypeLine": {
+          "Raw": "Creature — Human Cleric",
+          "Types": ["Creature"],
+          "Subtypes": ["Human", "Cleric"]
+        },
+        "Oracle": {
+          "RawText": "Whenever another creature you control enters, you gain 1 life.\nDisturb {1}{W} (You may cast this card from your graveyard transformed for its disturb cost.)",
+          "Abilities": [
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "Whenever",
+                "Event": "Enters",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "gainLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
+              ]
+            },
+            {
+              "Kind": "static",
+              "KeywordSource": "Disturb",
+              "Reminder": {
+                "Text": "(You may cast this card from your graveyard transformed for its disturb cost.)"
+              },
+              "Effects": [
+                {
+                  "EffectType": "alternativeCast",
+                  "FromZone": "Graveyard",
+                  "Cost": {
+                    "CostType": "mana",
+                    "Symbols": [
+                      {
+                        "Kind": "generic",
+                        "GenericAmount": 1
+                      },
+                      {
+                        "Kind": "colored",
+                        "Colors": ["W"]
+                      }
+                    ]
+                  },
+                  "Transformed": true
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{W}",
+            "Symbols": [
+              {
+                "Kind": "colored",
+                "Colors": ["W"]
+              }
+            ],
+            "ManaValue": 1,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": ["W"]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 1,
+              "Raw": "1"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 1,
+              "Raw": "1"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Luminous Phantom",
+        "TypeLine": {
+          "Raw": "Creature — Spirit Cleric",
+          "Types": ["Creature"],
+          "Subtypes": ["Spirit", "Cleric"]
+        },
+        "Oracle": {
+          "RawText": "Flying\nWhenever another creature you control leaves the battlefield, you gain 1 life.\nIf Luminous Phantom would be put into a graveyard from anywhere, exile it instead.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "KeywordSource": "Flying",
+              "Effects": [
+                {
+                  "EffectType": "evasion",
+                  "CanBeBlockedBy": {
+                    "CardTypes": ["creature"],
+                    "Characteristics": [
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Flying"
+                      },
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Reach"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "Whenever",
+                "Event": "LeavesTheBattlefield",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "gainLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
+              ]
+            },
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "replacement",
+                  "Event": {
+                    "EventType": "zoneChange",
+                    "DestinationZone": "Graveyard",
+                    "AffectedObjects": {
+                      "IsSelf": true
+                    }
+                  },
+                  "OriginalEventOccurs": false,
+                  "Replacement": {
+                    "EffectType": "exile",
+                    "Target": {
+                      "Kind": "Self"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "colors",
+            "Colors": ["W"]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 1,
+              "Raw": "1"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 1,
+              "Raw": "1"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
