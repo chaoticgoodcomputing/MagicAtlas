@@ -278,6 +278,21 @@ public sealed record ObjectFilter
   public IReadOnlyList<Characteristic>? Characteristics { get; init; }
 
   /// <summary>
+  /// Keyword abilities the filtered object must NOT have — "creatures without
+  /// flying" (Moat: "Creatures without flying can't attack.", CR 702.9 flying).
+  /// The negation axis parallel to the positive "has [keyword]" predicate carried
+  /// by <see cref="KeywordCharacteristic"/> inside <see cref="Characteristics"/>,
+  /// mirroring how <see cref="ExcludedCardTypes"/>/<see cref="ExcludedSubtypes"/>/
+  /// <see cref="ExcludedColors"/>/<see cref="ExcludedSupertypes"/> each pair with
+  /// their positive counterpart axis. Distinct from the typed residual
+  /// <see cref="OtherCharacteristic"/> ("withoutFlying" free-text description)
+  /// some existing rules emit as a deliberate scope deferral (ADR 0001) — this is
+  /// the first-class structured predicate for the "without [keyword]" shape.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<KeywordAbility>? LacksKeywords { get; init; }
+
+  /// <summary>
   /// Restricts the filter to objects matching the characteristic value CHOSEN as
   /// this permanent entered — the structured consumer side of a CR 607 linked ability
   /// (the producer is a "choose a [creature type|color]" effect under
