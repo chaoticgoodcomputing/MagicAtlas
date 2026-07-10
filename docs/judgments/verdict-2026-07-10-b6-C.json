@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SerendibDjinn.json",
+      "verdict": "FAIL",
+      "citations": ["CR 603.8", "CR 603.12"],
+      "reason": "third ability 'sacrifice this creature' models Target.Kind=It, but the AST enum defines Self='this creature'/'this permanent' and It='previously mentioned object'; there is no antecedent for It here (source self-reference), and precedent fixtures (LonghornFirebeast, WildLeotau, WhipstitchedZombie) all model 'this creature' as Self. FLAG-1 OtherCondition free-text 'you sacrifice an Island this way' IS genuinely irreducible (reflexive causation-gate + subtype filter, matches whitelisted Spelunking precedent) and is fine."
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ControlNoLandsConditionRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 603.8", "CR 603.2e"],
+      "reason": "doc-comment cites CR 603.2e (the 'becomes' transition-trigger subrule) for what is textbook a STATE-triggered ability; CR 603.8 is the state-trigger rule and its own example is 'controlling no permanents of a particular card type'. 603.2e's text ('trigger only at the time the named event happens') contradicts state-trigger semantics. Wrong-mechanic citation. (The modeling itself — ControlNoLandType, filter land/You/no-subtype — is correct.)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/KeyToTheCity.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2e", "CR 509.1b", "CR 601.2c"],
+      "reason": "optional>conditionalPay(Cost {2}) + IfYouDo drawCards structured exactly per Deathgreeter/HellkiteCharger precedent; Instructions echo 'you may pay {2}' consistent, draw NOT dropped. BecomesUntapped trigger + up-to-one-target cantBeBlocked (upTo Max1/Min0, EOT); no becomes-tapped collision."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AncientGreenwarden.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2d"],
+      "reason": "pure Panharmonicon reuse: replacement/abilityTrigger AffectedObjects{permanent,You} CausedByEntering{land} OriginalEventOccurs Modifier{additionalTime}; CR 603.2d verbatim; anchored matchers literal-phrase-distinct from Panharmonicon/Drivnod (no collision); Reach+reminder+mayPlayFromGraveyard faithful."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GauntletsOfLight.json",
+      "verdict": "PASS",
+      "citations": ["CR 510.1a", "CR 702.5"],
+      "reason": "enchantRestriction + modifyPT(+0/+2, EnchantedOrEquipped) + reused AssignDamageAsToughnessEffect (510.1a verified); granted '{2}{W}: Untap this creature' fully STRUCTURED (activated, untap Self correct within granted-ability frame); anchored regex distinct from High Alert."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FlowstoneSlide.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.2", "CR 107.3", "CR 613.4c"],
+      "reason": "modifyPT Each/creature, +X (VariableQuantity), -X (CalculatedQuantity multiply -1), EOT; CR 611.2/107.3/613.4c verified. AbilityClassifier X/Y/Z block disjoint from digit block ([XYZ] never matches \\d) so digit mass-anthems not diverted; spell rule anchored, disjoint from MassAnthemSpellRule."
+    }
+  ]
+}

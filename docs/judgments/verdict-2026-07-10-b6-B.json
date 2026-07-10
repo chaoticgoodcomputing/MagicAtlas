@@ -1,0 +1,118 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TheTenRings.json",
+      "verdict": "PASS",
+      "citations": ["CR 402.2"],
+      "reason": "K19: maxHandSize You/Value:10 static + end-step top-up drawCards CalculatedQuantity(10 minus CardsInHand) faithful to 'draw cards equal to the difference'; byte-exact oracle"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Keyword/MaxHandSizeEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 402.2"],
+      "reason": "K19: Player+Value numeric-SET sibling of NoMaxHandSizeEffect; 402.2 (maximum hand size) matches (minor: doc aside cites 604.3 CDA where 604.2 static-persistence fits better - not load-bearing)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/ConditionParser.cs",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "K19: PendingHandSizeUpperBound [ThreadStatic] cleared at top of every Parse() (no cross-parse leak); widened HandSize regex ('fewer/more than N') stays anchored to the hand-count predicate - sibling-sweep shows no mis-capture"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#maxHandSize",
+      "verdict": "PASS",
+      "citations": ["CR 402.2"],
+      "reason": "K19: coarse projection sensible - hand-size-limit static is a rules-of-the-game numeric restriction, inert for interaction recall (sibling of noMaxHandSize/cantDrawCards/cantGainLife)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ObscuringAether.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 708.1", "CR 708.2a"],
+      "reason": "K20: costReduction over CardTypes[spell,creature]+IsFaceDown+Controller:You static, plus activated turnFaceDown Self; byte-exact oracle"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/ZoneChange/TurnFaceDownEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 708.1", "CR 708.2a", "CR 701.27b"],
+      "reason": "K20: turnFaceDown Target-only node; 708.1/708.2a (face down), 701.27b (turn-face-down vs transform distinct game actions) all verified"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilter.cs#IsFaceDown",
+      "verdict": "PASS",
+      "citations": ["CR 708.1"],
+      "reason": "K20: nullable bool game-state axis, correctly not asserted as a printed characteristic; grounded in 708.1"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/FaceDownCreatureSpellCostReductionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 118.7a", "CR 601.2f"],
+      "reason": "K20: worker's brief-correction confirmed - 118.7 IS cost reduction ('cost may be changed or reduced'), 118.9 IS alternative costs; anchored regex, Dream Chisel (identical phrase) now parses not mis-captures"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#turnFaceDown",
+      "verdict": "PASS",
+      "citations": ["CR 708.2a"],
+      "reason": "K20: coarse projection sensible - face-down state flip, sibling of transform (also coarse); no flow rule reads face-down-state events"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MelirasKeepers.json",
+      "verdict": "PASS",
+      "citations": ["CR 122"],
+      "reason": "K26: cantHaveCounters (nullable Target=Self, nullable CounterType=all) static; oracle byte-exact ('This creature can't have counters put on it.')"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Counter/CantHaveCountersEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 122"],
+      "reason": "K26: null-Target-means-Self convention (mirrors CantAttackEffect/CantBeBlockedEffect); anchored 'This creature/permanent' regex correctly declines Blossombind/Suncleanser filtered variants - no board-wide over-capture"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#cantHaveCounters",
+      "verdict": "PASS",
+      "citations": ["CR 122"],
+      "reason": "K26: coarse projection sensible - counter-denial object-suppression static, inert for interaction recall (sibling of cantAttack/cantBeBlocked/cantHaveOrGainKeyword)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Moat.json",
+      "verdict": "PASS",
+      "citations": ["CR 508.1c", "CR 702.9"],
+      "reason": "K22: cantAttack over Each creature with LacksKeywords:[Flying], no Controller (all players); oracle byte-exact"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilter.cs#LacksKeywords",
+      "verdict": "PASS",
+      "citations": ["CR 508.1c", "CR 702.9"],
+      "reason": "K22: IReadOnlyList<KeywordAbility> negation axis (KeywordAbility.Flying valid); anchored 'Creatures without X can't attack' regex correctly excludes Form of the Dragon ('can't attack you'), captures Moat + Magus of the Moat (identical) - no mis-capture"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Dragonologist.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 702.11", "CR 401.4"],
+      "reason": "K07: fixture shape faithful - look-privately compound effect (type-or-subtype disjunction filter is established convention) + Untapped/Dragon/You tapped-state anthem granting hexproof; no unparsed, no lossy secondary line"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/CardFlow/LookAtTopMayRevealMatchingRestToBottomEffect.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 701.19a", "CR 701.20a"],
+      "reason": "K07: contradictory citation - doc quotes 'CR 701.19a: to look at cards means to check for specific information' but 701.19a in the corpus is the REGENERATE rule (fabricated quote). 701.20a (reveal) and 401.4 (random-order) are correct; only the look-action cite is wrong (no dedicated look-at keyword-action rule exists - drop or re-anchor to a hidden-information rule)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/LookAtTopMayRevealMatchingRestToBottomTriggeredRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 701.19a"],
+      "reason": "K07: same contradictory citation - doc-comment cites 'CR 701.19a (look)' but 701.19a is Regenerate. Structure/anchoring/disjunction-parse all sound; only the CR number is wrong"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/TappedStateSubtypeCreaturesHaveKeywordRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 702.11", "CR 110.5"],
+      "reason": "K07: state-qualified subtype anthem well-anchored (state-first + bare-plural subtype), disjoint from J17 SubtypeCreaturesHaveKeywordListRule and BareKeywordGrantRule; sweep shows only Dragonologist matches. NOTE: reused tap citation 'CR 701.21' is Sacrifice in the corpus - should be 701.26 (Tap and Untap); pre-existing drift inherited from TappedStateCharacteristic, correct 110.5 present alongside"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#lookAtTopMayRevealMatchingRestToBottom",
+      "verdict": "PASS",
+      "citations": ["CR 401.4"],
+      "reason": "K07: coarse projection DECISION sensible - library-visibility look effect matching sibling reveal/impulse coarse precedent, inert for interaction recall. NOTE: reason string embeds the same wrong 'CR 701.19a look' cite - fix alongside the node"
+    }
+  ]
+}
