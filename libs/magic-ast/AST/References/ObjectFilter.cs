@@ -398,6 +398,16 @@ public enum ChosenCharacteristicKind
   /// land type is governed by CR 305.7 (the land loses its old land types and gains the corresponding mana
   /// abilities).</summary>
   BasicLandType,
+
+  /// <summary>"the chosen name" — the card name chosen as the permanent entered (CR 614.12; Declaration of
+  /// Naught: "As this enchantment enters, choose a card name." / "{U}: Counter target spell with the chosen
+  /// name."). Structured consumer of a <see cref="Effects.Keyword.ChooseCardNameEffect"/> producer, mirroring
+  /// how <see cref="CreatureType"/>/<see cref="Color"/>/<see cref="CardType"/> consume their own
+  /// "choose a [X]" producers. Used on an <see cref="ObjectFilter"/> whose <see cref="ObjectFilter.CardTypes"/>
+  /// already names the object category (e.g. "spell") — the chosen name narrows that category to the single
+  /// named card rather than duplicating the literal <see cref="ObjectFilter.Name"/> string field, since the
+  /// name itself is a fresh per-game choice, not a fixed value printed on the card.</summary>
+  CardName,
 }
 
 /// <summary>
