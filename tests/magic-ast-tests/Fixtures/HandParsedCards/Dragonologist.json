@@ -1,0 +1,107 @@
+{
+  "Input": {
+    "Name": "Dragonologist",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Creature — Human Wizard",
+    "OracleText": "When this creature enters, look at the top six cards of your library. You may reveal an instant, sorcery, or Dragon card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.\nUntapped Dragons you control have hexproof.",
+    "Power": "1",
+    "Toughness": "3",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "8810ebb4-9e51-46f0-a54a-a0b4d77b762a",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Dragonologist",
+    "TypeLine": {
+      "Raw": "Creature — Human Wizard",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Wizard"]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, look at the top six cards of your library. You may reveal an instant, sorcery, or Dragon card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.\nUntapped Dragons you control have hexproof.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "lookAtTopMayRevealMatchingRestToBottom",
+              "Player": { "Kind": "You" },
+              "Count": { "QuantityType": "literal", "Value": 6 },
+              "Filter": {
+                "CardTypes": ["instant", "sorcery"],
+                "Subtypes": ["Dragon"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Subtypes": ["Dragon"],
+                  "Controller": "You",
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "tapped",
+                      "Tapped": false
+                    }
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Hexproof"
+                  }
+                ],
+                "KeywordSource": "Hexproof"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 1, "Raw": "1" },
+        "Toughness": { "ValueType": "fixed", "Value": 3, "Raw": "3" }
+      }
+    ]
+  }
+}
