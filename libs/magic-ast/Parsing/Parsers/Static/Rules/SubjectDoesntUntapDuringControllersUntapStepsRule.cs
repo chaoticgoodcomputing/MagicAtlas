@@ -32,6 +32,16 @@ using MagicAST.AST.References;
 /// </para>
 ///
 /// <para>
+/// Also generalizes over the five basic land SUBTYPES (Islands / Swamps /
+/// Plains / Mountains / Forests), which key an unqualified
+/// <see cref="ObjectFilter.Subtypes"/> filter rather than
+/// <see cref="ObjectFilter.CardTypes"/> — mirroring how "Destroy all Islands."
+/// models its target as <c>Subtypes:["Island"]</c> with no card-type filter.
+/// Canonical card: Choke ("Islands don't untap during their controllers'
+/// untap steps.").
+/// </para>
+///
+/// <para>
 /// CR 502.3 (verbatim): "Third, the active player determines which permanents
 /// they control will untap. Then they untap them all simultaneously. This
 /// turn-based action doesn't use the stack. Normally, all of a player's
@@ -48,11 +58,12 @@ using MagicAST.AST.References;
 public sealed class SubjectDoesntUntapDuringControllersUntapStepsRule : IStaticRule
 {
   // Anchored full-sentence match:
-  // "[Lands|Creatures|Artifacts|Permanents] don't untap during their controllers'
-  // untap steps." Apostrophe class tolerates both the straight (U+0027) and
-  // curly (U+2019) apostrophe forms used across printings.
+  // "[Lands|Creatures|Artifacts|Permanents|Islands|Swamps|Plains|Mountains|
+  // Forests] don't untap during their controllers' untap steps." Apostrophe
+  // class tolerates both the straight (U+0027) and curly (U+2019) apostrophe
+  // forms used across printings.
   private static readonly Regex _pattern = new(
-    @"^\s*(?<subject>Lands|Creatures|Artifacts|Permanents)\s+don[’']t\s+untap\s+during\s+their\s+controllers[’']?\s+untap\s+steps\.?\s*$",
+    @"^\s*(?<subject>Lands|Creatures|Artifacts|Permanents|Islands|Swamps|Plains|Mountains|Forests)\s+don[’']t\s+untap\s+during\s+their\s+controllers[’']?\s+untap\s+steps\.?\s*$",
     RegexOptions.Compiled
   );
 
@@ -65,6 +76,20 @@ public sealed class SubjectDoesntUntapDuringControllersUntapStepsRule : IStaticR
       ["Permanents"] = "permanent",
     };
 
+  // Basic land subtypes (plural surface form → singular subtype string), keyed
+  // separately from card types since these subjects filter on
+  // ObjectFilter.Subtypes, not ObjectFilter.CardTypes (mirrors "Destroy all
+  // Islands." → Filter:{Subtypes:["Island"]}).
+  private static readonly IReadOnlyDictionary<string, string> _subjectToBasicLandSubtype =
+    new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+      ["Islands"] = "Island",
+      ["Swamps"] = "Swamp",
+      ["Plains"] = "Plains",
+      ["Mountains"] = "Mountain",
+      ["Forests"] = "Forest",
+    };
+
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
   {
     var match = _pattern.Match(clause.RawText);
@@ -74,7 +99,17 @@ public sealed class SubjectDoesntUntapDuringControllersUntapStepsRule : IStaticR
     }
 
     var subject = match.Groups["subject"].Value;
-    if (!_subjectToCardType.TryGetValue(subject, out var cardType))
+
+    ObjectFilter filter;
+    if (_subjectToCardType.TryGetValue(subject, out var cardType))
+    {
+      filter = new ObjectFilter { CardTypes = [cardType] };
+    }
+    else if (_subjectToBasicLandSubtype.TryGetValue(subject, out var subtype))
+    {
+      filter = new ObjectFilter { Subtypes = [subtype] };
+    }
+    else
     {
       return null;
     }
@@ -90,7 +125,7 @@ public sealed class SubjectDoesntUntapDuringControllersUntapStepsRule : IStaticR
             Target = new ObjectReference
             {
               Kind = ObjectReferenceKind.Each,
-              Filter = new ObjectFilter { CardTypes = [cardType] },
+              Filter = filter,
             },
             WhoseUntapStep = "their controllers'",
           },
