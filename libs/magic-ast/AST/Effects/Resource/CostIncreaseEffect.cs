@@ -14,7 +14,7 @@ using MagicAST.AST.Effects.Traits;
 /// (CR 601.2), and the mana component of that total is what the caster pays (CR 118.7).
 ///
 /// <para>
-/// Four shapes share this node:
+/// Five shapes share this node:
 /// <list type="bullet">
 ///   <item>"Noncreature spells cost {1} more to cast." (Thorn of Amethyst / Sphere of
 ///         Resistance) — the filter sits on the enclosing StaticAbility.AffectedObjects;
@@ -33,6 +33,14 @@ using MagicAST.AST.Effects.Traits;
 ///         (the spell taxes only itself), and <see cref="PerTargetBeyondFirst"/> is
 ///         true. CR 601.2f: the total cost is the mana cost plus all additional costs
 ///         and cost increases.</item>
+///   <item>"Spells your opponents cast that target this creature cost an additional
+///         3 life to cast." (Terror of the Peaks) — the same targeting-tax shape as
+///         the pre-Ward pattern above (CasterFilter + TargetedObject), but the increase
+///         is paid in a NON-MANA currency (life) rather than mana, so it is carried in
+///         <see cref="LifeAmount"/> instead of <see cref="Amount"/>/<see cref="ManaSymbols"/>;
+///         <see cref="Amount"/> is a zero literal (no mana component at all), mirroring how
+///         the colored-only Ruby Leech shape zeroes Amount when the increase lives entirely
+///         in a different field.</item>
 /// </list>
 /// </para>
 /// </summary>
@@ -53,6 +61,18 @@ public sealed record CostIncreaseEffect : Effect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<ManaSymbol>? ManaSymbols { get; init; }
+
+  /// <summary>
+  /// Life increase to the total cost — "cost an additional 3 life to cast" (Terror
+  /// of the Peaks). A distinct currency from <see cref="Amount"/>/<see cref="ManaSymbols"/>
+  /// (both mana): CR 601.2f's total cost sums "all additional costs and cost increases",
+  /// and a life increase is not a mana symbol, so it is not flattened into the mana
+  /// <see cref="Amount"/> (which stays a zero literal for this shape) nor into
+  /// <see cref="ManaSymbols"/> (there is no {L} mana symbol — life is paid directly
+  /// from the caster's life total, CR 119). Null for every mana-only shape above.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Quantity? LifeAmount { get; init; }
 
   /// <summary>
   /// The object that affected spells must target for the increase to apply.
