@@ -1,0 +1,211 @@
+{
+  "Input": {
+    "Name": "Brenard, Ginger Sculptor",
+    "ManaCost": "{1}{G}{W}{U}",
+    "TypeLine": "Legendary Creature — Human Artificer",
+    "OracleText": "Each creature you control that's a Food or a Golem gets +2/+2 and has trample.\nWhenever another nontoken creature you control dies, you may exile it. If you do, create a token that's a copy of that creature, except it's a 1/1 Food Golem artifact creature in addition to its other types and it has \"{2}, {T}, Sacrifice this token: You gain 3 life.\"",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["G", "U", "W"],
+    "ColorIdentity": ["G", "U", "W"],
+    "Keywords": ["Food"],
+    "Id": "ca6bf2e0-7dc3-4166-98a2-aa7edbf132a8",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Brenard, Ginger Sculptor",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Artificer",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Artificer"]
+    },
+    "Oracle": {
+      "RawText": "Each creature you control that's a Food or a Golem gets +2/+2 and has trample.\nWhenever another nontoken creature you control dies, you may exile it. If you do, create a token that's a copy of that creature, except it's a 1/1 Food Golem artifact creature in addition to its other types and it has \"{2}, {T}, Sacrifice this token: You gain 3 life.\"",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Subtypes": ["Food", "Golem"],
+                  "Controller": "You"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Subtypes": ["Food", "Golem"],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Trample",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Trample"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsToken": false,
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "exile",
+                "Target": {
+                  "Kind": "It"
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "copy",
+                "Target": {
+                  "Kind": "ThatCreature"
+                },
+                "Modifications": [
+                  {
+                    "ModificationType": "powerToughnessOverride",
+                    "Power": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Toughness": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    }
+                  },
+                  {
+                    "ModificationType": "typeAdder",
+                    "CardTypes": ["artifact", "creature"],
+                    "Subtypes": ["Food", "Golem"]
+                  },
+                  {
+                    "ModificationType": "activatedAbilityAdder",
+                    "Ability": {
+                      "Costs": [
+                        {
+                          "CostType": "mana",
+                          "Symbols": [
+                            {
+                              "Kind": "generic",
+                              "GenericAmount": 2
+                            }
+                          ]
+                        },
+                        {
+                          "CostType": "tap"
+                        },
+                        {
+                          "CostType": "sacrifice",
+                          "Filter": {
+                            "IsSelf": true
+                          },
+                          "Quantity": {
+                            "QuantityType": "literal",
+                            "Value": 1
+                          }
+                        }
+                      ],
+                      "Effects": [
+                        {
+                          "EffectType": "gainLife",
+                          "Amount": {
+                            "QuantityType": "literal",
+                            "Value": 3
+                          },
+                          "Player": {
+                            "Kind": "You"
+                          }
+                        }
+                      ],
+                      "IsManaAbility": false
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}{W}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G", "U", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "U", "G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}

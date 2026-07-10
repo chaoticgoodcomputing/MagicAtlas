@@ -521,6 +521,14 @@
           ]
         },
         {
+          "Type": "ActivatedAbilityAdder",
+          "Discriminator": "activatedAbilityAdder",
+          "IsUnparsed": false,
+          "Fields": [
+            "Ability"
+          ]
+        },
+        {
           "Type": "ColorAdder",
           "Discriminator": "colorAdder",
           "IsUnparsed": false,
@@ -3004,5 +3012,5 @@
       ]
     }
   ],
-  "SchemaHash": "767667abd70a73ae09ee611fab4eb2afbecd79791e9e7e43983d322429fee947"
+  "SchemaHash": "a96ec275c90b363edeae3d31d2a224aa4b0d004a30a637e50ca621b0a599ea77"
 }
