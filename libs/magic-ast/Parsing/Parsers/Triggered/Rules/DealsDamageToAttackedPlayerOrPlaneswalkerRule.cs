@@ -7,10 +7,21 @@ using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
 
 /// <summary>
-/// "[this enchantment|this creature|Name] deals N damage to the player or planeswalker
-/// that creature is attacking." — the attack-trigger burn family (Cavalcade of Calamity:
-/// "Whenever a creature you control with power 1 or less attacks, this enchantment deals 1
-/// damage to the player or planeswalker that creature is attacking.").
+/// "[this enchantment|this creature|it|Name] deals N damage to the player or planeswalker
+/// [that creature is|it's|it is] attacking." — the attack-trigger burn family. Two surface
+/// forms of the same effect:
+/// <list type="bullet">
+/// <item>Cavalcade of Calamity — "Whenever a creature you control with power 1 or less attacks,
+/// this enchantment deals 1 damage to the player or planeswalker <b>that creature is</b> attacking."
+/// The attacking creature named by the trigger is a different object than the source enchantment,
+/// so the back-reference is "that creature".</item>
+/// <item>Scorch Spitter — "Whenever this creature attacks, it deals 1 damage to the player or
+/// planeswalker <b>it's</b> attacking." Here the trigger's attacking creature IS the source ("this
+/// creature" / "it"), so the back-reference is the contracted "it's" (= "it is").</item>
+/// </list>
+/// Both forms name the same thing — the single defending object the trigger's attacking creature
+/// is attacking — and therefore the same <see cref="ObjectReferenceKind.AttackedPlayerOrPlaneswalker"/>
+/// reference, so they share one rule/one gold shape.
 ///
 /// <para>Emits a <see cref="DealDamageEffect"/> (Rule 120 — non-combat damage dealt by a
 /// resolving triggered ability) whose <see cref="DealDamageEffect.Target"/> is a
@@ -19,19 +30,21 @@ using MagicAST.AST.References;
 /// creature is attacking (CR 508.1b). The "or" is the two possible kinds of that one
 /// determined object, not a chooser's alternatives, so it is a single determined reference
 /// rather than a <see cref="ObjectReferenceKind.Choice"/>. The damage <see cref="DealDamageEffect.Source"/>
-/// is <see cref="ObjectReferenceKind.Self"/> — "this enchantment"/"this creature" is the
+/// is <see cref="ObjectReferenceKind.Self"/> — "this enchantment"/"this creature"/"it" is the
 /// ability's own source object (CR 109).</para>
 ///
-/// <para>The tail "the player or planeswalker that creature is attacking" is anchored on the
-/// right (^…$) so this rule cannot claim a differently-shaped damage effect; the subject is
+/// <para>The tail "the player or planeswalker [that creature is|it's|it is] attacking" is anchored
+/// on the right (^…$) so this rule cannot claim a differently-shaped damage effect; the subject is
 /// captured but always resolves to the source object (Self), because a resolving ability's
-/// damage is dealt by the permanent that has the ability.</para>
+/// damage is dealt by the permanent that has the ability. The numeric-amount requirement
+/// (<c>\d+|one…ten</c>) keeps trample reminder text — "can deal excess combat damage to the
+/// player or planeswalker it's attacking" — out (no counted amount, "deal" not "deals N").</para>
 /// </summary>
 [TriggeredRule]
 public sealed class DealsDamageToAttackedPlayerOrPlaneswalkerRule : ITriggeredRule
 {
   private static readonly Regex Pattern = new(
-    @"^.+?\s+deals?\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+damage\s+to\s+the\s+player\s+or\s+planeswalker\s+that\s+creature\s+is\s+attacking$",
+    @"^.+?\s+deals?\s+(?<amount>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+damage\s+to\s+the\s+player\s+or\s+planeswalker\s+(?:that\s+creature\s+is|it['’]s|it\s+is)\s+attacking$",
     RegexOptions.Compiled | RegexOptions.IgnoreCase
   );
 
