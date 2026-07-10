@@ -998,6 +998,14 @@
           ]
         },
         {
+          "Type": "CantDrawCardsEffect",
+          "Discriminator": "cantDrawCards",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
           "Type": "CantGainLifeEffect",
           "Discriminator": "cantGainLife",
           "IsUnparsed": false,
@@ -2846,5 +2854,5 @@
       ]
     }
   ],
-  "SchemaHash": "32ee032c43a35756a6787c146fffb6c40f38bfcd335c89ddecab881c79352c27"
+  "SchemaHash": "6646af8bc7626004667591325eb98ac5c2c42672654423cc1ac09320006f5768"
 }

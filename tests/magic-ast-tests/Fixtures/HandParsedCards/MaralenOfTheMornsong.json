@@ -1,0 +1,143 @@
+{
+  "Input": {
+    "Name": "Maralen of the Mornsong",
+    "ManaCost": "{1}{B}{B}",
+    "TypeLine": "Legendary Creature — Elf Wizard",
+    "OracleText": "Players can't draw cards.\nAt the beginning of each player's draw step, that player loses 3 life, searches their library for a card, puts it into their hand, then shuffles.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
+    "Keywords": [],
+    "Id": "ba98d363-194b-4bc0-b9fe-987c498ab6fa",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Maralen of the Mornsong",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Elf Wizard",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Wizard"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Players can't draw cards.\nAt the beginning of each player's draw step, that player loses 3 life, searches their library for a card, puts it into their hand, then shuffles.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantDrawCards",
+              "Player": {
+                "Kind": "EachPlayer"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Draw",
+              "Edge": "Beginning",
+              "Whose": "Any"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "loseLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 3
+                  },
+                  "Player": {
+                    "Kind": "ThatPlayer"
+                  }
+                },
+                {
+                  "EffectType": "searchLibrary",
+                  "Filter": {},
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "ThatPlayer"
+                  },
+                  "Destination": "Hand",
+                  "Revealed": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
