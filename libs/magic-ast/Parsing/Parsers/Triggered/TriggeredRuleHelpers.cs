@@ -314,14 +314,20 @@ internal static class TriggeredRuleHelpers
       return new ObjectFilter { CardTypes = ["creature"], IsEquipped = true };
     }
 
-    // "nontoken creature" / "a nontoken creature" — CR 111: tokens are permanents
-    // created by effects, not cards. "Nontoken" restricts the trigger to creature
-    // permanents that are not tokens (IsToken = false). Must be checked before the
-    // plain "a creature" branch because "a nontoken creature" does NOT contain the
+    // "nontoken creature" / "a nontoken creature" / "another nontoken creature" — CR 111:
+    // tokens are permanents created by effects, not cards. "Nontoken" restricts the trigger
+    // to creature permanents that are not tokens (IsToken = false). Must be checked before
+    // the plain "a creature" branch because "a nontoken creature" does NOT contain the
     // literal substring "a creature" — the two paths are mutually exclusive by text.
+    // "another nontoken creature" excludes the source (CR 109.5) — mirrors the "another
+    // creature" ExcludeSelf convention below (Bane, Lord of Darkness: "another nontoken
+    // creature you control dies"). The intervening "nontoken" word means the plain
+    // ".Contains(\"another creature\")" check below never fires for this phrase, so the
+    // exclusion is captured here instead.
     if (lower.Contains("nontoken creature"))
     {
-      return new ObjectFilter { CardTypes = ["creature"], IsToken = false, Controller = controller };
+      var excludeSelf = lower.Contains("another nontoken creature") ? (bool?)true : null;
+      return new ObjectFilter { CardTypes = ["creature"], IsToken = false, Controller = controller, ExcludeSelf = excludeSelf };
     }
 
     if (lower.Contains("a creature") || lower.Contains("another creature"))
