@@ -38,24 +38,43 @@
           "KeywordSource": "Lifelink"
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 9,
-            "Length": 107
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Controller": "You"
+            },
+            "MinimumCount": 1
           },
-          "RawText": "Whenever one or more creatures you control deal combat damage to a player, you draw a card and lose 1 life.",
-          "Diagnostics": [
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Triggered ability parser not yet implemented",
-              "Location": {
-                "Start": 9,
-                "Length": 107
-              },
-              "RawText": "Whenever one or more creatures you control deal combat damage to a player, you draw a card and lose 1 life.",
-              "Pattern": "UnparsedTriggered",
-              "LastAttemptedRule": "TriggeredAbilityParser.Parse",
-              "FailurePosition": 9
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "drawCards",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                },
+                {
+                  "EffectType": "loseLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -76,9 +95,6 @@
           "Effects": [
             {
               "EffectType": "createToken",
-              "Player": {
-                "Kind": "You"
-              },
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
@@ -95,7 +111,11 @@
                 ],
                 "Subtypes": [
                   "Robot"
-                ]
+                ],
+                "IsCopy": false
+              },
+              "Player": {
+                "Kind": "You"
               }
             }
           ],
@@ -125,7 +145,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
