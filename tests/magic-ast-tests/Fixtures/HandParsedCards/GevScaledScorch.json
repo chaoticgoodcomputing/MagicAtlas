@@ -1,0 +1,149 @@
+{
+  "Input": {
+    "Name": "Gev, Scaled Scorch",
+    "ManaCost": "{B}{R}",
+    "TypeLine": "Legendary Creature — Lizard Mercenary",
+    "OracleText": "Ward—Pay 2 life.\nOther creatures you control enter with an additional +1/+1 counter on them for each opponent who lost life this turn.\nWhenever you cast a Lizard spell, Gev deals 1 damage to target opponent.",
+    "Power": "3",
+    "Toughness": "2",
+    "Colors": ["B", "R"],
+    "ColorIdentity": ["B", "R"],
+    "Keywords": ["Ward"],
+    "Id": "131ea976-289e-4f32-896d-27bbfd423ba9",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Gev, Scaled Scorch",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Lizard Mercenary",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Lizard", "Mercenary"]
+    },
+    "Oracle": {
+      "RawText": "Ward—Pay 2 life.\nOther creatures you control enter with an additional +1/+1 counter on them for each opponent who lost life this turn.\nWhenever you cast a Lizard spell, Gev deals 1 damage to target opponent.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Ward",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesTarget",
+            "Filter": {
+              "Controller": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": {
+                  "Kind": "It"
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "ThatPlayer"
+                },
+                "Cost": {
+                  "CostType": "payLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "When": "asObjectEnters",
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "EntityType": "player",
+                  "Controller": "Opponent",
+                  "History": {
+                    "PredicateType": "lostLifeThisTurn"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": ["spell"],
+              "Subtypes": ["Lizard"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": {
+                "Kind": "Opponent"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}{R}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 3, "Raw": "3" },
+        "Toughness": { "ValueType": "fixed", "Value": 2, "Raw": "2" }
+      }
+    ]
+  }
+}
