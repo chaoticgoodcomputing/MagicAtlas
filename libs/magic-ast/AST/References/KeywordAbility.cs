@@ -620,4 +620,16 @@ public enum KeywordAbility
   /// <see cref="MagicAST.AST.Effects.Keyword.GiftEffect"/>, not this identity.
   /// </summary>
   Gift,
+
+  /// <summary>
+  /// Unlock (CR 709.5e–f) — the class of costs paid to unlock a locked half (door)
+  /// of a Room permanent. CR 709.5e: "A player who controls a permanent that has
+  /// one or more locked halves may pay the mana cost of a locked half of that
+  /// permanent to give that permanent the appropriate unlocked designation."
+  /// CR 709.5f: "Some spells and abilities instruct a player to 'unlock' half of a
+  /// permanent." The surviving keyword identity a reference filter matches on for
+  /// "Unlock costs you pay cost {N} less" (Inquisitive Glimmer) — the sibling of
+  /// <see cref="Equip"/> for the class-of-cost reduction shape (ADR 0003 follow-up 1).
+  /// </summary>
+  Unlock,
 }

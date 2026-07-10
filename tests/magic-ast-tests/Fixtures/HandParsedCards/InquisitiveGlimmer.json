@@ -1,0 +1,100 @@
+{
+  "Input": {
+    "Name": "Inquisitive Glimmer",
+    "ManaCost": "{W}{U}",
+    "TypeLine": "Enchantment Creature — Fox Glimmer",
+    "OracleText": "Enchantment spells you cast cost {1} less to cast.\nUnlock costs you pay cost {1} less.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": ["U", "W"],
+    "ColorIdentity": ["U", "W"],
+    "Keywords": [],
+    "Id": "f1f66e3e-9f1f-4601-aa30-30b66805a5a8",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Inquisitive Glimmer",
+    "TypeLine": {
+      "Raw": "Enchantment Creature — Fox Glimmer",
+      "Types": ["Enchantment", "Creature"],
+      "Subtypes": ["Fox", "Glimmer"]
+    },
+    "Oracle": {
+      "RawText": "Enchantment spells you cast cost {1} less to cast.\nUnlock costs you pay cost {1} less.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": ["spell", "enchantment"],
+            "Controller": "You"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "AppliesTo": {
+                "Kind": "activatedAbility",
+                "Keyword": "Unlock",
+                "Controller": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U", "W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
