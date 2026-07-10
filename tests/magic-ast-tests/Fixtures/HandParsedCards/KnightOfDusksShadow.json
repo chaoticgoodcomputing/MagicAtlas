@@ -1,0 +1,151 @@
+{
+  "Input": {
+    "Name": "Knight of Dusk's Shadow",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Human Knight",
+    "OracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nYour opponents can't gain life.\n{1}{B}: This creature gets +1/+1 until end of turn.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": ["Menace"],
+    "Id": "33dfd2fe-e0e0-465c-b730-a30e6f5c271c",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Knight of Dusk's Shadow",
+    "TypeLine": {
+      "Raw": "Creature — Human Knight",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Knight"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Menace (This creature can't be blocked except by two or more creatures.)\nYour opponents can't gain life.\n{1}{B}: This creature gets +1/+1 until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ]
+              },
+              "MinimumBlockers": 2
+            }
+          ],
+          "KeywordSource": "Menace",
+          "Reminder": {
+            "Text": "(This creature can't be blocked except by two or more creatures.)"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantGainLife",
+              "Player": {
+                "Kind": "EachOpponent"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
