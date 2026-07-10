@@ -1,0 +1,137 @@
+{
+  "Input": {
+    "Name": "Mirror Box",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "The \"legend rule\" doesn't apply to permanents you control.\nEach legendary creature you control gets +1/+1.\nEach nontoken creature you control gets +1/+1 for each other creature you control with the same name as that creature.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "d507daa3-3f16-4ab1-81ea-794e5bb488fc",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Mirror Box",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "The \"legend rule\" doesn't apply to permanents you control.\nEach legendary creature you control gets +1/+1.\nEach nontoken creature you control gets +1/+1 for each other creature you control with the same name as that creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "legendRuleSuppression",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Controller": "You"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Supertypes": [
+                    "Legendary"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "IsToken": false,
+                  "Controller": "You"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "SharesNameWith": {
+                    "Kind": "It"
+                  },
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "ToughnessModifier": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "SharesNameWith": {
+                    "Kind": "It"
+                  },
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

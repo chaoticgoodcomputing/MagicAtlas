@@ -146,6 +146,21 @@ public sealed record ObjectFilter
   public ObjectReference? SharesCreatureTypeWith { get; init; }
 
   /// <summary>
+  /// Relational name axis: filters to objects that have the SAME NAME as a referenced object —
+  /// "other creature you control with the same name as that creature" (Mirror Box: "Each nontoken
+  /// creature you control gets +1/+1 for each other creature you control with the same name as that
+  /// creature."). CR 201.2 (two objects have the same name if the English versions of their names
+  /// are identical). Parallels <see cref="SharesCreatureTypeWith"/> (the creature-type sibling) and
+  /// <see cref="SharesColorWith"/> (the color sibling): the name to match is the one the referenced
+  /// object CURRENTLY has, resolved by a consumer, not a card-text literal — distinct from the
+  /// absolute <see cref="Name"/> axis (CR 201.4), which pins a single fixed printed name. The
+  /// referent is an <see cref="ObjectReference"/> ("that creature", the anaphoric back-reference to
+  /// the per-object subject the anthem is currently modifying — <c>{Kind:It}</c> per Rule 109.2).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? SharesNameWith { get; init; }
+
+  /// <summary>
   /// Filters to colorless objects (those with no colors at all). Rule 105.1.
   /// Mutually exclusive with <see cref="Colors"/> in practice (a card cannot
   /// be both colorless and have a color).

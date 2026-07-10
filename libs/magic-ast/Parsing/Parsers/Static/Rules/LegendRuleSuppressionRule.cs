@@ -7,24 +7,26 @@ using MagicAST.AST.References;
 /// <summary>
 /// "The 'legend rule' doesn't apply." (Mirror Gallery, unscoped) / "The
 /// 'legend rule' doesn't apply to creatures you control." (Council of Reeds,
-/// scoped). Rule 704.5j: "If two or more legendary permanents with the same
-/// name are controlled by the same player, that player chooses one of them,
-/// and the rest are put into their owners' graveyards. This is called the
-/// 'legend rule.'" Both surfaces emit a
+/// scoped to creatures) / "The 'legend rule' doesn't apply to permanents you
+/// control." (Mirror Box, scoped to permanents). Rule 704.5j: "If two or more
+/// legendary permanents with the same name are controlled by the same player,
+/// that player chooses one of them, and the rest are put into their owners'
+/// graveyards. This is called the 'legend rule.'" All three surfaces emit a
 /// <see cref="MagicAST.AST.Effects.Replacement.LegendRuleSuppressionEffect"/>;
-/// the optional trailing "to creatures you control" clause populates that
-/// effect's <c>Target</c> with a "creatures you control" reference (reusing
-/// the established <c>Kind=Each, Filter={CardTypes:["creature"],
-/// Controller:You}</c> shape), narrowing the suppression's scope. Absence of
-/// the clause leaves <c>Target</c> null — the original unscoped form.
-/// ANCHORED (^…$) so neither surface can match as a substring of a broader
-/// clause.
+/// the optional trailing "to &lt;noun&gt; you control" clause populates that
+/// effect's <c>Target</c> with a "&lt;noun&gt; you control" reference (reusing
+/// the established <c>Kind=Each, Filter={CardTypes:[…],
+/// Controller:You}</c> shape), narrowing the suppression's scope. The noun maps
+/// to the corresponding card type — "creatures" → <c>creature</c>, "permanents"
+/// → <c>permanent</c> (the permanent pseudo-type, CR 110.4a). Absence of the
+/// clause leaves <c>Target</c> null — the original unscoped form. ANCHORED (^…$)
+/// so no surface can match as a substring of a broader clause.
 /// </summary>
 [StaticRule(Priority = 981)]
 public sealed class LegendRuleSuppressionRule : IStaticRule
 {
   private static readonly Regex _legendRuleSuppressionPattern = new(
-    @"^\s*The\s+[""""""]legend\s+rule[""""""]\s+doesn'?t\s+apply(?:\s+to\s+(?<scope>creatures\s+you\s+control))?\.?\s*$",
+    @"^\s*The\s+[""""""]legend\s+rule[""""""]\s+doesn'?t\s+apply(?:\s+to\s+(?<noun>creatures|permanents)\s+you\s+control)?\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -36,11 +38,18 @@ public sealed class LegendRuleSuppressionRule : IStaticRule
       return null;
     }
 
-    var target = match.Groups["scope"].Success
+    // The scoped variants narrow the suppression to a filtered set of the
+    // controller's permanents; the noun ("creatures" / "permanents") selects the
+    // card type. Unscoped leaves Target null (Mirror Gallery's broad form).
+    var cardType = match.Groups["noun"].Success
+      ? match.Groups["noun"].Value.ToLowerInvariant() == "permanents" ? "permanent" : "creature"
+      : null;
+
+    var target = cardType is not null
       ? new ObjectReference
       {
         Kind = ObjectReferenceKind.Each,
-        Filter = new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You },
+        Filter = new ObjectFilter { CardTypes = [cardType], Controller = ControllerFilter.You },
       }
       : null;
 
