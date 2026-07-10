@@ -1,0 +1,117 @@
+{
+  "Input": {
+    "Name": "Scent of Brine",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Reveal any number of blue cards in your hand. Counter target spell unless its controller pays {1} for each card revealed this way.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
+  },
+  "Output": {
+    "Name": "Scent of Brine",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Reveal any number of blue cards in your hand. Counter target spell unless its controller pays {1} for each card revealed this way.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "revealCards",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "anyAmount"
+              },
+              "Zone": "Hand",
+              "Filter": {
+                "CardTypes": [
+                  "card"
+                ],
+                "Colors": [
+                  "U"
+                ]
+              }
+            },
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "spell"
+                    ]
+                  }
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "Controller"
+                },
+                "Cost": {
+                  "CostType": "scaledMana",
+                  "PerUnit": {
+                    "Symbols": [
+                      {
+                        "Kind": "generic",
+                        "GenericAmount": 1
+                      }
+                    ]
+                  },
+                  "Count": {
+                    "QuantityType": "cardsRevealedThisWay"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
+    ]
+  }
+}
