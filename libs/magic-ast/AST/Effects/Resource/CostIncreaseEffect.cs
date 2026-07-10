@@ -14,7 +14,7 @@ using MagicAST.AST.Effects.Traits;
 /// (CR 601.2), and the mana component of that total is what the caster pays (CR 118.7).
 ///
 /// <para>
-/// Three shapes share this node:
+/// Four shapes share this node:
 /// <list type="bullet">
 ///   <item>"Noncreature spells cost {1} more to cast." (Thorn of Amethyst / Sphere of
 ///         Resistance) — the filter sits on the enclosing StaticAbility.AffectedObjects;
@@ -26,6 +26,13 @@ using MagicAST.AST.Effects.Traits;
 ///         it is carried in <see cref="ManaSymbols"/> with a zero generic Amount. Colored
 ///         mana is load-bearing and must not be flattened to generic {1} (CR 601.2's
 ///         Altar's Reap example distinguishes {B} from {1}).</item>
+///   <item>"This spell costs {cost} more to cast for each target beyond the first."
+///         (Strive — an ability word, CR 207.2c; carries no rules meaning of its own,
+///         so the sentence itself is the operative static ability, CR 604.1) —
+///         self-referential: no AffectedObjects/TargetedObject/CasterFilter is set
+///         (the spell taxes only itself), and <see cref="PerTargetBeyondFirst"/> is
+///         true. CR 601.2f: the total cost is the mana cost plus all additional costs
+///         and cost increases.</item>
 /// </list>
 /// </para>
 /// </summary>
@@ -62,4 +69,22 @@ public sealed record CostIncreaseEffect : Effect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ControllerFilter? CasterFilter { get; init; }
+
+  /// <summary>
+  /// "for each target beyond the first" — Strive's target-count cost-scaling axis
+  /// (Kiora's Dismissal: "This spell costs {U} more to cast for each target beyond
+  /// the first."). True when <see cref="Amount"/>/<see cref="ManaSymbols"/> is paid
+  /// once per target chosen for THIS spell beyond the first, rather than as a flat
+  /// one-time increase (CR 601.2f — additional costs and cost increases sum into the
+  /// total cost). Distinct from <see cref="TargetedObject"/>, which names an object
+  /// OTHER spells must target for THEIR cost to increase (Spiketail Drake); here the
+  /// tax is on the ability's own spell and scales with its own chosen target count —
+  /// a targeting-choice quantity outside <see cref="MagicAST.AST.References.ObjectFilter"/>
+  /// scope (identical "beyond the first" doctrine to Rampage/Melee's residual, but
+  /// here the axis is boolean rather than free text because the per-unit increment is
+  /// already fully carried by <see cref="Amount"/>/<see cref="ManaSymbols"/>). Default
+  /// false, preserving the three existing shapes above.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool PerTargetBeyondFirst { get; init; }
 }
