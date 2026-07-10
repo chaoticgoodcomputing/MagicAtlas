@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Hall of Triumph",
+    "ManaCost": "{3}",
+    "TypeLine": "Legendary Artifact",
+    "OracleText": "As Hall of Triumph enters, choose a color.\nCreatures you control of the chosen color get +1/+1.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "634fd988-5d5c-4637-b7fd-05a41798ead8",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Hall of Triumph",
+    "TypeLine": {
+      "Raw": "Legendary Artifact",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "As Hall of Triumph enters, choose a color.\nCreatures you control of the chosen color get +1/+1.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "chooseColor"
+            }
+          ],
+          "When": "asThisEnters"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You",
+                  "ChosenCharacteristic": "Color"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
