@@ -1771,7 +1771,9 @@
           "Type": "NoMaxHandSizeEffect",
           "Discriminator": "noMaxHandSize",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "Player"
+          ]
         },
         {
           "Type": "OffspringEffect",
@@ -2772,5 +2774,5 @@
       ]
     }
   ],
-  "SchemaHash": "f84f671cf8ef4582df3b39f08fbb458aedb2ec7db1f0a450cd19368ea8c3d227"
+  "SchemaHash": "ad10965a7fc572a801e10260c4848d1876a22e457a78ac990c2028f9a860841e"
 }
