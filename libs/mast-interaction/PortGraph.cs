@@ -829,6 +829,7 @@ public sealed class PortWalk
       // Inert effects (no flow) are still ports, by totality (§4) — edge-sparse, never dropped.
       "modifyPT" => Port(card, "modify:pt", PortSide.Emit),
       "switchPT" => Port(card, "switch:pt", PortSide.Emit),
+      "setBasePT" => Port(card, "set:pt", PortSide.Emit),
       "evasion" => Port(card, $"evasion:{keyword?.ToLowerInvariant() ?? "evasion"}", PortSide.Emit),
       { } other => Port(card, $"emit:{other.ToLowerInvariant()}", PortSide.Emit),
       _ => null,

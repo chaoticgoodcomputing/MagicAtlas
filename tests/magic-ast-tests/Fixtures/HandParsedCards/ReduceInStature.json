@@ -1,0 +1,82 @@
+{
+  "Input": {
+    "Name": "Reduce in Stature",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nEnchanted creature has base power and toughness 0/2.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": ["Enchant"],
+    "Id": "8bad1d13-c4f6-4440-9988-e1db40039f02",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Reduce in Stature",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nEnchanted creature has base power and toughness 0/2.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": ["creature"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "setBasePT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "Power": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "Toughness": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
