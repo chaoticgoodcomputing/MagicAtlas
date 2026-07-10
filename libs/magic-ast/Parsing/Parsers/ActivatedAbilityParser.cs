@@ -349,6 +349,15 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     {
       return ActivationRestriction.OnlyAsInstant;
     }
+    // "Activate only during your upkeep." — a step-scoped timing restriction (CR 602.5),
+    // strictly narrower than "…during your turn". ANCHORED to whole-string equality (like
+    // the OnlyAsSorcery branch above) so it can NOT match compound restrictions such as
+    // "Activate only during your upkeep and only once each turn." / "…and only if …" —
+    // matching those as a substring would silently drop the trailing sibling restriction.
+    if (lower == "activate only during your upkeep" || lower == "activate this ability only during your upkeep")
+    {
+      return ActivationRestriction.OnlyDuringYourUpkeep;
+    }
     if (lower.Contains("activate only during your turn") || lower.Contains("activate this ability only during your turn"))
     {
       return ActivationRestriction.OnlyDuringYourTurn;

@@ -259,6 +259,7 @@
     "OnlyAsInstant": "timing restriction (CR 602.5a — already at instant speed by default; this explicit marker is inert for intra-turn loop firability gating) — no flow rule consumes it yet",
     "OnlyAsSorcery": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "OnlyDuringYourTurn": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "OnlyDuringYourUpkeep": "step-scoped timing restriction (CR 602.5); like OnlyDuringYourTurn it does not gate an intra-window loop's firability (a loop confined to the upkeep step can still repeat), so consciously inert for recall — no flow rule consumes it yet",
     "Other": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet"
   }
 }
