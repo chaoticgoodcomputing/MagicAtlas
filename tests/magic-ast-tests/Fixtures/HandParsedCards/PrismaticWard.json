@@ -1,0 +1,91 @@
+{
+  "Input": {
+    "Name": "Prismatic Ward",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nAs this Aura enters, choose a color.\nPrevent all damage that would be dealt to enchanted creature by sources of the chosen color.",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": ["Enchant"],
+    "Id": "d9c1e9de-3c9b-4a1e-9f6f-8dfd1e0f0f9b",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Prismatic Ward",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nAs this Aura enters, choose a color.\nPrevent all damage that would be dealt to enchanted creature by sources of the chosen color.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": ["creature"]
+              }
+            }
+          ],
+          "KeywordSource": "Enchant"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "chooseColor"
+            }
+          ],
+          "When": "asThisEnters"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "preventDamage",
+              "All": true,
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "Source": {
+                "Kind": "Each",
+                "Filter": {
+                  "ChosenCharacteristic": "Color"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}
