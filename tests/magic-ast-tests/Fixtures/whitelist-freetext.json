@@ -746,6 +746,12 @@
       "reason": "PB-9 misc structured-characteristic — 'creature or Vehicle' is a cross-axis disjunction (card type OR artifact subtype); ObjectFilter has no structured OR field spanning CardTypes and Subtypes axes; consistent with DFT/BroodheartEngine 'creature or Vehicle card' encoding"
     },
     {
+      "card": "T45PowerArmor",
+      "sink": "UnstructuredEffect",
+      "tag": "debt",
+      "reason": "the upkeep 'you may pay {E}. If you do, untap equipped creature, then put your choice of a menace, trample, or lifelink counter on it.' consequent needs a choice-among-enumerated-named-counter-types node (menace/trample/lifelink keyword counters, CR 122.1e) that doesn't exist yet — PutCountersEffect.CounterType is a fixed required string across every counter node (PutCountersEffect/RemoveCountersEffect/MoveCountersEffect/PutCountersCost/ObjectHasCounterCondition/TriggerCondition), so recording a controller-chosen SUBSET of named options (not the open ChosenColor-style full domain) requires a new node; the trigger itself (At the beginning of your upkeep) and the ETB energy gain both parse fully structured"
+    },
+    {
       "card": "TDM/EnduringTenacity",
       "sink": "OtherCondition",
       "tag": "debt",
