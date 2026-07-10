@@ -1,0 +1,108 @@
+{
+  "Input": {
+    "Name": "Silverquill Silencer",
+    "ManaCost": "{W}{B}",
+    "TypeLine": "Creature — Human Cleric",
+    "OracleText": "As this creature enters, choose a nonland card name.\nWhenever an opponent casts a spell with the chosen name, they lose 3 life and you draw a card.",
+    "Power": "3",
+    "Toughness": "2",
+    "Colors": ["B", "W"],
+    "ColorIdentity": ["B", "W"],
+    "Keywords": [],
+    "Id": "8bb60dcc-cb4a-414d-850f-c98efd872894",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Silverquill Silencer",
+    "TypeLine": {
+      "Raw": "Creature — Human Cleric",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "As this creature enters, choose a nonland card name.\nWhenever an opponent casts a spell with the chosen name, they lose 3 life and you draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "When": "asThisEnters",
+          "Effects": [
+            {
+              "EffectType": "chooseCardName",
+              "Filter": {
+                "CardTypes": ["card"],
+                "ExcludedCardTypes": ["land"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": ["spell"],
+              "Controller": "Opponent",
+              "ChosenCharacteristic": "CardName"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Player": {
+                "Kind": "ThatPlayer"
+              }
+            },
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}{B}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

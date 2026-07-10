@@ -915,6 +915,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return youDrawAndLose;
     }
 
+    var theyLoseAndYouDraw = TryParseTheyLoseLifeAndYouDrawCards(trimmed);
+    if (theyLoseAndYouDraw is not null)
+    {
+      return theyLoseAndYouDraw;
+    }
+
     // "create a P1/T1 color1 sub1 creature token. If [condition], create a P2/T2 color2 sub2
     // creature token instead." — two-sentence conditional token creation where the "instead"
     // means the second token REPLACES the first when the condition holds (Rule 111 / CR 603).
@@ -1611,6 +1617,57 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     {
       new DrawCardsEffect { Count = LiteralQuantity.Of(drawCount), Player = you},
       new LoseLifeEffect { Amount = LiteralQuantity.Of(lifeCount), Player = you },
+    };
+  }
+
+  /// <summary>
+  /// "they lose N life and you draw a card." — the Silverquill Silencer
+  /// named-card-punisher shape: the opponent whose cast triggered the ability
+  /// ("they", <see cref="ObjectReferenceKind.ThatPlayer"/> — CR 109.5,
+  /// back-referencing the player identified by the trigger condition's filter)
+  /// loses life, and the controller draws a card. Returns a flat two-element
+  /// list [loseLife(ThatPlayer, N), drawCards(You, M)]. Sibling of
+  /// <see cref="TryParseYouDrawAndYouLoseLife"/> (same two effect types,
+  /// opposite order and opposite life-loss subject) and of
+  /// <see cref="Triggered.Rules.TheyLoseLifeRule"/> (bare single-clause "they
+  /// lose N life" only — this compound sentence isn't matched by that anchored
+  /// rule). CR 119.3 (life loss); CR 121.1 (draw a card).
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseTheyLoseLifeAndYouDrawCards(string effectText)
+  {
+    var match = Regex.Match(
+      effectText,
+      @"^they\s+lose\s+(?<life>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life\s+and\s+you\s+draw\s+(?<draw>a|one|two|three|\d+)\s+cards?$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    static int ParseAmount(string raw) => raw.ToLowerInvariant() switch
+    {
+      "a" or "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      "four" => 4,
+      "five" => 5,
+      "six" => 6,
+      "seven" => 7,
+      "eight" => 8,
+      "nine" => 9,
+      "ten" => 10,
+      _ => int.Parse(raw),
+    };
+    var lifeCount = ParseAmount(match.Groups["life"].Value);
+    var drawCount = ParseAmount(match.Groups["draw"].Value);
+    return new List<Effect>
+    {
+      new LoseLifeEffect
+      {
+        Amount = LiteralQuantity.Of(lifeCount),
+        Player = new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
+      },
+      new DrawCardsEffect { Count = LiteralQuantity.Of(drawCount), Player = ObjectReference.You() },
     };
   }
 
