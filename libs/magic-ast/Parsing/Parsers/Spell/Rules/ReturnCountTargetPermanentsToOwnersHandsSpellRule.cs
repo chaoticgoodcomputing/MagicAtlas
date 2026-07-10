@@ -10,11 +10,13 @@ using MagicAST.AST.References;
 /// "Return X target nonland permanents to their owners' hands." — the spell-side
 /// multi-target bounce whose target set has a variable (or literal) cardinality over a
 /// PLURAL permanent type, e.g. Distorting Wake: "Return X target nonland permanents to
-/// their owners' hands." Handles a variable count (X/Y/Z) or a literal count ("two",
-/// "3") over a PLURAL card type ("permanents", "creatures", …), with an optional
-/// "non&lt;x&gt;" or colour modifier before the type ("nonland", "green"), returned to
-/// their owners' hands (plural possessive, because there are multiple returned
-/// permanents with potentially different owners).
+/// their owners' hands." Handles a variable count (X/Y/Z), a literal count ("two",
+/// "3"), or the unbounded "any number of" choice (Kiora's Dismissal: "Return any
+/// number of target enchantments to their owners' hands.", CR 107.3) over a PLURAL
+/// card type ("permanents", "creatures", …), with an optional "non&lt;x&gt;" or colour
+/// modifier before the type ("nonland", "green"), returned to their owners' hands
+/// (plural possessive, because there are multiple returned permanents with
+/// potentially different owners).
 ///
 /// <para>
 /// Spell-side sibling of the activated-ability
@@ -46,21 +48,24 @@ using MagicAST.AST.References;
 ///
 /// <para>
 /// ANCHOR: the pattern is anchored (^…$) on the full clause and requires an explicit
-/// count token, a PLURAL type, and the PLURAL "their owners' hands", so it is disjoint
-/// from the singular-target sibling <see cref="ReturnTargetToHandRule"/> (which matches
-/// "Return target &lt;type&gt; … its owner's hand", with no count token before
-/// "target") and cannot match as a substring of, or subsume, any other Return* sibling.
+/// count token (bounded or "any number of"), a PLURAL type, and the PLURAL "their
+/// owners' hands", so it is disjoint from the singular-target sibling
+/// <see cref="ReturnTargetToHandRule"/> (which matches "Return target &lt;type&gt; …
+/// its owner's hand", with no count token before "target", and whose patterns do not
+/// accept an "any number of" prefix) and cannot match as a substring of, or subsume,
+/// any other Return* sibling.
 /// </para>
 /// </summary>
 [SpellRule]
 public sealed class ReturnCountTargetPermanentsToOwnersHandsSpellRule : ISpellRule
 {
   // "Return <count> target [mod] <plural-type> to their owners' hands."
-  //   count      : X/Y/Z (variable), a run of digits, or a number word (two..ten)
+  //   count      : X/Y/Z (variable), a run of digits, a number word (two..ten), or the
+  //                unbounded "any number of" choice (CR 107.3)
   //   mod        : an optional "non<x>" negation or a bare colour word
   //   plural-type: creatures | artifacts | enchantments | lands | permanents | planeswalkers
   private static readonly Regex _pattern = new(
-    @"^Return\s+(?<count>[XYZ]|\d+|two|three|four|five|six|seven|eight|nine|ten)\s+target\s+"
+    @"^Return\s+(?<count>[XYZ]|\d+|two|three|four|five|six|seven|eight|nine|ten|any\s+number\s+of)\s+target\s+"
       + @"(?:(?<mod>non\w+|white|blue|black|red|green)\s+)?"
       + @"(?<type>creatures|artifacts|enchantments|lands|permanents|planeswalkers)\s+"
       + @"to\s+their\s+owners['’]?\s+hands$",
@@ -129,6 +134,14 @@ public sealed class ReturnCountTargetPermanentsToOwnersHandsSpellRule : ISpellRu
 
   private static Quantity ParseCount(string token)
   {
+    // Unbounded "any number of" choice (CR 107.3) — an upper-unbounded player choice,
+    // distinct from a bounded literal/variable count. Normalise internal whitespace
+    // (the regex tolerates runs of \s) before comparing.
+    if (Regex.IsMatch(token, @"^any\s+number\s+of$", RegexOptions.IgnoreCase))
+    {
+      return new AnyAmountQuantity();
+    }
+
     // Variable placeholder (X/Y/Z) — value is defined by the spell's own {X} mana cost.
     if (token.Length == 1 && char.IsLetter(token[0]))
     {
