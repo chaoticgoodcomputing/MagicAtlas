@@ -178,6 +178,24 @@ public static class ConditionParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
+  /// "you've cast a noncreature spell this turn" / "you've cast a spell this turn" — a
+  /// backward-looking spell-count intervening-if (CR 603.4) gating on whether the
+  /// controller has cast a (optionally type-qualified) spell during the current turn.
+  /// Council of Reeds' "if you've cast a noncreature spell this turn". Structured to a
+  /// <see cref="CountCondition"/> whose <see cref="ObjectFilter.History"/> is a
+  /// <see cref="CastThisTurnPredicate"/> (CR 601 casting), composing the same
+  /// <c>CardTypes=["spell"], Controller=You, History=castThisTurn</c> shape used by
+  /// Aetherflux Reservoir's spell-count quantity, plus the "non-[type]" negation axis
+  /// (<see cref="ObjectFilter.ExcludedCardTypes"/>) already used for "cast a noncreature
+  /// spell" trigger filters (Spellgorger Weird). The threshold is "at least one"
+  /// (GreaterThanOrEqual 1) — "you've cast a spell" is an existence check, not a literal
+  /// count. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex CastSpellThisTurn = new(
+    @"^you(?:'ve|\s+have)\s+cast\s+(?:a|an)\s+(?:non(?<excluded>[a-z]+)\s+)?(?<noun>spell)\s+this\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// "red is the most common color among all permanents [or is tied for most common]" —
   /// a color-prevalence gate (Halam Djinn). Structured to a
   /// <see cref="MostCommonColorCondition"/> (a max-by-color tally, not an object count)
@@ -346,6 +364,24 @@ public static class ConditionParser
     if (CastThisObject.IsMatch(body))
     {
       return new CastThisObjectCondition();
+    }
+
+    if (CastSpellThisTurn.Match(body) is { Success: true } cstm)
+    {
+      var filter = new ObjectFilter
+      {
+        CardTypes = ["spell"],
+        ExcludedCardTypes = cstm.Groups["excluded"].Success
+          ? [cstm.Groups["excluded"].Value.ToLowerInvariant()]
+          : null,
+        Controller = ControllerFilter.You,
+        History = new CastThisTurnPredicate { Caster = ControllerFilter.You },
+      };
+      return new CountCondition
+      {
+        Filter = filter,
+        Count = new Comparison { Operator = ComparisonOperator.GreaterThanOrEqual, Value = 1 },
+      };
     }
 
     if (SourceCombatState.Match(body) is { Success: true } scm)
