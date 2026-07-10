@@ -17,7 +17,7 @@ using MagicAST.AST.References;
 /// grants that same creature type to the permanent, additively.
 ///
 /// <para>
-/// CR 205.1a governs the "in addition to its other types" retention: existing subtypes
+/// CR 205.1b governs the "in addition to its other types" retention: existing subtypes
 /// (and card types) are kept, and the object also gains the new subtype — an additive
 /// grant, not a replacement (contrast <see cref="ChangeSubtypeEffect"/>, which SETS/
 /// replaces the subtype for "This creature becomes the creature type of your choice").
