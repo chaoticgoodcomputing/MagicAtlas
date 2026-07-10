@@ -17,6 +17,9 @@ using MagicAST.AST.References;
 ///   <item>"Nontoken creatures you control are Forest lands in addition to their other types."
 ///     → <see cref="AddTypeEffect"/> with Target={Each, nontoken creatures you control},
 ///     AddedCardTypes=["land"], AddedSubtypes=["Forest"].</item>
+///   <item>"Nontoken artifacts you control are lands in addition to their other types."
+///     (Toph, the First Metalbender) → <see cref="AddTypeEffect"/> with
+///     Target={Each, nontoken artifacts you control}, AddedCardTypes=["land"].</item>
 /// </list>
 /// </para>
 ///
@@ -105,30 +108,41 @@ public sealed class NonlandCreatureTypeGrantRule : IStaticRule
     ];
   }
 
+  // "Nontoken <cardType>(s) you control" — IsToken:false, CardTypes:[<cardType>],
+  // Controller:You. Anchored to this exact "Nontoken <type> you control" shape (no
+  // free-floating substring match) so it cannot collide with a differently-scoped
+  // subject clause elsewhere in the corpus. Currently recognises "creature" (Ashaya,
+  // Soul of the Wild) and "artifact" (Toph, the First Metalbender).
+  private static readonly Regex _nontokenSubjectPattern = new(
+    @"^Nontoken (?<type>creatures?|artifacts?) you control$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   /// <summary>
   /// Builds an <see cref="ObjectReference"/> for the subject noun phrase.
-  /// Currently handles: "Nontoken creatures you control".
-  /// Returns null for unrecognised subjects.
+  /// Currently handles: "Nontoken creatures you control" and "Nontoken artifacts you
+  /// control" (singular or plural). Returns null for unrecognised subjects.
   /// </summary>
   private static ObjectReference? TryBuildSubjectFilter(string subject)
   {
-    // "Nontoken creatures you control" — IsToken:false, CardTypes:["creature"], Controller:You
-    if (subject.Equals("Nontoken creatures you control", StringComparison.OrdinalIgnoreCase) ||
-        subject.Equals("Nontoken creature you control", StringComparison.OrdinalIgnoreCase))
+    var m = _nontokenSubjectPattern.Match(subject.Trim());
+    if (!m.Success)
     {
-      return new ObjectReference
-      {
-        Kind = ObjectReferenceKind.Each,
-        Filter = new ObjectFilter
-        {
-          CardTypes = ["creature"],
-          IsToken = false,
-          Controller = ControllerFilter.You,
-        },
-      };
+      return null;
     }
 
-    return null;
+    var cardType = m.Groups["type"].Value.TrimEnd('s').ToLowerInvariant();
+
+    return new ObjectReference
+    {
+      Kind = ObjectReferenceKind.Each,
+      Filter = new ObjectFilter
+      {
+        CardTypes = [cardType],
+        IsToken = false,
+        Controller = ControllerFilter.You,
+      },
+    };
   }
 
   /// <summary>
