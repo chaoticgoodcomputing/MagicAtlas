@@ -2004,6 +2004,15 @@
           ]
         },
         {
+          "Type": "RevealTopCardMatchToBattlefieldElseGraveyardEffect",
+          "Discriminator": "revealTopCardMatchToBattlefieldElseGraveyard",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Player"
+          ]
+        },
+        {
           "Type": "RevealTopMayPutMatchingRestToGraveyardEffect",
           "Discriminator": "revealTopMayPutMatchingRestToGraveyard",
           "IsUnparsed": false,
@@ -2698,5 +2707,5 @@
       ]
     }
   ],
-  "SchemaHash": "5c91217e97415fa711ab7e239687166962e9155adf54bcc0e5ee931233059fb2"
+  "SchemaHash": "558a923104f60a818749561dbf92268dac00c015d1158c96bc426a68d963b8d2"
 }
