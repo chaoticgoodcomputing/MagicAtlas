@@ -132,6 +132,20 @@ public sealed record ObjectFilter
   public ObjectReference? SharesColorWith { get; init; }
 
   /// <summary>
+  /// Relational subtype axis: filters to objects that share a creature type with a
+  /// referenced object — "shares a creature type with it" (Titan of Littjara: "you may
+  /// draw a card for each other creature you control that shares a creature type with
+  /// it"). CR 205.3 (creature subtypes are called creature types). Parallels
+  /// <see cref="SharesColorWith"/> (the color-family sibling): the creature types to
+  /// match are those the referenced object CURRENTLY has, resolved by a consumer, not a
+  /// card-text literal — distinct from <see cref="ChosenCharacteristic"/>, which
+  /// compares against a single fixed value chosen once (not the referenced object's
+  /// live, possibly-multiple, type set).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? SharesCreatureTypeWith { get; init; }
+
+  /// <summary>
   /// Filters to colorless objects (those with no colors at all). Rule 105.1.
   /// Mutually exclusive with <see cref="Colors"/> in practice (a card cannot
   /// be both colorless and have a color).

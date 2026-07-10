@@ -57,4 +57,22 @@ public sealed record AddTypeEffect : ContinuousEffect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public IReadOnlyList<string>? AddedSubtypes { get; init; }
+
+  /// <summary>
+  /// Set instead of <see cref="AddedSubtypes"/> when the additively-granted subtype is a
+  /// value chosen EARLIER by a linked "choose a creature type" ability on the same
+  /// permanent (CR 607.1 linked abilities) rather than a literal subtype — "This creature
+  /// is the chosen type in addition to its other types" (Titan of Littjara), paired with
+  /// an "As this creature enters, choose a creature type" declaration
+  /// (<see cref="MagicAST.AST.Effects.Keyword.ChooseCreatureTypeEffect"/>) on a separate
+  /// static ability of the same card. Parallels
+  /// <see cref="ChangeSubtypeEffect.ChosenSubtypeReference"/> (the SET-not-ADD sibling for
+  /// this exact back-reference shape) and <see cref="ObjectFilter.ChosenCharacteristic"/>
+  /// (the filter-side back-reference to the same chosen value, for "creatures of the
+  /// chosen type"): all three read the identical permanent-scoped choice, structured by
+  /// kind since a permanent has at most one chosen creature type (CR 205.3). Mutually
+  /// exclusive with <see cref="AddedSubtypes"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ChosenCharacteristicKind? ChosenSubtypeReference { get; init; }
 }
