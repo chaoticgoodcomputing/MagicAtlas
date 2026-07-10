@@ -84,6 +84,18 @@ public sealed record TokenDefinition
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public bool? EntersTapped { get; init; }
 
+  /// <summary>
+  /// True when the token enters the battlefield already attacking (e.g. "create a 1/1 white
+  /// Warrior creature token that's tapped and attacking" — Najeela, the Blade-Blossom). CR 508.4:
+  /// "an effect can put a creature onto the battlefield attacking"; such a creature is a declared
+  /// attacker without having been declared during the declare-attackers step (CR 508.1) and was
+  /// never "declared as an attacker" for triggers that check that. Null (omitted in JSON) when the
+  /// token enters without attacking. Declarative entry modifier paralleling <see cref="EntersTapped"/>;
+  /// the choice of which player/planeswalker/battle it attacks is engine territory.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? EntersAttacking { get; init; }
+
   // Factory methods for common tokens
   public static TokenDefinition Treasure() =>
     new()

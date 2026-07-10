@@ -410,6 +410,13 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     {
       return ActivationRestriction.OnlyDuringYourTurn;
     }
+    // "Activate only during combat." — phase-scoped (CR 506 / CR 602.5). ANCHORED to whole-string
+    // equality (like the OnlyDuringYourUpkeep branch above) so it cannot swallow a trailing sibling
+    // restriction in a compound "Activate only during combat and only once each turn."-style sentence.
+    if (lower == "activate only during combat" || lower == "activate this ability only during combat")
+    {
+      return ActivationRestriction.OnlyDuringCombat;
+    }
     if (lower.Contains("activate only once each turn") || lower.Contains("activate this ability only once each turn"))
     {
       return ActivationRestriction.OnlyOnceEachTurn;
