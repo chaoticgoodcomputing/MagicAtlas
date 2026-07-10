@@ -1,0 +1,173 @@
+{
+  "Input": {
+    "Name": "Glasspool Mimic // Glasspool Shore",
+    "TypeLine": "Creature — Shapeshifter Rogue // Land",
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "5adcb500-8c77-4925-8e2c-1243502827d1",
+    "Layout": "modal_dfc",
+    "CardFaces": [
+      {
+        "Name": "Glasspool Mimic",
+        "ManaCost": "{2}{U}",
+        "TypeLine": "Creature — Shapeshifter Rogue",
+        "OracleText": "You may have this creature enter as a copy of a creature you control, except it's a Shapeshifter Rogue in addition to its other types.",
+        "Power": "0",
+        "Toughness": "0",
+        "Colors": ["U"]
+      },
+      {
+        "Name": "Glasspool Shore",
+        "ManaCost": "",
+        "TypeLine": "Land",
+        "OracleText": "This land enters tapped.\n{T}: Add {U}.",
+        "Colors": []
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Glasspool Mimic // Glasspool Shore",
+    "TypeLine": {
+      "Raw": "Creature — Shapeshifter Rogue // Land",
+      "Types": ["Creature"],
+      "Subtypes": ["Shapeshifter", "Rogue", "//", "Land"]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "layout",
+        "Layout": "modal_dfc"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Glasspool Mimic",
+        "TypeLine": {
+          "Raw": "Creature — Shapeshifter Rogue",
+          "Types": ["Creature"],
+          "Subtypes": ["Shapeshifter", "Rogue"]
+        },
+        "Oracle": {
+          "RawText": "You may have this creature enter as a copy of a creature you control, except it's a Shapeshifter Rogue in addition to its other types.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "optional",
+                  "Inner": {
+                    "EffectType": "becomesCopy",
+                    "Subject": {
+                      "Kind": "Self"
+                    },
+                    "CopyTarget": {
+                      "Kind": "Any",
+                      "Filter": {
+                        "CardTypes": ["creature"],
+                        "Controller": "You"
+                      }
+                    },
+                    "Modifications": [
+                      {
+                        "ModificationType": "typeAdder",
+                        "Subtypes": ["Shapeshifter", "Rogue"]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "When": "asThisEnters"
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{2}{U}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              },
+              {
+                "Kind": "colored",
+                "Colors": ["U"]
+              }
+            ],
+            "ManaValue": 3,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Raw": "0",
+              "Value": 0
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Raw": "0",
+              "Value": 0
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Glasspool Shore",
+        "TypeLine": {
+          "Raw": "Land",
+          "Types": ["Land"]
+        },
+        "Oracle": {
+          "RawText": "This land enters tapped.\n{T}: Add {U}.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "tap",
+                  "Target": {
+                    "Kind": "Self"
+                  }
+                }
+              ],
+              "When": "asThisEnters"
+            },
+            {
+              "Kind": "activated",
+              "Costs": [
+                {
+                  "CostType": "tap"
+                }
+              ],
+              "Effects": [
+                {
+                  "EffectType": "addMana",
+                  "Mana": "{U}",
+                  "AnyColor": false
+                }
+              ],
+              "IsManaAbility": true
+            }
+          ]
+        },
+        "Attributes": []
+      }
+    ]
+  }
+}

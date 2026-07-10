@@ -1,6 +1,7 @@
 namespace MagicAST.AST.Effects.Modification;
 
 using System.Text.Json.Serialization;
+using MagicAST.AST.Effects.TokenCopy;
 using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
@@ -48,4 +49,17 @@ public sealed record BecomesCopyEffect : ContinuousEffect
   /// the oracle text (e.g. "target permanent card in your graveyard").
   /// </summary>
   public required ObjectReference CopyTarget { get; init; }
+
+  /// <summary>
+  /// "Except"-clauses applied to the copy — power/toughness overrides, type
+  /// additions, ability additions. Shares <see cref="CopyModification"/> with
+  /// <see cref="MagicAST.AST.Effects.TokenCopy.CopyEffect.Modifications"/>: the
+  /// "except" grammar is identical whether the copy is a brand-new token
+  /// (CopyEffect) or the permanent becoming the copy in place (this effect).
+  /// Glasspool Mimic: "... except it's a Shapeshifter Rogue in addition to its
+  /// other types" → a single <see cref="TypeAdder"/> (CR 707.2 copiable values —
+  /// the except-clause overrides the copy's inherited subtypes).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<CopyModification>? Modifications { get; init; }
 }
