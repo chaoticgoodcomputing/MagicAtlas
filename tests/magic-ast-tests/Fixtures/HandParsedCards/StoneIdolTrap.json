@@ -1,0 +1,98 @@
+{
+  "Input": {
+    "Name": "Stone Idol Trap",
+    "ManaCost": "{5}{R}",
+    "TypeLine": "Instant — Trap",
+    "OracleText": "This spell costs {1} less to cast for each attacking creature.\nCreate a 6/12 colorless Construct artifact creature token with trample. Exile it at the beginning of your next end step.",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": [],
+    "Id": "44dee4b3-f3c1-4ef5-8dfa-fa10c860be1e",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Stone Idol Trap",
+    "TypeLine": {
+      "Raw": "Instant — Trap",
+      "Types": ["Instant"],
+      "Subtypes": ["Trap"]
+    },
+    "Oracle": {
+      "RawText": "This spell costs {1} less to cast for each attacking creature.\nCreate a 6/12 colorless Construct artifact creature token with trample. Exile it at the beginning of your next end step.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "PerObject": {
+                "CardTypes": ["creature"],
+                "Characteristics": [
+                  { "CharacteristicType": "combatState", "State": "Attacking" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": { "QuantityType": "literal", "Value": 1 },
+              "Token": {
+                "Power": "6",
+                "Toughness": "12",
+                "Colors": ["C"],
+                "Types": ["artifact", "creature"],
+                "Subtypes": ["Construct"],
+                "Abilities": [
+                  {
+                    "Kind": "static",
+                    "KeywordSource": "Trample",
+                    "Effects": [
+                      { "EffectType": "keywordAbility", "Keyword": "Trample" }
+                    ]
+                  }
+                ],
+                "IsCopy": false
+              },
+              "Player": { "Kind": "You" }
+            },
+            {
+              "EffectType": "createDelayedTrigger",
+              "DelayedTrigger": {
+                "Trigger": {
+                  "Timing": "At",
+                  "Event": {
+                    "Part": "End",
+                    "Edge": "Beginning",
+                    "When": "Next",
+                    "Whose": "You"
+                  }
+                },
+                "Effects": [
+                  { "EffectType": "exile", "Target": { "Kind": "It" } }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 5 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 6
+      },
+      { "Kind": "colors", "Colors": ["R"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["R"] }
+    ]
+  }
+}

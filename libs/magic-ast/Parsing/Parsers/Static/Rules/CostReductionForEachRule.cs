@@ -64,6 +64,19 @@ public sealed class CostReductionForEachRule : IStaticRule
         Zone = Zone.Battlefield,
       };
     }
+    // "attacking creature" — Stone Idol Trap's per-attacker discount. "Attacking"
+    // is a combat-state predicate (CR 508; Glossary "Attacking Creature"), not a
+    // creature subtype, so it is encoded via CombatStateCharacteristic rather than
+    // Subtypes — mirroring the codebase-wide convention for "attacking creature"
+    // filters (e.g. ModifyPTTargetAttackingCreatureEffectRule).
+    else if (filterPhrase == "attacking creature")
+    {
+      perObject = new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Characteristics = [Characteristic.InCombat(CombatState.Attacking)],
+      };
+    }
 
     if (perObject is null)
     {
