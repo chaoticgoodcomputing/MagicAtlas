@@ -201,6 +201,7 @@
     "payLife": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "removeCounters": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "returnToHand": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "scaledCost": "count-scaled generic-cost payment (CR 702.24a) — cumulative upkeep's 'pay [cost] for each age counter on it' unless-cost on Inner Sanctum (a Pay-life per-unit cost scaled by a CounterCountQuantity), sibling of scaledMana but with a polymorphic (non-mana) per-unit Cost; no flow rule reads counter-unless payment resources yet; consciously inert for interaction recall",
     "scaledMana": "count-scaled mana payment (CR 118.1) — the 'pays {1} for each card revealed this way' unless-cost on Scent of Brine's counter; a preventing payment whose total is (per-unit mana) × a game-state count, sibling of the coarse flat 'mana'/'payLife'/'payEnergy' payment costs on the unless side; no flow rule reads counter-unless payment resources yet; consciously inert for interaction recall",
     "selfMana": "no semantic projection yet — coarse fallback no flow rule consumes; explicit named carve-out",
     "tapPermanents": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",

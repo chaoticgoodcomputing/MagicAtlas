@@ -589,6 +589,15 @@
           ]
         },
         {
+          "Type": "ScaledCost",
+          "Discriminator": "scaledCost",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "PerUnit"
+          ]
+        },
+        {
           "Type": "ScaledManaCost",
           "Discriminator": "scaledMana",
           "IsUnparsed": false,
@@ -2707,5 +2716,5 @@
       ]
     }
   ],
-  "SchemaHash": "558a923104f60a818749561dbf92268dac00c015d1158c96bc426a68d963b8d2"
+  "SchemaHash": "60672c280ccc9b32df1cebde23c0b48851db393b4254f11f11d28c32de73bdfa"
 }
