@@ -296,6 +296,12 @@
       "reason": "recursive token/granted-ability body parsing — Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life.) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
     },
     {
+      "card": "RapaciousGuest",
+      "sink": "AbilityText",
+      "tag": "irreducible",
+      "reason": "recursive token/granted-ability body parsing — Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life.) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
+    },
+    {
       "card": "HeatShimmer",
       "sink": "AbilityText",
       "tag": "irreducible",

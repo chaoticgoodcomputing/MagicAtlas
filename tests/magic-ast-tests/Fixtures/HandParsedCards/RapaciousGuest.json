@@ -1,0 +1,144 @@
+{
+  "Input": {
+    "Name": "Rapacious Guest",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Halfling Citizen",
+    "OracleText": "Menace\nWhenever one or more creatures you control deal combat damage to a player, create a Food token.\nWhenever you sacrifice a Food, put a +1/+1 counter on this creature.\nWhen this creature leaves the battlefield, target opponent loses life equal to its power.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": ["Food", "Menace"],
+    "Id": "ff9dfba4-07d2-4407-a441-88acc7284d43",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Rapacious Guest",
+    "TypeLine": {
+      "Raw": "Creature — Halfling Citizen",
+      "Types": ["Creature"],
+      "Subtypes": ["Halfling", "Citizen"]
+    },
+    "Oracle": {
+      "RawText": "Menace\nWhenever one or more creatures you control deal combat damage to a player, create a Food token.\nWhenever you sacrifice a Food, put a +1/+1 counter on this creature.\nWhen this creature leaves the battlefield, target opponent loses life equal to its power.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Menace",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"]
+              },
+              "MinimumBlockers": 2
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Controller": "You"
+            },
+            "MinimumCount": 1
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Types": ["artifact"],
+                "Subtypes": ["Food"],
+                "AbilityText": ["{2}, {T}, Sacrifice this artifact: You gain 3 life."],
+                "IsCopy": false
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Sacrifices",
+            "Filter": {
+              "Subtypes": ["Food"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Self"
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "LeavesTheBattlefield",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "loseLife",
+              "Player": {
+                "Kind": "Opponent"
+              },
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "Power",
+                "Source": "it"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 2, "Raw": "2" },
+        "Toughness": { "ValueType": "fixed", "Value": 2, "Raw": "2" }
+      }
+    ]
+  }
+}
