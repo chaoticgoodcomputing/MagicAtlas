@@ -235,6 +235,18 @@ public sealed class ClauseSplitter
         continue;
       }
 
+      // Commander-conditional free-cast family's alternative-cost line ("If you
+      // control a commander, you may cast this spell without paying its mana
+      // cost.") is a card-casting annotation (CR 118.9 alternative cost; CR 903
+      // Commander format), not an oracle ability. AttributeExtractor parses the
+      // cost and condition and emits AlternativeCostsAttribute instead. Skipping
+      // here prevents a spurious UnparsedAbility/UnparsedSpell failure in
+      // Oracle.Abilities for the cost line.
+      if (IsCommanderFreeCastAlternativeCostPrefix(paragraphText))
+      {
+        continue;
+      }
+
       // Kicker (CR 702.33) is NOT skipped here. It is a static ability whose
       // keyword combinator (KickerKeyword) decomposes the line into a
       // StaticAbility{KeywordSource:"Kicker", AdditionalCastCostEffect} via the
@@ -530,6 +542,21 @@ public sealed class ClauseSplitter
     text.StartsWith("You may sacrifice a nontoken", StringComparison.OrdinalIgnoreCase)
     && text.Contains(
       "creature rather than pay this spell's mana cost",
+      StringComparison.OrdinalIgnoreCase
+    );
+
+  /// <summary>
+  /// Recognises the commander-conditional free-cast family's "If you control a
+  /// commander, you may cast this spell without paying its mana cost." line (e.g.
+  /// Deadly Rollick). CR 118.9 (alternative cost) / CR 903 (Commander format).
+  /// AttributeExtractor parses the cost and condition and emits
+  /// AlternativeCostsAttribute instead. Kept narrow to this specific sentence so
+  /// it does not swallow other alternative costs handled elsewhere (Bestow,
+  /// Borderpost, Pitch, Sacrifice).
+  /// </summary>
+  private static bool IsCommanderFreeCastAlternativeCostPrefix(string text) =>
+    text.StartsWith(
+      "If you control a commander, you may cast this spell without paying its mana cost",
       StringComparison.OrdinalIgnoreCase
     );
 
