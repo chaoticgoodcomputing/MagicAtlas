@@ -1,0 +1,100 @@
+{
+  "Input": {
+    "Name": "Price of Knowledge",
+    "ManaCost": "{6}{B}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Players have no maximum hand size.\nAt the beginning of each opponent's upkeep, this enchantment deals damage to that player equal to the number of cards in that player's hand.",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": [],
+    "Id": "97f536be-7836-4c9a-befc-94590e602f26",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Price of Knowledge",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Players have no maximum hand size.\nAt the beginning of each opponent's upkeep, this enchantment deals damage to that player equal to the number of cards in that player's hand.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "noMaxHandSize",
+              "Player": { "Kind": "EachPlayer" }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "CardTypes": [
+                    "card"
+                  ],
+                  "Owner": "ThatPlayer",
+                  "Zone": "Hand"
+                }
+              },
+              "Target": {
+                "Kind": "ThatPlayer"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{6}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 6
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 7,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

@@ -404,15 +404,6 @@
           ]
         },
         {
-          "Type": "ObjectInZoneCondition",
-          "Discriminator": "objectInZone",
-          "IsUnparsed": false,
-          "Fields": [
-            "Reference",
-            "Zone"
-          ]
-        },
-        {
           "Type": "OtherCondition",
           "Discriminator": "other",
           "IsUnparsed": false,
@@ -1780,7 +1771,9 @@
           "Type": "NoMaxHandSizeEffect",
           "Discriminator": "noMaxHandSize",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "Player"
+          ]
         },
         {
           "Type": "OffspringEffect",
@@ -2781,5 +2774,5 @@
       ]
     }
   ],
-  "SchemaHash": "a5b78ad160d0e2730af6d0f5d81b01f61d7213d4158cf925bb5d067e3d5e63be"
+  "SchemaHash": "ad10965a7fc572a801e10260c4848d1876a22e457a78ac990c2028f9a860841e"
 }
