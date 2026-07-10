@@ -146,6 +146,19 @@ public sealed record ObjectFilter
   public ObjectReference? SharesCreatureTypeWith { get; init; }
 
   /// <summary>
+  /// Relational card-type axis: filters to objects that share at least one PERMANENT type
+  /// (CR 110.4: artifact, battle, creature, enchantment, land, planeswalker) with a referenced
+  /// object — Cloudstone Curio: "return another permanent you control that shares a permanent
+  /// type with it". Parallels <see cref="SharesCreatureTypeWith"/> (the narrower creature-SUBTYPE
+  /// sibling, CR 205.3m) and <see cref="SharesColorWith"/> (the color sibling): the permanent
+  /// types to match are those the referenced object CURRENTLY has, resolved by a consumer, not a
+  /// card-text literal. Distinct from a plain <see cref="CardTypes"/> entry, which pins one or more
+  /// FIXED literal types rather than comparing against another object's live type set.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? SharesPermanentTypeWith { get; init; }
+
+  /// <summary>
   /// Relational name axis: filters to objects that have the SAME NAME as a referenced object —
   /// "other creature you control with the same name as that creature" (Mirror Box: "Each nontoken
   /// creature you control gets +1/+1 for each other creature you control with the same name as that

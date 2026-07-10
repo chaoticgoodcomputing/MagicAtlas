@@ -1,0 +1,85 @@
+{
+  "Input": {
+    "Name": "Cloudstone Curio",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "Whenever a nonartifact permanent you control enters, you may return another permanent you control that shares a permanent type with it to its owner's hand.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "6146bf98-3cab-4044-a1a2-cf2203f617aa",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Cloudstone Curio",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever a nonartifact permanent you control enters, you may return another permanent you control that shares a permanent type with it to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "permanent"
+              ],
+              "ExcludedCardTypes": [
+                "artifact"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "returnToHand",
+                "Target": {
+                  "Kind": "Any",
+                  "Filter": {
+                    "CardTypes": [
+                      "permanent"
+                    ],
+                    "Controller": "You",
+                    "ExcludeSelf": true,
+                    "SharesPermanentTypeWith": {
+                      "Kind": "It"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
