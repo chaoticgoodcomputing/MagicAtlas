@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BLB/RockyRebuke.json",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 701.14"],
+      "reason": "OracleText byte-identical to real Rocky Rebuke; fully structured DealDamageEffect (Source=creature you control, derived Power 'it', Target=creature an opponent controls); no unparsed/free-text/lossy merge; non-combat (IsCombat null) correct"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/BiteOpponentControlsSpellRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 701.14"],
+      "reason": "Anchored ^...$ rule mirrors sibling BiteRule; emits pre-existing DealDamageEffect; 'an opponent controls' -> ControllerFilter.Opponent correct; CR 120.1 (source of damage) and CR 701.14/701.14d (fight is symmetric + non-combat contrast) both exist and match modeling"
+    },
+    {
+      "target": "mast/target-creature-you-control-deal#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "No new discriminator introduced (newAstNode=false, shared=[]); reuses pre-existing DealDamageEffect + ControllerFilter.Opponent, both already projected; no PortWalk projection decision required"
+    }
+  ]
+}

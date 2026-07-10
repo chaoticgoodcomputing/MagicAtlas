@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ElvenAmbush.json",
+      "verdict": "PASS",
+      "citations": ["CR 111.1"],
+      "reason": "OracleText byte-identical to Scryfall; fully-structured createToken with count over ObjectFilter{Subtypes:[Elf],Controller:You,Zone:Battlefield} and 1/1 green Elf Warrior TokenDefinition; no unparsed/free-text; count shape matches Elvish Archdruid precedent"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/CreateCreatureTokenForEachControlledSubtypeRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 111.1", "CR 107.3"],
+      "reason": "New SpellRule reuses existing createToken effect + count quantity (no new AST node); emits sound structured shape; cites ADR 0004 (reference-not-resolution), no CR citation to contradict"
+    },
+    {
+      "target": "create-a-1-1-green-elf-warrior-c#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "No new discriminator introduced (newAstNode=false, reuses createToken/count); no PortWalk projection decision required by initiative-03 ratchet"
+    }
+  ]
+}

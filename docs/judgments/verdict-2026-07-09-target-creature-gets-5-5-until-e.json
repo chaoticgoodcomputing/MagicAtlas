@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ZNR/ObNixilissCruelty.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 614.6", "CR 700.4"],
+      "reason": "OracleText byte-identical to Scryfall; sentence 1 -> modifyPT (Target creature, -5/-5, untilTime Turn/End), sentence 2 -> death-replacement (OriginalEventOccurs:false, exile it) with DyingObject:It anaphora; fully structured, no unparsed/free-text; mirrors landed Incendiary Flow family"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/ModifyPTThenExileInsteadReplacementRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 614.6", "CR 700.4"],
+      "reason": "Emits modifyPT SpellAbility + linked death-replacement StaticAbility matching gold; cited CR 614.1/614.6/700.4 all exist and match modeling; that-creature/it anaphora -> ObjectReferenceKind.It per UntapThatCreatureRule/ThreatenRule convention"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Replacement/DeathEvent.cs#DyingObject",
+      "verdict": "PASS",
+      "citations": ["CR 700.4"],
+      "reason": "New optional DyingObject ObjectReference is a sound generalization: pins one already-identified object by anaphoric reference, orthogonal to the inherited filter-scoped AffectedObjects axis (reference-not-resolution, ADR 0004); null-omitted for filter-scoped death events; CR 700.4 dies-citation correct"
+    },
+    {
+      "target": "mast/target-creature-gets-5-5-until-e#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "No new discriminator introduced (newAstNode=false); modifyPT, replacement, death event, and exile all already project in PortGraph/PortWalkProjection (replacement=intercept+inner-emit CR 614, modifyPT=modify:pt emit); DyingObject is a reference refinement, not a projection-relevant discriminator, so no new PortWalk entry required"
+    }
+  ]
+}

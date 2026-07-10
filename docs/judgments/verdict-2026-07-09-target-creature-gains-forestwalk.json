@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NEM/IvyDancer.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.14", "CR 611.1", "CR 602.1"],
+      "reason": "OracleText byte-identical to Ivy Dancer; {T} activated grant of forestwalk to a Target creature modeled as gainAbility -> static (KeywordSource Forestwalk) -> evasion with DefendingPlayerControls over Forest subtype, untilTime end of turn; no unparsed/lossy nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/TargetCreatureGainsLandwalkEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.14", "CR 611.1", "CR 602.1"],
+      "reason": "target-scoped dual of ThisCreatureGainsLandwalkEffectRule; emits existing GainAbilityEffect/EvasionEffect shape (no new AST node); cited CR 702.14/611.1/602.1 all exist and match the modeling; anchored regex pinned to the five basic landwalk words"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/TargetCreatureGainsLandwalkEffectRule.cs#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (newAstNode=false, shared=[]); reuses pre-existing EvasionConditionType.DefendingPlayerControls and KeywordAbility.Forestwalk which already carry their PortWalk projection decisions from the self-grant sibling; no new projection entry required"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ARB/DistortingWake.json",
+      "verdict": "PASS",
+      "citations": ["CR 107.3", "CR 400.3", "CR 402.1", "CR 115.1"],
+      "reason": "Gold models 'Return X target nonland permanents to their owners' hands' as Kind:spell + returnToHand with Target{Quantity:VariableQuantity X, Filter:{CardTypes:[permanent], ExcludedCardTypes:[land]}}; no unparsed/unstructured/OtherX, OracleText byte-identical (ASCII apostrophe) and self-consistent with RawText, matches sibling Alexi convention"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/ReturnCountTargetPermanentsToOwnersHandsSpellRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 107.3", "CR 400.3", "CR 402.1", "CR 115.1"],
+      "reason": "Spell-side sibling of the activated ReturnCount...EffectRule; anchored ^...$ over count+plural-type+their owners' hands; reuses ReturnToHandEffect/VariableQuantity/ExcludedCardTypes; all four cited CR rules exist verbatim in rules-structure.json and match the modeling"
+    },
+    {
+      "target": "tdd/return-x-target-nonland-permanen#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "No new discriminator introduced (reuses existing returnToHand effect, ObjectReference.Quantity, and pre-existing ObjectFilter.ExcludedCardTypes); no PortWalk projection decision required"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/USG/Humble.json",
+      "verdict": "PASS",
+      "citations": ["CR 113.10", "CR 208.4", "CR 613.4b"],
+      "reason": "eventual-truth gold: both clauses structured (loseAbility+AllAbilities:true, setBasePT 0/1), shared until-EOT duration, single target via It back-ref; no unparsed/free-text; OracleText byte-identical to Scryfall Humble"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Modification/SetBasePTEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 208.4", "CR 613.4b", "CR 604.3"],
+      "reason": "new node models 'has base power and toughness X/Y' as layer-7b set (CR 208.4a/613.4b); Power/Toughness as Quantity, distinct from DefinePT (CDA) and ModifyPT; citations verified"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Modification/LoseAbilityEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 113.10"],
+      "reason": "sound generalization: replaces free-text 'all abilities' with structured AllAbilities bool scope, AbilityText now optional residual; CR 113.10 'loses that ability' matches"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/LosesAllAbilitiesAndSetBasePTSpellRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 601.2c", "CR 113.10", "CR 208.4"],
+      "reason": "IMultiSpellRule emits flat sibling [loseAbility, setBasePT] with shared target (It back-ref) + shared EOT duration; single target governs both clauses per CR 601.2c; citations verified (doc-comment AbilityText mention is stale vs emitted AllAbilities:true — code-quality only, gold uses AllAbilities)"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#setBasePT",
+      "verdict": "PASS",
+      "citations": ["CR 208.4", "CR 613.4b"],
+      "reason": "initiative-03 projection decision present + sensible: base-P/T-set parked coarse alongside definePT/becomesCreature P/T family; no flow rule reads P/T-setting; consciously inert, not something a flow rule clearly wants"
+    },
+    {
+      "target": "libs/magic-ast/schema/ast-schema.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "regenerated schema consistent with code: loseAbility drops now-conditional AbilityText (Fields=[Target]), adds setBasePT [Power,Target,Toughness]; SchemaHash updated"
+    }
+  ]
+}

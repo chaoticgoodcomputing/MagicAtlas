@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TSP/DejaVu.json",
+      "verdict": "PASS",
+      "citations": ["CR 608.2", "CR 404.1", "CR 402.1", "CR 115.1"],
+      "reason": "Déjà Vu gold fully structured: returnToHand + Target with CardTypes=[sorcery], Zone=Graveyard, Controller=You; OracleText byte-identical to oracle-cards.json; no unparsed/free-text/lossy nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/ReturnSorceryFromGraveyardSpellRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 608.2", "CR 404.1", "CR 402.1", "CR 115.1"],
+      "reason": "New ISpellRule clones the vetted instant-or-sorcery sibling for the bare sorcery type; emits existing ReturnToHandEffect + ObjectFilter; all four cited CR rules exist and match the modeling"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/ReturnSorceryFromGraveyardSpellRule.cs#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "No new discriminator introduced (reuses returnToHand effect, sorcery card type, Zone/Controller filters); returnToHand already has a PortWalkProjection entry that sensibly projects graveyard-sorcery recursion as a spell-recast arm, so no new projection decision is required"
+    }
+  ]
+}

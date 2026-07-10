@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ONS/ChillingTrap.json",
+      "verdict": "PASS",
+      "citations": ["CR 121.1", "CR 611.2"],
+      "reason": "OracleText byte-identical to oracle-cards.json; two sibling spell effects modifyPT(target creature, -4/0, until end of turn) + drawCards(1, You) gated by a structured count CountCondition (Wizard subtype, Controller You, >=1); no unparsed/free-text, no lossy drop/merge, timing not baked into effect"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/ModifyPTThenConditionalDrawRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 121.1", "CR 611.2"],
+      "reason": "IMultiSpellRule anchored to full two-sentence text emits the exact gold shape reusing existing ModifyPTEffect/DrawCardsEffect/CountCondition nodes; cited CR 121.1 (Drawing a Card) and CR 611.2 (continuous effect from spell resolution) both present in rules-structure.json and match the modeling"
+    },
+    {
+      "target": "mast/target-creature-gets-4-0-until-e#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "newAstNode=false, shared=[]; no new discriminator (effect/cost type, trigger event, restriction) introduced -- reuses pre-existing modifyPT/drawCards/count/untilTime discriminators, so no PortWalk projection decision is required and the exhaustiveness ratchet is not triggered"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/JOU/SmeltWardMinotaur.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 509.1"],
+      "reason": "OracleText byte-identical to Scryfall; SpellCast trigger Filter {spell,instant,sorcery}/You matches convention; cantBlock effect targets creature with Controller:Opponent and untilTime EndOfTurn duration; no unparsed/free-text/lossy nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TargetControllerCantBlockThisTurnTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 509.1"],
+      "reason": "cited rules exist and match (603.2 triggered-ability general; 509.1/.1b can't-block restriction); anchored regex, Priority=70, maps controller clause to valid ControllerFilter values; reuses existing CantBlockEffect; sound"
+    },
+    {
+      "target": "mast/target-creature-opponent-cant-block#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (reuses cantBlock effect, SpellCast trigger, ControllerFilter.Opponent); pre-existing cantBlock coarse-projection entry is sensible (block restriction inert for flow graph)"
+    }
+  ]
+}

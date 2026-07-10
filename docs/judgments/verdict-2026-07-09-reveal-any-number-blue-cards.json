@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TOR/ScentOfBrine.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.20a", "CR 701.6a", "CR 118.1"],
+      "reason": "OracleText byte-identical to real Scent of Brine; both sentences fully modeled (revealCards blue-hand + preventable/counterSpell with unless scaledMana); no unparsed/free-text/lossy; mirrors Mana Leak counter and Scent of Nightshade reveal conventions"
+    },
+    {
+      "target": "libs/magic-ast/AST/Costs/ScaledManaCost.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.1"],
+      "reason": "sound decomposition of 'pay {MANA} for each [count]' into PerUnit ManaCost x Count Quantity (reference-not-resolution); CR 118.1 quoted verbatim and matches an unless-payment cost"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/RevealAnyNumberBlueCardsFromHandRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.20a"],
+      "reason": "anchored regex emits RevealCardsEffect (You / anyAmount / Hand / card+U) matching the black sibling; CR 701.20a quoted verbatim and correct for reveal"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/CounterUnlessPaysPerCardRevealedRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.6a", "CR 118.1"],
+      "reason": "emits Preventable(CounterSpell target spell, Unless{Controller, scaledMana}); anchored on 'for each card revealed this way' tail so no overlap with flat CounterUnlessPaysRule; CR 701.6a and 118.1 quoted verbatim and correct"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#scaledMana",
+      "verdict": "PASS",
+      "citations": ["CR 118.1"],
+      "reason": "new cost discriminator; coarse carve-out present with plausible reason; sensible because the interaction walker has no Unless/Preventable handling, so no flow rule consumes counter-unless payment resources — genuinely inert, not a parked flow-relevant discriminator"
+    },
+    {
+      "target": "libs/magic-ast/schema/ast-schema.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "sound generalization: registers ScaledManaCost (discriminator scaledMana, IsUnparsed false, Fields Count/PerUnit), SchemaHash bumped consistently"
+    }
+  ]
+}

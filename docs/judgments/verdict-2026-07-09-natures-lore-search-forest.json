@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TMP/NaturesLore.json",
+      "verdict": "PASS",
+      "citations": ["CR 305.6", "CR 701.23"],
+      "reason": "OracleText byte-identical to Scryfall; searchLibrary Filter{CardTypes:[land],Subtypes:[Forest]} Count literal 1 Destination Battlefield Revealed false correctly models 'Search your library for a Forest card, put that card onto the battlefield'; no basic supertype asserted (dual/snow Forests qualify); implicit-shuffle encoding matches the spell-ramp precedent (RampantGrowth, Cultivate); no unparsed/free-text/lossy nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/SearchLibraryLandTypeToBattlefieldUntappedRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 305.6", "CR 701.23"],
+      "reason": "CR 305.6 (basic land types are Plains/Island/Swamp/Mountain/Forest) and CR 701.23 (search action) both exist in rules-structure.json and match the modeling; sound untapped twin of SearchLibraryLandTypeToBattlefieldRule, regex mutually exclusive with the tapped sibling (anchors 'battlefield, then shuffle' vs 'battlefield tapped'); emits SearchDestination.Battlefield; no new AST node"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/SearchLibraryLandTypeToBattlefieldUntappedRule.cs#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (newAstNode=false, shared=[]); reuses pre-existing searchLibrary EffectType and SearchDestination.Battlefield enum value, both already projected; projection ratchet does not fire"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MMQ/AmbitionsCost.json",
+      "verdict": "PASS",
+      "citations": ["CR 121.1", "CR 119.3"],
+      "reason": "OracleText byte-identical to oracle-cards.json; spell ability decomposes 'You draw three cards and you lose 3 life' into drawCards{literal 3, You} + loseLife{literal 3, You}; no unparsed/UnstructuredEffect, no lossy drop of the lose-life conjunct; attributes (manaCost {3}{B} MV4, colors/identity [B]) correct"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/YouDrawCardsAndYouLoseLifeRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 121.1", "CR 119.3"],
+      "reason": "anchored ^...$ regex requiring the mandatory second 'you' to disambiguate from targeted/activated variants; emits flat [DrawCardsEffect, LoseLifeEffect] both with ObjectReference.You(); cited CR 121.1 (draw) and CR 119.3 (lose life) both exist in rules-structure.json and match the modeling"
+    },
+    {
+      "target": "mast/ambitions-cost-draw-lose#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "No new discriminator introduced (newAstNode=false, shared=[]); reuses existing drawCards (known-coarse baseline) and loseLife (semantic PortWalkProjection emit:life:loss) which already carry sensible projection decisions; ratchet has nothing new to enforce"
+    }
+  ]
+}

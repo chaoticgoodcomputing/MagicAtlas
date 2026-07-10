@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DriverOfTheDead.json",
+      "verdict": "PASS",
+      "citations": ["CR 400.7", "CR 404.1", "CR 115.1", "CR 603.2"],
+      "reason": "triggered self-dies + returnToBattlefield of target creature card with ManaValueComparison LessThanOrEqual 2 from your graveyard; fully structured, no unparsed/free-text, OracleText byte-identical to card"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ReturnTargetCardWithManaValueFromGraveyardToBattlefieldTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 400.7", "CR 404.1", "CR 115.1", "CR 603.2"],
+      "reason": "reuses ReturnToBattlefieldEffect + existing ObjectFilter.ManaValueComparison axis; anchored, mutually exclusive with plain sibling; all cited rules exist and match"
+    },
+    {
+      "target": "projection:mast/return-target-creature-card-with",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (reuses ReturnToBattlefieldEffect + existing ManaValueComparison filter axis); no PortWalk projection decision required"
+    }
+  ]
+}

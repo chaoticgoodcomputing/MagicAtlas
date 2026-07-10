@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/7ED/TelepathicSpies.json",
+      "verdict": "PASS",
+      "citations": ["CR 402.3", "CR 102.2"],
+      "reason": "Input.OracleText byte-identical; triggered Enters (IsSelf) + lookAtCards over target opponent's hand (CardsInHand, Zone.Hand); no unparsed/free-text; opponent restriction preserved via established CardTypes convention (matches gold ThoughtErasure.json)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/LookAtTargetHandTriggeredRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 701.12"],
+      "reason": "doc-comment cites 'the Peek pattern (Rule 701.12)' but CR 701.12 is Exchange and there is no Peek/Look keyword action; citation contradicts the look-at-hand modeling. Parser + emitted AST are otherwise sound."
+    },
+    {
+      "target": "look-at-target-opponent-s-hand#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses existing lookAtCards effect / DerivedKind.CardsInHand / Zone.Hand / ObjectReferenceKind.Target; no PortWalk projection decision required"
+    }
+  ]
+}

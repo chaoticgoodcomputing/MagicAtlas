@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FranticConfrontation.json",
+      "verdict": "PASS",
+      "citations": ["CR 107.3a", "CR 613.4c", "CR 702.7a", "CR 702.19a"],
+      "reason": "Input.OracleText byte-identical to real card; +X/+0 modeled as modifyPT (Target creature Controller=You, PowerModifier variable X, ToughnessModifier literal 0, until end of turn), first strike as gainAbility static combatDamageTiming First, trample as gainAbility static keywordAbility Trample; no unparsed/free-text; all effects share until-end-of-turn duration"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/TargetControlledVariablePTAndGainKeywordsSpellRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 107.3a", "CR 613.4c", "CR 702.7a", "CR 702.19a"],
+      "reason": "New IMultiSpellRule reusing existing effect nodes; doc-comment cites 107.3a/613.4c/702.7a/702.19a — all present in rules-structure.json and text matches modeling; keyword factory mirrors sibling ModifyPTAndGainKeywordControlledSpellRule; emits flat structured effect list, no escape hatch"
+    },
+    {
+      "target": "mast-target-creature-you-control-gets#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "newAstNode=false, shared=[]; no new effect/cost discriminator, trigger event, or restriction introduced (reuses modifyPT/gainAbility/combatDamageTiming/keywordAbility) — no PortWalk projection decision required"
+    }
+  ]
+}

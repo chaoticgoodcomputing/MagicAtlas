@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FUT/MagusoftheMirror.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.12a", "CR 701.12c", "CR 602.5"],
+      "reason": "Oracle text byte-identical to Scryfall; full fidelity — tap + sacrifice-self costs, exchangeCharacteristic/LifeTotals (You<->Opponent), OnlyDuringYourUpkeep restriction; no unparsed/free-text/lossy nodes"
+    },
+    {
+      "target": "libs/magic-ast/AST/Abilities/ActivatedAbility.cs#OnlyDuringYourUpkeep",
+      "verdict": "PASS",
+      "citations": ["CR 602.5"],
+      "reason": "New ActivationRestriction enum value; cited CR 602.5 exists and matches ('can't begin to activate an ability that's prohibited'); strictly narrower than OnlyDuringYourTurn — sound"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/ExchangeLifeTotalsEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.12a", "CR 701.12c"],
+      "reason": "Reuses pre-existing ExchangeCharacteristicEffect/LifeTotals facet (no new effect discriminator); doc-comment cites 701.12a/c which exist verbatim; anchored regex cannot claim a substring of a larger exchange sentence"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/ActivatedAbilityParser.cs",
+      "verdict": "PASS",
+      "citations": ["CR 602.5"],
+      "reason": "Sound generalization — anchored whole-string equality on the two canonical phrasings; conservative (won't match compound restrictions and silently drop trailing siblings)"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#OnlyDuringYourUpkeep",
+      "verdict": "PASS",
+      "citations": ["CR 602.5"],
+      "reason": "Projection decision present and sensible — step-scoped timing restriction does not gate intra-window loop firability (a loop confined to the upkeep step can still repeat), consistent with OnlyDuringYourTurn/OnlyAsSorcery already parked coarse; not something a flow rule would want"
+    }
+  ]
+}

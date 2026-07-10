@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DidntSayPlease.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.17a", "CR 701.6"],
+      "reason": "OracleText byte-identical to Scryfall; both effects fully structured (counterSpell + mill), no unparsed/free-text; mill Count=3 literal + Player=Controller anaphora; counterSpell Filter CardTypes:[spell] matches family convention (PunishIgnorance/SpellSnare)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/ItsControllerMillsRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.17a"],
+      "reason": "reuses existing MillEffect node; mirrors ItsControllerLosesLifeRule anaphoric-controller pattern; cited CR 701.17a verbatim matches rules-structure.json"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/ItsControllerMillsRule.cs#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (mill/counterSpell/Controller all pre-exist); existing mill known-coarse entry 'no flow rule consumes it yet' is sensible"
+    }
+  ]
+}

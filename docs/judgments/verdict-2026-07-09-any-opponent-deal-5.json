@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/OTJ/LonghornFirebeast.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.12", "CR 120.1", "CR 701.21a", "CR 603.2"],
+      "reason": "OracleText byte-identical to Scryfall; trigger When/Enters/self + optional{Chooser:Opponent, Inner:dealDamage 5 source It target Opponent, IfYouDo:sacrifice Self} — fully structured, no unparsed/free-text, correct semantics"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/AnyOpponentMayHaveItDealDamageThenSacrificeSelfRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.12", "CR 120.1", "CR 701.21a", "CR 603.2"],
+      "reason": "anchored rule emits sound OptionalEffect(Chooser=Opponent)/DealDamageEffect(It->Opponent)/SacrificeEffect(Self); all four cited CR rules exist in rules-structure.json and match the modeling"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Core/OptionalEffect.cs#Chooser",
+      "verdict": "PASS",
+      "citations": ["CR 118.12"],
+      "reason": "sound generalization: nullable Chooser (null == controller), JsonIgnore WhenWritingNull keeps existing fixtures unchanged, mirrors DiscardCardsEffect.Chooser; doc citation corrected from wrong CR 117.7 (cast-in-response) to CR 118.12"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Core/OptionalEffect.cs#projection-decision",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses effectTypes optional/dealDamage/sacrifice (all already have semantic PortWalkProjection entries) and the Enters trigger; Chooser is an attribute refinement, not a projection-relevant discriminator, so no projection decision is required"
+    }
+  ]
+}

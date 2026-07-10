@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TOR/ScentOfIvy.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.20a"],
+      "reason": "Input.OracleText byte-identical to Scryfall Scent of Ivy; gold decomposes into revealCards(You, anyAmount, Hand, filter card+G) + modifyPT(target creature, +X/+X where X=cardsRevealedThisWay, until end of turn); no unparsed/IUnparsed/UnstructuredEffect; exact positive mirror of the Scent of Nightshade -X sibling"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/RevealAnyNumberGreenCardsFromHandRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.20a"],
+      "reason": "Emits RevealCardsEffect(You, AnyAmountQuantity, Hand, CardTypes=[card]+Colors=[G]); doc-comment cites CR 701.20a verbatim-correct against rules-structure.json; exact mirror of RevealAnyNumberBlackCardsFromHandRule"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/TargetCreatureGetsPlusXRevealedThisWayRule.cs",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "Emits ModifyPTEffect(target creature, PowerMod/ToughnessMod=CardsRevealedThisWayQuantity used directly, EndOfTurn); positive mirror of the Minus-X sibling which negates via CalculatedQuantity*-1; no free text, no baked timing (duration is a composed node)"
+    },
+    {
+      "target": "mast/reveal-any-number-green-cards#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "newAstNode=false, shared=[]; no new discriminator introduced (RevealCardsEffect/ModifyPTEffect/CardsRevealedThisWayQuantity/AnyAmountQuantity all pre-exist) so the PortWalk exhaustiveness ratchet is not triggered; no projection decision required"
+    }
+  ]
+}
