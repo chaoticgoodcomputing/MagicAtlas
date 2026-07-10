@@ -141,6 +141,8 @@ public class OperatorPropertyTests
     f.ExiledWith is not null
     || f.SharesColorWith is not null
     || f.SharesCreatureTypeWith is not null
+    || f.SharesNameWith is not null
+    || f.SharesCardTypeWith is not null
     || f.AttachedTo is not null
     || f.ChosenCharacteristic is not null
     || f.History is not null
