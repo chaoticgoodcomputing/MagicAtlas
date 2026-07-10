@@ -88,6 +88,17 @@ public enum DerivedKind
   /// <summary>The number of cards in a player's library. CR 401.1 (the library zone).</summary>
   CardsInLibrary,
   DamageDealt,
+
+  /// <summary>
+  /// The amount of damage prevented by a preceding prevention effect — "the damage
+  /// prevented this way" in "You gain life equal to the damage prevented this way."
+  /// (Intervention Pact, Reverse Damage, Awe Strike, Hallow). Reference-not-resolution
+  /// (ADR 0004): MAST records the textual link to the damage a prior
+  /// <see cref="MagicAST.AST.Effects.Damage.PreventDamageEffect"/> prevented, not the
+  /// runtime value. Distinct from <see cref="DamageDealt"/> (damage that WAS dealt) —
+  /// prevented damage is damage that would have been dealt but was stopped (CR 615).
+  /// </summary>
+  DamagePrevented,
   LifeGained,
   LifeLost,
   /// <summary>

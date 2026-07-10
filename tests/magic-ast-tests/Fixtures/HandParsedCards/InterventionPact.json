@@ -1,0 +1,124 @@
+{
+  "Input": {
+    "Name": "Intervention Pact",
+    "ManaCost": "{0}",
+    "TypeLine": "Instant",
+    "OracleText": "The next time a source of your choice would deal damage to you this turn, prevent that damage. You gain life equal to the damage prevented this way.\nAt the beginning of your next upkeep, pay {1}{W}{W}. If you don't, you lose the game.",
+    "Colors": ["W"],
+    "ColorIndicator": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": [],
+    "Id": "bca127ef-349e-4380-875d-49c14fa03b18",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Intervention Pact",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "The next time a source of your choice would deal damage to you this turn, prevent that damage. You gain life equal to the damage prevented this way.\nAt the beginning of your next upkeep, pay {1}{W}{W}. If you don't, you lose the game.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "preventDamage",
+              "NextInstance": true,
+              "Source": {
+                "Kind": "Designated"
+              },
+              "Target": {
+                "Kind": "You"
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            },
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "DamagePrevented"
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "When": "Next",
+              "Whose": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "loseTheGame",
+                "Player": {
+                  "Kind": "You"
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "You"
+                },
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 1
+                    },
+                    {
+                      "Kind": "colored",
+                      "Colors": ["W"]
+                    },
+                    {
+                      "Kind": "colored",
+                      "Colors": ["W"]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{0}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 0
+          }
+        ],
+        "ManaValue": 0
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}

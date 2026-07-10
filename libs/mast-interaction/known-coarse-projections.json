@@ -208,6 +208,7 @@
     "warp": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "webSlinging": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "winTheGame": "absolute win effect \u2014 no flow rule needs to propagate win conditions yet; coarse conscious carve-out",
+    "loseTheGame": "absolute loss effect (Pact deferred-cost consequence 'if you don't, you lose the game') \u2014 mirror of winTheGame, sibling of cantLoseGame/cantWinGame which are all coarse game-outcome nodes; no flow rule reads game-loss events yet; consciously inert for interaction recall",
     "gainAbilitiesFromExiledCards": "ability-set grant from exiled creature cards (CR 613.1f layer-6) \u2014 grants dynamic activated abilities; no interaction flow rule reads exiled-card ability grants yet; consciously inert for interaction recall",
     "wish": "Karn, the Great Creator \u22122 / Glittering Wish family (CR 400.11b: retrieve from outside game or exile to hand) \u2014 sideboard retrieval; no interaction flow rule reads wish-retrieval events yet; consciously inert for interaction recall",
     "repeat": "repeat/loop control-flow effect \u2014 no interaction flow rule consumes iterative repetition yet; consciously inert for recall",
