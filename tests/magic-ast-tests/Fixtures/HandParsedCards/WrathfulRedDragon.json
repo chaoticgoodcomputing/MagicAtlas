@@ -1,0 +1,113 @@
+{
+  "Input": {
+    "Name": "Wrathful Red Dragon",
+    "ManaCost": "{3}{R}{R}",
+    "TypeLine": "Creature — Dragon",
+    "OracleText": "Flying\nWhenever a Dragon you control is dealt damage, it deals that much damage to any target that isn't a Dragon.",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": ["Flying"],
+    "Id": "acd207de-eec3-4d82-b8b9-b1e60a7bad12",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Wrathful Red Dragon",
+    "TypeLine": {
+      "Raw": "Creature — Dragon",
+      "Types": ["Creature"],
+      "Subtypes": ["Dragon"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nWhenever a Dragon you control is dealt damage, it deals that much damage to any target that isn't a Dragon.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
+            }
+          ],
+          "KeywordSource": "Flying"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "CreatureDealtDamage",
+            "Filter": {
+              "Subtypes": ["Dragon"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Source": {
+                "Kind": "It"
+              },
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "DamageDealt"
+              },
+              "Target": {
+                "Kind": "AnyTarget",
+                "Filter": {
+                  "ExcludedSubtypes": ["Dragon"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
+        "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 }
+      }
+    ]
+  }
+}
