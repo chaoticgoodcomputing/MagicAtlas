@@ -94,7 +94,7 @@
             {
               "EffectType": "sacrifice",
               "Target": {
-                "Kind": "It"
+                "Kind": "Self"
               }
             }
           ]

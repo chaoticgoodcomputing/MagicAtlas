@@ -58,7 +58,7 @@ public sealed class GiftKeyword : IKeyword
       Reminder = reminder,
       Effects =
       [
-        new OptionalEffect { Inner = new ChoosePlayerEffect() },
+        new OptionalEffect { Inner = new ChoosePlayerEffect { Scope = ControllerFilter.Opponent } },
         new GiftEffect
         {
           Gifted = new DrawCardsEffect

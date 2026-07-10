@@ -373,6 +373,12 @@
           "Fields": []
         },
         {
+          "Type": "GiftPromisedCondition",
+          "Discriminator": "giftPromised",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "KeywordCostPaidCondition",
           "Discriminator": "keywordCostPaid",
           "IsUnparsed": false,
@@ -433,6 +439,14 @@
           "Fields": [
             "Reference",
             "Zone"
+          ]
+        },
+        {
+          "Type": "ObjectIsEquippedCondition",
+          "Discriminator": "objectIsEquipped",
+          "IsUnparsed": false,
+          "Fields": [
+            "Reference"
           ]
         },
         {
@@ -1045,6 +1059,12 @@
           ]
         },
         {
+          "Type": "CantHaveCountersEffect",
+          "Discriminator": "cantHaveCounters",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CantHaveOrGainKeywordEffect",
           "Discriminator": "cantHaveOrGainKeyword",
           "IsUnparsed": false,
@@ -1131,6 +1151,12 @@
           "Fields": [
             "Options"
           ]
+        },
+        {
+          "Type": "ChooseCardNameEffect",
+          "Discriminator": "chooseCardName",
+          "IsUnparsed": false,
+          "Fields": []
         },
         {
           "Type": "ChooseCardTypeEffect",
@@ -1535,6 +1561,14 @@
           ]
         },
         {
+          "Type": "GiftEffect",
+          "Discriminator": "gift",
+          "IsUnparsed": false,
+          "Fields": [
+            "Gifted"
+          ]
+        },
+        {
           "Type": "GoadedEffect",
           "Discriminator": "goaded",
           "IsUnparsed": false,
@@ -1660,6 +1694,16 @@
           "Fields": []
         },
         {
+          "Type": "LookAtTopMayRevealMatchingRestToBottomEffect",
+          "Discriminator": "lookAtTopMayRevealMatchingRestToBottom",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Filter",
+            "Player"
+          ]
+        },
+        {
           "Type": "LoseAbilityEffect",
           "Discriminator": "loseAbility",
           "IsUnparsed": false,
@@ -1690,6 +1734,15 @@
           "Discriminator": "manaPersists",
           "IsUnparsed": false,
           "Fields": []
+        },
+        {
+          "Type": "MaxHandSizeEffect",
+          "Discriminator": "maxHandSize",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player",
+            "Value"
+          ]
         },
         {
           "Type": "MayCastTargetFromGraveyardEffect",
@@ -2505,6 +2558,14 @@
           ]
         },
         {
+          "Type": "TurnFaceDownEffect",
+          "Discriminator": "turnFaceDown",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
           "Type": "TypecyclingEffect",
           "Discriminator": "typecycling",
           "IsUnparsed": false,
@@ -2921,5 +2982,5 @@
       ]
     }
   ],
-  "SchemaHash": "3cdb27e8add049f7b7b811bca8339ba59f5455d6bd521867ce30e2af90fd9bfa"
+  "SchemaHash": "e235551cdc5d7e9ee76fc5a99fd4d8701280254a57a020fbea2eff2d262b8250"
 }

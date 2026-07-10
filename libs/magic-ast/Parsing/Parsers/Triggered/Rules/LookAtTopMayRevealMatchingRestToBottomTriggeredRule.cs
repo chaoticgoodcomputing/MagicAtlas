@@ -16,9 +16,9 @@ using MagicAST.AST.References;
 /// them" and "the rest" in the second and third sentences are back-references
 /// to the look in the first — so this rule matches all three sentences as a
 /// single fragment and emits one
-/// <see cref="LookAtTopMayRevealMatchingRestToBottomEffect"/>. CR 701.19a
-/// (look); CR 701.20a (reveal); CR 401.4 (the remainder placed on the bottom
-/// in a random order).
+/// <see cref="LookAtTopMayRevealMatchingRestToBottomEffect"/>. Looking is a
+/// general instruction (not a CR 701 keyword action); CR 701.20a (reveal);
+/// CR 401.4 (the remainder placed on the bottom in a random order).
 /// </para>
 ///
 /// <para>

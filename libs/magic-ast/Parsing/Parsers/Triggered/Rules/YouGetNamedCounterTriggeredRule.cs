@@ -11,7 +11,7 @@ using MagicAST.AST.References;
 /// (Kalemne, Disciple of Iroas: "Whenever you cast a creature spell with mana
 /// value 5 or greater, you get an experience counter."; the same "you get {E}"
 /// shape generalised beyond energy to any named counter, e.g. experience,
-/// CR 122.2i).
+/// CR 122.1).
 ///
 /// <para>
 /// CR 122.1: "A counter is a marker placed on an object or player that modifies

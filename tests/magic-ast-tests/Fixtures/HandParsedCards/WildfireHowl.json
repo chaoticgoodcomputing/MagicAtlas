@@ -25,7 +25,8 @@
             {
               "EffectType": "optional",
               "Inner": {
-                "EffectType": "choosePlayer"
+                "EffectType": "choosePlayer",
+                "Scope": "Opponent"
               }
             },
             {

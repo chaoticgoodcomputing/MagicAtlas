@@ -22,8 +22,8 @@ using MagicAST.Parsing;
 /// <para>
 /// The affected objects are instant or sorcery spells on the stack controlled by the
 /// source's controller. <c>CardTypes: ["instant", "sorcery"]</c> follows the
-/// established MAST convention for the "instant and/or sorcery" type disjunction
-/// (Rule 700.4) — no separate "spell" entry is needed since instant and sorcery
+/// established MAST modeling convention for the "instant and/or sorcery" type
+/// disjunction — no separate "spell" entry is needed since instant and sorcery
 /// cards only ever exist as spells while eligible to be countered. The
 /// <see cref="CantBeCounteredEffect"/> records the restriction; its presence on a
 /// <see cref="StaticAbility"/> with <c>AffectedObjects</c> scoping to instant/sorcery

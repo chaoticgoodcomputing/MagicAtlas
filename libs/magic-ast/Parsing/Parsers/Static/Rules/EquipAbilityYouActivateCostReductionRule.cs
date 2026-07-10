@@ -18,8 +18,9 @@ using MagicAST.AST.References;
 /// <see cref="ActivatedAbilityReference"/>).
 ///
 /// <para>
-/// CR 118.9 (cost alterations): "Some effects reduce the cost to cast a spell or
-/// activate an ability." CR 702.6 (Equip): the activated ability being reduced is
+/// CR 118.7 (cost reduction): "What a player actually needs to do to pay a cost
+/// may be changed or reduced by effects." (CR 118.9 governs ALTERNATIVE costs, not
+/// reduction.) CR 702.6 (Equip): the activated ability being reduced is
 /// the Equipment's Equip ability. The class of reduced abilities is keyed on the
 /// surviving keyword identity (ADR 0003 follow-up 1) via an
 /// <see cref="ActivatedAbilityReference"/> with <see cref="KeywordAbility.Equip"/>

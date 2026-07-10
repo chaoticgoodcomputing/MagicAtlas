@@ -11,8 +11,8 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 ///
 /// <para>
 /// This is a single coupled atomic action: the controller privately LOOKS
-/// (CR 701.19a: "to look at ... cards means to check for specific information
-/// about them") at a FIXED number of cards from the top of their library —
+/// (looking at cards is a general game instruction, not one of the CR 701
+/// keyword actions) at a FIXED number of cards from the top of their library —
 /// unlike the sibling <see cref="RevealTopMayPutMatchingRestToGraveyardEffect"/>
 /// and <see cref="RevealTopMayPutSharesCreatureTypeRestToBottomEffect"/>
 /// families, this pile is never shown to any other player. The controller MAY

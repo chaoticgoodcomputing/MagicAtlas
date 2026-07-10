@@ -6,7 +6,9 @@ using MagicAST.AST.Triggers;
 
 /// <summary>
 /// "When you control no lands, [effect]." — a state-triggered ability
-/// (CR 603.2e — a trigger that is a state condition; "when you control no [X]").
+/// (CR 603.8 — "Some triggered abilities trigger when a game state (such as a
+/// player controlling no permanents of a particular card type) is true", i.e. a
+/// state trigger, NOT the CR 603.2e "becomes"-transition trigger).
 /// Fires when the controlling player transitions to controlling zero lands of
 /// any kind (no basic-land-subtype qualifier), distinct from
 /// <see cref="ControlNoLandTypeConditionRule"/>, which matches the Islandhome-style

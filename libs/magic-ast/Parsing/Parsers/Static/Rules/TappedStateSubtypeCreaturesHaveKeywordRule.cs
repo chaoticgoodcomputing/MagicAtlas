@@ -15,7 +15,7 @@ using MagicAST.AST.References;
 /// that continuously gives +1/+1 to each white creature on the battlefield.")
 /// granting a keyword ability to every creature of the named subtype the
 /// controller controls, further restricted to those currently in the named
-/// tap state (CR 701.21 / 110.5, per <see cref="TappedStateCharacteristic"/>'s
+/// tap state (CR 701.26 / 110.5, per <see cref="TappedStateCharacteristic"/>'s
 /// own established citation, reused below).
 ///
 /// <para>
@@ -45,7 +45,7 @@ using MagicAST.AST.References;
 /// <para>
 /// The tapped/untapped predicate is expressed as a
 /// <see cref="TappedStateCharacteristic"/> on the granted-to filter's
-/// <see cref="ObjectFilter.Characteristics"/> (CR 701.21 / 110.5, per that
+/// <see cref="ObjectFilter.Characteristics"/> (CR 701.26 / 110.5, per that
 /// node's own doc), the same node <see cref="BareKeywordGrantRule"/>'s Saryth
 /// arm and
 /// <see cref="MagicAST.Parsing.Parsers.Spell.Rules.AddManaForEachTappedLandOpponentsControlRule"/>

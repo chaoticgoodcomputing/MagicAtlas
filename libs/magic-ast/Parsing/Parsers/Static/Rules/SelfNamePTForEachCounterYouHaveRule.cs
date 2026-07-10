@@ -12,7 +12,7 @@ using MagicAST.AST.References;
 /// Disciple of Iroas: "Kalemne gets +1/+1 for each experience counter you
 /// have."). CR 611.3 (a static ability that sets or modifies power/toughness);
 /// CR 122 (counters — CR 122.1 counters may be placed on a player, not only an
-/// object; CR 122.2i experience counters specifically).
+/// object; CR 122.1 experience counters specifically).
 ///
 /// <para>
 /// Self-by-name sibling of <see cref="SelfPTForEachRule"/> (which is anchored
