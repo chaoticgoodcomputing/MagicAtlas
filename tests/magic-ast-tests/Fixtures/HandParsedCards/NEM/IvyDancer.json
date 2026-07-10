@@ -1,0 +1,124 @@
+{
+  "Input": {
+    "Name": "Ivy Dancer",
+    "ManaCost": "{2}{G}",
+    "TypeLine": "Creature — Dryad Shaman",
+    "OracleText": "{T}: Target creature gains forestwalk until end of turn. (It can't be blocked as long as defending player controls a Forest.)",
+    "Power": "1",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Ivy Dancer",
+    "TypeLine": {
+      "Raw": "Creature — Dryad Shaman",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dryad",
+        "Shaman"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}: Target creature gains forestwalk until end of turn. (It can't be blocked as long as defending player controls a Forest.)",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Forestwalk",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "UnblockableCondition": {
+                      "ConditionType": "DefendingPlayerControls",
+                      "PermanentFilter": {
+                        "Subtypes": [
+                          "Forest"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
