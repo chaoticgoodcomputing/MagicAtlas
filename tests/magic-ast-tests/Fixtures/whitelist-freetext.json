@@ -170,6 +170,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "DemonicConsultation",
+      "sink": "OtherCharacteristic",
+      "tag": "irreducible",
+      "reason": "positional predicate 'top' (library top-card position) — no structured Position field on ObjectFilter; same residual category as M20/MysticForge and UgintheIneffable"
+    },
+    {
       "card": "Divert",
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
