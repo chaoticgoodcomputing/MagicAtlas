@@ -1013,6 +1013,12 @@
           "Fields": []
         },
         {
+          "Type": "CantBeCopiedEffect",
+          "Discriminator": "cantBeCopied",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CantBeCounteredEffect",
           "Discriminator": "cantBeCountered",
           "IsUnparsed": false,
@@ -2982,5 +2988,5 @@
       ]
     }
   ],
-  "SchemaHash": "e235551cdc5d7e9ee76fc5a99fd4d8701280254a57a020fbea2eff2d262b8250"
+  "SchemaHash": "ee7eee21df7e9a2a65da9068a4ca5dfdea822dfa8115e4537bf5517ae4ebdab0"
 }

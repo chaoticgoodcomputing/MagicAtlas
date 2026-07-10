@@ -1264,15 +1264,15 @@ public sealed class AbilityClassifier
       };
     }
 
-    // "This spell can't be countered." is a property of the resolving spell;
-    // route it to the spell parser so the EffectType lands inside
-    // SpellAbility.Effects rather than as a top-level static. Other
-    // "This spell ..." phrasings (e.g., "This spell costs {X} less to cast")
+    // "This spell can't be countered." / "This spell can't be copied." are properties
+    // of the resolving spell on the stack; route them to the spell parser so the
+    // EffectType lands inside SpellAbility.Effects rather than as a top-level static.
+    // Other "This spell ..." phrasings (e.g., "This spell costs {X} less to cast")
     // are static cost-modification effects and remain Static.
     if (
       Regex.IsMatch(
         clause.RawText,
-        @"^\s*This\s+spell\s+can'?t\s+be\s+countered",
+        @"^\s*This\s+spell\s+can'?t\s+be\s+(?:countered|copied)",
         RegexOptions.IgnoreCase
       )
     )

@@ -1,0 +1,125 @@
+{
+  "Input": {
+    "Name": "See Double",
+    "ManaCost": "{2}{U}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "This spell can't be copied.\nChoose one. If an opponent has eight or more cards in their graveyard, you may choose both instead.\n• Copy target spell. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)\n• Create a token that's a copy of target creature.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "41634103-7b58-4feb-84b7-90a07a7b474f",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "See Double",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "This spell can't be copied.\nChoose one. If an opponent has eight or more cards in their graveyard, you may choose both instead.\n• Copy target spell. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)\n• Create a token that's a copy of target creature.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "cantBeCopied"
+            }
+          ]
+        },
+        {
+          "Kind": "modal",
+          "ModeSelection": {
+            "Minimum": 1,
+            "Maximum": 1,
+            "ConditionalOverride": {
+              "Condition": {
+                "ConditionType": "count",
+                "Filter": {
+                  "CardTypes": ["card"],
+                  "Zone": "Graveyard",
+                  "Owner": "Opponent"
+                },
+                "Count": {
+                  "Operator": "GreaterThanOrEqual",
+                  "Value": 8
+                }
+              },
+              "Selection": {
+                "Minimum": 1,
+                "Maximum": 2
+              }
+            }
+          },
+          "Modes": [
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "copy",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": ["spell"],
+                        "Zone": "Stack"
+                      }
+                    },
+                    "MayChooseNewTargets": true
+                  }
+                ]
+              }
+            },
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "copy",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": ["creature"]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "AllowDuplicates": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
