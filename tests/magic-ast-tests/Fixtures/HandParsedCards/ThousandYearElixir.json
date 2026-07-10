@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Thousand-Year Elixir",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "You may activate abilities of creatures you control as though those creatures had haste.\n{1}, {T}: Untap target creature.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "95c2d832-5244-4236-81d5-2920aa2e281e",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Thousand-Year Elixir",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You may activate abilities of creatures you control as though those creatures had haste.\n{1}, {T}: Untap target creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "activateAbilitiesAsThoughHaste",
+              "AppliesTo": {
+                "Kind": "objectActivatedAbility",
+                "PermanentFilter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
+              ]
+            },
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
