@@ -1,0 +1,92 @@
+{
+  "Input": {
+    "Name": "Toph, the First Metalbender",
+    "ManaCost": "{1}{R}{G}{W}",
+    "TypeLine": "Legendary Creature — Human Warrior Ally",
+    "OracleText": "Nontoken artifacts you control are lands in addition to their other types. (They don't gain the ability to {T} for mana.)\nAt the beginning of your end step, earthbend 2. (Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped.)",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["G", "R", "W"],
+    "ColorIdentity": ["G", "R", "W"],
+    "Keywords": ["Earthbend"],
+    "Id": "70b6670f-a9fa-4d75-b0a7-c01b5071a514",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Toph, the First Metalbender",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Warrior Ally",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Warrior", "Ally"]
+    },
+    "Oracle": {
+      "RawText": "Nontoken artifacts you control are lands in addition to their other types. (They don't gain the ability to {T} for mana.)\nAt the beginning of your end step, earthbend 2. (Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Reminder": {
+            "Text": "(They don't gain the ability to {T} for mana.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["artifact"],
+                  "IsToken": false,
+                  "Controller": "You"
+                }
+              },
+              "AddedCardTypes": ["land"]
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": { "Part": "End", "Edge": "Beginning", "Whose": "You" }
+          },
+          "Effects": [
+            {
+              "EffectType": "earthbend",
+              "Count": { "QuantityType": "literal", "Value": 2 }
+            }
+          ],
+          "Reminder": {
+            "Text": "Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{G}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G", "R", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "R", "G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 3, "Raw": "3" },
+        "Toughness": { "ValueType": "fixed", "Value": 3, "Raw": "3" }
+      }
+    ]
+  }
+}
