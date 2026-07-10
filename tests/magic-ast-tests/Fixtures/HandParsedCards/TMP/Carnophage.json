@@ -1,0 +1,107 @@
+{
+  "Input": {
+    "Name": "Carnophage",
+    "ManaCost": "{B}",
+    "TypeLine": "Creature — Zombie",
+    "OracleText": "At the beginning of your upkeep, tap this creature unless you pay 1 life.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Carnophage",
+    "TypeLine": {
+      "Raw": "Creature — Zombie",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie"
+      ]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of your upkeep, tap this creature unless you pay 1 life.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "tap",
+                "Target": {
+                  "Kind": "Self"
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "You"
+                },
+                "Cost": {
+                  "CostType": "payLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
