@@ -817,20 +817,22 @@ public sealed class AbilityClassifier
       };
     }
 
-    // "Target player/opponent discards/draws/gains/loses/mills/shuffles ..." — spell-resolution
-    // player-targeting resource instructions (e.g., "Target player discards their hand,
-    // then draws four cards." — Wheel and Deal; "Target opponent draws a card." — Bargain;
-    // "Target opponent reveals their hand. You choose ..." — Thought Erasure / Thoughtseize /
-    // Coercion reveal-choose-discard family; "Target player shuffles up to two target cards
-    // from their graveyard into their library." — Krosan Reclamation, the shuffle keyword
-    // action, CR 701.24). Both "Target player" and "Target opponent" mark a one-shot
-    // imperative spell effect (Rule 113.3a) addressed to a targeted player, not a
-    // continuous static. Without this check these lines fall through to the Static default and
-    // stall in StaticAbilityParser.
+    // "Target player/opponent discards/draws/gains/loses/mills/shuffles/creates ..." —
+    // spell-resolution player-targeting resource instructions (e.g., "Target player
+    // discards their hand, then draws four cards." — Wheel and Deal; "Target opponent
+    // draws a card." — Bargain; "Target opponent reveals their hand. You choose ..." —
+    // Thought Erasure / Thoughtseize / Coercion reveal-choose-discard family; "Target
+    // player shuffles up to two target cards from their graveyard into their library." —
+    // Krosan Reclamation, the shuffle keyword action, CR 701.24; "Target player creates a
+    // 2/2 black Zombie creature token." — Gravedig, CR 111.2: a resolving spell's effect
+    // may specify a player other than the controller as a created token's creator). Both
+    // "Target player" and "Target opponent" mark a one-shot imperative spell effect (Rule
+    // 113.3a) addressed to a targeted player, not a continuous static. Without this check
+    // these lines fall through to the Static default and stall in StaticAbilityParser.
     if (
       Regex.IsMatch(
         clause.RawText,
-        @"^\s*Target\s+(player|opponent)\s+(discards?|draws?|gains?|loses?|mills?|returns?|exiles?|sacrifices?|reveals?|shuffles?)\s+",
+        @"^\s*Target\s+(player|opponent)\s+(discards?|draws?|gains?|loses?|mills?|returns?|exiles?|sacrifices?|reveals?|shuffles?|creates?)\s+",
         RegexOptions.IgnoreCase
       )
     )
