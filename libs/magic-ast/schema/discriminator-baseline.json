@@ -233,6 +233,7 @@
     "OracleEffect:returnToBattlefield",
     "OracleEffect:returnToHand",
     "OracleEffect:revealCards",
+    "OracleEffect:revealTopCardMatchToBattlefieldElseGraveyard",
     "OracleEffect:revealTopMayPutMatchingRestToGraveyard",
     "OracleEffect:revealTopPutMatchingToHand",
     "OracleEffect:revealUntil",
