@@ -1,0 +1,70 @@
+{
+  "Input": {
+    "Name": "Mortuary",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Whenever a creature is put into your graveyard from the battlefield, put that card on top of your library.",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": [],
+    "Id": "860f46ea-6fd0-456d-971d-8d1eccc7fa60",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Mortuary",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "Whenever a creature is put into your graveyard from the battlefield, put that card on top of your library.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putOnTopOfLibrary",
+              "Target": {
+                "Kind": "It"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}
