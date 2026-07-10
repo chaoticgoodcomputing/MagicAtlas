@@ -613,4 +613,11 @@ public enum KeywordAbility
   /// Phyrexian mana symbol whose cost was paid with 2 life.
   /// </summary>
   Compleated,
+
+  /// <summary>
+  /// Gift (CR 702.174). Parameterized — written "Gift a [something]". The gifted
+  /// object (a card, a Food, a Treasure, …) is carried by the expanded
+  /// <see cref="MagicAST.AST.Effects.Keyword.GiftEffect"/>, not this identity.
+  /// </summary>
+  Gift,
 }
