@@ -132,3 +132,28 @@ public sealed record OtherHistoryPredicate : HistoryPredicate, IResidual
   /// </summary>
   public required string Description { get; init; }
 }
+
+/// <summary>
+/// "who lost life this turn" — a backward-looking predicate restricting a
+/// PLAYER filter to those who lost life during the current turn window (CR
+/// 119.3: "If an effect causes a player to gain life or lose life, that
+/// player's life total is adjusted accordingly."). Gev, Scaled Scorch: "Other
+/// creatures you control enter with an additional +1/+1 counter on them for
+/// each opponent who lost life this turn."
+///
+/// <para>
+/// A marker (no fields): WHICH players are checked (controller vs. opponent)
+/// is carried on the enclosing <see cref="ObjectFilter.Controller"/>/
+/// <see cref="ObjectFilter.EntityType"/> axes, not duplicated here — mirrors
+/// <see cref="MagicAST.AST.Abilities.PrecedingActionPerformedCondition"/>'s
+/// field-less convention for a fixed idiom with no further parameters. The
+/// identical "opponent lost life this turn" surface already names the
+/// BOOLEAN precondition of Spectacle (CR 702.137a,
+/// <see cref="MagicAST.Keywords.Definitions.SpectacleKeyword"/>); this
+/// predicate is the COUNTING sibling — used inside a
+/// <see cref="MagicAST.AST.Quantities.CountQuantity"/> over a player-scoped
+/// <see cref="ObjectFilter"/> rather than a yes/no cast-cost gate.
+/// </para>
+/// </summary>
+[HistoryPredicateKind("lostLifeThisTurn")]
+public sealed record LostLifeThisTurnPredicate : HistoryPredicate;

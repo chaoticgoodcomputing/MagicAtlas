@@ -845,15 +845,6 @@
           ]
         },
         {
-          "Type": "AddColorEffect",
-          "Discriminator": "addColor",
-          "IsUnparsed": false,
-          "Fields": [
-            "Colors",
-            "Target"
-          ]
-        },
-        {
           "Type": "AddManaEffect",
           "Discriminator": "addMana",
           "IsUnparsed": false,
@@ -2800,6 +2791,12 @@
           ]
         },
         {
+          "Type": "LostLifeThisTurnPredicate",
+          "Discriminator": "lostLifeThisTurn",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "OtherHistoryPredicate",
           "Discriminator": "other",
           "IsUnparsed": false,
@@ -3080,5 +3077,5 @@
       ]
     }
   ],
-  "SchemaHash": "1ba50f272b7ee10ebaa367c0ad4e07e2df88976f3fdb7d84620a99331c931b13"
+  "SchemaHash": "01cfdc8b0f1f4dddfc847c145cf5ebed67d246bea97720018ce05ba9c81277d4"
 }
