@@ -39,6 +39,7 @@
     "changeColor": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "changeSubtype": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "changeTarget": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "chooseBasicLandType": "basic-land-type-choice declaration (Roots of Life shape, CR 607/614.12) — choice is consumed by ChosenCharacteristicKind.BasicLandType trigger filter; no flow rule reads basic-land-type-choice events yet; consciously inert for interaction recall, sibling of chooseCardType/chooseColor/chooseCreatureType",
     "chooseCardType": "card-type-choice declaration (Cloud Key shape, CR 607/614.1c) — choice is consumed by ChosenCharacteristicKind.CardType cost-reduction filter; no flow rule reads card-type-choice events yet; consciously inert for interaction recall",
     "chooseColor": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "chooseCreatureType": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
