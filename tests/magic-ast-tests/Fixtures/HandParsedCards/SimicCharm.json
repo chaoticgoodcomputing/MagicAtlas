@@ -1,0 +1,141 @@
+{
+  "Input": {
+    "Name": "Simic Charm",
+    "ManaCost": "{G}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Choose one —\n• Target creature gets +3/+3 until end of turn.\n• Permanents you control gain hexproof until end of turn.\n• Return target creature to its owner's hand.",
+    "Colors": ["G", "U"],
+    "ColorIdentity": ["G", "U"],
+    "Keywords": [],
+    "Id": "3384ee4e-738f-4442-bccd-4f96022b7219",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Simic Charm",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Choose one —\n• Target creature gets +3/+3 until end of turn.\n• Permanents you control gain hexproof until end of turn.\n• Return target creature to its owner's hand.",
+      "Abilities": [
+        {
+          "Kind": "modal",
+          "ModeSelection": {
+            "Minimum": 1,
+            "Maximum": 1
+          },
+          "Modes": [
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "modifyPT",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": ["creature"]
+                      }
+                    },
+                    "PowerModifier": {
+                      "QuantityType": "literal",
+                      "Value": 3
+                    },
+                    "ToughnessModifier": {
+                      "QuantityType": "literal",
+                      "Value": 3
+                    },
+                    "Duration": {
+                      "DurationType": "untilTime",
+                      "Until": {
+                        "Part": "Turn",
+                        "Edge": "End"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "gainAbility",
+                    "Target": {
+                      "Kind": "Each",
+                      "Filter": {
+                        "CardTypes": ["permanent"],
+                        "Controller": "You"
+                      }
+                    },
+                    "GainedAbility": {
+                      "Kind": "static",
+                      "KeywordSource": "Hexproof",
+                      "Effects": [
+                        {
+                          "EffectType": "keywordAbility",
+                          "Keyword": "Hexproof"
+                        }
+                      ]
+                    },
+                    "Duration": {
+                      "DurationType": "untilTime",
+                      "Until": {
+                        "Part": "Turn",
+                        "Edge": "End"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "returnToHand",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": ["creature"]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "AllowDuplicates": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}{U}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G", "U"]
+      }
+    ]
+  }
+}
