@@ -1,0 +1,76 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FreyalisesRadiance.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.24", "CR 502.3", "CR 205.4"],
+      "reason": "cumulativeUpkeep {2} + doesntUntap Each{permanent,Snow} WhoseUntapStep=their controllers' faithfully models both lines"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/SupertypeSubjectDoesntUntapDuringControllersUntapStepsRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 502.3", "CR 205.4a", "CR 205.4g"],
+      "reason": "reuses DoesntUntapEffect keyed on Supertypes:[Snow]; anchored supertype-lead regex is mutually exclusive with the color-lead sibling (no theft either direction)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TophTheFirstMetalbender.json",
+      "verdict": "PASS",
+      "citations": ["CR 205.1b", "CR 305.1", "CR 701.66a"],
+      "reason": "addType Each{artifact,IsToken:false,You}->land + earthbend Count:2 keyword-action at end step; reminder text is verbatim-exempt"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/NonlandCreatureTypeGrantRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 205.1b"],
+      "reason": "extends nontoken-subject helper to artifact via anchored regex; quoted verbatim text matches 205.1b (labeled 205.1a — subrule-letter slip, not a FAIL)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AnimarSoulOfElements.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.16", "CR 118.7"],
+      "reason": "protection From[W,B]; SpellCast{spell,creature,You}->putCounters self; costReduction counterCount +1/+1 On:Self, AffectedObjects{spell,creature,You}"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/TypeSpellCostReductionPerCounterOnSelfRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.7"],
+      "reason": "CounterCountQuantity on Self carried on CostReductionEffect.Amount; reuses BuildTypeSpellFilter; anchored suffix cannot be swallowed by cost-reduction sibling"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CrystalSkullIsuSpyglass.json",
+      "verdict": "PASS",
+      "citations": ["CR 700.6", "CR 207.2"],
+      "reason": "optional{lookAtTopCardAnyTime}; mayPlayFromTopOfLibrary[PlayLands,CastSpells]+AffectedObjects{IsHistoric}; {T}:Add{U} mana ability"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/MayPlayHistoricFromTopOfLibraryRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 700.6", "CR 207.2"],
+      "reason": "single MayPlayFromTopOfLibraryEffect(both actions) + IsHistoric filter; anchored after reminder-strip, no collision with unrestricted/Bolas siblings"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GuideOfSouls.json",
+      "verdict": "PASS",
+      "citations": ["CR 508.3d", "CR 603.12", "CR 107.14", "CR 205.1b"],
+      "reason": "ETB composite gainLife+gainEnergy; attack->optional{conditionalPay payEnergy 3}, IfYouDo composite putCounters(attacking)+flying counter+addType Angel; faithful"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/WheneverYouAttackConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 508.3d"],
+      "reason": "bare you-attack -> Attacks event + {creature,You} filter; CR 508.3d quoted verbatim and correct; anchored so it can't shadow qualified attack siblings"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/MayPayEnergyPutCountersAndBecomeSubtypeReflexiveRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.12", "CR 107.14", "CR 205.1b"],
+      "reason": "Optional(ConditionalPay payEnergy) + IfYouDo composite; CR 603.12 reflexive-trigger quote verbatim/correct; 205.1a label is a subrule slip (text is 205.1b), not a FAIL"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/GainLifeAndGetEnergyTriggeredRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 701.20", "CR 119.3"],
+      "reason": "doc-comment cites 'CR 701.20 (gain life)' but CR 701.20 is the Reveal keyword action — contradictory citation (gain life is CR 119.3, correctly co-cited)"
+    }
+  ]
+}
