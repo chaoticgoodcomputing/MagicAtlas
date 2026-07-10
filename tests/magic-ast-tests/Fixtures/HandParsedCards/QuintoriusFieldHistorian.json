@@ -1,0 +1,126 @@
+{
+  "Input": {
+    "Name": "Quintorius, Field Historian",
+    "ManaCost": "{3}{R}{W}",
+    "TypeLine": "Legendary Creature — Elephant Cleric",
+    "OracleText": "Spirits you control get +1/+0.\nWhenever one or more cards leave your graveyard, create a 3/2 red and white Spirit creature token.",
+    "Power": "2",
+    "Toughness": "4",
+    "Colors": ["R", "W"],
+    "ColorIdentity": ["R", "W"],
+    "Keywords": [],
+    "Id": "8e3c7f00-e997-4b07-98af-45b9ea35d2d7",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Quintorius, Field Historian",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Elephant Cleric",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Elephant", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "Spirits you control get +1/+0.\nWhenever one or more cards leave your graveyard, create a 3/2 red and white Spirit creature token.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "Subtypes": ["Spirit"],
+                  "Controller": "You"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "LeavesGraveyard",
+            "Filter": {
+              "CardTypes": ["card"],
+              "Controller": "You"
+            },
+            "MinimumCount": 1
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "3",
+                "Toughness": "2",
+                "Colors": ["R", "W"],
+                "Types": ["creature"],
+                "Subtypes": ["Spirit"],
+                "IsCopy": false
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R", "W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}
