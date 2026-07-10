@@ -1,0 +1,48 @@
+{
+  "shard": "rejudge",
+  "batch": 6,
+  "date": "2026-07-10",
+  "items": [
+    {
+      "family": "K02",
+      "card": "Wildfire Howl",
+      "target": "libs/magic-ast/Keywords/Definitions/GiftKeyword.cs + tests/magic-ast-tests/Fixtures/HandParsedCards/WildfireHowl.json",
+      "verdict": "PASS",
+      "cr_checked": ["CR 702.174a", "CR 702.174e"],
+      "citations": ["CR 702.174a", "CR 702.174e"],
+      "reason": "gift promise now scopes ChoosePlayerEffect to Opponent; gold optional->choosePlayer carries Scope:Opponent, matching CR 702.174a 'you may choose an opponent'",
+      "notes": "GiftKeyword builds new ChoosePlayerEffect { Scope = ControllerFilter.Opponent }; gold has {EffectType:choosePlayer, Scope:Opponent}. Scope is K03's real nullable ControllerFilter field (JsonIgnore-when-null so Sawhorn-style unrestricted printings stay null) — reuse does not affect other cards. CR 702.174a confirmed ('...you may choose an opponent'), CR 702.174e confirms payoff 'The chosen player draws a card' (gift->drawCards by ChosenPlayer). Minor: GiftKeyword doc-comment clause 'carries the declaration only' reads slightly stale vs the now-set Scope, but code+gold+citation are correct — not a FAIL."
+    },
+    {
+      "family": "K07",
+      "card": "Dragonologist",
+      "target": "libs/magic-ast/AST/Effects/CardFlow/LookAtTopMayRevealMatchingRestToBottomEffect.cs + LookAtTopMayRevealMatchingRestToBottomTriggeredRule.cs + TappedStateSubtypeCreaturesHaveKeywordRule.cs",
+      "verdict": "PASS",
+      "cr_checked": ["CR 701.19 (Regenerate)", "CR 701.20a (Reveal)", "CR 401.4", "CR 701.21 (Sacrifice)", "CR 701.26 (Tap and Untap)"],
+      "citations": ["CR 701.20a", "CR 401.4", "CR 701.26"],
+      "reason": "fabricated '701.19a look' quote removed (replaced by 'looking is a general instruction, not a CR 701 keyword action'); reveal=701.20a and random-order=401.4 correct; tap-state 701.21->701.26 correct; no residual 701.19a/701.21",
+      "notes": "701.19=Regenerate (so old 'to look at cards' quote was fabricated - now gone). 701.20a='To reveal a card, show that card to all players' - correct for reveal. 401.4=multi-card library placement rule (governs the rest-to-bottom disposition; 'in a random order' is the oracle override) - applicable, not contradictory. 701.21=Sacrifice (old tap-state cite was wrong), 701.26=Tap and Untap (correct). grep confirms zero residual 701.19/701.21 in all three files."
+    },
+    {
+      "family": "K09",
+      "card": "Eowyn, Lady of Rohan",
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EquipAbilityYouActivateCostReductionRule.cs",
+      "verdict": "PASS",
+      "cr_checked": ["CR 118.7 (cost reduction)", "CR 118.9 (alternative costs)"],
+      "citations": ["CR 118.7", "CR 702.6"],
+      "reason": "cost-reduction cite corrected 118.9->118.7; 118.7 = 'What a player actually needs to do to pay a cost may be changed or reduced by effects' matches the '{N} less' reduction; note that 118.9 governs alternative costs is accurate",
+      "notes": "118.7 confirmed as the cost-change/reduction rule (mana reduced to nothing = {0}). 118.9 confirmed as alternative costs ('You may [action] rather than pay [this object's] mana cost'), so the parenthetical distinction in the doc-comment is correct. Equip=702.6 also cited correctly."
+    },
+    {
+      "family": "K14",
+      "card": "Serendib Djinn",
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SacrificeTriggeredRule.cs + ControlNoLandsConditionRule.cs + tests/magic-ast-tests/Fixtures/HandParsedCards/SerendibDjinn.json",
+      "verdict": "PASS",
+      "cr_checked": ["CR 701.21a (Sacrifice)", "CR 603.8 (state trigger)", "CR 603.2e ('becomes' transition)"],
+      "citations": ["CR 701.21a", "CR 603.8"],
+      "reason": "REAL: SacrificeTriggeredRule splits 'it'->It vs 'this creature'/'this permanent'->Self; SerendibDjinn 3rd ability gold sacrifice Target now Self. BACK-PROP CONFIRMED: LonghornFirebeast(OTJ)/WildLeotau(CON)/WhipstitchedZombie(NEM) all keep sacrifice Target Self and are not broken. Citation 603.2e->603.8 (state trigger) correct",
+      "notes": "603.8=state triggers, example is literally 'a player controlling no permanents of a particular card type' - exact match for 'When you control no lands'. 603.2e='becomes'-transition trigger (correctly NOT used). 701.21a=Sacrifice (retained). Back-prop: all 3 sibling 'sacrifice this creature'/'...unless you pay' golds have Target:{Kind:Self} at HEAD; 'sacrifice it' golds (PhantasmalBear, KariZev, BalduvianHorde, FallowWurm, etc.) still map to It. The rule change aligns the parser with the pre-existing Self golds rather than breaking them."
+    }
+  ],
+  "overall": "ALL PASS - 4/4 remediated families verified; K14 back-prop check clean across the 3 sibling golds"
+}
