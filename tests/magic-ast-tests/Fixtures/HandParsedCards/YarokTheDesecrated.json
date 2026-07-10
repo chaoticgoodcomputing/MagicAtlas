@@ -1,0 +1,142 @@
+{
+  "Input": {
+    "Name": "Yarok, the Desecrated",
+    "ManaCost": "{2}{B}{G}{U}",
+    "TypeLine": "Legendary Creature — Elemental Horror",
+    "OracleText": "Deathtouch, lifelink\nIf a permanent entering causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.",
+    "Power": "3",
+    "Toughness": "5",
+    "Colors": ["B", "G", "U"],
+    "ColorIdentity": ["B", "G", "U"],
+    "Keywords": ["Lifelink", "Deathtouch"],
+    "Id": "c08a2da8-3ce7-4e0d-bdb0-81b6cdf3126a",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Yarok, the Desecrated",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Elemental Horror",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental",
+        "Horror"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Deathtouch, lifelink\nIf a permanent entering causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Deathtouch",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Deathtouch"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Lifelink",
+          "Effects": [
+            {
+              "EffectType": "lifelink"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "abilityTrigger",
+                "AffectedObjects": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Controller": "You"
+                },
+                "CausedByEntering": {
+                  "CardTypes": [
+                    "permanent"
+                  ]
+                }
+              },
+              "OriginalEventOccurs": true,
+              "Modifier": {
+                "Type": "additionalTime"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}{G}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "G",
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G",
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        }
+      }
+    ]
+  }
+}
