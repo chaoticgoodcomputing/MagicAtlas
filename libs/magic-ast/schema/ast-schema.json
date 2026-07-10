@@ -380,15 +380,6 @@
           ]
         },
         {
-          "Type": "ObjectHasCounterCondition",
-          "Discriminator": "objectHasCounter",
-          "IsUnparsed": false,
-          "Fields": [
-            "CounterType",
-            "Subject"
-          ]
-        },
-        {
           "Type": "ObjectHasSubtypeCondition",
           "Discriminator": "objectHasSubtype",
           "IsUnparsed": false,
@@ -595,6 +586,15 @@
           "Fields": [
             "Filter",
             "Quantity"
+          ]
+        },
+        {
+          "Type": "ScaledCost",
+          "Discriminator": "scaledCost",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "PerUnit"
           ]
         },
         {
@@ -2716,5 +2716,5 @@
       ]
     }
   ],
-  "SchemaHash": "2dacbedcfa5c0058d19c0ada7cd853c7e029cb46b0d28ee2a2b7a61ee912a05f"
+  "SchemaHash": "60672c280ccc9b32df1cebde23c0b48851db393b4254f11f11d28c32de73bdfa"
 }
