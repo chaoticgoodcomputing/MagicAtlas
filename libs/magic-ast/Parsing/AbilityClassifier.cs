@@ -407,21 +407,23 @@ public sealed class AbilityClassifier
       };
     }
 
-    // "Prevent all damage that would be dealt to this creature by [source]." —
-    // a permanent, always-on damage-prevention shield printed directly on a
-    // creature (e.g. Champion Lancer: "... by creatures."), CR 604.2 ("Static
-    // abilities create continuous effects, some of which are prevention
-    // effects ..."). "Prevent" heads the generic spell-instruction-verb list
-    // below (Fog-style "Prevent all combat damage ... this turn" IS a genuine
-    // one-shot spell-resolution step), but this shape names its own permanent
-    // ("this creature") as the protected recipient with no turn-bounded
-    // duration — a declarative, continuously-active property of the object,
-    // not an imperative resolution instruction. Intercept before the generic
-    // verb check swallows it (mirrors the "You may cast this card from your
+    // "Prevent all damage that would be dealt to this/enchanted creature by
+    // [source]." — a permanent, always-on damage-prevention shield printed
+    // directly on a creature (e.g. Champion Lancer: "... by creatures.") or on
+    // an Aura's enchanted-creature clause (e.g. Prismatic Ward: "... by sources
+    // of the chosen color."), CR 604.2 ("Static abilities create continuous
+    // effects, some of which are prevention effects ..."). "Prevent" heads the
+    // generic spell-instruction-verb list below (Fog-style "Prevent all combat
+    // damage ... this turn" IS a genuine one-shot spell-resolution step), but
+    // this shape names a specific permanent ("this creature" / "enchanted
+    // creature") as the protected recipient with no turn-bounded duration — a
+    // declarative, continuously-active property of the object, not an
+    // imperative resolution instruction. Intercept before the generic verb
+    // check swallows it (mirrors the "You may cast this card from your
     // graveyard" intercept above).
     if (Regex.IsMatch(
       clause.RawText.TrimStart(),
-      @"^Prevent\s+all\s+damage\s+that\s+would\s+be\s+dealt\s+to\s+this\s+creature\s+by\s+",
+      @"^Prevent\s+all\s+damage\s+that\s+would\s+be\s+dealt\s+to\s+(?:this|enchanted)\s+creature\s+by\s+",
       RegexOptions.IgnoreCase))
     {
       return new ClauseClassification

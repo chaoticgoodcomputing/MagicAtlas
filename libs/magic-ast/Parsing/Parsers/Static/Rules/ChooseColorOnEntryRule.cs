@@ -3,11 +3,19 @@ namespace MagicAST.Parsing.Parsers.Static;
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
 
+/// <summary>
+/// "As this [permanent] enters, choose a color." — CR 614.12's Voice of All
+/// example ("As this creature enters, choose a color."). The affected-object
+/// noun varies with the printed permanent type/subtype (e.g. "As this Aura
+/// enters, choose a color." — Prismatic Ward, an Enchantment — Aura), so the
+/// noun alternation lists every noun observed on this template rather than a
+/// single fixed word.
+/// </summary>
 [StaticRule(Priority = 960)]
 public sealed class ChooseColorOnEntryRule : IStaticRule
 {
   private static readonly Regex _chooseColorOnEntryPattern = new(
-    @"^\s*As\s+this\s+(?:permanent|land|creature|artifact|enchantment)\s+enters,\s+choose\s+a\s+color(?:\s+(?<restriction>other\s+than\s+[a-z]+?))?\.?\s*$",
+    @"^\s*As\s+this\s+(?:permanent|land|creature|artifact|enchantment|Aura)\s+enters,\s+choose\s+a\s+color(?:\s+(?<restriction>other\s+than\s+[a-z]+?))?\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
