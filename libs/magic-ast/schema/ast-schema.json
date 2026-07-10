@@ -499,6 +499,15 @@
           ]
         },
         {
+          "Type": "TargetsFilterCondition",
+          "Discriminator": "targetsFilter",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Subject"
+          ]
+        },
+        {
           "Type": "TriggeringAbilityIsManaCondition",
           "Discriminator": "triggeringAbilityIsMana",
           "IsUnparsed": false,
@@ -543,6 +552,24 @@
           "IsUnparsed": false,
           "Fields": [
             "Colors"
+          ]
+        },
+        {
+          "Type": "ConditionalModification",
+          "Discriminator": "conditionalModification",
+          "IsUnparsed": false,
+          "Fields": [
+            "Condition",
+            "Modification"
+          ]
+        },
+        {
+          "Type": "CounterAdder",
+          "Discriminator": "counterAdder",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "CounterType"
           ]
         },
         {
@@ -3044,5 +3071,5 @@
       ]
     }
   ],
-  "SchemaHash": "f5399d713582975407b824143aed8aabcd5ad6abf043c2348108da31602c1c2e"
+  "SchemaHash": "ff91990982df920e060db65324ae113d581034a0b8265317a8d6b4cfd3a508bf"
 }
