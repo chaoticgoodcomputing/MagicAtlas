@@ -1,0 +1,111 @@
+{
+  "Input": {
+    "Name": "Runed Stalactite",
+    "ManaCost": "{1}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "Equipped creature gets +1/+1 and is every creature type.\nEquip {2}",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": ["Equip"],
+    "Id": "a54f50fe-d4c0-49ba-9063-853c76ae3e19",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Runed Stalactite",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": ["Artifact"],
+      "Subtypes": ["Equipment"]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature gets +1/+1 and is every creature type.\nEquip {2}",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Changeling",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Changeling"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Restrictions": ["OnlyAsSorcery"],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
