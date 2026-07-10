@@ -1,0 +1,91 @@
+{
+  "Input": {
+    "Name": "Magus of the Future",
+    "ManaCost": "{2}{U}{U}{U}",
+    "TypeLine": "Creature — Human Wizard",
+    "OracleText": "Play with the top card of your library revealed.\nYou may play lands and cast spells from the top of your library.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "27ba1ea5-c861-4bb4-a681-fc0633268bd9",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Magus of the Future",
+    "TypeLine": {
+      "Raw": "Creature — Human Wizard",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Wizard"]
+    },
+    "Oracle": {
+      "RawText": "Play with the top card of your library revealed.\nYou may play lands and cast spells from the top of your library.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "playWithTopRevealed"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "mayPlayFromTopOfLibrary",
+              "Actions": ["PlayLands", "CastSpells"]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}
