@@ -1,0 +1,148 @@
+{
+  "Input": {
+    "Name": "Dragonlord Dromoka",
+    "ManaCost": "{4}{G}{W}",
+    "TypeLine": "Legendary Creature — Elder Dragon",
+    "OracleText": "This spell can't be countered.\nFlying, lifelink\nYour opponents can't cast spells during your turn.",
+    "Power": "5",
+    "Toughness": "7",
+    "Colors": ["G", "W"],
+    "ColorIdentity": ["G", "W"],
+    "Keywords": ["Flying", "Lifelink"],
+    "Id": "4452d99e-23c2-408d-9eb8-ef31aefafa9d",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Dragonlord Dromoka",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Elder Dragon",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elder",
+        "Dragon"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This spell can't be countered.\nFlying, lifelink\nYour opponents can't cast spells during your turn.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "cantBeCountered"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Lifelink",
+          "Effects": [
+            {
+              "EffectType": "lifelink"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeCast"
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": [
+              "spell"
+            ],
+            "Controller": "Opponent"
+          },
+          "Condition": {
+            "ConditionType": "other",
+            "Text": "During your turn"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        }
+      }
+    ]
+  }
+}
