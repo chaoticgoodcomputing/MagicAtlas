@@ -122,13 +122,14 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     // restriction sentence glued to the effect.
     StripTrailingReminder(ref effectPart);
 
-    // Extract a trailing "Any player may activate this ability." permission
+    // Extract a trailing "Any player may activate this ability." / "Only your
+    // opponents may activate this ability[, and only as a sorcery]." permission
     // sentence (CR 602.2's "unless the object specifically says otherwise" branch)
     // before restriction/effect parsing. MUST run before ExtractActivationRestrictions
     // for the same reason as StripTrailingReminder: if left glued to the effect text,
     // TryParseMultiEffectSentences will try (and fail) to parse it as a second effect,
     // degrading the whole ability to UnparsedEffect.
-    var whoMayActivate = ExtractActivationPermission(ref effectPart);
+    var whoMayActivate = ExtractActivationPermission(ref effectPart, out var impliedRestriction);
 
     // Extract trailing "Activate only as ..." restriction sentences from
     // effectPart before effect parsing. These are not effects — they constrain
@@ -137,6 +138,18 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     // Also extracts "Activate only if [condition]" into a structured Condition
     // (ADR 0007 — conditions are one union; CR 602.5c).
     var restrictions = ExtractActivationRestrictions(ref effectPart, out var activationCondition);
+
+    // Fold in a restriction implied by the compound permission sentence (e.g.
+    // "Only your opponents may activate this ability and only as a sorcery." —
+    // the "and only as a sorcery" clause shares the permission sentence rather
+    // than forming its own trailing ". "-delimited sentence, so
+    // ExtractActivationRestrictions never sees it independently).
+    if (impliedRestriction is not null)
+    {
+      restrictions = restrictions is null
+        ? [impliedRestriction.Value]
+        : [.. restrictions, impliedRestriction.Value];
+    }
 
     // Parse effects
     var effects = ParseEffects(effectPart);
@@ -287,16 +300,38 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     RegexOptions.Compiled | RegexOptions.IgnoreCase
   );
 
+  // Anchored regex for "Only your opponents may activate this ability[, ]and
+  // only as a sorcery." (Detention Vortex) — must match the ENTIRE candidate
+  // sentence (after trimming), like _anyPlayerMayActivatePattern, so it cannot
+  // match a substring of a longer clause. CR 602.2: "unless the object
+  // specifically says otherwise." The trailing "and only as a sorcery" clause is
+  // optional: it shares this sentence rather than forming its own trailing
+  // ". "-delimited restriction sentence, so it's captured here (via the
+  // "sorcery" group) rather than by ExtractActivationRestrictions.
+  private static readonly Regex _onlyOpponentsMayActivatePattern = new(
+    @"^[Oo]nly\s+your\s+opponents?\s+may\s+activate(?:\s+this\s+ability)?(?:,?\s+and\s+only\s+as\s+an?\s+(?<sorcery>sorcery|instant))?\.?$",
+    RegexOptions.Compiled | RegexOptions.IgnoreCase
+  );
+
   /// <summary>
-  /// Strips a trailing "Any player may activate this ability." sentence from
-  /// <paramref name="effectPart"/> (CR 602.1's "Activation instructions" slot; CR
-  /// 602.2's "unless the object specifically says otherwise" branch), mutating it
-  /// in place. Returns <see cref="ActivationPermission.AnyPlayer"/> when the
-  /// sentence is found and stripped, else null (leaving the default
-  /// controller-only permission implicit).
+  /// Strips a trailing "Any player may activate this ability." / "Only your
+  /// opponents may activate this ability[, and only as a sorcery]." sentence
+  /// from <paramref name="effectPart"/> (CR 602.1's "Activation instructions"
+  /// slot; CR 602.2's "unless the object specifically says otherwise" branch),
+  /// mutating it in place. Returns the parsed <see cref="ActivationPermission"/>
+  /// when a sentence is found and stripped, else null (leaving the default
+  /// controller-only permission implicit). <paramref name="impliedRestriction"/>
+  /// carries the "and only as a sorcery/instant" clause folded into the opponent
+  /// sentence, when present — a restriction that never forms its own trailing
+  /// ". "-delimited sentence for <see cref="ExtractActivationRestrictions"/> to see.
   /// </summary>
-  private static ActivationPermission? ExtractActivationPermission(ref string effectPart)
+  private static ActivationPermission? ExtractActivationPermission(
+    ref string effectPart,
+    out ActivationRestriction? impliedRestriction
+  )
   {
+    impliedRestriction = null;
+
     var lastDotSpace = effectPart.LastIndexOf(". ", StringComparison.Ordinal);
     string candidate;
     string? prefix;
@@ -311,13 +346,26 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       prefix = null;
     }
 
-    if (!_anyPlayerMayActivatePattern.IsMatch(candidate))
+    if (_anyPlayerMayActivatePattern.IsMatch(candidate))
     {
-      return null;
+      effectPart = prefix ?? string.Empty;
+      return ActivationPermission.AnyPlayer;
     }
 
-    effectPart = prefix ?? string.Empty;
-    return ActivationPermission.AnyPlayer;
+    var opponentMatch = _onlyOpponentsMayActivatePattern.Match(candidate);
+    if (opponentMatch.Success)
+    {
+      if (opponentMatch.Groups["sorcery"].Success)
+      {
+        impliedRestriction = opponentMatch.Groups["sorcery"].Value.Equals("instant", StringComparison.OrdinalIgnoreCase)
+          ? ActivationRestriction.OnlyAsInstant
+          : ActivationRestriction.OnlyAsSorcery;
+      }
+      effectPart = prefix ?? string.Empty;
+      return ActivationPermission.Opponent;
+    }
+
+    return null;
   }
 
   /// <summary>

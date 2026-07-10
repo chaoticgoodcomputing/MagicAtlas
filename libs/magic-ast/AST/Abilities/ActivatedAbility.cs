@@ -127,4 +127,10 @@ public enum ActivationPermission
   /// <summary>"Any player may activate this ability." — CR 602.2's "unless the
   /// object specifically says otherwise" branch.</summary>
   AnyPlayer,
+
+  /// <summary>"Only your opponents may activate this ability." — CR 602.2's
+  /// "unless the object specifically says otherwise" branch, narrowed to the
+  /// controller's opponents rather than broadened to any player (Detention
+  /// Vortex).</summary>
+  Opponent,
 }
