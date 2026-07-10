@@ -5,6 +5,7 @@
     "AbilityReferenceKind:spell",
     "CharacteristicKind:combatState",
     "CharacteristicKind:counter",
+    "CharacteristicKind:extremeStat",
     "CharacteristicKind:keyword",
     "CharacteristicKind:other",
     "CharacteristicKind:tapped",
