@@ -14,7 +14,7 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// </summary>
 /// <remarks>
 /// MAST describes what the oracle text says, not what the rules engine enforces
-/// (CR 120, draw). This effect records only who is prohibited from drawing
+/// (CR 121, drawing a card). This effect records only who is prohibited from drawing
 /// cards (<see cref="Player"/>); it does NOT model the state-based/replacement
 /// machinery the rules use to enforce the prohibition — mirroring how
 /// <see cref="CantGainLifeEffect"/>'s remarks disclaim engine enforcement of its

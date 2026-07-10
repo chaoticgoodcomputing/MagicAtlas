@@ -9,7 +9,7 @@ using MagicAST.AST.References;
 /// Recognises the global draw-lock static "Players can't draw cards." (Maralen
 /// of the Mornsong). A rules-of-the-game continuous effect (CR 611.1) written as
 /// a plain static statement (CR 604.1) that stops a player or players from
-/// drawing cards — see CR 120 (draw) for the drawing rule this restriction
+/// drawing cards — see CR 121 (drawing a card) for the drawing rule this restriction
 /// overrides. Emits a single <see cref="StaticAbility"/> carrying one
 /// <see cref="CantDrawCardsEffect"/>, scoped to
 /// <see cref="ObjectReferenceKind.EachPlayer"/> for the symmetric "Players" case
