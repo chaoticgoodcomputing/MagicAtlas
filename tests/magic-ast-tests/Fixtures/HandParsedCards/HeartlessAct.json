@@ -1,0 +1,108 @@
+{
+  "Input": {
+    "Name": "Heartless Act",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Instant",
+    "OracleText": "Choose one —\n• Destroy target creature with no counters on it.\n• Remove up to three counters from target creature.",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": [],
+    "Id": "b57c57a8-d72b-4c6c-a2db-a7ef61190f42",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Heartless Act",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Choose one —\n• Destroy target creature with no counters on it.\n• Remove up to three counters from target creature.",
+      "Abilities": [
+        {
+          "Kind": "modal",
+          "ModeSelection": {
+            "Minimum": 1,
+            "Maximum": 1
+          },
+          "Modes": [
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "destroy",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": ["creature"],
+                        "Characteristics": [
+                          {
+                            "CharacteristicType": "counter",
+                            "CounterType": "any",
+                            "Count": {
+                              "Operator": "Equal",
+                              "Value": 0
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "removeCounters",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": ["creature"]
+                      }
+                    },
+                    "CounterType": "any",
+                    "Count": {
+                      "QuantityType": "upTo",
+                      "Maximum": 3
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "AllowDuplicates": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}
