@@ -148,6 +148,12 @@ public enum KeywordAbility
   /// <summary>Disguise (CR 702).</summary>
   Disguise,
 
+  /// <summary>
+  /// Disturb (CR 702.146a). Parameterized — the alternative cost is carried by the
+  /// expanded <c>AlternativeCastEffect</c>, not this identity.
+  /// </summary>
+  Disturb,
+
   /// <summary>Doctor's companion (CR 702).</summary>
   [JsonStringEnumMemberName("Doctor's companion")]
   DoctorsCompanion,

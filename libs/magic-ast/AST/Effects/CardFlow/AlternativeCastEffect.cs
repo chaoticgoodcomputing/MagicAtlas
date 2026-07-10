@@ -64,4 +64,16 @@ public sealed record AlternativeCastEffect : Effect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Condition? Condition { get; init; }
+
+  /// <summary>
+  /// "You may cast this card transformed from your graveyard" — Disturb (CR 702.146a):
+  /// the card is cast with its BACK face up rather than as printed (CR 712.8c), the
+  /// distinguishing semantic vs. every other alternative-cast keyword this effect
+  /// models (Flashback/Escape/Aftermath/Jump-start/Retrace/Madness/Surge/Spectacle all
+  /// cast the card as printed). Parallel to
+  /// <see cref="MagicAST.AST.Effects.ZoneChange.ReturnToBattlefieldEffect.Transformed"/>.
+  /// Null/false when the card is cast in its normal (front-face) form.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? Transformed { get; init; }
 }
