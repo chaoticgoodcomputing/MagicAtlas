@@ -1,0 +1,88 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/InquisitiveGlimmer.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 118.9", "CR 709.5e", "CR 709.5f"],
+      "reason": "N06: both cost reductions structured — enchantment-spell reduction (CardTypes spell+enchantment, Controller You) + Unlock-cost reduction (CostReductionEffect.AppliesTo ActivatedAbilityReference Keyword=Unlock); 118.7 correct, 118.9 correctly disclaimed as alt-cost, 709.5e/f verbatim-match the Unlock/Room rules"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/UnlockCostsYouPayCostReductionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 709.5e", "CR 709.5f"],
+      "reason": "N06: reused CostReductionEffect+ActivatedAbilityReference keyed on new KeywordAbility.Unlock; anchored ^...$ regex, sibling-safe; doc transparently notes Unlock is a special action (709.5e) modeled via the keyword-keyed cost-class reference — descriptively accurate"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ThornbiteStaff.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.6", "CR 113.3", "CR 613.1f", "CR 602.1", "CR 603.2"],
+      "reason": "N07: both quoted abilities parsed structurally — activated ({2},{T}: deal 1 to any target, Source Self) + triggered (Whenever creature Dies -> untap Self); Shaman-ETB optional attach to It; Equip {4} OnlyAsSorcery targeting creature you control; no free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EquippedCreatureHasTwoQuotedAbilitiesRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.6", "CR 113.3", "CR 613.1f", "CR 602.1", "CR 603.2"],
+      "reason": "N07: two sibling GainAbilityEffects (no composite, mirrors Blitz shape); dispatches each quoted body to activated-then-triggered parser, returns null (surfaces gap) if unrecognised; all citations exist and match"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/VernalBloom.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 106.12"],
+      "reason": "N08: triggered TapsForMana (Filter land+Forest) -> addMana {G} Player=Controller; 'an additional' is subsumed by node design (Player set for 'its controller'); 106.12 = tap-for-mana is activating a {T} mana ability, exact match"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TapForManaConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 106.12"],
+      "reason": "N08: new passive-voice branch 'a <Subtype> is tapped for mana' gated by LandSubtypes allowlist; anchored so it cannot collide with the enchanted-land (Wild Growth/Fertile Ground) or subject-tap variants — sibling sweep clean"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NiveousWisps.json",
+      "verdict": "PASS",
+      "citations": ["CR 105.3", "CR 613.1e", "CR 109.2", "CR 113.3a"],
+      "reason": "N10: changeColor Target creature -> white until end of turn; tap Target It ('that creature'); draw 1 You; all structured, white is a real color (not the colorless->C anti-pattern)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/TargetCreatureBecomesColorRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 105.3", "CR 611.1"],
+      "reason": "N10: reuses ChangeColorEffect (same node as activated Metathran Transport rule) with EndOfTurn duration; 105.3 verbatim in doc and matches modeling"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/TapThatCreatureRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 109.2"],
+      "reason": "N10: 'Tap that creature' anaphoric back-ref mapped to ObjectReferenceKind.It (mirrors UntapThatCreatureRule); TapEffect structured"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/AbilityClassifier.cs",
+      "verdict": "PASS",
+      "citations": ["CR 113.3a"],
+      "reason": "N10: singular becomes-color route fires only on un-costed spell lines; colon-prefixed activated form (Metathran Transport '{U}:') is routed to Activated earlier (lines 248/316) before this branch — sibling sweep clean"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SilkenStrength.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.8", "CR 702.17", "CR 613.4c", "CR 613.1f", "CR 301.7", "CR 303.4"],
+      "reason": "N14: Flash, ETB-untap enchanted, composite +1/+2 (ModifyPT) + reach (GainAbility keyword) all structured; the 'creature or Vehicle' enchant disjunction is free-text but is the landed SwiftReconfiguration precedent (present at base) and an explicit PB-9 whitelist carve-out the dispatch sanctions — accepted tracked debt, not a silent shortcut"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantedPermanentPTAndKeywordRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 613.4c", "CR 613.1f", "CR 611.3", "CR 301.7", "CR 207.2"],
+      "reason": "N14: 'permanent'-worded sibling of EnchantedPTAndKeywordRule; emits CompositeEffect(ModifyPT + GainAbility); 301.7c letter is imprecise but parent 301.7 exists and Vehicle-not-creature-unless-crewed is consistent (SKILL: parent-vs-subrule imprecision is not a FAIL)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/UntapEnchantedTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.26", "CR 303.4"],
+      "reason": "N14: 'untap enchanted <type>' -> UntapEffect Target EnchantedOrEquipped; direct sibling of TapEnchantedTriggeredRule; citations exist and match"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/KeywordAbility.cs#Unlock",
+      "verdict": "PASS",
+      "citations": ["CR 709.5e", "CR 709.5f"],
+      "reason": "N06: additive new enum value Unlock; doc-comment cites 709.5e/f verbatim (both exist in rules data and describe the Room lock/unlock cost mechanic) — no impact on existing values"
+    }
+  ]
+}

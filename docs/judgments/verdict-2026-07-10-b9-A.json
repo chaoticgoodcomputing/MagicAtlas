@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DemonicConsultation.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.20a", "CR 701.13a", "CR 607"],
+      "reason": "chooseCardName + exile(top 6) + new revealUntilExileRest (reveal-until-chosen-name to hand, remainder EXILED not bottomed) faithfully models the two-sentence coupled action; chosen-name consumed structurally via ChosenCharacteristic:CardName (linked-ability variable, not free text); 'top' positional predicate is whitelisted OtherCharacteristic residual matching the UginTheIneffable/MysticForge precedent"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#revealUntilExileRest",
+      "verdict": "PASS",
+      "citations": ["CR 701.20a", "CR 701.13a"],
+      "reason": "new effectType discriminator parked coarse with sensible justification identical to sibling revealUntil (library-visibility action, no flow rule reads reveal-until-found yet, consciously inert) — a flow rule would not want this; coarse is correct"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MysticalDispute.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 601.2c", "CR 601.2f"],
+      "reason": "conditional self-cost-reduction modeled as static costReduction gated by new targetsFilter condition (ObjectFilter{CardTypes:[spell],Colors:[U]}) — structured, not a bespoke color field; secondary counter-unless-pay reuses preventable/counterSpell + Unless{Controller,{3}}; CR citations exist and match"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SparkDouble.json",
+      "verdict": "PASS",
+      "citations": ["CR 707.2", "CR 614.12"],
+      "reason": "enter-as-copy replacement decomposed as static + When:asThisEnters + optional + becomesCopy (reused) with new CounterAdder/ConditionalModification: +1/+1-if-creature, +loyalty-if-planeswalker gated via objectHasCardType, isn't-legendary via SupertypeRemover — no baked-in-timing discriminator; faithful to 'except ...' clause"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ShiftingBorders.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.12a", "CR 702.47"],
+      "reason": "exchangeCharacteristic(Control) over two target lands + splice-onto-Arcane {3}{U} static with reminder; both nodes reused (no enum edit); AbilityClassifier 'Exchange' keyword-action route is a leading-verb one-shot with no static-ability collision"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Fury.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.74a", "CR 702.4"],
+      "reason": "Evoke as static alternativeCast(ExileCost: red card from hand) + triggered sacrifice-if-evoked (keywordCostPaid intervening-if); ETB deals 4 damage Divided among anyAmount target creatures/planeswalkers; double-strike combatDamageTiming Both; EvokeStaticRule split preserves the mana-cost pattern so mana-form Evoke still parses"
+    }
+  ]
+}
