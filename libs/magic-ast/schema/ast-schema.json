@@ -291,6 +291,12 @@
       "DiscriminatorKey": "ConditionType",
       "Types": [
         {
+          "Type": "AdditionalCostPaidCondition",
+          "Discriminator": "additionalCostPaid",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "AllCondition",
           "Discriminator": "all",
           "IsUnparsed": false,
@@ -377,6 +383,15 @@
             "Among",
             "Color",
             "IncludeTies"
+          ]
+        },
+        {
+          "Type": "ObjectHasCounterCondition",
+          "Discriminator": "objectHasCounter",
+          "IsUnparsed": false,
+          "Fields": [
+            "CounterType",
+            "Subject"
           ]
         },
         {
@@ -577,6 +592,16 @@
           "IsUnparsed": false,
           "Fields": [
             "Target"
+          ]
+        },
+        {
+          "Type": "RevealCost",
+          "Discriminator": "reveal",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Quantity",
+            "Zone"
           ]
         },
         {
@@ -1402,11 +1427,28 @@
           ]
         },
         {
+          "Type": "GoadedEffect",
+          "Discriminator": "goaded",
+          "IsUnparsed": false,
+          "Fields": [
+            "Target"
+          ]
+        },
+        {
           "Type": "GraftEffect",
           "Discriminator": "graft",
           "IsUnparsed": false,
           "Fields": [
             "Value"
+          ]
+        },
+        {
+          "Type": "GrantAdditionalCostEffect",
+          "Discriminator": "grantAdditionalCost",
+          "IsUnparsed": false,
+          "Fields": [
+            "AdditionalCost",
+            "AffectedSpells"
           ]
         },
         {
@@ -1983,6 +2025,14 @@
           "Fields": [
             "Event",
             "OriginalEventOccurs"
+          ]
+        },
+        {
+          "Type": "RetainUnspentManaEffect",
+          "Discriminator": "retainUnspentMana",
+          "IsUnparsed": false,
+          "Fields": [
+            "Color"
           ]
         },
         {
@@ -2716,5 +2766,5 @@
       ]
     }
   ],
-  "SchemaHash": "60672c280ccc9b32df1cebde23c0b48851db393b4254f11f11d28c32de73bdfa"
+  "SchemaHash": "99e80c04a7cf96b682044ccb63d3d8e34ec76e004df6ffd86007b00c848c41f8"
 }
