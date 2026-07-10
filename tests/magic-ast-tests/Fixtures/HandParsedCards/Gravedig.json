@@ -1,0 +1,153 @@
+{
+  "Input": {
+    "Name": "Gravedig",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Choose one —\n• Target player creates a 2/2 black Zombie creature token.\n• Return target creature card from your graveyard to your hand.\nEntwine {2} (Choose both if you pay the entwine cost.)",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
+    "Keywords": [
+      "Entwine"
+    ],
+    "Id": "e2b054a9-7565-4fdd-b6a5-2786c5bb5b7e",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Gravedig",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Choose one —\n• Target player creates a 2/2 black Zombie creature token.\n• Return target creature card from your graveyard to your hand.\nEntwine {2} (Choose both if you pay the entwine cost.)",
+      "Abilities": [
+        {
+          "Kind": "modal",
+          "ModeSelection": {
+            "Minimum": 1,
+            "Maximum": 1
+          },
+          "Modes": [
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "createToken",
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Token": {
+                      "Power": "2",
+                      "Toughness": "2",
+                      "Colors": [
+                        "B"
+                      ],
+                      "Types": [
+                        "creature"
+                      ],
+                      "Subtypes": [
+                        "Zombie"
+                      ],
+                      "IsCopy": false
+                    },
+                    "Player": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": [
+                          "player"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "returnToHand",
+                    "Target": {
+                      "Kind": "Target",
+                      "Filter": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "Controller": "You",
+                        "Zone": "Graveyard"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "AllowDuplicates": false
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Entwine",
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    }
+                  ]
+                },
+                "IsOptional": true,
+                "Repeatable": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}
