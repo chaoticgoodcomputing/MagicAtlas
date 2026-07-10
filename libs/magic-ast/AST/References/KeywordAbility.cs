@@ -293,6 +293,9 @@ public enum KeywordAbility
   /// <summary>Horsemanship (CR 702).</summary>
   Horsemanship,
 
+  /// <summary>Impending (CR 702.176).</summary>
+  Impending,
+
   /// <summary>Improvise (CR 702).</summary>
   Improvise,
 

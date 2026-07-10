@@ -380,6 +380,15 @@
           ]
         },
         {
+          "Type": "ObjectHasCounterCondition",
+          "Discriminator": "objectHasCounter",
+          "IsUnparsed": false,
+          "Fields": [
+            "CounterType",
+            "Subject"
+          ]
+        },
+        {
           "Type": "ObjectHasSubtypeCondition",
           "Discriminator": "objectHasSubtype",
           "IsUnparsed": false,
@@ -1977,14 +1986,6 @@
           ]
         },
         {
-          "Type": "RetainUnspentManaEffect",
-          "Discriminator": "retainUnspentMana",
-          "IsUnparsed": false,
-          "Fields": [
-            "Color"
-          ]
-        },
-        {
           "Type": "ReturnToBattlefieldEffect",
           "Discriminator": "returnToBattlefield",
           "IsUnparsed": false,
@@ -2715,5 +2716,5 @@
       ]
     }
   ],
-  "SchemaHash": "ebaeec8c08edf27ac0ab4616e1171cda55ba3c9d35ee9b9464f5cd7248b52507"
+  "SchemaHash": "2dacbedcfa5c0058d19c0ada7cd853c7e029cb46b0d28ee2a2b7a61ee912a05f"
 }
