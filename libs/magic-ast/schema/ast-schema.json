@@ -1104,6 +1104,12 @@
           "Fields": []
         },
         {
+          "Type": "ChoosePlayerEffect",
+          "Discriminator": "choosePlayer",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CombatDamageTimingEffect",
           "Discriminator": "combatDamageTiming",
           "IsUnparsed": false,
@@ -2854,5 +2860,5 @@
       ]
     }
   ],
-  "SchemaHash": "6646af8bc7626004667591325eb98ac5c2c42672654423cc1ac09320006f5768"
+  "SchemaHash": "e440983e5f0d7c3309e19da91cbb8364162484c43ca49efdf27f9f12d287cf52"
 }
