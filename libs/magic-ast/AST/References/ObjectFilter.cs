@@ -456,6 +456,21 @@ public enum ControllerFilter
   /// or battle each of the chosen creatures is attacking."
   /// </summary>
   DefendingPlayer,
+
+  /// <summary>
+  /// Objects belonging to the player selected by a "choose a player" effect
+  /// (CR 607 linked ability) — "the chosen player or a permanent they control"
+  /// (Sawhorn Nemesis: "If a source would deal damage to the chosen player or a
+  /// permanent they control, it deals double that damage instead."). Leaving
+  /// <see cref="ObjectFilter.CardTypes"/> unset lets a single filter cover both
+  /// the chosen player themselves and any permanent they control, mirroring how
+  /// <see cref="Opponent"/> is used bare (no CardTypes) for the structurally
+  /// identical "an opponent or a permanent an opponent controls" shape
+  /// (<c>NoncombatDamageDoublingReplacementRule</c>, Solphim). Parallels
+  /// <see cref="EnchantedPlayer"/> on the controller axis: the player bound by a
+  /// fresh "choose a player" declaration rather than an Aura's enchanted object.
+  /// </summary>
+  ChosenPlayer,
 }
 
 /// <summary>

@@ -46,6 +46,7 @@
     "chooseCardType": "card-type-choice declaration (Cloud Key shape, CR 607/614.1c) \u2014 choice is consumed by ChosenCharacteristicKind.CardType cost-reduction filter; no flow rule reads card-type-choice events yet; consciously inert for interaction recall",
     "chooseColor": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "chooseCreatureType": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
+    "choosePlayer": "player-choice declaration (Sawhorn Nemesis shape, CR 614.1c) \u2014 choice is consumed by ControllerFilter.ChosenPlayer on the paired damage-doubling replacement's AffectedObjects filter; no flow rule reads player-choice events yet; consciously inert for interaction recall, sibling of chooseCardType/chooseColor/chooseCreatureType",
     "combatDamageTiming": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "commanderDesignation": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "conditionalPay": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
