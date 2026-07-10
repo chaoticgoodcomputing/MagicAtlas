@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Arcane Adaptation",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Enchantment",
+    "OracleText": "As this enchantment enters, choose a creature type.\nCreatures you control are the chosen type in addition to their other types. The same is true for creature spells you control and creature cards you own that aren't on the battlefield.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "bf3edaaf-cf63-4e17-94ae-9d9991d9fb5f",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Arcane Adaptation",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "As this enchantment enters, choose a creature type.\nCreatures you control are the chosen type in addition to their other types. The same is true for creature spells you control and creature cards you own that aren't on the battlefield.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "When": "asThisEnters",
+          "Effects": [
+            {
+              "EffectType": "chooseCreatureType"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              },
+              "ChosenSubtypeReference": "CreatureType"
+            },
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["spell", "creature"],
+                  "Controller": "You"
+                }
+              },
+              "ChosenSubtypeReference": "CreatureType"
+            },
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Owner": "You"
+                }
+              },
+              "ChosenSubtypeReference": "CreatureType"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}
