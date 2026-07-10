@@ -366,6 +366,21 @@ public sealed class AbilityClassifier
         };
       }
 
+      // Exception: "Choose a card name. [effect...]" (Demonic Consultation) is a
+      // card-name declaration followed by plain spell effects, not a modal
+      // mode-selection — there is no bullet ("•") list of options. Route to the
+      // spell parser like the "Choose target" carve-out above, mirroring
+      // ChooseCardNameEffect's reuse as a plain spell effect.
+      if (Regex.IsMatch(trimmed, @"^Choose\s+a\s+card\s+name\b", RegexOptions.IgnoreCase))
+      {
+        return new ClauseClassification
+        {
+          Kind = AbilityKind.Spell,
+          Confidence = 0.90,
+          AbilityWord = abilityWord,
+        };
+      }
+
       return new ClauseClassification
       {
         Kind = AbilityKind.Modal,

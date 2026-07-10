@@ -546,24 +546,6 @@
           ]
         },
         {
-          "Type": "ConditionalModification",
-          "Discriminator": "conditionalModification",
-          "IsUnparsed": false,
-          "Fields": [
-            "Condition",
-            "Modification"
-          ]
-        },
-        {
-          "Type": "CounterAdder",
-          "Discriminator": "counterAdder",
-          "IsUnparsed": false,
-          "Fields": [
-            "Count",
-            "CounterType"
-          ]
-        },
-        {
           "Type": "PowerToughnessOverride",
           "Discriminator": "powerToughnessOverride",
           "IsUnparsed": false,
@@ -2358,6 +2340,15 @@
           ]
         },
         {
+          "Type": "RevealUntilExileRestEffect",
+          "Discriminator": "revealUntilExileRest",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "Player"
+          ]
+        },
+        {
           "Type": "RingTemptsEffect",
           "Discriminator": "ringTemptsYou",
           "IsUnparsed": false,
@@ -3053,5 +3044,5 @@
       ]
     }
   ],
-  "SchemaHash": "c7ae663ab41b267345e2117b3fbee4b8339ebe95d6e38bbe64a54584972624c5"
+  "SchemaHash": "f5399d713582975407b824143aed8aabcd5ad6abf043c2348108da31602c1c2e"
 }
