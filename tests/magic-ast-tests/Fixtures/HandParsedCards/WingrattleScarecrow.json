@@ -1,0 +1,165 @@
+{
+  "Input": {
+    "Name": "Wingrattle Scarecrow",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact Creature — Scarecrow",
+    "OracleText": "This creature has flying as long as you control a blue creature.\nThis creature has persist as long as you control a black creature. (When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "61c5d86e-1ce1-4386-b70f-73b24351d6ae",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Wingrattle Scarecrow",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Scarecrow",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Scarecrow"
+      ]
+    },
+    "Oracle": {
+      "RawText": "This creature has flying as long as you control a blue creature.\nThis creature has persist as long as you control a black creature. (When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Characteristics": [
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Flying"
+                        },
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Reach"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "KeywordSource": "Flying"
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "count",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Colors": [
+                      "U"
+                    ],
+                    "Controller": "You"
+                  },
+                  "Count": {
+                    "Operator": "GreaterThanOrEqual",
+                    "Value": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Persist"
+                  }
+                ],
+                "KeywordSource": "Persist"
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "count",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Colors": [
+                      "B"
+                    ],
+                    "Controller": "You"
+                  },
+                  "Count": {
+                    "Operator": "GreaterThanOrEqual",
+                    "Value": 1
+                  }
+                }
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}
