@@ -56,4 +56,18 @@ public sealed record CantActivateAbilitiesEffect : Effect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectReference? Target { get; init; }
+
+  /// <summary>
+  /// Mana-ability carve-out: when <c>true</c>, the lock excludes mana abilities —
+  /// "…can't be activated <em>unless they're mana abilities</em>." (Pithing Needle,
+  /// Sorcerous Spyglass). CR 605.1a: "A mana ability is an activated ability that
+  /// meets [certain] criteria… An activated ability with a mana symbol in its cost
+  /// isn't necessarily a mana ability." CR 605.1b covers the triggered form. The
+  /// exception is modeled structurally on the restriction itself, not as free text:
+  /// the affected mana abilities remain activatable while every other activated
+  /// ability of the affected objects is locked. Null/absent means the lock applies
+  /// to all activated abilities without exception (Collector Ouphe, Karn).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? ExceptManaAbilities { get; init; }
 }
