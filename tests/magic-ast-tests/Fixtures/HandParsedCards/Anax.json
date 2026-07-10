@@ -1,0 +1,174 @@
+{
+  "Input": {
+    "Name": "Anax, Hardened in the Forge",
+    "ManaCost": "{1}{R}{R}",
+    "TypeLine": "Legendary Enchantment Creature — Demigod",
+    "OracleText": "Anax's power is equal to your devotion to red. (Each {R} in the mana costs of permanents you control counts toward your devotion to red.)\nWhenever Anax or another nontoken creature you control dies, create a 1/1 red Satyr creature token with \"This token can't block.\" If the creature had power 4 or greater, create two of those tokens instead.",
+    "Power": "*",
+    "Toughness": "3",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": [],
+    "Id": "ad107ae0-2540-46f8-9970-72983b87ba04",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Anax, Hardened in the Forge",
+    "TypeLine": {
+      "Raw": "Legendary Enchantment Creature — Demigod",
+      "Supertypes": ["Legendary"],
+      "Types": ["Enchantment", "Creature"],
+      "Subtypes": ["Demigod"]
+    },
+    "Oracle": {
+      "RawText": "Anax's power is equal to your devotion to red. (Each {R} in the mana costs of permanents you control counts toward your devotion to red.)\nWhenever Anax or another nontoken creature you control dies, create a 1/1 red Satyr creature token with \"This token can't block.\" If the creature had power 4 or greater, create two of those tokens instead.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "definePT",
+              "Characteristic": "Power",
+              "Value": {
+                "QuantityType": "devotion",
+                "Colors": ["R"]
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "Each {R} in the mana costs of permanents you control counts toward your devotion to red."
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsToken": false,
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "quantityComparison",
+                "Left": {
+                  "QuantityType": "derived",
+                  "DerivedFrom": "Power",
+                  "Source": "the creature"
+                },
+                "Operator": "GreaterThanOrEqual",
+                "Right": {
+                  "QuantityType": "literal",
+                  "Value": 4
+                }
+              },
+              "Then": {
+                "EffectType": "createToken",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                },
+                "Token": {
+                  "Power": "1",
+                  "Toughness": "1",
+                  "Colors": ["R"],
+                  "Types": ["creature"],
+                  "Subtypes": ["Satyr"],
+                  "Abilities": [
+                    {
+                      "Kind": "static",
+                      "Effects": [
+                        {
+                          "EffectType": "cantBlock"
+                        }
+                      ]
+                    }
+                  ],
+                  "IsCopy": false
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              },
+              "Else": {
+                "EffectType": "createToken",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Token": {
+                  "Power": "1",
+                  "Toughness": "1",
+                  "Colors": ["R"],
+                  "Types": ["creature"],
+                  "Subtypes": ["Satyr"],
+                  "Abilities": [
+                    {
+                      "Kind": "static",
+                      "Effects": [
+                        {
+                          "EffectType": "cantBlock"
+                        }
+                      ]
+                    }
+                  ],
+                  "IsCopy": false
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "variable",
+          "Raw": "*"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}
