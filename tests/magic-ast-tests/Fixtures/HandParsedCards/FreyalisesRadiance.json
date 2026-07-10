@@ -1,0 +1,99 @@
+{
+  "Input": {
+    "Name": "Freyalise's Radiance",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Cumulative upkeep {2} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nSnow permanents don't untap during their controllers' untap steps.",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": ["Cumulative upkeep"],
+    "Id": "4bafb0b4-9f01-4c67-add4-a0ffe0a3a691",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Freyalise's Radiance",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Cumulative upkeep {2} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nSnow permanents don't untap during their controllers' untap steps.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Cumulative upkeep",
+          "Reminder": {
+            "Text": "(At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "cumulativeUpkeep",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 2
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "doesntUntap",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Supertypes": [
+                    "Snow"
+                  ]
+                }
+              },
+              "WhoseUntapStep": "their controllers'"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
+    ]
+  }
+}
