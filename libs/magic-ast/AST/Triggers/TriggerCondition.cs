@@ -495,6 +495,24 @@ public enum TriggerEvent
   /// </summary>
   DiceRolled,
 
+  /// <summary>
+  /// An Aura, Equipment, Fortification, or other attached permanent becomes unattached
+  /// from the object or player it was attached to — "Whenever this Equipment becomes
+  /// unattached from a permanent, …" (Stitcher's Graft). CR 701.3d (verbatim): "To
+  /// 'unattach' an Equipment from a creature means to move it away from that creature
+  /// so the Equipment is on the battlefield but is not equipping anything. … If an Aura,
+  /// Equipment, or Fortification that was attached to an object or player ceases to be
+  /// attached to it, that counts as 'becoming unattached [from that object or player]';
+  /// this includes if that Aura, Equipment, or Fortification leaves the battlefield, the
+  /// object leaves the zone it was in, or that player leaves the game." The
+  /// <see cref="TriggerCondition.Filter"/> carries the object it was attached to (the
+  /// "from a permanent" complement), so the effect can resolve the back-reference "that
+  /// permanent" (<see cref="MagicAST.AST.References.ObjectReferenceKind.ThatPermanent"/>).
+  /// Distinct from the parameterless <see cref="MagicAST.AST.Effects.Modification.UnattachEffect"/>
+  /// (an explicit unattach INSTRUCTION) — this is the CONSUMER side, the event a trigger watches for.
+  /// </summary>
+  BecomesUnattached,
+
   /// <summary>Unrecognized trigger event</summary>
   Other,
 }

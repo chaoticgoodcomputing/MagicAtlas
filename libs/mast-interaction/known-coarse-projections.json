@@ -228,6 +228,7 @@
     "BecomesCrewed": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "BecomesTapped": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "BecomesTarget": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
+    "BecomesUnattached": "CR 701.3d becomes-unattached trigger (Stitcher's Graft: 'Whenever this Equipment becomes unattached from a permanent, sacrifice that permanent.') — fires when an Aura/Equipment/Fortification ceases to be attached to its object; no flow rule reads unattach events yet; consciously inert for interaction recall",
     "BecomesUntapped": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "Blocks": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "BlocksOrBecomesBlocked": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
