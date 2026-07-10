@@ -33,6 +33,7 @@
     "cantCastMoreThanNSpells": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "cantGainLife": "CR 119.7 global life-gain-lock static (Giant Cindermaw 'Players can't gain life') — a rules-of-the-game prohibition, not an emit/consume event; sibling of cantBeCast/cantCastMoreThanNSpells/noMaxHandSize which are all coarse restriction statics; no flow rule reads life-gain-lock yet; consciously inert for interaction recall",
     "cantHaveOrGainKeyword": "CR 113.11 can't-have keyword lock (Archetype cycle — Archetype of Imagination) — an ability-suppression continuous effect; sibling of loseAbility/gainAbility/keywordAbility which are all coarse; no flow rule reads ability-denial yet; consciously inert for interaction recall",
+    "cantLoseGameForZeroLife": "CR 704.5a zero-or-less-life state-based-loss override (Lich's Tomb 'You don't lose the game for having 0 or less life.') — a rules-of-the-game prohibition on one specific loss condition, sibling of cantGainLife/cantBeCast/noMaxHandSize which are all coarse restriction statics; no flow rule reads loss-condition overrides yet; consciously inert for interaction recall",
     "castWithoutPaying": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "champion": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
     "changeColor": "baseline coarse fallback (initiative-03 inception 2026-06-15) — no flow rule consumes it yet",
