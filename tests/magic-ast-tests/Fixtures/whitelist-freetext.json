@@ -368,6 +368,12 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
+      "card": "KeyToTheCity",
+      "sink": "Instructions",
+      "tag": "irreducible",
+      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {2})"
+    },
+    {
       "card": "KikiJikiMirrorBreaker",
       "sink": "AbilityText",
       "tag": "irreducible",
