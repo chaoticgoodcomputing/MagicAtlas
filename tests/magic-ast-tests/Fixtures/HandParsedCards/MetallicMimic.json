@@ -1,0 +1,114 @@
+{
+  "Input": {
+    "Name": "Metallic Mimic",
+    "ManaCost": "{2}",
+    "TypeLine": "Artifact Creature — Shapeshifter",
+    "OracleText": "As this creature enters, choose a creature type.\nThis creature is the chosen type in addition to its other types.\nEach other creature you control of the chosen type enters with an additional +1/+1 counter on it.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "2623640e-51bb-4aba-a31f-1b6d170f58f6",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Metallic Mimic",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Shapeshifter",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Shapeshifter"
+      ]
+    },
+    "Oracle": {
+      "RawText": "As this creature enters, choose a creature type.\nThis creature is the chosen type in addition to its other types.\nEach other creature you control of the chosen type enters with an additional +1/+1 counter on it.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "chooseCreatureType"
+            }
+          ],
+          "When": "asThisEnters"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "Self"
+              },
+              "ChosenSubtypeReference": "CreatureType"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "When": "asObjectEnters",
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You",
+                  "ChosenCharacteristic": "CreatureType",
+                  "ExcludeSelf": true
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}
