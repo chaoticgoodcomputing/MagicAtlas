@@ -1766,6 +1766,15 @@ public sealed class AbilityClassifier
     // not a declarative static. The imperative form "Gain" (second person) differs from
     // the third-person "gains" that appears on permanent-static oracle text.
     "Gain",
+    // Exchange keyword action (CR 701.12a: "A spell or ability may instruct players to
+    // exchange something (for example, life totals or control of two permanents) as part
+    // of its resolution."). "Exchange control of two target lands." (Shifting Borders,
+    // Vedalken Plotter, Political Trickery) and every other "Exchange …" line is a
+    // one-shot resolution step, never a declarative static — so, like the other keyword
+    // actions above (Investigate, Populate, Proliferate, …), it routes to the spell
+    // parser. Without this entry the clause defaults to Static and stalls in the
+    // unimplemented static-ability parser.
+    "Exchange",
   ];
 
   /// <summary>
