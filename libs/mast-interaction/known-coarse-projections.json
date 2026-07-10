@@ -6,6 +6,7 @@
     "adapt": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "grantAlternativeCost": "alternative-cost grant (CR 118.9 'you may pay [cost] rather than pay the mana cost') \u2014 a cost-replacement permission; no interaction flow rule reads alternative-cost grants yet; consciously inert for interaction recall (Rooftop Storm)",
     "grantAdditionalCost": "additional-cost grant (CR 601.2f 'plus all additional costs') for a filtered class of OTHER spells the controller casts \u2014 a cost-addition permission, sibling of grantAlternativeCost; no interaction flow rule reads additional-cost grants yet; consciously inert for interaction recall (Defiler of Instinct)",
+    "addColor": "additive color grant (CR 105.3 'in addition to its other colors') \u2014 color characteristic, layer-5 sibling of addType; no interaction flow rule reads additive color grants yet; consciously inert for interaction recall",
     "addType": "additive card-type/subtype grant (CR 205.1a 'in addition to their other types') \u2014 type-line characteristic, no interaction flow rule reads additive type grants yet; consciously inert for interaction recall",
     "additionalCastCost": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "allMustBlock": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",

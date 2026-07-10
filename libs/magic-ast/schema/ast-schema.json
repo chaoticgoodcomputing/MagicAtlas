@@ -845,6 +845,15 @@
           ]
         },
         {
+          "Type": "AddColorEffect",
+          "Discriminator": "addColor",
+          "IsUnparsed": false,
+          "Fields": [
+            "Colors",
+            "Target"
+          ]
+        },
+        {
           "Type": "AddManaEffect",
           "Discriminator": "addMana",
           "IsUnparsed": false,
@@ -1797,14 +1806,6 @@
           "IsUnparsed": false,
           "Fields": [
             "Amount",
-            "Player"
-          ]
-        },
-        {
-          "Type": "LoseTheGameEffect",
-          "Discriminator": "loseTheGame",
-          "IsUnparsed": false,
-          "Fields": [
             "Player"
           ]
         },
@@ -3079,5 +3080,5 @@
       ]
     }
   ],
-  "SchemaHash": "be14a13567e9c06b6d20f9525b8edace2a4d348399ef5d71869234df69af1742"
+  "SchemaHash": "1ba50f272b7ee10ebaa367c0ad4e07e2df88976f3fdb7d84620a99331c931b13"
 }
