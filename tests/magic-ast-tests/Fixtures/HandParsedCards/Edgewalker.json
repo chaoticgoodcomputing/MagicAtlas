@@ -1,0 +1,72 @@
+{
+  "Input": {
+    "Name": "Edgewalker",
+    "ManaCost": "{1}{W}{B}",
+    "TypeLine": "Creature — Human Cleric",
+    "OracleText": "Cleric spells you cast cost {W}{B} less to cast. This effect reduces only the amount of colored mana you pay. (For example, if you cast a Cleric spell with mana cost {1}{W}, it costs {1} to cast.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["B", "W"],
+    "ColorIdentity": ["B", "W"],
+    "Keywords": [],
+    "Id": "c8b477c2-2cd5-41f2-8754-d4d5000df58d",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Edgewalker",
+    "TypeLine": {
+      "Raw": "Creature — Human Cleric",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "Cleric spells you cast cost {W}{B} less to cast. This effect reduces only the amount of colored mana you pay. (For example, if you cast a Cleric spell with mana cost {1}{W}, it costs {1} to cast.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "literal", "Value": 0 },
+              "ManaSymbols": [
+                { "Kind": "colored", "Colors": ["W"] },
+                { "Kind": "colored", "Colors": ["B"] }
+              ]
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": ["spell"],
+            "Subtypes": ["Cleric"],
+            "Controller": "You"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 2, "Raw": "2" },
+        "Toughness": { "ValueType": "fixed", "Value": 2, "Raw": "2" }
+      }
+    ]
+  }
+}
