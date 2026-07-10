@@ -480,6 +480,19 @@ internal static class StaticRuleHelpers
         KeywordSource = KeywordAbility.Infect,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Infect }],
       },
+      // Persist (CR 702.79a): a triggered keyword ability ("When this permanent is put
+      // into a graveyard from the battlefield, if it had no -1/-1 counters on it, return
+      // it to the battlefield..."). MAST records the keyword's presence via the same
+      // parameterless KeywordAbilityEffect marker used for the other triggered-keyword
+      // grants above (riot/myriad/melee/cipher/haunt/provoke); the dies-trigger and
+      // return-to-battlefield mechanics live in the keyword's own expansion
+      // (PersistKeyword) when the keyword appears bare on a card, not when it is
+      // conditionally GRANTED to a permanent by another ability's effect.
+      "persist" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Persist,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Persist }],
+      },
       _ => null,
     };
   }
