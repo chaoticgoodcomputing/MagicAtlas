@@ -38,46 +38,58 @@
           }
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 45,
-            "Length": 51
+          "Kind": "spreeMode",
+          "AdditionalCost": {
+            "CostType": "mana",
+            "Symbols": [
+              { "Kind": "generic", "GenericAmount": 1 }
+            ]
           },
-          "RawText": "+ {1} — Create a 1/1 green Squirrel creature token.",
-          "Diagnostics": [
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Static ability parser not yet implemented",
-              "Location": {
-                "Start": 45,
-                "Length": 51
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
               },
-              "RawText": "+ {1} — Create a 1/1 green Squirrel creature token.",
-              "Pattern": "AmbiguousStructure",
-              "LastAttemptedRule": "StaticAbilityParser.Parse",
-              "FailurePosition": 45
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": ["G"],
+                "Types": ["creature"],
+                "Subtypes": ["Squirrel"]
+              },
+              "Player": {
+                "Kind": "You"
+              }
             }
           ]
         },
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 97,
-            "Length": 52
+          "Kind": "spreeMode",
+          "AdditionalCost": {
+            "CostType": "mana",
+            "Symbols": [
+              { "Kind": "generic", "GenericAmount": 2 }
+            ]
           },
-          "RawText": "+ {2} — Create X 1/1 green Squirrel creature tokens.",
-          "Diagnostics": [
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Static ability parser not yet implemented",
-              "Location": {
-                "Start": 97,
-                "Length": 52
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "variable",
+                "Name": "X"
               },
-              "RawText": "+ {2} — Create X 1/1 green Squirrel creature tokens.",
-              "Pattern": "AmbiguousStructure",
-              "LastAttemptedRule": "StaticAbilityParser.Parse",
-              "FailurePosition": 97
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": ["G"],
+                "Types": ["creature"],
+                "Subtypes": ["Squirrel"]
+              },
+              "Player": {
+                "Kind": "You"
+              }
             }
           ]
         }

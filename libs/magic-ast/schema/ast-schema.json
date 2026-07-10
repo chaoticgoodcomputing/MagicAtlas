@@ -83,6 +83,15 @@
           ]
         },
         {
+          "Type": "SpreeModeAbility",
+          "Discriminator": "spreeMode",
+          "IsUnparsed": false,
+          "Fields": [
+            "AdditionalCost",
+            "Effects"
+          ]
+        },
+        {
           "Type": "StaticAbility",
           "Discriminator": "static",
           "IsUnparsed": false,
@@ -3004,5 +3013,5 @@
       ]
     }
   ],
-  "SchemaHash": "767667abd70a73ae09ee611fab4eb2afbecd79791e9e7e43983d322429fee947"
+  "SchemaHash": "508840b488c1d22c976792668702dc812b98a938974a390e3e412617dc6c1a3d"
 }
