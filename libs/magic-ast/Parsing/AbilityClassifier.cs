@@ -1043,6 +1043,30 @@ public sealed class AbilityClassifier
       };
     }
 
+    // Mass P/T-modification-plus-keyword-grant spell shape with "until end of turn" —
+    // a composite one-shot imperative spell effect (Rule 113.3a) that both changes P/T
+    // and grants a keyword in the same sentence, e.g. "Creatures you control get +1/+1
+    // and gain haste until end of turn." (Goblin War Party's second modal option).
+    // Anchored on the "and gain <keyword> until end of turn" tail so it only fires for
+    // this composite shape, never shadowing the P/T-only sibling above. Without this the
+    // line defaults to Static, stalling in StaticAbilityParser the same way the P/T-only
+    // shape did before that block was added.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Creatures\s+you\s+control\s+get\s+[+\-]\d+/[+\-]\d+\s+and\s+gain\s+.+?\s+until\s+end\s+of\s+turn",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "All creatures able to block target creature this turn do so." — Lure-type
     // one-shot spell effect (Rule 509.1c). The "target creature" and "this turn"
     // markers together distinguish the spell form from the static-ability forms
