@@ -1,0 +1,96 @@
+{
+  "Input": {
+    "Name": "Nirkana Revenant",
+    "ManaCost": "{4}{B}{B}",
+    "TypeLine": "Creature — Vampire Shade",
+    "OracleText": "Whenever you tap a Swamp for mana, add an additional {B}.\n{B}: This creature gets +1/+1 until end of turn.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": [],
+    "Id": "96da0a4c-2865-4383-875a-9f5d6503baee",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Nirkana Revenant",
+    "TypeLine": {
+      "Raw": "Creature — Vampire Shade",
+      "Types": ["Creature"],
+      "Subtypes": ["Vampire", "Shade"]
+    },
+    "Oracle": {
+      "RawText": "Whenever you tap a Swamp for mana, add an additional {B}.\n{B}: This creature gets +1/+1 until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "TapsForMana",
+            "Filter": {
+              "CardTypes": ["land"],
+              "Subtypes": ["Swamp"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{B}"
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["B"] }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": { "Kind": "Self" },
+              "PowerModifier": { "QuantityType": "literal", "Value": 1 },
+              "ToughnessModifier": { "QuantityType": "literal", "Value": 1 },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": { "Part": "Turn", "Edge": "End" }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{B}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["B"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
+        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+      }
+    ]
+  }
+}

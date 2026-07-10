@@ -41,6 +41,14 @@ using MagicAST.AST.Triggers;
 ///     mirror-image of the Dictate of Karametra land variant above, for creatures rather than
 ///     lands. Controller: You when "you tap"; Any when "a player taps".
 ///   </item>
+///   <item>
+///     Subtype-land any-mana: "you tap a Swamp for mana" (Nirkana Revenant) — narrows the land
+///     any-mana variant above to a single named land subtype (<c>CardTypes: ["land"]</c> +
+///     <c>Subtypes: [word]</c>, mirroring the land-subtype filter shape used by
+///     <see cref="MagicAST.Parsing.Parsers.Activated.Rules.TapSingularSubtypeCostRule"/>). No
+///     specific symbol is recorded (<see cref="TriggerCondition.ProducedMana"/> is null).
+///     Controller: You when "you tap"; Any when "a player taps".
+///   </item>
 /// </list>
 ///
 /// CR 106.12: "To 'tap [a permanent] for mana' is to activate a mana ability of that permanent
@@ -96,6 +104,23 @@ public sealed class TapForManaConditionRule : ITriggerConditionRule
     @"\b(?<subject>you|a\s+player)\s+tap[s]?\s+a\s+creature\s+for\s+mana\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
+
+  // "you tap a Swamp for mana" — Nirkana Revenant shape. The tapped object is named by a
+  // capitalised land subtype word rather than "land"/"permanent", so this pattern is NOT
+  // case-insensitive: requiring an uppercase first letter is what distinguishes it from the
+  // lowercase "a land"/"a creature"/"a permanent" shapes above.
+  private static readonly Regex _tapLandSubtypeForAnyManaPattern = new(
+    @"\b(?<subject>you|a\s+player)\s+tap[s]?\s+an?\s+(?<subtype>[A-Z][A-Za-z]+)\s+for\s+mana\s*$",
+    RegexOptions.Compiled
+  );
+
+  // Land subtypes (CR 205.3i): the five basics plus single-word nonbasic land types. Mirrors
+  // the set in TapSingularSubtypeCostRule / ReturnLandSubtypeToHandCostRule.
+  private static readonly HashSet<string> LandSubtypes = new(System.StringComparer.OrdinalIgnoreCase)
+  {
+    "Plains", "Island", "Swamp", "Mountain", "Forest",
+    "Desert", "Gate", "Lair", "Locus", "Mine", "Tower", "Cave", "Sphere",
+  };
 
   public TriggerCondition? Match(string triggerText, string lower, TriggerTiming timing)
   {
@@ -165,6 +190,32 @@ public sealed class TapForManaConditionRule : ITriggerConditionRule
           Controller = controller,
         },
         // ProducedMana is null — the trigger fires for any mana type.
+      };
+    }
+
+    // "you tap a Swamp for mana" — Nirkana Revenant. Checked before the "permanent" guard
+    // because this shape names a capitalised land subtype, not "a land"/"a permanent". Only
+    // matches when the captured word is a known land subtype, to avoid over-generalizing to
+    // arbitrary capitalised nouns.
+    var sub = _tapLandSubtypeForAnyManaPattern.Match(triggerText.Trim());
+    if (sub.Success && LandSubtypes.Contains(sub.Groups["subtype"].Value))
+    {
+      var subject = sub.Groups["subject"].Value.Trim();
+      var controller = subject.Equals("you", System.StringComparison.OrdinalIgnoreCase)
+        ? ControllerFilter.You
+        : ControllerFilter.Any;
+
+      return new TriggerCondition
+      {
+        Timing = timing,
+        Event = TriggerEvent.TapsForMana,
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["land"],
+          Subtypes = [sub.Groups["subtype"].Value],
+          Controller = controller,
+        },
+        // ProducedMana is null — the trigger fires for any mana type the tapped land produces.
       };
     }
 
