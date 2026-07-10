@@ -1,0 +1,144 @@
+{
+  "Input": {
+    "Name": "Vigor",
+    "ManaCost": "{3}{G}{G}{G}",
+    "TypeLine": "Creature — Elemental Incarnation",
+    "OracleText": "Trample\nIf damage would be dealt to another creature you control, prevent that damage. Put a +1/+1 counter on that creature for each 1 damage prevented this way.\nWhen Vigor is put into a graveyard from anywhere, shuffle it into its owner's library.",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": ["Trample"],
+    "Id": "ea7047d8-8d32-48a3-829b-7eb5427ed53a",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Vigor",
+    "TypeLine": {
+      "Raw": "Creature — Elemental Incarnation",
+      "Types": ["Creature"],
+      "Subtypes": ["Elemental", "Incarnation"]
+    },
+    "Oracle": {
+      "RawText": "Trample\nIf damage would be dealt to another creature you control, prevent that damage. Put a +1/+1 counter on that creature for each 1 damage prevented this way.\nWhen Vigor is put into a graveyard from anywhere, shuffle it into its owner's library.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ],
+          "KeywordSource": "Trample"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "damage",
+                "AffectedObjects": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "preventDamage",
+                    "All": true,
+                    "Target": {
+                      "Kind": "It"
+                    }
+                  },
+                  {
+                    "EffectType": "putCounters",
+                    "Target": {
+                      "Kind": "It"
+                    },
+                    "CounterType": "+1/+1",
+                    "Count": {
+                      "QuantityType": "derived",
+                      "DerivedFrom": "DamageDealt"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "PutIntoGraveyard",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "shuffleIntoLibrary",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        }
+      }
+    ]
+  }
+}
