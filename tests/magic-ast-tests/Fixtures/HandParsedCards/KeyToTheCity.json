@@ -1,0 +1,138 @@
+{
+  "Input": {
+    "Name": "Key to the City",
+    "ManaCost": "{2}",
+    "TypeLine": "Artifact",
+    "OracleText": "{T}, Discard a card: Up to one target creature can't be blocked this turn.\nWhenever this artifact becomes untapped, you may pay {2}. If you do, draw a card.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "f2103bba-f367-45ed-9b2c-bf31bb2926a5",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Key to the City",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}, Discard a card: Up to one target creature can't be blocked this turn.\nWhenever this artifact becomes untapped, you may pay {2}. If you do, draw a card.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "discard",
+              "Filter": {
+                "CardTypes": [
+                  "card"
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "cantBeBlocked",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                },
+                "Quantity": {
+                  "QuantityType": "upTo",
+                  "Maximum": 1,
+                  "Minimum": 0
+                }
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesUntapped",
+            "Filter": {
+              "CardTypes": [
+                "artifact"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    }
+                  ]
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "drawCards",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ],
+          "Instructions": [
+            "you may pay {2}"
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
