@@ -1,0 +1,67 @@
+{
+  "Input": {
+    "Name": "Stone Calendar",
+    "ManaCost": "{5}",
+    "TypeLine": "Artifact",
+    "OracleText": "Spells you cast cost {1} less to cast.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "e682d19b-7936-4942-b42c-c836d6741a45",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Stone Calendar",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Spells you cast cost {1} less to cast.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": [
+              "spell"
+            ],
+            "Controller": "You"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}
