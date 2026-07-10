@@ -1,0 +1,198 @@
+{
+  "Input": {
+    "Name": "Ovika, Enigma Goliath",
+    "ManaCost": "{5}{U}{R}",
+    "TypeLine": "Legendary Creature — Phyrexian Nightmare",
+    "OracleText": "Flying\nWard—{3}, Pay 3 life.\nWhenever you cast a noncreature spell, create X 1/1 red Phyrexian Goblin creature tokens, where X is the mana value of that spell. They gain haste until end of turn.",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": ["R", "U"],
+    "ColorIdentity": ["R", "U"],
+    "Keywords": ["Flying", "Ward"],
+    "Id": "54819d7a-eec6-49e6-a0bb-d9d07d42b4a6",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Ovika, Enigma Goliath",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Phyrexian Nightmare",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Phyrexian", "Nightmare"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nWard—{3}, Pay 3 life.\nWhenever you cast a noncreature spell, create X 1/1 red Phyrexian Goblin creature tokens, where X is the mana value of that spell. They gain haste until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Ward",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesTarget",
+            "Filter": {
+              "Controller": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": {
+                  "Kind": "It"
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "ThatPlayer"
+                },
+                "Cost": {
+                  "CostType": "composite",
+                  "Costs": [
+                    {
+                      "CostType": "mana",
+                      "Symbols": [
+                        {
+                          "Kind": "generic",
+                          "GenericAmount": 3
+                        }
+                      ]
+                    },
+                    {
+                      "CostType": "payLife",
+                      "Amount": {
+                        "QuantityType": "literal",
+                        "Value": 3
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": ["spell"],
+              "ExcludedCardTypes": ["creature"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "derived",
+                "DerivedFrom": "ManaValue",
+                "Source": "that spell"
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": ["R"],
+                "Types": ["creature"],
+                "Subtypes": ["Phyrexian", "Goblin"],
+                "IsCopy": false
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "It"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Haste",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Haste"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{U}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 7,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R", "U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        }
+      }
+    ]
+  }
+}
