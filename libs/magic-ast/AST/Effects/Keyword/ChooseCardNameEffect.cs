@@ -1,6 +1,8 @@
 namespace MagicAST.AST.Effects.Keyword;
 
+using System.Text.Json.Serialization;
 using MagicAST.AST.Effects.Traits;
+using MagicAST.AST.References;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
@@ -31,4 +33,17 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 [OracleEffect("chooseCardName")]
 public sealed record ChooseCardNameEffect : Effect
 {
+  /// <summary>
+  /// Optional restriction on which card names are eligible to be chosen — e.g.
+  /// "choose a nonland card name" (Silverquill Silencer, CR 614.12 as-enters
+  /// choice) restricts the domain to nonland cards. Null for the unrestricted
+  /// "choose a card name" printing (Declaration of Naught). Structured via the
+  /// existing <see cref="ObjectFilter.ExcludedCardTypes"/> axis (the same
+  /// "nonland" encoding used by <c>ObjectFilter{CardTypes:["card"],
+  /// ExcludedCardTypes:["land"]}</c> elsewhere, e.g. the Thoughtseize family's
+  /// "you choose a nonland card") rather than a free-text label, per the MAST
+  /// no-free-text doctrine.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectFilter? Filter { get; init; }
 }
