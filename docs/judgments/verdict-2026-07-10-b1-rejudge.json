@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "F01",
+      "verdict": "PASS",
+      "citations": ["CR 502.3", "CR 109.5"],
+      "reason": "PhaseTriggerConditionRule maps 'each player's <phase>' -> Event.Whose=Any (a faithful value: the clock point recurs on EVERY player's phase); Hokori line-2 Upkeep, Nekusar Draw, Rites Draw all now carry Whose:Any and the effect's ControllerFilter.ThatPlayer antecedent ('that player') resolves to the player whose step fired. Only 3 'beginning of each player's <phase>' fixtures exist; all consistent. Cited CR 502.3 (untap turn-based action, effects can keep permanents from untapping) and CR 109.5 (player-pronoun reference) both exist and are non-contradictory."
+    },
+    {
+      "target": "F11",
+      "verdict": "PASS",
+      "citations": ["CR 509.1b", "CR 201.5"],
+      "reason": "IsProperNounSelfReference (via _boardWideSubjectWord + bare-plural guard) rejects all 8 previously-stolen board-wide restrictions (Bedlam, Tazeem, Razorjaw Oni, Frenetic Raptor via plural, Siege Elemental, Magistrate's Veto, Bothersome Quasit, Spitting Dilophosaurus) so they fall through instead of being mislabeled Target=Self; still matches genuine self-by-name cases (Norin, Skrelv, Homura, Ozox, plus A-Cauldron Familiar, Arco-Flagellant, Everlasting Lich, Feldon, Francisco, Gobland, Managorger Phoenix). \\b word-boundary correctly avoids matching 'land' inside 'Gobland'. No over-reject, no under-reject, no new sibling-mislabel. CR 509.1b (block restrictions) exists and matches."
+    },
+    {
+      "target": "F12",
+      "verdict": "PASS",
+      "citations": ["CR 205.2a", "CR 105.1"],
+      "reason": "MayCastFromTopOfLibraryRule maps lowercase 'non<type>' -> CardTypes:[card]+ExcludedCardTypes:[type] only when <type> is in KnownCardTypes, and declines unknown lowercase words (returns null). Only 3 corpus cards match the exact '<a> spells and <b> spells from the top' pattern: Madame Web (noncreature -> card minus creature, correct), Mystic Forge (artifact/colorless, unaffected -- fixture confirmed), Sigarda (Angel/Human subtypes, unaffected -- fixture confirmed). The decline-unknown branch fires on no current corpus card, so no regression. CR 205.2a (card-types list) and CR 105.1 (colorless is absence of color) both exist and match."
+    }
+  ]
+}
