@@ -1,0 +1,85 @@
+{
+  "Input": {
+    "Name": "Steel Golem",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact Creature — Golem",
+    "OracleText": "You can't cast creature spells.",
+    "Power": "3",
+    "Toughness": "4",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "88d9b1ae-755d-49e4-b012-db95019491c6",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Steel Golem",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Golem",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Golem"
+      ]
+    },
+    "Oracle": {
+      "RawText": "You can't cast creature spells.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeCast",
+              "Caster": {
+                "Kind": "You"
+              }
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": [
+              "spell",
+              "creature"
+            ]
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}
