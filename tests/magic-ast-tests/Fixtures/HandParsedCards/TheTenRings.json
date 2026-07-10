@@ -1,0 +1,109 @@
+{
+  "Input": {
+    "Name": "The Ten Rings",
+    "ManaCost": "{8}",
+    "TypeLine": "Legendary Artifact",
+    "OracleText": "Your maximum hand size is ten.\nAt the beginning of your end step, if you have fewer than ten cards in hand, draw cards equal to the difference.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "2332bc91-b0f2-4911-844d-d1cc915cd6c8",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "The Ten Rings",
+    "TypeLine": {
+      "Raw": "Legendary Artifact",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Your maximum hand size is ten.\nAt the beginning of your end step, if you have fewer than ten cards in hand, draw cards equal to the difference.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "maxHandSize",
+              "Player": {
+                "Kind": "You"
+              },
+              "Value": 10
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "count",
+            "Filter": {
+              "CardTypes": [
+                "card"
+              ],
+              "Owner": "You",
+              "Zone": "Hand"
+            },
+            "Count": {
+              "Operator": "LessThan",
+              "Value": 10
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "literal",
+                  "Value": 10
+                },
+                "Operation": "subtract",
+                "OperandQuantity": {
+                  "QuantityType": "derived",
+                  "DerivedFrom": "CardsInHand"
+                }
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{8}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 8
+          }
+        ],
+        "ManaValue": 8,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

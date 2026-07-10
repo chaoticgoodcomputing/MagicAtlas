@@ -1676,6 +1676,15 @@
           "Fields": []
         },
         {
+          "Type": "MaxHandSizeEffect",
+          "Discriminator": "maxHandSize",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player",
+            "Value"
+          ]
+        },
+        {
           "Type": "MayCastTargetFromGraveyardEffect",
           "Discriminator": "mayCastTargetFromGraveyard",
           "IsUnparsed": false,
@@ -2489,14 +2498,6 @@
           ]
         },
         {
-          "Type": "TurnFaceDownEffect",
-          "Discriminator": "turnFaceDown",
-          "IsUnparsed": false,
-          "Fields": [
-            "Target"
-          ]
-        },
-        {
           "Type": "TypecyclingEffect",
           "Discriminator": "typecycling",
           "IsUnparsed": false,
@@ -2913,5 +2914,5 @@
       ]
     }
   ],
-  "SchemaHash": "7ae526a54270dcb08feeecd1c936bc0da6da36da730408c81f39777bea2cbab3"
+  "SchemaHash": "bddb06a3c69eb9f80d25582df2fb1c2c75c613dc3393419caef64e80df81ef46"
 }
