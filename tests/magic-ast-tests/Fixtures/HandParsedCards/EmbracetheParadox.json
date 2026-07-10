@@ -1,0 +1,71 @@
+{
+  "Input": {
+    "Name": "Embrace the Paradox",
+    "ManaCost": "{3}{G}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Draw three cards. You may put a land card from your hand onto the battlefield tapped.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["G", "U"],
+    "ColorIdentity": ["G", "U"]
+  },
+  "Output": {
+    "Name": "Embrace the Paradox",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "Draw three cards. You may put a land card from your hand onto the battlefield tapped.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            },
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "putFromHandOntoBattlefield",
+                "Filter": {
+                  "CardTypes": ["land"],
+                  "Zone": "Hand",
+                  "Controller": "You"
+                },
+                "Tapped": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G", "U"]
+      }
+    ]
+  }
+}
