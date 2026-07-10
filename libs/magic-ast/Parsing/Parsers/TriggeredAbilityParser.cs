@@ -838,6 +838,23 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return new List<Effect> { drawLifeLost };
     }
 
+    // Trigger-aware "that many" antecedent: "put that many +1/+1 counters on this
+    // creature" under a GainsLife trigger — the granted ability places counters
+    // equal to the life just gained (CR 119.3 / CR 122.1). Sunbond: "Whenever you
+    // gain life, put that many +1/+1 counters on this creature." This rule MUST
+    // NOT be in the generic reflection-discovered pool: the same "put that many …
+    // counters" surface could appear under a different trigger event with a
+    // different antecedent (e.g. CounterPlaced, DamageDealt). Guard on GainsLife
+    // exactly, mirroring DrawThatManyCardsLifeLostRule's LosesLife guard.
+    if (
+      trigger.Event is EventOccurrence { Event: TriggerEvent.GainsLife }
+      && new Triggered.Rules.PutThatManyPlusOneCountersGainsLifeRule().TryMatch(trimmed, out var putCountersGain)
+      && putCountersGain is not null
+    )
+    {
+      return new List<Effect> { putCountersGain };
+    }
+
     var opponentExileThenExile = TryParseOpponentExileCreatureThenExileGraveyardCard(trimmed);
     if (opponentExileThenExile is not null)
     {
