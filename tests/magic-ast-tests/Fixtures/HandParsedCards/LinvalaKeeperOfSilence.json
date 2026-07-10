@@ -1,0 +1,83 @@
+{
+  "Input": {
+    "Name": "Linvala, Keeper of Silence",
+    "ManaCost": "{2}{W}{W}",
+    "TypeLine": "Legendary Creature — Angel",
+    "OracleText": "Flying\nActivated abilities of creatures your opponents control can't be activated.",
+    "Power": "3",
+    "Toughness": "4",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": ["Flying"],
+    "Id": "dded98c3-17cb-4a43-a209-289ceb11df39",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Linvala, Keeper of Silence",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Angel",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Angel"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nActivated abilities of creatures your opponents control can't be activated.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": [
+                  { "CharacteristicType": "keyword", "Keyword": "Flying" },
+                  { "CharacteristicType": "keyword", "Keyword": "Reach" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "AffectedObjects": {
+            "CardTypes": ["creature"],
+            "Controller": "Opponent"
+          },
+          "Effects": [
+            {
+              "EffectType": "cantActivateAbilities"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 3, "Raw": "3" },
+        "Toughness": { "ValueType": "fixed", "Value": 4, "Raw": "4" }
+      }
+    ]
+  }
+}
