@@ -1,0 +1,107 @@
+{
+  "Input": {
+    "Name": "Animar, Soul of Elements",
+    "ManaCost": "{G}{U}{R}",
+    "TypeLine": "Legendary Creature — Elemental",
+    "OracleText": "Protection from white and from black\nWhenever you cast a creature spell, put a +1/+1 counter on Animar.\nCreature spells you cast cost {1} less to cast for each +1/+1 counter on Animar.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["G", "R", "U"],
+    "ColorIdentity": ["G", "R", "U"],
+    "Keywords": ["Protection"],
+    "Id": "a3da57d0-1ae3-4f05-a52d-eb76ad56cae7",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Animar, Soul of Elements",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Elemental",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Elemental"]
+    },
+    "Oracle": {
+      "RawText": "Protection from white and from black\nWhenever you cast a creature spell, put a +1/+1 counter on Animar.\nCreature spells you cast cost {1} less to cast for each +1/+1 counter on Animar.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Protection",
+          "Effects": [
+            {
+              "EffectType": "protection",
+              "From": [
+                { "Kind": "Color", "Value": "W" },
+                { "Kind": "Color", "Value": "B" }
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": ["spell", "creature"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": { "Kind": "Self" },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": {
+                "QuantityType": "counterCount",
+                "CounterType": "+1/+1",
+                "On": { "Kind": "Self" }
+              }
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": ["spell", "creature"],
+            "Controller": "You"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{G}{U}{R}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G", "R", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G", "R", "U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 1, "Raw": "1" },
+        "Toughness": { "ValueType": "fixed", "Value": 1, "Raw": "1" }
+      }
+    ]
+  }
+}
