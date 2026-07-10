@@ -36,7 +36,7 @@ using MagicAST.AST.References;
 /// </para>
 ///
 /// <para>
-/// CR 205.1a (verbatim): "Some effects change an object's card type, subtype, and/or
+/// CR 205.1b (verbatim): "Some effects change an object's card type, subtype, and/or
 /// supertype but specify that the object retains a prior card type, subtype, and/or
 /// supertype. In such cases, all the object's prior card types, subtypes, and
 /// supertypes are retained, and the effect causes the object to gain or lose other
