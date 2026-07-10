@@ -36,6 +36,15 @@ public sealed class EntersTappedRule : IStaticRule
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // Anchored to the exact "Artifacts, creatures, and lands ..." surface phrase
+  // (Frozen Aether) so it cannot steal Arm 3's bare creature-only or Arm 4's
+  // creature+nonbasic-land forms: this is a plain three-type disjunction
+  // (artifact OR creature OR land) with NO "nonbasic" qualifier on the land half.
+  private static readonly Regex _entersTappedOpponentsArtifactsCreaturesAndLandsPattern = new(
+    @"^\s*Artifacts,\s+creatures,\s+and\s+lands\s+your\s+opponents\s+control\s+enter\s+tapped\.?\s*$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
   {
     // "Enters tapped" is the composite "as this enters, tap it": the timing
@@ -140,6 +149,35 @@ public sealed class EntersTappedRule : IStaticRule
               {
                 CardTypes = ["creature", "land"],
                 ExcludedSupertypes = ["Basic"],
+                Controller = ControllerFilter.Opponent,
+              },
+            },
+          }],
+        },
+      ];
+    }
+
+    // Arm 5: "Artifacts, creatures, and lands your opponents control enter
+    // tapped." (Frozen Aether). Generalizes Arm 4's two-type disjunction to a
+    // three-type disjunction (artifact OR creature OR land), with no "nonbasic"
+    // qualifier — every land an opponent controls is covered, not just nonbasic
+    // ones. Same AsObjectEnters + TapEffect(Each+filter) composite as Arms 3/4
+    // (CR 614.1d).
+    if (_entersTappedOpponentsArtifactsCreaturesAndLandsPattern.IsMatch(clause.RawText))
+    {
+      return
+      [
+        new StaticAbility
+        {
+          When = StaticTimingKind.AsObjectEnters,
+          Effects = [new MagicAST.AST.Effects.Control.TapEffect
+          {
+            Target = new ObjectReference
+            {
+              Kind = ObjectReferenceKind.Each,
+              Filter = new ObjectFilter
+              {
+                CardTypes = ["artifact", "creature", "land"],
                 Controller = ControllerFilter.Opponent,
               },
             },
