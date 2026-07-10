@@ -124,6 +124,20 @@ public sealed class EnchantedHasProtectionRule : IStaticRule
       return new ProtectionQuality { Kind = ProtectionQualityKind.Everything };
     }
 
+    // "the chosen color" — a DEFINITE back-reference to the single color bound by
+    // the paired "As this Aura enters, choose a color." replacement ability (CR 607
+    // linked ability; see ChooseColorOnEntryRule), NOT a fresh per-resolution choice
+    // (that shape is "the color of your choice" -> ProtectionQualityKind.ChosenColor,
+    // handled by the spell/activated protection-grant rules). Floating Shield.
+    if (normalized is "the chosen color" or "chosen color")
+    {
+      return new ProtectionQuality
+      {
+        Kind = ProtectionQualityKind.ChosenCharacteristic,
+        ChosenCharacteristic = ChosenCharacteristicKind.Color,
+      };
+    }
+
     // Color names → WUBRG codes
     var colorCode = normalized switch
     {
