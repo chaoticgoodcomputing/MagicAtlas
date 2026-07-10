@@ -1,0 +1,82 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MaralenOfTheMornsong.json",
+      "verdict": "PASS",
+      "citations": ["CR 121", "CR 604.1", "CR 611.1"],
+      "reason": "line-1 draw-lock -> cantDrawCards{Player:EachPlayer} (symmetric 'Players'); line-2 'each player's draw step' -> Trigger{Draw,Beginning,Whose:Any} + composite[loseLife 3 ThatPlayer, searchLibrary ThatPlayer Dest:Hand]; faithful, no unparsed/free-text"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/CardFlow/CantDrawCardsEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 121", "CR 604.1", "CR 611.1"],
+      "reason": "new draw-lock static; Player scope field mirrors CantGainLifeEffect; I11 citation fix landed (reads CR 121 Drawing a Card, not 120 Damage) in node doc"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#cantDrawCards",
+      "verdict": "PASS",
+      "citations": ["CR 121"],
+      "reason": "new discriminator cantDrawCards has a coarse-projection entry; sensible - a rules-of-the-game prohibition (sibling of cantGainLife), inert for flow, no flow rule reads a draw-lock; citation fix 120->121 landed here too"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PortRazer.json",
+      "verdict": "PASS",
+      "citations": ["CR 508.1", "CR 701.26"],
+      "reason": "line-1 untap-each+additionalCombatPhase on one DealsCombatDamageToPlayer trigger; line-2 -> cantAttack{AlreadyAttackedThisTurn:true} reflexive (Target null = this creature); faithful"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Combat/CantAttackEffect.cs#AlreadyAttackedThisTurn",
+      "verdict": "PASS",
+      "citations": ["CR 508.1"],
+      "reason": "additive bool on existing cantAttack discriminator de-strings the 'already attacked this turn' idiom (like Alone/OnlyAlone); CR 508.1c attacker restriction; reflexive 'it' correctly leaves Target null"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/UntapEachTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.26"],
+      "reason": "reuses UntapEffect{Kind:Each}; anchored ^untap each...$ distinct from UntapAllTriggeredRule's ^untap all...$; no mislabel of 'untap all' siblings"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ShadowInTheWarp.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2f", "CR 603.2"],
+      "reason": "line-1 first-creature-spell cost-less -> costReduction 2 + AffectedObjects{[spell,creature],You,History:castThisTurn Ordinal 1}; line-2 opponent-first-noncreature trigger -> SpellCast{spell,ExcludedCardTypes:[creature],Opponent} Ordinal 1 PerTurn + dealDamage 2 ThatPlayer; faithful"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/HistoryPredicate.cs#CastThisTurnPredicate.Ordinal",
+      "verdict": "PASS",
+      "citations": ["CR 601.2f"],
+      "reason": "additive Ordinal on existing castThisTurn predicate records which occurrence ('first') the oracle names, descriptive-only; reuses CostReductionEffect; no new discriminator"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/CastsNthSpellEachTurnConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 601", "CR 603.2"],
+      "reason": "priority 999 above generic SpellCastConditionRule (998); requires both 'each turn' and a whitelisted ordinal, so generic 'whenever you cast a spell' siblings (no each-turn/ordinal) fall through - no over-capture"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DetentionVortex.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.5a", "CR 602.2"],
+      "reason": "'Enchant nonland permanent' -> enchantRestriction{CardTypes:[permanent],ExcludedCardTypes:[land]}; compound 'can't attack or block, and activated abilities can't be activated' fully structured into cantAttack/cantBlock/cantActivateAbilities (EnchantedOrEquipped); {3} destroy-self with WhoMayActivate:Opponent + OnlyAsSorcery; no free-text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantRule.cs#nonTypeBranch",
+      "verdict": "PASS",
+      "citations": ["CR 702.5a"],
+      "reason": "widened shared EnchantRule 'non<type> <type>' branch routes 'nonland permanent' to CardTypes:[permanent]+ExcludedCardTypes:[land] (CR 109 type negation), parallel to codebase nonland-card convention; no free-text characteristics"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/ActivatedAbilityParser.cs#ExtractActivationPermission",
+      "verdict": "PASS",
+      "citations": ["CR 602.2"],
+      "reason": "additive ActivationPermission.Opponent enum (CR 602.2 'unless the object specifically says otherwise'); anchored ^only your opponents may activate...$ pattern matches full sentence only, folds 'and only as a sorcery' -> OnlyAsSorcery; sibling opponent-activation cards (Knight/Clergy/Soul Ransom) parse correctly, no mislabel"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/DestroySelfEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.8"],
+      "reason": "'Destroy this Aura' -> DestroyEffect{Target:Self}; anchored, redundant type word dropped (Self implies it), distinct from DestroyTargetEffectRule; replaces prior unstructured line 3"
+    }
+  ]
+}

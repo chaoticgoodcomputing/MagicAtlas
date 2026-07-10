@@ -1,0 +1,106 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WalkTheAeons.json",
+      "verdict": "PASS",
+      "citations": [
+        "CR 500.7"
+      ],
+      "reason": "takeExtraTurn with Player=Target(player filter) faithfully models 'Target player takes an extra turn'; Buyback modeled as additionalCastCost sacrifice 3 Islands + keywordCostPaid returnToHand replacement; CR 500.7 verbatim quote matches rules-structure.json"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WalkTheAeons.json#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "reuses existing TakeExtraTurnEffect/EffectType takeExtraTurn (already projected); Target-player is an existing ObjectReferenceKind, no new discriminator, so no new PortWalk projection decision required"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MirranSafehouse.json",
+      "verdict": "PASS",
+      "citations": [
+        "CR 113.3",
+        "CR 602.1c"
+      ],
+      "reason": "hasAllAbilitiesOfControlledCreatures with Subject=Self, AbilityKind=activated, SourceFilter=CardTypes[land]+Zone=Graveyard (no Owner => every player's graveyard) faithfully models 'all activated abilities of all land cards in all graveyards'; cited rules exist (113.3 grounds activated-ability category; 602.1c verbatim correct)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MirranSafehouse.json#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "reuses existing HasAllAbilitiesOfControlledCreaturesEffect (already projected); SourceFilter land/Graveyard is a filter refinement, not a new discriminator"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/IngeniousInfiltrator.json",
+      "verdict": "PASS",
+      "citations": [
+        "CR 603.2",
+        "CR 510"
+      ],
+      "reason": "triggered Event=DealsCombatDamageToPlayer with Filter creature/Subtypes[Ninja]/Controller=You + drawCards 1 faithfully models 'Whenever a Ninja you control deals combat damage to a player, draw a card'; Ninjutsu unchanged; fixture carries no citation"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SubtypeYouControlDealsCombatDamageToPlayerConditionRule.cs",
+      "verdict": "PASS",
+      "citations": [
+        "CR 509",
+        "CR 510"
+      ],
+      "reason": "REMEDIATED (orchestrator, doc-only): CR 509->510 (Combat Damage Step, verified present in rules-structure.json); modeling was already faithful. doc-comment cites 'CR 509 (Combat Damage Step): combat damage assignment is the game event' but rules-structure.json says CR 509 is the Declare Blockers Step; combat damage is dealt in the Combat Damage Step = CR 510. Contradictory citation; fix 509->510 (CR 603.2 load-bearing cite is correct)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SubtypeYouControlDealsCombatDamageToPlayerConditionRule.cs#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "reuses existing TriggerEvent.DealsCombatDamageToPlayer (already projected); subtype-subject sibling rule, no new discriminator"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WrathfulRedDragon.json",
+      "verdict": "PASS",
+      "citations": [
+        "CR 120.1",
+        "CR 603.2"
+      ],
+      "reason": "triggered CreatureDealtDamage (Subtypes[Dragon]/Controller=You) + dealDamage Source=It, Amount=derived DamageDealt, Target=AnyTarget Filter ExcludedSubtypes[Dragon] faithfully models 'it deals that much damage to any target that isn't a Dragon'; CR 120.1 (objects deal damage) + 603.2 both match"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WrathfulRedDragon.json#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "reuses existing TriggerEvent.CreatureDealtDamage, DerivedKind.DamageDealt, AnyTarget, and pre-existing ObjectFilter.ExcludedSubtypes; no new discriminator, no new projection decision required"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/StoneIdolTrap.json",
+      "verdict": "PASS",
+      "citations": [
+        "CR 601.2",
+        "CR 508",
+        "CR 513",
+        "CR 603.7"
+      ],
+      "reason": "costReduction Amount=1 PerObject=creature+combatState:Attacking faithfully models per-attacker discount (CR 508 attacking); createToken 6/12 Construct artifact creature w/ trample + createDelayedTrigger exile It at beginning of your next end step (CR 513/603.7) faithful; token Colors:['C'] is the KNOWN pre-existing colorless anti-pattern (contra CR 105.1), tracked corpus-wide per verdict-2026-05-25 \u2014 not a batch HALT"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/StoneIdolTrap.json#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "extends CostReductionForEachRule reusing CostReductionEffect{PerObject} (already projected); token/exile spell rules reuse CreateTokenEffect/ExileEffect/createDelayedTrigger; CombatState.Attacking characteristic pre-existed; no new discriminator"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GenjuOfTheFens.json",
+      "verdict": "PASS",
+      "citations": [
+        "CR 702.5a",
+        "CR 305.6",
+        "CR 303.4c",
+        "CR 603.2"
+      ],
+      "reason": "enchantRestriction land/Swamp (Enchant basic land type); becomesCreature Subject=EnchantedOrEquipped 2/2 black land+creature +Spirit with nested structured {B}:+1/+1 activated ability and until-end-of-turn duration; PutIntoGraveyard trigger (land/Swamp/IsEnchanted) -> optional returnToHand Self-from-graveyard; all three lines faithful, all cited rules exist and match"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GenjuOfTheFens.json#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "reuses existing BecomesCreatureEffect, TriggerEvent.PutIntoGraveyard, and ReturnSelfFromGraveyard shapes (already projected); no new discriminator introduced"
+    }
+  ]
+}
