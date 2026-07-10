@@ -1,0 +1,112 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/AST/Effects/Modification/SetBasePTEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 613.4", "CR 613.4b"],
+      "reason": "layer-7b base-P/T SET on EnchantedOrEquipped; CR 613.4b ('effects that refer to the base power and/or toughness apply in this layer') matches, distinct from ModifyPT (7c) / DefinePT (7a)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/SetBasePTRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 613.4b"],
+      "reason": "anchored ^Enchanted|Equipped creature has base power and toughness N/M.$; emits SetBasePTEffect(EnchantedOrEquipped, literal P, literal T)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ReduceInStature.json",
+      "verdict": "PASS",
+      "citations": ["CR 613.4b", "CR 702.5"],
+      "reason": "enchantRestriction(creature) + setBasePT(0/2, EnchantedOrEquipped); no unparsed, no free text"
+    },
+    {
+      "target": "libs/mast-interaction/PortGraph.cs#setBasePT->set:pt",
+      "verdict": "PASS",
+      "citations": ["CR 613.4"],
+      "reason": "semantic projection is genuinely inert: Emit-only set:pt with no matching Consume anywhere (mirrors modify:pt/switch:pt; ADR 0002 'inert emits have no outgoing edge'); fabricates no cross-card edge, bench:recall neutral"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Damage/CantPreventDamageEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 615.1", "CR 604.1"],
+      "reason": "empty global-lock marker, no player/source/recipient scope (unconditional); CR 615.1 (prevention effects) matches; mirrors CantBeCounteredEffect marker shape"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/CantPreventDamageRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 615.1"],
+      "reason": "anchored ^Damage can't be prevented.$; emits single CantPreventDamageEffect"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LeylineOfPunishment.json",
+      "verdict": "PASS",
+      "citations": ["CR 615.1"],
+      "reason": "optional(openingHand) + cantGainLife(EachPlayer) + cantPreventDamage; no unparsed, no free text"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#cantPreventDamage",
+      "verdict": "PASS",
+      "citations": ["CR 615.1"],
+      "reason": "coarse is sensible: a rules-of-the-game prohibition, emits/consumes no resource; sibling of cantGainLife/cantBeCast coarse statics; no flow rule reads prevention-lock (preventDamage itself is coarse)"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/CardFlow/PlayWithHandsRevealedEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.20a", "CR 604.2"],
+      "reason": "Player-scoped (EachPlayer/EachOpponent) continuous static; CR 701.20a exists and matches (its worked example is the Telepathy phrasing); Revelation=EachPlayer correct"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/PlayWithHandsRevealedRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.20a"],
+      "reason": "NO collision: base 22950ec2 has no prior Telepathy/hands-revealed handler; two anchored patterns isolate the standalone clause (Telepathy, Squee, Seer's Vision, Zur's Weirding line-1) and correctly skip 'all players' conditionals (Urza's Contact Lenses)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Revelation.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.20a"],
+      "reason": "playWithHandsRevealed(EachPlayer) for 'Players play with their hands revealed'; no unparsed, no free text"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#playWithHandsRevealed",
+      "verdict": "PASS",
+      "citations": ["CR 701.20a"],
+      "reason": "coarse is sensible: continuous public-information effect, no resource emit/consume; sibling of playWithTopRevealed; no flow rule reads hand-visibility grants"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/SelfIsAlsoSubtypesRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 205.1b", "CR 205.3m", "CR 201.5"],
+      "reason": "additive 'is also a' subtype grant -> AddTypeEffect(Self, AddedSubtypes); Self (not literal name) correct. Doc-comment quotes 205.1b's retention text but labels it '205.1a' (205.1a is the replace rule); subrule-letter slip only, concept grounded at 205.1b -> not a FAIL"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilter.cs#SharesCreatureTypeWith",
+      "verdict": "PASS",
+      "citations": ["CR 205.3m"],
+      "reason": "relational creature-type axis mirrors SharesColorWith exactly (both UndecidedAxis + SupUndecidedAxis, conservatively undecided so Subsumes/Intersects stay sound; IsRelational updated); sound in isolation"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TajuruParagon.json",
+      "verdict": "PASS",
+      "citations": ["CR 205.1b", "CR 205.3m", "CR 701.20"],
+      "reason": "addType(Self, 4 subtypes) + Kicker additionalCastCost + triggered(Enters, IsSelf) InterveningIf keywordCostPaid(Kicker) + revealTop...(You, 6, SharesCreatureTypeWith Self); no unparsed, no free text (fixtures carry no citations)"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/CardFlow/RevealTopMayPutSharesCreatureTypeRestToBottomEffect.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 400.4", "CR 701.20", "CR 205.3m"],
+      "reason": "cites CR 400.4 for 'random-order bottom-of-library remainder', but CR 400.4 in rules-structure.json is 'Cards with certain card types can't enter certain zones' -- an unrelated/contradictory rule (no rule in 400/401 covers random-order placement). CR 701.20 and CR 205.3m are correct; only the 400.4 cite is wrong. Fix: drop/replace the 400.4 citation (sibling RevealTopPutMatchingToHand cites CR 401.4 for order)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/RevealTopMayPutSharesCreatureTypeRestToBottomTriggeredRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 400.4", "CR 701.20", "CR 205.3m"],
+      "reason": "shares the same wrong citation: doc-comment cites 'CR 400.4 (the remainder placed on the bottom in a random order)' but CR 400.4 is about card types and zones. AST shape is faithful; fix is citation-only (remove/replace 400.4)"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#revealTopMayPutSharesCreatureTypeRestToBottom",
+      "verdict": "PASS",
+      "citations": ["CR 701.20", "CR 205.3m"],
+      "reason": "coarse projection decision is sensible: library-visibility action, inert, sibling of revealTopMayPutMatchingRestToGraveyard/revealTopPutMatchingToHand; NOTE the entry's reason string also carries the wrong 'CR 400.4' cite that should be corrected alongside the two node files"
+    }
+  ]
+}

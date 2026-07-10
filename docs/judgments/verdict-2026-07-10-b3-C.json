@@ -1,0 +1,94 @@
+{
+  "items": [
+    {
+      "target": "mast-tdd/2026-07-10-tap-creature-for-mana-additional :: tests/magic-ast-tests/Fixtures/HandParsedCards/LeylineOfAbundance.json",
+      "verdict": "PASS",
+      "citations": ["CR 106.12", "CR 605.1"],
+      "reason": "faithful: openingHand optional; TapsForMana creature/You trigger + addMana {G}; {6}{G}{G} putCounters Each creature you control +1/+1 all match oracle text"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-tap-creature-for-mana-additional :: libs/magic-ast/Parsing/Parsers/Activated/Rules/PutCountersEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 122.1"],
+      "reason": "'on each <type> you control' fix is END-ANCHORED ($); Ajani Steadfast compound line does not match (trailing 'and a loyalty counter...' defeats the anchor; 'each other planeswalker' also excluded); emits Each+creature/You correctly, ordered before this-permanent/default-Self fallback that was the prior mistarget"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-tap-creature-for-mana-additional :: libs/magic-ast/Parsing/Parsers/Triggered/Rules/TapForManaConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 106.12", "CR 605.1"],
+      "reason": "'you tap a creature for mana' emits TapsForMana with creature filter + You/Any controller, mirror of land variant; ProducedMana null (any mana) faithful; CR 106.12 tap-for-mana cite verified"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-tap-creature-for-mana-additional :: projection-decision",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator: reuses existing TapsForMana trigger event + Each/putCounters (both present at base sha with prior projection decisions); no projection files touched, ratchet non-applicable"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-tap-other-permanent-cost :: tests/magic-ast-tests/Fixtures/HandParsedCards/GatewayShade.json",
+      "verdict": "PASS",
+      "citations": ["CR 602.5", "CR 118.3", "CR 205.3i"],
+      "reason": "'Tap an untapped Gate you control' -> tapPermanents cost, CardTypes:[land] Subtypes:[Gate] Controller:You Quantity:1 is correct (Gate is a land type per 205.3i); +2/+2 modifyPT Self until end of turn faithful"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-tap-other-permanent-cost :: libs/magic-ast/Parsing/Parsers/Activated/Rules/TapSingularSubtypeCostRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 701.20", "CR 701.26"],
+      "reason": "contradictory citation: doc-comment cites 'CR 701.20 tap/untap' and 'CR 701.20a: a permanent must be untapped to be tapped to pay the cost', but in rules-structure.json 701.20 is 'Reveal' (701.20a = 'To reveal a card, show that card to all players'); the Tap and Untap keyword action is 701.26. Modeling/classification are otherwise faithful (Gate/Desert/Swamp->land, all creature subtypes->creature default verified across ~30 corpus siblings); fix is doc-comment cite 701.20->701.26 and re-render"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-tap-other-permanent-cost :: projection-decision",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator: emits existing TapPermanentsCost (present at base sha); no projection files touched"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-creatures-combat-damage-create-token :: tests/magic-ast-tests/Fixtures/HandParsedCards/RapaciousGuest.json",
+      "verdict": "PASS",
+      "citations": ["CR 510.1", "CR 603.2", "CR 608.2h", "CR 119.3"],
+      "reason": "all four abilities faithful: Menace evasion MinimumBlockers 2; aggregate DealsCombatDamageToPlayer creature/You MinimumCount 1 -> createToken Food; Sacrifices Food/You -> putCounters Self; LeavesTheBattlefield self -> loseLife Opponent derived Power 'it'"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-creatures-combat-damage-create-token :: libs/magic-ast/Parsing/Parsers/Triggered/Rules/OneOrMoreCreaturesDealCombatDamageToPlayerConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 510.1", "CR 603.2"],
+      "reason": "aggregate-subject sibling is disjoint from singular DealsCombatDamageConditionRule (plural verb 'deal' vs 'deals'); anchored ^...to a player$ so 'to one or more players'/'this turn' fall through; emits DealsCombatDamageToPlayer + MinimumCount 1 (both present at base sha)"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-creatures-combat-damage-create-token :: libs/magic-ast/Parsing/Parsers/Triggered/Rules/TargetOpponentLosesLifeEqualToItsPowerRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 608.2h", "CR 119.3"],
+      "reason": "loseLife Opponent with DerivedQuantity Power/'it' faithful; 608.2h (info from game state / last-known) + 119.3 (life loss) load-bearing cites verified. Note: parenthetical CR 120.1 cite is tangential (120.1 is about damage, not power-as-characteristic) but not contradictory to the life-loss modeling"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-creatures-combat-damage-create-token :: tests/magic-ast-tests/Fixtures/whitelist-freetext.json (RapaciousGuest Food AbilityText)",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "Food-token AbilityText free-text carve-out is the established recursive-token-body class (identical reason to the prior adjacent whitelist entry; HazelsBrewmaster precedent) — token body reminder text on TokenDefinition.AbilityText, deferred de-string initiative"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-creatures-combat-damage-create-token :: projection-decision",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator: reuses DealsCombatDamageToPlayer + MinimumCount + LoseLifeEffect + createToken (all present at base sha); no projection files touched"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-torpor-orb-trigger-suppression :: tests/magic-ast-tests/Fixtures/HandParsedCards/TorporOrb.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 614.10"],
+      "reason": "static ReplacementEffect over abilityTrigger event, CausedByEntering creature filter, OriginalEventOccurs:false, no Replacement (replace-with-nothing) is a faithful descriptive model of 'creatures entering don't cause abilities to trigger'; unscoped AffectedObjects matches 'abilities' (any controller)"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-torpor-orb-trigger-suppression :: libs/magic-ast/Parsing/Parsers/Static/Rules/CreaturesEnteringDontCauseTriggerRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 614.10", "CR 604.1"],
+      "reason": "suppression mirror of Panharmonicon-family (OriginalEventOccurs:false + no Replacement) is disjoint from the trigger-DOUBLING family (OriginalEventOccurs:true + Modifier additionalTime); anchored regex; all cites (603.2, 614.10 skip=do-nothing, 604.1 static) verified in rules-structure.json"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-torpor-orb-trigger-suppression :: projection-decision",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator: reuses ReplacementEffect + AbilityTriggerEvent (present at base sha); no projection files touched. Even if novel, a trigger-suppressor is loop-negative and coarse would be sensible"
+    }
+  ]
+}

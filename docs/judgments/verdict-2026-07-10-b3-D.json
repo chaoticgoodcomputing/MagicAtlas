@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/KnowledgeExploitation.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.76a"],
+      "reason": "ProwlKeyword mirrors Freerunning/Spectacle/Surge exactly (StaticAbility + AlternativeCastEffect FromZone=Hand + Cost + OtherCondition gate); both carve-outs justified (OtherCondition prowl-gate = same PB-7 structured-condition bucket as its siblings; UnstructuredEffect line-2 = genuine out-of-scope search+cast L1 shell)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FistOfSuns.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.9"],
+      "reason": "reuses GrantAlternativeCostEffect with fixed {W}{U}{B}{R}{G} alt-cost + unfiltered spells-you-cast filter; anchored disjoint from Rooftop Storm's rule (which requires a non-empty filter noun); correctly generalizes to Jodah/Leyline (identical line), excludes Conspiracy Unraveler (non-mana cost)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PatricianGeist.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2f"],
+      "reason": "reuses CostReductionEffect + ObjectFilter.Zone=Graveyard (positive cast-origin zone, parallel to Savvy Trader's ExcludedZone); Flying evasion + 'Other Spirits' anthem (ExcludeSelf) parsed via existing rules"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BlanketOfNight.json",
+      "verdict": "PASS",
+      "citations": ["CR 305.7", "CR 205.1"],
+      "reason": "reuses AddTypeEffect (additive AddedSubtypes:[Swamp]) on unrestricted Each-land filter for the 'in addition to its other land types' clause; sibling of LandsAreEveryBasicLandTypeRule; doc's 205.1a cite belongs to 205.1b (non-fatal subrule slip), primary 305.7 exact"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DragonlordDromoka.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.3a"],
+      "reason": "reuses CantBeCastEffect + AffectedObjects{spell,Controller:Opponent} + OtherCondition 'During your turn' (established Razorkin Needlehead PB-7 timing bucket); carve-out justified; correctly generalizes to A-Teferi/Kutzil/Tidal Barracuda/Voice of Victory (identical clause)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PegasusStampede.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.27a"],
+      "reason": "widened BuybackStaticRule (em-dash non-mana form) reuses SacrificeCost via ParseSacrificePattern + unchanged two-ability decomposition (AdditionalCastCostEffect + ReplacementEffect ZoneChange Stack->Graveyard, ReturnToHand); mana siblings still route through the mana-first branch (non-mana requires em-dash)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MagebaneArmor.json",
+      "verdict": "FAIL",
+      "citations": ["CR 702.6", "CR 611.2"],
+      "reason": "LoseAbilityEffect.AbilityText:'flying' inlines a single evergreen keyword as free text; KeywordAbility.Flying + the corpus's structured Characteristic{keyword:Flying} already model it, so a typed node can express it (escape-hatch FAIL); cited AnimateDead/VraskaBetrayalsSting precedents are unstructurable ability-SCOPES, off-point for a bare keyword (ModifyPT/PreventDamage NoncombatOnly/classifier intercept are fine)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Choke.json",
+      "verdict": "PASS",
+      "citations": ["CR 502.3"],
+      "reason": "widened SubjectDoesntUntapDuringControllersUntapStepsRule builds ObjectFilter.Subtypes:[Island] (not CardTypes) for basic-land-subtype subject; reuses DoesntUntapEffect; offline sweep confirms scope = Choke + Curse of Marit Lage only"
+    }
+  ]
+}
