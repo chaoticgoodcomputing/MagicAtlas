@@ -55,6 +55,7 @@ public abstract record Characteristic
       "attacking alone" => new CombatStateCharacteristic { State = CombatState.AttackingAlone },
       "tapped" => new TappedStateCharacteristic { Tapped = true },
       "untapped" => new TappedStateCharacteristic { Tapped = false },
+      "equipped" => new EquippedStateCharacteristic(),
       "with a +1/+1 counter" or "with a +1/+1 counter on it" => new CounterCharacteristic
       {
         CounterType = "+1/+1",
@@ -130,6 +131,22 @@ public sealed record TappedStateCharacteristic : Characteristic
   /// <summary><c>true</c> for "tapped", <c>false</c> for "untapped".</summary>
   public required bool Tapped { get; init; }
 }
+
+/// <summary>
+/// An equipped-state constraint — "Equipped creatures" / "Equipped Warriors"
+/// (Kor Blademaster: "Equipped Warriors you control have double strike."). The
+/// attachment-state analogue of <see cref="TappedStateCharacteristic"/>: the
+/// filtered object currently has an Equipment attached to it (CR 702.6). Same
+/// category the <see cref="Characteristic"/> doc calls out as a first-class
+/// carve-out from the <see cref="OtherCharacteristic"/> residual, and the
+/// filter-axis sibling of <c>ObjectIsEquippedCondition</c> (which carries the
+/// same "is equipped" predicate for a single back-referenced object rather
+/// than a filtered set). MAST records only that the granted-to set is scoped
+/// to permanents currently carrying an attached Equipment; the actual
+/// attachment state is engine territory (CR 702.6, 704.5n).
+/// </summary>
+[CharacteristicKind("equipped")]
+public sealed record EquippedStateCharacteristic : Characteristic;
 
 /// <summary>
 /// A counter constraint — the filtered object must have a counter of a given kind,
