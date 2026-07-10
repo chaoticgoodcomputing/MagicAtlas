@@ -1,0 +1,167 @@
+{
+  "Input": {
+    "Name": "Genju of the Fens",
+    "ManaCost": "{B}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant Swamp\n{2}: Until end of turn, enchanted Swamp becomes a 2/2 black Spirit creature with \"{B}: This creature gets +1/+1 until end of turn.\" It's still a land.\nWhen enchanted Swamp is put into a graveyard, you may return this card from your graveyard to your hand.",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": ["Enchant"],
+    "Id": "d8e06ff3-5fdd-444d-916e-3764f795456e",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Genju of the Fens",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant Swamp\n{2}: Until end of turn, enchanted Swamp becomes a 2/2 black Spirit creature with \"{B}: This creature gets +1/+1 until end of turn.\" It's still a land.\nWhen enchanted Swamp is put into a graveyard, you may return this card from your graveyard to your hand.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": ["land"],
+                "Subtypes": ["Swamp"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "becomesCreature",
+              "Subject": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "Power": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Toughness": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Colors": ["B"],
+              "CardTypes": ["land", "creature"],
+              "AddedSubtypes": ["Spirit"],
+              "GainedAbilities": [
+                {
+                  "Kind": "activated",
+                  "Costs": [
+                    {
+                      "CostType": "mana",
+                      "Symbols": [
+                        {
+                          "Kind": "colored",
+                          "Colors": ["B"]
+                        }
+                      ]
+                    }
+                  ],
+                  "Effects": [
+                    {
+                      "EffectType": "modifyPT",
+                      "Target": {
+                        "Kind": "Self"
+                      },
+                      "PowerModifier": {
+                        "QuantityType": "literal",
+                        "Value": 1
+                      },
+                      "ToughnessModifier": {
+                        "QuantityType": "literal",
+                        "Value": 1
+                      },
+                      "Duration": {
+                        "DurationType": "untilTime",
+                        "Until": {
+                          "Part": "Turn",
+                          "Edge": "End"
+                        }
+                      }
+                    }
+                  ],
+                  "IsManaAbility": false
+                }
+              ],
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "PutIntoGraveyard",
+            "Filter": {
+              "CardTypes": ["land"],
+              "Subtypes": ["Swamp"],
+              "IsEnchanted": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "returnToHand",
+                "Target": {
+                  "Kind": "Self",
+                  "Filter": {
+                    "Zone": "Graveyard"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}
