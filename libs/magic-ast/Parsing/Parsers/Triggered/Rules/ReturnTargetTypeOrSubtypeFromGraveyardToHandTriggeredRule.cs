@@ -22,8 +22,8 @@ using MagicAST.AST.References;
 /// capitalised non-card-type words route to <see cref="ObjectFilter.Subtypes"/> (OR
 /// semantics — CR 205.3, a card has zero or more subtypes). Source zone is the
 /// controller's own graveyard (CR 404.1); destination is the controller's hand
-/// (CR 402.1); CR 701.10 (return, the keyword action moving an object from one
-/// zone to another).
+/// (CR 402.1). "Return … to hand" is ordinary zone movement (CR 400.7), not a
+/// CR 701 keyword action.
 /// </para>
 ///
 /// <para>

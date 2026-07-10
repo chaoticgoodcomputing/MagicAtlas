@@ -100,7 +100,7 @@ public sealed class EquippedSubtypeCreaturesHaveKeywordRule : IStaticRule
       CardTypes = ["creature"],
       Subtypes = [subtype],
       Controller = ControllerFilter.You,
-      Characteristics = [new EquippedStateCharacteristic()],
+      Characteristics = [new EquippedStateCharacteristic { Equipped = true }],
     };
 
     return

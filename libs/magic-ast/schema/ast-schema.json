@@ -255,7 +255,9 @@
           "Type": "EquippedStateCharacteristic",
           "Discriminator": "equipped",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "Equipped"
+          ]
         },
         {
           "Type": "ExtremeStatCharacteristic",
@@ -1019,6 +1021,12 @@
           "Fields": []
         },
         {
+          "Type": "CantBeCopiedEffect",
+          "Discriminator": "cantBeCopied",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CantBeCounteredEffect",
           "Discriminator": "cantBeCountered",
           "IsUnparsed": false,
@@ -1315,6 +1323,14 @@
           "IsUnparsed": false,
           "Fields": [
             "Cost"
+          ]
+        },
+        {
+          "Type": "DamageCantBePreventedEffect",
+          "Discriminator": "damageCantBePrevented",
+          "IsUnparsed": false,
+          "Fields": [
+            "Source"
           ]
         },
         {
@@ -2988,5 +3004,5 @@
       ]
     }
   ],
-  "SchemaHash": "ed4c240b657a8e114793aaf519196e2aabd0ff31fa1d4a3f17c2fd0a68898a0b"
+  "SchemaHash": "767667abd70a73ae09ee611fab4eb2afbecd79791e9e7e43983d322429fee947"
 }

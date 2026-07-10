@@ -45,7 +45,8 @@
                   "Controller": "You",
                   "Characteristics": [
                     {
-                      "CharacteristicType": "equipped"
+                      "CharacteristicType": "equipped",
+                      "Equipped": true
                     }
                   ]
                 }
