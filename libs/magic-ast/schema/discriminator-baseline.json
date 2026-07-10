@@ -187,6 +187,7 @@
     "OracleEffect:mayPlayFromGraveyard",
     "OracleEffect:mayPlayFromLibrary",
     "OracleEffect:mayPlayFromTopOfLibrary",
+    "OracleEffect:mayPlayTargetFromExile",
     "OracleEffect:megamorph",
     "OracleEffect:mill",
     "OracleEffect:miracle",
