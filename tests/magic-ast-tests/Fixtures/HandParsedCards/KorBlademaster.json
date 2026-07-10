@@ -1,0 +1,94 @@
+{
+  "Input": {
+    "Name": "Kor Blademaster",
+    "ManaCost": "{1}{W}",
+    "TypeLine": "Creature — Kor Warrior",
+    "OracleText": "Double strike\nEquipped Warriors you control have double strike.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": ["Double strike"],
+    "Id": "fc6d6049-5599-47eb-ae58-a8eb96927ece",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Kor Blademaster",
+    "TypeLine": {
+      "Raw": "Creature — Kor Warrior",
+      "Types": ["Creature"],
+      "Subtypes": ["Kor", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "Double strike\nEquipped Warriors you control have double strike.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Double strike",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "Both"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Subtypes": ["Warrior"],
+                  "Controller": "You",
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "equipped"
+                    }
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Double strike",
+                "Effects": [
+                  {
+                    "EffectType": "combatDamageTiming",
+                    "Timing": "Both"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 1, "Raw": "1" },
+        "Toughness": { "ValueType": "fixed", "Value": 1, "Raw": "1" }
+      }
+    ]
+  }
+}
