@@ -1081,6 +1081,34 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target creature becomes [color] until end of turn." — the SINGULAR-targeting
+    // counterpart of the "One or more target creatures become ..." rule above (Niveous
+    // Wisps: "Target creature becomes white until end of turn. Tap that creature.").
+    // Anchored at the start only (no trailing $) so it still fires when this clause is
+    // the opening sentence of a multi-sentence spell line ("... until end of turn. Tap
+    // that creature."/"Untap that creature."), mirroring the "gets +N/+M" and "gains
+    // [keyword]" rules above. The "Target" subject plus "until end of turn" duration
+    // mark this as a one-shot imperative spell effect (Rule 113.3a), not a declarative
+    // static. A literal `{cost}:` prefix (e.g. Metathran Transport's activated ability
+    // of the same shape) is already routed to Activated by the earlier colon check, so
+    // this rule only ever sees un-costed, printed spell lines. Without this the line
+    // defaults to Static, where StaticAbilityParser stalls.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+creature\s+becomes\s+(white|blue|black|red|green|colorless)\s+until\s+end\s+of\s+turn",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Mass P/T-modification spell shapes with "until end of turn" — one-shot imperative
     // spell effects (Rule 113.3a). The "until end of turn" duration is the distinguishing
     // marker between these spell forms and their permanent-static counterparts (e.g.,
