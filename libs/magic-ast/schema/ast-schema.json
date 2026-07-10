@@ -291,12 +291,6 @@
       "DiscriminatorKey": "ConditionType",
       "Types": [
         {
-          "Type": "AdditionalCostPaidCondition",
-          "Discriminator": "additionalCostPaid",
-          "IsUnparsed": false,
-          "Fields": []
-        },
-        {
           "Type": "AllCondition",
           "Discriminator": "all",
           "IsUnparsed": false,
@@ -1407,15 +1401,6 @@
           ]
         },
         {
-          "Type": "GrantAdditionalCostEffect",
-          "Discriminator": "grantAdditionalCost",
-          "IsUnparsed": false,
-          "Fields": [
-            "AdditionalCost",
-            "AffectedSpells"
-          ]
-        },
-        {
           "Type": "GrantAlternativeCostEffect",
           "Discriminator": "grantAlternativeCost",
           "IsUnparsed": false,
@@ -1989,6 +1974,14 @@
           "Fields": [
             "Event",
             "OriginalEventOccurs"
+          ]
+        },
+        {
+          "Type": "RetainUnspentManaEffect",
+          "Discriminator": "retainUnspentMana",
+          "IsUnparsed": false,
+          "Fields": [
+            "Color"
           ]
         },
         {
@@ -2722,5 +2715,5 @@
       ]
     }
   ],
-  "SchemaHash": "2775602cf4227411fd58aa8234488942c50baac633dcd5fcb2c466eade071bac"
+  "SchemaHash": "ebaeec8c08edf27ac0ab4616e1171cda55ba3c9d35ee9b9464f5cd7248b52507"
 }

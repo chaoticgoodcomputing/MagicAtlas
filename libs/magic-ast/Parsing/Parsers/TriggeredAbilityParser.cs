@@ -850,6 +850,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return counterExileCast;
     }
 
+    var discardDrawEscalating = TryParseDiscardDrawThenEscalatingResolutionCountEffects(trimmed);
+    if (discardDrawEscalating is not null)
+    {
+      return discardDrawEscalating;
+    }
+
     var loseGainLifeWhereX = TryParseLoseAndGainLifeWhereX(trimmed);
     if (loseGainLifeWhereX is not null)
     {
@@ -1169,6 +1175,111 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         {
           Target = new ObjectReference { Kind = ObjectReferenceKind.It },
         },
+      },
+    };
+  }
+
+  /// <summary>
+  /// Magecraft-style escalating-resolution composite: "discard a card, then draw
+  /// a card. If this is the second time this ability has resolved this turn,
+  /// [SelfName] deals N damage to each opponent and each creature they control.
+  /// If it's the third time, add [mana]." (Ashling, Flame Dancer).
+  ///
+  /// <para>
+  /// Returns the gold's flat four-element list: [discardCards(You, 1),
+  /// drawCards(You, 1), conditional(OtherCondition "second time", composite
+  /// [dealDamage(EachOpponent), dealDamage(Each creature opponents control)]),
+  /// conditional(OtherCondition "third time", addMana)]. The "discard a card,
+  /// then draw a card" pair mirrors the Teferi, Master of Time "Draw a card,
+  /// then discard a card" shape (<see cref="Activated.Rules.DrawThenDiscardEffectRule"/>)
+  /// — two mandatory sibling effects joined by ", then", reversed order — as flat
+  /// siblings rather than nested under a CompositeEffect.
+  /// </para>
+  ///
+  /// <para>
+  /// The "Nth time this ability has resolved this turn" counting is engine
+  /// bookkeeping, not a structured Condition (no dedicated node exists for it —
+  /// see <c>OtherCondition</c> precedent on Nissa, Resurgent Animist and
+  /// Sephiroth, Fabled SOLDIER). CR 603.2 (triggered ability resolution counting
+  /// is a fact tracked by the game, not by MAST). CR 701.9a (discard); CR 121.1
+  /// (draw); CR 120.1-120.2 (damage — the named self-reference resolves to
+  /// <see cref="ObjectReferenceKind.Self"/> per CR 201.5); CR 106.4 (add mana).
+  /// </para>
+  ///
+  /// <para>
+  /// "each creature they control" (the plural back-reference to "each opponent")
+  /// reuses the established <c>Kind: Each, Filter: {CardTypes:[creature],
+  /// Controller: Opponent}</c> shape ("creatures your opponents control" —
+  /// CumberStone) — collectively, every creature any opponent controls — rather
+  /// than a per-opponent nested loop.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseDiscardDrawThenEscalatingResolutionCountEffects(
+    string effectText
+  )
+  {
+    var match = Regex.Match(
+      effectText,
+      @"^discard\s+a\s+card,\s*then\s+draw\s+a\s+card\.\s*"
+        + @"If\s+this\s+is\s+the\s+second\s+time\s+this\s+ability\s+has\s+resolved\s+this\s+turn,\s*"
+        + @"[A-Z]\S.*?\s+deals?\s+(?<dmg>\d+)\s+damage\s+to\s+each\s+opponent\s+and\s+each\s+creature\s+they\s+control\.\s*"
+        + @"If\s+it'?s\s+the\s+third\s+time,\s*add\s+(?<mana>(?:\{[^}]+\})+)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var damage = int.Parse(match.Groups["dmg"].Value);
+    var mana = match.Groups["mana"].Value;
+
+    return new List<Effect>
+    {
+      new DiscardCardsEffect
+      {
+        Count = LiteralQuantity.Of(1),
+        Player = ObjectReference.You(),
+        Random = false,
+      },
+      new DrawCardsEffect { Count = LiteralQuantity.Of(1), Player = ObjectReference.You() },
+      new ConditionalEffect
+      {
+        Condition = new OtherCondition
+        {
+          Text = "this is the second time this ability has resolved this turn",
+        },
+        Then = new CompositeEffect
+        {
+          Effects =
+          [
+            new DealDamageEffect
+            {
+              Amount = LiteralQuantity.Of(damage),
+              Source = ObjectReference.Self(),
+              Target = new ObjectReference { Kind = ObjectReferenceKind.EachOpponent },
+            },
+            new DealDamageEffect
+            {
+              Amount = LiteralQuantity.Of(damage),
+              Source = ObjectReference.Self(),
+              Target = new ObjectReference
+              {
+                Kind = ObjectReferenceKind.Each,
+                Filter = new ObjectFilter
+                {
+                  CardTypes = ["creature"],
+                  Controller = ControllerFilter.Opponent,
+                },
+              },
+            },
+          ],
+        },
+      },
+      new ConditionalEffect
+      {
+        Condition = new OtherCondition { Text = "it's the third time" },
+        Then = new AddManaEffect { Mana = mana },
       },
     };
   }

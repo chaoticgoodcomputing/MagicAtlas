@@ -1,0 +1,173 @@
+{
+  "Input": {
+    "Name": "Ashling, Flame Dancer",
+    "ManaCost": "{2}{R}{R}",
+    "TypeLine": "Legendary Creature — Elemental Shaman",
+    "OracleText": "You don't lose unspent red mana as steps and phases end.\nMagecraft — Whenever you cast or copy an instant or sorcery spell, discard a card, then draw a card. If this is the second time this ability has resolved this turn, Ashling deals 2 damage to each opponent and each creature they control. If it's the third time, add {R}{R}{R}{R}.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": ["Magecraft"],
+    "Id": "40463be5-89e2-410b-9a4b-770f70d14293",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Ashling, Flame Dancer",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Elemental Shaman",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Elemental", "Shaman"]
+    },
+    "Oracle": {
+      "RawText": "You don't lose unspent red mana as steps and phases end.\nMagecraft — Whenever you cast or copy an instant or sorcery spell, discard a card, then draw a card. If this is the second time this ability has resolved this turn, Ashling deals 2 damage to each opponent and each creature they control. If it's the third time, add {R}{R}{R}{R}.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "retainUnspentMana",
+              "Color": "R"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "CastOrCopySpell",
+            "Filter": {
+              "CardTypes": ["spell", "instant", "sorcery"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "discardCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              },
+              "RevealHand": false,
+              "Random": false
+            },
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            },
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "this is the second time this ability has resolved this turn"
+              },
+              "Then": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "dealDamage",
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    },
+                    "Target": {
+                      "Kind": "EachOpponent"
+                    },
+                    "Source": {
+                      "Kind": "Self"
+                    }
+                  },
+                  {
+                    "EffectType": "dealDamage",
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    },
+                    "Target": {
+                      "Kind": "Each",
+                      "Filter": {
+                        "CardTypes": ["creature"],
+                        "Controller": "Opponent"
+                      }
+                    },
+                    "Source": {
+                      "Kind": "Self"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "it's the third time"
+              },
+              "Then": {
+                "EffectType": "addMana",
+                "Mana": "{R}{R}{R}{R}",
+                "AnyColor": false,
+                "AnyType": false,
+                "OfChosenColor": false
+              }
+            }
+          ],
+          "AbilityWord": "Magecraft"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}
