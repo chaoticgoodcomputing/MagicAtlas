@@ -920,6 +920,12 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
+      "card": "VexingSphinx",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — cumulative upkeep's CR 702.24a intervening-if 'this permanent is on the battlefield', same residual category as InnerSanctum's and PsychicVortex's (the sibling life-cost/draw-cost cumulative-upkeep printings) — VexingSphinx is the discard-cost printing."
+    },
+    {
       "card": "VraskaBetrayalsSting",
       "sink": "AbilityText",
       "tag": "debt",
