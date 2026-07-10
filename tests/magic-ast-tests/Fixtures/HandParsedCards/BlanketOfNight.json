@@ -1,0 +1,70 @@
+{
+  "Input": {
+    "Name": "Blanket of Night",
+    "ManaCost": "{1}{B}{B}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Each land is a Swamp in addition to its other land types.",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": [],
+    "Id": "fe012fd0-9ff0-4436-a890-3ab436e42201",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Blanket of Night",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "Each land is a Swamp in addition to its other land types.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["land"]
+                }
+              },
+              "AddedSubtypes": ["Swamp"]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}
