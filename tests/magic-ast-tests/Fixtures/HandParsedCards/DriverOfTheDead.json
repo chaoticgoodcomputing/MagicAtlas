@@ -1,0 +1,111 @@
+{
+  "Input": {
+    "Name": "Driver of the Dead",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Creature — Vampire",
+    "OracleText": "When this creature dies, return target creature card with mana value 2 or less from your graveyard to the battlefield.",
+    "Power": "3",
+    "Toughness": "2",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Driver of the Dead",
+    "TypeLine": {
+      "Raw": "Creature — Vampire",
+      "Supertypes": [],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature dies, return target creature card with mana value 2 or less from your graveyard to the battlefield.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "returnToBattlefield",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Zone": "Graveyard",
+                  "Controller": "You",
+                  "ManaValueComparison": {
+                    "Operator": "LessThanOrEqual",
+                    "Value": 2
+                  }
+                }
+              },
+              "Tapped": false
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}
