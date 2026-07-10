@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "Springleaf Parade",
+    "ManaCost": "{X}{G}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "When this enchantment enters, create X 1/1 colorless Shapeshifter creature tokens with changeling. (They're every creature type.)\nCreature tokens you control have \"{T}: Add one mana of any color.\"",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": [],
+    "Id": "44265489-645a-43b0-bc1f-726905b06876",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Springleaf Parade",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "When this enchantment enters, create X 1/1 colorless Shapeshifter creature tokens with changeling. (They're every creature type.)\nCreature tokens you control have \"{T}: Add one mana of any color.\"",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["enchantment"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": { "Kind": "You" },
+              "Count": { "QuantityType": "variable", "Name": "X" },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": ["C"],
+                "Types": ["creature"],
+                "Subtypes": ["Shapeshifter"],
+                "Abilities": [
+                  {
+                    "Kind": "static",
+                    "KeywordSource": "Changeling",
+                    "Effects": [
+                      {
+                        "EffectType": "keywordAbility",
+                        "Keyword": "Changeling"
+                      }
+                    ]
+                  }
+                ],
+                "IsCopy": false
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "They're every creature type."
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "IsToken": true,
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "activated",
+                "Costs": [
+                  { "CostType": "tap" }
+                ],
+                "Effects": [
+                  {
+                    "EffectType": "addMana",
+                    "Mana": "",
+                    "AnyColor": true
+                  }
+                ],
+                "IsManaAbility": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{X}{G}{G}",
+        "Symbols": [
+          { "Kind": "variable" },
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "IsVariable": true
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}
