@@ -1,0 +1,150 @@
+{
+  "Input": {
+    "Name": "Floating Shield",
+    "ManaCost": "{2}{W}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nAs this Aura enters, choose a color.\nEnchanted creature has protection from the chosen color. This effect doesn't remove this Aura.\nSacrifice this Aura: Target creature gains protection from the chosen color until end of turn.",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": ["Enchant"],
+    "Id": "4dbda39b-a998-4ad9-95df-72ed9556c390",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Floating Shield",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nAs this Aura enters, choose a color.\nEnchanted creature has protection from the chosen color. This effect doesn't remove this Aura.\nSacrifice this Aura: Target creature gains protection from the chosen color until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": ["creature"]
+              }
+            }
+          ],
+          "KeywordSource": "Enchant"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "chooseColor"
+            }
+          ],
+          "When": "asThisEnters"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Protection",
+                "Effects": [
+                  {
+                    "EffectType": "protection",
+                    "From": [
+                      {
+                        "Kind": "ChosenCharacteristic",
+                        "ChosenCharacteristic": "Color"
+                      }
+                    ],
+                    "DoesNotRemoveThisAura": true
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["enchantment"],
+                "Subtypes": ["Aura"],
+                "IsSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Protection",
+                "Effects": [
+                  {
+                    "EffectType": "protection",
+                    "From": [
+                      {
+                        "Kind": "ChosenCharacteristic",
+                        "ChosenCharacteristic": "Color"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}
