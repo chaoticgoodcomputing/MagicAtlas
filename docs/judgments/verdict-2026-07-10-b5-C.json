@@ -1,0 +1,58 @@
+{
+  "shard": "C",
+  "batch": 5,
+  "date": "2026-07-10",
+  "items": [
+    {
+      "family": "J03",
+      "card": "Runed Stalactite",
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/AttachedModifyPTAndEveryCreatureTypeRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 702.6", "CR 702.73a", "CR 205.3m", "CR 613.4c", "CR 611.3"],
+      "cr_checked": ["702.6", "702.73a", "205.3m", "613.4c", "611.3"],
+      "reason": "doc-comment cites 'CR 702.6 - Changeling as an ability grant' but 702.6 is Equip; Changeling is 702.73/702.73a (also cited). Wrong citation.",
+      "notes": "Modeling is faithful and sibling-clean: ModifyPTEffect +1/+1 on EnchantedOrEquipped + structured GainAbility(Changeling KeywordAbilityEffect) (not free text), Equip {2} attach parses. Anchored matcher captures only Runed Stalactite + Amorphous Axe (same '[Equipped/Enchanted] creature gets +N/+M and is every creature type' template); correctly declines Arachnoform (has-reach compound). Only defect is the 702.6=Equip mislabel in the doc-comment; correct number 702.73 is also present. Fix: drop/correct the '702.6' citation."
+    },
+    {
+      "family": "J04",
+      "card": "Wingrattle Scarecrow",
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/AsLongAsControlColorCreatureSelfKeywordGrantRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 611.2", "CR 611.3", "CR 702.79a", "CR 207.2"],
+      "cr_checked": ["611.2", "611.3", "702.79a", "207.2"],
+      "reason": "doc-comment cites 'CR 611.2 (conditional continuous effect)' but 611.2 is continuous effects from resolution of a spell/ability and explicitly excludes static abilities; Wingrattle's grants are static-ability continuous effects -> correct rule is CR 611.3.",
+      "notes": "Modeling is faithful and sibling-clean: BOTH conditional grants present, each gated by CountCondition{creature, color, Controller:You, >=1} wrapped in AsLongAsDuration; flying via evasion(CanBeBlockedBy flying/reach) w/ KeywordSource, persist via KeywordAbilityEffect w/ reminder attached. Persist 702.79a verbatim-correct; reminder 207.2 correct. Anchored matcher captures the whole Shadowmoor Scarecrow cycle (same 'This creature has [kw] as long as you control a [color] creature' template) and correctly declines the '...permanent'/dual-color/'Enchanted creature' Runemark+Behemoth variants. Only defect is 611.2 (should be 611.3). Fix: change '611.2' to '611.3'."
+    },
+    {
+      "family": "J07",
+      "card": "Nature's Revolt",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NaturesRevolt.json",
+      "verdict": "PASS",
+      "citations": ["CR 611", "CR 604.1", "CR 205.1b", "CR 305.7"],
+      "cr_checked": ["611.1", "604.1", "205.1b", "305.7"],
+      "reason": "BecomesCreatureEffect Each land, CardTypes ['land','creature'] retains land ('still lands'), 2/2, Colors [], all-lands scope; all cited CRs verified present + matching.",
+      "notes": "Anchored '^All lands are P/T creatures that are still lands$' captures only Nature's Revolt + Living Plane (same template); correctly declines Kormus Bell/Living Lands ('All Swamps/Forests'), Ambush Commander ('Forests you control ... green Elf'), and Rude Awakening ('Until end of turn ... become')."
+    },
+    {
+      "family": "J09",
+      "card": "Darkest Hour",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DarkestHour.json",
+      "verdict": "PASS",
+      "citations": ["CR 105.1", "CR 611.1"],
+      "cr_checked": ["105.1", "611.1"],
+      "reason": "ChangeColorEffect Each creature -> Colors ['B'] (color layer, not set-type); CR 105.1 (five colors) + CR 611.1 (continuous effect) verified.",
+      "notes": "Full-anchored + color-name-restricted + subject whitelist. Captures only Darkest Hour; correctly declines Dralnu's Crusade (color+set-type), Intangible Vibes ('are tokens'), Kormus Bell, and crucially Onakke Catacomb ('All creatures are black and have deathtouch' compound). No set-type mis-capture."
+    },
+    {
+      "family": "J19",
+      "card": "Harbinger of the Seas",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/HarbingerOfTheSeas.json",
+      "verdict": "PASS",
+      "citations": ["CR 613.1d", "CR 205.1a", "CR 305.7", "CR 205.4c", "CR 305.6"],
+      "cr_checked": ["613.1d", "205.1a", "305.7", "205.4c", "305.6"],
+      "reason": "ChangeSubtypeEffect (SET, not additive) on Each land ExcludedSupertypes ['Basic'] -> Subtypes ['Island']; nonbasic-only scope; all cited CRs verified. Oracle is exactly 'Nonbasic lands are Islands.' (verified vs oracle-cards.json) so 'lose other types' clause is implicit via CR 305.7 and correctly absent.",
+      "notes": "SET vs ADD distinction correct: emits ChangeSubtypeEffect, never AddTypeEffect. Anchored matcher captures only 'Nonbasic lands are <basic type>.' (Harbinger, Blood Moon, Magus of the Moon); correctly declines Blanket of Night/Urborg/Yavimaya/Khod/Stormtide ('... in addition' additive), Event Horizon ('Wastes', not a basic land type), and Zhao (conditional, '^' anchor fails)."
+    }
+  ],
+  "overall": "FAIL"
+}

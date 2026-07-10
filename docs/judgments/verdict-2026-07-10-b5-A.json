@@ -1,0 +1,78 @@
+{
+  "shard": "A",
+  "batch": 5,
+  "date": "2026-07-10",
+  "items": [
+    {
+      "family": "J05",
+      "card": "Herald of Eternal Dawn",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/HeraldOfEternalDawn.json + AST/Effects/Resource/CantLoseGameEffect.cs + CantWinGameEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 104.2a", "CR 104.3", "CR 604.1", "CR 704.5a"],
+      "cr_checked": ["104.2a", "104.3", "604.1", "704.5a"],
+      "reason": "cantLoseGame scoped You + cantWinGame scoped EachOpponent; Flash/Flying parse structurally; new nodes distinct from CantLoseGameForZeroLife/WinTheGame; all CRs verbatim-match",
+      "notes": "Faithful. cantLoseGame(You)+cantWinGame(EachOpponent) correctly split by scope. Secondary Flash->timingModification Grant Instant, Flying->evasion both structural. New effect nodes genuinely new, correct Player ObjectReference shape. CR 104.2a/104.3/604.1/704.5a all exist and match."
+    },
+    {
+      "family": "J05",
+      "card": "Herald of Eternal Dawn (projection)",
+      "target": "libs/mast-interaction/known-coarse-projections.json#cantLoseGame,cantWinGame",
+      "verdict": "PASS",
+      "citations": ["CR 104.3", "CR 104.2a"],
+      "cr_checked": ["104.3", "104.2a"],
+      "reason": "two new effect discriminators parked coarse; sensible -- game-outcome rules-of-the-game statics, no flow rule reads loss/win overrides, genuinely inert for interaction recall",
+      "notes": "cantLoseGame->CR 104.3, cantWinGame->CR 104.2a. Coarse choice sensible: these are blanket game-outcome prohibitions, not emit/consume events; sibling of cantLoseGameForZeroLife/winTheGame. No flow rule would want these. PASS."
+    },
+    {
+      "family": "J13",
+      "card": "Verdant Mastery",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/VerdantMastery.json + AST/Abilities/AlternativeCostPaidCondition.cs + AST/Quantities/RemainderQuantity.cs + AST/Effects/ZoneChange/SearchPlacement.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.9", "CR 601.2f", "CR 601.2b", "CR 604.5", "CR 701.23"],
+      "cr_checked": ["118.9", "601.2f", "601.2b", "604.5", "701.23"],
+      "reason": "grantAlternativeCost IsSelf (Fist of Suns precedent); faithful 3-way search split (opp 1 gated on alternativeCostPaid, you 2, remainder->hand, basic lands, revealed); SearchPlacement Controller/Condition additive nullable (Cultivate byte-identical); all CRs exist",
+      "notes": "Alt cost {3}{G} rather-than modeled via reused grantAlternativeCost with AffectedSpells.IsSelf (CR 118.9 verbatim). Search line distribution faithful to 'who gets what'. 'Then shuffle' implicit family-wide (verified vs Cultivate M11 fixture, which also carries no shuffle field). SearchPlacement +Controller +Condition are nullable JsonIgnore-WhenWritingNull -> Cultivate/Kodama's Reach fixtures unchanged, no sibling break. New nodes AlternativeCostPaidCondition + RemainderQuantity are markers, schema IsUnparsed:false. Minor: RemainderQuantity doc says '701.23e-style' (701.23e is reveal, not distribution) -- within-rule imprecision, not a FAIL. No new PortWalk discriminator (Condition/Quantity kinds), projection N/A."
+    },
+    {
+      "family": "J15",
+      "card": "Psychic Vortex",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PsychicVortex.json + AST/Costs/Cost.cs#DrawCardsCost",
+      "verdict": "PASS",
+      "citations": ["CR 702.24a", "CR 121.1"],
+      "cr_checked": ["702.24a", "121.1"],
+      "reason": "cumulative upkeep decomposed (putCounters age + preventable sacrifice-unless scaledCost drawCards x ageCounters) matches batch-1 pay-life precedent widened to draw cost; end-step sac-land+discard-hand structural; DrawCardsCost correct shape",
+      "notes": "New DrawCardsCost (drawCards costType) is genuinely new, count-only shape mirroring PayLifeCost, CR 702.24a + 121.1 both match. Cumulative-upkeep skeleton faithful to CR 702.24a. Secondary end-step trigger fully structured (composite sacrifice land + discard hand=CardsInHand). The InterveningIf ConditionType 'other' 'this permanent is on the battlefield' IS free-text, BUT it is the CR 702.24a keyword boilerplate carried identically by the accepted batch-1 precedent Inner Sanctum (present on base c4f2a3e6) and dozens of merged golds; it is WHITELISTED PB-7 debt in whitelist-freetext.json with a burndown plan, enforced by the stateless FreeTextWhitelistTests gate -- not a newly-introduced un-whitelisted residual on the judged draw-cost work. Consistent with accepted baseline."
+    },
+    {
+      "family": "J15",
+      "card": "Psychic Vortex (projection)",
+      "target": "libs/mast-interaction/known-coarse-projections.json#costType.drawCards",
+      "verdict": "PASS",
+      "citations": ["CR 702.24a"],
+      "cr_checked": ["702.24a"],
+      "reason": "new drawCards costType parked coarse; sensible -- sibling of coarse payLife/payEnergy upkeep-tax costs, mirrors the already-coarse drawCards EffectType, no flow rule reads a draw-as-cost yet",
+      "notes": "costType.drawCards->CR 702.24a. Coarse sensible: draw-paid-as-cost is a self-tax; since even the drawCards EffectType is coarse (nothing reads draws in flow), the cost form being coarse is consistent. PASS."
+    },
+    {
+      "family": "J11",
+      "card": "Moderation",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Moderation.json + Parsing/Parsers/Static/Rules/CantCastMoreThanNSpellsRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 601.3a", "CR 611.1", "CR 601.2"],
+      "cr_checked": ["601.3a", "611.1", "601.2"],
+      "reason": "N=1 modeled (cantCastMoreThanNSpells You MaxPerPeriod 1 eachTurn); shared rule broadened Each player->(Each player|You) is sibling-clean; secondary SpellCast->draw trigger structural; CRs exist",
+      "notes": "Reuses cantCastMoreThanNSpells (existing coarse discriminator, no projection needed). SIBLING SWEEP of the broadened (Each player|You) anchored regex over oracle bulk: newly (and correctly) captures Colfenor's Plans and Yawgmoth's Agenda (both genuinely 'You can't cast more than one spell each turn.'); correctly EXCLUDES Hedonist's Trove ('...one spell this way each turn'), Curse of Exhaustion ('Enchanted player...'), Deafening Silence/Phyrexian Censor ('...noncreature/non-Phyrexian spell'), I Bask ('Each opponent'). Zero mislabels. CR 601.3a exists (parent 601.3 slightly more precise for a plain casting prohibition, but subrule imprecision is not a FAIL); 611.1/601.2 match."
+    },
+    {
+      "family": "J01",
+      "card": "Quintorius, Field Historian",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/QuintoriusFieldHistorian.json + Parsing/Parsers/Triggered/Rules/CardsLeaveGraveyardAggregateConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2"],
+      "cr_checked": ["603.2"],
+      "reason": "aggregate 'one or more cards leave your graveyard' modeled via LeavesGraveyard + MinimumCount 1 (CR 603.2); anthem +1/+0 structural; new matcher sibling-clean; CR 603.2 verbatim",
+      "notes": "Reuses existing LeavesGraveyard trigger event (Syr Konrad precedent) + MinimumCount convention -> no new discriminator, projection N/A. Secondary anthem 'Spirits you control get +1/+0'->modifyPT structural. SIBLING SWEEP: anchored ^one or more cards? leave your graveyard$ correctly captures ~19 genuine untyped aggregate triggers (Amzu, Ark of Hunger, Tormod, Willow Geist, On Wings of Gold, both Quintorius, etc.); correctly EXCLUDES typed ('creature/artifact cards' -> Desecrated Tomb, Chalk Outline, Imotekh), temporally-qualified ('during your turn' -> Attuned Hunter, Kheru Goldkeeper), and singular ('a card' -> Syr Konrad, Kishla Skimmer, Murktide, Oasis). Zero mislabels. Minor: filter uses CardTypes ['card'] sentinel for untyped 'any card' -- a structured convention (doc-comment intentional), not free-text; acceptable."
+    }
+  ],
+  "overall": "PASS"
+}
