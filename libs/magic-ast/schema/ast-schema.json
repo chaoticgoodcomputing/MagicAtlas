@@ -305,6 +305,12 @@
           ]
         },
         {
+          "Type": "AlternativeCostPaidCondition",
+          "Discriminator": "alternativeCostPaid",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "BeenAttackedThisStepCondition",
           "Discriminator": "beenAttackedThisStep",
           "IsUnparsed": false,
@@ -2733,6 +2739,12 @@
           "Fields": []
         },
         {
+          "Type": "RemainderQuantity",
+          "Discriminator": "remainder",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "UpToQuantity",
           "Discriminator": "upTo",
           "IsUnparsed": false,
@@ -2854,5 +2866,5 @@
       ]
     }
   ],
-  "SchemaHash": "6646af8bc7626004667591325eb98ac5c2c42672654423cc1ac09320006f5768"
+  "SchemaHash": "24696db134cc0e80048ffa8d4c805d953f55d0f520adc1ba73933c017da547a4"
 }
