@@ -1,0 +1,201 @@
+{
+  "Input": {
+    "Name": "Najeela, the Blade-Blossom",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Legendary Creature — Human Warrior",
+    "OracleText": "Whenever a Warrior attacks, you may have its controller create a 1/1 white Warrior creature token that's tapped and attacking.\n{W}{U}{B}{R}{G}: Untap all attacking creatures. They gain trample, lifelink, and haste until end of turn. After this phase, there is an additional combat phase. Activate only during combat.",
+    "Power": "3",
+    "Toughness": "2",
+    "Colors": ["R"],
+    "ColorIdentity": ["B", "G", "R", "U", "W"],
+    "Keywords": [],
+    "Id": "2cb1d1da-6077-46b5-8c63-39882b8016f2",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Najeela, the Blade-Blossom",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Warrior",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "Whenever a Warrior attacks, you may have its controller create a 1/1 white Warrior creature token that's tapped and attacking.\n{W}{U}{B}{R}{G}: Untap all attacking creatures. They gain trample, lifelink, and haste until end of turn. After this phase, there is an additional combat phase. Activate only during combat.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Subtypes": ["Warrior"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "createToken",
+                "Player": {
+                  "Kind": "Controller"
+                },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Token": {
+                  "Power": "1",
+                  "Toughness": "1",
+                  "Colors": ["W"],
+                  "Types": ["creature"],
+                  "Subtypes": ["Warrior"],
+                  "IsCopy": false,
+                  "EntersTapped": true,
+                  "EntersAttacking": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["W"] },
+                { "Kind": "colored", "Colors": ["U"] },
+                { "Kind": "colored", "Colors": ["B"] },
+                { "Kind": "colored", "Colors": ["R"] },
+                { "Kind": "colored", "Colors": ["G"] }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Characteristics": [
+                    { "CharacteristicType": "combatState", "State": "Attacking" }
+                  ]
+                }
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Characteristics": [
+                    { "CharacteristicType": "combatState", "State": "Attacking" }
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Trample",
+                "Effects": [
+                  { "EffectType": "keywordAbility", "Keyword": "Trample" }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": { "Part": "Turn", "Edge": "End" }
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Characteristics": [
+                    { "CharacteristicType": "combatState", "State": "Attacking" }
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Lifelink",
+                "Effects": [
+                  { "EffectType": "lifelink" }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": { "Part": "Turn", "Edge": "End" }
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Characteristics": [
+                    { "CharacteristicType": "combatState", "State": "Attacking" }
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Haste",
+                "Effects": [
+                  { "EffectType": "keywordAbility", "Keyword": "Haste" }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": { "Part": "Turn", "Edge": "End" }
+              }
+            },
+            {
+              "EffectType": "additionalCombatPhase"
+            }
+          ],
+          "Restrictions": ["OnlyDuringCombat"],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "U", "B", "R", "G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

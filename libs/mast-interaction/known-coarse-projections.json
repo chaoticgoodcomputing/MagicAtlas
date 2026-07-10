@@ -290,6 +290,7 @@
     "OnlyAsSorcery": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "OnlyDuringYourTurn": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "OnlyDuringYourUpkeep": "step-scoped timing restriction (CR 602.5); like OnlyDuringYourTurn it does not gate an intra-window loop's firability (a loop confined to the upkeep step can still repeat), so consciously inert for recall \u2014 no flow rule consumes it yet",
+    "OnlyDuringCombat": "phase-scoped timing restriction (CR 506 / CR 602.5, Najeela the Blade-Blossom); like OnlyDuringYourTurn/OnlyDuringYourUpkeep it constrains WHEN the ability can be activated, not what resource flows \u2014 a combat-confined loop (the extra-combat-phase engine) still repeats within its window, so consciously inert for recall \u2014 no flow rule consumes it yet",
     "Other": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet"
   }
 }

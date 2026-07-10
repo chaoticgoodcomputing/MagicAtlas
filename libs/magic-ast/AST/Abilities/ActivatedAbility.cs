@@ -100,6 +100,14 @@ public enum ActivationRestriction
   /// <summary>"Activate only if you control no untapped lands"</summary>
   OnlyIfNoUntappedLands,
 
+  /// <summary>"Activate only during combat." — a phase-scoped timing restriction (CR 602.5:
+  /// "A player can't begin to activate an ability that's prohibited from being activated.").
+  /// The ability may be activated only while a combat phase is in progress (CR 506 — the
+  /// combat phase), regardless of whose turn it is (Najeela, the Blade-Blossom). Narrower than
+  /// <see cref="OnlyDuringYourTurn"/> (a turn-scoped restriction) along the phase axis and
+  /// orthogonal to the player axis.</summary>
+  OnlyDuringCombat,
+
   /// <summary>"Activate only once." — the Exhaust keyword constraint (CR 702.177a:
   /// "'Exhaust — [Cost]: [Effect]' means '[Cost]: [Effect]. Activate only once.'"
   /// Unlike <see cref="OnlyOnceEachTurn"/> (which resets each turn), an ability with
