@@ -7,24 +7,27 @@ using MagicAST.AST.References;
 
 /// <summary>
 /// Recognises the spell-cast-cap static "Each player can't cast more than one
-/// spell each turn." (Eidolon of Rhetoric, Arcane Laboratory). A rules-of-the-game
-/// continuous effect (CR 611.1) that caps cast events (CR 601.2) per player per
-/// turn — NOT a per-spell "can't be cast" restriction. Emits a single
-/// <see cref="StaticAbility"/> carrying one
+/// spell each turn." (Eidolon of Rhetoric, Arcane Laboratory) and its
+/// single-player-scoped variant "You can't cast more than one spell each turn."
+/// (Moderation). CR 601.3a: a player who wants to cast a spell follows the steps
+/// of casting it, and a continuous effect such as this one restricts whether
+/// that's legal (CR 611.1: a continuous effect "affects players or the rules of
+/// the game, for a fixed or indefinite period") — NOT a per-spell "can't be cast"
+/// restriction. Emits a single <see cref="StaticAbility"/> carrying one
 /// <see cref="CantCastMoreThanNSpellsEffect"/>; the cap, scope, and counting
 /// window are structured fields, never free text.
 /// </summary>
 [StaticRule(Priority = 971)]
 public sealed class CantCastMoreThanNSpellsRule : IStaticRule
 {
-  private static readonly Regex _eachPlayerCapPattern = new(
-    @"^\s*Each\s+player\s+can'?t\s+cast\s+more\s+than\s+(?<count>one|two|three|\d+)\s+spell(?:s)?\s+each\s+turn\.?\s*$",
+  private static readonly Regex _capPattern = new(
+    @"^\s*(?<subject>Each\s+player|You)\s+can'?t\s+cast\s+more\s+than\s+(?<count>one|two|three|\d+)\s+spell(?:s)?\s+each\s+turn\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
   {
-    var match = _eachPlayerCapPattern.Match(clause.RawText);
+    var match = _capPattern.Match(clause.RawText);
     if (!match.Success)
     {
       return null;
@@ -36,6 +39,10 @@ public sealed class CantCastMoreThanNSpellsRule : IStaticRule
       return null;
     }
 
+    var player = match.Groups["subject"].Value.Trim().Equals("You", StringComparison.OrdinalIgnoreCase)
+      ? ObjectReference.You()
+      : new ObjectReference { Kind = ObjectReferenceKind.EachPlayer };
+
     return
     [
       new StaticAbility
@@ -44,7 +51,7 @@ public sealed class CantCastMoreThanNSpellsRule : IStaticRule
         [
           new CantCastMoreThanNSpellsEffect
           {
-            Player = new ObjectReference { Kind = ObjectReferenceKind.EachPlayer },
+            Player = player,
             MaxPerPeriod = count.Value,
             Period = SpellCastLimitPeriod.EachTurn,
           },
