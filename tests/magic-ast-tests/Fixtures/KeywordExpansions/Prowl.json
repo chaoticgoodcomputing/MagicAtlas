@@ -1,0 +1,33 @@
+{
+  "Keyword": "Prowl",
+  "Parameter": "{3}{U}",
+  "Expected": {
+    "Kind": "static",
+    "KeywordSource": "Prowl",
+    "Effects": [
+      {
+        "EffectType": "alternativeCast",
+        "FromZone": "Hand",
+        "Cost": {
+          "CostType": "mana",
+          "Symbols": [
+            {
+              "Kind": "generic",
+              "GenericAmount": 3
+            },
+            {
+              "Kind": "colored",
+              "Colors": [
+                "U"
+              ]
+            }
+          ]
+        },
+        "Condition": {
+          "ConditionType": "other",
+          "Text": "a player was dealt combat damage this turn by a source that, at the time it dealt that damage, was under your control and had any of the creature types of this spell"
+        }
+      }
+    ]
+  }
+}

@@ -433,6 +433,13 @@ public enum KeywordAbility
   /// <summary>Prowess (CR 702).</summary>
   Prowess,
 
+  /// <summary>
+  /// Prowl (CR 702.76a). Parameterized — the alternative prowl cost is carried by the
+  /// expanded <see cref="MagicAST.AST.Effects.CardFlow.AlternativeCastEffect"/>, not
+  /// this identity.
+  /// </summary>
+  Prowl,
+
   /// <summary>Rampage (CR 702.23).</summary>
   Rampage,
 

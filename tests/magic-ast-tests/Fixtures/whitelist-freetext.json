@@ -362,6 +362,18 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
+      "card": "KnowledgeExploitation",
+      "sink": "OtherCondition",
+      "tag": "debt",
+      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — Prowl's CR 702.76a intervening-if ('a player was dealt combat damage this turn by a source ... that ... had any of the creature types of this spell') is the same reference-not-resolution residual as its Freerunning/Spectacle/Surge alt-cast-condition siblings"
+    },
+    {
+      "card": "KnowledgeExploitation",
+      "sink": "UnstructuredEffect",
+      "tag": "debt",
+      "reason": "L1 shell fallback (fidelity ladder) — the non-target second ability ('Search target opponent's library for an instant or sorcery card. You may cast that card without paying its mana cost. Then that player shuffles.') is out of scope for the Prowl-keyword TDD slice; mirrors the parser's current StaticAbilityParser/spell L1 shell, not freshly authored"
+    },
+    {
       "card": "KodamaoftheEastTree",
       "sink": "OtherCondition",
       "tag": "debt",
