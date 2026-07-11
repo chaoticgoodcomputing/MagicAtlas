@@ -51,6 +51,15 @@
         "parallel": false
       }
     },
+    "recall-report": {
+      "//": "Regenerate the wide reconstruction-recall measurement: the CardAtlas flow (D1-D4 over the parse-ready CSB combo-card union) emits Data/_08_Reporting/extended-recall-report.json — reconstruction recall over EVERY projection-ready combo (green/amber/missed + recallAtGreen + popularity-weighted recall), the number that actually moves per batch (the gold-33 bench is the regression GATE; this is the product SCOREBOARD). Feed it to 'tools/recall-log.sh <label>' to append the per-batch snapshot + delta to the tracked docs/judgments/recall-log.jsonl. Needs the live corpus (main-only); measurement, never a gate.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run -- --flow CardAtlas"],
+        "cwd": "tests/magic-ast-tests",
+        "parallel": false
+      }
+    },
     "seed-ontology": {
       "//": "Regenerate the MTG type ontology from the upstream mtg-rules project and copy it into this project's Curated input layer. Preserves the explicit 'copied from mtg-rules' provenance; the raw CR text stays in mtg-rules (gitignored). Run after mtg-rules' ontology rules change.",
       "executor": "nx:run-commands",
