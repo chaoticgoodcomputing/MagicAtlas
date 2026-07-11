@@ -29,6 +29,19 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/interaction-triage-report.json")
       .Build());
 
+  /// <summary>
+  /// The combo-anchored pick surface: unparsed hub cards ranked by the combo-popularity value each
+  /// gates, with sole-blocker counts, co-star neighborhood, and a block-reason split
+  /// (parser-family vs the empty-oracle-text DATA gap). The demand-side complement to
+  /// <see cref="InteractionTriageReport"/>'s allComboBlockingCards; a pick surface for the
+  /// mast-tdd-loop, never a gate.
+  /// </summary>
+  public IItem<ComboAnchorReport> ComboAnchorReport =>
+    CreateItem(() => Item.Of<ComboAnchorReport>("ComboAnchorReport")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/combo-anchor-report.json")
+      .Build());
+
   /// <summary>The abstract label-level interaction graph (the known-families grammar, flattened) — left viz subplot.</summary>
   public IItem<IEnumerable<LabelEdgeRow>> LabelEdges =>
     CreateItem(() => Item.Of<IEnumerable<LabelEdgeRow>>("LabelEdges")
