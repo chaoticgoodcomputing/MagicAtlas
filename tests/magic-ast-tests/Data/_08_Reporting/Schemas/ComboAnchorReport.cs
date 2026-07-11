@@ -16,9 +16,9 @@ namespace MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
 /// <list type="bullet">
 ///   <item><see cref="ComboAnchor.SoleBlockerCount"/> — combos where this hub is the ONLY unparsed
 ///   card, i.e. parsing it alone makes them reconstructable (modulo projection/precision).</item>
-///   <item><see cref="ComboAnchor.BlockReason"/> — splits <c>empty-oracle-text</c> (the DFC/MDFC/Room
-///   ingest gap — a DATA-layer fix, not a parser rule) from <c>parser-family</c> and
-///   <c>missing-from-corpus</c>, so an infrastructure fix wearing a card's name is visible.</item>
+///   <item><see cref="ComboAnchor.BlockReason"/> — splits <c>parser-family</c> (dispatchable) from
+///   <c>missing-from-corpus</c> (out of scope) and <c>empty-oracle-text</c> (genuinely textless AFTER
+///   composing double-faced <c>CardFaces</c> — ≈none in scope, since DFCs parse from their faces).</item>
 ///   <item><see cref="ComboAnchor.CoStars"/> — the neighborhood: co-stars flagged
 ///   <c>alsoUnparsed</c> (close together) vs already-parsing (light up free once the hub lands).</item>
 ///   <item><see cref="ComboAnchor.TopPayoffs"/> — what the blocked combos actually do.</item>
@@ -50,7 +50,7 @@ public partial record ComboAnchorReport
   [SerializedLabel("parserFamilyMass")]
   public long ParserFamilyMass { get; init; }
 
-  /// <summary>Hubs blocked by empty <c>OracleText</c> (DFC/MDFC/Room ingest gap) — a DATA-layer fix, not a parser rule.</summary>
+  /// <summary>Hubs with no rules text even after composing double-faced <c>CardFaces</c> — genuinely textless (≈none in scope).</summary>
   [SerializedLabel("emptyTextHubs")]
   public int EmptyTextHubs { get; init; }
 

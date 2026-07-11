@@ -92,11 +92,21 @@ public static class RankComboAnchorsStep
         }
       }
 
+      // Compose face text the way the parse pipeline does (ParseCorpusStep / CardAtlasShared `\n\n`
+      // idiom) before judging emptiness. A double-faced card carries its rules text in CardFaces with a
+      // null top-level OracleText, and it PARSES from the composed faces (Eirdu → 6/8 abilities). So
+      // "empty-oracle-text" must mean empty AFTER composing — otherwise every DFC parser-family is
+      // mislabeled a data gap and wrongly skipped. Post-compose, empty-oracle-text collapses to
+      // genuinely textless cards (≈none in commander-legal scope), and DFCs fall through to parser-family.
       string ReasonFor(string card)
       {
         if (!inCorpus.Contains(card))
           return "missing-from-corpus";
-        return string.IsNullOrWhiteSpace(Text(card)?.OracleText) ? "empty-oracle-text" : "parser-family";
+        var dto = Text(card);
+        var text = dto?.OracleText;
+        if (string.IsNullOrWhiteSpace(text) && dto?.CardFaces is { Count: > 0 })
+          text = string.Join("\n\n", dto.CardFaces.Select(f => f.OracleText ?? "").Where(t => t.Length > 0));
+        return string.IsNullOrWhiteSpace(text) ? "empty-oracle-text" : "parser-family";
       }
 
       var anchors = hubs
