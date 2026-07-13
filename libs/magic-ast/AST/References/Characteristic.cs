@@ -55,6 +55,8 @@ public abstract record Characteristic
       "attacking alone" => new CombatStateCharacteristic { State = CombatState.AttackingAlone },
       "tapped" => new TappedStateCharacteristic { Tapped = true },
       "untapped" => new TappedStateCharacteristic { Tapped = false },
+      "equipped" => new EquippedStateCharacteristic { Equipped = true },
+      "unequipped" => new EquippedStateCharacteristic { Equipped = false },
       "with a +1/+1 counter" or "with a +1/+1 counter on it" => new CounterCharacteristic
       {
         CounterType = "+1/+1",
@@ -129,6 +131,36 @@ public sealed record TappedStateCharacteristic : Characteristic
 {
   /// <summary><c>true</c> for "tapped", <c>false</c> for "untapped".</summary>
   public required bool Tapped { get; init; }
+}
+
+/// <summary>
+/// An equipped/unequipped state constraint — "Equipped creatures you control have
+/// flying and haste" (Dalakos, Crafter of Wonders). The attachment-state predicate
+/// the <see cref="Characteristic"/> doc calls out as a first-class carve-out from
+/// the <see cref="OtherCharacteristic"/> residual, sibling to
+/// <see cref="TappedStateCharacteristic"/> (same mechanism: a bool state axis on
+/// the filter, not a back-reference to a specific attaching object).
+///
+/// <para>
+/// CR 702.6 (Equip, verbatim per <see cref="MagicAST.AST.Abilities.ObjectIsEquippedCondition"/>'s
+/// own citation): "an Equipment can become attached to a creature; a creature with
+/// an Equipment attached to it is 'equipped'." Distinct from
+/// <see cref="ObjectFilter.IsEquipped"/> (the Equipment-source's OWN back-reference
+/// to the specific permanent IT is attached to, e.g. "whenever equipped creature
+/// attacks" printed on an Equipment card): this characteristic instead scopes an
+/// unrelated permanent's "Each"-quantified anthem to whichever creatures currently
+/// carry ANY Equipment, with no back-reference to a particular attaching object —
+/// Dalakos is a creature, not an Equipment, so it has no "own" equipped creature to
+/// back-reference. Describes what the oracle text says (the object is equipped, or
+/// not); the actual attachment state is engine territory (reference-not-resolution,
+/// ADR 0004).
+/// </para>
+/// </summary>
+[CharacteristicKind("equipped")]
+public sealed record EquippedStateCharacteristic : Characteristic
+{
+  /// <summary><c>true</c> for "equipped", <c>false</c> for the (rare) "unequipped".</summary>
+  public required bool Equipped { get; init; }
 }
 
 /// <summary>

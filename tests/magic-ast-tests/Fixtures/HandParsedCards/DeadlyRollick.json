@@ -1,0 +1,109 @@
+{
+  "Input": {
+    "Name": "Deadly Rollick",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Instant",
+    "OracleText": "If you control a commander, you may cast this spell without paying its mana cost.\nExile target creature.",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
+    "Keywords": [],
+    "Id": "0e13f735-54fa-42b6-aea4-ced33811d7d4",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Deadly Rollick",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "If you control a commander, you may cast this spell without paying its mana cost.\nExile target creature.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "exile",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "alternativeCosts",
+        "Costs": [
+          {
+            "Cost": {
+              "CostType": "mana",
+              "Symbols": []
+            },
+            "Condition": {
+              "ConditionType": "count",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Supertypes": [
+                  "Commander"
+                ],
+                "Controller": "You"
+              },
+              "Count": {
+                "Operator": "GreaterThanOrEqual",
+                "Value": 1
+              }
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 81
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

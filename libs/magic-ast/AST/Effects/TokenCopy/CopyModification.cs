@@ -115,3 +115,79 @@ public sealed record TriggeredAbilityAdder : CopyModification
   /// </summary>
   public required TriggeredAbility Ability { get; init; }
 }
+
+/// <summary>
+/// "except it enters with an additional [count] [counter type] counter(s) on it"
+/// — adds counters to the copy as part of a copy-on-entry replacement (CR 707.2
+/// copiable values; CR 614.12 covers the enters-the-battlefield-as-a-copy
+/// replacement effect this modification rides on). Distinct from
+/// <see cref="MagicAST.AST.Effects.ZoneChange.CounterPlacement"/> (a zone-change
+/// counter attachment on exile/move effects) and from
+/// <see cref="MagicAST.AST.Effects.Counter.PutCountersEffect"/> (a standalone
+/// put-counters effect): this node is scoped to an "except" clause on
+/// <see cref="BecomesCopyEffect"/>/<see cref="MagicAST.AST.Effects.TokenCopy.CopyEffect"/>,
+/// recording the counter kind and count the copy gains on top of whatever it would
+/// otherwise enter with. Spark Double: "it enters with an additional +1/+1 counter
+/// on it if it's a creature" pairs this node with <see cref="ConditionalModification"/>
+/// to gate it on the copy's resulting card type.
+/// </summary>
+[CopyModificationKind("counterAdder")]
+public sealed record CounterAdder : CopyModification
+{
+  /// <summary>
+  /// The kind of counter added (lowercase: "+1/+1", "loyalty", etc.).
+  /// </summary>
+  public required string CounterType { get; init; }
+
+  /// <summary>
+  /// How many additional counters are added.
+  /// </summary>
+  public required Quantity Count { get; init; }
+}
+
+/// <summary>
+/// "except [modification] if [condition]" — gates another <see cref="CopyModification"/>
+/// on a predicate about the copy (CR 707.2 copiable values, applied conditionally;
+/// CR 614.12 replacement effect). Spark Double's except-clause names two counter
+/// additions that apply only depending on what the copy turns out to be: "it enters
+/// with an additional +1/+1 counter on it if it's a creature, [and] an additional
+/// loyalty counter on it if it's a planeswalker" → two <see cref="ConditionalModification"/>s,
+/// each gating a <see cref="CounterAdder"/> on an <see cref="ObjectHasCardTypeCondition"/>
+/// naming the copy's resulting type (Subject: Self — the entering permanent checking
+/// its own post-copy type). The composable analogue of
+/// <see cref="MagicAST.AST.Effects.Core.ConditionalEffect"/> for the modification axis
+/// rather than the effect axis: WHICH modification applies is separate from WHETHER it
+/// applies, so <see cref="Condition"/> and <see cref="Modification"/> are distinct fields
+/// rather than baking the gate into a modification-specific discriminator.
+/// </summary>
+[CopyModificationKind("conditionalModification")]
+public sealed record ConditionalModification : CopyModification
+{
+  /// <summary>The condition that must be true for <see cref="Modification"/> to apply.</summary>
+  public required Condition Condition { get; init; }
+
+  /// <summary>The modification applied when <see cref="Condition"/> is true.</summary>
+  public required CopyModification Modification { get; init; }
+}
+
+/// <summary>
+/// "except it has [activated ability]" — adds a fully-structured ACTIVATED ability
+/// to the copy token (CR 707.2 copiable values). The activated analogue of
+/// <see cref="TriggeredAbilityAdder"/>: used when the "except" clause is a quoted
+/// activated ability such as <c>"{2}, {T}, Sacrifice this token: You gain 3 life."</c>
+/// (Brenard, Ginger Sculptor) — a full "[Cost]: [Effect]" ability (CR 602.1) whose
+/// cost list and effect are rules-meaningful and therefore cannot be held as free
+/// text in <see cref="AbilityAdder.AbilityText"/>.
+/// Rule CR 707.2: "when copying an object, the copy acquires the copiable values
+/// of the original object's characteristics … abilities listed in the definition
+/// of that object" — an "except it has [ability]" clause overrides the printed
+/// abilities the token would otherwise inherit.
+/// </summary>
+[CopyModificationKind("activatedAbilityAdder")]
+public sealed record ActivatedAbilityAdder : CopyModification
+{
+  /// <summary>
+  /// The structured activated ability added to the copy token.
+  /// </summary>
+  public required ActivatedAbility Ability { get; init; }
+}

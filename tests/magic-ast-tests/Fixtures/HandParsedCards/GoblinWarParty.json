@@ -1,0 +1,201 @@
+{
+  "Input": {
+    "Name": "Goblin War Party",
+    "ManaCost": "{3}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Choose one —\n• Create three 1/1 red Goblin creature tokens.\n• Creatures you control get +1/+1 and gain haste until end of turn.\nEntwine {2}{R} (Choose both if you pay the entwine cost.)",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Entwine"
+    ],
+    "Id": "2b4155d1-0a87-4d2c-a1a0-06b2553eaae4",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Goblin War Party",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Choose one —\n• Create three 1/1 red Goblin creature tokens.\n• Creatures you control get +1/+1 and gain haste until end of turn.\nEntwine {2}{R} (Choose both if you pay the entwine cost.)",
+      "Abilities": [
+        {
+          "Kind": "modal",
+          "ModeSelection": {
+            "Minimum": 1,
+            "Maximum": 1
+          },
+          "Modes": [
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "createToken",
+                    "Player": {
+                      "Kind": "You"
+                    },
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 3
+                    },
+                    "Token": {
+                      "Power": "1",
+                      "Toughness": "1",
+                      "Colors": [
+                        "R"
+                      ],
+                      "Types": [
+                        "creature"
+                      ],
+                      "Subtypes": [
+                        "Goblin"
+                      ],
+                      "IsCopy": false
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Ability": {
+                "Kind": "spell",
+                "Effects": [
+                  {
+                    "EffectType": "composite",
+                    "Effects": [
+                      {
+                        "EffectType": "modifyPT",
+                        "Target": {
+                          "Kind": "Each",
+                          "Filter": {
+                            "CardTypes": [
+                              "creature"
+                            ],
+                            "Controller": "You"
+                          }
+                        },
+                        "PowerModifier": {
+                          "QuantityType": "literal",
+                          "Value": 1
+                        },
+                        "ToughnessModifier": {
+                          "QuantityType": "literal",
+                          "Value": 1
+                        },
+                        "Duration": {
+                          "DurationType": "untilTime",
+                          "Until": {
+                            "Part": "Turn",
+                            "Edge": "End"
+                          }
+                        }
+                      },
+                      {
+                        "EffectType": "gainAbility",
+                        "Target": {
+                          "Kind": "Each",
+                          "Filter": {
+                            "CardTypes": [
+                              "creature"
+                            ],
+                            "Controller": "You"
+                          }
+                        },
+                        "GainedAbility": {
+                          "Kind": "static",
+                          "KeywordSource": "Haste",
+                          "Effects": [
+                            {
+                              "EffectType": "keywordAbility",
+                              "Keyword": "Haste"
+                            }
+                          ]
+                        },
+                        "Duration": {
+                          "DurationType": "untilTime",
+                          "Until": {
+                            "Part": "Turn",
+                            "Edge": "End"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "AllowDuplicates": false
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Entwine",
+          "Effects": [
+            {
+              "EffectType": "additionalCastCost",
+              "AdditionalCost": {
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    },
+                    {
+                      "Kind": "colored",
+                      "Colors": [
+                        "R"
+                      ]
+                    }
+                  ]
+                },
+                "IsOptional": true,
+                "Repeatable": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
+    ]
+  }
+}

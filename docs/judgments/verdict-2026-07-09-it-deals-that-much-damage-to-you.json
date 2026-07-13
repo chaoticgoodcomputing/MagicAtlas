@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TMP/JackalPup.json",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 603.2", "CR 109.5"],
+      "reason": "OracleText byte-identical to oracle-cards.json; trigger CreatureDealtDamage + Filter{creature, IsSelf:true} models 'whenever this creature is dealt damage'; effect dealDamage Amount=derived(DamageDealt) Target=You Source=Self models 'it deals that much damage to you'; fully structured, no unparsed/free-text, no lossy drop"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ItDealsThatMuchDamageToYouRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 603.2", "CR 109.5"],
+      "reason": "emits DealDamageEffect{Amount=derived DamageDealt, Target=You, Source=Self}; cited CR 120.1/603.2/109.5 exist and match ('you' = controller, source of damage); structured, no free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SelfCreatureDealtDamageConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 603.2"],
+      "reason": "emits TriggerCondition{Event=CreatureDealtDamage, Filter=creature+IsSelf:true}; Priority 600 > generic 500 correctly gives 'this creature' the self-restricted reading; cited rules exist and match"
+    },
+    {
+      "target": "mast/it-deals-that-much-damage-to-you#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (CreatureDealtDamage event, DamageDealt derived-kind, IsSelf restriction, You/Self references all pre-exist at baseSha with existing PortWalk projection coverage); no new projection decision required"
+    }
+  ]
+}

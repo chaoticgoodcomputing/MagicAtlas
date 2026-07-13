@@ -1,0 +1,80 @@
+{
+  "Input": {
+    "Name": "Thran Vigil",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Whenever one or more artifact and/or creature cards leave your graveyard during your turn, put a +1/+1 counter on target creature you control.",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": [],
+    "Id": "3faed400-0712-4fc1-b710-144db40a5e11",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Thran Vigil",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "Whenever one or more artifact and/or creature cards leave your graveyard during your turn, put a +1/+1 counter on target creature you control.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "LeavesGraveyard",
+            "Filter": {
+              "CardTypes": ["artifact", "creature"],
+              "Controller": "You"
+            },
+            "MinimumCount": 1,
+            "DuringYourTurn": true
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "Input": {
+    "Name": "Mine Bearer",
+    "ManaCost": "{2}{W}",
+    "TypeLine": "Creature — Human Soldier",
+    "OracleText": "{T}, Sacrifice this creature: Destroy target attacking creature.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Mine Bearer",
+    "TypeLine": {
+      "Raw": "Creature — Human Soldier",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "{T}, Sacrifice this creature: Destroy target attacking creature.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"],
+                "IsSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "combatState",
+                      "State": "Attacking"
+                    }
+                  ]
+                }
+              },
+              "CantBeRegenerated": false
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

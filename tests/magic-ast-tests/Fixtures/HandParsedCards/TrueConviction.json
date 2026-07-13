@@ -1,0 +1,123 @@
+{
+  "Input": {
+    "Name": "True Conviction",
+    "ManaCost": "{3}{W}{W}{W}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Creatures you control have double strike and lifelink.",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [],
+    "Id": "9e5dc58b-f486-4b9f-9138-33efa31a05e4",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "True Conviction",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": [
+        "Enchantment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Creatures you control have double strike and lifelink.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Double strike",
+                "Effects": [
+                  {
+                    "EffectType": "combatDamageTiming",
+                    "Timing": "Both"
+                  }
+                ]
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Lifelink",
+                "Effects": [
+                  {
+                    "EffectType": "lifelink"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}

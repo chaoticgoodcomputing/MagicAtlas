@@ -74,11 +74,31 @@ public enum DerivedKind
   Toughness,
   ManaValue,
   LifeTotal,
+  /// <summary>
+  /// A player's STARTING life total — the fixed value set at the beginning of the game
+  /// (CR 119.1: "Each player begins the game with a starting life total of 20." — 40 in
+  /// Commander per CR 903.7), as distinct from <see cref="LifeTotal"/> (the player's
+  /// CURRENT life total, which changes as the game progresses). Bane, Lord of Darkness:
+  /// "your life total is less than or equal to half your starting life total" compares
+  /// the current total against a fraction of this fixed reference value.
+  /// </summary>
+  StartingLifeTotal,
   CardsInHand,
   CardsInGraveyard,
   /// <summary>The number of cards in a player's library. CR 401.1 (the library zone).</summary>
   CardsInLibrary,
   DamageDealt,
+
+  /// <summary>
+  /// The amount of damage prevented by a preceding prevention effect — "the damage
+  /// prevented this way" in "You gain life equal to the damage prevented this way."
+  /// (Intervention Pact, Reverse Damage, Awe Strike, Hallow). Reference-not-resolution
+  /// (ADR 0004): MAST records the textual link to the damage a prior
+  /// <see cref="MagicAST.AST.Effects.Damage.PreventDamageEffect"/> prevented, not the
+  /// runtime value. Distinct from <see cref="DamageDealt"/> (damage that WAS dealt) —
+  /// prevented damage is damage that would have been dealt but was stopped (CR 615).
+  /// </summary>
+  DamagePrevented,
   LifeGained,
   LifeLost,
   /// <summary>
@@ -294,6 +314,19 @@ public sealed record CalculatedQuantity : Quantity
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Quantity? BaseQuantity { get; init; }
+
+  /// <summary>
+  /// The other quantity operand for a binary operation whose right-hand side is
+  /// itself a full <see cref="Quantity"/> rather than the scalar <see cref="Operand"/> —
+  /// e.g. "3 minus the number of cards in their hand" (Rackling): a
+  /// <see cref="LiteralQuantity"/> 3 as <see cref="BaseQuantity"/>, <c>Operation="subtract"</c>,
+  /// and a <see cref="CountQuantity"/> here. Optional; used when the second operand is a
+  /// game-state count/derivation the scalar <see cref="Operand"/> cannot express (that field
+  /// only holds an integer, as in "the base count × N"). Mutually exclusive with
+  /// <see cref="Operand"/> and <see cref="Expression"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Quantity? OperandQuantity { get; init; }
 
   /// <summary>
   /// The operation: half, double, triple, etc.

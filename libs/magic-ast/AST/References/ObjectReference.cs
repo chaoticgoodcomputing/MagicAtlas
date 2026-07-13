@@ -95,6 +95,21 @@ public enum ObjectReferenceKind
   /// <summary>"the defending player"</summary>
   DefendingPlayer,
 
+  /// <summary>
+  /// "the player or planeswalker that creature is attacking" — the single defending object
+  /// (a player OR a planeswalker) that the trigger's attacking creature has been declared
+  /// attacking (CR 508.1b: "the active player announces which player, planeswalker, or battle
+  /// each of the chosen creatures is attacking"). Distinct from <see cref="DefendingPlayer"/>:
+  /// that names the defending <em>player</em> (the person, or the controller of an attacked
+  /// planeswalker/battle — CR 508.1); this names the attacked object itself, which may be the
+  /// planeswalker rather than any player. NOT a <see cref="Choice"/> — the recipient is fixed by
+  /// the attack declaration, not chosen at resolution — so the "or" is the two possible kinds of
+  /// the one determined object, not a chooser's alternatives (Cavalcade of Calamity). The "that
+  /// creature" back-reference is the trigger's attacking creature (mirrors <see cref="ThatCreature"/>);
+  /// a linked reference (ADR 0004 reference-not-resolution), not a threaded binding.
+  /// </summary>
+  AttackedPlayerOrPlaneswalker,
+
   /// <summary>"enchanted creature", "equipped creature"</summary>
   EnchantedOrEquipped,
 
@@ -134,4 +149,7 @@ public enum ObjectReferenceKind
 
   /// <summary>"the encoded creature" — the creature a ciphered spell is encoded on (CR 702.99); its combat damage triggers casting a copy. Paired with <see cref="Effects.ZoneChange.ExileEffect.EncodedOn"/> on the production side.</summary>
   Encoded,
+
+  /// <summary>"that permanent" — the permanent named by a becomes-unattached trigger condition (CR 701.3d: "becoming unattached [from that object or player]"), e.g. "Whenever this Equipment becomes unattached from a permanent, sacrifice that permanent" (Stitcher's Graft). Permanent analogue of <see cref="ThatCreature"/>/<see cref="ThatPlayer"/> — refers back to the object the trigger's <see cref="MagicAST.AST.Triggers.TriggerCondition"/> Filter identified (the object detached FROM), not the ability's own source (<see cref="Self"/>). Kept distinct from <see cref="ThatCreature"/> because the oracle text itself types the detached-from object generically as a permanent, not narrowed to creature (CR 301.5c: "An Equipment that equips an illegal or nonexistent permanent becomes unattached from that permanent but remains on the battlefield").</summary>
+  ThatPermanent,
 }

@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Bill Potts",
     "ManaCost": "{3}{R}",
-    "TypeLine": "Legendary Creature — Human",
+    "TypeLine": "Legendary Creature \u2014 Human",
     "OracleText": "Whenever you cast an instant or sorcery spell that targets only Bill Potts or activate an ability that targets only Bill Potts, copy that spell or ability. You may choose new targets for the copy. This ability triggers only once each turn.\nDoctor's companion (You can have two commanders if the other is the Doctor.)",
     "Power": "2",
     "Toughness": "4",
@@ -19,7 +19,7 @@
   "Output": {
     "Name": "Bill Potts",
     "TypeLine": {
-      "Raw": "Legendary Creature — Human",
+      "Raw": "Legendary Creature \u2014 Human",
       "Supertypes": [
         "Legendary"
       ],
@@ -34,39 +34,45 @@
       "RawText": "Whenever you cast an instant or sorcery spell that targets only Bill Potts or activate an ability that targets only Bill Potts, copy that spell or ability. You may choose new targets for the copy. This ability triggers only once each turn.\nDoctor's companion (You can have two commanders if the other is the Doctor.)",
       "Abilities": [
         {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 0,
-            "Length": 239
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": [
+                "spell",
+                "instant",
+                "sorcery"
+              ],
+              "Controller": "You"
+            }
           },
-          "RawText": "Whenever you cast an instant or sorcery spell that targets only Bill Potts or activate an ability that targets only Bill Potts, copy that spell or ability. You may choose new targets for the copy. This ability triggers only once each turn.",
-          "Diagnostics": [
+          "Effects": [
             {
-              "Severity": "error",
-              "Message": "Triggered ability parser not yet implemented",
-              "Location": {
+              "EffectType": "unstructured",
+              "Text": "copy that spell or ability. You may choose new targets for the copy.",
+              "SourceSpan": {
                 "Start": 0,
                 "Length": 239
-              },
-              "RawText": "Whenever you cast an instant or sorcery spell that targets only Bill Potts or activate an ability that targets only Bill Potts, copy that spell or ability. You may choose new targets for the copy. This ability triggers only once each turn.",
-              "Pattern": "ComplexTargeting",
-              "LastAttemptedRule": "TriggeredAbilityParser.Parse",
-              "FailurePosition": 0
+              }
             }
+          ],
+          "Restrictions": [
+            "OnlyOnceEachTurn"
           ]
         },
         {
           "Kind": "static",
-          "KeywordSource": "Doctor's companion",
-          "Reminder": {
-            "Text": "(You can have two commanders if the other is the Doctor.)"
-          },
           "Effects": [
             {
               "EffectType": "keywordAbility",
               "Keyword": "Doctor's companion"
             }
-          ]
+          ],
+          "KeywordSource": "Doctor's companion",
+          "Reminder": {
+            "Text": "(You can have two commanders if the other is the Doctor.)"
+          }
         }
       ]
     },
@@ -86,7 +92,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -104,13 +111,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         }
       }
     ]

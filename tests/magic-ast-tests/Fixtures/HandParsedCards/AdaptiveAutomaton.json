@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "Adaptive Automaton",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact Creature — Construct",
+    "OracleText": "As this creature enters, choose a creature type.\nThis creature is the chosen type in addition to its other types.\nOther creatures you control of the chosen type get +1/+1.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "e35e614c-51a9-4d5c-b7fa-1a0a87108785",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Adaptive Automaton",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Construct",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Construct"
+      ]
+    },
+    "Oracle": {
+      "RawText": "As this creature enters, choose a creature type.\nThis creature is the chosen type in addition to its other types.\nOther creatures you control of the chosen type get +1/+1.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "chooseCreatureType"
+            }
+          ],
+          "When": "asThisEnters"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "Self"
+              },
+              "ChosenSubtypeReference": "CreatureType"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You",
+                  "ChosenCharacteristic": "CreatureType",
+                  "ExcludeSelf": true
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

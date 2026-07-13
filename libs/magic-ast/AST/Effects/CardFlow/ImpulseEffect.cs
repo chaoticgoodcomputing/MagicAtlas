@@ -42,6 +42,26 @@ public sealed record ImpulseEffect : ContinuousEffect
   /// </summary>
   public required ImpulseRestDestination RestDestination { get; init; }
 
+  /// <summary>
+  /// Restricts <em>which</em> of the exiled cards may be played/cast during the
+  /// <see cref="ContinuousEffect.Duration"/> window, for the
+  /// <see cref="ImpulseRestDestination.RemainExiled"/> shape — "you may cast an
+  /// <b>instant or sorcery</b> spell from among those exiled cards" (Chandra,
+  /// Hope's Beacon's first +1: <c>CardTypes = ["instant","sorcery"]</c>). A
+  /// structured <see cref="ObjectFilter"/>, NOT a free-text note. Null for the
+  /// un-restricted "you may play those cards" family (Jeska's Will, The Legend of
+  /// Roku), where every exiled card is playable.
+  ///
+  /// <para>
+  /// CR 601.3e: an effect may grant permission to cast a card from a zone other
+  /// than the hand, with any stated type restriction. Reference-not-resolution
+  /// (ADR 0004): MAST records which exiled cards qualify; the engine enforces the
+  /// permission at cast time.
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public MagicAST.AST.References.ObjectFilter? PlayableFilter { get; init; }
+
 }
 
 /// <summary>

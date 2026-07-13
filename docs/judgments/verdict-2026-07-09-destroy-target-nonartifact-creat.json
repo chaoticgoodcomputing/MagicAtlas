@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FUT/MagusOfTheAbyss.json",
+      "verdict": "FAIL",
+      "citations": ["CR 109.5", "CR 500 (turn structure)"],
+      "reason": "trigger drops the 'each player's' scope (GameTime.Whose absent) though the card is 'at the beginning of each player's upkeep'; this lossy drop also leaves both ThatPlayer back-references (Controller + Chooser) with no antecedent. Sibling Iron Maiden ('each opponent's upkeep ... that player') sets Whose:Opponent + ThatPlayer; Aboroth/ElvishFarmer set Whose:You"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/ZoneChange/DestroyEffect.cs#Chooser",
+      "verdict": "PASS",
+      "citations": ["CR 115.1", "CR 601.2c", "CR 109.5"],
+      "reason": "nullable Chooser records the 'of their choice' reassignment of target selection away from the ability controller; JsonIgnore-when-null keeps existing golds byte-stable; cited rules exist and match the modeling"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/DestroyTargetNonartifactCreatureThatPlayerControlsRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.8a", "CR 701.19", "CR 109.5", "CR 110.4", "CR 601.2c"],
+      "reason": "anchored regex emits the correct effect shape (creature + ExcludedCardTypes:[artifact] + Controller:ThatPlayer + Chooser:ThatPlayer + CantBeRegenerated); all cited CR rules exist and are non-contradictory; rule emits only the effect, not the trigger (so it is not the source of the missing Whose)"
+    },
+    {
+      "target": "mast/destroy-target-nonartifact-creat#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new PortGraph-relevant discriminator: DestroyEffect already projects, the added Chooser is inert metadata for flow reachability (who selects the target does not alter ports/edges), and ThatPlayer is a reused enum value; no new PortWalkProjection or known-coarse-projections entry required, existing projection is sensible"
+    }
+  ]
+}

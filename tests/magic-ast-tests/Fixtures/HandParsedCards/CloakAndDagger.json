@@ -1,0 +1,108 @@
+{
+  "Input": {
+    "Name": "Cloak and Dagger",
+    "ManaCost": "{2}",
+    "TypeLine": "Kindred Artifact — Rogue Equipment",
+    "OracleText": "Equipped creature gets +2/+0 and has shroud. (It can't be the target of spells or abilities.)\nWhenever a Rogue creature enters, you may attach this Equipment to it.\nEquip {3}",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": ["Equip"],
+    "Id": "38bb3e3c-1a7d-4bc4-b69d-6a8e9f1b3fe7",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Cloak and Dagger",
+    "TypeLine": {
+      "Raw": "Kindred Artifact — Rogue Equipment",
+      "Types": ["Kindred", "Artifact"],
+      "Subtypes": ["Rogue", "Equipment"]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature gets +2/+0 and has shroud. (It can't be the target of spells or abilities.)\nWhenever a Rogue creature enters, you may attach this Equipment to it.\nEquip {3}",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "modifyPT",
+                  "Target": { "Kind": "EnchantedOrEquipped" },
+                  "PowerModifier": { "QuantityType": "literal", "Value": 2 },
+                  "ToughnessModifier": { "QuantityType": "literal", "Value": 0 }
+                },
+                {
+                  "EffectType": "gainAbility",
+                  "Target": { "Kind": "EnchantedOrEquipped" },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "Effects": [
+                      { "EffectType": "keywordAbility", "Keyword": "Shroud" }
+                    ],
+                    "KeywordSource": "Shroud"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Subtypes": ["Rogue"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "attach",
+                "Target": { "Kind": "It" }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [{ "Kind": "generic", "GenericAmount": 3 }]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Restrictions": ["OnlyAsSorcery"],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [{ "Kind": "generic", "GenericAmount": 2 }],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      { "Kind": "colors", "Colors": [] },
+      { "Kind": "colorIdentity", "ColorIdentity": [] }
+    ]
+  }
+}

@@ -288,6 +288,32 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     var effects = ParseEffects(effectPart, trigger);
     if (effects == null || effects.Count == 0)
     {
+      // L1 shell fallback (fidelity ladder). The trigger parsed but its effect
+      // interior did not. Rather than collapse the WHOLE ability to an
+      // UnparsedAbility (fidelity L0 — a hole that discards the parsed trigger),
+      // land the real triggered shell with the deferred interior carried as an
+      // UnstructuredEffect residual (fidelity L1): the parsed trigger stays (and
+      // gives the interaction graph its consume-side ports), the effect text is
+      // preserved verbatim and accounted as residual debt — zero silent loss.
+      // Only when there is genuine effect text to hold; an empty interior is a
+      // true failure and stays L0 (return null).
+      if (!string.IsNullOrWhiteSpace(effectPart))
+      {
+        return new TriggeredAbility
+        {
+          Trigger = trigger,
+          AdditionalTrigger = additionalTrigger,
+          AdditionalTriggers = additionalTriggers,
+          InterveningIf = interveningIf,
+          Effects = new List<Effect>
+          {
+            new UnstructuredEffect { Text = effectPart, SourceSpan = clause.SourceSpan },
+          },
+          Reminder = reminder,
+          AbilityWord = abilityWord,
+          Restrictions = triggeredRestrictions,
+        };
+      }
       return null;
     }
 
@@ -415,6 +441,23 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     if (onceEachTurn.Success)
     {
       effectPart = effectPart[..onceEachTurn.Index].Trim();
+      restrictions ??= [];
+      restrictions.Add(TriggeredAbilityRestriction.OnlyOnceEachTurn);
+    }
+
+    // "This ability triggers only once each turn." — CR 603.2h's other phrasing,
+    // capping how often the ability triggers rather than the action taken on
+    // resolution (Chandra, Hope's Beacon's copy trigger). Anchored to the end of the
+    // effect text so it strips only a trailing restriction sentence. Both phrasings
+    // map to OnlyOnceEachTurn.
+    var abilityOnceEachTurn = Regex.Match(
+      effectPart,
+      @"\s*\bThis\s+ability\s+triggers\s+only\s+once\s+each\s+turn\.?\s*$",
+      RegexOptions.IgnoreCase
+    );
+    if (abilityOnceEachTurn.Success)
+    {
+      effectPart = effectPart[..abilityOnceEachTurn.Index].Trim();
       restrictions ??= [];
       restrictions.Add(TriggeredAbilityRestriction.OnlyOnceEachTurn);
     }
@@ -812,6 +855,23 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return new List<Effect> { drawLifeLost };
     }
 
+    // Trigger-aware "that many" antecedent: "put that many +1/+1 counters on this
+    // creature" under a GainsLife trigger — the granted ability places counters
+    // equal to the life just gained (CR 119.3 / CR 122.1). Sunbond: "Whenever you
+    // gain life, put that many +1/+1 counters on this creature." This rule MUST
+    // NOT be in the generic reflection-discovered pool: the same "put that many …
+    // counters" surface could appear under a different trigger event with a
+    // different antecedent (e.g. CounterPlaced, DamageDealt). Guard on GainsLife
+    // exactly, mirroring DrawThatManyCardsLifeLostRule's LosesLife guard.
+    if (
+      trigger.Event is EventOccurrence { Event: TriggerEvent.GainsLife }
+      && new Triggered.Rules.PutThatManyPlusOneCountersGainsLifeRule().TryMatch(trimmed, out var putCountersGain)
+      && putCountersGain is not null
+    )
+    {
+      return new List<Effect> { putCountersGain };
+    }
+
     var opponentExileThenExile = TryParseOpponentExileCreatureThenExileGraveyardCard(trimmed);
     if (opponentExileThenExile is not null)
     {
@@ -822,6 +882,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     if (counterExileCast is not null)
     {
       return counterExileCast;
+    }
+
+    var discardDrawEscalating = TryParseDiscardDrawThenEscalatingResolutionCountEffects(trimmed);
+    if (discardDrawEscalating is not null)
+    {
+      return discardDrawEscalating;
     }
 
     var loseGainLifeWhereX = TryParseLoseAndGainLifeWhereX(trimmed);
@@ -864,6 +930,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     if (youDrawAndLose is not null)
     {
       return youDrawAndLose;
+    }
+
+    var theyLoseAndYouDraw = TryParseTheyLoseLifeAndYouDrawCards(trimmed);
+    if (theyLoseAndYouDraw is not null)
+    {
+      return theyLoseAndYouDraw;
     }
 
     // "create a P1/T1 color1 sub1 creature token. If [condition], create a P2/T2 color2 sub2
@@ -1143,6 +1215,111 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         {
           Target = new ObjectReference { Kind = ObjectReferenceKind.It },
         },
+      },
+    };
+  }
+
+  /// <summary>
+  /// Magecraft-style escalating-resolution composite: "discard a card, then draw
+  /// a card. If this is the second time this ability has resolved this turn,
+  /// [SelfName] deals N damage to each opponent and each creature they control.
+  /// If it's the third time, add [mana]." (Ashling, Flame Dancer).
+  ///
+  /// <para>
+  /// Returns the gold's flat four-element list: [discardCards(You, 1),
+  /// drawCards(You, 1), conditional(OtherCondition "second time", composite
+  /// [dealDamage(EachOpponent), dealDamage(Each creature opponents control)]),
+  /// conditional(OtherCondition "third time", addMana)]. The "discard a card,
+  /// then draw a card" pair mirrors the Teferi, Master of Time "Draw a card,
+  /// then discard a card" shape (<see cref="Activated.Rules.DrawThenDiscardEffectRule"/>)
+  /// — two mandatory sibling effects joined by ", then", reversed order — as flat
+  /// siblings rather than nested under a CompositeEffect.
+  /// </para>
+  ///
+  /// <para>
+  /// The "Nth time this ability has resolved this turn" counting is engine
+  /// bookkeeping, not a structured Condition (no dedicated node exists for it —
+  /// see <c>OtherCondition</c> precedent on Nissa, Resurgent Animist and
+  /// Sephiroth, Fabled SOLDIER). CR 603.2 (triggered ability resolution counting
+  /// is a fact tracked by the game, not by MAST). CR 701.9a (discard); CR 121.1
+  /// (draw); CR 120.1-120.2 (damage — the named self-reference resolves to
+  /// <see cref="ObjectReferenceKind.Self"/> per CR 201.5); CR 106.4 (add mana).
+  /// </para>
+  ///
+  /// <para>
+  /// "each creature they control" (the plural back-reference to "each opponent")
+  /// reuses the established <c>Kind: Each, Filter: {CardTypes:[creature],
+  /// Controller: Opponent}</c> shape ("creatures your opponents control" —
+  /// CumberStone) — collectively, every creature any opponent controls — rather
+  /// than a per-opponent nested loop.
+  /// </para>
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseDiscardDrawThenEscalatingResolutionCountEffects(
+    string effectText
+  )
+  {
+    var match = Regex.Match(
+      effectText,
+      @"^discard\s+a\s+card,\s*then\s+draw\s+a\s+card\.\s*"
+        + @"If\s+this\s+is\s+the\s+second\s+time\s+this\s+ability\s+has\s+resolved\s+this\s+turn,\s*"
+        + @"[A-Z]\S.*?\s+deals?\s+(?<dmg>\d+)\s+damage\s+to\s+each\s+opponent\s+and\s+each\s+creature\s+they\s+control\.\s*"
+        + @"If\s+it'?s\s+the\s+third\s+time,\s*add\s+(?<mana>(?:\{[^}]+\})+)$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var damage = int.Parse(match.Groups["dmg"].Value);
+    var mana = match.Groups["mana"].Value;
+
+    return new List<Effect>
+    {
+      new DiscardCardsEffect
+      {
+        Count = LiteralQuantity.Of(1),
+        Player = ObjectReference.You(),
+        Random = false,
+      },
+      new DrawCardsEffect { Count = LiteralQuantity.Of(1), Player = ObjectReference.You() },
+      new ConditionalEffect
+      {
+        Condition = new OtherCondition
+        {
+          Text = "this is the second time this ability has resolved this turn",
+        },
+        Then = new CompositeEffect
+        {
+          Effects =
+          [
+            new DealDamageEffect
+            {
+              Amount = LiteralQuantity.Of(damage),
+              Source = ObjectReference.Self(),
+              Target = new ObjectReference { Kind = ObjectReferenceKind.EachOpponent },
+            },
+            new DealDamageEffect
+            {
+              Amount = LiteralQuantity.Of(damage),
+              Source = ObjectReference.Self(),
+              Target = new ObjectReference
+              {
+                Kind = ObjectReferenceKind.Each,
+                Filter = new ObjectFilter
+                {
+                  CardTypes = ["creature"],
+                  Controller = ControllerFilter.Opponent,
+                },
+              },
+            },
+          ],
+        },
+      },
+      new ConditionalEffect
+      {
+        Condition = new OtherCondition { Text = "it's the third time" },
+        Then = new AddManaEffect { Mana = mana },
       },
     };
   }
@@ -1457,6 +1634,57 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     {
       new DrawCardsEffect { Count = LiteralQuantity.Of(drawCount), Player = you},
       new LoseLifeEffect { Amount = LiteralQuantity.Of(lifeCount), Player = you },
+    };
+  }
+
+  /// <summary>
+  /// "they lose N life and you draw a card." — the Silverquill Silencer
+  /// named-card-punisher shape: the opponent whose cast triggered the ability
+  /// ("they", <see cref="ObjectReferenceKind.ThatPlayer"/> — CR 109.5,
+  /// back-referencing the player identified by the trigger condition's filter)
+  /// loses life, and the controller draws a card. Returns a flat two-element
+  /// list [loseLife(ThatPlayer, N), drawCards(You, M)]. Sibling of
+  /// <see cref="TryParseYouDrawAndYouLoseLife"/> (same two effect types,
+  /// opposite order and opposite life-loss subject) and of
+  /// <see cref="Triggered.Rules.TheyLoseLifeRule"/> (bare single-clause "they
+  /// lose N life" only — this compound sentence isn't matched by that anchored
+  /// rule). CR 119.3 (life loss); CR 121.1 (draw a card).
+  /// </summary>
+  private static IReadOnlyList<Effect>? TryParseTheyLoseLifeAndYouDrawCards(string effectText)
+  {
+    var match = Regex.Match(
+      effectText,
+      @"^they\s+lose\s+(?<life>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life\s+and\s+you\s+draw\s+(?<draw>a|one|two|three|\d+)\s+cards?$",
+      RegexOptions.IgnoreCase
+    );
+    if (!match.Success)
+    {
+      return null;
+    }
+    static int ParseAmount(string raw) => raw.ToLowerInvariant() switch
+    {
+      "a" or "one" => 1,
+      "two" => 2,
+      "three" => 3,
+      "four" => 4,
+      "five" => 5,
+      "six" => 6,
+      "seven" => 7,
+      "eight" => 8,
+      "nine" => 9,
+      "ten" => 10,
+      _ => int.Parse(raw),
+    };
+    var lifeCount = ParseAmount(match.Groups["life"].Value);
+    var drawCount = ParseAmount(match.Groups["draw"].Value);
+    return new List<Effect>
+    {
+      new LoseLifeEffect
+      {
+        Amount = LiteralQuantity.Of(lifeCount),
+        Player = new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
+      },
+      new DrawCardsEffect { Count = LiteralQuantity.Of(drawCount), Player = ObjectReference.You() },
     };
   }
 

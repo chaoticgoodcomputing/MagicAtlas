@@ -1,0 +1,293 @@
+{
+  "Input": {
+    "Name": "Oteclan Landmark // Oteclan Levitator",
+    "TypeLine": "Artifact // Artifact Creature — Golem",
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Scry",
+      "Flying",
+      "Craft",
+      "Transform"
+    ],
+    "Id": "099a1d1c-72ba-468e-9385-8f93e1fce001",
+    "Layout": "transform",
+    "CardFaces": [
+      {
+        "Name": "Oteclan Landmark",
+        "ManaCost": "{W}",
+        "TypeLine": "Artifact",
+        "OracleText": "When this artifact enters, scry 2.\nCraft with artifact {2}{W} ({2}{W}, Exile this artifact, Exile another artifact you control or an artifact card from your graveyard: Return this card transformed under its owner's control. Craft only as a sorcery.)",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Name": "Oteclan Levitator",
+        "ManaCost": "",
+        "TypeLine": "Artifact Creature — Golem",
+        "OracleText": "Flying\nWhenever this creature attacks, target attacking creature without flying gains flying until end of turn.",
+        "Power": "1",
+        "Toughness": "4",
+        "Colors": [
+          "W"
+        ],
+        "ColorIndicator": [
+          "W"
+        ]
+      }
+    ]
+  },
+  "Output": {
+    "Name": "Oteclan Landmark // Oteclan Levitator",
+    "TypeLine": {
+      "Raw": "Artifact // Artifact Creature — Golem",
+      "Types": [
+        "Artifact",
+        "//",
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Golem"
+      ]
+    },
+    "Oracle": {
+      "RawText": "",
+      "Abilities": []
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "layout",
+        "Layout": "transform"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Oteclan Landmark",
+        "TypeLine": {
+          "Raw": "Artifact",
+          "Types": [
+            "Artifact"
+          ]
+        },
+        "Oracle": {
+          "RawText": "When this artifact enters, scry 2.\nCraft with artifact {2}{W} ({2}{W}, Exile this artifact, Exile another artifact you control or an artifact card from your graveyard: Return this card transformed under its owner's control. Craft only as a sorcery.)",
+          "Abilities": [
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "When",
+                "Event": "Enters",
+                "Filter": {
+                  "CardTypes": [
+                    "artifact"
+                  ],
+                  "IsSelf": true
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "scry",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  }
+                }
+              ]
+            },
+            {
+              "Kind": "activated",
+              "Costs": [
+                {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    },
+                    {
+                      "Kind": "colored",
+                      "Colors": [
+                        "W"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "CostType": "exile",
+                  "Filter": {
+                    "CardTypes": [
+                      "permanent"
+                    ],
+                    "IsSelf": true
+                  },
+                  "Quantity": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "FromZone": "Battlefield"
+                },
+                {
+                  "CostType": "exile",
+                  "Filter": {
+                    "CardTypes": [
+                      "artifact"
+                    ],
+                    "Owner": "You",
+                    "ExcludeSelf": true
+                  },
+                  "Quantity": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "FromZone": "Anywhere"
+                }
+              ],
+              "Effects": [
+                {
+                  "EffectType": "returnToBattlefield",
+                  "Target": {
+                    "Kind": "Self"
+                  },
+                  "Tapped": false,
+                  "UnderControl": {
+                    "Kind": "Owner"
+                  },
+                  "Transformed": true
+                }
+              ],
+              "Restrictions": [
+                "OnlyAsSorcery"
+              ],
+              "IsManaAbility": false,
+              "KeywordSource": "Craft",
+              "Reminder": {
+                "Text": "({2}{W}, Exile this artifact, Exile another artifact you control or an artifact card from your graveyard: Return this card transformed under its owner's control. Craft only as a sorcery.)"
+              }
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{W}",
+            "Symbols": [
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "W"
+                ]
+              }
+            ],
+            "ManaValue": 1,
+            "IsVariable": false
+          },
+          {
+            "Kind": "colors",
+            "Colors": [
+              "W"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Oteclan Levitator",
+        "TypeLine": {
+          "Raw": "Artifact Creature — Golem",
+          "Types": [
+            "Artifact",
+            "Creature"
+          ],
+          "Subtypes": [
+            "Golem"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Flying\nWhenever this creature attacks, target attacking creature without flying gains flying until end of turn.",
+          "Abilities": [
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "evasion",
+                  "CanBeBlockedBy": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "Characteristics": [
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Flying"
+                      },
+                      {
+                        "CharacteristicType": "keyword",
+                        "Keyword": "Reach"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "KeywordSource": "Flying"
+            },
+            {
+              "Kind": "triggered",
+              "Trigger": {
+                "Timing": "Whenever",
+                "Event": "Attacks",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "IsSelf": true
+                }
+              },
+              "Effects": [
+                {
+                  "EffectType": "unstructured",
+                  "Text": "target attacking creature without flying gains flying until end of turn.",
+                  "SourceSpan": {
+                    "Start": 7,
+                    "Length": 104
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "colors",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "creatureStats",
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 1,
+              "Raw": "1"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 4,
+              "Raw": "4"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

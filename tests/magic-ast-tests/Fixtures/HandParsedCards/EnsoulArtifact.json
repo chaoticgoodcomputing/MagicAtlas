@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Ensoul Artifact",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant artifact\nEnchanted artifact is a creature with base power and toughness 5/5 in addition to its other types.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": ["Enchant"],
+    "Id": "8351efc5-a392-4ec8-877f-15d5b3dc0929",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Ensoul Artifact",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Enchant artifact\nEnchanted artifact is a creature with base power and toughness 5/5 in addition to its other types.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": ["artifact"]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "becomesCreature",
+              "Subject": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "Power": {
+                "QuantityType": "literal",
+                "Value": 5
+              },
+              "Toughness": {
+                "QuantityType": "literal",
+                "Value": 5
+              },
+              "Colors": [],
+              "CardTypes": ["artifact", "creature"],
+              "AddedSubtypes": [],
+              "GainedAbilities": []
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}

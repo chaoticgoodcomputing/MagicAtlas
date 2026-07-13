@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TMP/ApesOfRath.json",
+      "verdict": "PASS",
+      "citations": ["CR 502.3", "CR 508.1"],
+      "reason": "OracleText byte-identical to Scryfall; trigger (Whenever/Attacks/{creature,IsSelf}) cleanly decomposed from a structured doesntUntap effect with Target{Kind:It} + WhoseUntapStep 'its controller's next'; no unparsed/UnstructuredEffect/OtherX; no lossy drop"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ItDoesntUntapNextUntapStepTriggeredRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 113.8", "CR 502.3", "CR 508.1"],
+      "reason": "doc-comment cites 'CR 113.8b' as authority for the anaphoric pronoun 'it', but 113.8 has zero subrules (113.8b absent from data) and 113.8's actual text is about ability-controller determination on the stack, not pronoun reference; wrong/absent citation for a real modeling decision (Target=It). Effect modeling itself sound (CR 502.3 verbatim); fix: drop 113.8b or cite the combat rule that identifies the attacking creature (CR 508.1)"
+    },
+    {
+      "target": "mast/it-doesnt-untap-during-cont#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (doesntUntap effect, ObjectReferenceKind.It, and Attacks trigger event all pre-existing; newAstNode=false, shared=[]); no PortWalk projection decision required"
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "Input": {
+    "Name": "Punish Ignorance",
+    "ManaCost": "{W}{U}{U}{B}",
+    "TypeLine": "Instant",
+    "OracleText": "Counter target spell. Its controller loses 3 life and you gain 3 life.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "B",
+      "U",
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "U",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Punish Ignorance",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Counter target spell. Its controller loses 3 life and you gain 3 life.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "counterSpell",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "spell"
+                  ]
+                }
+              }
+            },
+            {
+              "EffectType": "loseLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Player": {
+                "Kind": "Controller"
+              }
+            },
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}{U}{U}{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "U",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "U",
+          "W"
+        ]
+      }
+    ]
+  }
+}

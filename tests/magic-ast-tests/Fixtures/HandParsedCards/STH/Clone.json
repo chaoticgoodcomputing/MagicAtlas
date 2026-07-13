@@ -1,0 +1,85 @@
+{
+  "Input": {
+    "Name": "Clone",
+    "ManaCost": "{3}{U}",
+    "TypeLine": "Creature — Shapeshifter",
+    "OracleText": "You may have this creature enter as a copy of any creature on the battlefield.",
+    "Power": "0",
+    "Toughness": "0",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Clone",
+    "TypeLine": {
+      "Raw": "Creature — Shapeshifter",
+      "Types": ["Creature"],
+      "Subtypes": ["Shapeshifter"]
+    },
+    "Oracle": {
+      "RawText": "You may have this creature enter as a copy of any creature on the battlefield.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "becomesCopy",
+                "Subject": {
+                  "Kind": "Self"
+                },
+                "CopyTarget": {
+                  "Kind": "Any",
+                  "Filter": {
+                    "CardTypes": ["creature"],
+                    "Zone": "Battlefield"
+                  }
+                }
+              }
+            }
+          ],
+          "When": "asThisEnters"
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "0",
+          "Value": 0
+        }
+      }
+    ]
+  }
+}

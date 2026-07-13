@@ -6,28 +6,40 @@ using MagicAST.AST.Effects.ZoneChange;
 using MagicAST.AST.References;
 
 /// <summary>
-/// "sacrifice it" — triggered self-sacrifice on the creature that fired the
-/// trigger (Rule 701.21a — Sacrifice). The pronoun "it" refers back to the trigger subject
-/// and maps to <see cref="ObjectReferenceKind.It"/>, matching the pronoun-
-/// reference convention used elsewhere in triggered rules.
+/// "sacrifice it" / "sacrifice this creature" / "sacrifice this permanent" —
+/// triggered self-sacrifice (Rule 701.21a — Sacrifice). The reference kind depends
+/// on the surface form: the pronoun "it" refers back to a previously-mentioned
+/// object and maps to <see cref="ObjectReferenceKind.It"/>, whereas the explicit
+/// "this creature"/"this permanent" self-reference (no antecedent) maps to
+/// <see cref="ObjectReferenceKind.Self"/> — matching the canonical
+/// <see cref="ObjectReference"/> convention (Self = "this creature", It = a prior
+/// object) and every existing "sacrifice this creature" gold (Longhorn Firebeast,
+/// Wild Leotau, Whipstitched Zombie).
 /// </summary>
 [TriggeredRule]
 public sealed class SacrificeTriggeredRule : ITriggeredRule
 {
   private static readonly Regex _pattern = new(
-    @"^sacrifice\s+(it|this\s+creature|this\s+permanent)\.?$",
+    @"^sacrifice\s+(?<ref>it|this\s+creature|this\s+permanent)\.?$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
   public bool TryMatch(string text, out Effect? effect)
   {
     effect = null;
-    if (!_pattern.IsMatch(text))
+    var match = _pattern.Match(text);
+    if (!match.Success)
     {
       return false;
     }
 
-    effect = new SacrificeEffect { Target = ObjectReference.It() };
+    // "it" is an anaphoric pronoun (prior object); "this creature"/"this permanent"
+    // is an explicit self-reference with no antecedent.
+    var isPronoun = match.Groups["ref"].Value.Trim().Equals("it", System.StringComparison.OrdinalIgnoreCase);
+    effect = new SacrificeEffect
+    {
+      Target = isPronoun ? ObjectReference.It() : ObjectReference.Self(),
+    };
     return true;
   }
 }

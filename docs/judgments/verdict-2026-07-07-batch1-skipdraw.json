@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/AST/Effects/Replacement/TurnPartEvent.cs#TurnPartEvent",
+      "verdict": "PASS",
+      "citations": ["CR 614.10", "CR 500.10"],
+      "reason": "New ReplacementEvent node models the skipped draw step TYPED (Part=Draw via the shared TurnPart enum, Whose=You via ControllerFilter) not free text; turnPart discriminator is unique on the EventType base; sound, minimal shape matching CR 614.10 skip-as-replacement over CR 500-series turn structure."
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/SkipDrawStepRule.cs#SkipDrawStepRule",
+      "verdict": "PASS",
+      "citations": ["CR 614.10", "CR 500.10"],
+      "reason": "Anchored (^...$) StaticRule emits a static ReplacementEffect with OriginalEventOccurs=false and no Replacement = CR 614.10 'instead do nothing'; correctly a replacement, not activated/triggered; anchor prevents swallowing a sibling."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MH3/SymbioticDeployment.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.10"],
+      "reason": "Gold matches oracle text (verified vs oracle-cards.json); line 1 = typed turnPart replacement; line 2 fully modeled (mana + tapPermanents cost + drawCards) with no dropped sibling; no unparsed/UnparsedEffect/Diagnostics; Raw/RawText are verbatim-by-design."
+    },
+    {
+      "target": "projection:turnPart (ReplacementEvent EventType discriminator)",
+      "verdict": "PASS",
+      "citations": ["CR 614.10"],
+      "reason": "turnPart is an EventType (ReplacementEvent) discriminator, not one of the four PortWalk-gated dimensions (effectType/costType/triggerEvent/restriction), so the exhaustiveness ratchet does not require a whitelist entry and none is needed; the inert call is sensible — skipping one's own draw step emits no consumable resource and forms no interaction edge; branch introduces no new gated discriminator (replacement/drawCards/mana/tapPermanents all pre-existing)."
+    }
+  ]
+}

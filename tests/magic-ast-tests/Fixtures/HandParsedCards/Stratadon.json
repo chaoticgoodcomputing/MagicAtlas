@@ -1,0 +1,62 @@
+{
+  "Input": {
+    "Name": "Stratadon",
+    "ManaCost": "{10}",
+    "TypeLine": "Artifact Creature — Beast",
+    "OracleText": "Domain — This spell costs {1} less to cast for each basic land type among lands you control.\nTrample",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": ["Trample", "Domain"],
+    "Id": "324bc757-9942-4862-b691-5af42e07f682",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Stratadon",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Beast",
+      "Types": ["Artifact", "Creature"],
+      "Subtypes": ["Beast"]
+    },
+    "Oracle": {
+      "RawText": "Domain — This spell costs {1} less to cast for each basic land type among lands you control.\nTrample",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "AbilityWord": "Domain",
+          "Effects": [
+            {
+              "EffectType": "costReduction",
+              "Amount": { "QuantityType": "domain" }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Trample",
+          "Effects": [
+            { "EffectType": "keywordAbility", "Keyword": "Trample" }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{10}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 10 }
+        ],
+        "ManaValue": 10
+      },
+      { "Kind": "colors", "Colors": [] },
+      { "Kind": "colorIdentity", "ColorIdentity": [] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 5, "Raw": "5" },
+        "Toughness": { "ValueType": "fixed", "Value": 5, "Raw": "5" }
+      }
+    ]
+  }
+}

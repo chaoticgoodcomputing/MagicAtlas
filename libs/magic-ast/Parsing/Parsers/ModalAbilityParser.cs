@@ -106,6 +106,14 @@ public sealed class ModalAbilityParser : IAbilityParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
+  // "Choose one. If an opponent has eight or more cards in their graveyard, you may
+  // choose both instead." (See Double). Captures the graveyard-size threshold that
+  // upgrades the base "choose one" to "choose one or both".
+  private static readonly Regex _opponentGraveyardChooseBothOverride = new(
+    @"^choose\s+one\s*\.\s+if\s+an\s+opponent\s+has\s+(?<n>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+or\s+more\s+cards\s+in\s+their\s+graveyard,\s+you\s+may\s+choose\s+both\s+instead",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
   /// <summary>
   /// Maps the modal header text to a <see cref="ModeSelection"/>.
   /// </summary>
@@ -136,6 +144,38 @@ public sealed class ModalAbilityParser : IAbilityParser
             {
               Operator = ComparisonOperator.GreaterThanOrEqual,
               Value = 1,
+            },
+          },
+          Selection = ModeSelection.ChooseOneOrBoth(),
+        },
+      };
+    }
+
+    // "Choose one. If an opponent has eight or more cards in their graveyard, you may
+    // choose both instead." — base ChooseOne with a conditional override that upgrades
+    // to ChooseOneOrBoth when an opponent's graveyard holds the threshold count of
+    // cards. CR 700.2d (modal, "choose both"); the condition is a CountCondition over
+    // cards in an opponent's graveyard (Owner axis — graveyard membership is by
+    // ownership, CR 108.3). Sibling of the commander override above.
+    var graveyardOverride = _opponentGraveyardChooseBothOverride.Match(lower);
+    if (graveyardOverride.Success && TryParseWordNumber(graveyardOverride.Groups["n"].Value, out var graveyardThreshold))
+    {
+      return ModeSelection.ChooseOne() with
+      {
+        ConditionalOverride = new ModeSelectionOverride
+        {
+          Condition = new CountCondition
+          {
+            Filter = new ObjectFilter
+            {
+              CardTypes = ["card"],
+              Zone = Zone.Graveyard,
+              Owner = ControllerFilter.Opponent,
+            },
+            Count = new Comparison
+            {
+              Operator = ComparisonOperator.GreaterThanOrEqual,
+              Value = graveyardThreshold,
             },
           },
           Selection = ModeSelection.ChooseOneOrBoth(),
@@ -201,6 +241,21 @@ public sealed class ModalAbilityParser : IAbilityParser
         return true;
       case "five":
         value = 5;
+        return true;
+      case "six":
+        value = 6;
+        return true;
+      case "seven":
+        value = 7;
+        return true;
+      case "eight":
+        value = 8;
+        return true;
+      case "nine":
+        value = 9;
+        return true;
+      case "ten":
+        value = 10;
         return true;
       default:
         value = 0;

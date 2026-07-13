@@ -1,0 +1,62 @@
+{
+  "Input": {
+    "Name": "Vernal Bloom",
+    "ManaCost": "{3}{G}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Whenever a Forest is tapped for mana, its controller adds an additional {G}.",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": [],
+    "Id": "baabb73c-e3d9-4ba1-9963-986e09ef49a7",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Vernal Bloom",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "Whenever a Forest is tapped for mana, its controller adds an additional {G}.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "TapsForMana",
+            "Filter": {
+              "CardTypes": ["land"],
+              "Subtypes": ["Forest"]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{G}",
+              "Player": { "Kind": "Controller" }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}

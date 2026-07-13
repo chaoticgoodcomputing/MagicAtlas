@@ -11,9 +11,9 @@ namespace MagicAtlas.Ast.Tests.Flows.MagicAstTriage.Steps;
 /// the MagicAST parser. Pure transform; no I/O.
 /// </summary>
 /// <remarks>
-/// Applies the corpus scope filters (commander-legal + paper printings) AND
-/// the parser-input precondition (oracle text or faces must exist). Multi-faced
-/// layouts (split/transform/flip) project their faces into
+/// Applies the corpus scope filter (commander-legal) AND the parser-input
+/// precondition (oracle text or faces must exist). Multi-faced layouts
+/// (split/transform/flip) project their faces into
 /// <see cref="CardInputDTO.CardFaces"/>.
 /// </remarks>
 [FlowthruStep]
@@ -22,7 +22,7 @@ public static class ProjectToCardInputStep
   public static Func<IEnumerable<MastRawScryfallCard>, IEnumerable<MastCardInput>> Create() =>
     cards =>
       cards
-        .Where(IsCommanderLegalPaper)
+        .Where(IsCommanderLegal)
         .Where(card =>
           !string.IsNullOrWhiteSpace(card.OracleText) || (card.CardFaces?.Count ?? 0) > 0
         )
@@ -34,27 +34,23 @@ public static class ProjectToCardInputStep
         .ToList();
 
   /// <summary>
-  /// Corpus scope filter: commander-legal AND printed in paper. Drops digital-only
-  /// printings (Conjure, Arena-only mechanics), un-legal/banned cards, and silver-
-  /// bordered / acorn cards. The atlas effort targets the paper-legal Commander
-  /// pool — anything outside it adds noise without contributing to the
-  /// hand-parsing surface we care about.
+  /// Corpus scope filter: commander-legal. This alone drops digital-only cards
+  /// (Alchemy / Conjure — all <c>commander: not_legal</c>), un-legal/banned
+  /// cards, and silver-bordered / acorn cards. We deliberately do NOT filter on
+  /// the <c>games</c> array: it is a <b>per-printing</b> field, and the Scryfall
+  /// oracle-cards bulk carries only one representative printing per oracle id, so
+  /// an old paper staple whose representative printing happens to be MTGO/Arena
+  /// (e.g. Demonic Consultation, Lotus Petal, Lion's Eye Diamond, Strip Mine)
+  /// would be spuriously dropped — silently excising cEDH combo pieces from the
+  /// entire corpus. Commander-legality is the honest paper-pool signal here.
   /// </summary>
-  private static bool IsCommanderLegalPaper(MastRawScryfallCard card)
+  private static bool IsCommanderLegal(MastRawScryfallCard card)
   {
     if (card.Legalities is null || !card.Legalities.TryGetValue("commander", out var legality))
     {
       return false;
     }
-    if (!string.Equals(legality, "legal", StringComparison.OrdinalIgnoreCase))
-    {
-      return false;
-    }
-    if (card.Games is null || !card.Games.Contains("paper", StringComparer.OrdinalIgnoreCase))
-    {
-      return false;
-    }
-    return true;
+    return string.Equals(legality, "legal", StringComparison.OrdinalIgnoreCase);
   }
 
   private static CardInputDTO ToInputDTO(MastRawScryfallCard card) =>

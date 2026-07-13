@@ -1,0 +1,53 @@
+{
+  "Input": {
+    "Name": "Exotic Orchard",
+    "ManaCost": "",
+    "TypeLine": "Land",
+    "OracleText": "{T}: Add one mana of any color that a land an opponent controls could produce.",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Exotic Orchard",
+    "TypeLine": {
+      "Raw": "Land",
+      "Types": ["Land"]
+    },
+    "Oracle": {
+      "RawText": "{T}: Add one mana of any color that a land an opponent controls could produce.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "",
+              "AnyColor": false,
+              "AnyColorProducibleBy": {
+                "CardTypes": ["land"],
+                "Controller": "Opponent",
+                "Zone": "Battlefield"
+              }
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

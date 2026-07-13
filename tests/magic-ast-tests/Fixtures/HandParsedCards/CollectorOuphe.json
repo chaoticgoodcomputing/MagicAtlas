@@ -1,0 +1,94 @@
+{
+  "Input": {
+    "Name": "Collector Ouphe",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Ouphe",
+    "OracleText": "Activated abilities of artifacts can't be activated.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [],
+    "Id": "085107a2-c1ec-473c-81d8-23e5a7197776",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Collector Ouphe",
+    "TypeLine": {
+      "Raw": "Creature — Ouphe",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Ouphe"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Activated abilities of artifacts can't be activated.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "AffectedObjects": {
+            "CardTypes": [
+              "artifact"
+            ]
+          },
+          "Effects": [
+            {
+              "EffectType": "cantActivateAbilities"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

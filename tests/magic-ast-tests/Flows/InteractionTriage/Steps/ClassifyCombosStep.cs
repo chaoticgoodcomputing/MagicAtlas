@@ -56,7 +56,13 @@ public static class ClassifyCombosStep
           BlockingCards = x.Blocking,
         };
 
-      var cardGaps = parseBlocked
+      // Full per-card blocking overlay, ranked by the downstream value a card
+      // gates. PopularityMass (sum of blocked-combo popularity) is the primary
+      // key — it rewards a card that blocks MANY combos, not just one popular
+      // one — and is the weight the MagicAstTriage flow fuses into its yield
+      // clusters. Emitted untruncated as AllComboBlockingCards; TopComboBlockingCards
+      // is the human-facing top slice.
+      var allCardGaps = parseBlocked
         .SelectMany(x => x.Blocking.Select(card => (Card: card, x.Combo.Popularity)))
         .GroupBy(t => t.Card, StringComparer.Ordinal)
         .Select(g => new CardGap
@@ -65,10 +71,10 @@ public static class ClassifyCombosStep
           Reason = inCorpus.Contains(g.Key) ? "unparsed" : "missing-from-corpus",
           BlockedComboCount = g.Count(),
           MaxComboPopularity = g.Max(t => t.Popularity),
+          PopularityMass = g.Sum(t => (long)t.Popularity),
         })
-        .OrderByDescending(cg => cg.MaxComboPopularity)
+        .OrderByDescending(cg => cg.PopularityMass)
         .ThenByDescending(cg => cg.BlockedComboCount)
-        .Take(TopN)
         .ToList();
 
       return new InteractionTriageReport
@@ -87,7 +93,8 @@ public static class ClassifyCombosStep
           .Take(TopN)
           .Select(ToItem)
           .ToList(),
-        TopComboBlockingCards = cardGaps,
+        TopComboBlockingCards = allCardGaps.Take(TopN).ToList(),
+        AllComboBlockingCards = allCardGaps,
       };
     };
 }

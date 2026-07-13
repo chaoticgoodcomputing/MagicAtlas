@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ARN/Aladdin.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.2", "CR 115.1", "CR 109.5"],
+      "reason": "gainControl on target artifact filter + asLongAs/controlsObject(Self,You) duration; timing composited not baked; oracle text byte-identical to Scryfall; no unparsed/free-text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/GainControlTargetForAsLongAsYouControlRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.2", "CR 109.5", "CR 115.1"],
+      "reason": "anchored full-sentence parser reusing GainControlEffect + AsLongAsDuration + new ControlsObjectCondition; all three cited rules exist and match verbatim"
+    },
+    {
+      "target": "libs/magic-ast/AST/Abilities/ControlsObjectCondition.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.2", "CR 109.5"],
+      "reason": "present-tense controlsObject condition (Reference+Controller), correctly distinct from past-tense controlledObject (CR 109.4); cited rules exist and match"
+    },
+    {
+      "target": "mast/gain-control-target-artifact#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "new discriminator is a ConditionType (controlsObject); PortWalk dispatches only costType/effectType/restriction/triggerEvent, so conditions are not projected — dispatched effect gainControl is pre-existing/reused; ratchet not implicated, no entry required"
+    }
+  ]
+}

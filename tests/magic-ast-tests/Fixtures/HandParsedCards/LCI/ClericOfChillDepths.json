@@ -1,0 +1,69 @@
+{
+  "Input": {
+    "Name": "Cleric of Chill Depths",
+    "ManaCost": "{1}{U}",
+    "TypeLine": "Creature — Merfolk Cleric",
+    "OracleText": "Whenever this creature blocks a creature, that creature doesn't untap during its controller's next untap step.",
+    "Power": "1",
+    "Toughness": "3",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Cleric of Chill Depths",
+    "TypeLine": {
+      "Raw": "Creature — Merfolk Cleric",
+      "Types": ["Creature"],
+      "Subtypes": ["Merfolk", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "Whenever this creature blocks a creature, that creature doesn't untap during its controller's next untap step.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Blocks",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "doesntUntap",
+              "Target": { "Kind": "ThatCreature" },
+              "WhoseUntapStep": "its controller's next"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["U"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

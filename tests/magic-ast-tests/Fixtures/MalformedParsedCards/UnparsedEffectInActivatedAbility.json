@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Broken Blademaster",
     "ManaCost": "{3}{R}{R}",
-    "TypeLine": "Creature — Human Warrior",
+    "TypeLine": "Creature \u2014 Human Warrior",
     "OracleText": "{T}: $$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
     "Power": "4",
     "Toughness": "2",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Broken Blademaster",
     "TypeLine": {
-      "Raw": "Creature — Human Warrior",
+      "Raw": "Creature \u2014 Human Warrior",
       "Types": [
         "Creature"
       ],
@@ -37,12 +37,12 @@
           ],
           "Effects": [
             {
-              "EffectType": "unparsed",
+              "EffectType": "unstructured",
+              "Text": "$$$ %%% ^^^ &&& *** ~~~ !!! ??? ///",
               "SourceSpan": {
                 "Start": 4,
                 "Length": 36
-              },
-              "RawText": "$$$ %%% ^^^ &&& *** ~~~ !!! ??? ///"
+              }
             }
           ],
           "IsManaAbility": false
@@ -90,13 +90,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "4",
-          "Value": 4
+          "Value": 4,
+          "Raw": "4"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "2",
-          "Value": 2
+          "Value": 2,
+          "Raw": "2"
         }
       }
     ]

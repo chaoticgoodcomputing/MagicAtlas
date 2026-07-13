@@ -1,0 +1,134 @@
+{
+  "Input": {
+    "Name": "Myrel, Shield of Argive",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Legendary Creature — Human Soldier",
+    "OracleText": "During your turn, your opponents can't cast spells or activate abilities of artifacts, creatures, or enchantments.\nWhenever Myrel attacks, create X 1/1 colorless Soldier artifact creature tokens, where X is the number of Soldiers you control.",
+    "Power": "3",
+    "Toughness": "4",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": [],
+    "Id": "e632ed57-bb00-4493-adef-7b4805edd7ea",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Myrel, Shield of Argive",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Soldier",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "During your turn, your opponents can't cast spells or activate abilities of artifacts, creatures, or enchantments.\nWhenever Myrel attacks, create X 1/1 colorless Soldier artifact creature tokens, where X is the number of Soldiers you control.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantBeCast"
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": ["spell"],
+            "Controller": "Opponent"
+          },
+          "Condition": {
+            "ConditionType": "other",
+            "Text": "During your turn"
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantActivateAbilities"
+            }
+          ],
+          "AffectedObjects": {
+            "CardTypes": ["artifact", "creature", "enchantment"],
+            "Controller": "Opponent"
+          },
+          "Condition": {
+            "ConditionType": "other",
+            "Text": "During your turn"
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "Subtypes": ["Soldier"],
+                  "Controller": "You"
+                }
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": ["C"],
+                "Types": ["artifact", "creature"],
+                "Subtypes": ["Soldier"],
+                "IsCopy": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}

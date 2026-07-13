@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DKA/SomberwaldStag.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.14", "CR 117.7"],
+      "reason": "OracleText byte-identical to corpus; ETB trigger (When/Enters/IsSelf) -> optional (you may) -> fight(Controlled: It, Opposed: Target creature Controller Opponent); no unparsed/unstructured/lossy nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/HaveItFightTargetTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.14", "CR 109.5", "CR 117.7"],
+      "reason": "reuses sound existing nodes (FightEffect/OptionalEffect/ObjectReference.It); cited CR 701.14 Fight exists and matches; CR 109.5 aside for the 'it' pronoun is imperfect but not contradictory (non-blocking)"
+    },
+    {
+      "target": "mast/you-may-have-it-fight-target-cre#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (newAstNode=false, reuses existing fight/optional/It/Target); no PortWalk projection decision required by the ratchet"
+    }
+  ]
+}

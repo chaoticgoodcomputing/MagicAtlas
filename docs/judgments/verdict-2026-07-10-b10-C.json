@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/StopCold.json",
+      "verdict": "PASS",
+      "citations": ["CR 502.3", "CR 611.3", "CR 613"],
+      "reason": "P03 fully structured (Flash timingModification, Enchant disjunction, ETB tap EnchantedOrEquipped, static loseAbility+doesntUntap composite); AbilityText:'all abilities' is a legit ability-SCOPE on the [FreeTextField] LoseAbilityEffect.AbilityText, whitelisted precedent-consistent with VraskaBetrayalsSting 'all other abilities'/AnimateDead (PB-9); DoesntUntapEffect 502.3, 611.3/613 exact"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantedLosesAllAbilitiesAndDoesntUntapRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 502.3", "CR 611.3", "CR 613"],
+      "reason": "P03 rule: anchored full-sentence regex, one StaticAbility with two reused effects both targeting EnchantedOrEquipped; cited 502.3/611.3 verbatim-exact, 613 layer system covers layer-6 ability removal"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/KiloApogeeMind.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 201.5", "CR 701.34"],
+      "reason": "P09 Haste keywordAbility + triggered BecomesTapped/IsSelf true (creature default correct, Kilo is a creature) + reused proliferate effect with verbatim reminder; self-by-name matcher anchored ^[A-Z], priority 983 below generic/subtype, no sibling over-match"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Mortuary.json",
+      "verdict": "PASS",
+      "citations": ["CR 700.4", "CR 111.1"],
+      "reason": "P11 'a creature is put into your graveyard from the battlefield' -> Dies + Controller You (CR 700.4 exact) faithful; putOnTopOfLibrary Target It for 'that card'; condition regex requires literal 'a creature' so declines nontoken sibling surface"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FaerieMastermind.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 121.1"],
+      "reason": "P12 Flash/Flying reused + triggered DrawsCard/Controller Opponent/Ordinal 2/PerTurn true (you draw), {3}{U} activated EachPlayer draws; 121.1 (section 121 'Drawing a Card') matches in-repo precedent, not the brief's uncertain 120.x"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ThranVigil.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2"],
+      "reason": "P19 LeavesGraveyard + CardTypes [artifact,creature] structured disjunction + Controller You + MinimumCount 1 + new bool DuringYourTurn field (not a discriminator); putCounters +1/+1 on target creature you control faithful; 603.2 exact"
+    },
+    {
+      "target": "libs/magic-ast/AST/Triggers/TriggerCondition.cs#DuringYourTurn",
+      "verdict": "PASS",
+      "citations": ["CR 603.2"],
+      "reason": "P19 new bool? DuringYourTurn is a plain condition-window field (not a new discriminator/enum case), documented distinct from PerTurn and TriggeredAbilityRestriction.OnlyDuringYourTurn (CR 603.2h); no PortWalk projection decision required"
+    }
+  ]
+}

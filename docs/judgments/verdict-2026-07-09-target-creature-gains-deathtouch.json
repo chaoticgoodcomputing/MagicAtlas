@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/VOW/BattleRageBlessing.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.2", "CR 613.1f", "CR 702.2", "CR 702.12"],
+      "reason": "Oracle text byte-identical to real card; two gainAbility effects (Deathtouch on target creature, Indestructible on 'It') each untilTime end-of-turn; no unparsed/unstructured nodes; discriminators match rule terminology; reminder text correctly omitted"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/TargetCreatureGainsMultipleKeywordsSpellRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.2", "CR 613.1f", "CR 702.2", "CR 702.12"],
+      "reason": "Reuses existing GainAbilityEffect/StaticAbility/KeywordAbilityEffect; cited CR rules exist and match modeling; 613.1c label is a subrule-letter slip (Layer 6 is 613.1f) within the correct parent 613.1 with correct Layer-6 prose, not a contradiction"
+    },
+    {
+      "target": "mast/target-creature-gains-deathtouch#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "No new discriminator introduced (newAstNode=false; reuses gainAbility/keywordAbility and pre-existing keyword enum values), so no PortWalk projection decision is required by the ratchet"
+    }
+  ]
+}

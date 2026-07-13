@@ -1,0 +1,49 @@
+{
+  "Input": {
+    "Name": "Sleight of Hand",
+    "ManaCost": "{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Look at the top two cards of your library. Put one of them into your hand and the other on the bottom of your library.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U"],
+    "ColorIdentity": ["U"]
+  },
+  "Output": {
+    "Name": "Sleight of Hand",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Look at the top two cards of your library. Put one of them into your hand and the other on the bottom of your library.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "impulse",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "RestDestination": "BottomOfLibrary"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 1
+      },
+      { "Kind": "colors", "Colors": ["U"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U"] }
+    ]
+  }
+}

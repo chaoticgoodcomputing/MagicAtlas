@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "Mind Shatter",
+    "ManaCost": "{X}{B}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Target player discards X cards at random.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Mind Shatter",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Target player discards X cards at random.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "discardCards",
+              "Count": { "QuantityType": "variable", "Name": "X" },
+              "Player": {
+                "Kind": "Target",
+                "Filter": { "CardTypes": ["player"] }
+              },
+              "Random": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{X}{B}{B}",
+        "Symbols": [
+          { "Kind": "variable" },
+          { "Kind": "colored", "Colors": ["B"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "IsVariable": true
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}

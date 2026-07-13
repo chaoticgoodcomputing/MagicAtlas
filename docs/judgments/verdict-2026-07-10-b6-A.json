@@ -1,0 +1,88 @@
+{
+  "shard": "A",
+  "batch": 6,
+  "date": "2026-07-10",
+  "overall": "FAIL",
+  "items": [
+    {
+      "family": "K02",
+      "card": "Wildfire Howl",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WildfireHowl.json",
+      "verdict": "FAIL",
+      "citations": ["CR 702.174a", "CR 702.174b", "CR 702.174e", "CR 702.174j", "CR 702.174k"],
+      "cr_checked": ["CR 702.174a", "CR 702.174b", "CR 702.174e", "CR 702.174j", "CR 702.174k"],
+      "reason": "Gift-promise choosePlayer is NOT restricted to opponent (no Scope). CR 702.174a mandates 'you may choose an opponent'; the opponent restriction survives only in verbatim (unparsed) reminder text. Gold must set choosePlayer Scope:Opponent (merge-depends on K03's new field) — it does not, so this is the fidelity gap, not the merge-dependency exemption. GiftEffect, GiftPromisedCondition, and the giftPromised damage conditional body are otherwise faithful; all cited 702.174 subrules verified in rules-structure.json.",
+      "notes": "FAIL on the CRITICAL opponent-scope requirement; one-line fix = add Scope:Opponent to the optional/choosePlayer effect."
+    },
+    {
+      "family": "K02",
+      "card": "Wildfire Howl",
+      "target": "libs/mast-interaction/known-coarse-projections.json#gift",
+      "verdict": "PASS",
+      "citations": ["CR 702.174b", "CR 702.174e"],
+      "cr_checked": ["CR 702.174b", "CR 702.174e"],
+      "reason": "Projection decision: gift keyword payoff parked coarse — a wrapper over the gifted drawCards, opponent-draw is not a combo engine and no flow rule reads gift payoffs. Sensible.",
+      "notes": "Initiative-03 projection verdict."
+    },
+    {
+      "family": "K05",
+      "card": "Phenomenon Investigators",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PhenomenonInvestigators.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 614.12c", "CR 700.2"],
+      "cr_checked": ["CR 614.12", "CR 614.12c", "CR 700.2"],
+      "reason": "Faithful: chooseNamedOption(Options=[Believe,Doubt]) under asThisEnters; both modes fully structured (Believe dies-trigger token, Doubt end-step optional bounce->draw) and each gated on chosenMode InterveningIf. CR 614.12c is exactly the anchor-word linked-ability rule. chooseNamedOption/chosenMode well-shaped (verbatim mode labels, not free-text). Sibling sweep CLEAN: ChooseNamedOptionOnEntryRule excludes basics/colors (reserved) and all other capitalized 'choose X or Y' matches are genuine named-mode cards; NamedModeGatedAbilityRule only captures anchor-word lines (modal '• Name —' options are consumed as ModalOptions, and a body-must-reparse-to-Trigger guard rejects modal one-shots) — every '• SingleCapWord — Trigger' card in the corpus is a genuine anchor-word card (Siege cycle, Mirrodin Besieged, Ineffable Blessing, Marvelous Scientist, Struggle for Project Purity).",
+      "notes": "PASS incl. sibling sweep."
+    },
+    {
+      "family": "K05",
+      "card": "Phenomenon Investigators",
+      "target": "libs/mast-interaction/known-coarse-projections.json#chooseNamedOption",
+      "verdict": "PASS",
+      "citations": ["CR 700.2", "CR 614.12"],
+      "cr_checked": ["CR 700.2", "CR 614.12"],
+      "reason": "Projection decision: chooseNamedOption parked coarse — card-local mode declaration, consumed by ChosenModeCondition intervening-if; no flow rule reads named-mode-choice events. Sensible.",
+      "notes": "Initiative-03 projection verdict."
+    },
+    {
+      "family": "K23",
+      "card": "Declaration of Naught",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DeclarationOfNaught.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 201.4", "CR 701.6", "CR 607"],
+      "cr_checked": ["CR 614.12", "CR 201.4", "CR 701.6", "CR 607"],
+      "reason": "Faithful: chooseCardName under asThisEnters (producer); '{U}: Counter target spell with the chosen name' modeled as counterSpell with Filter{CardTypes:[spell], ChosenCharacteristic:CardName} — a structured CR 607 linked-ability reference, not free text. ChooseCardNameEffect + ChosenCharacteristicKind.CardName well-shaped. Anchored matchers, unique surface; sibling sweep clean (only Declaration of Naught).",
+      "notes": "PASS."
+    },
+    {
+      "family": "K23",
+      "card": "Declaration of Naught",
+      "target": "libs/mast-interaction/known-coarse-projections.json#chooseCardName",
+      "verdict": "PASS",
+      "citations": ["CR 607", "CR 614.12"],
+      "cr_checked": ["CR 607", "CR 614.12"],
+      "reason": "Projection decision: chooseCardName parked coarse — choice consumed by ChosenCharacteristicKind.CardName on the counter ability's target filter; no flow rule reads card-name-choice events. Sensible.",
+      "notes": "Initiative-03 projection verdict."
+    },
+    {
+      "family": "K03",
+      "card": "The Rack",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TheRack.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.1c", "CR 614.12"],
+      "cr_checked": ["CR 614.1c", "CR 614.12"],
+      "reason": "Faithful: 'choose an opponent' -> choosePlayer Scope:Opponent under asThisEnters; chosen-player upkeep trigger (Whose:ChosenPlayer); 'X is 3 minus cards in their hand' -> calculated(3 subtract count hand ThatPlayer), target ThatPlayer. Scope is additive nullable with JsonIgnore-WhenWritingNull, so Sawhorn Nemesis stays byte-identical (verified: its choosePlayer serializes with no Scope key). ChosenPlayerPhaseTriggerConditionRule is a NEW separate file, not an edit to the shared PhaseTriggerConditionRule. No new effect discriminator -> no projection entry needed. Sibling sweep clean: all 12 'choose an opponent' enter cards correctly bind Scope:Opponent.",
+      "notes": "PASS; Sawhorn byte-identity and separate-file rule both confirmed."
+    },
+    {
+      "family": "K09",
+      "card": "Éowyn, Lady of Rohan",
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EquipAbilityYouActivateCostReductionRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 118.9", "CR 118.7", "CR 118.7a"],
+      "cr_checked": ["CR 118.9", "CR 118.7", "CR 118.7a"],
+      "reason": "WRONG CITATION (known, tracked): doc-comment cites 'CR 118.9 (cost alterations)' for the {1}-less cost REDUCTION, but rules-structure.json 118.9 is ALTERNATIVE COSTS ('Some spells have alternative costs... pay rather than paying the mana cost'), which is a different mechanic. Correct = CR 118.7 ('What a player actually needs to do to pay a cost may be changed or reduced by effects') / 118.7a (generic-mana reductions). Rest of Éowyn is faithful: CostReductionEffect{AppliesTo: activatedAbility Equip/You}; the combat trigger's modal(first strike|vigilance) + conditional(objectIsEquipped -> composite of both, 'instead') shape is faithful; ObjectIsEquippedCondition is well-shaped (cites CR 702.6 Equip — acceptable; CR 301.5a defines 'equipped creature' more precisely, noted, not a FAIL).",
+      "notes": "FAIL on the 118.9 vs 118.7/118.7a citation bug; orchestrator to remediate."
+    }
+  ]
+}

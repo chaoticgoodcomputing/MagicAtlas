@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ThousandYearElixir.json",
+      "verdict": "PASS",
+      "citations": ["CR 302.6", "CR 702.10a"],
+      "reason": "static activateAbilitiesAsThoughHaste (AppliesTo=creatures you control) + {1},{T} untap target creature; describes the CR 302.6 activation-permission, not a full haste grant; oracle text byte-exact"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Timing/ActivateAbilitiesAsThoughHasteEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 302.6", "CR 702.10a", "CR 602.1c"],
+      "reason": "reusable node with generic AbilityReference AppliesTo (not card-specific); doc correctly scopes to lifting the {T}/{Q} summoning-sickness gate without granting haste/attack permission; all cited rules exist and match"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#activateAbilitiesAsThoughHaste",
+      "verdict": "PASS",
+      "citations": ["CR 302.6"],
+      "reason": "projection decision present and sensible: a permission-grant static (sibling of activateLoyaltyAbilityAsThough) that emits no resource event a flow rule reads; genuinely inert, coarse is correct"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LichsTomb.json",
+      "verdict": "PASS",
+      "citations": ["CR 704.5a", "CR 119.3"],
+      "reason": "line1 static cantLoseGameForZeroLife(You); line2 triggered LosesLife -> sacrifice(You, permanent) Count=DerivedQuantity{LifeLost}; no unparsed; reminder text carried verbatim; oracle byte-exact"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Resource/CantLoseGameForZeroLifeEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 704.5a", "CR 604.1"],
+      "reason": "704.5a exists and matches verbatim ('a player with 0 or less life loses the game'); describes the loss-condition override not SBA machinery; correctly narrower than a blanket cant-lose grant"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#cantLoseGameForZeroLife",
+      "verdict": "PASS",
+      "citations": ["CR 704.5a"],
+      "reason": "projection decision present and sensible: a rules-of-the-game loss-condition prohibition (sibling of cantGainLife); no flow rule reads loss-condition overrides; coarse is correct"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GyrusWakerOfCorpses.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 601.2f", "CR 702.134", "CR 603.7"],
+      "reason": "ETB replacement putCounters(Self,+1/+1) Count=manaSpentToCast via asThisEnters (Self, not literal); attack line reuses optional/exile(lesser-power vs Self)/copy(It)/createDelayedTrigger(exile It at combat End); no unparsed; oracle byte-exact"
+    },
+    {
+      "target": "libs/magic-ast/AST/Quantities/ManaSpentToCastQuantity.cs",
+      "verdict": "PASS",
+      "citations": ["CR 601.2f", "CR 601.2h"],
+      "reason": "field-less total-mana-spent quantity; 601.2f/601.2h quoted accurately and support the total-cost-paid fact; correctly distinguished from printed ManaValue, Sunburst distinct-colors, and the boolean ManaSpentToCastCondition; quantity dim is not a PortWalk dispatch dimension so no projection entry needed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SavvyTrader.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2f", "CR 611.2b", "CR 110.4a"],
+      "reason": "ETB exile(target permanent card, graveyard, You) + optional mayPlayTargetFromExile(It) Duration=asLongAs objectInZone(It,Exile); static costReduction(1) AffectedObjects spell/You/ExcludedZone=Hand; no unparsed/free-text; rules generalize to siblings without mislabel"
+    },
+    {
+      "target": "libs/magic-ast/AST/Abilities/ObjectInZoneCondition.cs",
+      "verdict": "PASS",
+      "citations": ["CR 400.1", "CR 611.2b"],
+      "reason": "structured zone-membership gate (Reference+Zone) faithfully models 'for as long as it remains exiled'; 400.1 spot-on; cited 611.2c exists and does not contradict, though 611.2b is the on-point 'for as long as' subrule (doc quote inaccurate) - not a citation FAIL under doctrine"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilter.cs#ExcludedZone",
+      "verdict": "PASS",
+      "citations": ["CR 601.2f", "CR 111.6"],
+      "reason": "ExcludedZone negation axis (parallel to Zone/ExcludedCardTypes) captures cast-origin-zone for a spell filter; 601.2f (which does exist and covers cost reduction) supports the reduction; condition/filter dims are not PortWalk dispatch dimensions so no projection entry needed"
+    }
+  ]
+}

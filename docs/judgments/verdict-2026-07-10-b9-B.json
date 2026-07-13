@@ -1,0 +1,118 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/KnightsCharge.json",
+      "verdict": "PASS",
+      "citations": ["CR 508", "CR 205.3m", "CR 603.1"],
+      "reason": "attacks-trigger Subtypes:[Knight]+Controller:You faithful; lose1/gain1 composite + sacrifice-return-all-Knights secondary correct; 0 unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SubtypeAttacksConditionRule.cs#N03",
+      "verdict": "PASS",
+      "citations": ["CR 508", "CR 205.3m", "CR 603.1", "CR 109.5"],
+      "reason": "right-anchors attacks$ (rejects 'attacks and isn't blocked'), another->ExcludeSelf, Controller:You; 109.5 grounds 'you'=controller; semantically compatible with N20's rule"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/ReturnAllSubtypeCreatureFromGraveyardToBattlefieldRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 400.1", "CR 110.5b"],
+      "reason": "subtype-qualified return-all to battlefield, optional tapped entry; anchored, declines bare-type sibling"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NajeelaTheBladeBlossom.json",
+      "verdict": "PASS",
+      "citations": ["CR 508", "CR 506", "CR 508.4"],
+      "reason": "any-Warrior attacks-trigger (no controller); optional controller-creates tapped+attacking token; untap-all + trample/lifelink/haste-eot + additional-combat-phase; OnlyDuringCombat restriction; faithful, 0 unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/HaveControllerCreateTappedAttackingTokenRule.cs#N20",
+      "verdict": "FAIL",
+      "citations": ["CR 116.1b"],
+      "reason": "cites CR 116.1b for the 'you may' optional idiom, but CR 116 is 'Special Actions' and 116.1 has no subrule b; optional-effect-during-resolution belongs to CR 118.12/608.2. Core token modeling (111.2, 508.4) is correct; fix the inline-comment cite"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/UntapAllAttackingGainKeywordsAdditionalCombatActivatedRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 508", "CR 506", "CR 500.8"],
+      "reason": "untap-all-attacking + per-keyword gainAbility(eot) + reused AdditionalCombatPhaseEffect; 'They' back-reference bound to attacking set"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SubtypeAttacksConditionRule.cs#N20",
+      "verdict": "PASS",
+      "citations": ["CR 508", "CR 205.3m"],
+      "reason": "bare-subtype attacks-trigger with optional you-control; produces Subtypes:[X]+Attacks, differing from N03 only on Controller/ExcludeSelf -> a combined superset rule satisfies both golds"
+    },
+    {
+      "target": "libs/magic-ast/AST/Abilities/ActivatedAbility.cs#OnlyDuringCombat-projection",
+      "verdict": "PASS",
+      "citations": ["CR 602.5", "CR 506"],
+      "reason": "new ActivationRestriction discriminator parked as known-coarse-projection; sensible - a phase-scoped timing gate constrains WHEN not resource flow, combat-confined loop still repeats in-window (inert for recall)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ChandraHopesBeacon.json",
+      "verdict": "PASS",
+      "citations": ["CR 606.3", "CR 606.5", "CR 601.2c"],
+      "reason": "all 4 abilities faithful: magecraft copy-trigger (OnlyOnceEachTurn), +2 add-two-any-color, +1 impulse w/ PlayableFilter[instant,sorcery], -X deal X to each of up-to-two AnyTarget (VariableLoyaltyCost); 0 unparsed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WHO/BillPotts.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "back-prop faithful: 'This ability triggers only once each turn' extracted from verbatim Text into Restrictions:[OnlyOnceEachTurn] - a strict de-string refinement, not lossy; residual unstructured copy body is pre-existing whitelisted L1 debt untouched by this branch"
+    },
+    {
+      "target": "libs/magic-ast/AST/Abilities/ActivatedAbility.cs#VariableLoyaltyCost",
+      "verdict": "PASS",
+      "citations": ["CR 606.3", "CR 606.5"],
+      "reason": "new field carries -X loyalty magnitude as Quantity(X); mutually exclusive with fixed LoyaltyCost; no new discriminator"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/CardFlow/ImpulseEffect.cs#PlayableFilter",
+      "verdict": "PASS",
+      "citations": ["CR 601.3"],
+      "reason": "structured ObjectFilter restricting which exiled cards are castable (instant/sorcery), not free text; parent CR 601.3 (permission to cast) on-point"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/SourceDealsXDamageToEachOfUpToTwoTargetsEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 601.2c", "CR 601.2d", "CR 107.3"],
+      "reason": "each-of-up-to-two AnyTarget (independent, correctly distinguished from 601.2d divided), Amount=X bound to loyalty cost"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/HeartShapedHerb.json",
+      "verdict": "PASS",
+      "citations": ["CR 615.10", "CR 725"],
+      "reason": "prevention replacement (opponent-source, prevent 1 to you) + optional sacrifice/IfYouDo return-w/-3-counters + becomeMonarch(You); both lines faithful, 0 unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/OpponentControlledSourceDamagePreventionStaticRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 615.1", "CR 615.1a", "CR 615.2", "CR 615.10"],
+      "reason": "damage-event replacement filtered by opponent-controlled source; PreventDamageEffect Amount=1 to You; all 615.x cites verified"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/OptionalSacrificeReturnWithCountersBecomeMonarchEffectRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 716", "CR 725"],
+      "reason": "doc-comment cites 'CR 716 (the monarch)' and quotes 725.1's verbatim monarch text, but CR 716 is 'Class Cards'; the monarch is CR 725. Contradictory citation. Modeling (becomeMonarch, 118.12 'if you do') is faithful; fix 716->725"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MagdaBrazenOutlaw.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 205.3m", "CR 701.23a"],
+      "reason": "Other-Dwarves anthem (ExcludeSelf), 'a Dwarf you control becomes tapped' -> create Treasure, sac-5 search artifact-or-Dragon to battlefield; type-or-subtype disjunction via established flat-filter convention (CounterTargetTypeOrSubtype precedent, structured not free-text); Treasure AbilityText whitelisted"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SubtypeBecomesTappedConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 205.3"],
+      "reason": "reuses BecomesTapped event with subtype+Controller:You filter; 603.2 'becomes' trigger correctly cited; sits below generic BecomesTappedConditionRule"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/SearchLibraryTypeOrSubtypeToBattlefieldEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.23a", "CR 205.3"],
+      "reason": "known-card-type words -> CardTypes, capitalised subtype words -> Subtypes; structured type-or-subtype disjunction (established convention), search-to-battlefield + shuffle composite"
+    }
+  ]
+}

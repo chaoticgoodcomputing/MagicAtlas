@@ -515,6 +515,10 @@ public static class ObjectFilterRelations
   private static string? UndecidedAxis(ObjectFilter f) =>
     f.ExiledWith is not null ? "ExiledWith"
     : f.SharesColorWith is not null ? "SharesColorWith"
+    : f.SharesCreatureTypeWith is not null ? "SharesCreatureTypeWith"
+    : f.SharesNameWith is not null ? "SharesNameWith"
+    : f.SharesCardTypeWith is not null ? "SharesCardTypeWith"
+    : f.SharesPermanentTypeWith is not null ? "SharesPermanentTypeWith"
     : f.ChosenCharacteristic is not null ? "ChosenCharacteristic"
     : f.History is not null ? "History"
     : f.AttachedTo is not null ? "AttachedTo"
@@ -851,6 +855,10 @@ public static class ObjectFilterRelations
   private static string? SupUndecidedAxis(ObjectFilter sup) =>
     sup.ExiledWith is not null ? "ExiledWith"
     : sup.SharesColorWith is not null ? "SharesColorWith"
+    : sup.SharesCreatureTypeWith is not null ? "SharesCreatureTypeWith"
+    : sup.SharesNameWith is not null ? "SharesNameWith"
+    : sup.SharesCardTypeWith is not null ? "SharesCardTypeWith"
+    : sup.SharesPermanentTypeWith is not null ? "SharesPermanentTypeWith"
     : sup.ChosenCharacteristic is not null ? "ChosenCharacteristic"
     : sup.History is not null ? "History"
     : sup.AttachedTo is not null ? "AttachedTo"

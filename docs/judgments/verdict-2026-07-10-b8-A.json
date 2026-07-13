@@ -1,0 +1,82 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/AST/Abilities/SpreeModeAbility.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.172a"],
+      "reason": "new spreeMode ability couples one AdditionalCost + Effects per '+ [cost] — [effect]' mode; CR 702.172a exists and matches Spree static-on-modal"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/RequisitionRaid.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.172a"],
+      "reason": "3 spreeMode modes each AdditionalCost {1} + structured effect (destroy artifact / destroy enchantment / putCounters each creature target-player-controls); faithful to real oracle, no unparsed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BLB/WildcallSpree.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.172a"],
+      "reason": "back-prop faithful to its Input.OracleText: two spreeMode+createToken modes ({1}->1 Squirrel, {2}->X Squirrels), unparsed nodes removed, whitelist shrink legitimate (synthetic fixture; name collides with real Manifest Wildcall but Input pre-existing/unmodified)"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/TokenCopy/CopyModification.cs#ActivatedAbilityAdder",
+      "verdict": "PASS",
+      "citations": ["CR 707.2", "CR 602.1"],
+      "reason": "new activatedAbilityAdder, sibling of TriggeredAbilityAdder, carries structured ActivatedAbility; CR 707.2/602.1 valid"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BrenardGingerSculptor.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 205.3", "CR 205.1b", "CR 707.2", "CR 602.1"],
+      "reason": "Food/Golem subtype disjunction (established Subtypes-as-OR convention, CR 205.3); +2/+2 and trample as two effects in one static (CR 611.3); dies->exile->copy with pt-override 1/1 + typeAdder 'in addition to' (CR 205.1b) + activatedAbilityAdder for quoted sac ability; all structured, faithful"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/ZoneChange/CantBeRegeneratedEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.19"],
+      "reason": "new cantBeRegenerated ContinuousEffect, nullable-Target=self convention, well-named; CR 701.19 (Regenerate) valid"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ClergyOfTheHolyNimbus.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.19", "CR 614.1"],
+      "reason": "self-regen as replacement of destruction (OriginalEventOccurs:false, regenerate Self); activated {1} cantBeRegenerated this-turn with WhoMayActivate:Opponent for 'only your opponents may activate'; faithful, no unparsed"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#cantBeRegenerated",
+      "verdict": "PASS",
+      "citations": ["CR 701.19"],
+      "reason": "coarse projection sensible: regeneration-denial is a preventive object-suppression restriction, not a loop emit/consume event; genuinely inert for interaction recall"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Timing/CantPlayLandsEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 305.1", "CR 116.2a"],
+      "reason": "new cantPlayLands Effect with required Player scope, sibling of CantDrawCardsEffect; CR 305.1/116.2a (playing a land = special action) valid"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AggressiveMining.json",
+      "verdict": "PASS",
+      "citations": ["CR 305.1", "CR 116.2a"],
+      "reason": "cantPlayLands Player:You; activated sacrifice-land -> drawCards 2 with Restrictions:[OnlyOnceEachTurn]; faithful, no unparsed"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#cantPlayLands",
+      "verdict": "PASS",
+      "citations": ["CR 305.1", "CR 116.2a"],
+      "reason": "coarse projection sensible: land-play lock is a rules-of-the-game prohibition on a special action, not a loop emit/consume event; genuinely inert"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ArahboTheFirstFang.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 205.3"],
+      "reason": "'Other Cats' anthem ExcludeSelf:true; self-inclusive 'Arahbo or another nontoken Cat enters' trigger Subtypes:[Cat] IsToken:false Controller:You with NO ExcludeSelf (CR 603.2); createToken 1/1 white Cat; faithful"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SelfOrAnotherNontokenSubtypeEntersConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 109.5", "CR 205.3"],
+      "reason": "self-inclusive filter (no ExcludeSelf) anchored to 'or another nontoken [Capitalised Subtype] you control enters' with lower.Contains guard; sibling-sweep clean: claims only genuinely self-inclusive Sethron/Darksteel/Go-Shintai/Arahbo, does NOT steal bare-'another' Lathliss/Inalla/Miirym/Knightfisher/Baboon/Black Panther which keep ExcludeSelf"
+    }
+  ]
+}

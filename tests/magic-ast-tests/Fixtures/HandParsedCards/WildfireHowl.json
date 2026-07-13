@@ -1,0 +1,147 @@
+{
+  "Input": {
+    "Name": "Wildfire Howl",
+    "ManaCost": "{1}{R}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nWildfire Howl deals 2 damage to each creature. If the gift was promised, instead Wildfire Howl deals 1 damage to any target and 2 damage to each creature.",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": ["Gift"],
+    "Id": "7392d397-9836-4df2-944d-c930c9566811",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Wildfire Howl",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nWildfire Howl deals 2 damage to each creature. If the gift was promised, instead Wildfire Howl deals 1 damage to any target and 2 damage to each creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "choosePlayer",
+                "Scope": "Opponent"
+              }
+            },
+            {
+              "EffectType": "gift",
+              "Gifted": {
+                "EffectType": "drawCards",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Player": {
+                  "Kind": "Designated",
+                  "Filter": {
+                    "Controller": "ChosenPlayer"
+                  }
+                }
+              }
+            }
+          ],
+          "KeywordSource": "Gift",
+          "Reminder": {
+            "Text": "(You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)"
+          }
+        },
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "giftPromised"
+              },
+              "Then": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "dealDamage",
+                    "Source": {
+                      "Kind": "Self"
+                    },
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Target": {
+                      "Kind": "AnyTarget"
+                    }
+                  },
+                  {
+                    "EffectType": "dealDamage",
+                    "Source": {
+                      "Kind": "Self"
+                    },
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    },
+                    "Target": {
+                      "Kind": "Each",
+                      "Filter": {
+                        "CardTypes": ["creature"]
+                      }
+                    }
+                  }
+                ]
+              },
+              "Else": {
+                "EffectType": "dealDamage",
+                "Source": {
+                  "Kind": "Self"
+                },
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                },
+                "Target": {
+                  "Kind": "Each",
+                  "Filter": {
+                    "CardTypes": ["creature"]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      }
+    ]
+  }
+}

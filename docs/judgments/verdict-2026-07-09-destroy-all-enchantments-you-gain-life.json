@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/USG/MultanisDecree.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.8a", "CR 119.3"],
+      "reason": "byte-identical oracle text; two fully-structured effects (destroy Each enchantment + gainLife 2x objectsDestroyedThisWay enchantment), no unparsed/free-text/lossy merge, correct semantics"
+    },
+    {
+      "target": "libs/magic-ast/AST/Quantities/ObjectsDestroyedThisWayQuantity.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.8a"],
+      "reason": "new quantity node; cited CR 701.8a exists and matches (destroy = move to graveyard); Filter:ObjectFilter names the counted noun (reference-not-resolution, ADR 0004), no free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/GainLifeForEachDestroyedThisWaySpellRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 119.3"],
+      "reason": "new anchored spell rule; cited CR 119.3 exists and matches; mirrors GainLifeForEachPermanentSpellRule, emits GainLifeEffect with CalculatedQuantity multiply for rate>1"
+    },
+    {
+      "target": "mast/destroy-all-enchantments-you-gain-life#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "only new discriminator is a Quantity type (not an effect/cost/trigger/restriction); Qty() defaults unknown QuantityType to symbolic null, no port label created; gainLife/destroy effects already projection-accounted (gainLife semantic, destroy justified-coarse) — no projection entry required"
+    }
+  ]
+}

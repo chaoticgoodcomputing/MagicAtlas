@@ -1,0 +1,124 @@
+{
+  "Input": {
+    "Name": "Spelltithe Enforcer",
+    "ManaCost": "{3}{W}{W}",
+    "TypeLine": "Creature — Elephant Wizard",
+    "OracleText": "Whenever an opponent casts a spell, that player sacrifices a permanent of their choice unless they pay {1}.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Spelltithe Enforcer",
+    "TypeLine": {
+      "Raw": "Creature — Elephant Wizard",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elephant",
+        "Wizard"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever an opponent casts a spell, that player sacrifices a permanent of their choice unless they pay {1}.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "Controller": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "sacrifice",
+                "Target": {
+                  "Kind": "ThatPlayer",
+                  "Filter": {
+                    "CardTypes": [
+                      "permanent"
+                    ]
+                  }
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "ThatPlayer"
+                },
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 1
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

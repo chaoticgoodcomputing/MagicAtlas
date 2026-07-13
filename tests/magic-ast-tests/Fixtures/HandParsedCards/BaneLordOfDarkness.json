@@ -1,0 +1,170 @@
+{
+  "Input": {
+    "Name": "Bane, Lord of Darkness",
+    "ManaCost": "{1}{W}{U}{B}",
+    "TypeLine": "Legendary Creature — God",
+    "OracleText": "As long as your life total is less than or equal to half your starting life total, Bane has indestructible.\nWhenever another nontoken creature you control dies, target opponent may have you draw a card. If they don't, you may put a creature card with equal or lesser toughness from your hand onto the battlefield.",
+    "Power": "5",
+    "Toughness": "2",
+    "Colors": ["B", "U", "W"],
+    "ColorIdentity": ["B", "U", "W"],
+    "Keywords": [],
+    "Id": "1a576d17-693d-4cc1-bb5b-bf81c74de03b",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Bane, Lord of Darkness",
+    "TypeLine": {
+      "Raw": "Legendary Creature — God",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["God"]
+    },
+    "Oracle": {
+      "RawText": "As long as your life total is less than or equal to half your starting life total, Bane has indestructible.\nWhenever another nontoken creature you control dies, target opponent may have you draw a card. If they don't, you may put a creature card with equal or lesser toughness from your hand onto the battlefield.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Indestructible",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Indestructible"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "quantityComparison",
+                  "Left": {
+                    "QuantityType": "derived",
+                    "DerivedFrom": "LifeTotal",
+                    "Source": "you"
+                  },
+                  "Operator": "LessThanOrEqual",
+                  "Right": {
+                    "QuantityType": "calculated",
+                    "BaseQuantity": {
+                      "QuantityType": "derived",
+                      "DerivedFrom": "StartingLifeTotal",
+                      "Source": "you"
+                    },
+                    "Operation": "half"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsToken": false,
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Chooser": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["opponent"]
+                }
+              },
+              "Inner": {
+                "EffectType": "drawCards",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              },
+              "IfYouDoNot": {
+                "EffectType": "optional",
+                "Inner": {
+                  "EffectType": "putFromHandOntoBattlefield",
+                  "Filter": {
+                    "CardTypes": ["creature"],
+                    "Zone": "Hand",
+                    "Controller": "You",
+                    "ToughnessComparison": {
+                      "Operator": "LessThanOrEqual",
+                      "RelativeTo": {
+                        "Kind": "ThatCreature"
+                      },
+                      "RelativeCharacteristic": "Toughness"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{W}{U}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "U", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "U", "B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

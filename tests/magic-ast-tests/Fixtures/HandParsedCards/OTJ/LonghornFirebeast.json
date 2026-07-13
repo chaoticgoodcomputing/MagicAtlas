@@ -1,0 +1,119 @@
+{
+  "Input": {
+    "Name": "Longhorn Firebeast",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Creature — Elemental Ox Beast",
+    "OracleText": "When this creature enters, any opponent may have it deal 5 damage to them. If a player does, sacrifice this creature.",
+    "Power": "3",
+    "Toughness": "2",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Longhorn Firebeast",
+    "TypeLine": {
+      "Raw": "Creature — Elemental Ox Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental",
+        "Ox",
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, any opponent may have it deal 5 damage to them. If a player does, sacrifice this creature.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Chooser": {
+                "Kind": "Opponent"
+              },
+              "Inner": {
+                "EffectType": "dealDamage",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 5
+                },
+                "Source": {
+                  "Kind": "It"
+                },
+                "Target": {
+                  "Kind": "Opponent"
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "sacrifice",
+                "Target": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

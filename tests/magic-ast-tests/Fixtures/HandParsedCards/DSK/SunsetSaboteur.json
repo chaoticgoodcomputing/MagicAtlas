@@ -1,0 +1,127 @@
+{
+  "Input": {
+    "Name": "Sunset Saboteur",
+    "ManaCost": "{1}{B}",
+    "TypeLine": "Creature — Human Rogue",
+    "OracleText": "Menace\nWard—Discard a card.\nWhenever this creature attacks, put a +1/+1 counter on target creature an opponent controls.",
+    "Power": "4",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Sunset Saboteur",
+    "TypeLine": {
+      "Raw": "Creature — Human Rogue",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Rogue"]
+    },
+    "Oracle": {
+      "RawText": "Menace\nWard—Discard a card.\nWhenever this creature attacks, put a +1/+1 counter on target creature an opponent controls.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"]
+              },
+              "MinimumBlockers": 2
+            }
+          ],
+          "KeywordSource": "Menace"
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Ward",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesTarget",
+            "Filter": {
+              "Controller": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": {
+                  "Kind": "It"
+                }
+              },
+              "Unless": {
+                "Player": {
+                  "Kind": "ThatPlayer"
+                },
+                "Cost": {
+                  "CostType": "discard",
+                  "Filter": {
+                    "CardTypes": ["card"]
+                  },
+                  "Quantity": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Attacks",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "Opponent"
+                }
+              },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

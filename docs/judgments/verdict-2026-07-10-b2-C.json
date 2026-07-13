@@ -1,0 +1,124 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DictateOfKarametra.json",
+      "verdict": "PASS",
+      "citations": ["CR 605.1a", "CR 106.12", "CR 106.4", "CR 603.2"],
+      "reason": "triggered ability = Trigger{TapsForMana, land, Any} + addMana{AnyType:true, Player:ThatPlayer}; Flash line static timingModification Grant Instant; matches oracle exactly"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TapForManaConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 106.12", "CR 603.2"],
+      "reason": "new land-for-mana branch is additive and $-anchored; previously these siblings hit the !permanent null guard, so no sibling reparse; anchor excludes the 'while you're the monarch' variant and the 'an opponent taps' subject"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ThatPlayerAddsManaOfAnyTypeProducedRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 106.4"],
+      "reason": "reuses AddManaEffect{AnyType,Player:ThatPlayer}; ^...$ anchored, accepts land|permanent noun; disjoint from Kinnan AddManaRule which uses implicit 'you'; no new discriminator"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-land-tap-mana-doubler#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses existing addMana effect + TapsForMana trigger event; PortWalk projection N/A, no ratchet entry needed"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Keyword/NoMaxHandSizeEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 402.2"],
+      "reason": "DESIGN: RECOMMEND KEEPING Player REQUIRED (not nullable). Required is consistent with the closest analogue CantGainLifeEffect (also required ObjectReference Player for the symmetric You/Players static scope); explicit structural scope beats an implicit null-means-You default; the 4 gold edits are semantically-correct backfills (Player:You is the faithful scope), not test-weakening — legitimate schema evolution. Orchestrator should NOT remediate; land as-is."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GracefulAdept.json",
+      "verdict": "PASS",
+      "citations": ["CR 402.2"],
+      "reason": "'You have no maximum hand size' -> Player:{Kind:You} is the faithful single-controller scope"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DecanterOfEndlessWater.json",
+      "verdict": "PASS",
+      "citations": ["CR 402.2"],
+      "reason": "'You have no maximum hand size' -> Player:{Kind:You} faithful; correct required-field backfill"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Spellbook.json",
+      "verdict": "PASS",
+      "citations": ["CR 402.2"],
+      "reason": "'You have no maximum hand size' -> Player:{Kind:You} faithful; correct required-field backfill"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MKM/NivMizzetVisionary.json",
+      "verdict": "PASS",
+      "citations": ["CR 402.2"],
+      "reason": "'You have no maximum hand size' -> Player:{Kind:You} faithful; correct required-field backfill"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PriceOfKnowledge.json",
+      "verdict": "PASS",
+      "citations": ["CR 402.2", "CR 603.2"],
+      "reason": "'Players have no maximum hand size' -> Player:{Kind:EachPlayer} faithful (all-players scope); line-2 dealDamage Amount=CountQuantity(cards in ThatPlayer's hand) Source:Self Target:ThatPlayer matches 'equal to the number of cards in that player's hand'"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SelfDealsHandSizeDamageToThatPlayerRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2"],
+      "reason": "^...$ anchored 'deals damage to that player equal to the number of cards in ... hand' with NO amount token after 'deals' — disjoint from digit sibling SelfDealsDamageToThatPlayerRule (requires number) and the 'deals X damage ... where X is' CalculatedQuantity siblings (require literal X token)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/NoMaxHandSizeRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 402.2"],
+      "reason": "^\\s*(You|Players)...$ subject capture scopes Player to You vs EachPlayer; anchored whole-line, no sibling mislabel"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-no-maximum-hand-size#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator — Player field added to existing noMaxHandSize; new rule emits existing dealDamage/CountQuantity; PortWalk projection N/A"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DeadlyRollick.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.9", "CR 903"],
+      "reason": "alternativeCosts = zero-symbol ManaCost (faithful to 'without paying its mana cost') gated on CountCondition{Commander creature, You, >=1}; cost line hoisted to Attributes, Oracle.Abilities = exile target creature"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/AttributeExtractor.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.9", "CR 903"],
+      "reason": "first-line ^...$ anchored commander free-cast; zero-symbol ManaCost distinct from explicit {0}; CountCondition{Supertypes:[Commander], creature, You} mirrors pre-existing documented ModalAbilityParser convention (CR 903 designation modeled on supertype axis)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/ClauseSplitter.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.9"],
+      "reason": "narrow StartsWith skip of the exact free-cast sentence prevents spurious UnparsedAbility; disjoint from the modal 'as you cast this spell, you may choose both' family and Biowaste/Crimson Honor Guard 'control a commander' lines"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-commander-conditional-free-cast#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator — reuses AlternativeCostsAttribute + CountCondition + ManaCost; PortWalk projection N/A"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ArmorOfThorns.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.5a"],
+      "reason": "enchantRestriction LegalTargets={CardTypes:[creature], ExcludedColors:[B]} faithful to 'Enchant nonblack creature'; line-1 flash/self-sacrifice and +2/+2 modifyPT fully structured, no unparsed nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.5a", "CR 105.1"],
+      "reason": "non<color> branch scoped to the post-'Enchant' descriptor, ^non(white|blue|black|red|green) <type>$ anchored; color group excludes nonland/non-Wall/noncommander/nonbasic so sibling Enchant lines are untouched; ExcludedColors=[B] via QualifierAxisMapper matches Doom-Blade precedent. NOTE: doc-comment's 'CR 105.2c' is imprecise (105.2c = 'colorless object has no color'; codebase convention cites CR 105.1) but present and non-contradictory — not a FAIL per citation policy"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-enchant-nonblack-creature#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator — ExcludedColors filter axis and enchantRestriction effect pre-exist; PortWalk projection N/A"
+    }
+  ]
+}

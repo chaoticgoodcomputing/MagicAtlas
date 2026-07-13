@@ -1,0 +1,152 @@
+{
+  "Input": {
+    "Name": "Rockcaster Platoon",
+    "ManaCost": "{5}{W}{W}",
+    "TypeLine": "Creature — Rhino Soldier",
+    "OracleText": "{4}{G}: This creature deals 2 damage to each creature with flying and each player.",
+    "Power": "5",
+    "Toughness": "7",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "G",
+      "W"
+    ]
+  },
+  "Output": {
+    "Name": "Rockcaster Platoon",
+    "TypeLine": {
+      "Raw": "Creature — Rhino Soldier",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Rhino",
+        "Soldier"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{4}{G}: This creature deals 2 damage to each creature with flying and each player.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 4
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "dealDamage",
+                  "Source": {
+                    "Kind": "Self"
+                  },
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "Target": {
+                    "Kind": "Each",
+                    "Filter": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Characteristics": [
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Flying"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "EffectType": "dealDamage",
+                  "Source": {
+                    "Kind": "Self"
+                  },
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "Target": {
+                    "Kind": "EachPlayer"
+                  }
+                }
+              ]
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 7,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 7,
+          "Raw": "7"
+        }
+      }
+    ]
+  }
+}

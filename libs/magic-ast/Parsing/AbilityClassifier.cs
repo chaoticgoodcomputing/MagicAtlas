@@ -48,6 +48,16 @@ public sealed record ClauseClassification
   /// For loyalty abilities, the loyalty cost (+N, -N, or 0).
   /// </summary>
   public int? LoyaltyCost { get; init; }
+
+  /// <summary>
+  /// For a <b>variable</b> loyalty ability ("−X: …") — the magnitude of loyalty
+  /// removed, carried as a <see cref="MagicAST.AST.Quantities.VariableQuantity"/>.
+  /// The tokenizer's loyalty-symbol reader only accepts a numeric cost, so the
+  /// "−X:" form is recognized from the clause's raw text instead; this field
+  /// threads the parsed X to <see cref="MagicAST.AST.Abilities.ActivatedAbility.VariableLoyaltyCost"/>.
+  /// Mutually exclusive with <see cref="LoyaltyCost"/>.
+  /// </summary>
+  public MagicAST.AST.Quantities.Quantity? VariableLoyaltyCost { get; init; }
 }
 
 /// <summary>
@@ -238,6 +248,19 @@ public sealed class AbilityClassifier
       return loyaltyClassification with { AbilityWord = abilityWord };
     }
 
+    // Variable-loyalty ability: "−X: …" (Chandra, Hope's Beacon). The tokenizer's
+    // loyalty-symbol reader (OracleTokenizer.TryTokenizeLoyaltySymbol) requires a
+    // numeric cost after the sign, so "−X" never produces a LoyaltyDown token —
+    // the '−' is dropped and 'X' tokenizes as a bare word. Recognize the form from
+    // the raw clause text so the ability routes to the activated (loyalty) parser
+    // with its variable cost preserved. CR 606.5 — a loyalty cost that removes X
+    // counters. Every printed variable-loyalty ability is a removal ("−X").
+    var variableLoyalty = TryClassifyAsVariableLoyalty(clause.RawText);
+    if (variableLoyalty != null)
+    {
+      return variableLoyalty with { AbilityWord = abilityWord };
+    }
+
     // Parenthetical-wrapped activated ability: "({T}: Add {B} or {R}.)" on dual
     // lands and basic land subtypes. The whole clause tokenizes as a single
     // ReminderText token; the inner content is a normal {cost}: effect pattern.
@@ -366,6 +389,21 @@ public sealed class AbilityClassifier
         };
       }
 
+      // Exception: "Choose a card name. [effect...]" (Demonic Consultation) is a
+      // card-name declaration followed by plain spell effects, not a modal
+      // mode-selection — there is no bullet ("•") list of options. Route to the
+      // spell parser like the "Choose target" carve-out above, mirroring
+      // ChooseCardNameEffect's reuse as a plain spell effect.
+      if (Regex.IsMatch(trimmed, @"^Choose\s+a\s+card\s+name\b", RegexOptions.IgnoreCase))
+      {
+        return new ClauseClassification
+        {
+          Kind = AbilityKind.Spell,
+          Confidence = 0.90,
+          AbilityWord = abilityWord,
+        };
+      }
+
       return new ClauseClassification
       {
         Kind = AbilityKind.Modal,
@@ -407,6 +445,127 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Prevent all damage that would be dealt to this/enchanted creature by
+    // [source]." — a permanent, always-on damage-prevention shield printed
+    // directly on a creature (e.g. Champion Lancer: "... by creatures.") or on
+    // an Aura's enchanted-creature clause (e.g. Prismatic Ward: "... by sources
+    // of the chosen color."), CR 604.2 ("Static abilities create continuous
+    // effects, some of which are prevention effects ..."). "Prevent" heads the
+    // generic spell-instruction-verb list below (Fog-style "Prevent all combat
+    // damage ... this turn" IS a genuine one-shot spell-resolution step), but
+    // this shape names a specific permanent ("this creature" / "enchanted
+    // creature") as the protected recipient with no turn-bounded duration — a
+    // declarative, continuously-active property of the object, not an
+    // imperative resolution instruction. Intercept before the generic verb
+    // check swallows it (mirrors the "You may cast this card from your
+    // graveyard" intercept above).
+    if (Regex.IsMatch(
+      clause.RawText.TrimStart(),
+      @"^Prevent\s+all\s+damage\s+that\s+would\s+be\s+dealt\s+to\s+(?:this|enchanted)\s+creature\s+by\s+",
+      RegexOptions.IgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "Prevent all damage that would be dealt to creatures you control." (Inner
+    // Sanctum) — the same always-on damage-prevention shield as the "this creature
+    // by [source]" intercept above, but scoped to the controller's creatures rather
+    // than the permanent itself, and with no "by [source]" qualifier (it blocks
+    // damage from any source). CR 604.2: a permanent, continuously-active static
+    // ability, not an imperative one-shot spell-resolution step, even though
+    // "Prevent" heads the generic spell-instruction-verb list below. Intercept here
+    // for the same reason as the sibling above.
+    if (Regex.IsMatch(
+      clause.RawText.TrimStart(),
+      @"^Prevent\s+all\s+damage\s+that\s+would\s+be\s+dealt\s+to\s+creatures\s+you\s+control\b",
+      RegexOptions.IgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "Prevent all [noncombat] damage that would be dealt to equipped creature."
+    // (Magebane Armor) — the same always-on damage-prevention shield as the two
+    // intercepts above, scoped to the Equipment's attached permanent rather than
+    // "this/enchanted creature" or "creatures you control", and optionally
+    // qualified to a single damage type ("noncombat"). CR 604.2: a permanent,
+    // continuously-active static ability, not an imperative one-shot
+    // spell-resolution step, even though "Prevent" heads the generic
+    // spell-instruction-verb list below. Intercept here for the same reason as
+    // the two siblings above.
+    if (Regex.IsMatch(
+      clause.RawText.TrimStart(),
+      @"^Prevent\s+all\s+(?:noncombat\s+)?damage\s+that\s+would\s+be\s+dealt\s+to\s+equipped\s+creature\b",
+      RegexOptions.IgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "Prevent all damage that would be dealt to you." (Glacial Chasm) — the same
+    // always-on damage-prevention shield as the three intercepts above, scoped to
+    // the controlling player ("you") rather than a creature or Equipment/Aura
+    // recipient, with no "by [source]" qualifier. CR 604.2: a permanent,
+    // continuously-active static ability, not an imperative one-shot
+    // spell-resolution step, even though "Prevent" heads the generic
+    // spell-instruction-verb list below. Anchored on "to you" immediately after
+    // "dealt" (word-boundary, no trailing "control") so it cannot collide with the
+    // "creatures you control" sibling above. Intercept here for the same reason as
+    // the three siblings above.
+    if (Regex.IsMatch(
+      clause.RawText.TrimStart(),
+      @"^Prevent\s+all\s+damage\s+that\s+would\s+be\s+dealt\s+to\s+you\b",
+      RegexOptions.IgnoreCase))
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Static,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "The next time a source of your choice would deal damage to you this turn,
+    // prevent that damage. …" — the uncoloured one-shot prevention shield printed as
+    // a spell (instant) resolution effect (Intervention Pact, Reverse Damage,
+    // Invulnerability, New Way Forward, Deflecting Palm). The clause opens with the
+    // resolution instruction "The next time …" (not an imperative verb, so
+    // StartsWithSpellInstructionVerb below misses it), which otherwise falls through
+    // to the Static default and stalls in StaticAbilityParser. Route it to the spell
+    // parser, where PreventNextDamageFromChosenSourceSpellRule builds the
+    // PreventDamageEffect and any trailing "You gain life …" sentence is dispatched to
+    // its own spell rule. ANCHORED at clause start: the activated cost-gated forms
+    // (Circle/Rune of Protection, Pentagram, Righteous Aura) open with "{cost}:" and
+    // are already routed to the activated parser above, so they never reach here.
+    if (
+      Regex.IsMatch(
+        clause.RawText.TrimStart(),
+        @"^The\s+next\s+time\s+a\s+source\s+of\s+your\s+choice\s+would\s+deal\s+damage\s+to\s+you\s+this\s+turn,\s+prevent\s+that\s+damage\b",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Spell-style instruction verbs at clause start: imperative effect
     // descriptions consistent with sorcery/instant resolution (Rule 113.3a).
     // Also fires for modal option bodies dispatched through the registry, where
@@ -417,6 +576,64 @@ public sealed class AbilityClassifier
       {
         Kind = AbilityKind.Spell,
         Confidence = 0.80,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "Remove up to three counters from target creature." (Heartless Act) /
+    // "Remove all counters from all permanents ..." (Aether Snap) — a one-shot
+    // counter-removal resolution step (CR 122.3: "If a permanent has both a
+    // +1/+1 counter and a -1/-1 counter on it, N of each are removed …" — removal
+    // is an effect action, not a declarative static). "Remove" is not in the
+    // generic <see cref="_spellInstructionVerbs"/> allowlist (too broad to
+    // allowlist bare — it also heads combat-removal and ante lines), so without
+    // this intercept the clause defaults to Static and stalls in the unimplemented
+    // static-ability parser. Anchored to the "Remove … counter(s) from …" frame so
+    // it only catches counter removal. The activated-cost form ("Remove three spore
+    // counters from this creature: …") is already intercepted earlier by
+    // <see cref="IsActivatedAbilityPattern"/> (the colon), so this fires only for the
+    // bare spell-body / modal-option form.
+    if (
+      Regex.IsMatch(
+        clause.RawText.TrimStart(),
+        @"^Remove\s+.*\bcounters?\b\s+from\b",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "Take an extra turn after this one." / "Take two extra turns after this
+    // one." — a one-shot spell-resolution effect that schedules additional
+    // turn(s) (CR 500.7: "Some effects can give a player extra turns. They do
+    // this by adding the turns directly after the specified turn."). "Take" is
+    // not in the generic <see cref="_spellInstructionVerbs"/> allowlist (too
+    // broad to allowlist bare — "Take" isn't otherwise a common spell verb),
+    // so without this intercept the clause defaults to Static and stalls in
+    // the unimplemented static-ability parser. Anchored to the specific
+    // "extra turn(s) after this one" frame so it doesn't swallow unrelated
+    // "Take ..." phrasings. The loyalty-ability and activated-cost forms
+    // ("−N: Take an extra turn after this one.") are already intercepted
+    // earlier by <see cref="TryClassifyAsLoyalty"/> / <see cref="IsActivatedAbilityPattern"/>,
+    // so this only fires for the bare spell-body form (e.g. Temporal Manipulation).
+    if (
+      Regex.IsMatch(
+        clause.RawText.TrimStart(),
+        @"^Take\s+(?:an|one|two|three|\S+)\s+extra\s+turns?\s+after\s+this\s+one",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
         AbilityWord = abilityWord,
       };
     }
@@ -689,20 +906,22 @@ public sealed class AbilityClassifier
       };
     }
 
-    // "Target player/opponent discards/draws/gains/loses/mills/shuffles ..." — spell-resolution
-    // player-targeting resource instructions (e.g., "Target player discards their hand,
-    // then draws four cards." — Wheel and Deal; "Target opponent draws a card." — Bargain;
-    // "Target opponent reveals their hand. You choose ..." — Thought Erasure / Thoughtseize /
-    // Coercion reveal-choose-discard family; "Target player shuffles up to two target cards
-    // from their graveyard into their library." — Krosan Reclamation, the shuffle keyword
-    // action, CR 701.24). Both "Target player" and "Target opponent" mark a one-shot
-    // imperative spell effect (Rule 113.3a) addressed to a targeted player, not a
-    // continuous static. Without this check these lines fall through to the Static default and
-    // stall in StaticAbilityParser.
+    // "Target player/opponent discards/draws/gains/loses/mills/shuffles/creates ..." —
+    // spell-resolution player-targeting resource instructions (e.g., "Target player
+    // discards their hand, then draws four cards." — Wheel and Deal; "Target opponent
+    // draws a card." — Bargain; "Target opponent reveals their hand. You choose ..." —
+    // Thought Erasure / Thoughtseize / Coercion reveal-choose-discard family; "Target
+    // player shuffles up to two target cards from their graveyard into their library." —
+    // Krosan Reclamation, the shuffle keyword action, CR 701.24; "Target player creates a
+    // 2/2 black Zombie creature token." — Gravedig, CR 111.2: a resolving spell's effect
+    // may specify a player other than the controller as a created token's creator). Both
+    // "Target player" and "Target opponent" mark a one-shot imperative spell effect (Rule
+    // 113.3a) addressed to a targeted player, not a continuous static. Without this check
+    // these lines fall through to the Static default and stall in StaticAbilityParser.
     if (
       Regex.IsMatch(
         clause.RawText,
-        @"^\s*Target\s+(player|opponent)\s+(discards?|draws?|gains?|loses?|mills?|returns?|exiles?|sacrifices?|reveals?|shuffles?)\s+",
+        @"^\s*Target\s+(player|opponent)\s+(discards?|draws?|gains?|loses?|mills?|returns?|exiles?|sacrifices?|reveals?|shuffles?|creates?)\s+",
         RegexOptions.IgnoreCase
       )
     )
@@ -913,6 +1132,34 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "Target creature becomes [color] until end of turn." — the SINGULAR-targeting
+    // counterpart of the "One or more target creatures become ..." rule above (Niveous
+    // Wisps: "Target creature becomes white until end of turn. Tap that creature.").
+    // Anchored at the start only (no trailing $) so it still fires when this clause is
+    // the opening sentence of a multi-sentence spell line ("... until end of turn. Tap
+    // that creature."/"Untap that creature."), mirroring the "gets +N/+M" and "gains
+    // [keyword]" rules above. The "Target" subject plus "until end of turn" duration
+    // mark this as a one-shot imperative spell effect (Rule 113.3a), not a declarative
+    // static. A literal `{cost}:` prefix (e.g. Metathran Transport's activated ability
+    // of the same shape) is already routed to Activated by the earlier colon check, so
+    // this rule only ever sees un-costed, printed spell lines. Without this the line
+    // defaults to Static, where StaticAbilityParser stalls.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Target\s+creature\s+becomes\s+(white|blue|black|red|green|colorless)\s+until\s+end\s+of\s+turn",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // Mass P/T-modification spell shapes with "until end of turn" — one-shot imperative
     // spell effects (Rule 113.3a). The "until end of turn" duration is the distinguishing
     // marker between these spell forms and their permanent-static counterparts (e.g.,
@@ -932,6 +1179,54 @@ public sealed class AbilityClassifier
         clause.RawText,
         @"^\s*(Creatures\s+you\s+control|Creatures\s+your\s+opponents\s+control|All\s+creatures|Attacking\s+creatures|Blocking\s+creatures)"
         + @"\s+get\s+[+\-]\d+/[+\-]\d+\s+until\s+end\s+of\s+turn",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // Mass P/T-modification spell shapes with "until end of turn" where the modifiers
+    // are the spell's announced X/Y/Z rather than a literal digit — same subject list
+    // as the literal-digit block above, e.g. "All creatures get +X/-X until end of
+    // turn." (Flowstone Slide). Disjoint from that block by construction (\d+ never
+    // matches an X/Y/Z letter), so it is a sibling regex, not an edit to it. Without
+    // this rule the line defaults to Static and stalls in StaticAbilityParser the same
+    // way the literal-digit shape did before that block was added.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*(Creatures\s+you\s+control|Creatures\s+your\s+opponents\s+control|All\s+creatures|Attacking\s+creatures|Blocking\s+creatures)"
+        + @"\s+get\s+[+\-][XYZ]/[+\-][XYZ]\s+until\s+end\s+of\s+turn",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // Mass P/T-modification-plus-keyword-grant spell shape with "until end of turn" —
+    // a composite one-shot imperative spell effect (Rule 113.3a) that both changes P/T
+    // and grants a keyword in the same sentence, e.g. "Creatures you control get +1/+1
+    // and gain haste until end of turn." (Goblin War Party's second modal option).
+    // Anchored on the "and gain <keyword> until end of turn" tail so it only fires for
+    // this composite shape, never shadowing the P/T-only sibling above. Without this the
+    // line defaults to Static, stalling in StaticAbilityParser the same way the P/T-only
+    // shape did before that block was added.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Creatures\s+you\s+control\s+get\s+[+\-]\d+/[+\-]\d+\s+and\s+gain\s+.+?\s+until\s+end\s+of\s+turn",
         RegexOptions.IgnoreCase
       )
     )
@@ -1008,6 +1303,30 @@ public sealed class AbilityClassifier
       };
     }
 
+    // "[Self] deals damage equal to the sacrificed creature's power to any target." —
+    // Thud's self-by-name spell-resolution shape: the additional-cost sacrifice
+    // (parsed separately by AttributeExtractor into AdditionalCostsAttribute) feeds a
+    // CR 607.1 linked-ability back-reference ("the sacrificed creature"). No numeric
+    // amount token between "deals" and "damage" — the amount is a derived reference —
+    // so this falls outside the generic "[Self] deals N damage to ..." pattern below and
+    // would otherwise default to Static and stall in StaticAbilityParser.
+    if (
+      !clause.Tokens.Any(t => t.Kind == OracleToken.QuotedText)
+      && Regex.IsMatch(
+        clause.RawText,
+        @"^\s*[A-Z]\S*(?:\s+\S+)*?\s+deals\s+damage\s+equal\s+to\s+the\s+sacrificed\s+creature's\s+power\s+to\s+any\s+target\b",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.90,
+        AbilityWord = abilityWord,
+      };
+    }
+
     // "[Self] deals N damage to ..." — self-by-name spell-resolution dealDamage.
     // Take Down's modal options ("Take Down deals 4 damage to target creature
     // with flying.") open with the card's own name rather than a recognised
@@ -1039,15 +1358,40 @@ public sealed class AbilityClassifier
       };
     }
 
-    // "This spell can't be countered." is a property of the resolving spell;
-    // route it to the spell parser so the EffectType lands inside
-    // SpellAbility.Effects rather than as a top-level static. Other
-    // "This spell ..." phrasings (e.g., "This spell costs {X} less to cast")
+    // "[Self] deals N damage divided as you choose among any number of target
+    // creatures." — Fire Covenant's divided-damage burn shape. The literal word
+    // immediately after "damage" is "divided" rather than "to", so it falls
+    // outside the sibling "[Self] deals N damage to ..." pattern above and would
+    // otherwise default to Static (a continuous-effect ability kind, CR 604) and
+    // stall in StaticAbilityParser — this is a one-shot spell-resolution effect
+    // (Rule 113.3a; CR 601.2d — dividing an effect among targets is a spellcasting
+    // announcement, not a continuous static ability).
+    if (
+      !clause.Tokens.Any(t => t.Kind == OracleToken.QuotedText)
+      && Regex.IsMatch(
+        clause.RawText,
+        @"^\s*[A-Z]\S*(?:\s+\S+)*?\s+deals?\s+\S+\s+damage\s+divided\s+.*\bamong\b",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "This spell can't be countered." / "This spell can't be copied." are properties
+    // of the resolving spell on the stack; route them to the spell parser so the
+    // EffectType lands inside SpellAbility.Effects rather than as a top-level static.
+    // Other "This spell ..." phrasings (e.g., "This spell costs {X} less to cast")
     // are static cost-modification effects and remain Static.
     if (
       Regex.IsMatch(
         clause.RawText,
-        @"^\s*This\s+spell\s+can'?t\s+be\s+countered",
+        @"^\s*This\s+spell\s+can'?t\s+be\s+(?:countered|copied)",
         RegexOptions.IgnoreCase
       )
     )
@@ -1116,6 +1460,30 @@ public sealed class AbilityClassifier
       Regex.IsMatch(
         clause.RawText,
         @"^\s*Creatures\s+you\s+control\s+gain\s+\S+.*?\s+until\s+end\s+of\s+turn\.?\s*$",
+        RegexOptions.IgnoreCase
+      )
+    )
+    {
+      return new ClauseClassification
+      {
+        Kind = AbilityKind.Spell,
+        Confidence = 0.85,
+        AbilityWord = abilityWord,
+      };
+    }
+
+    // "Permanents you control gain [keyword] until end of turn." — spell-resolution
+    // mass keyword grant to all permanents the caster controls (e.g. Simic Charm's
+    // modal option "Permanents you control gain hexproof until end of turn."). The
+    // "until end of turn" duration marks this as a one-shot imperative spell effect
+    // (Rule 113.3a), not a permanent declarative static. Mirrors the "Creatures you
+    // control gain" sibling above but scoped to the broader "permanent" pseudo card
+    // type (CR 110.4a) rather than "creature". Without this route the clause defaults
+    // to Static and stalls in StaticAbilityParser.
+    if (
+      Regex.IsMatch(
+        clause.RawText,
+        @"^\s*Permanents\s+you\s+control\s+gain\s+\S+.*?\s+until\s+end\s+of\s+turn\.?\s*$",
         RegexOptions.IgnoreCase
       )
     )
@@ -1492,6 +1860,15 @@ public sealed class AbilityClassifier
     // not a declarative static. The imperative form "Gain" (second person) differs from
     // the third-person "gains" that appears on permanent-static oracle text.
     "Gain",
+    // Exchange keyword action (CR 701.12a: "A spell or ability may instruct players to
+    // exchange something (for example, life totals or control of two permanents) as part
+    // of its resolution."). "Exchange control of two target lands." (Shifting Borders,
+    // Vedalken Plotter, Political Trickery) and every other "Exchange …" line is a
+    // one-shot resolution step, never a declarative static — so, like the other keyword
+    // actions above (Investigate, Populate, Proliferate, …), it routes to the spell
+    // parser. Without this entry the clause defaults to Static and stalls in the
+    // unimplemented static-ability parser.
+    "Exchange",
   ];
 
   /// <summary>
@@ -1577,6 +1954,40 @@ public sealed class AbilityClassifier
     }
 
     return null;
+  }
+
+  // Anchored "−X:" / "-X:" variable-loyalty prefix. Only the minus (removal) form
+  // is matched: every printed variable-loyalty ability removes X counters (there is
+  // no printed "+X:" loyalty). Requires the sign, a single variable letter, and a
+  // colon at the very start of the clause so it cannot match a substring.
+  private static readonly Regex _variableLoyaltyPattern = new(
+    @"^\s*[−-](?<var>[XYZ])\s*:",
+    RegexOptions.Compiled
+  );
+
+  /// <summary>
+  /// Classifies a "−X: …" clause as a variable-loyalty activated ability. Reads the
+  /// raw text (not the token stream) because the tokenizer drops the '−' and leaves
+  /// only a bare 'X' word — see the call-site comment in <see cref="Classify"/>.
+  /// Returns null when the clause is not a variable-loyalty ability.
+  /// </summary>
+  private static ClauseClassification? TryClassifyAsVariableLoyalty(string rawText)
+  {
+    var m = _variableLoyaltyPattern.Match(rawText);
+    if (!m.Success)
+    {
+      return null;
+    }
+
+    return new ClauseClassification
+    {
+      Kind = AbilityKind.Activated,
+      Confidence = 0.98,
+      VariableLoyaltyCost = new MagicAST.AST.Quantities.VariableQuantity
+      {
+        Name = m.Groups["var"].Value,
+      },
+    };
   }
 
   /// <summary>
@@ -1819,6 +2230,12 @@ public sealed class AbilityClassifier
       || kind == OracleToken.RedMana
       || kind == OracleToken.GreenMana
       || kind == OracleToken.ColorlessMana
+      // Snow mana symbol {S} (CR 107.4h): "a cost that can be paid with one mana
+      // of any type produced by a snow source". A leading "{S}:" (Goblin
+      // Rimerunner) is a mana cost component just like {W}/{U}/…/{C} and must
+      // be recognized so the clause classifies as Activated rather than falling
+      // through to Static.
+      || kind == OracleToken.SnowMana
       || kind == OracleToken.HybridMana
       || kind == OracleToken.PhyrexianMana
       || kind == OracleToken.VariableMana

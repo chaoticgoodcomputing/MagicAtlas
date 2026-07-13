@@ -1,0 +1,95 @@
+{
+  "Input": {
+    "Name": "Myr Quadropod",
+    "ManaCost": "{4}",
+    "TypeLine": "Artifact Creature — Myr",
+    "OracleText": "{3}: Switch this creature's power and toughness until end of turn.",
+    "Power": "1",
+    "Toughness": "4",
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Myr Quadropod",
+    "TypeLine": {
+      "Raw": "Artifact Creature — Myr",
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Myr"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{3}: Switch this creature's power and toughness until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "switchPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}

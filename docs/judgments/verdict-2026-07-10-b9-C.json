@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CracklingEmergence.json",
+      "verdict": "PASS",
+      "citations": ["CR 613", "CR 205.1b", "CR 113.6", "CR 614.1", "CR 702.12b"],
+      "reason": "all 3 abilities structured: enchantRestriction, becomesCreature (3/3 R Spirit, CardTypes [land,creature] retains land, GainedAbilities haste), and destruction replacement (OriginalEventOccurs false, composite sacrifice-Self + gainAbility-It indestructible EOT); no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantedIsCreatureWithKeywordsStillTypeRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 613", "CR 205.1b", "CR 113.6", "CR 305.7"],
+      "reason": "BecomesCreatureEffect with GainedAbilities via shared keyword mapper; retention via CardTypes [land,creature] matches CR 205.1b; load-bearing citations correct"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantedLandWouldBeDestroyedSacrificeGrantIndestructibleRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 614.1", "CR 702.12b"],
+      "reason": "destruction replacement correctly modeled (614.1 replacement, 702.12b indestructible correct); doc-comment mis-attributes this-object self-reference to CR 700.4 (actually 'dies') and CR 111.7 (actually tokens ceasing) but present+non-contradictory to the modeling, not a FAIL"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/HallOfTriumph.json",
+      "verdict": "PASS",
+      "citations": ["CR 201.5", "CR 611.3", "CR 607.1"],
+      "reason": "chooseColor decomposed with When asThisEnters (timing not baked); anthem consumer uses structured ChosenCharacteristic Color (not free-text) on Each creature you control +1/+1"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/ChooseColorOnEntryRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 201.5"],
+      "reason": "self-by-name branch added; CR 201.5 (name refers to that object) cited correctly; emits plain chooseColor + When, no timing-baking"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TrueConviction.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 702.4", "CR 702.15"],
+      "reason": "both keywords granted to Each creature you control: double strike (combatDamageTiming Both) + lifelink; two GainAbilityEffect nodes; citations correct"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/ControlledCreaturesHaveKeywordListRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 702.4", "CR 702.15"],
+      "reason": "disjoint sibling anchored to literal 'Creatures you control have <kw1> and <kw2>'; sibling-sweep clean vs token/subtype/other/nontoken/attacking variants (mandatory lowercase 'Creatures' first word)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/StagBeetle.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 614.1c"],
+      "reason": "putCounters Self +1/+1, Count = count of {creature, ExcludeSelf, Battlefield} = all-players creatures excluding self; When asThisEnters; no controller restriction as oracle demands"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EntersWithVariableCountersWhereXCountRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 614.1c"],
+      "reason": "CountQuantity over ObjectFilter correct; 614.12 head quoted verbatim; doc-comment mis-cites CR 109.5 (the 'you/your' rule) for the 'other' self-exclusion but present+non-contradictory, not a FAIL"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MetallicMimic.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.1d", "CR 607.1"],
+      "reason": "all 3 abilities structured: chooseCreatureType + When asThisEnters; addType Self ChosenSubtypeReference; putCounters Each-creature-you-control chosen-type ExcludeSelf +1/+1 with When asObjectEnters (other creatures, future ETB); structured linked reference not free-text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/ChosenTypeEntersWithCounterRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 614.1d", "CR 607.1"],
+      "reason": "replacement over general subset (other creatures of chosen type) uses AsObjectEnters per 614.1d; ChosenCharacteristic CreatureType for 607.1 link; doc-comment mis-cites CR 109.5 for 'other' (109.5 is 'you/your') but present+non-contradictory, not a FAIL"
+    }
+  ]
+}

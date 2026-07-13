@@ -1,0 +1,121 @@
+{
+  "Input": {
+    "Name": "Engulfing Slagwurm",
+    "ManaCost": "{5}{G}{G}",
+    "TypeLine": "Creature — Wurm",
+    "OracleText": "Whenever this creature blocks or becomes blocked by a creature, destroy that creature. You gain life equal to that creature's toughness.",
+    "Power": "7",
+    "Toughness": "7",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Engulfing Slagwurm",
+    "TypeLine": {
+      "Raw": "Creature — Wurm",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Wurm"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Whenever this creature blocks or becomes blocked by a creature, destroy that creature. You gain life equal to that creature's toughness.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BlocksOrBecomesBlocked",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "ThatCreature"
+              }
+            },
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "Toughness",
+                "Source": "that creature"
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{5}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 5,
+            "IsPhyrexian": false,
+            "IsSnow": false
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
+        ],
+        "ManaValue": 7,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "7",
+          "Value": 7
+        }
+      }
+    ]
+  }
+}

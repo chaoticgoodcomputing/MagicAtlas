@@ -132,6 +132,63 @@ public sealed record ObjectFilter
   public ObjectReference? SharesColorWith { get; init; }
 
   /// <summary>
+  /// Relational subtype axis: filters to objects that share a creature type with a
+  /// referenced object — "shares a creature type with it" (Titan of Littjara: "you may
+  /// draw a card for each other creature you control that shares a creature type with
+  /// it"). CR 205.3 (creature subtypes are called creature types). Parallels
+  /// <see cref="SharesColorWith"/> (the color-family sibling): the creature types to
+  /// match are those the referenced object CURRENTLY has, resolved by a consumer, not a
+  /// card-text literal — distinct from <see cref="ChosenCharacteristic"/>, which
+  /// compares against a single fixed value chosen once (not the referenced object's
+  /// live, possibly-multiple, type set).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? SharesCreatureTypeWith { get; init; }
+
+  /// <summary>
+  /// Relational card-type axis: filters to objects that share at least one PERMANENT type
+  /// (CR 110.4: artifact, battle, creature, enchantment, land, planeswalker) with a referenced
+  /// object — Cloudstone Curio: "return another permanent you control that shares a permanent
+  /// type with it". Parallels <see cref="SharesCreatureTypeWith"/> (the narrower creature-SUBTYPE
+  /// sibling, CR 205.3m) and <see cref="SharesColorWith"/> (the color sibling): the permanent
+  /// types to match are those the referenced object CURRENTLY has, resolved by a consumer, not a
+  /// card-text literal. Distinct from a plain <see cref="CardTypes"/> entry, which pins one or more
+  /// FIXED literal types rather than comparing against another object's live type set.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? SharesPermanentTypeWith { get; init; }
+
+  /// <summary>
+  /// Relational name axis: filters to objects that have the SAME NAME as a referenced object —
+  /// "other creature you control with the same name as that creature" (Mirror Box: "Each nontoken
+  /// creature you control gets +1/+1 for each other creature you control with the same name as that
+  /// creature."). CR 201.2 (two objects have the same name if the English versions of their names
+  /// are identical). Parallels <see cref="SharesCreatureTypeWith"/> (the creature-type sibling) and
+  /// <see cref="SharesColorWith"/> (the color sibling): the name to match is the one the referenced
+  /// object CURRENTLY has, resolved by a consumer, not a card-text literal — distinct from the
+  /// absolute <see cref="Name"/> axis (CR 201.4), which pins a single fixed printed name. The
+  /// referent is an <see cref="ObjectReference"/> ("that creature", the anaphoric back-reference to
+  /// the per-object subject the anthem is currently modifying — <c>{Kind:It}</c> per Rule 109.2).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? SharesNameWith { get; init; }
+
+  /// <summary>
+  /// Relational card-type axis: filters to objects that share a card type with a referenced
+  /// object — "Spells you cast that share a card type with the exiled card cost {2} less to
+  /// cast" (Semblance Anvil, CR 118.7 cost reduction). CR 110.4 (card types: artifact,
+  /// creature, enchantment, instant, land, planeswalker, sorcery, etc.). Parallels
+  /// <see cref="SharesCreatureTypeWith"/> (the creature-subtype sibling, CR 205.3) and
+  /// <see cref="SharesColorWith"/> (the color sibling): the card types to match are those the
+  /// referenced object CURRENTLY has, resolved by a consumer, not a literal
+  /// <see cref="CardTypes"/> list. The referent is typically the card exiled by a linked
+  /// Imprint ability (CR 702.38) — an <see cref="ObjectReference"/> with Zone.Exile +
+  /// ExiledWith: Self (ADR 0004 "reference not resolution").
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? SharesCardTypeWith { get; init; }
+
+  /// <summary>
   /// Filters to colorless objects (those with no colors at all). Rule 105.1.
   /// Mutually exclusive with <see cref="Colors"/> in practice (a card cannot
   /// be both colorless and have a color).
@@ -177,6 +234,20 @@ public sealed record ObjectFilter
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public bool? IsMulticolored { get; init; }
+
+  /// <summary>
+  /// Filters to face-down objects — CR 708.1: "Some cards allow spells and permanents
+  /// to be face down." A face-down spell or permanent's copiable characteristics are
+  /// replaced (typically the 2/2 no-name/no-text default of CR 708.2a) regardless of
+  /// its printed card. A named game-state axis, not a card type or subtype: it cannot
+  /// be expressed on the existing type axes without falsely asserting "face-down" is a
+  /// printed characteristic. Parallels <see cref="IsColorless"/> / <see cref="IsHistoric"/>
+  /// as a boolean game-quality axis on the filter (Obscuring Aether: "Face-down creature
+  /// spells you cast cost {1} less to cast." → <c>CardTypes=["spell","creature"],
+  /// IsFaceDown=true, Controller=You</c>).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsFaceDown { get; init; }
 
   /// <summary>
   /// Filters to monocolored objects (those with exactly one color). Rule 105.3
@@ -264,6 +335,21 @@ public sealed record ObjectFilter
   public IReadOnlyList<Characteristic>? Characteristics { get; init; }
 
   /// <summary>
+  /// Keyword abilities the filtered object must NOT have — "creatures without
+  /// flying" (Moat: "Creatures without flying can't attack.", CR 702.9 flying).
+  /// The negation axis parallel to the positive "has [keyword]" predicate carried
+  /// by <see cref="KeywordCharacteristic"/> inside <see cref="Characteristics"/>,
+  /// mirroring how <see cref="ExcludedCardTypes"/>/<see cref="ExcludedSubtypes"/>/
+  /// <see cref="ExcludedColors"/>/<see cref="ExcludedSupertypes"/> each pair with
+  /// their positive counterpart axis. Distinct from the typed residual
+  /// <see cref="OtherCharacteristic"/> ("withoutFlying" free-text description)
+  /// some existing rules emit as a deliberate scope deferral (ADR 0001) — this is
+  /// the first-class structured predicate for the "without [keyword]" shape.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<KeywordAbility>? LacksKeywords { get; init; }
+
+  /// <summary>
   /// Restricts the filter to objects matching the characteristic value CHOSEN as
   /// this permanent entered — the structured consumer side of a CR 607 linked ability
   /// (the producer is a "choose a [creature type|color]" effect under
@@ -282,6 +368,25 @@ public sealed record ObjectFilter
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public Zone? Zone { get; init; }
+
+  /// <summary>
+  /// Zone EXCLUDED by a "from anywhere other than [zone]" qualifier. Parallel
+  /// negation axis to <see cref="Zone"/>, mirroring <see cref="ExcludedCardTypes"/>
+  /// over <see cref="CardTypes"/>.
+  ///
+  /// <para>
+  /// On a <c>CardTypes=["spell"]</c> filter this names the zone the spell was CAST
+  /// FROM rather than its current zone — a spell's current zone is always the stack
+  /// (CR 111.6/109.5), so a stated zone other than <see cref="Zone.Stack"/> on a
+  /// spell filter is unambiguous shorthand for the pre-cast origin zone (Savvy
+  /// Trader: "Spells you cast from anywhere other than your hand cost {1} less to
+  /// cast" → <c>CardTypes=["spell"], ExcludedZone=Hand</c>; CR 601.2f cost
+  /// reduction). Parallels <see cref="MagicAST.AST.Effects.CardFlow.AlternativeCastEffect.FromZone"/>
+  /// (the positive "you may cast this from [zone]" permission's origin-zone axis).
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Zone? ExcludedZone { get; init; }
 
   /// <summary>
   /// Power comparison.
@@ -356,6 +461,25 @@ public enum ChosenCharacteristicKind
   /// chosen as the permanent entered — the structured consumer of a CR 607 linked ability whose producer is a
   /// <see cref="MagicAST.AST.Effects.Keyword.ChooseCardTypeEffect"/> (e.g. Cloud Key).</summary>
   CardType,
+
+  /// <summary>"the basic land type of your choice" — one of the five basic land types (Plains, Island, Swamp,
+  /// Mountain, Forest) chosen as an effect resolves (Reef Shaman: "{T}: Target land becomes the basic land type
+  /// of your choice until end of turn."). Constrained per CR 305.6 ("If an object uses the words 'basic land
+  /// type,' it's referring to one of these subtypes"). Used on <see cref="Effects.Modification.ChangeSubtypeEffect.ChosenSubtype"/>
+  /// as the fresh-choice land-type analogue of <see cref="CreatureType"/>; setting a land's subtype to a basic
+  /// land type is governed by CR 305.7 (the land loses its old land types and gains the corresponding mana
+  /// abilities).</summary>
+  BasicLandType,
+
+  /// <summary>"the chosen name" — the card name chosen as the permanent entered (CR 614.12; Declaration of
+  /// Naught: "As this enchantment enters, choose a card name." / "{U}: Counter target spell with the chosen
+  /// name."). Structured consumer of a <see cref="Effects.Keyword.ChooseCardNameEffect"/> producer, mirroring
+  /// how <see cref="CreatureType"/>/<see cref="Color"/>/<see cref="CardType"/> consume their own
+  /// "choose a [X]" producers. Used on an <see cref="ObjectFilter"/> whose <see cref="ObjectFilter.CardTypes"/>
+  /// already names the object category (e.g. "spell") — the chosen name narrows that category to the single
+  /// named card rather than duplicating the literal <see cref="ObjectFilter.Name"/> string field, since the
+  /// name itself is a fresh per-game choice, not a fixed value printed on the card.</summary>
+  CardName,
 }
 
 /// <summary>
@@ -414,6 +538,21 @@ public enum ControllerFilter
   /// or battle each of the chosen creatures is attacking."
   /// </summary>
   DefendingPlayer,
+
+  /// <summary>
+  /// Objects belonging to the player selected by a "choose a player" effect
+  /// (CR 607 linked ability) — "the chosen player or a permanent they control"
+  /// (Sawhorn Nemesis: "If a source would deal damage to the chosen player or a
+  /// permanent they control, it deals double that damage instead."). Leaving
+  /// <see cref="ObjectFilter.CardTypes"/> unset lets a single filter cover both
+  /// the chosen player themselves and any permanent they control, mirroring how
+  /// <see cref="Opponent"/> is used bare (no CardTypes) for the structurally
+  /// identical "an opponent or a permanent an opponent controls" shape
+  /// (<c>NoncombatDamageDoublingReplacementRule</c>, Solphim). Parallels
+  /// <see cref="EnchantedPlayer"/> on the controller axis: the player bound by a
+  /// fresh "choose a player" declaration rather than an Aura's enchanted object.
+  /// </summary>
+  ChosenPlayer,
 }
 
 /// <summary>

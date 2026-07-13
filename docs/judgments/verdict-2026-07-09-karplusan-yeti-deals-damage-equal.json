@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ICE/KarplusanYeti.json",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 701.14"],
+      "reason": "OracleText byte-identical to real card; the reciprocal fight-longhand decomposes faithfully into two ordered dealDamage effects (Self->target creature by its power; ThatCreature->Self by its power) with no unparsed/free-text/lossy merge; Source:'it' matches the established 'equal to its power' convention"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/DealsDamageEqualToPowerReciprocalEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 701.14"],
+      "reason": "Cited CR 120.1 (damage source) and CR 701.14 (fight, correctly cited as the contrast this is NOT) both exist and match; anchored ^...$ regexes emit existing DealDamageEffect with correct Source/Amount/Target; output matches gold fixture exactly"
+    },
+    {
+      "target": "mast/karplusan-yeti-deals-damage-equal#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "No new discriminator introduced (reuses existing dealDamage EffectType, ThatCreature ObjectReferenceKind, DerivedQuantity/DerivedKind.Power, tap cost); no PortWalk projection decision required and none omitted"
+    }
+  ]
+}

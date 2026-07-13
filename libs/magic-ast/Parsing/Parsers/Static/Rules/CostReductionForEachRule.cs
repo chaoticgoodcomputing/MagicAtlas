@@ -64,6 +64,32 @@ public sealed class CostReductionForEachRule : IStaticRule
         Zone = Zone.Battlefield,
       };
     }
+    // "attacking creature" — Stone Idol Trap's per-attacker discount. "Attacking"
+    // is a combat-state predicate (CR 508; Glossary "Attacking Creature"), not a
+    // creature subtype, so it is encoded via CombatStateCharacteristic rather than
+    // Subtypes — mirroring the codebase-wide convention for "attacking creature"
+    // filters (e.g. ModifyPTTargetAttackingCreatureEffectRule).
+    else if (filterPhrase == "attacking creature")
+    {
+      perObject = new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Characteristics = [Characteristic.InCombat(CombatState.Attacking)],
+      };
+    }
+    // "creature your opponents control" — Primeval Protector's opponent-creature-count
+    // discount (CR 118.7: an effect can reduce the total cost to pay when casting a
+    // spell). The count scales with a plain filtered creature count over all
+    // opponents' creatures, distinct from the Domain-reduction sibling
+    // (PartyCostReductionForEachRule) which counts basic land types instead.
+    else if (filterPhrase == "creature your opponents control")
+    {
+      perObject = new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Controller = ControllerFilter.Opponent,
+      };
+    }
 
     if (perObject is null)
     {

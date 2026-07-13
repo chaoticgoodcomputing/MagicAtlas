@@ -1,0 +1,115 @@
+{
+  "Input": {
+    "Name": "Adun Oakenshield",
+    "ManaCost": "{B}{R}{G}",
+    "TypeLine": "Legendary Creature — Human Knight",
+    "OracleText": "{B}{R}{G}, {T}: Return target creature card from your graveyard to your hand.",
+    "Power": "1",
+    "Toughness": "2",
+    "Colors": [
+      "B",
+      "G",
+      "R"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G",
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Adun Oakenshield",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Knight",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Knight"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{B}{R}{G}, {T}: Return target creature card from your graveyard to your hand.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["B"] },
+                { "Kind": "colored", "Colors": ["R"] },
+                { "Kind": "colored", "Colors": ["G"] }
+              ]
+            },
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "returnToHand",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You",
+                  "Zone": "Graveyard"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}{R}{G}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["B"] },
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "G",
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G",
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

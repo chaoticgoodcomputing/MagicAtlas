@@ -1,0 +1,126 @@
+{
+  "Input": {
+    "Name": "Nyxbloom Ancient",
+    "ManaCost": "{4}{G}{G}{G}",
+    "TypeLine": "Enchantment Creature — Elemental",
+    "OracleText": "Trample\nIf you tap a permanent for mana, it produces three times as much of that mana instead.",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Trample"
+    ],
+    "Id": "a391da36-0b40-46ea-b771-50d2b920207e",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Nyxbloom Ancient",
+    "TypeLine": {
+      "Raw": "Enchantment Creature — Elemental",
+      "Types": [
+        "Enchantment",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Trample\nIf you tap a permanent for mana, it produces three times as much of that mana instead.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ],
+          "KeywordSource": "Trample"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "manaProduction",
+                "AffectedObjects": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Controller": "You"
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Modifier": {
+                "Type": "triple"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 7
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
+      }
+    ]
+  }
+}

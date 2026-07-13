@@ -6,6 +6,16 @@ implementation is a focused vertical slice per card, not open-ended design. See
 [`parser-coverage-pilot.md`](parser-coverage-pilot.md) for why these were deferred (each failed twice
 under fan-out: unanchored-regex overfit, then free-text residual).
 
+**This is a value-ranked queue, not a graveyard.** "Deferred" is a *scheduling* verdict — fan-out can't
+close these — never a value verdict; the hard cards are disproportionately the high-combo-value ones
+(Rings of Brighthearth gates **124 combos**, The One Ring **58**). Each entry is titled with its combo
+count, and the queue is worked **highest-value-first**: whenever the top entry out-values the current
+batch's `fusedScore` leaders, the orchestrator runs it as a **dedicated single-card effort** (a batch of
+one, on Opus, with the design budget the spec below already scopes) instead of another parse-family
+batch. Refresh the counts from `interaction-triage-report.json` (`allComboBlockingCards` — the same
+combo-value axis the parse and projection pick surfaces rank by). The list only shrinks by *closing*
+cards, never by forgetting them.
+
 ## Rings of Brighthearth (124 combos)
 
 > Whenever you activate an ability, if it isn't a mana ability, you may pay {2}. If you do, copy that

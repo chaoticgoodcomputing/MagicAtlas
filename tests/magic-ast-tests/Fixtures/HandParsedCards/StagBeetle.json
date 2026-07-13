@@ -1,0 +1,81 @@
+{
+  "Input": {
+    "Name": "Stag Beetle",
+    "ManaCost": "{3}{G}{G}",
+    "TypeLine": "Creature — Insect",
+    "OracleText": "This creature enters with X +1/+1 counters on it, where X is the number of other creatures on the battlefield.",
+    "Power": "0",
+    "Toughness": "0",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": [],
+    "Id": "72cc64b9-f5b9-42d3-9921-564c4c9f2c77",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Stag Beetle",
+    "TypeLine": {
+      "Raw": "Creature — Insect",
+      "Types": ["Creature"],
+      "Subtypes": ["Insect"]
+    },
+    "Oracle": {
+      "RawText": "This creature enters with X +1/+1 counters on it, where X is the number of other creatures on the battlefield.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "When": "asThisEnters",
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": { "Kind": "Self" },
+              "CounterType": "+1/+1",
+              "Count": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "CardTypes": ["creature"],
+                  "ExcludeSelf": true,
+                  "Zone": "Battlefield"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["G"] },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 0,
+          "Raw": "0"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 0,
+          "Raw": "0"
+        }
+      }
+    ]
+  }
+}

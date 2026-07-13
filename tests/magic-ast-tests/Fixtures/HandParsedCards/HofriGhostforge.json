@@ -1,0 +1,182 @@
+{
+  "Input": {
+    "Name": "Hofri Ghostforge",
+    "ManaCost": "{3}{R}{W}",
+    "TypeLine": "Legendary Creature — Dwarf Cleric",
+    "OracleText": "Spirits you control get +1/+1 and have trample and haste.\nWhenever another nontoken creature you control dies, exile it. If you do, create a token that's a copy of that creature, except it's a Spirit in addition to its other types and it has \"When this token leaves the battlefield, return the exiled card to its owner's graveyard.\"",
+    "Power": "4",
+    "Toughness": "5",
+    "Colors": ["R", "W"],
+    "ColorIdentity": ["R", "W"],
+    "Keywords": [],
+    "Id": "bc03cdb6-5ad0-452d-a698-bd19f5ebac83",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Hofri Ghostforge",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Dwarf Cleric",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Dwarf", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "Spirits you control get +1/+1 and have trample and haste.\nWhenever another nontoken creature you control dies, exile it. If you do, create a token that's a copy of that creature, except it's a Spirit in addition to its other types and it has \"When this token leaves the battlefield, return the exiled card to its owner's graveyard.\"",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Subtypes": ["Spirit"],
+                  "Controller": "You"
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Subtypes": ["Spirit"],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Trample",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Trample"
+                  }
+                ]
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Subtypes": ["Spirit"],
+                  "Controller": "You"
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Haste",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Haste"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsToken": false,
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "exile",
+                  "Target": {
+                    "Kind": "It"
+                  }
+                },
+                {
+                  "EffectType": "copy",
+                  "Target": {
+                    "Kind": "ThatCreature"
+                  },
+                  "Modifications": [
+                    {
+                      "ModificationType": "typeAdder",
+                      "Subtypes": ["Spirit"]
+                    },
+                    {
+                      "ModificationType": "triggeredAbilityAdder",
+                      "Ability": {
+                        "Trigger": {
+                          "Timing": "When",
+                          "Event": "LeavesTheBattlefield",
+                          "Filter": {
+                            "IsSelf": true
+                          }
+                        },
+                        "Effects": [
+                          {
+                            "EffectType": "returnToGraveyard",
+                            "Target": {
+                              "Kind": "Designated",
+                              "Filter": {
+                                "Zone": "Exile"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
+        "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 }
+      }
+    ]
+  }
+}

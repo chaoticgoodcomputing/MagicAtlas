@@ -2,6 +2,7 @@ namespace MagicAST.Parsing;
 
 using System.Text.RegularExpressions;
 using MagicAST.AST;
+using MagicAST.AST.Abilities;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Quantities;
 using MagicAST.AST.References;
@@ -126,6 +127,31 @@ public sealed partial class AttributeExtractor
       attributes.Add(pitchAlternativeCostAttr);
     }
 
+    // "Sacrifice a creature" alternative-cost family (Flare of Duplication, ...). CR
+    // 118.9: "You may [action] rather than pay [this object]'s mana cost" is an
+    // alternative cost; CR 604.5: it functions while the spell is on the stack — so,
+    // like Bestow's, Borderpost's, and the Pitch family's costs above, it is hosted on
+    // the card's cost attributes rather than surfaced as an oracle ability.
+    var sacrificeAlternativeCostAttr = TryExtractSacrificeAlternativeCost(input.OracleText);
+    if (sacrificeAlternativeCostAttr is not null)
+    {
+      attributes.Add(sacrificeAlternativeCostAttr);
+    }
+
+    // Commander-conditional free-cast family (Deadly Rollick, ...). CR 118.9: "You
+    // may [action] rather than pay [this object's] mana cost" is an alternative
+    // cost; CR 604.5: it functions while the spell is on the stack — so, like
+    // Bestow's, Borderpost's, Pitch's, and the Sacrifice family's costs above, it
+    // is hosted on the card's cost attributes rather than surfaced as an oracle
+    // ability.
+    var commanderFreeCastAlternativeCostAttr = TryExtractCommanderFreeCastAlternativeCost(
+      input.OracleText
+    );
+    if (commanderFreeCastAlternativeCostAttr is not null)
+    {
+      attributes.Add(commanderFreeCastAlternativeCostAttr);
+    }
+
     return attributes;
   }
 
@@ -196,11 +222,35 @@ public sealed partial class AttributeExtractor
   )]
   private static partial Regex AdditionalSacrificePrefix();
 
+  // "As an additional cost to cast this spell, sacrifice a[n] <type> or [a[n]] <type>."
+  // A type-disjunction sacrifice cost: the sacrificed permanent may be either card type
+  // (CR 118.8 — additional costs; the "or" between two card types is a disjunctive filter,
+  // modelled as CardTypes=[t1, t2], matching the "an artifact or creature" encoding on
+  // Panharmonicon). The trailing "." is anchored immediately after the second type so this
+  // does NOT capture the distinct alternative-cost shapes ("sacrifice a creature or discard a
+  // card." / "... or pay {3}.") — those have text between the second word and the period and
+  // stay unrecognised here (left for a future batch), exactly as before this branch was added.
+  [GeneratedRegex(
+    @"^As an additional cost to cast this spell,\s+sacrifice\s+an?\s+(?<t1>[a-z]+)\s+or\s+(?:an?\s+)?(?<t2>[a-z]+)\.",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex AdditionalSacrificeDisjunctionPrefix();
+
+  // "As an additional cost to cast this spell, pay [amount] life." — the Fire
+  // Covenant / Wing Shards mandatory pay-life additional cost family. Amount is
+  // X/Y/Z (a variable the controller announces as the spell is cast, CR 601.2b),
+  // a literal digit run, or a number word (one..ten).
+  [GeneratedRegex(
+    @"^As an additional cost to cast this spell,\s+pay\s+(?<amount>[XYZ]|\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+life\.$",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex AdditionalPayLifePrefix();
+
   /// <summary>
   /// Scans oracle text for "As an additional cost to cast this spell, sacrifice a [type]."
   /// prefix lines and returns an AdditionalCostsAttribute when found, or null when absent.
-  /// Handles the sacrifice-a-permanent family; other cost shapes (discard, pay life) are
-  /// not yet recognised here and are left unparsed until a future batch extends this method.
+  /// Handles the sacrifice-a-permanent and pay-life families; other cost shapes (discard, ...)
+  /// are not yet recognised here and are left unparsed until a future batch extends this method.
   /// </summary>
   private AdditionalCostsAttribute? TryExtractAdditionalCosts(string? oracleText)
   {
@@ -229,12 +279,76 @@ public sealed partial class AttributeExtractor
       return new AdditionalCostsAttribute { Costs = [sacrificeCost] };
     }
 
+    // "As an additional cost to cast this spell, pay [amount] life." — CR 601.2f:
+    // "The total cost is the mana cost or alternative cost ..., plus all additional
+    // costs and cost increases ..." The life payment itself is a PayLifeCost; the
+    // amount is most commonly the linked variable X (CR 601.2b — the controller
+    // announces the value of a variable cost as the spell is cast).
+    var payLifeMatch = AdditionalPayLifePrefix().Match(firstLine);
+    if (payLifeMatch.Success)
+    {
+      var payLifeCost = new AdditionalCost
+      {
+        Cost = new PayLifeCost { Amount = ParseAdditionalCostAmount(payLifeMatch.Groups["amount"].Value) },
+        SourceSpan = new TextSpan(0, firstLine.Length),
+      };
+
+      return new AdditionalCostsAttribute { Costs = [payLifeCost] };
+    }
+
+    // Type-disjunction sacrifice ("sacrifice an artifact or creature.") — one permanent that
+    // is either card type. Checked after the single-type branch above (which requires the
+    // period to fall right after one type word, so it never matches the "X or Y" form).
+    var disjunctionMatch = AdditionalSacrificeDisjunctionPrefix().Match(firstLine);
+    if (disjunctionMatch.Success)
+    {
+      var t1 = disjunctionMatch.Groups["t1"].Value.ToLowerInvariant();
+      var t2 = disjunctionMatch.Groups["t2"].Value.ToLowerInvariant();
+      var disjunctionCost = new AdditionalCost
+      {
+        Cost = new SacrificeCost
+        {
+          Filter = new ObjectFilter { CardTypes = [t1, t2] },
+          Quantity = LiteralQuantity.Of(1),
+        },
+        SourceSpan = new TextSpan(0, firstLine.Length),
+      };
+
+      return new AdditionalCostsAttribute { Costs = [disjunctionCost] };
+    }
+
     // Kicker (CR 702.33) is NOT extracted here. It is a static ability — its combinator
     // (KickerKeyword) emits a StaticAbility{KeywordSource:"Kicker", AdditionalCastCostEffect}
     // into Oracle.Abilities, carrying the keyword identity the anonymous
     // AdditionalCostsAttribute would lose. Surfacing it here too would double-count the cost.
 
     return null;
+  }
+
+  /// <summary>
+  /// Parses an additional-cost amount token — X/Y/Z (a variable announced as the
+  /// spell is cast, CR 601.2b), a literal digit run, or a number word (one..ten) —
+  /// into the corresponding <see cref="Quantity"/>.
+  /// </summary>
+  private static Quantity ParseAdditionalCostAmount(string token)
+  {
+    if (token.Length == 1 && char.IsLetter(token[0]))
+    {
+      return new VariableQuantity { Name = token.ToUpperInvariant() };
+    }
+
+    if (int.TryParse(token, out var digits))
+    {
+      return LiteralQuantity.Of(digits);
+    }
+
+    var amount = token.ToLowerInvariant() switch
+    {
+      "one" => 1, "two" => 2, "three" => 3, "four" => 4, "five" => 5,
+      "six" => 6, "seven" => 7, "eight" => 8, "nine" => 9, "ten" => 10,
+      _ => throw new InvalidOperationException("Unreachable: regex only matches recognised amount tokens."),
+    };
+    return LiteralQuantity.Of(amount);
   }
 
   // "Bestow {cost}" — the keyword line is always the card's first paragraph.
@@ -408,6 +522,145 @@ public sealed partial class AttributeExtractor
         Filter = new ObjectFilter { CardTypes = ["card"], Colors = [colorCode] },
         Quantity = LiteralQuantity.Of(1),
         FromZone = Zone.Hand,
+      },
+      SourceSpan = new TextSpan(0, firstLine.Length),
+    };
+
+    return new AlternativeCostsAttribute { Costs = [cost] };
+  }
+
+  // "You may sacrifice a nontoken [color] creature rather than pay this spell's mana
+  // cost." — the "sacrifice a creature" alternative-cost family (Flare of Duplication,
+  // ...). Kept narrow to this specific sentence so it does not swallow other "rather
+  // than pay this spell's mana cost" costs handled elsewhere (Bestow, Borderpost, Pitch).
+  [GeneratedRegex(
+    @"^You may sacrifice a nontoken (?<color>white|blue|black|red|green) creature rather than pay this spell's mana cost\.?$",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex SacrificeAlternativeCostPrefix();
+
+  /// <summary>
+  /// Scans oracle text for the "sacrifice a creature" alternative-cost family's "You
+  /// may sacrifice a nontoken [color] creature rather than pay this spell's mana cost."
+  /// line and returns an <see cref="AlternativeCostsAttribute"/> carrying the sacrifice
+  /// cost, or null when absent.
+  ///
+  /// <para>
+  /// CR 118.9: "Some spells have alternative costs. An alternative cost is a cost
+  /// listed in a spell's text, or applied to it from another effect, that its
+  /// controller may pay rather than paying the spell's mana cost. Alternative costs
+  /// are usually phrased, 'You may [action] rather than pay [this object's] mana
+  /// cost,' ..." CR 604.5: "... abilities that say ... 'You may pay [cost] rather than
+  /// pay [this object]'s mana cost' ... work while a spell is on the stack." The line
+  /// is therefore a card-level cost attribute, not an oracle ability — mirroring
+  /// <see cref="TryExtractPitchAlternativeCost"/> above. The "nontoken" qualifier is
+  /// recorded on the filter's <c>IsToken</c> axis (CR 111) rather than dropped.
+  /// </para>
+  /// </summary>
+  private AlternativeCostsAttribute? TryExtractSacrificeAlternativeCost(string? oracleText)
+  {
+    if (string.IsNullOrWhiteSpace(oracleText))
+    {
+      return null;
+    }
+
+    var firstLine = oracleText.Split('\n')[0].Trim();
+    var match = SacrificeAlternativeCostPrefix().Match(firstLine);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var colorCode = match.Groups["color"].Value.ToLowerInvariant() switch
+    {
+      "white" => "W",
+      "blue" => "U",
+      "black" => "B",
+      "red" => "R",
+      "green" => "G",
+      _ => throw new InvalidOperationException("Unreachable: regex only matches the five color words."),
+    };
+
+    var cost = new AlternativeCost
+    {
+      Cost = new SacrificeCost
+      {
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Colors = [colorCode],
+          IsToken = false,
+        },
+        Quantity = LiteralQuantity.Of(1),
+      },
+      SourceSpan = new TextSpan(0, firstLine.Length),
+    };
+
+    return new AlternativeCostsAttribute { Costs = [cost] };
+  }
+
+  // "If you control a commander, you may cast this spell without paying its mana
+  // cost." — the commander-conditional free-cast family (Deadly Rollick, ...).
+  // Anchored (^…$, whole line) so it does not swallow other alternative-cost
+  // lines handled elsewhere (Bestow, Borderpost, Pitch, Sacrifice).
+  [GeneratedRegex(
+    @"^If you control a commander, you may cast this spell without paying its mana cost\.?$",
+    RegexOptions.IgnoreCase
+  )]
+  private static partial Regex CommanderFreeCastAlternativeCostPrefix();
+
+  /// <summary>
+  /// Scans oracle text for the commander-conditional free-cast family's "If you
+  /// control a commander, you may cast this spell without paying its mana cost."
+  /// line and returns an <see cref="AlternativeCostsAttribute"/> carrying a
+  /// zero-symbol <see cref="ManaCost"/> gated on a <see cref="CountCondition"/>,
+  /// or null when absent.
+  ///
+  /// <para>
+  /// CR 118.9 (verbatim): "Some spells have alternative costs. ... Alternative
+  /// costs are usually phrased, ... 'You may cast [this object] without paying
+  /// its mana cost.'" CR 903 (Commander format) supplies the gating fact "you
+  /// control a commander" — a board-state count, not a game action — so it is
+  /// recorded as a <see cref="CountCondition"/> on
+  /// <see cref="AlternativeCost.Condition"/> (the field this record type carries
+  /// for exactly this purpose) rather than folded into the cost itself. The
+  /// filter shape (Commander-supertype creature, controller You, count ≥ 1)
+  /// mirrors the one <c>ModalAbilityParser</c> builds for the sibling "If you
+  /// control a commander as you cast this spell, you may choose both instead."
+  /// mode-expansion condition. The alternative <see cref="Cost"/> is a
+  /// zero-symbol <see cref="ManaCost"/> — "without paying its mana cost" reads as
+  /// paying no mana at all, distinct from an explicit "{0}" cost (Rooftop Storm's
+  /// "You may pay {0} rather than pay the mana cost", handled by the
+  /// <c>GrantAlternativeCostRule</c> static rule, which targets OTHER spells
+  /// rather than this card's own casting cost).
+  /// </para>
+  /// </summary>
+  private AlternativeCostsAttribute? TryExtractCommanderFreeCastAlternativeCost(string? oracleText)
+  {
+    if (string.IsNullOrWhiteSpace(oracleText))
+    {
+      return null;
+    }
+
+    var firstLine = oracleText.Split('\n')[0].Trim();
+    var match = CommanderFreeCastAlternativeCostPrefix().Match(firstLine);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    var cost = new AlternativeCost
+    {
+      Cost = new ManaCost { Symbols = [] },
+      Condition = new CountCondition
+      {
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Supertypes = ["Commander"],
+          Controller = ControllerFilter.You,
+        },
+        Count = new Comparison { Operator = ComparisonOperator.GreaterThanOrEqual, Value = 1 },
       },
       SourceSpan = new TextSpan(0, firstLine.Length),
     };

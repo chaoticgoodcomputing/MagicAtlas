@@ -95,6 +95,11 @@ public enum KeywordAbility
   /// <summary>Changeling (CR 702).</summary>
   Changeling,
 
+  /// <summary>Cleave (CR 702.148a). Parameterized — the alternative cleave cost is
+  /// carried by the expanded <see cref="MagicAST.AST.Effects.CardFlow.AlternativeCastEffect"/>,
+  /// not this identity.</summary>
+  Cleave,
+
   /// <summary>Choose a Background (CR 702).</summary>
   [JsonStringEnumMemberName("Choose a Background")]
   ChooseABackground,
@@ -110,6 +115,11 @@ public enum KeywordAbility
 
   /// <summary>Convoke (CR 702).</summary>
   Convoke,
+
+  /// <summary>Craft (CR 702.167). An activated ability on double-faced cards that
+  /// exiles this permanent plus [materials] to return this card transformed under its
+  /// owner's control, sorcery-speed only.</summary>
+  Craft,
 
   /// <summary>Crew (CR 702).</summary>
   Crew,
@@ -147,6 +157,12 @@ public enum KeywordAbility
 
   /// <summary>Disguise (CR 702).</summary>
   Disguise,
+
+  /// <summary>
+  /// Disturb (CR 702.146a). Parameterized — the alternative cost is carried by the
+  /// expanded <c>AlternativeCastEffect</c>, not this identity.
+  /// </summary>
+  Disturb,
 
   /// <summary>Doctor's companion (CR 702).</summary>
   [JsonStringEnumMemberName("Doctor's companion")]
@@ -276,6 +292,9 @@ public enum KeywordAbility
 
   /// <summary>Horsemanship (CR 702).</summary>
   Horsemanship,
+
+  /// <summary>Impending (CR 702.176).</summary>
+  Impending,
 
   /// <summary>Improvise (CR 702).</summary>
   Improvise,
@@ -413,6 +432,13 @@ public enum KeywordAbility
 
   /// <summary>Prowess (CR 702).</summary>
   Prowess,
+
+  /// <summary>
+  /// Prowl (CR 702.76a). Parameterized — the alternative prowl cost is carried by the
+  /// expanded <see cref="MagicAST.AST.Effects.CardFlow.AlternativeCastEffect"/>, not
+  /// this identity.
+  /// </summary>
+  Prowl,
 
   /// <summary>Rampage (CR 702.23).</summary>
   Rampage,
@@ -587,4 +613,23 @@ public enum KeywordAbility
   /// Phyrexian mana symbol whose cost was paid with 2 life.
   /// </summary>
   Compleated,
+
+  /// <summary>
+  /// Gift (CR 702.174). Parameterized — written "Gift a [something]". The gifted
+  /// object (a card, a Food, a Treasure, …) is carried by the expanded
+  /// <see cref="MagicAST.AST.Effects.Keyword.GiftEffect"/>, not this identity.
+  /// </summary>
+  Gift,
+
+  /// <summary>
+  /// Unlock (CR 709.5e–f) — the class of costs paid to unlock a locked half (door)
+  /// of a Room permanent. CR 709.5e: "A player who controls a permanent that has
+  /// one or more locked halves may pay the mana cost of a locked half of that
+  /// permanent to give that permanent the appropriate unlocked designation."
+  /// CR 709.5f: "Some spells and abilities instruct a player to 'unlock' half of a
+  /// permanent." The surviving keyword identity a reference filter matches on for
+  /// "Unlock costs you pay cost {N} less" (Inquisitive Glimmer) — the sibling of
+  /// <see cref="Equip"/> for the class-of-cost reduction shape (ADR 0003 follow-up 1).
+  /// </summary>
+  Unlock,
 }

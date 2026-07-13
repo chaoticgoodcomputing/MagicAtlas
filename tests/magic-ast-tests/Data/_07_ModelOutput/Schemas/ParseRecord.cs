@@ -33,8 +33,53 @@ public partial record ParseRecord
   /// <summary>Card-level count of abilities that were NOT <c>UnparsedAbility</c>.</summary>
   public required int ParsedAbilities { get; init; }
 
+  /// <summary>
+  /// The card's position on the fidelity ladder (worst level across its abilities):
+  /// <list type="bullet">
+  ///   <item><b>0 (L0)</b> — an <see cref="MagicAST.AST.IUnparsed"/> hole is present (a whole
+  ///   ability or effect the parser couldn't structure at all).</item>
+  ///   <item><b>1 (L1)</b> — no hole, but an <see cref="MagicAST.AST.IResidual"/> node is present
+  ///   (a typed shell with deferred interior / free-text residual — accounted, not dropped).</item>
+  ///   <item><b>2 (L2)</b> — fully structured: no holes, no residuals.</item>
+  /// </list>
+  /// This is the honest coverage axis. The legacy "fully parsed" test (no <c>IUnparsed</c>) conflates
+  /// L1 and L2; <see cref="FidelityLevel"/> separates them so residual-carrying cards stop counting as
+  /// truly structured. L3/L4 (projection / GREEN reconstruction) live in the interaction layer, not here.
+  /// </summary>
+  public int FidelityLevel { get; init; }
+
   /// <summary>Per-line outcomes, in oracle-text order. Empty if the card has no oracle text.</summary>
   public required IReadOnlyList<LineOutcome> Lines { get; init; }
+
+  /// <summary>
+  /// The verbatim text of each <c>UnstructuredEffect</c> residual this card carries — the deferred
+  /// effect interiors held by L1 ability shells (see the fidelity ladder). These are the precise
+  /// FAILING FRAGMENTS the parser could classify but not structure, delimited exactly (unlike a
+  /// whole-line diagnostic). They are the L1→L2 burn-down worklist: clustering these fragments by
+  /// grammar shape (not whole line) is what makes families compose — one new effect rule closes the
+  /// fragment across every shell that carries it. Empty for L0/L2 cards. Feeds
+  /// <c>TriageReport.TopResidualClusters</c>.
+  /// </summary>
+  public IReadOnlyList<string> ResidualFragments { get; init; } = [];
+
+  /// <summary>
+  /// True when the parse dropped structure WITHOUT emitting an
+  /// <c>UnparsedAbility</c> — a lossy-but-clean parse (see
+  /// <c>LossyParseAnalyzer</c>). Such a card looks clean to the per-line
+  /// diagnostics but silently under-represents its oracle text, so it is a risky
+  /// exemplar for a family whose target line is NOT the lossy one. Detected via a
+  /// trigger deficit (trigger openers in the text &gt; TriggeredAbility nodes
+  /// produced). Defaults false; a card with an honest UnparsedAbility is not
+  /// "lossy" (its failure is already visible).
+  /// </summary>
+  public bool SuspectedLossy { get; init; }
+
+  /// <summary>
+  /// The size of the trigger deficit (trigger openers minus produced
+  /// TriggeredAbility nodes) — 0 for a faithful parse. Surfaced for the triage
+  /// diagnostic and to rank which lossy cards dropped the most.
+  /// </summary>
+  public int DroppedTriggers { get; init; }
 
   /// <summary>
   /// Residual-debt tally for this card's parse (ADR 0001 forcing-function): the

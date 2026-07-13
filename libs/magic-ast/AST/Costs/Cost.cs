@@ -84,6 +84,48 @@ public sealed record DiscardCost : Cost
   /// How many must be discarded.
   /// </summary>
   public required Quantity Quantity { get; init; }
+
+  /// <summary>
+  /// True when the card(s) to discard are chosen "at random" rather than by the
+  /// discarding player — e.g. Balduvian Horde's "sacrifice it unless you discard a
+  /// card at random." CR 701.9b: "By default, effects that cause a player to discard
+  /// a card allow the affected player to choose which card to discard. Some effects,
+  /// however, require a random discard or allow another player to choose which card
+  /// is discarded." This flag records the "random discard" variant. Mirrors
+  /// <see cref="MagicAST.AST.Effects.CardFlow.DiscardCardsEffect.Random"/> on the
+  /// cost side. Omitted from serialization when false (the common, non-random case)
+  /// so existing discard-cost fixtures are unaffected.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool Random { get; init; }
+}
+
+/// <summary>
+/// "Reveal a [color] card in your hand" — a non-mana cost, most commonly the alternative
+/// "turn face up" cost variant of Morph (CR 702.37a): "Morph—Reveal a red card in your
+/// hand" rather than a mana morph cost. Distinct from the general
+/// <see cref="MagicAST.AST.Effects.CardFlow.RevealCardsEffect"/> (an effect that reveals
+/// cards as part of resolving a spell/ability): this is the COST paid, modelled with the
+/// same Filter/Quantity/Zone shape as <see cref="DiscardCost"/> and <see cref="ExileCost"/>.
+/// </summary>
+[OracleCost("reveal")]
+public sealed record RevealCost : Cost
+{
+  /// <summary>
+  /// Which card(s) qualify to be revealed — "a red card" is <c>CardTypes=["card"]</c> +
+  /// <c>Colors=["R"]</c>.
+  /// </summary>
+  public required ObjectFilter Filter { get; init; }
+
+  /// <summary>
+  /// How many cards must be revealed — "a … card" is a single card.
+  /// </summary>
+  public required Quantity Quantity { get; init; }
+
+  /// <summary>
+  /// The zone the revealed card(s) come from — <see cref="Zone.Hand"/> for "in your hand".
+  /// </summary>
+  public required Zone Zone { get; init; }
 }
 
 /// <summary>
@@ -96,6 +138,25 @@ public sealed record PayLifeCost : Cost
   /// How much life to pay.
   /// </summary>
   public required Quantity Amount { get; init; }
+}
+
+/// <summary>
+/// "Draw a card" / "Draw N cards" paid as a COST rather than resolved as an
+/// effect — e.g. the per-age-counter upkeep price on Psychic Vortex's
+/// "Cumulative upkeep—Draw a card." (CR 702.24a: cumulative upkeep's "[cost]"
+/// slot can be templated with any cost, not just mana or life). Distinct from
+/// <see cref="MagicAST.AST.Effects.CardFlow.DrawCardsEffect"/> (a resolving
+/// effect that draws cards as part of an ability's resolution): here drawing
+/// is itself the tax paid to avoid a consequence (mirrors the flat
+/// <see cref="PayLifeCost"/> / <see cref="PayEnergyCost"/> shape — count only,
+/// no filter/zone, since "a card"/"N cards" always comes from the player's own
+/// library, CR 121.1).
+/// </summary>
+[OracleCost("drawCards")]
+public sealed record DrawCardsCost : Cost
+{
+  /// <summary>How many cards must be drawn.</summary>
+  public required Quantity Quantity { get; init; }
 }
 
 /// <summary>

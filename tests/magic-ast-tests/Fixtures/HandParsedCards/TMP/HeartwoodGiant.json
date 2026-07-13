@@ -1,0 +1,126 @@
+{
+  "Input": {
+    "Name": "Heartwood Giant",
+    "ManaCost": "{3}{G}{G}",
+    "TypeLine": "Creature — Giant",
+    "OracleText": "{T}, Sacrifice a Forest: This creature deals 2 damage to target player or planeswalker.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Heartwood Giant",
+    "TypeLine": {
+      "Raw": "Creature — Giant",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Giant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{T}, Sacrifice a Forest: This creature deals 2 damage to target player or planeswalker.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "Subtypes": [
+                  "Forest"
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Source": {
+                "Kind": "Self"
+              },
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "player",
+                    "planeswalker"
+                  ]
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{G}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
+      }
+    ]
+  }
+}

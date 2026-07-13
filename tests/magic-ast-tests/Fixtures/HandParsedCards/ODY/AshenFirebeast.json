@@ -1,0 +1,132 @@
+{
+  "Input": {
+    "Name": "Ashen Firebeast",
+    "ManaCost": "{6}{R}{R}",
+    "TypeLine": "Creature — Elemental Beast",
+    "OracleText": "{1}{R}: This creature deals 1 damage to each creature without flying.",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
+  },
+  "Output": {
+    "Name": "Ashen Firebeast",
+    "TypeLine": {
+      "Raw": "Creature — Elemental Beast",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental",
+        "Beast"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{1}{R}: This creature deals 1 damage to each creature without flying.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "withoutFlying"
+                    }
+                  ]
+                }
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{6}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 6
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 8,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        }
+      }
+    ]
+  }
+}

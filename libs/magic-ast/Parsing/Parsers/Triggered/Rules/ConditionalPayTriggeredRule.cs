@@ -49,6 +49,9 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
   private static readonly EachOpponentLosesLifeTriggeredRule _eachOpponentLosesLifeRule = new();
   private static readonly ReturnSelfFromGraveyardToBattlefieldRule _returnSelfFromGraveyardRule = new();
   private static readonly TapUntapTargetTriggeredRule _tapUntapTargetRule = new();
+  private static readonly ItGainsKeywordUntilEndOfTurnRule _itGainsKeywordRule = new();
+  private static readonly ThisCreatureDealsDamageToAnyTargetTriggeredRule _selfDealsDamageAnyTargetRule = new();
+  private static readonly CantBlockThisTurnTriggeredRule _cantBlockThisTurnRule = new();
 
   // ── Pattern 1: "you may pay {COST}. If you do, [effect]" ──────────────
   // The cost is one or more {X} symbols; the consequent effect is everything
@@ -135,6 +138,26 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
     // Malachite, Nacre, Onyx) and the tap/tap-or-untap siblings.
     if (_tapUntapTargetRule.TryMatch(text, out var tapUntap) && tapUntap is not null)
       return tapUntap;
+    // "it gains [keyword] until end of turn" (Order of the Golden Cricket: "Whenever
+    // this creature attacks, you may pay {W}. If you do, it gains flying until end
+    // of turn.") — reuse the anaphoric "it" keyword-grant rule as the "if you do"
+    // consequent.
+    if (_itGainsKeywordRule.TryMatch(text, out var itGains) && itGains is not null)
+      return itGains;
+    // "this enchantment deals N damage to any target" (Searing Meditation, JUD:
+    // "Whenever you gain life, you may pay {2}. If you do, this enchantment deals 2
+    // damage to any target.") — reuse the self-source burn rule as the "if you do"
+    // consequent. The rule also covers the "this creature/permanent/artifact" pronoun
+    // forms, emitting DealDamageEffect { Source = Self, Target = AnyTarget }.
+    if (_selfDealsDamageAnyTargetRule.TryMatch(text, out var selfDamage) && selfDamage is not null)
+      return selfDamage;
+    // "target [filter] can't block this turn" (Frenzied Goblin, ONS: "Whenever
+    // this creature attacks, you may pay {R}. If you do, target creature can't
+    // block this turn.") — reuse the anchored blocker-restriction rule as the
+    // "if you do" consequent, emitting CantBlockEffect { Target = target creature,
+    // Duration = end of turn }.
+    if (_cantBlockThisTurnRule.TryMatch(text, out var cantBlock) && cantBlock is not null)
+      return cantBlock;
 
     // No match: return null so the caller (TryMatch) rejects the whole text
     // rather than emitting a partially-parsed effect. The dispatcher will

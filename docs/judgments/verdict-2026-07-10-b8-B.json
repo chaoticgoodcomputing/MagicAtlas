@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/OvikaEnigmaGoliath.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.21a", "CR 601.2f", "CR 111.2", "CR 202.3"],
+      "reason": "Ward—{3}, Pay 3 life faithfully modeled as CompositeCost[ManaCost{3}, PayLifeCost 3] on the standard Ward BecomesTarget/preventable-counter shape; cast-noncreature trigger creates X (=MV of that spell) 1/1 red Phyrexian Goblins + they-gain-haste-EOT; no unparsed nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/WardKeywordRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.21a", "CR 601.2f"],
+      "reason": "new compound mana+life branch tried first (its comma-anchored pattern cannot match the 4 existing forms); bare-mana/life/sacrifice/discard forms preserved unchanged, only re-nested — sibling sweep of the 5 Ward fixtures unaffected"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PlateArmor.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.21a", "CR 118.7", "CR 109.5", "CR 613.4c", "CR 613.1f"],
+      "reason": "+3/+3 modifyPT + ward{1} grant (full triggered ability) on EnchantedOrEquipped; Equip {3} attach OnlyAsSorcery; costReduction Amount1 PerObject Equipment ExcludeSelf with AppliesTo null (documented self-scope convention); M15 did not edit WardKeywordRule.cs"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MabelHeirToCragflame.json",
+      "verdict": "PASS",
+      "citations": ["CR 205.4a", "CR 205.4b", "CR 611.3", "CR 109.5"],
+      "reason": "Other Mice anthem via new IrregularPluralSubtypeAnthemRule (Mice->Mouse, ExcludeSelf, LordPTBuffRule untouched); Cragflame token ETB fully structured (quoted +1/+1 + vigilance/trample/haste + equip {2}); new additive TokenDefinition.Supertypes=['Legendary'] is non-breaking (JsonIgnore WhenWritingNull)"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/TokenDefinition.cs",
+      "verdict": "PASS",
+      "citations": ["CR 205.4a", "CR 205.4b"],
+      "reason": "additive nullable Supertypes field with WhenWritingNull ignore; correctly distinct from Types/Subtypes per 205.4b; does not perturb existing token fixtures"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Edgewalker.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 205.3"],
+      "reason": "colored-only reduction modeled as costReduction Amount0 + ManaSymbols[W,B] (zero generic component = 'reduces only colored mana' by construction) scoped by AffectedObjects spell/Cleric/You"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/VastwoodZendikon.json",
+      "verdict": "PASS",
+      "citations": ["CR 205.1b", "CR 613.1", "CR 700.4", "CR 603.2"],
+      "reason": "becomesCreature EnchantedOrEquipped 6/4 green Elemental with CardTypes[land,creature] captures 'still a land' (no free-text); enchanted-land-dies trigger (Dies + IsEnchanted filter) -> returnToHand It; all structured"
+    }
+  ]
+}

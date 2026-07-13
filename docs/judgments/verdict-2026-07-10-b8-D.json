@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Gravedig.json",
+      "verdict": "PASS",
+      "citations": ["CR 700.2", "CR 702.42a", "CR 111.2"],
+      "reason": "modal Choose one (ModeSelection 1/1) + Entwine {2} (KeywordSource + optional additionalCastCost); mode1 createToken with Player=Target{player} per CR 111.2, mode2 returnToHand-from-graveyard structured; AbilityClassifier 'creates?' addition at ~L830 is disjoint from the only other batch editor (controlled-creatures-cant-attack @ ~L477), no new discriminator (reuses CreateTokenEffect)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/VexingSphinx.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.24a"],
+      "reason": "cumulative-upkeep discard-cost fully decomposed (age counter + PreventableEffect{sacrifice unless ScaledCost(discard x age-counter count)}) per CR 702.24a verbatim; whitelisted OtherCondition intervening-if 'this permanent is on the battlefield' is genuine (literal CR 702.24a clause, matches InnerSanctum/PsychicVortex precedent); dies->drawCards CounterCountQuantity On:Self structured; new own-file rule anchored on em-dash Discard, disjoint from pay-life/draw-cost siblings"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Psychatog.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.8a", "CR 602.1a", "CR 109.4"],
+      "reason": "both activated pumps structured: discard-cost + untyped ExileCost (2 cards, Controller You, FromZone Graveyard) with modifyPT +1/+1 until eot; untyped exile rule anchored ^Exile N cards from your graveyard$ verified disjoint from typed sibling and from 'exile this/that card'; 118.8a cost citation imprecise vs 602.1a but not contradictory and matches accepted sibling precedent"
+    }
+  ]
+}

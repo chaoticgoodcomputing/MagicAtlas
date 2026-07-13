@@ -1,0 +1,145 @@
+{
+  "Input": {
+    "Name": "Kalemne, Disciple of Iroas",
+    "ManaCost": "{2}{R}{W}",
+    "TypeLine": "Legendary Creature — Giant Soldier",
+    "OracleText": "Double strike, vigilance\nWhenever you cast a creature spell with mana value 5 or greater, you get an experience counter.\nKalemne gets +1/+1 for each experience counter you have.",
+    "Power": "3",
+    "Toughness": "3",
+    "Colors": ["R", "W"],
+    "ColorIdentity": ["R", "W"],
+    "Keywords": ["Vigilance", "Double strike"],
+    "Id": "3c718940-dc07-4449-ba35-4029f366c3eb",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Kalemne, Disciple of Iroas",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Giant Soldier",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Giant", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "Double strike, vigilance\nWhenever you cast a creature spell with mana value 5 or greater, you get an experience counter.\nKalemne gets +1/+1 for each experience counter you have.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Double strike",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "Both"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Vigilance",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Vigilance"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "SpellCast",
+            "Filter": {
+              "CardTypes": ["spell", "creature"],
+              "Controller": "You",
+              "ManaValueComparison": {
+                "Operator": "GreaterThanOrEqual",
+                "Value": 5
+              }
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": {
+                "Kind": "You"
+              },
+              "CounterType": "experience",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Self"
+              },
+              "PowerModifier": {
+                "QuantityType": "counterCount",
+                "CounterType": "experience",
+                "On": {
+                  "Kind": "You"
+                }
+              },
+              "ToughnessModifier": {
+                "QuantityType": "counterCount",
+                "CounterType": "experience",
+                "On": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
+      }
+    ]
+  }
+}

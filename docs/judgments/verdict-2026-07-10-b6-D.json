@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SoulfireGrandMaster.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 702.15a", "CR 603.7", "CR 702.27a", "CR 109.2"],
+      "reason": "K08 spelltype-list-anthem: lifelink anthem via GainAbilityEffect(Each) over the established [spell,instant,sorcery] you-control filter; buyback-style delayed-trigger + ReplacementEffect(zoneChange stack->graveyard, OriginalEventOccurs:false)->returnToHand(It) faithfully models the once-form shield; all effects structured, matcher anchored, no over-capture"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SphinxOfTheFinalWord.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 113.6g"],
+      "reason": "K15 spelltype-list-cant-be-countered: CantBeCounteredEffect over instant/sorcery you-control matches sibling CreatureSpellsCantBeCounteredRule shape; self spell-scoped can't-be-countered + Flying evasion + Hexproof all structured; anchored, sole corpus match is Sphinx. NON-GATING NOTES: doc-comment cites CR 700.4 (the 'dies' rule) for the type-disjunction aside (wrong ref, but node's core is grounded by 113.6g/611.3, not absent/contradictory); filter drops the 'spell' marker vs the [spell,<type>] convention used by the sibling and by K08/K18 this batch"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/KalemneDiscipleOfIroas.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 122.1", "CR 202.3", "CR 603.2"],
+      "reason": "K18 self-anthem-per-experience-counter: ModifyPTEffect(Self) scaled by CounterCountQuantity(experience,On:You) = self-anthem per player counter; SpellCast trigger filtered by ManaValueComparison>=5 on [spell,creature]; PutCountersEffect(You,experience) gain; double strike combatDamageTiming:Both convention correct; matchers anchored, corpus sweep clean (Kelsien+Kalemne self-refs, Azula excluded by anchor; 'you get a counter' only hits real player counters). NON-GATING: doc-comment '122.2i experience counters' is a non-existent subrule (122.1 correctly grounds player counters); experience counters absent from rules dataset = corpus gap"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/EnsoulArtifact.json",
+      "verdict": "PASS",
+      "citations": ["CR 613", "CR 208.3", "CR 205.1b"],
+      "reason": "K21 animate-enchanted-artifact: reused BecomesCreatureEffect(EnchantedOrEquipped) base P/T 5/5 with CardTypes:[artifact,creature] retaining the enchanted type + adding creature ('in addition to its other types'); enchantRestriction structured; matcher anchored with closed type-alternation, guards against 'is a Bird in addition...' subtype siblings; sibling sweep captures only genuine animate-artifact auras"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SilverskinArmor.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 613.1d", "CR 613.4c", "CR 205.1b", "CR 205.2a"],
+      "reason": "K27 attached-pt-and-is-cardtype: one StaticAbility carrying ModifyPTEffect(+1/+1) + AddTypeEffect(AddedCardTypes:[artifact]) both on EnchantedOrEquipped; captured type validated against the CR 205.2a card-type whitelist so it cannot fabricate a bogus card type; corpus sweep confirms artifact captured but Knight/Monk/Warrior subtype-riders correctly declined; Equip {2} attach + OnlyAsSorcery structured"
+    }
+  ]
+}

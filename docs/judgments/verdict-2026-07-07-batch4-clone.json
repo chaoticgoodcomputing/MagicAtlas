@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnterAsCopyRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 707.2", "CR 603.6d", "CR 614.1c", "CR 115.1"],
+      "reason": "Clone becomes-a-copy-on-enter modeled as StaticAbility{When:asThisEnters} + OptionalEffect + BecomesCopyEffect(Subject:Self, CopyTarget:Any+typed filter); BecomesCopyEffect (in-place, no new object) not CopyEffect matches CR 707.2 whose own example IS Clone; asThisEnters = static replacement per 603.6d/614.1c not ETB trigger; Any = choice not target per 115.1; anchored regex, except-forms decline, no free-text/unparsed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/STH/Clone.json",
+      "verdict": "PASS",
+      "citations": ["CR 707.2"],
+      "reason": "gold matches rule: static/asThisEnters + optional + becomesCopy{Subject:Self, CopyTarget:{Kind:Any, Filter:{CardTypes:[creature], Zone:Battlefield}}}; oracle text verbatim from CR 707.2's Clone example; no Duration (permanent copy) correct; typed filter, no unparsed nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnterAsCopyRule.cs#projection(becomesCopy)",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (reuses becomesCopy/optional/static-asThisEnters/ObjectReferenceKind.Any); becomesCopy already carries a justified coarse carve-out in known-coarse-projections.json; coarse is sensible since copy-of-arbitrary-creature can't be statically resolved into a flow-consumable edge"
+    }
+  ]
+}

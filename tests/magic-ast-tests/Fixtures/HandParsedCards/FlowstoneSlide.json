@@ -1,0 +1,103 @@
+{
+  "Input": {
+    "Name": "Flowstone Slide",
+    "ManaCost": "{X}{2}{R}{R}",
+    "TypeLine": "Sorcery",
+    "OracleText": "All creatures get +X/-X until end of turn.",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": [],
+    "Id": "074121e8-aecc-469f-b181-8e6a9e918826",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Flowstone Slide",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": [
+        "Sorcery"
+      ]
+    },
+    "Oracle": {
+      "RawText": "All creatures get +X/-X until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "variable",
+                "Name": "X"
+              },
+              "ToughnessModifier": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "variable",
+                  "Name": "X"
+                },
+                "Operation": "multiply",
+                "Operand": -1
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{X}{2}{R}{R}",
+        "Symbols": [
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "IsVariable": true
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
+    ]
+  }
+}

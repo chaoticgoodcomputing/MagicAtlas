@@ -1,0 +1,112 @@
+{
+  "Input": {
+    "Name": "Clergy of the Holy Nimbus",
+    "ManaCost": "{W}",
+    "TypeLine": "Creature — Human Cleric",
+    "OracleText": "If this creature would be destroyed, regenerate it.\n{1}: This creature can't be regenerated this turn. Only your opponents may activate this ability.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": ["Regenerate"],
+    "Id": "db1f578f-fa3b-4447-953b-1490852b6c80",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Clergy of the Holy Nimbus",
+    "TypeLine": {
+      "Raw": "Creature — Human Cleric",
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Cleric"]
+    },
+    "Oracle": {
+      "RawText": "If this creature would be destroyed, regenerate it.\n{1}: This creature can't be regenerated this turn. Only your opponents may activate this ability.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "destruction",
+                "AffectedObjects": {
+                  "IsSelf": true
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "regenerate",
+                "Target": {
+                  "Kind": "Self"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "cantBeRegenerated",
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "WhoMayActivate": "Opponent",
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}

@@ -468,6 +468,31 @@ internal static class StaticRuleHelpers
         KeywordSource = KeywordAbility.Riot,
         Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Riot }],
       },
+      // Infect (Rule 702.90a: "Infect is a static ability."): this creature deals
+      // damage to creatures in the form of -1/-1 counters and to players in the
+      // form of poison counters (Rule 702.90b-c). MAST records the keyword's
+      // presence via the same KeywordAbilityEffect shape as the other parameterless
+      // markers; the damage-redirection semantics are engine territory. Enables the
+      // "Enchanted/Equipped creature has infect" grant shape (BareKeywordGrantRule
+      // Arm 1), mirroring how it already grants Defender/Deathtouch/etc.
+      "infect" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Infect,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Infect }],
+      },
+      // Persist (CR 702.79a): a triggered keyword ability ("When this permanent is put
+      // into a graveyard from the battlefield, if it had no -1/-1 counters on it, return
+      // it to the battlefield..."). MAST records the keyword's presence via the same
+      // parameterless KeywordAbilityEffect marker used for the other triggered-keyword
+      // grants above (riot/myriad/melee/cipher/haunt/provoke); the dies-trigger and
+      // return-to-battlefield mechanics live in the keyword's own expansion
+      // (PersistKeyword) when the keyword appears bare on a card, not when it is
+      // conditionally GRANTED to a permanent by another ability's effect.
+      "persist" => new StaticAbility
+      {
+        KeywordSource = KeywordAbility.Persist,
+        Effects = [new MagicAST.AST.Effects.Keyword.KeywordAbilityEffect { Keyword = MagicAST.AST.References.KeywordAbility.Persist }],
+      },
       _ => null,
     };
   }
@@ -536,6 +561,26 @@ internal static class StaticRuleHelpers
       return filter is null
         ? null
         : filter with { Zone = Zone.Graveyard };
+    }
+
+    // "<type> cards in your graveyard" — typed count scoped to the
+    // controller's own graveyard (Salvage Slasher's characteristic-defining
+    // P/T bonus, CR 604.3; the layer-7c modifier itself is CR 613.4c). Distinct
+    // from the "all graveyards" case above by the added Controller axis
+    // (mirrors the "you control" board-count case's Controller.You), matching
+    // the established Controller+Zone shape already used for cost-reduction
+    // counts over "your graveyard" (Ghoultree, Cryptic Serpent).
+    var yourGraveyardMatch = Regex.Match(
+      text,
+      @"^(?<type>.+?)\s+cards?\s+in\s+your\s+graveyard$",
+      RegexOptions.IgnoreCase
+    );
+    if (yourGraveyardMatch.Success)
+    {
+      var filter = ClassifyTypeNounPhrase(yourGraveyardMatch.Groups["type"].Value);
+      return filter is null
+        ? null
+        : filter with { Zone = Zone.Graveyard, Controller = ControllerFilter.You };
     }
 
     // "<nouns> you control" — board count.

@@ -1,0 +1,128 @@
+{
+  "Input": {
+    "Name": "Magebane Armor",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "Equipped creature gets +2/+4 and loses flying.\nPrevent all noncombat damage that would be dealt to equipped creature.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [
+      "Equip"
+    ],
+    "Id": "95b0f586-a100-4817-93f8-1ee2df39ce03",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Magebane Armor",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature gets +2/+4 and loses flying.\nPrevent all noncombat damage that would be dealt to equipped creature.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 4
+              }
+            },
+            {
+              "EffectType": "loseAbility",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "Keyword": "Flying"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "preventDamage",
+              "All": true,
+              "NoncombatOnly": true,
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "Reminder": {
+            "Text": "({2}: Attach to target creature you control. Equip only as a sorcery.)"
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "Input": {
+    "Name": "Sunbond",
+    "ManaCost": "{3}{W}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature\nEnchanted creature has \"Whenever you gain life, put that many +1/+1 counters on this creature.\"",
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
+    "Id": "9f14bbff-8a3c-4aa0-a5aa-0dd6cb23b2a3",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Sunbond",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Enchant creature\nEnchanted creature has \"Whenever you gain life, put that many +1/+1 counters on this creature.\"",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ]
+              }
+            }
+          ],
+          "KeywordSource": "Enchant"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "GainedAbility": {
+                "Kind": "triggered",
+                "Trigger": {
+                  "Timing": "Whenever",
+                  "Event": "GainsLife",
+                  "Filter": {
+                    "Controller": "You"
+                  }
+                },
+                "Effects": [
+                  {
+                    "EffectType": "putCounters",
+                    "Target": {
+                      "Kind": "Self"
+                    },
+                    "CounterType": "+1/+1",
+                    "Count": {
+                      "QuantityType": "derived",
+                      "DerivedFrom": "LifeGained"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
+    ]
+  }
+}

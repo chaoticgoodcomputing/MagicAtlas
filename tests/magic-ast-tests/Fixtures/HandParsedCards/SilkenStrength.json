@@ -1,0 +1,139 @@
+{
+  "Input": {
+    "Name": "Silken Strength",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Flash\nEnchant creature or Vehicle\nWhen this Aura enters, untap enchanted permanent.\nEnchanted permanent gets +1/+2 and has reach.",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": ["Enchant", "Flash"],
+    "Id": "ce0e1ded-9b00-4d7b-884c-70a429783b1f",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Silken Strength",
+    "TypeLine": {
+      "Raw": "Enchantment — Aura",
+      "Types": ["Enchantment"],
+      "Subtypes": ["Aura"]
+    },
+    "Oracle": {
+      "RawText": "Flash\nEnchant creature or Vehicle\nWhen this Aura enters, untap enchanted permanent.\nEnchanted permanent gets +1/+2 and has reach.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flash",
+          "Effects": [
+            {
+              "EffectType": "timingModification",
+              "Modification": "Grant",
+              "Timing": "Instant"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Enchant",
+          "Effects": [
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "other",
+                    "Description": "creature or Vehicle"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["aura"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "modifyPT",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  }
+                },
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "Effects": [
+                      {
+                        "EffectType": "keywordAbility",
+                        "Keyword": "Reach"
+                      }
+                    ],
+                    "KeywordSource": "Reach"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["G"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      }
+    ]
+  }
+}

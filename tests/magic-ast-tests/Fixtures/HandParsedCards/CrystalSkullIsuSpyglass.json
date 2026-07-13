@@ -1,0 +1,94 @@
+{
+  "Input": {
+    "Name": "Crystal Skull, Isu Spyglass",
+    "ManaCost": "{2}{U}{U}",
+    "TypeLine": "Legendary Artifact",
+    "OracleText": "You may look at the top card of your library any time.\nYou may play historic lands and cast historic spells from the top of your library. (Artifacts, legendaries, and Sagas are historic.)\n{T}: Add {U}.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "b10fa72b-6742-4b65-8654-ac70b6240e38",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Crystal Skull, Isu Spyglass",
+    "TypeLine": {
+      "Raw": "Legendary Artifact",
+      "Supertypes": ["Legendary"],
+      "Types": ["Artifact"]
+    },
+    "Oracle": {
+      "RawText": "You may look at the top card of your library any time.\nYou may play historic lands and cast historic spells from the top of your library. (Artifacts, legendaries, and Sagas are historic.)\n{T}: Add {U}.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "lookAtTopCardAnyTime"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "mayPlayFromTopOfLibrary",
+              "Actions": ["PlayLands", "CastSpells"]
+            }
+          ],
+          "AffectedObjects": {
+            "IsHistoric": true
+          }
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "addMana",
+              "Mana": "{U}",
+              "AnyColor": false
+            }
+          ],
+          "IsManaAbility": true
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}

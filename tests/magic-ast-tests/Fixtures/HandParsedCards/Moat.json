@@ -1,0 +1,61 @@
+{
+  "Input": {
+    "Name": "Moat",
+    "ManaCost": "{2}{W}{W}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Creatures without flying can't attack.",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": [],
+    "Id": "e2dffeb3-c858-4b8c-ae1f-109721f7d2da",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Moat",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "Creatures without flying can't attack.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "cantAttack",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "LacksKeywords": ["Flying"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      }
+    ]
+  }
+}

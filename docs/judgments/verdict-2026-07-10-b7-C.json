@@ -1,0 +1,64 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/YarokTheDesecrated.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2d", "CR 702.2", "CR 702.15"],
+      "reason": "deathtouch/lifelink keywords + replacement(abilityTrigger, AffectedObjects=permanent+You, CausedByEntering=permanent, additionalTime) faithfully models any-permanent trigger doubling; input text matches DB verbatim; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/PermanentTriggerDoublingRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.2d"],
+      "reason": "citation exists and matches; regex anchored to 'a permanent entering' — mutually exclusive with LandTriggerDoublingRule's 'a land entering' anchor, no K06 collision; reuses accepted additionalTime modifier"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Stratadon.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 305.6", "CR 207.2c"],
+      "reason": "costReduction Amount=domain (1x DomainQuantity) + AbilityWord 'Domain' + trample keyword; input text matches DB; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/DomainSpellCostReductionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 305.6", "CR 207.2c"],
+      "reason": "cited 305.6/118.7 (NOT the brief's erroneous 700.6); all citations exist and match; domain-count reduction correctly modeled; anchored own-file rule, no CostReductionForEachRule overlap"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/StoneCalendar.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 118.7a"],
+      "reason": "costReduction literal 1 + AffectedObjects=spell+You unrestricted filter faithful to 'Spells you cast cost {1} less to cast.'; input text matches DB; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/UnrestrictedSpellCostReductionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 118.7a"],
+      "reason": "citation exists/matches; ^Spells\\s+you\\s+cast...$ anchor (no leading qualifier noun) cannot capture any qualified 'X spells you cast cost {N} less' sibling"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FrozenAether.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.1d", "CR 614.12"],
+      "reason": "When=asObjectEnters + tap Each{artifact,creature,land; Opponent} faithful three-type disjunction; input text matches DB; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EntersTappedRule.cs#Arm5",
+      "verdict": "PASS",
+      "citations": ["CR 614.1d", "CR 614.12"],
+      "reason": "Arm5 anchored to 'Artifacts, creatures, and lands your opponents control enter tapped.' — cannot steal Arm3 (bare creature) or Arm4 (creature+nonbasic-land, both anchored on 'Creatures'); correctly also covers Kismet"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/HeraldicBanner.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 607.1", "CR 614.1c"],
+      "reason": "producer chooseColor(When=asThisEnters) + anthem modifyPT with STRUCTURED ChosenCharacteristic:Color (not free text) + mana ability OfChosenColor; timing decomposed, not baked; input matches DB; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/ChosenColorAnthemModifyPTRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 607.1"],
+      "reason": "citations exist/match; references chosen color via structured ChosenCharacteristicKind.Color (established infra, direct sibling of accepted ChosenTypeAnthemModifyPTRule) rather than the free-text anti-pattern; distinct 'color' vs 'type' surface, no sibling overlap"
+    }
+  ]
+}

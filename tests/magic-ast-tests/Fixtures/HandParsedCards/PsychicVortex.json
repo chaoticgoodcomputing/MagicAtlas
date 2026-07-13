@@ -1,0 +1,124 @@
+{
+  "Input": {
+    "Name": "Psychic Vortex",
+    "ManaCost": "{2}{U}{U}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Cumulative upkeep—Draw a card. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nAt the beginning of your end step, sacrifice a land and discard your hand.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": ["Cumulative upkeep"],
+    "Id": "3bc2a419-7122-4eeb-bb64-738a647cfd82",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Psychic Vortex",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "Cumulative upkeep—Draw a card. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nAt the beginning of your end step, sacrifice a land and discard your hand.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Cumulative upkeep",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "this permanent is on the battlefield"
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": { "Kind": "Self" },
+              "CounterType": "age",
+              "Count": { "QuantityType": "literal", "Value": 1 }
+            },
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "sacrifice",
+                "Target": { "Kind": "Self" }
+              },
+              "Unless": {
+                "Player": { "Kind": "Controller" },
+                "Cost": {
+                  "CostType": "scaledCost",
+                  "PerUnit": {
+                    "CostType": "drawCards",
+                    "Quantity": { "QuantityType": "literal", "Value": 1 }
+                  },
+                  "Count": {
+                    "QuantityType": "counterCount",
+                    "CounterType": "age",
+                    "On": { "Kind": "Self" }
+                  }
+                }
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "(At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)"
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "End",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "sacrifice",
+                  "Target": {
+                    "Kind": "Any",
+                    "Filter": { "CardTypes": ["land"] }
+                  }
+                },
+                {
+                  "EffectType": "discardCards",
+                  "Count": { "QuantityType": "derived", "DerivedFrom": "CardsInHand" },
+                  "Player": { "Kind": "You" }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}

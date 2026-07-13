@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/StaticRuleHelpers.cs#BuildObjectCountFilter(your-graveyard branch)",
+      "verdict": "PASS",
+      "citations": ["CR 604.3", "CR 613.4c", "CR 108.3", "CR 109.4"],
+      "reason": "anchored ^<type> card(s) in your graveyard$ branch is disjoint from the 'all graveyards' (different literal tail) and 'you control' siblings; strips the 'cards' head noun before ClassifyTypeNounPhrase (so 'cards' isn't mis-typed as a subtype); untyped 'card(s) in your graveyard' correctly falls through to null; Controller=You + Zone=Graveyard matches the established ObjectFilter/CountOf convention (Cryptic Serpent, Ghoultree). Owner (CR 108.3) would be strictly more precise for an owned zone than Controller (CR 109.4) and CardTypeDiversityCondition uses Owner, but this matches the family's own precedent — process note, not a FAIL. 613.4c is the correct layer-7c cite; 604.3 'characteristic-defining' framing is imprecise for a 'gets +N/+0' modifier but is contextual, not load-bearing."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DSK/SalvageSlasher.json",
+      "verdict": "PASS",
+      "citations": ["CR 613.4c", "CR 604.3"],
+      "reason": "static modifyPT Target=Self mirrors the Rat Colony gold shape: PowerModifier is a typed count over ObjectFilter{CardTypes:[artifact],Controller:You,Zone:Graveyard}, ToughnessModifier is a literal 0 — '+1/+0' is fully typed, no free text; no unparsed/UnparsedEffect/Diagnostics; single ability fully modeled with no dropped sibling."
+    }
+  ]
+}

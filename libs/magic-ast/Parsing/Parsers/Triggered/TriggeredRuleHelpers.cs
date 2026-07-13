@@ -314,14 +314,27 @@ internal static class TriggeredRuleHelpers
       return new ObjectFilter { CardTypes = ["creature"], IsEquipped = true };
     }
 
-    // "nontoken creature" / "a nontoken creature" — CR 111: tokens are permanents
-    // created by effects, not cards. "Nontoken" restricts the trigger to creature
-    // permanents that are not tokens (IsToken = false). Must be checked before the
-    // plain "a creature" branch because "a nontoken creature" does NOT contain the
+    // "nontoken creature" / "a nontoken creature" / "another nontoken creature" — CR 111:
+    // tokens are permanents created by effects, not cards. "Nontoken" restricts the trigger
+    // to creature permanents that are not tokens (IsToken = false). Must be checked before
+    // the plain "a creature" branch because "a nontoken creature" does NOT contain the
     // literal substring "a creature" — the two paths are mutually exclusive by text.
+    // "another nontoken creature" excludes the source (CR 109.5) — mirrors the "another
+    // creature" ExcludeSelf convention below (Bane, Lord of Darkness: "another nontoken
+    // creature you control dies"). The intervening "nontoken" word means the plain
+    // ".Contains(\"another creature\")" check below never fires for this phrase, so the
+    // exclusion is captured here instead.
+    //
+    // Disjunction guard (mirrors Guard 2 in the plain-creature branch below): a self-by-name
+    // disjunction "<Name> or another nontoken creature you control dies" (Anax, Hardened in
+    // the Forge) is SELF-INCLUSIVE — the source triggers it via the name clause — so it must
+    // NOT set ExcludeSelf. Only an unconditional "another nontoken creature" (no "or another"
+    // partner) excludes the source.
     if (lower.Contains("nontoken creature"))
     {
-      return new ObjectFilter { CardTypes = ["creature"], IsToken = false, Controller = controller };
+      var isDisjunction = lower.Contains("or another nontoken creature");
+      var excludeSelf = (!isDisjunction && lower.Contains("another nontoken creature")) ? (bool?)true : null;
+      return new ObjectFilter { CardTypes = ["creature"], IsToken = false, Controller = controller, ExcludeSelf = excludeSelf };
     }
 
     if (lower.Contains("a creature") || lower.Contains("another creature"))
@@ -366,6 +379,24 @@ internal static class TriggeredRuleHelpers
     {
       var excludeSelf = lower.Contains("another artifact") ? (bool?)true : null;
       return new ObjectFilter { CardTypes = ["artifact"], Controller = controller, ExcludeSelf = excludeSelf };
+    }
+
+    // "a nonartifact permanent" / "another nonartifact permanent" — CR 110.4 (the six permanent
+    // types) / CR 301 (the artifact card type). A permanent that lacks the artifact card type,
+    // modeled via the general non-[type] negation axis (CardTypes=["permanent"] +
+    // ExcludedCardTypes=["artifact"]), mirroring the "nontoken creature" branch above. Checked
+    // before the plain "a permanent"/"another permanent" branch below so the artifact exclusion
+    // is never lost (Cloudstone Curio: "Whenever a nonartifact permanent you control enters, ...").
+    if (lower.Contains("nonartifact permanent"))
+    {
+      var excludeSelf = lower.Contains("another nonartifact permanent") ? (bool?)true : null;
+      return new ObjectFilter
+      {
+        CardTypes = ["permanent"],
+        ExcludedCardTypes = ["artifact"],
+        Controller = controller,
+        ExcludeSelf = excludeSelf,
+      };
     }
 
     // Permanent ETB triggers: "Whenever a permanent enters, ..."

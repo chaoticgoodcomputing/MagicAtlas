@@ -128,6 +128,34 @@ public sealed record TriggerCondition
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public int? MinimumCount { get; init; }
+
+  /// <summary>
+  /// True when the trigger event only counts if it occurs during the
+  /// ability's controller's own turn — "during your turn" (Thran Vigil:
+  /// "Whenever one or more artifact and/or creature cards leave your
+  /// graveyard <i>during your turn</i>, ..."). This narrows the WINDOW in
+  /// which the event must occur for the ability to trigger.
+  ///
+  /// <para>
+  /// Distinct from <see cref="PerTurn"/> (which scopes an <see cref="Ordinal"/>
+  /// reset, not the event window) and from
+  /// <see cref="MagicAST.AST.Abilities.TriggeredAbilityRestriction.OnlyDuringYourTurn"/>
+  /// (a restriction carried by a trailing standalone sentence AFTER the
+  /// resolution clause — CR 603.2h, "Do this only during your turn.") — here
+  /// the qualifier is grammatically part of the trigger condition clause
+  /// itself, so it lives on the condition rather than on the ability.
+  /// </para>
+  ///
+  /// <para>
+  /// CR 603.2: "Whenever a game event or game state matches a triggered
+  /// ability's trigger event, that ability automatically triggers." This
+  /// field narrows which occurrences of the event match. Null when no turn
+  /// qualifier is present (the default: any occurrence of the event
+  /// triggers, regardless of whose turn it is).
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? DuringYourTurn { get; init; }
 }
 
 /// <summary>
@@ -366,6 +394,17 @@ public enum TriggerEvent
   /// <summary>A player discards a card</summary>
   DiscardsCard,
 
+  /// <summary>
+  /// A player mills one or more cards (CR 701.17a: "For a player to mill a number of
+  /// cards, that player puts that many cards from the top of their library into their
+  /// graveyard."). Parallels the other card-flow player-action events
+  /// (<see cref="DrawsCard"/>, <see cref="DiscardsCard"/>): the <see cref="TriggerCondition.Filter"/>
+  /// carries the milling player (Controller = You for "when you mill"). Primary use is
+  /// the reflexive "mill N cards. When you do, …" shape (CR 603.12), where the milling
+  /// action is the reflexive trigger's event.
+  /// </summary>
+  Mills,
+
   // Other
   /// <summary>A player sacrifices a permanent</summary>
   Sacrifices,
@@ -483,6 +522,24 @@ public enum TriggerEvent
   /// interaction engine can close a dice loop (roll → this trigger → effect → … → roll again).
   /// </summary>
   DiceRolled,
+
+  /// <summary>
+  /// An Aura, Equipment, Fortification, or other attached permanent becomes unattached
+  /// from the object or player it was attached to — "Whenever this Equipment becomes
+  /// unattached from a permanent, …" (Stitcher's Graft). CR 701.3d (verbatim): "To
+  /// 'unattach' an Equipment from a creature means to move it away from that creature
+  /// so the Equipment is on the battlefield but is not equipping anything. … If an Aura,
+  /// Equipment, or Fortification that was attached to an object or player ceases to be
+  /// attached to it, that counts as 'becoming unattached [from that object or player]';
+  /// this includes if that Aura, Equipment, or Fortification leaves the battlefield, the
+  /// object leaves the zone it was in, or that player leaves the game." The
+  /// <see cref="TriggerCondition.Filter"/> carries the object it was attached to (the
+  /// "from a permanent" complement), so the effect can resolve the back-reference "that
+  /// permanent" (<see cref="MagicAST.AST.References.ObjectReferenceKind.ThatPermanent"/>).
+  /// Distinct from the parameterless <see cref="MagicAST.AST.Effects.Modification.UnattachEffect"/>
+  /// (an explicit unattach INSTRUCTION) — this is the CONSUMER side, the event a trigger watches for.
+  /// </summary>
+  BecomesUnattached,
 
   /// <summary>Unrecognized trigger event</summary>
   Other,

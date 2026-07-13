@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ONS/HarmonyOfNature.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.26a", "CR 119.3", "CR 115.1", "CR 107.3"],
+      "reason": "OracleText byte-identical to Scryfall; two fully-structured sibling effects (tap Any/untapped-creatures-you-control count anyAmount; gainLife 4 x creaturesTappedThisWay); no unparsed/free-text/lossy nodes"
+    },
+    {
+      "target": "libs/magic-ast/AST/Quantities/CreaturesTappedThisWayQuantity.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.26a"],
+      "reason": "field-less Quantity mirroring CardsRevealedThisWayQuantity; reference-not-resolution back-link to the sibling tap; cited CR 701.26a matches verbatim"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/TapAnyNumberOfUntappedCreaturesYouControlRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.26a", "CR 107.3", "CR 115.1"],
+      "reason": "constructs sound TapEffect(Any + untapped/you-control filter + anyAmount); all cited rules exist and are consistent (115.1 correctly justifies Any-not-Target)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/GainLifeForEachCreatureTappedThisWayRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 119.3"],
+      "reason": "constructs GainLifeEffect(4 x creaturesTappedThisWay via CalculatedQuantity); cited CR 119.3 matches verbatim"
+    },
+    {
+      "target": "mast/tap-any-number-untapped-creatures#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new projected discriminator: the only new node is a Quantity (outside the ratchet's effectType/costType/triggerEvent/restriction surface); the effects it feeds (tap, gainLife) are already semantically projected (tap:self cost, emit:life:gain)"
+    }
+  ]
+}

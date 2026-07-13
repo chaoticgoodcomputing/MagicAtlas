@@ -1,0 +1,168 @@
+{
+  "Input": {
+    "Name": "Blight Mound",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Enchantment",
+    "OracleText": "Attacking Pests you control get +1/+0 and have menace.\nWhenever a nontoken creature you control dies, create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": [],
+    "Id": "dc060028-e01c-4bc7-8b52-7d0e2a350061",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Blight Mound",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "Attacking Pests you control get +1/+0 and have menace.\nWhenever a nontoken creature you control dies, create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Subtypes": ["Pest"],
+                  "Controller": "You",
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "combatState",
+                      "State": "Attacking"
+                    }
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              }
+            },
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Subtypes": ["Pest"],
+                  "Controller": "You",
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "combatState",
+                      "State": "Attacking"
+                    }
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Menace",
+                "Effects": [
+                  {
+                    "EffectType": "evasion",
+                    "CanBeBlockedBy": {
+                      "CardTypes": ["creature"]
+                    },
+                    "MinimumBlockers": 2
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsToken": false,
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": ["B", "G"],
+                "Types": ["creature"],
+                "Subtypes": ["Pest"],
+                "Abilities": [
+                  {
+                    "Kind": "triggered",
+                    "Trigger": {
+                      "Timing": "When",
+                      "Event": "Dies",
+                      "Filter": {
+                        "CardTypes": ["creature"],
+                        "IsSelf": true
+                      }
+                    },
+                    "Effects": [
+                      {
+                        "EffectType": "gainLife",
+                        "Amount": {
+                          "QuantityType": "literal",
+                          "Value": 1
+                        },
+                        "Player": {
+                          "Kind": "You"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "IsCopy": false
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}

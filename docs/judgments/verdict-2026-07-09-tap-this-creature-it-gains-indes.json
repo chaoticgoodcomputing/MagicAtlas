@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ISD/DrudgeSentinel.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.26a", "CR 702.12a", "CR 611.1"],
+      "reason": "OracleText byte-identical to real card; two flat sibling effects (tap Self + gainAbility Indestructible until end of turn) with no unparsed/free-text; GainedAbility static+KeywordSource+keywordAbility shape matches BuildGrantedKeywordAbility; reminder text correctly dropped"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/TapSelfThenGainsKeywordEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.26a", "CR 611.1", "CR 702.12a"],
+      "reason": "all three cited rules exist in rules-structure.json and match modeling verbatim; emits pre-existing TapEffect + GainAbilityEffect (Self, EndOfTurn) via mirror of ExileSelfThenReturnToBattlefieldRule; unmodeled keyword falls through to residual (no half-structured grant)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/TapSelfThenGainsKeywordEffectRule.cs#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (newAstNode=false; tap/gainAbility/keywordAbility all pre-exist, indestructible already in BuildGrantedKeywordAbility) so no PortWalk projection decision is required"
+    }
+  ]
+}

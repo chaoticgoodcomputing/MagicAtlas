@@ -1,0 +1,64 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/HeartlessAct.json",
+      "verdict": "PASS",
+      "citations": ["CR 700.2", "CR 122.1"],
+      "reason": "modal Choose one (Min1/Max1, AllowDuplicates false); mode1 destroy target creature with no-counters filter (CounterCharacteristic any/Equal-0), mode2 removeCounters upTo(3); no unparsed/free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/DestroyTargetCreatureWithNoCountersRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 122.1"],
+      "reason": "no-counters predicate = CounterCharacteristic CounterType any, Count Equal 0; fully anchored, will not shadow generic destroy siblings"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/RemoveUpToNCountersFromTargetCreatureRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 122.1", "CR 122.3"],
+      "reason": "RemoveCountersEffect any + UpToQuantity(max); anchored to bare-'counters'/target-creature surface, excludes typed-counter and target-permanent siblings"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/AbilityClassifier.cs#remove-counters-intercept",
+      "verdict": "PASS",
+      "citations": ["CR 122.3"],
+      "reason": "spell-routing intercept for 'Remove ... counters from ...'; region (L491) disjoint from L09's countered->copied change (L1235), no semantic conflict; quoted 122.3 text is verbatim"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FerventChampion.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.6", "CR 118.7"],
+      "reason": "first strike/haste/attack-trigger/cost-reduction all structured; costReduction AppliesTo Equip/You/TargetsObject:Self, pump ExcludeSelf attacking-Knight +1/+0 EOT; no unparsed/free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EquipAbilityYouActivateTargetingSelfCostReductionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 118.9", "CR 702.6", "CR 109.5"],
+      "reason": "CostReductionEffect(3) + ActivatedAbilityReference Equip/You/TargetsObject:Self; anchored, distinct from Eowyn bare-form and enchanted-creature sibling"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/AnotherTargetAttackingSubtypeYouControlPumpTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 603.1", "CR 611.2a", "CR 514.2", "CR 205.3m"],
+      "reason": "effect-only clause; Subtype+Controller:You+ExcludeSelf+combatState Attacking, +N/+M UntilEndOfTurn; capitalised-subtype anchor excludes generic-noun siblings"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/KirriTalentedSprout.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 205.3"],
+      "reason": "anthem Subtypes:[Plant,Treefolk] OR-disjunction, ExcludeSelf, +2/+0; postcombat-main return trigger with graveyard/You filter, mixed type-or-subtype disjunction structured; no unparsed/free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/MultiSubtypeAnthemModifyPTRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 205.3", "CR 109.5"],
+      "reason": "Subtypes disjunction (Plant/Treefolk), ExcludeSelf for 'Other', Each/You, +2/+0; 2+-subtype anchor keeps it disjoint from single-subtype anthem and Lord rules"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ReturnTargetTypeOrSubtypeFromGraveyardToHandTriggeredRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 701.10"],
+      "reason": "doc-comment cites CR 701.10 as 'return, the keyword action moving an object from one zone to another' but CR 701.10 is 'Double'; 'return' is not a CR 701 keyword action (no 701 rule is titled Return) - the cited rule's text contradicts the modeling; correct grounding is zone-change 400.7/404.1/402.1"
+    }
+  ]
+}

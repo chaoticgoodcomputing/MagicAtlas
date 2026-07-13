@@ -52,15 +52,54 @@ public static class ConditionParser
 
   /// <summary>
   /// "that player has two or fewer cards in hand" / "you have N or more cards in
-  /// hand" — a hand-size predicate (Prickle Faeries' upkeep intervening-if). The
-  /// possessive subject maps to the owner of the counted cards (hand membership is
-  /// by ownership, CR 108.3): "that player" → <see cref="ControllerFilter.ThatPlayer"/>
-  /// (the player whose step fired the trigger, CR 109.5), "you/your" → You. Structured
-  /// to a <see cref="CountCondition"/> over the Hand zone rather than left as a
-  /// free-text residual.
+  /// hand" / "you have fewer than ten cards in hand" (The Ten Rings) — a hand-size
+  /// predicate (Prickle Faeries' upkeep intervening-if). The possessive subject maps
+  /// to the owner of the counted cards (hand membership is by ownership, CR 108.3):
+  /// "that player" → <see cref="ControllerFilter.ThatPlayer"/> (the player whose
+  /// step fired the trigger, CR 109.5), "you/your" → You. Structured to a
+  /// <see cref="CountCondition"/> over the Hand zone rather than left as a free-text
+  /// residual. Covers both the trailing "N or more/fewer" suffix form and the
+  /// strict leading "fewer than N"/"more than N" prefix form (a plain
+  /// <see cref="ComparisonOperator.LessThan"/>/<see cref="ComparisonOperator.GreaterThan"/>,
+  /// distinct from the suffix form's inclusive "or fewer"/"or more").
   /// </summary>
   private static readonly Regex HandSize = new(
-    @"^(?<who>that\s+player|you|your)\s+(?:has|have)\s+(?<quant>a|an|\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer))?\s+cards?\s+in\s+(?:hand|their\s+hand|your\s+hand)$",
+    @"^(?<who>that\s+player|you|your)\s+(?:has|have)\s+(?:(?<prefixdir>fewer|more)\s+than\s+)?(?<quant>a|an|\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer))?\s+cards?\s+in\s+(?:hand|their\s+hand|your\s+hand)$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "you have exactly 1 life" / "that player has 10 or less life" — a life-total
+  /// threshold predicate (Near-Death Experience's upkeep intervening-if: "At the
+  /// beginning of your upkeep, if you have exactly 1 life, you win the game.").
+  /// Structured to a <see cref="QuantityComparisonCondition"/> whose left operand
+  /// is a <see cref="DerivedQuantity"/> keyed on <see cref="DerivedKind.LifeTotal"/>
+  /// (the <c>Source</c> pronoun carries whose life total — "you"/"that player" —
+  /// mirroring the "it" pronoun convention used elsewhere for derived quantities)
+  /// rather than left as a free-text <see cref="OtherCondition"/> residual.
+  /// CR 119.1: "Each player begins the game with a starting life total of 20."
+  /// Anchored (^…$).
+  /// </summary>
+  private static readonly Regex LifeTotal = new(
+    @"^(?<who>you|that\s+player)\s+(?:have|has)\s+(?:exactly\s+)?(?<quant>\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer|less))?\s+life$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "your life total is less than or equal to half your starting life total" — the
+  /// God-template life-threshold predicate (Bane, Lord of Darkness: "As long as your life
+  /// total is less than or equal to half your starting life total, Bane has
+  /// indestructible."). CR 119.1: "Each player begins the game with a starting life total
+  /// of 20." (format-dependent — CR 903.7 sets 40 for Commander); "starting life total" is
+  /// the FIXED value set at the beginning of the game, distinct from the player's CURRENT
+  /// life total (<see cref="DerivedKind.LifeTotal"/>) that changes as the game progresses.
+  /// Structured to a <see cref="QuantityComparisonCondition"/> whose <c>Right</c> operand
+  /// is a <see cref="CalculatedQuantity"/> halving a <see cref="DerivedQuantity"/> keyed on
+  /// the new <see cref="DerivedKind.StartingLifeTotal"/> — the sibling shape of the plain
+  /// <see cref="LifeTotal"/> predicate above, generalised to a comparison operator phrase
+  /// ("is less than or equal to") and a derived (not literal) right-hand side. Anchored
+  /// (^…$).
+  /// </summary>
+  private static readonly Regex LifeTotalVsHalfStarting = new(
+    @"^(?<who>your|that\s+player's)\s+life\s+total\s+is\s+(?<op>less\s+than\s+or\s+equal\s+to|greater\s+than\s+or\s+equal\s+to|less\s+than|greater\s+than|equal\s+to)\s+half\s+(?:your|their)\s+starting\s+life\s+total$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
@@ -143,6 +182,29 @@ public static class ConditionParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
+  /// "you've cast a noncreature spell this turn" / "you've cast a spell this turn" /
+  /// "you've cast an instant or sorcery spell this turn" — a backward-looking
+  /// spell-count intervening-if (CR 603.4) gating on whether the controller has
+  /// cast a (optionally type-qualified) spell during the current turn. Council of
+  /// Reeds' "if you've cast a noncreature spell this turn"; Sanar's Treasure
+  /// ability "Activate only if you've cast an instant or sorcery spell this turn."
+  /// Structured to a <see cref="CountCondition"/> whose
+  /// <see cref="ObjectFilter.History"/> is a <see cref="CastThisTurnPredicate"/>
+  /// (CR 601 casting), composing the same <c>CardTypes=["spell"], Controller=You,
+  /// History=castThisTurn</c> shape used by Aetherflux Reservoir's spell-count
+  /// quantity, plus two type axes: the "non-[type]" negation
+  /// (<see cref="ObjectFilter.ExcludedCardTypes"/>) already used for "cast a
+  /// noncreature spell" trigger filters (Spellgorger Weird), and the
+  /// "instant or sorcery" disjunction (<c>CardTypes=["spell","instant","sorcery"]</c>,
+  /// the same composition Thousand-Year Storm/Doublecast use for the trigger-side
+  /// filter). The threshold is "at least one" (GreaterThanOrEqual 1) — "you've cast
+  /// a spell" is an existence check, not a literal count. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex CastSpellThisTurn = new(
+    @"^you(?:'ve|\s+have)\s+cast\s+(?:a|an)\s+(?:(?<disjunction>instant\s+or\s+sorcery)\s+|non(?<excluded>[a-z]+)\s+)?(?<noun>spell)\s+this\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// "red is the most common color among all permanents [or is tied for most common]" —
   /// a color-prevalence gate (Halam Djinn). Structured to a
   /// <see cref="MostCommonColorCondition"/> (a max-by-color tally, not an object count)
@@ -164,9 +226,38 @@ public static class ConditionParser
       ["green"] = "G",
     };
 
+  /// <summary>
+  /// "it targets a blue spell" — Mystical Dispute's conditional self-cost-reduction
+  /// gate (CR 118.7). Anchored on the "[color] spell" tail so it cannot collide with
+  /// the "it targets a tapped creature/permanent" sibling (a distinct free-text arm
+  /// consumed only by <see cref="ConditionalSpellCostReductionRule"/>'s own regex,
+  /// not handled here).
+  /// </summary>
+  private static readonly Regex ItTargetsColoredSpell = new(
+    @"^it\s+targets\s+an?\s+(?<color>white|blue|black|red|green)\s+spell$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// The most recent hand-size upper-bound threshold parsed by <see cref="Parse"/>'s
+  /// <see cref="HandSize"/> arm (e.g. 10 for "fewer than ten cards in hand"), for a
+  /// paired effect rule that needs the numeral — see the hand-off note on the
+  /// <see cref="HandSize"/> match site in <see cref="Parse"/>. The consumer (e.g.
+  /// <c>DrawCardsEqualToHandSizeDifferenceRule</c>) reads and clears it immediately
+  /// after, in the same synchronous ability parse, mirroring the
+  /// <c>AttacksPlayerAndIsntBlockedConditionRule.PendingInterveningIf</c> hand-off.
+  /// </summary>
+  [ThreadStatic]
+  public static int? PendingHandSizeUpperBound;
+
   /// <summary>Parse a condition phrase; never throws — unrecognised phrases become a residual.</summary>
   public static Condition Parse(string phrase)
   {
+    // Reset the hand-off from any earlier, unrelated Parse call on this thread —
+    // only the HandSize match (if any) made by THIS call should reach the paired
+    // effect rule that runs immediately afterward. Set again below if this call's
+    // body matches HandSize with an upper-bound comparison.
+    PendingHandSizeUpperBound = null;
+
     var verbatim = phrase.Trim();
     // Strip a leading "if " / "as long as " connector before matching the predicate.
     var body = Regex.Replace(verbatim, @"^(if|as\s+long\s+as)\s+", "", RegexOptions.IgnoreCase).Trim();
@@ -222,10 +313,90 @@ public static class ConditionParser
         Zone = Zone.Hand,
         Owner = owner,
       };
+
+      Comparison count;
+      if (hm.Groups["prefixdir"].Success)
+      {
+        // Strict leading form: "fewer than N"/"more than N" (no "or").
+        var value = NumberWords.TryGetValue(hm.Groups["quant"].Value, out var pv)
+          ? pv
+          : int.Parse(hm.Groups["quant"].Value);
+        var op = hm.Groups["prefixdir"].Value.Equals("fewer", StringComparison.OrdinalIgnoreCase)
+          ? ComparisonOperator.LessThan
+          : ComparisonOperator.GreaterThan;
+        count = new Comparison { Operator = op, Value = value };
+      }
+      else
+      {
+        count = Quant(hm.Groups["quant"].Value, hm.Groups["dir"].Value);
+      }
+
+      // Communicate the upper-bound threshold to a paired effect rule that needs
+      // the numeral to build a "draw cards equal to the difference" quantity (The
+      // Ten Rings: "if you have fewer than ten cards in hand, draw cards equal to
+      // the difference" — the effect rule only sees the post-intervening-if effect
+      // fragment, so the numeral this condition just parsed is handed off here).
+      // Only set for an upper-bound (LessThan/LessThanOrEqual): "the difference"
+      // reads as threshold-minus-count, which only makes sense against an upper
+      // bound. Mirrors the AttacksPlayerAndIsntBlockedConditionRule.PendingInterveningIf
+      // cross-rule hand-off pattern used elsewhere in the triggered-ability pipeline.
+      if (count.Operator is ComparisonOperator.LessThan or ComparisonOperator.LessThanOrEqual && count.Value is int threshold)
+      {
+        PendingHandSizeUpperBound = threshold;
+      }
+
       return new CountCondition
       {
         Filter = filter,
-        Count = Quant(hm.Groups["quant"].Value, hm.Groups["dir"].Value),
+        Count = count,
+      };
+    }
+
+    if (LifeTotal.Match(body) is { Success: true } lt)
+    {
+      var value = NumberWords.TryGetValue(lt.Groups["quant"].Value, out var lv)
+        ? lv
+        : int.Parse(lt.Groups["quant"].Value);
+      var op = lt.Groups["dir"].Value.ToLowerInvariant() switch
+      {
+        "more" => ComparisonOperator.GreaterThanOrEqual,
+        "fewer" or "less" => ComparisonOperator.LessThanOrEqual,
+        _ => ComparisonOperator.Equal,
+      };
+      return new QuantityComparisonCondition
+      {
+        Left = new DerivedQuantity
+        {
+          DerivedFrom = DerivedKind.LifeTotal,
+          Source = lt.Groups["who"].Value.ToLowerInvariant(),
+        },
+        Operator = op,
+        Right = new LiteralQuantity { Value = value },
+      };
+    }
+
+    if (LifeTotalVsHalfStarting.Match(body) is { Success: true } lths)
+    {
+      var who = lths.Groups["who"].Value.StartsWith("your", StringComparison.OrdinalIgnoreCase)
+        ? "you"
+        : "that player";
+      var op = lths.Groups["op"].Value.ToLowerInvariant() switch
+      {
+        "less than or equal to" => ComparisonOperator.LessThanOrEqual,
+        "greater than or equal to" => ComparisonOperator.GreaterThanOrEqual,
+        "less than" => ComparisonOperator.LessThan,
+        "greater than" => ComparisonOperator.GreaterThan,
+        _ => ComparisonOperator.Equal,
+      };
+      return new QuantityComparisonCondition
+      {
+        Left = new DerivedQuantity { DerivedFrom = DerivedKind.LifeTotal, Source = who },
+        Operator = op,
+        Right = new CalculatedQuantity
+        {
+          Operation = "half",
+          BaseQuantity = new DerivedQuantity { DerivedFrom = DerivedKind.StartingLifeTotal, Source = who },
+        },
       };
     }
 
@@ -263,6 +434,26 @@ public static class ConditionParser
     if (CastThisObject.IsMatch(body))
     {
       return new CastThisObjectCondition();
+    }
+
+    if (CastSpellThisTurn.Match(body) is { Success: true } cstm)
+    {
+      var filter = new ObjectFilter
+      {
+        CardTypes = cstm.Groups["disjunction"].Success
+          ? ["spell", "instant", "sorcery"]
+          : ["spell"],
+        ExcludedCardTypes = cstm.Groups["excluded"].Success
+          ? [cstm.Groups["excluded"].Value.ToLowerInvariant()]
+          : null,
+        Controller = ControllerFilter.You,
+        History = new CastThisTurnPredicate { Caster = ControllerFilter.You },
+      };
+      return new CountCondition
+      {
+        Filter = filter,
+        Count = new Comparison { Operator = ComparisonOperator.GreaterThanOrEqual, Value = 1 },
+      };
     }
 
     if (SourceCombatState.Match(body) is { Success: true } scm)
@@ -311,6 +502,19 @@ public static class ConditionParser
         Color = ColorWordToCode[mcc.Groups["color"].Value],
         IncludeTies = body.Contains("tied", StringComparison.OrdinalIgnoreCase),
         Among = NounToFilter(mcc.Groups["noun"].Value.Trim()),
+      };
+    }
+
+    if (ItTargetsColoredSpell.Match(body) is { Success: true } itcs)
+    {
+      return new TargetsFilterCondition
+      {
+        Subject = "It",
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["spell"],
+          Colors = [ColorWordToCode[itcs.Groups["color"].Value]],
+        },
       };
     }
 

@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MournfulZombie.json",
+      "verdict": "PASS",
+      "citations": ["CR 119.3"],
+      "reason": "OracleText byte-identical to oracle-cards.json; single sentence fully structured as activated ability (mana {W} + tap costs) with gainLife effect, literal Amount 1 to Target player; no unparsed/free-text, no lossy drop; player filter matches established codebase convention"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/TargetPlayerGainsLifeEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 119.3"],
+      "reason": "cited CR 119.3 exists and text matches (effect causes a player to gain life); maps to existing GainLifeEffect with Target(Player) reference and literal/word/variable amount; anchored regex; no new discriminator or escape hatch"
+    },
+    {
+      "target": "tdd/target-player-gains-1-life-mournful-zombie#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses existing gainLife effect type (already projected) and existing Target/Player object reference; no new PortGraph case or coarse-projection entry required"
+    }
+  ]
+}

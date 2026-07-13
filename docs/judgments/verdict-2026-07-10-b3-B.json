@@ -1,0 +1,76 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/StitchersGraft.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.3d", "CR 701.21", "CR 502.3"],
+      "reason": "faithful: modifyPT +3/+3, doesntUntap{It}+WhoseUntapStep, BecomesUnattached trigger (Filter=permanent) + sacrifice{ThatPermanent} back-ref, equip; oracle byte-matches corpus"
+    },
+    {
+      "target": "libs/magic-ast/AST/Triggers/TriggerCondition.cs#BecomesUnattached",
+      "verdict": "PASS",
+      "citations": ["CR 701.3d"],
+      "reason": "new TriggerEvent discriminator; doc quotes 701.3d verbatim (matches rules-structure.json); condition rule anchored to 'becomes unattached from a/an/the X', gives correct bonus coverage to Grafted Wargear/Exoskeleton/Captain's Hook"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectReference.cs#ThatPermanent",
+      "verdict": "PASS",
+      "citations": ["CR 701.3d", "CR 301.5"],
+      "reason": "new back-ref kind for 'that permanent'; correctly kept distinct from ThatCreature since oracle types the detached-from object generically as permanent; sacrifice rule anchored (^sacrifice that permanent$) so Captain's Hook 'destroy that permanent' is NOT stolen"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#triggerEvent.BecomesUnattached",
+      "verdict": "PASS",
+      "citations": ["CR 701.3d"],
+      "reason": "projection decision present + sensible: coarse, consistent with entire sibling Becomes* family (Blocked/Crewed/Tapped/Target/Untapped all coarse); downstream sacrifice payoff separately projected; not something a flow rule would clearly want"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TitanOfLittjara.json",
+      "verdict": "PASS",
+      "citations": ["CR 607.1", "CR 205.3", "CR 205.1", "CR 118.12"],
+      "reason": "chooseCreatureType + When:asThisEnters is the correct timing-composable decomposition (not the OnEntry anti-pattern); addType{ChosenSubtypeReference:CreatureType} is a STRUCTURED linked-var reference, not free text; optional draw-per-shared-type + IfYouDo discard faithful"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Modification/AddTypeEffect.cs#ChosenSubtypeReference",
+      "verdict": "PASS",
+      "citations": ["CR 607.1", "CR 205.1"],
+      "reason": "additive-grant back-reference to the chosen creature type; faithful parallel of the pre-existing ChangeSubtypeEffect.ChosenSubtypeReference (SET sibling) and ObjectFilter.ChosenCharacteristic; the SKILL's prescribed structured-reference fix, not the free-text shortcut"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilter.cs#SharesCreatureTypeWith",
+      "verdict": "PASS",
+      "citations": ["CR 205.3"],
+      "reason": "new relational axis; faithful parallel of pre-existing SharesColorWith, correctly distinguished from ChosenCharacteristic (live type-set vs fixed chosen value); registered in ObjectFilterRelations undecided-axis + property tests"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CouncilOfReeds.json",
+      "verdict": "PASS",
+      "citations": ["CR 704.5j", "CR 603.4", "CR 201.5", "CR 707.1"],
+      "reason": "legendRuleSuppression{Target:Each creature you control} scoped; intervening-if count condition on cast-history (>=1); copy{Self} self-by-name token matches CreateCopyOnCombatDamage sibling convention; oracle byte-matches corpus"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Replacement/LegendRuleSuppressionEffect.cs#Target",
+      "verdict": "PASS",
+      "citations": ["CR 704.5j"],
+      "reason": "additive optional Target (WhenWritingNull) narrows suppression scope; Mirror Gallery unscoped gold byte-preserved ({EffectType:legendRuleSuppression}); rule anchored ^...$"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/ConditionParser.cs#CastSpellThisTurn",
+      "verdict": "PASS",
+      "citations": ["CR 603.4", "CR 601.3a"],
+      "reason": "anchored cast-history intervening-if -> CountCondition{spell,(non-type),You,castThisTurn,>=1}; correct bonus coverage across H.E.R.B.I.E./Fortune Teller's Talent/etc.; does not swallow Hurkyl's 'spells you've cast this turn' counting phrase"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SteelGolem.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.3a"],
+      "reason": "cantBeCast{Caster:You} + AffectedObjects{CardTypes:[spell,creature]} faithful caster-scoped restriction; positive spell-type convention matches existing Nullify/Disallow fixtures; oracle byte-matches corpus"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Timing/CantBeCastEffect.cs#Caster",
+      "verdict": "PASS",
+      "citations": ["CR 601.3a"],
+      "reason": "additive optional Caster (WhenWritingNull) reuses cantBeCast discriminator; Gaddock Teeg unscoped gold untouched (no regression); rule anchored, correct bonus coverage Nullhide Ferox/Grid Monitor/Nikya, Ward of Bones (Each opponent...) not stolen"
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "Input": {
+    "Name": "Terror of the Peaks",
+    "ManaCost": "{3}{R}{R}",
+    "TypeLine": "Creature — Dragon",
+    "OracleText": "Flying\nSpells your opponents cast that target this creature cost an additional 3 life to cast.\nWhenever another creature you control enters, this creature deals damage equal to that creature's power to any target.",
+    "Power": "5",
+    "Toughness": "4",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": ["Flying"],
+    "Id": "904ff94a-4db4-44a6-8593-89c32905b3fc",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Terror of the Peaks",
+    "TypeLine": {
+      "Raw": "Creature — Dragon",
+      "Types": ["Creature"],
+      "Subtypes": ["Dragon"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nSpells your opponents cast that target this creature cost an additional 3 life to cast.\nWhenever another creature you control enters, this creature deals damage equal to that creature's power to any target.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": [
+                  { "CharacteristicType": "keyword", "Keyword": "Flying" },
+                  { "CharacteristicType": "keyword", "Keyword": "Reach" }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "costIncrease",
+              "Amount": { "QuantityType": "literal", "Value": 0 },
+              "LifeAmount": { "QuantityType": "literal", "Value": 3 },
+              "TargetedObject": { "Kind": "Self" },
+              "CasterFilter": "Opponent"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Source": { "Kind": "Self" },
+              "Amount": {
+                "QuantityType": "derived",
+                "DerivedFrom": "Power",
+                "Source": "that creature"
+              },
+              "Target": { "Kind": "AnyTarget" }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{R}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["R"] },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 5
+      },
+      { "Kind": "colors", "Colors": ["R"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
+        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+      }
+    ]
+  }
+}

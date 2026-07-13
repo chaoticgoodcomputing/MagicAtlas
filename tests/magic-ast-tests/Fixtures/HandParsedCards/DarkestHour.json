@@ -1,0 +1,62 @@
+{
+  "Input": {
+    "Name": "Darkest Hour",
+    "ManaCost": "{B}",
+    "TypeLine": "Enchantment",
+    "OracleText": "All creatures are black.",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": [],
+    "Id": "aeeb0f91-2084-448a-8226-95d7c87dd6bb",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Darkest Hour",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "All creatures are black.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "changeColor",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              },
+              "Colors": ["B"]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{B}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 1,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}

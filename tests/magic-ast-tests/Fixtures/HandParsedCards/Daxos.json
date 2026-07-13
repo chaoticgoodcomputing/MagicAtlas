@@ -1,0 +1,107 @@
+{
+  "Input": {
+    "Name": "Daxos, Blessed by the Sun",
+    "ManaCost": "{W}{W}",
+    "TypeLine": "Legendary Enchantment Creature — Demigod",
+    "OracleText": "Daxos's toughness is equal to your devotion to white. (Each {W} in the mana costs of permanents you control counts toward your devotion to white.)\nWhenever another creature you control enters or dies, you gain 1 life.",
+    "Power": "2",
+    "Toughness": "*",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": [],
+    "Id": "0fd2adb3-a6f4-448e-af2a-15ca92b1de63",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Daxos, Blessed by the Sun",
+    "TypeLine": {
+      "Raw": "Legendary Enchantment Creature — Demigod",
+      "Supertypes": ["Legendary"],
+      "Types": ["Enchantment", "Creature"],
+      "Subtypes": ["Demigod"]
+    },
+    "Oracle": {
+      "RawText": "Daxos's toughness is equal to your devotion to white. (Each {W} in the mana costs of permanents you control counts toward your devotion to white.)\nWhenever another creature you control enters or dies, you gain 1 life.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "definePT",
+              "Characteristic": "Toughness",
+              "Value": {
+                "QuantityType": "devotion",
+                "Colors": ["W"]
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "Each {W} in the mana costs of permanents you control counts toward your devotion to white."
+          }
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "EntersOrDies",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "variable",
+          "Raw": "*"
+        }
+      }
+    ]
+  }
+}

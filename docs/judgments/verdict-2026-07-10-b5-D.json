@@ -1,0 +1,48 @@
+{
+  "shard": "D",
+  "batch": 5,
+  "date": "2026-07-10",
+  "items": [
+    {
+      "family": "J08",
+      "card": "Golgari Grave-Troll",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GolgariGraveTroll.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 614.1c"],
+      "cr_checked": ["614.12", "614.1c"],
+      "reason": "ETB variable counters modeled as PutCountersEffect(Self) with CountQuantity over CardTypes=[creature]/Controller=You/Zone=Graveyard; activated {1}+remove-counter regenerate and Dredge 6 all faithful, nothing unparsed. Rule only fires on exact 'creature card in your graveyard' filter; the 3 other cards carrying that clause (Golgari Raiders, Voracious Brood, Zombie Mob) share identical semantics = correct captures, no mis-capture.",
+      "notes": "Regex subject group is broad but the filter switch accepts only the one phrase, so no over-capture. Golgari Raiders' 'Undergrowth —' ability word (no rules meaning, CR 207.2c) is the only cosmetic loss on a sibling; not a rules mis-capture."
+    },
+    {
+      "family": "J10",
+      "card": "Thalia, Heretic Cathar",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ThaliaHereticCathar.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 614.1d", "CR 205.4c"],
+      "cr_checked": ["614.12", "614.1d", "205.4c"],
+      "reason": "New EntersTappedRule Arm 4 exactly anchored to 'Creatures and nonbasic lands your opponents control enter tapped.'; only Thalia, Heretic Cathar + Thalia and The Gitrog Monster match (identical effect = correct). Filter (creature OR land) with ExcludedSupertypes=[Basic] is equivalent to creatures + nonbasic lands since no creature is basic (CR 205.4c). First strike (combatDamageTiming First) faithful.",
+      "notes": "SIBLING SWEEP of all 20 'enter tapped' cards: Arm 3 is anchored ('Creatures your opponents control enter tapped.$') so declines Thalia; new Arm 4 requires 'and nonbasic lands' so does not steal Arm 3 cards (Authority of the Consuls, Imposing Sovereign...) nor 'Artifacts and creatures...' (Blind Obedience), 'Artifacts, creatures, and lands...' (Kismet/Frozen Aether/Loxodon), 'Nonbasic lands...' (Archon of Emeria), or 'enters tapped unless...' lands. Change only ADDS an arm."
+    },
+    {
+      "family": "J12",
+      "card": "Thud",
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Thud.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.2f", "CR 607.1", "CR 701.21a", "CR 120.1"],
+      "cr_checked": ["601.2f", "607.1", "701.21a", "120.1", "601.2c"],
+      "reason": "Additional SacrificeCost (creature, qty 1) in AdditionalCostsAttribute (CR 601.2f) + spell dealDamage with DerivedQuantity(Power, Source='the sacrificed creature') to AnyTarget, Source=Self. Faithful, nothing unparsed. DerivedQuantity.Source string is the established codebase convention (identical to Diamond Valley's GainLifeEqualToSacrificedCreaturesToughness at base sha), not novel free-text.",
+      "notes": "Classifier arm SAFE: trigger-timing classification (line ~300) catches any 'When…' clause before the new arm at line 1134, so Surtland Flinger's reflexive 'When you do, this creature deals…' routes to Triggered; activated siblings (Airdrop Condor, Barrage Tyrant, Bloodshot Cyclops) start with '{' so fail the ^[A-Z] guard. Spell siblings Fling and Pyrrhic Blast are functionally identical to Thud = correct captures. CR 601.2c cited for self-by-name is imprecise (that concept is CR 201.4) but does not contradict Source=Self; per doctrine not a citation FAIL."
+    },
+    {
+      "family": "J17",
+      "card": "Cloudshredder Sliver",
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/SubtypeCreaturesHaveKeywordListRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 604.2", "CR 702.9", "CR 702.10", "CR 301.5"],
+      "cr_checked": ["604.2", "702.9", "702.10"],
+      "reason": "New rule mis-captures Dalakos, Crafter of Wonders: its static line 'Equipped creatures you control have flying and haste.' matches the rule's [A-Z][a-z]+ subject capture, and 'Equipped' is NOT in the reserved-decline set {Other,Nontoken,Attacking}, so the rule emits filter Subtypes=[\"Equipped\"] + flying + haste. 'Equipped' is a STATE (a creature with an Equipment attached, CR 301.5), not a creature subtype. This is a two-keyword grant that BareKeywordGrantRule (pri 967) declines (single kw group -> MapKeywordToStaticAbility('flying and haste')=null) and no other rule owns, so Dalakos was previously unparsed and the new rule (pri 975, fires first) NEWLY introduces a wrong parse.",
+      "notes": "The Cloudshredder Sliver fixture itself is faithful (Sliver IS a subtype; flying as evasion CanBeBlockedBy Flying/Reach, haste as keywordAbility, both granted to Each Sliver-creature-you-control). The FAIL is the rule's sibling mis-capture, exactly what the offline edge-diff gate would catch. The [A-Z][a-z]+ subtype capture is also under-guarded against Land/Red/Multicolored/Tapped/Modified single-keyword lines (Tatyova, Bloodmark Mentor, Maze cycle, Lost in the Maze, Kodama) — those reproduce BareKeywordGrantRule's own pre-existing subtype-treatment so are not NEW mis-captures, but confirm the guard should validate 'sub' against real creature subtypes (or denylist Equipped/Land/Modified/Tapped/color/'Multicolored'). Fix: add 'Equipped' (and ideally a real-subtype whitelist) so the rule declines Dalakos and lets a state-characteristic filter model it."
+    }
+  ],
+  "overall": "FAIL"
+}

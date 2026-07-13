@@ -1,0 +1,63 @@
+{
+  "Input": {
+    "Name": "Borrowing 100,000 Arrows",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Draw a card for each tapped creature target opponent controls.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": []
+  },
+  "Output": {
+    "Name": "Borrowing 100,000 Arrows",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Draw a card for each tapped creature target opponent controls.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "count",
+                "CountOf": {
+                  "CardTypes": ["creature"],
+                  "Controller": "Target",
+                  "Characteristics": [
+                    { "CharacteristicType": "tapped", "Tapped": true }
+                  ]
+                }
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}

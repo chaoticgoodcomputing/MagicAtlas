@@ -1,0 +1,113 @@
+{
+  "Input": {
+    "Name": "Ob Nixilis's Cruelty",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Instant",
+    "OracleText": "Target creature gets -5/-5 until end of turn. If that creature would die this turn, exile it instead.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
+  },
+  "Output": {
+    "Name": "Ob Nixilis's Cruelty",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": [
+        "Instant"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Target creature gets -5/-5 until end of turn. If that creature would die this turn, exile it instead.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": -5
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": -5
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "replacement",
+              "Event": {
+                "EventType": "death",
+                "DyingObject": {
+                  "Kind": "It"
+                }
+              },
+              "OriginalEventOccurs": false,
+              "Replacement": {
+                "EffectType": "exile",
+                "Target": {
+                  "Kind": "It"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
+    ]
+  }
+}

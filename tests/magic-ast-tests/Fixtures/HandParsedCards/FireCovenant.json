@@ -1,0 +1,69 @@
+{
+  "Input": {
+    "Name": "Fire Covenant",
+    "ManaCost": "{1}{B}{R}",
+    "TypeLine": "Instant",
+    "OracleText": "As an additional cost to cast this spell, pay X life.\nFire Covenant deals X damage divided as you choose among any number of target creatures.",
+    "Colors": ["B", "R"],
+    "ColorIdentity": ["B", "R"],
+    "Keywords": [],
+    "Id": "1a13437b-e0c7-4ca9-a0e2-b8cb1b5813ec",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Fire Covenant",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"]
+    },
+    "Oracle": {
+      "RawText": "As an additional cost to cast this spell, pay X life.\nFire Covenant deals X damage divided as you choose among any number of target creatures.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": { "QuantityType": "variable", "Name": "X" },
+              "Source": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Target",
+                "Filter": { "CardTypes": ["creature"] },
+                "Quantity": { "QuantityType": "anyAmount" }
+              },
+              "Divided": true
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{B}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["B"] },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      { "Kind": "colors", "Colors": ["B", "R"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["B", "R"] },
+      {
+        "Kind": "additionalCosts",
+        "Costs": [
+          {
+            "Cost": {
+              "CostType": "payLife",
+              "Amount": { "QuantityType": "variable", "Name": "X" }
+            },
+            "IsOptional": false,
+            "SourceSpan": { "Start": 0, "Length": 53 }
+          }
+        ]
+      }
+    ]
+  }
+}

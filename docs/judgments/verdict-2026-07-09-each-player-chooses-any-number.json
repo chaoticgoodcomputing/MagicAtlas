@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DestinedConfrontation.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.21a"],
+      "reason": "OracleText byte-identical to real Destined Confrontation ({2}{W}{W}); single sacrificeAllButChosen effect with EachPlayer/creature Target + KeepTotalPower <=4; no unparsed/UnstructuredEffect, no lossy drop"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/ZoneChange/SacrificeAllButChosenEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.21a"],
+      "reason": "fused choose-keep-then-sacrifice-rest effect; Target (ObjectReference) + KeepTotalPower (aggregate Comparison, distinct from per-object PowerComparison); cited CR 701.21a exists and text matches"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/EachChoosesKeepByTotalPowerSacrificesRestRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.21a"],
+      "reason": "backreferenced-type regex emits one SacrificeAllButChosenEffect; scope/type/power/bound mappings sound; 'or less' -> LessThanOrEqual correct"
+    },
+    {
+      "target": "libs/magic-ast/schema/ast-schema.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "adds SacrificeAllButChosenEffect (discriminator sacrificeAllButChosen, IsUnparsed:false, Fields KeepTotalPower+Target) matching the node; sound generalization"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#sacrificeAllButChosen",
+      "verdict": "PASS",
+      "citations": ["CR 701.21a"],
+      "reason": "projection decision present; effect-side sacrifice is coarse like its siblings sacrifice/destroy (no flow rule consumes a sacrifice EFFECT event; cost-side sac:<fodder> is a separate semantic port) - sensible coarse"
+    }
+  ]
+}

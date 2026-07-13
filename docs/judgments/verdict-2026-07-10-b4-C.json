@@ -1,0 +1,64 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ArcaneAdaptation.json",
+      "verdict": "PASS",
+      "citations": ["CR 205.1b", "CR 205.3m", "CR 607.1"],
+      "reason": "additive chosen-type grant over 3 scopes (creatures/creature spells/creature cards you own) via structured ChosenSubtypeReference:CreatureType; producer binder decomposed as When:asThisEnters + chooseCreatureType (no timing baked in); linked-variable modeled structured, not free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/CreaturesAreChosenTypeGrantRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 205.1b", "CR 607.1"],
+      "reason": "mirrors CreaturesAreEveryCreatureTypeRule (Maskwood) reusing AddTypeEffect+ChosenSubtypeReference; anchored full-paragraph regex; doc quotes the 'in addition to its other types' additive-retention text (actual 205.1b, labeled 205.1a - subrule-letter imprecision only)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ManaweftSliver.json",
+      "verdict": "PASS",
+      "citations": ["CR 113.3", "CR 611.1", "CR 605.1a"],
+      "reason": "granted {T}:add-any-color is a STRUCTURED activated mana ability (Costs:[tap], addMana AnyColor:true, IsManaAbility:true) inside GainAbilityEffect over creature+Sliver+You filter; no free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/SubtypeCreaturesHaveQuotedAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 113.3", "CR 611.1"],
+      "reason": "dispatches quoted body to ActivatedAbilityParser (fallback Triggered), returns null on unrecognized body (honest gap); anchored; 113.3 is a loose paraphrase but topically correct (113.3b defines activated abilities) and non-contradictory"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AvenWindGuide.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.9", "CR 702.21", "CR 604.2"],
+      "reason": "token keyword-pair grant: two GainAbilityEffect over creature+IsToken+You filter (flying->evasion, vigilance->keywordAbility); line1 Flying/Vigilance and line3 Embalm both parse structured; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/CreatureTokensHaveKeywordListRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 604.2", "CR 702.9", "CR 702.21"],
+      "reason": "new sibling to ControlledFilterHaveKeywordListRule (not edited); mandatory ' and ' conjunction keeps it disjoint from BareKeywordGrantRule Arm2 single-keyword shape; IsToken filter faithful"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BlightMound.json",
+      "verdict": "PASS",
+      "citations": ["CR 508", "CR 611.3", "CR 702.111"],
+      "reason": "attacking-subtype anthem+keyword: ModifyPTEffect(+1/+0)+GainAbilityEffect(menace MinimumBlockers:2) share creature+Pest+You+CombatState:Attacking filter; line2 dies-trigger creates Pest token with nested dies->gainLife; no unparsed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/AttackingSubtypeAnthemAndKeywordGrantRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 508", "CR 611.3", "CR 109.5"],
+      "reason": "mirrors TribalAnthemAndKeywordGrantRule with mandatory 'Attacking' prefix -> disjoint from Tribal/Supertype siblings; CombatStateCharacteristic(Attacking) reused; ModifyPTEffect/GainAbilityEffect reused"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GoblinWarParty.json",
+      "verdict": "PASS",
+      "citations": ["CR 700.2", "CR 702.42", "CR 113.3a"],
+      "reason": "modal 'Choose one' uses structured ModalAbility (ModeSelection 1/1, 2 Modes, AllowDuplicates:false); mode1 createToken x3, mode2 CompositeEffect(modifyPT EOT + gainAbility haste EOT); Entwine as structured optional additionalCastCost; each mode inner effect structured"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/MassAnthemAndGainKeywordSpellRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 113.3a", "CR 611"],
+      "reason": "emits single CompositeEffect(ModifyPTEffect + per-keyword GainAbilityEffect) sharing duration+target; anchored on 'and gain <kw> until end of turn' tail so it never substring-captures the P/T-only sibling; AbilityClassifier route added is anchored+narrow (does not reroute pure-anthem siblings that lack 'and gain ... until end of turn')"
+    }
+  ]
+}

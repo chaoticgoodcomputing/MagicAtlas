@@ -1,0 +1,99 @@
+{
+  "Input": {
+    "Name": "Clattering Skeletons",
+    "ManaCost": "{3}{B}",
+    "TypeLine": "Creature — Skeleton",
+    "OracleText": "When this creature dies, venture into the dungeon. (Enter the first room or advance to the next room.)",
+    "Power": "4",
+    "Toughness": "3",
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Clattering Skeletons",
+    "TypeLine": {
+      "Raw": "Creature — Skeleton",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Skeleton"
+      ]
+    },
+    "Oracle": {
+      "RawText": "When this creature dies, venture into the dungeon. (Enter the first room or advance to the next room.)",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Dies",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "ventureIntoTheDungeon"
+            }
+          ],
+          "Reminder": {
+            "Text": "Enter the first room or advance to the next room."
+          }
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

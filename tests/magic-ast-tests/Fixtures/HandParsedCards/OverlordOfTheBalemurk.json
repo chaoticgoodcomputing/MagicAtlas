@@ -1,0 +1,170 @@
+{
+  "Input": {
+    "Name": "Overlord of the Balemurk",
+    "ManaCost": "{3}{B}{B}",
+    "TypeLine": "Enchantment Creature — Avatar Horror",
+    "OracleText": "Impending 5—{1}{B} (If you cast this spell for its impending cost, it enters with five time counters and isn't a creature until the last is removed. At the beginning of your end step, remove a time counter from it.)\nWhenever this permanent enters or attacks, mill four cards, then you may return a non-Avatar creature card or a planeswalker card from your graveyard to your hand.",
+    "Power": "5",
+    "Toughness": "5",
+    "Colors": ["B"],
+    "ColorIdentity": ["B"],
+    "Keywords": ["Impending", "Mill"],
+    "Id": "9b911653-7b96-4cf3-a907-13c5c53a14f7",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Overlord of the Balemurk",
+    "TypeLine": {
+      "Raw": "Enchantment Creature — Avatar Horror",
+      "Types": ["Enchantment", "Creature"],
+      "Subtypes": ["Avatar", "Horror"]
+    },
+    "Oracle": {
+      "RawText": "Impending 5—{1}{B} (If you cast this spell for its impending cost, it enters with five time counters and isn't a creature until the last is removed. At the beginning of your end step, remove a time counter from it.)\nWhenever this permanent enters or attacks, mill four cards, then you may return a non-Avatar creature card or a planeswalker card from your graveyard to your hand.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Impending",
+          "Reminder": {
+            "Text": "(If you cast this spell for its impending cost, it enters with five time counters and isn't a creature until the last is removed. At the beginning of your end step, remove a time counter from it.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "alternativeCast",
+              "FromZone": "Hand",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  { "Kind": "generic", "GenericAmount": 1 },
+                  { "Kind": "colored", "Colors": ["B"] }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Impending",
+          "When": "asThisEnters",
+          "Condition": {
+            "ConditionType": "keywordCostPaid",
+            "Keyword": "Impending"
+          },
+          "Effects": [
+            {
+              "EffectType": "putCounters",
+              "Target": { "Kind": "Self" },
+              "CounterType": "time",
+              "Count": { "QuantityType": "literal", "Value": 5 }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "KeywordSource": "Impending",
+          "Effects": [
+            {
+              "EffectType": "loseType",
+              "Subject": { "Kind": "Self" },
+              "LostType": "creature",
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "all",
+                  "Conditions": [
+                    { "ConditionType": "keywordCostPaid", "Keyword": "Impending" },
+                    { "ConditionType": "objectHasCounter", "Subject": { "Kind": "Self" }, "CounterType": "time" }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "KeywordSource": "Impending",
+          "Trigger": {
+            "Timing": "At",
+            "Event": { "Part": "End", "Edge": "Beginning", "Whose": "You" }
+          },
+          "InterveningIf": {
+            "ConditionType": "all",
+            "Conditions": [
+              { "ConditionType": "keywordCostPaid", "Keyword": "Impending" },
+              { "ConditionType": "objectHasCounter", "Subject": { "Kind": "Self" }, "CounterType": "time" }
+            ]
+          },
+          "Effects": [
+            {
+              "EffectType": "removeCounters",
+              "Target": { "Kind": "Self" },
+              "CounterType": "time",
+              "Count": { "QuantityType": "literal", "Value": 1 }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "EntersOrAttacks",
+            "Filter": { "CardTypes": ["permanent"], "IsSelf": true }
+          },
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "mill",
+                  "Count": { "QuantityType": "literal", "Value": 4 },
+                  "Player": { "Kind": "You" }
+                },
+                {
+                  "EffectType": "optional",
+                  "Inner": {
+                    "EffectType": "returnToHand",
+                    "Target": {
+                      "Kind": "Any",
+                      "Filter": {
+                        "CardTypes": ["creature", "planeswalker"],
+                        "ExcludedSubtypes": ["Avatar"],
+                        "Zone": "Graveyard",
+                        "Controller": "You"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{B}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 3 },
+          { "Kind": "colored", "Colors": ["B"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 5, "Raw": "5" },
+        "Toughness": { "ValueType": "fixed", "Value": 5, "Raw": "5" }
+      }
+    ]
+  }
+}

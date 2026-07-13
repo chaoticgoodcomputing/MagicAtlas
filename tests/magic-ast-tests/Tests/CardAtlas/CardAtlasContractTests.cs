@@ -76,7 +76,7 @@ public class CardAtlasContractTests
   private static readonly List<CardPortRow> Ports = D1.Ports.ToList();
   private static readonly List<ComboInstanceRow> Instances = ReconstructCombosStep
     .Create(TestData.OntologyPath)((Combos, CardInputs))
-    .ToList();
+    .Rows.ToList();
   private static readonly (ResourceGraph Graph, ArchetypeCatalog Catalog) D23 = FamilyRollupStep.Create()(
     (Ports, Instances)
   );

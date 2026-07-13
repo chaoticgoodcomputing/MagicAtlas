@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DSK/ClammyProwler.json",
+      "verdict": "PASS",
+      "citations": ["CR 508.1", "CR 509.1", "CR 603.1"],
+      "reason": "Oracle text byte-identical to real card; fully structured (no unparsed/free-text); trigger Whenever/Attacks/IsSelf + cantBeBlocked on target creature ExcludeSelf + combatState Attacking, untilTime Turn/End correctly models 'another target attacking creature can't be blocked this turn'; attributes (2/5, {3}{U}, U) match"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/AnotherTargetAttackingCreatureCantBeBlockedThisTurnRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 509.1", "CR 508.1", "CR 603.1", "CR 109.5"],
+      "reason": "Reuses existing CantBeBlockedEffect (OracleEffect cantBeBlocked) with ExcludeSelf + CombatState.Attacking + EndOfTurn; anchored ^another...$ regex avoids sibling collision; primary evasion citation 509.1b correct; 109.5 for 'another' is the established codebase convention (ObjectFilterRelations.cs:505), in-data and non-contradictory"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#cantBeBlocked",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "No new discriminator introduced (cantBeBlocked, CombatState.Attacking, ExcludeSelf all pre-exist); existing cantBeBlocked coarse projection ('no flow rule consumes it yet') remains sensible for a runtime blocking-declaration evasion restriction"
+    }
+  ]
+}

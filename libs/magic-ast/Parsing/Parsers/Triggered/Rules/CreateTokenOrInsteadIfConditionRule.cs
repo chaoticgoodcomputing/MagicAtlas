@@ -3,6 +3,7 @@ namespace MagicAST.Parsing.Parsers.Triggered.Rules;
 using System.Text.RegularExpressions;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects;
+using MagicAST.AST.Effects.Combat;
 using MagicAST.AST.Effects.Core;
 using MagicAST.AST.Effects.TokenCopy;
 using MagicAST.AST.Quantities;
@@ -41,9 +42,45 @@ using MagicAST.AST.References;
 /// splitter, so the two-sentence shape is not incorrectly split into two independent token
 /// creation effects.
 /// </para>
+///
+/// <para>
+/// A sibling shape handled by the same composite path: "create a P/T color Subtype creature
+/// token [with "&lt;ability&gt;"]. If the creature had power N or greater, create &lt;count&gt;
+/// of those tokens instead." — the SAME token definition, with the "instead" branch creating
+/// MULTIPLE copies of it rather than a distinct replacement token (Anax, Hardened in the Forge:
+/// "create a 1/1 red Satyr creature token with "This token can't block." If the creature had
+/// power 4 or greater, create two of those tokens instead."). "The creature" is the creature
+/// named by the trigger's dies event — recorded as <see cref="DerivedQuantity.Source"/> = "the
+/// creature" (the established short-antecedent convention, e.g. "it"/"the card you exiled"),
+/// not a free-text condition. CR 604.3 does not apply here (this is an ordinary triggered
+/// effect, not a CDA); CR 111.2 (token creation) and CR 603 (triggered abilities) do.
+/// </para>
 /// </summary>
 public static class CreateTokenOrInsteadIfConditionRule
 {
+  // "create a P/T color Subtype creature token[ with "<ability>"]. If the creature had power N
+  // or greater, create <count word> of those tokens instead." Anchored (^…$); disjoint from
+  // _pattern above because that shape's second sentence always describes a DIFFERENT token
+  // (its own P/T/color/subtype), never "those tokens".
+  //
+  // The two alternatives after "creature token" are mutually exclusive: a bare token
+  // description ends in its own sentence period ("...token."), while a quoted with-clause
+  // ends in the QUOTED ability's own internal period ("...with \"This token can't block.\"")
+  // — the closing quote is NOT followed by a second sentence-terminating period.
+  private static readonly Regex _doubledCountPattern = new(
+    @"^create\s+a\s+(?<p>\d+)/(?<t>\d+)\s+(?<color>white|blue|black|red|green)\s+(?<sub>[A-Z][a-z]+)"
+      + @"\s+creature\s+token(?:\.|\s+with\s+""(?<ability>[^""]+)"")\s+"
+      + @"If\s+the\s+creature\s+had\s+power\s+(?<threshold>\d+)\s+or\s+greater,\s+"
+      + @"create\s+(?<count>two|three|four|five|six|seven|eight|nine|ten)\s+of\s+those\s+tokens\s+instead\.?$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  private static readonly IReadOnlyDictionary<string, int> _countWords =
+    new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+    {
+      ["two"] = 2, ["three"] = 3, ["four"] = 4, ["five"] = 5,
+      ["six"] = 6, ["seven"] = 7, ["eight"] = 8, ["nine"] = 9, ["ten"] = 10,
+    };
   // Matches the full two-sentence pattern (without trailing period stripped by caller):
   //   "create a P/T color Subtype creature token. If [condition], create a P/T color Subtype
   //    creature token instead"
@@ -65,11 +102,19 @@ public static class CreateTokenOrInsteadIfConditionRule
     };
 
   /// <summary>
-  /// Attempts to match <paramref name="text"/> as the two-sentence "create X. If condition, create Y
-  /// instead" pattern. Returns the <see cref="ConditionalEffect"/> on success; null on no-match.
+  /// Attempts to match <paramref name="text"/> as either two-sentence conditional-token-creation
+  /// shape: the distinct-replacement-token pattern, or the sibling same-token-doubled-count
+  /// pattern (see class remarks). Returns the <see cref="ConditionalEffect"/> on success; null on
+  /// no-match.
   /// </summary>
   public static Effect? TryMatch(string text)
   {
+    var doubled = TryMatchDoubledCount(text);
+    if (doubled is not null)
+    {
+      return doubled;
+    }
+
     var match = _pattern.Match(text);
     if (!match.Success)
     {
@@ -128,5 +173,91 @@ public static class CreateTokenOrInsteadIfConditionRule
   {
     if (raw.Length == 0) return raw;
     return char.ToUpperInvariant(raw[0]) + raw[1..].ToLowerInvariant();
+  }
+
+  /// <summary>
+  /// Attempts to match <paramref name="text"/> as the same-token-doubled-count shape: "create a
+  /// P/T color Subtype creature token [with "&lt;ability&gt;"]. If the creature had power N or
+  /// greater, create &lt;count&gt; of those tokens instead." Returns null on no-match.
+  /// </summary>
+  private static Effect? TryMatchDoubledCount(string text)
+  {
+    var match = _doubledCountPattern.Match(text);
+    if (!match.Success)
+    {
+      return null;
+    }
+
+    if (!_colorMap.TryGetValue(match.Groups["color"].Value, out var colorCode))
+    {
+      return null;
+    }
+
+    var subtype = NormalizeSubtype(match.Groups["sub"].Value);
+    var count = match.Groups["count"].Success && _countWords.TryGetValue(match.Groups["count"].Value, out var cw)
+      ? cw
+      : 2;
+    var threshold = int.Parse(match.Groups["threshold"].Value);
+
+    IReadOnlyList<Ability>? tokenAbilities = null;
+    if (match.Groups["ability"].Success)
+    {
+      var granted = ParseQuotedTokenAbility(match.Groups["ability"].Value.Trim());
+      if (granted is not null)
+      {
+        tokenAbilities = [granted];
+      }
+    }
+
+    var token = new TokenDefinition
+    {
+      Power = match.Groups["p"].Value,
+      Toughness = match.Groups["t"].Value,
+      Colors = [colorCode],
+      Types = ["creature"],
+      Subtypes = [subtype],
+      Abilities = tokenAbilities,
+    };
+
+    // "the creature" — the creature named by the trigger's dies event (CR 603). Recorded via
+    // the established short-antecedent Source convention (DerivedQuantity.Source = "it"/"the
+    // card you exiled"), not a free-text condition (ADR 0004: reference-not-resolution).
+    var condition = new MagicAST.AST.Abilities.QuantityComparisonCondition
+    {
+      Left = new DerivedQuantity { DerivedFrom = DerivedKind.Power, Source = "the creature" },
+      Operator = ComparisonOperator.GreaterThanOrEqual,
+      Right = LiteralQuantity.Of(threshold),
+    };
+
+    return new ConditionalEffect
+    {
+      Condition = condition,
+      Then = new CreateTokenEffect
+      {
+        Player = ObjectReference.You(),
+        Count = LiteralQuantity.Of(count),
+        Token = token,
+      },
+      Else = new CreateTokenEffect
+      {
+        Player = ObjectReference.You(),
+        Count = LiteralQuantity.Of(1),
+        Token = token,
+      },
+    };
+  }
+
+  /// <summary>
+  /// Maps a quoted token-ability sentence to a structured <see cref="Ability"/>. Narrowly scoped
+  /// to the recognised shape ("This token can't block.") rather than a general sentence parser;
+  /// returns null for unrecognised text so the caller can fall back gracefully.
+  /// </summary>
+  private static Ability? ParseQuotedTokenAbility(string quoted)
+  {
+    if (Regex.IsMatch(quoted, @"^this\s+token\s+can'?t\s+block\.?$", RegexOptions.IgnoreCase))
+    {
+      return new StaticAbility { Effects = [new CantBlockEffect()] };
+    }
+    return null;
   }
 }

@@ -1,0 +1,201 @@
+{
+  "Input": {
+    "Name": "Magda, Brazen Outlaw",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Legendary Creature — Dwarf Berserker",
+    "OracleText": "Other Dwarves you control get +1/+0.\nWhenever a Dwarf you control becomes tapped, create a Treasure token.\nSacrifice five Treasures: Search your library for an artifact or Dragon card, put that card onto the battlefield, then shuffle.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Treasure"
+    ],
+    "Id": "079e6263-e54c-4899-a336-5315909b9322",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Magda, Brazen Outlaw",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Dwarf Berserker",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dwarf",
+        "Berserker"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Other Dwarves you control get +1/+0.\nWhenever a Dwarf you control becomes tapped, create a Treasure token.\nSacrifice five Treasures: Search your library for an artifact or Dragon card, put that card onto the battlefield, then shuffle.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Dwarf"
+                  ],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "BecomesTapped",
+            "Filter": {
+              "Subtypes": [
+                "Dwarf"
+              ],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Types": [
+                  "artifact"
+                ],
+                "Subtypes": [
+                  "Treasure"
+                ],
+                "IsCopy": false,
+                "AbilityText": [
+                  "{T}, Sacrifice this artifact: Add one mana of any color."
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "Subtypes": [
+                  "Treasure"
+                ]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 5
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "searchLibrary",
+                  "Filter": {
+                    "CardTypes": [
+                      "artifact"
+                    ],
+                    "Subtypes": [
+                      "Dragon"
+                    ]
+                  },
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Destination": "Battlefield",
+                  "Revealed": false
+                },
+                {
+                  "EffectType": "shuffle",
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
+              ]
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
+      }
+    ]
+  }
+}

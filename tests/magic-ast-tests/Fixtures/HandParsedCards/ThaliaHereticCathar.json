@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Thalia, Heretic Cathar",
+    "ManaCost": "{2}{W}",
+    "TypeLine": "Legendary Creature — Human Soldier",
+    "OracleText": "First strike\nCreatures and nonbasic lands your opponents control enter tapped.",
+    "Power": "3",
+    "Toughness": "2",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": ["First strike"],
+    "Id": "c062937f-d519-4206-99b0-cbea01b85a0d",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Thalia, Heretic Cathar",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Soldier",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Soldier"]
+    },
+    "Oracle": {
+      "RawText": "First strike\nCreatures and nonbasic lands your opponents control enter tapped.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "First"
+            }
+          ],
+          "KeywordSource": "First strike"
+        },
+        {
+          "Kind": "static",
+          "When": "asObjectEnters",
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature", "land"],
+                  "ExcludedSupertypes": ["Basic"],
+                  "Controller": "Opponent"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      { "Kind": "colors", "Colors": ["W"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Value": 3, "Raw": "3" },
+        "Toughness": { "ValueType": "fixed", "Value": 2, "Raw": "2" }
+      }
+    ]
+  }
+}

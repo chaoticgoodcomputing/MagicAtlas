@@ -1,0 +1,132 @@
+{
+  "Input": {
+    "Name": "Ephara, God of the Polis",
+    "ManaCost": "{2}{W}{U}",
+    "TypeLine": "Legendary Enchantment Creature — God",
+    "OracleText": "Indestructible\nAs long as your devotion to white and blue is less than seven, Ephara isn't a creature.\nAt the beginning of each upkeep, if you had another creature enter the battlefield under your control last turn, draw a card.",
+    "Power": "6",
+    "Toughness": "5",
+    "Colors": ["U", "W"],
+    "ColorIdentity": ["U", "W"]
+  },
+  "Output": {
+    "Name": "Ephara, God of the Polis",
+    "TypeLine": {
+      "Raw": "Legendary Enchantment Creature — God",
+      "Supertypes": ["Legendary"],
+      "Types": ["Enchantment", "Creature"],
+      "Subtypes": ["God"]
+    },
+    "Oracle": {
+      "RawText": "Indestructible\nAs long as your devotion to white and blue is less than seven, Ephara isn't a creature.\nAt the beginning of each upkeep, if you had another creature enter the battlefield under your control last turn, draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Indestructible",
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Indestructible"
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "loseType",
+              "Subject": {
+                "Kind": "Self"
+              },
+              "LostType": "creature",
+              "Duration": {
+                "DurationType": "asLongAs",
+                "Condition": {
+                  "ConditionType": "quantityComparison",
+                  "Left": {
+                    "QuantityType": "devotion",
+                    "Colors": ["W", "U"]
+                  },
+                  "Operator": "LessThan",
+                  "Right": {
+                    "QuantityType": "literal",
+                    "Value": 7
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "other",
+            "Text": "you had another creature enter the battlefield under your control last turn"
+          },
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U", "W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W", "U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        }
+      }
+    ]
+  }
+}

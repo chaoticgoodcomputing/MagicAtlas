@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "other-subtype-enters-with-counter",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 614.1d", "CR 109.5"],
+      "reason": "OonasBlackguard.json models the 'Each other Rogue creature you control enters with a counter' line as a static replacement (Kind:static, When:asObjectEnters, PutCountersEffect over ExcludeSelf Rogue filter), not a trigger — correct per CR 614.1d/614.12. The shared DealsCombatDamageConditionRule edit is additive: the new _withCounterPattern matches only 3 corpus cards — Oona's (target), Bred for the Hunt (same trigger-subject structure, now correctly gains CounterCharacteristic{+1/+1}, a fidelity improvement), and Simic Basilisk (bails at the player-recipient check since it deals damage 'to a creature'). Keyword-with siblings (White Widow etc.) preserved via the else branch. No unparsed/free-text; CR 614.12 exists and matches."
+    },
+    {
+      "target": "controlled-have-keyword-grant",
+      "verdict": "FAIL",
+      "citations": ["CR 205.2a", "CR 702.11a"],
+      "reason": "SIBLING MISLABEL via the MayCastFromTopOfLibraryRule generalization: broadening the hardcoded 'artifact spells and colorless spells' matcher to '<a> spells and <b> spells from the top of your library' newly captures Madame Web, Clairvoyant ('Spider spells and noncreature spells'), whose lowercase branch emits CardTypes:[\"noncreature\"]. 'noncreature' is not a card type (CR 205.2a); the codebase's own documented convention (ObjectFilter.cs) requires ExcludedCardTypes for non-X (nonland -> CardTypes:[\"card\"]+ExcludedCardTypes:[\"land\"]). No fixture guards Madame Web and the edge-diff gate is offline. (The co-committed ControlledFilterHaveKeywordListRule is itself clean — its guards correctly DECLINE every Creature/Attacking-token sibling: Combine Chrysalis, Starry-Eyed Skyrider, Teysa, Aven Wind Guide, etc.; Other-permanents (Avacyn, Walls of Ba Sing Se) and Zombie-token grants are correct.) FIX: map a lowercase 'non<x>' word to CardTypes:[\"card\"]+ExcludedCardTypes:[\"x\"], or decline the noncreature case, before this rule can own Madame Web."
+    },
+    {
+      "target": "sacrifice-alternative-cost",
+      "verdict": "PASS",
+      "citations": ["CR 118.9", "CR 604.5", "CR 111.1"],
+      "reason": "FlareOfDuplication.json models 'You may sacrifice a nontoken red creature rather than pay this spell's mana cost' as a card-level AlternativeCostsAttribute{SacrificeCost, Filter creature/Colors:[R]/IsToken:false, Qty 1} — doctrinally consistent with the Pitch/Force-of-Will precedent (CR 118.9 alternative cost, CR 604.5 functions on the stack; both exist and match). 'nontoken'->IsToken:false preserved; 'red'->Colors:[R]. Anchored regex; corpus grep shows only the 5-card Flare cycle matches, each with a distinct correctly-mapped color (G/U/B/W/R) — no sibling mislabeled; Bestow/Borderpost/Pitch alt-costs untouched; Feed the Pack not skipped. Copy effect correct, no unparsed/free-text. NOTE (non-blocking): ClauseSplitter's skip guard is slightly broader than the color-anchored extractor, so a hypothetical non-color 'nontoken <X> creature rather than pay this spell's mana cost' would be skipped-from-Abilities yet not captured as an attribute (latent silent-drop); no such card exists in the corpus today."
+    },
+    {
+      "target": "strive-additional-cost",
+      "verdict": "PASS",
+      "citations": ["CR 601.2f", "CR 207.2c", "CR 107.3"],
+      "reason": "KiorasDismissal.json: PerTargetBeyondFirst bool added to CostIncreaseEffect additively (JsonIgnore WhenWritingDefault; the 3 existing costIncrease shapes serialize unchanged). Strive line -> static CostIncreaseEffect{Amount 0, ManaSymbols:[U], PerTargetBeyondFirst:true}; Strive stripped as an ability word (CR 207.2c — 'strive' is in the ability-word list, no rules meaning). The new anchored rule correctly handles all 22 corpus 'costs {cost} more to cast for each target beyond the first' cards, including the prefix-less Fireball/Officious Interrogation, with generic->Amount and colored->ManaSymbols (colored mana never flattened). The 'any number of' broadening of ReturnCountTargetPermanentsToOwnersHandsSpellRule newly captures only Kiora's Dismissal (Paradoxical Outcome/Kairi/Morningtide's Light rejected by the anchored qualifiers); bounded-count siblings unchanged. CR 601.2f/207.2c exist and match; CR 107.3 for 'any number of' is loosely apt but not contradictory. No unparsed/free-text, describe-not-execute."
+    }
+  ]
+}

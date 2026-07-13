@@ -9,9 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flowthru.Core" Version="0.25.0" />
-    <PackageReference Include="Flowthru.Extensions.Parquet" Version="0.25.0" />
-    <PackageReference Include="Flowthru.Extensions.Python" Version="0.25.0" />
+    <PackageReference Include="Flowthru.Core" Version="0.28.0" />
+    <PackageReference Include="Flowthru.Extensions.Parquet" Version="0.28.0" />
+    <PackageReference Include="Flowthru.Extensions.Python" Version="0.28.0" />
   </ItemGroup>
 
   <ItemGroup>

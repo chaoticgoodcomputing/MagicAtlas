@@ -1,0 +1,110 @@
+{
+  "Input": {
+    "Name": "Hokori, Dust Drinker",
+    "ManaCost": "{2}{W}{W}",
+    "TypeLine": "Legendary Creature — Spirit",
+    "OracleText": "Lands don't untap during their controllers' untap steps.\nAt the beginning of each player's upkeep, that player untaps a land they control.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": [],
+    "Id": "5a03f5d5-d5c3-4a7d-8d44-e60b498b4ed5",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Hokori, Dust Drinker",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Spirit",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Spirit"]
+    },
+    "Oracle": {
+      "RawText": "Lands don't untap during their controllers' untap steps.\nAt the beginning of each player's upkeep, that player untaps a land they control.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "doesntUntap",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["land"]
+                }
+              },
+              "WhoseUntapStep": "their controllers'"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "Any"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "untap",
+              "Target": {
+                "Kind": "Any",
+                "Filter": {
+                  "CardTypes": ["land"],
+                  "Controller": "ThatPlayer"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

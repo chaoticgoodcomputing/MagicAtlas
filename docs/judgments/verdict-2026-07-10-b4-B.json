@@ -1,0 +1,88 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WrathOfMaritLage.json",
+      "verdict": "PASS",
+      "citations": ["CR 502.3", "CR 105"],
+      "reason": "'Red creatures don't untap...' -> doesntUntap Each{Colors:[R],CardTypes:[creature]}; 'tap all red creatures' -> tap Each same filter; correct color+type composition"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/SubjectDoesntUntapDuringControllersUntapStepsRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 502.3", "CR 105.1"],
+      "reason": "optional leading COLOR qualifier + IgnoreCase case-fix; anchored ^...$ + fixed subject-noun list keeps it tight, no corpus over-match; bare siblings (Hokori Lands, Choke Islands, Dream Tides Creatures) parse identically, color forms (Magnetic Mountain/Thelon's Curse Blue) were unstructured before -> now correct"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TapAllTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.26"],
+      "reason": "reuses TapEffect; mirrors established UntapAllTriggeredRule exactly plus color axis; anchored $ rejects all multi-word forms (attacking/nonland/other/tapped/that...); fixture path correct"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NirkanaRevenant.json",
+      "verdict": "PASS",
+      "citations": ["CR 605", "CR 106.12"],
+      "reason": "'you tap a Swamp for mana' -> TapsForMana Filter{CardTypes:[land],Subtypes:[Swamp],Controller:You}; Swamp casing matches established fixture Subtypes convention; addMana {B} reuses AddAdditionalManaRule shape"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TapForManaConditionRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 106.12", "CR 205.3i"],
+      "reason": "subtype-land branch uppercase-gated + LandSubtypes-set gated so it cannot claim arbitrary capitalized nouns; checked after the lowercase 'a land'/'a creature' branches, so Dictate of Karametra + Leyline of Abundance still hit their branches unchanged"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Phyresis.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.90a"],
+      "reason": "'Enchanted creature has infect' -> gainAbility EnchantedOrEquipped, GainedAbility static KeywordSource Infect + keywordAbility Infect; reminder text ignored; matches 'Infect is a static ability'"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/StaticRuleHelpers.cs#infect",
+      "verdict": "PASS",
+      "citations": ["CR 702.90a"],
+      "reason": "single additive 'infect' => case (no duplicate), reuses pre-existing KeywordAbility.Infect enum; bare-creature infect goes via SimpleKeyword chain so Glistener Elf etc. unaffected"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Sunbond.json",
+      "verdict": "PASS",
+      "citations": ["CR 113.3", "CR 603.2", "CR 119.3", "CR 122.1"],
+      "reason": "granted ability is a STRUCTURED triggered ability (Whenever/GainsLife/Controller You -> putCounters Self +1/+1, Count derived LifeGained), not AbilityText free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantedHasGrantedTriggeredAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 113.3", "CR 603.2"],
+      "reason": "dispatches quoted body to TriggeredAbilityParser (structured), returns null on non-triggered bodies so GrantedAbilityRule's activated-ability path is undisturbed (priority 996 vs 995, collision-free)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/PutThatManyPlusOneCountersGainsLifeRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 119.3", "CR 122.1"],
+      "reason": "TriggeredAbilityParser dispatch is event-gated to GainsLife only; corpus 'that many +1/+1 counters' cards under other triggers (Atomwheel roll, Bioessence loyalty, Blood Hound damage) are untouched; reuses DerivedKind.LifeGained"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Sanar.json",
+      "verdict": "PASS",
+      "citations": ["CR 722.3a", "CR 601"],
+      "reason": "'Sanar enters prepared' -> KeywordSource Prepared; activation condition structured to count/castThisTurn CardTypes[spell,instant,sorcery]; Wild Idea disjunction -> searchLibrary CardTypes[instant,sorcery]; Treasure-token AbilityText is a justified irreducible carve-out (predefined-token body, tracked de-string initiative)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/SelfNameEntersPreparedRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 722.3a"],
+      "reason": "CR 722.3a verbatim confirmed present in rules-structure.json and matches the doc-comment quote; '(?!This)' negative lookahead keeps it disjoint from KeywordListRule; corpus has zero other 'enters prepared' cards so no sibling mislabel possible"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/SearchLibraryToHandRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 205.2"],
+      "reason": "new _orPattern (tried first) is guarded to only claim disjunctions where BOTH tokens are known card types -> Wild Idea instant|sorcery correct, subtype-disjunctions (Equipment|Vehicle) fall through; 'an?' article widen extends only the pre-existing single-pattern behavior, siblings (Lay of the Land, Eladamri's Call) unchanged"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/ConditionParser.cs",
+      "verdict": "PASS",
+      "citations": ["CR 601", "CR 205.2"],
+      "reason": "'instant or sorcery' disjunction added as a new alternative inside the existing optional group; 'you've cast a noncreature spell'/'a spell' siblings parse identically (non-negation branch unchanged)"
+    }
+  ]
+}

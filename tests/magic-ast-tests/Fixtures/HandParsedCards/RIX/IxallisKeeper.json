@@ -1,0 +1,172 @@
+{
+  "Input": {
+    "Name": "Ixalli's Keeper",
+    "ManaCost": "{1}{G}",
+    "TypeLine": "Creature — Human Shaman",
+    "OracleText": "{7}{G}, {T}, Sacrifice this creature: Target creature gets +5/+5 and gains trample until end of turn.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
+  },
+  "Output": {
+    "Name": "Ixalli's Keeper",
+    "TypeLine": {
+      "Raw": "Creature — Human Shaman",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Shaman"
+      ]
+    },
+    "Oracle": {
+      "RawText": "{7}{G}, {T}, Sacrifice this creature: Target creature gets +5/+5 and gains trample until end of turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 7
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
+              ]
+            },
+            {
+              "CostType": "tap"
+            },
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "IsSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "modifyPT",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": [
+                        "creature"
+                      ]
+                    }
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 5
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 5
+                  },
+                  "Duration": {
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
+                  }
+                },
+                {
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "It"
+                  },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "KeywordSource": "Trample",
+                    "Effects": [
+                      {
+                        "EffectType": "keywordAbility",
+                        "Keyword": "Trample"
+                      }
+                    ]
+                  },
+                  "Duration": {
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{G}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
+        ],
+        "ManaValue": 2,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

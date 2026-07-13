@@ -1,0 +1,94 @@
+{
+  "Input": {
+    "Name": "Wrath of Marit Lage",
+    "ManaCost": "{3}{U}{U}",
+    "TypeLine": "Enchantment",
+    "OracleText": "When this enchantment enters, tap all red creatures.\nRed creatures don't untap during their controllers' untap steps.",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "a0111ef4-f0be-4af3-981f-aa19a17a3d7b",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Wrath of Marit Lage",
+    "TypeLine": {
+      "Raw": "Enchantment",
+      "Types": ["Enchantment"]
+    },
+    "Oracle": {
+      "RawText": "When this enchantment enters, tap all red creatures.\nRed creatures don't untap during their controllers' untap steps.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["enchantment"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "tap",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "Colors": ["R"],
+                  "CardTypes": ["creature"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "doesntUntap",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "Colors": ["R"],
+                  "CardTypes": ["creature"]
+                }
+              },
+              "WhoseUntapStep": "their controllers'"
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          }
+        ],
+        "ManaValue": 5,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      }
+    ]
+  }
+}

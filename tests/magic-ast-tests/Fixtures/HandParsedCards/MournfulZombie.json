@@ -1,0 +1,75 @@
+{
+  "Input": {
+    "Name": "Mournful Zombie",
+    "ManaCost": "{2}{B}",
+    "TypeLine": "Creature — Zombie",
+    "OracleText": "{W}, {T}: Target player gains 1 life.",
+    "Power": "2",
+    "Toughness": "1",
+    "Colors": ["B"],
+    "ColorIdentity": ["B", "W"]
+  },
+  "Output": {
+    "Name": "Mournful Zombie",
+    "TypeLine": {
+      "Raw": "Creature — Zombie",
+      "Types": ["Creature"],
+      "Subtypes": ["Zombie"]
+    },
+    "Oracle": {
+      "RawText": "{W}, {T}: Target player gains 1 life.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                { "Kind": "colored", "Colors": ["W"] }
+              ]
+            },
+            { "CostType": "tap" }
+          ],
+          "Effects": [
+            {
+              "EffectType": "gainLife",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "Target",
+                "Filter": { "CardTypes": ["player"] }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

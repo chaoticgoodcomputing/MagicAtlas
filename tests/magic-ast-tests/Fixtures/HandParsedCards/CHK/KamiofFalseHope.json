@@ -1,0 +1,79 @@
+{
+  "Input": {
+    "Name": "Kami of False Hope",
+    "ManaCost": "{W}",
+    "TypeLine": "Creature — Spirit",
+    "OracleText": "Sacrifice this creature: Prevent all combat damage that would be dealt this turn.",
+    "Power": "1",
+    "Toughness": "1",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"]
+  },
+  "Output": {
+    "Name": "Kami of False Hope",
+    "TypeLine": {
+      "Raw": "Creature — Spirit",
+      "Types": ["Creature"],
+      "Subtypes": ["Spirit"]
+    },
+    "Oracle": {
+      "RawText": "Sacrifice this creature: Prevent all combat damage that would be dealt this turn.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "sacrifice",
+              "Filter": {
+                "CardTypes": ["creature"],
+                "IsSelf": true
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "preventDamage",
+              "All": true,
+              "CombatOnly": true,
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["W"] }
+        ],
+        "ManaValue": 1
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
+        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+      }
+    ]
+  }
+}

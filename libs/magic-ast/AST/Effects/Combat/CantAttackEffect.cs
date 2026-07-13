@@ -141,4 +141,27 @@ public sealed record CantAttackEffect : ContinuousEffect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
   public bool OnlyAlone { get; init; }
+
+  /// <summary>
+  /// "already attacked this turn" qualifier: when <c>true</c>, the oracle line
+  /// reads "can't attack a player it has already attacked this turn" — the
+  /// restriction is narrowed to a specific player, not a blanket "can't
+  /// attack." The named object may still attack any player it has NOT already
+  /// attacked this turn (or a planeswalker/battle); the restriction bites only
+  /// against a player this object already attacked earlier in the current turn.
+  ///
+  /// <para>
+  /// CR 508.1 (declare-attackers step; attacking restrictions constrain the
+  /// set of legal attacker declarations). Multiplayer-only in practice (in a
+  /// two-player game there is only one opposing player to attack, so the
+  /// restriction only bites after an additional-combat-phase effect grants a
+  /// second declare-attackers step against the same opponent — the Port Razer
+  /// pattern). The pronoun "it" always resolves to the source object bearing
+  /// the static ability (reflexive, like <see cref="Alone"/>/<see cref="OnlyAlone"/>);
+  /// MAST records what the restriction means, not how a runtime engine tracks
+  /// per-turn attack history.
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+  public bool AlreadyAttackedThisTurn { get; init; }
 }

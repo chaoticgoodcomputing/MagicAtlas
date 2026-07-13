@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/HofriGhostforge.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 205.1b", "CR 707.2", "CR 701.13a", "CR 404.1"],
+      "reason": "Spirits anthem (modifyPT + gainAbility Trample/Haste) + dies-trigger flat CompositeEffect([exile It, copy ThatCreature]) with structured modifications (typeAdder Spirit + triggeredAbilityAdder leaves-bf returnToGraveyard); mandatory exile correctly NOT OptionalEffect (no 'may', ADR 0005); no unparsed/free-text"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/ZoneChange/ReturnToGraveyardEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 400.1", "CR 400.2"],
+      "reason": "new returnToGraveyard zone-change effect; cited zone-change rules exist and match; distinct from Destroy/Sacrifice (battlefield-only) correctly"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#returnToGraveyard",
+      "verdict": "PASS",
+      "citations": ["CR 400.1"],
+      "reason": "coarse projection sensible: sibling graveyard-fillers (destroy/mill/sacrifice/returnToHand) are all coarse; only returnToBattlefield (blink) is semantic, exactly as the reason states; cleanup of an already-inert exiled card originates no cross-card resource"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/UnctusGrandMetatect.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 105.3", "CR 205.1a", "CR 121.1", "CR 701.9a"],
+      "reason": "all 3 abilities structured: quoted becomes-tapped->draw+discard triggered (composite), artifact-creatures +1/+1 anthem (ExcludeSelf), {U/P} activated addColor+addType (OnlyAsSorcery, Phyrexian mana); no unparsed/free-text"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Modification/AddColorEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 105.3", "CR 613.1e"],
+      "reason": "new addColor additive color grant; CR 105.3 ('in addition to its other colors') + CR 613.1e (layer 5 color-changing) both exist and match; single-letter color codes (U), not colorless-as-color"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#addColor",
+      "verdict": "PASS",
+      "citations": ["CR 105.3"],
+      "reason": "coarse projection sensible: layer-5 characteristic grant, sibling of addType (also coarse); no flow rule consumes additive color grants"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GevScaledScorch.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.1d", "CR 119.3", "CR 120.1", "CR 702.137a"],
+      "reason": "Ward-Pay 2 life (reused preventable counterSpell-unless-payLife), enters-with-additional +1/+1 counter (asObjectEnters replacement, putCounters Each ExcludeSelf, CountQuantity over player Controller=Opponent + LostLifeThisTurnPredicate), Lizard-cast dealDamage 1 to Opponent Source Self; no unparsed/free-text"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/HistoryPredicate.cs#LostLifeThisTurnPredicate",
+      "verdict": "PASS",
+      "citations": ["CR 119.3", "CR 702.137a"],
+      "reason": "new lostLifeThisTurn history predicate; CR 119.3 (life loss) + CR 702.137a (Spectacle precondition; 702.137 IS Spectacle in the dataset) both exist and match the counting-sibling framing"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-other-creatures-enter-with-counter#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "LostLifeThisTurnPredicate is a HistoryPredicate member / count-filter axis, not an effect discriminator; no known-coarse-projections entry required and the ratchet does not demand one"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CloudstoneCurio.json",
+      "verdict": "PASS",
+      "citations": ["CR 110.4", "CR 205.3m", "CR 109.5", "CR 301"],
+      "reason": "fixture itself sound: nonartifact-permanent enters trigger -> optional returnToHand of another permanent SharesPermanentTypeWith It; 'it'=entering permanent, 'another'=ExcludeSelf, 'you may'=optional; citations valid"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilter.cs#SharesPermanentTypeWith",
+      "verdict": "FAIL",
+      "citations": ["CR 110.4"],
+      "reason": "new relational axis SharesPermanentTypeWith is NOT registered in ObjectFilterRelations soundness floors (UndecidedAxis + SupUndecidedAxis) nor OperatorPropertyTests.IsRelational; silently treated as fully-decided/precise, which is unsound for exactly the Cloudstone-Curio bounce loops MAST is meant to discover (cf. P08 which correctly registered its axis in both floors)"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-nonartifact-enters-return#projection",
+      "verdict": "FAIL",
+      "citations": [],
+      "reason": "the relational axis's soundness/projection decision is ABSENT: SharesPermanentTypeWith missing from both UndecidedAxis and SupUndecidedAxis; the interaction operator will over-precisely resolve a filter whose membership depends on the entering permanent's live permanent types"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SemblanceAnvil.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.7", "CR 406.6", "CR 110.4"],
+      "reason": "fixture itself sound: Imprint ETB optional exile (OptionalEffect, nonland via CardTypes=[card]+ExcludedCardTypes=[land]), cost-reduction static over spells SharesCardTypeWith the ExiledWith:Self card; no unparsed/free-text"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilter.cs#SharesCardTypeWith",
+      "verdict": "FAIL",
+      "citations": ["CR 702.38", "CR 406.6"],
+      "reason": "field doc-comment cites 'a linked Imprint ability (CR 702.38)', but CR 702.38 is Amplify, not Imprint (Imprint appears nowhere in rules-structure.json); citing the Amplify rule on an Imprint node contradicts the modeling; the correct linked-ability rule (CR 406.6) is already cited in the cost-reduction rule, so drop/replace the 702.38 references"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ExileNonlandCardFromHandImprintTriggeredRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 702.38"],
+      "reason": "doc-comment states 'CR 702.38 (Imprint): an imprint ability exiles a card...'; 702.38 is Amplify in the dataset, not Imprint; wrong/contradictory citation"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilterRelations.cs#SharesCardTypeWith",
+      "verdict": "PASS",
+      "citations": ["CR 118.7"],
+      "reason": "SharesCardTypeWith correctly added to BOTH soundness floors (UndecidedAxis + SupUndecidedAxis) and OperatorPropertyTests.IsRelational; also correctly closes the pre-existing SharesNameWith gap in IsRelational; independent of and compatible with P10's SharesPermanentTypeWith (different arms, no conflict)"
+    }
+  ]
+}

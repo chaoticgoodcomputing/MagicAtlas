@@ -45,14 +45,29 @@
           },
           "Effects": [
             {
-              "EffectType": "drawCards",
-              "Count": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Player": {
-                "Kind": "You"
-              }
+              "EffectType": "composite",
+              "Effects": [
+                {
+                  "EffectType": "drawCards",
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                },
+                {
+                  "EffectType": "loseLife",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
+                }
+              ]
             }
           ],
           "AbilityWord": "Void"
@@ -75,7 +90,8 @@
             ]
           }
         ],
-        "ManaValue": 5
+        "ManaValue": 5,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

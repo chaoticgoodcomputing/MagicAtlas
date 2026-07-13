@@ -53,6 +53,23 @@ public static class InteractionTriageFlow
           outputs: catalog.InteractionTriageReport
         );
 
+        // Combo-ANCHORED pick surface (demand side): rank the unparsed hub cards by the combo-popularity
+        // value each gates, with sole-blocker counts, co-star neighborhood, and the parser-family vs
+        // empty-oracle-text (DATA gap) split. Independent of ClassifyCombos — a parallel read of the same
+        // Combos + ParseRecords, plus CardInputs for type line / oracle-text-emptiness. A pick surface for
+        // the loop, never a gate. Run standalone via `--only RankComboAnchors` (FetchCombos auto-included).
+        pipeline.AddStep<
+          IEnumerable<Combo>,
+          IEnumerable<ParseRecord>,
+          IEnumerable<MastCardInput>,
+          ComboAnchorReport
+        >(
+          label: "RankComboAnchors",
+          transform: RankComboAnchorsStep.Create(),
+          inputs: (catalog.Combos, catalog.ParseRecords, catalog.CardInputs),
+          outputs: catalog.ComboAnchorReport
+        );
+
         // Label-level graph (left viz subplot): the known-families grammar, flattened.
         pipeline.AddStep<IEnumerable<LabelEdgeRow>>(
           label: "LabelEdges",

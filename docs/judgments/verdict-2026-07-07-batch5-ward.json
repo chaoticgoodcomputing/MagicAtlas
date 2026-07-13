@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/WardKeywordRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.21a"],
+      "reason": "adds a Ward non-mana discard-cost branch (DiscardCost) matching CR 702.21a; DiscardCostPattern is anchored ^...$ and evaluated after mana/life/sacrifice, requires the literal 'Ward—Discard', so it cannot mislabel 'Ward {N}' / 'Ward—Pay' / 'Ward—Sacrifice' siblings"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/PutCountersTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 109.5"],
+      "reason": "new 'target creature an opponent controls' branch sets Controller=Opponent, checked before the bare 'target creature' fallthrough and disjoint from the 'you control' sibling; fixes the previously-lossy drop of the opponent-controller restriction"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/DSK/SunsetSaboteur.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.21a", "CR 702.111", "CR 109.5"],
+      "reason": "all three abilities faithful: Menace evasion+MinimumBlockers:2 (702.111); Ward triggered BecomesTarget/Controller:Opponent preventable counterSpell Unless ThatPlayer pays discard-a-card (702.21a); attack trigger putCounters +1/+1 onto target creature Controller:Opponent (opponent restriction preserved); no unparsed/free-text nodes"
+    },
+    {
+      "target": "mast-tdd/2026-07-07-ward-nonmana-cost#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses pre-existing discard CostType ([OracleCost(\"discard\")], ParseDiscardPattern) and ControllerFilter.Opponent; no new PortWalk projection decision required"
+    }
+  ]
+}

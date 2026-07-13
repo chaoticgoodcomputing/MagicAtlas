@@ -1,0 +1,88 @@
+{
+  "Input": {
+    "Name": "Chase Stein, Runaway",
+    "ManaCost": "{1}{R}",
+    "TypeLine": "Legendary Creature — Human Hero",
+    "OracleText": "{T}, Discard a card: Exile the top card of your library. Until the end of your next turn, you may play that card.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"]
+  },
+  "Output": {
+    "Name": "Chase Stein, Runaway",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Hero",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Human", "Hero"]
+    },
+    "Oracle": {
+      "RawText": "{T}, Discard a card: Exile the top card of your library. Until the end of your next turn, you may play that card.",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            { "CostType": "tap" },
+            {
+              "CostType": "discard",
+              "Filter": {
+                "CardTypes": ["card"]
+              },
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "impulse",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "RestDestination": "RemainExiled",
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End",
+                  "When": "Next",
+                  "Whose": "You"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{1}{R}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 1 },
+          { "Kind": "colored", "Colors": ["R"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["R"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
+      }
+    ]
+  }
+}

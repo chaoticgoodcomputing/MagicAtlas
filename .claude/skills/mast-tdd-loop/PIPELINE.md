@@ -144,6 +144,12 @@ Keep it ~200 words per family. Informative, not prescriptive about parser shape 
 - Pattern frequencies (top 5 changes): {pattern: before → after}
 - New patterns surfaced: {list}
 
+### Product delta (green recall — the objective, not the L2 proxy)
+<!-- from `nx run mast:recall-report` then `bash tools/recall-log.sh {batch}`; deltas vs the prior recall-log.jsonl line -->
+- GREEN: {n} ({+Δ})   AMBER: {n} ({±Δ})   missed: {n} ({±Δ})
+- recallAtGreen: {pct} ({+Δpp})   popularity-weighted recall: {pct} ({+Δpp})
+- One sentence: did this batch's parse work convert to trustworthy edges, or land on dark labels? {note}
+
 ### Projected vs observed yield
 | Agent | Cluster/Scope | Projected MarginalYield | Observed Card Δ | Observed Line Δ | Yield Ratio |
 |---|---|---|---|---|---|

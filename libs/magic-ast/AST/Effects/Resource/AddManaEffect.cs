@@ -127,6 +127,36 @@ public sealed record AddManaEffect : Effect
   public ObjectFilter? AnyColorAmong { get; init; }
 
   /// <summary>
+  /// For "add one mana of any color that a land an opponent controls could
+  /// produce" — the Exotic Orchard / Fellwar Stone shape. The produced mana is
+  /// ONE unit of a freely-chosen color, but the choice is constrained to the
+  /// colors of mana that the permanents matching this filter <i>could produce</i>
+  /// (their mana-production capability), NOT the colors of the permanents
+  /// themselves. This is the crucial difference from <see cref="AnyColorAmong"/>
+  /// (Mox Amber — the chosen color must be present among the permanents' OWN
+  /// colors): a Plains is colorless as a permanent yet could produce {W}, so the
+  /// two axes are not interchangeable.
+  ///
+  /// <para>CR 106.7 (verbatim, which names this card): "Some abilities produce
+  /// mana based on the type of mana another permanent or permanents 'could
+  /// produce.' … Example: Exotic Orchard has the ability '{T}: Add one mana of
+  /// any color that a land an opponent controls could produce.'" The filter
+  /// records WHICH permanents' production capability constrains the choice
+  /// (here <c>CardTypes=["land"], Controller=Opponent, Zone=Battlefield</c>);
+  /// reference-not-resolution (ADR 0004) — the engine evaluates the actual
+  /// producible colors at activation time.</para>
+  ///
+  /// <para>CR 605.1a: the enclosing <c>{T}: Add …</c> ability is a mana ability —
+  /// no target, could add mana when it resolves, not a loyalty ability — so the
+  /// ability carries <c>IsManaAbility = true</c>. When set, <see cref="Mana"/> is
+  /// <c>""</c> (the color is dynamic) and <see cref="AnyColor"/> /
+  /// <see cref="OfChosenColor"/> / <see cref="AnyColorAmong"/> /
+  /// <see cref="ForEachColorAmong"/> are <c>false</c> / <c>null</c>.</para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectFilter? AnyColorProducibleBy { get; init; }
+
+  /// <summary>
   /// For variable amounts
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

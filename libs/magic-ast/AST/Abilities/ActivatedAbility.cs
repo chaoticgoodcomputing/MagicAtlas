@@ -3,6 +3,7 @@ namespace MagicAST.AST.Abilities;
 using System.Text.Json.Serialization;
 using MagicAST.AST.Costs;
 using MagicAST.AST.Effects;
+using MagicAST.AST.Quantities;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
 /// <summary>
@@ -67,6 +68,25 @@ public sealed record ActivatedAbility : Ability
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public int? LoyaltyCost { get; init; }
+
+  /// <summary>
+  /// For a <b>variable</b> loyalty ability — "−X: …" (Chandra, Hope's Beacon;
+  /// Jaya, Venerated Firemage; Domri, Anarch of Bolas) — the amount of loyalty
+  /// removed, carried as a <see cref="VariableQuantity"/> (X). Mutually exclusive
+  /// with <see cref="LoyaltyCost"/>: a fixed cost sets that <c>int?</c>, a variable
+  /// one sets this and leaves <see cref="LoyaltyCost"/> null.
+  ///
+  /// <para>
+  /// CR 606.3 governs when a loyalty ability may be activated; CR 606.5 — activating
+  /// a loyalty ability whose cost removes loyalty counters removes that many. Every
+  /// printed variable-loyalty ability is a <em>removal</em> ("−X"), never a gain, so
+  /// this field records only the magnitude X; the minus direction is inherent to the
+  /// variable-loyalty form. Distinct from <see cref="LoyaltyCost"/> which carries its
+  /// own sign for fixed costs.
+  /// </para>
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Quantity? VariableLoyaltyCost { get; init; }
 }
 
 /// <summary>
@@ -87,11 +107,26 @@ public enum ActivationRestriction
   /// <summary>"Activate only during your turn"</summary>
   OnlyDuringYourTurn,
 
+  /// <summary>"Activate only during your upkeep." — a step-scoped timing restriction
+  /// (CR 602.5: "A player can't begin to activate an ability that's prohibited from
+  /// being activated."). Strictly narrower than <see cref="OnlyDuringYourTurn"/>: the
+  /// ability may be activated only during the upkeep step of the controller's turn
+  /// (Magus of the Mirror).</summary>
+  OnlyDuringYourUpkeep,
+
   /// <summary>"Activate only once each turn"</summary>
   OnlyOnceEachTurn,
 
   /// <summary>"Activate only if you control no untapped lands"</summary>
   OnlyIfNoUntappedLands,
+
+  /// <summary>"Activate only during combat." — a phase-scoped timing restriction (CR 602.5:
+  /// "A player can't begin to activate an ability that's prohibited from being activated.").
+  /// The ability may be activated only while a combat phase is in progress (CR 506 — the
+  /// combat phase), regardless of whose turn it is (Najeela, the Blade-Blossom). Narrower than
+  /// <see cref="OnlyDuringYourTurn"/> (a turn-scoped restriction) along the phase axis and
+  /// orthogonal to the player axis.</summary>
+  OnlyDuringCombat,
 
   /// <summary>"Activate only once." — the Exhaust keyword constraint (CR 702.177a:
   /// "'Exhaust — [Cost]: [Effect]' means '[Cost]: [Effect]. Activate only once.'"
@@ -120,4 +155,10 @@ public enum ActivationPermission
   /// <summary>"Any player may activate this ability." — CR 602.2's "unless the
   /// object specifically says otherwise" branch.</summary>
   AnyPlayer,
+
+  /// <summary>"Only your opponents may activate this ability." — CR 602.2's
+  /// "unless the object specifically says otherwise" branch, narrowed to the
+  /// controller's opponents rather than broadened to any player (Detention
+  /// Vortex).</summary>
+  Opponent,
 }

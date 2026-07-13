@@ -1,6 +1,8 @@
 namespace MagicAST.Parsing.Parsers;
 
 using MagicAST.AST.Abilities;
+using MagicAST.AST.Effects;
+using MagicAST.AST.Effects.Core;
 using MagicAST.Parsing;
 using MagicAST.Parsing.Parsers.Static;
 using MagicAST.Parsing.Tokens;
@@ -39,6 +41,26 @@ public sealed class StaticAbilityParser : IAbilityParser
     if (parsed is { Count: > 0 })
     {
       return parsed;
+    }
+    // L1 shell fallback (fidelity ladder): a recognised static ability whose
+    // interior no rule structured. Land the StaticAbility shell with the clause
+    // held verbatim as an UnstructuredEffect residual (L1) rather than a
+    // whole-ability UnparsedAbility (L0) — accounted, zero silent loss. Gated on
+    // classification confidence: the static parser is the catch-all, so a
+    // low-confidence clause (genuinely unstructurable text, not a real static
+    // ability) must NOT be fabricated into a spurious static shell — it stays L0.
+    if (!string.IsNullOrWhiteSpace(clause.RawText) && classification.Confidence > 0.5)
+    {
+      return
+      [
+        new StaticAbility
+        {
+          Effects = new List<Effect>
+          {
+            new UnstructuredEffect { Text = clause.RawText, SourceSpan = clause.SourceSpan },
+          },
+        },
+      ];
     }
     return
     [

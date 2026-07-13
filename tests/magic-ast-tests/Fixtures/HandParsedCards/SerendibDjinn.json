@@ -1,0 +1,138 @@
+{
+  "Input": {
+    "Name": "Serendib Djinn",
+    "ManaCost": "{2}{U}{U}",
+    "TypeLine": "Creature — Djinn",
+    "OracleText": "Flying\nAt the beginning of your upkeep, sacrifice a land. If you sacrifice an Island this way, this creature deals 3 damage to you.\nWhen you control no lands, sacrifice this creature.",
+    "Power": "5",
+    "Toughness": "6",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": ["Flying"],
+    "Id": "ed1409f0-f17b-4f5c-9cf7-8ed18143b7b8",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Serendib Djinn",
+    "TypeLine": {
+      "Raw": "Creature — Djinn",
+      "Types": ["Creature"],
+      "Subtypes": ["Djinn"]
+    },
+    "Oracle": {
+      "RawText": "Flying\nAt the beginning of your upkeep, sacrifice a land. If you sacrifice an Island this way, this creature deals 3 damage to you.\nWhen you control no lands, sacrifice this creature.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": ["creature"],
+                "Characteristics": [
+                  { "CharacteristicType": "keyword", "Keyword": "Flying" },
+                  { "CharacteristicType": "keyword", "Keyword": "Reach" }
+                ]
+              }
+            }
+          ],
+          "KeywordSource": "Flying"
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "Any",
+                "Filter": {
+                  "CardTypes": ["land"]
+                }
+              }
+            },
+            {
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "other",
+                "Text": "you sacrifice an Island this way"
+              },
+              "Then": {
+                "EffectType": "dealDamage",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 3
+                },
+                "Source": {
+                  "Kind": "Self"
+                },
+                "Target": {
+                  "Kind": "You"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "ControlNoLandType",
+            "Filter": {
+              "CardTypes": ["land"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{U}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 2 },
+          { "Kind": "colored", "Colors": ["U"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        }
+      }
+    ]
+  }
+}

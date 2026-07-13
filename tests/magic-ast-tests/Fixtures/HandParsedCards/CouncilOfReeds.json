@@ -1,0 +1,138 @@
+{
+  "Input": {
+    "Name": "Council of Reeds",
+    "ManaCost": "{2}{U}",
+    "TypeLine": "Legendary Creature — Human Scientist Hero",
+    "OracleText": "The \"legend rule\" doesn't apply to creatures you control.\nAt the beginning of combat on your turn, if you've cast a noncreature spell this turn, create a token that's a copy of Council of Reeds.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "a0d824ea-75d2-4de5-923b-813bba44e80b",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Council of Reeds",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Human Scientist Hero",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Scientist",
+        "Hero"
+      ]
+    },
+    "Oracle": {
+      "RawText": "The \"legend rule\" doesn't apply to creatures you control.\nAt the beginning of combat on your turn, if you've cast a noncreature spell this turn, create a token that's a copy of Council of Reeds.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "legendRuleSuppression",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Combat",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
+          },
+          "InterveningIf": {
+            "ConditionType": "count",
+            "Filter": {
+              "CardTypes": [
+                "spell"
+              ],
+              "ExcludedCardTypes": [
+                "creature"
+              ],
+              "Controller": "You",
+              "History": {
+                "PredicateType": "castThisTurn",
+                "Caster": "You"
+              }
+            },
+            "Count": {
+              "Operator": "GreaterThanOrEqual",
+              "Value": 1
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

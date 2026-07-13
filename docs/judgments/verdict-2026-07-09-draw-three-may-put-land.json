@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/EmbracetheParadox.json",
+      "verdict": "PASS",
+      "citations": ["CR 400.7", "CR 110.5b", "CR 117.7"],
+      "reason": "Both sentences fully modeled: drawCards(Count 3, You) + optional{putFromHandOntoBattlefield land/Hand/You, Tapped:true}; OracleText byte-identical to card; no unparsed/free-text/lossy nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/MayPutCardFromHandOntoBattlefieldRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 400.7", "CR 110.5"],
+      "reason": "Anchored spell-rule emitting OptionalEffect over pre-existing PutFromHandOntoBattlefieldEffect; cited CR 400.7 (zone change new object) and CR 110.5 (status incl. tapped/untapped) both present in rules-structure.json and match the modeling"
+    },
+    {
+      "target": "mast/draw-three-may-put-land#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "No new discriminator introduced (newAstNode=false); drawCards, optional, putFromHandOntoBattlefield already carry sensible projection decisions in known-coarse-projections.json; ratchet has nothing new to enforce"
+    }
+  ]
+}

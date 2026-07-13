@@ -59,6 +59,27 @@ dotnet test tools/bench/MagicAtlas.Bench
 (`nx` targets are not wired here; invoke `dotnet` directly. The bench has no network or Python
 dependency.)
 
+### Two tiers: the strict gate here, the wide measurement in the flow host
+
+This gold bench is the **strict gate tier** — small (33 combos), offline, deterministic, per-combo
+pinned, CI-safe. Its 33-combo denominator is deliberately tiny (every card must have a committed gold
+fixture), which makes it a rock-solid regression gate but **too small to show per-batch progress**: a
+batch can unblock dozens of combos and move this number by zero.
+
+The complement is the **wide measurement tier**, produced by the Flowthru host's CardAtlas flow (co-emitted
+from the same per-combo reconstruction that builds D4):
+`tests/magic-ast-tests/Data/_08_Reporting/extended-recall-report.json` (schema
+`ExtendedRecallReport`). It reconstructs **every** combo whose cards are projection-ready in the current
+corpus — thousands, not 33 — and reports `green / amber / missed`, `recallAtGreen`, `recallAtAmber`, and
+a **popularity-weighted** recall (does the engine reconstruct the *popular* combos?). It has NO pins and
+is NOT a gate — it needs the gitignored corpus, so it runs only where the corpus is present (main, not
+worktrees). Regenerate with `dotnet run -- --flow CardAtlas` from `tests/magic-ast-tests`.
+
+Use the two together: the gold gate HALTs the loop on any regression (correctness floor); the wide
+report is the batch scoreboard (are we reconstructing more of the combos that actually exist?). Neither
+subsumes the other — 33 pinned combos can't measure progress, and thousands of un-pinned combos can't be
+a stable gate.
+
 ### The gate (`combo-expected-tiers.json`) and the derived report (`bench-report.json`)
 
 The gate is an **explicit per-combo expected-tier whitelist**, not a moving aggregate baseline

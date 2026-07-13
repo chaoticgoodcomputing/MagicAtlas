@@ -14,14 +14,18 @@ namespace MagicAtlas.Ast.Tests.Flows.LabelCensus;
 /// </summary>
 public static class LabelCensusFlow
 {
-  public static BuiltFlow Create(Catalog catalog, string ontologyPath) =>
+  public static BuiltFlow Create(
+    Catalog catalog,
+    string ontologyPath,
+    string? interactionTriageReportPath = null
+  ) =>
     FlowBuilder.CreateFlow(
       "PortLabelCensus",
       pipeline =>
       {
         pipeline.AddStep<IEnumerable<MastCardInput>, PortLabelCensus>(
           label: "Census",
-          transform: CensusStep.Create(ontologyPath),
+          transform: CensusStep.Create(ontologyPath, interactionTriageReportPath),
           inputs: catalog.CardInputs,
           outputs: catalog.PortLabelCensus
         );

@@ -1,0 +1,67 @@
+{
+  "Input": {
+    "Name": "Spiteful Blow",
+    "ManaCost": "{4}{B}{B}",
+    "TypeLine": "Sorcery",
+    "OracleText": "Destroy target creature and target land.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["B"],
+    "ColorIdentity": ["B"]
+  },
+  "Output": {
+    "Name": "Spiteful Blow",
+    "TypeLine": {
+      "Raw": "Sorcery",
+      "Types": ["Sorcery"]
+    },
+    "Oracle": {
+      "RawText": "Destroy target creature and target land.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              }
+            },
+            {
+              "EffectType": "destroy",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["land"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{B}{B}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["B"] },
+          { "Kind": "colored", "Colors": ["B"] }
+        ],
+        "ManaValue": 6
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B"]
+      }
+    ]
+  }
+}

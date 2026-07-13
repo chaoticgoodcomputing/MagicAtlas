@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AFR/PortableHole.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.1", "CR 406.1", "CR 202.3", "CR 701.13", "CR 603.6"],
+      "reason": "OracleText byte-identical to Portable Hole; fully structured ETB triggered exile with ManaValueComparison LessThanOrEqual 2, ExcludedCardTypes [land] for 'nonland permanent', Controller Opponent, UntilLeavesBattlefieldDuration Object 'this artifact'; no unparsed/free-text/lossy nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ExileTargetByManaValueUntilLeavesTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.1", "CR 406.1", "CR 202.3", "CR 701.13", "CR 603.6", "CR 205.2"],
+      "reason": "sibling of ExileUntilLeavesTriggeredRule; anchored mandatory mana-value qualifier lands on pre-existing ObjectFilter.ManaValueComparison; all six cited CR rules exist in rules-structure.json and match the modeling; emits sound structured ExileEffect"
+    },
+    {
+      "target": "mast/exile-target-nonland-permanent-a#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced — reuses pre-existing ManaValueComparison/ExcludedCardTypes/Controller restrictions on ObjectFilter and the existing ExileEffect + UntilLeavesBattlefieldDuration; no new PortWalk projection decision required"
+    }
+  ]
+}

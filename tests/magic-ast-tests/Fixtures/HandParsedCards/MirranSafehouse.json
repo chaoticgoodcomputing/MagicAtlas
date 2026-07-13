@@ -1,0 +1,67 @@
+{
+  "Input": {
+    "Name": "Mirran Safehouse",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "As long as this artifact is on the battlefield, it has all activated abilities of all land cards in all graveyards.",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": [],
+    "Id": "d76fe2f2-ce2c-49e4-9f00-89c82f2fae8d",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Mirran Safehouse",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "As long as this artifact is on the battlefield, it has all activated abilities of all land cards in all graveyards.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "hasAllAbilitiesOfControlledCreatures",
+              "Subject": {
+                "Kind": "Self"
+              },
+              "AbilityKind": "activated",
+              "SourceFilter": {
+                "CardTypes": [
+                  "land"
+                ],
+                "Zone": "Graveyard"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

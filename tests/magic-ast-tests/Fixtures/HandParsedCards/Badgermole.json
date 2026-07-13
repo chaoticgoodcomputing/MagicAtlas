@@ -1,0 +1,97 @@
+{
+  "Input": {
+    "Name": "Badgermole",
+    "ManaCost": "{4}{G}",
+    "TypeLine": "Creature — Badger Mole",
+    "OracleText": "When this creature enters, earthbend 2. (Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped.)\nCreatures you control with +1/+1 counters on them have trample.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": ["G"],
+    "ColorIdentity": ["G"],
+    "Keywords": ["Earthbend"],
+    "Id": "aabbd420-b7fc-496f-9168-bad823d51d9e",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Badgermole",
+    "TypeLine": {
+      "Raw": "Creature — Badger Mole",
+      "Types": ["Creature"],
+      "Subtypes": ["Badger", "Mole"]
+    },
+    "Oracle": {
+      "RawText": "When this creature enters, earthbend 2. (Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped.)\nCreatures you control with +1/+1 counters on them have trample.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "When",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "earthbend",
+              "Count": { "QuantityType": "literal", "Value": 2 }
+            }
+          ],
+          "Reminder": {
+            "Text": "Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped."
+          }
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You",
+                  "Characteristics": [
+                    { "CharacteristicType": "counter", "CounterType": "+1/+1" }
+                  ]
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "Effects": [
+                  { "EffectType": "keywordAbility", "Keyword": "Trample" }
+                ],
+                "KeywordSource": "Trample"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{G}",
+        "Symbols": [
+          { "Kind": "generic", "GenericAmount": 4 },
+          { "Kind": "colored", "Colors": ["G"] }
+        ],
+        "ManaValue": 5
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["G"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["G"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
+        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+      }
+    ]
+  }
+}

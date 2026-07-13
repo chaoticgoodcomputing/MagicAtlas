@@ -1,0 +1,87 @@
+{
+  "Input": {
+    "Name": "Iron Maiden",
+    "ManaCost": "{3}",
+    "TypeLine": "Artifact",
+    "OracleText": "At the beginning of each opponent's upkeep, this artifact deals X damage to that player, where X is the number of cards in their hand minus 4.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": [],
+    "ColorIdentity": []
+  },
+  "Output": {
+    "Name": "Iron Maiden",
+    "TypeLine": {
+      "Raw": "Artifact",
+      "Types": [
+        "Artifact"
+      ]
+    },
+    "Oracle": {
+      "RawText": "At the beginning of each opponent's upkeep, this artifact deals X damage to that player, where X is the number of cards in their hand minus 4.",
+      "Abilities": [
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "At",
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "Opponent"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "calculated",
+                "BaseQuantity": {
+                  "QuantityType": "count",
+                  "CountOf": {
+                    "CardTypes": [
+                      "card"
+                    ],
+                    "Owner": "ThatPlayer",
+                    "Zone": "Hand"
+                  }
+                },
+                "Operation": "subtract",
+                "OperandQuantity": {
+                  "QuantityType": "literal",
+                  "Value": 4
+                }
+              },
+              "Target": {
+                "Kind": "ThatPlayer"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{3}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
+        ],
+        "ManaValue": 3
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

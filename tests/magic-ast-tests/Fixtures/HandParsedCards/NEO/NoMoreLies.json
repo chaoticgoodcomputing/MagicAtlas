@@ -1,0 +1,58 @@
+{
+  "Input": {
+    "Name": "No More Lies",
+    "ManaCost": "{W}{U}",
+    "TypeLine": "Instant",
+    "OracleText": "Counter target spell unless its controller pays {3}. If that spell is countered this way, exile it instead of putting it into its owner's graveyard.",
+    "Power": null,
+    "Toughness": null,
+    "Colors": ["U", "W"],
+    "ColorIdentity": ["U", "W"]
+  },
+  "Output": {
+    "Name": "No More Lies",
+    "TypeLine": {
+      "Raw": "Instant",
+      "Types": ["Instant"],
+      "Subtypes": []
+    },
+    "Oracle": {
+      "RawText": "Counter target spell unless its controller pays {3}. If that spell is countered this way, exile it instead of putting it into its owner's graveyard.",
+      "Abilities": [
+        {
+          "Kind": "spell",
+          "Effects": [
+            {
+              "EffectType": "preventable",
+              "Inner": {
+                "EffectType": "counterSpell",
+                "Target": { "Kind": "Target", "Filter": { "CardTypes": ["spell"] } },
+                "ExileInsteadOfGraveyard": true
+              },
+              "Unless": {
+                "Player": { "Kind": "Controller" },
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [ { "Kind": "generic", "GenericAmount": 3 } ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{W}{U}",
+        "Symbols": [
+          { "Kind": "colored", "Colors": ["W"] },
+          { "Kind": "colored", "Colors": ["U"] }
+        ],
+        "ManaValue": 2
+      },
+      { "Kind": "colors", "Colors": ["U", "W"] },
+      { "Kind": "colorIdentity", "ColorIdentity": ["U", "W"] }
+    ]
+  }
+}

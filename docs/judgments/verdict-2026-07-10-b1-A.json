@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "mast-tdd/2026-07-10-morph-reveal-cost",
+      "verdict": "PASS",
+      "citations": ["CR 702.37a", "CR 106.4"],
+      "reason": "RevealCost is a distinct turn-face-up morph cost (Filter/Quantity/Zone, mirrors DiscardCost/ExileCost) not collapsed into the fixed {3} face-down cast cost; CR 702.37a exists and matches; fixture clean; 'reveal' costType coarse projection justified (info-disclosure, no zone change / no resource loss, revealCards precedent)"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-equipped-gets-pt-and-goaded",
+      "verdict": "PASS",
+      "citations": ["CR 701.15b", "CR 611.3"],
+      "reason": "GoadedEffect is a descriptive designation (CR 701.15b verbatim-matched, no combat execution); AttachThisToTargetEffectRule anchored ^...$ (Luxior's 'up to one target' correctly no-matches, filter-drop impossible); AttachedModifyPTAndGoadedRule precisely models the whole Impetus cycle and excludes compound siblings (Ghoulish/Predatory); goaded coarse projection justified (mustAttack/cantAttack sibling)"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-dont-lose-unspent-mana",
+      "verdict": "PASS",
+      "citations": ["CR 500.4", "CR 106.4"],
+      "reason": "retainUnspentMana node correct & described-not-executed (CR 500.4/106.4 quotes verbatim-verified); bespoke composite matcher is fully anchored ^...$ on Ashling's entire escalating sequence (only card in corpus matching both text fragments, cannot regress sibling composites/magecraft); OtherCondition carve-out whitelisted AND genuinely irreducible (no NthTimeAbilityResolvedCondition node; recurring PB-7 debt family, real peers Nissa Resurgent Animist + Sephiroth); retainUnspentMana coarse projection justified (manaPersists sibling)"
+    },
+    {
+      "target": "mast-tdd/2026-07-10-defiler-additional-cost-life",
+      "verdict": "PASS",
+      "citations": ["CR 601.2f"],
+      "reason": "GrantAdditionalCostEffect (grant-optional-cost-to-filtered-spell-class) + AdditionalCostPaidCondition (optional-cost-paid marker) correct shape, CR 601.2f verbatim-matched; CostReductionEffect.ManaSymbols addition sound (colored {R} reduction); SpellCastConditionRule word-list change is purely additive (permanent/planeswalker/land/battle appended after untouched 5 words + logic) so zero sibling regression, only adds recognized type words; grantAdditionalCost coarse projection justified (grantAlternativeCost sibling)"
+    }
+  ]
+}

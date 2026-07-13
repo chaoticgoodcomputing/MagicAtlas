@@ -1,0 +1,126 @@
+{
+  "Input": {
+    "Name": "Arahbo, the First Fang",
+    "ManaCost": "{2}{W}",
+    "TypeLine": "Legendary Creature — Cat Avatar",
+    "OracleText": "Other Cats you control get +1/+1.\nWhenever Arahbo or another nontoken Cat you control enters, create a 1/1 white Cat creature token.",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["W"],
+    "ColorIdentity": ["W"],
+    "Keywords": [],
+    "Id": "524a5d93-26ed-436d-a437-dc9460acce98",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Arahbo, the First Fang",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Cat Avatar",
+      "Supertypes": ["Legendary"],
+      "Types": ["Creature"],
+      "Subtypes": ["Cat", "Avatar"]
+    },
+    "Oracle": {
+      "RawText": "Other Cats you control get +1/+1.\nWhenever Arahbo or another nontoken Cat you control enters, create a 1/1 white Cat creature token.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Subtypes": ["Cat"],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "Enters",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Subtypes": ["Cat"],
+              "IsToken": false,
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "createToken",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Token": {
+                "Power": "1",
+                "Toughness": "1",
+                "Colors": ["W"],
+                "Types": ["creature"],
+                "Subtypes": ["Cat"],
+                "IsCopy": false
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["W"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["W"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["W"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

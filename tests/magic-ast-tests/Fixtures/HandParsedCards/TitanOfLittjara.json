@@ -1,0 +1,153 @@
+{
+  "Input": {
+    "Name": "Titan of Littjara",
+    "ManaCost": "{4}{U}{U}",
+    "TypeLine": "Creature — Illusion",
+    "OracleText": "As this creature enters, choose a creature type.\nThis creature is the chosen type in addition to its other types.\nWhenever this creature enters or attacks, you may draw a card for each other creature you control that shares a creature type with it. If you do, discard a card.",
+    "Power": "6",
+    "Toughness": "6",
+    "Colors": ["U"],
+    "ColorIdentity": ["U"],
+    "Keywords": [],
+    "Id": "62807f83-b219-4769-afdd-2870deeb93c0",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Titan of Littjara",
+    "TypeLine": {
+      "Raw": "Creature — Illusion",
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Illusion"
+      ]
+    },
+    "Oracle": {
+      "RawText": "As this creature enters, choose a creature type.\nThis creature is the chosen type in addition to its other types.\nWhenever this creature enters or attacks, you may draw a card for each other creature you control that shares a creature type with it. If you do, discard a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "chooseCreatureType"
+            }
+          ],
+          "When": "asThisEnters"
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "Self"
+              },
+              "ChosenSubtypeReference": "CreatureType"
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "EntersOrAttacks",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "IsSelf": true
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "drawCards",
+                "Count": {
+                  "QuantityType": "count",
+                  "CountOf": {
+                    "CardTypes": [
+                      "creature"
+                    ],
+                    "SharesCreatureTypeWith": {
+                      "Kind": "Self"
+                    },
+                    "Controller": "You",
+                    "ExcludeSelf": true
+                  }
+                },
+                "Player": {
+                  "Kind": "You"
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "discardCards",
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Player": {
+                  "Kind": "You"
+                },
+                "RevealHand": false,
+                "Random": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{4}{U}{U}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
+        "ManaValue": 6,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 6,
+          "Raw": "6"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TMP/Carnophage.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.26a", "CR 118.5"],
+      "reason": "byte-identical oracle text; triggered upkeep timing decomposed from a structured PreventableEffect{tap Self} + UnlessClause{You, payLife 1}; no unparsed/unstructured nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TapSelfUnlessPayLifeRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.26a", "CR 118.5", "CR 109.2"],
+      "reason": "reuses existing TapEffect/PreventableEffect/UnlessClause/PayLifeCost (newAstNode=false); cited rules exist and match; sound mirror of SacrificeSelfUnlessPayRule on the tap side"
+    },
+    {
+      "target": "mast-tap-unless-pay-carnophage#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (tap/preventable/payLife/unless all pre-existing); no PortWalk projection decision required"
+    }
+  ]
+}

@@ -39,6 +39,18 @@ public sealed record TokenDefinition
   public IReadOnlyList<string>? Subtypes { get; init; }
 
   /// <summary>
+  /// Supertypes of the token (e.g. "Legendary" — CR 205.4a). Mirrors the
+  /// <c>Supertypes</c> field on the card's own <c>TypeLine</c>/<c>ObjectFilter</c>
+  /// (CR 205.4a: "Legendary" and other supertypes). Some named tokens are printed
+  /// with an explicit supertype in their creation text (e.g. "create Cragflame, a
+  /// legendary colorless Equipment artifact token …" — Mabel, Heir to Cragflame),
+  /// distinct from <see cref="Types"/>/<see cref="Subtypes"/> (CR 205.4b:
+  /// supertypes are not card types or subtypes).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? Supertypes { get; init; }
+
+  /// <summary>
   /// Name of the token if specified.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -71,6 +83,18 @@ public sealed record TokenDefinition
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public bool? EntersTapped { get; init; }
+
+  /// <summary>
+  /// True when the token enters the battlefield already attacking (e.g. "create a 1/1 white
+  /// Warrior creature token that's tapped and attacking" — Najeela, the Blade-Blossom). CR 508.4:
+  /// "an effect can put a creature onto the battlefield attacking"; such a creature is a declared
+  /// attacker without having been declared during the declare-attackers step (CR 508.1) and was
+  /// never "declared as an attacker" for triggers that check that. Null (omitted in JSON) when the
+  /// token enters without attacking. Declarative entry modifier paralleling <see cref="EntersTapped"/>;
+  /// the choice of which player/planeswalker/battle it attacks is engine territory.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? EntersAttacking { get; init; }
 
   // Factory methods for common tokens
   public static TokenDefinition Treasure() =>
@@ -112,5 +136,21 @@ public sealed record TokenDefinition
       Types = ["artifact"],
       Subtypes = ["Blood"],
       AbilityText = ["{1}, {T}, Discard a card, Sacrifice this artifact: Draw a card."],
+    };
+
+  /// <summary>
+  /// A Map token — a colorless artifact predefined token (CR 111.10 — predefined tokens).
+  /// Its predefined activated ability ("{1}, {T}, Sacrifice this token: Target creature you
+  /// control explores. Activate only as a sorcery.") rides on the parenthetical reminder text
+  /// the parser strips (CR 207.2 — reminder text has no rules meaning), so — following the
+  /// Powerstone precedent added clean in <c>CreateTappedPredefinedTokenRule</c> — the ability
+  /// body is NOT re-asserted here as free text. The token is identified structurally by its
+  /// artifact type + named "Map" subtype.
+  /// </summary>
+  public static TokenDefinition Map() =>
+    new()
+    {
+      Types = ["artifact"],
+      Subtypes = ["Map"],
     };
 }

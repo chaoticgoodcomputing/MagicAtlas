@@ -1,0 +1,85 @@
+{
+  "batch": "2026-07-10-b8-C",
+  "shard": "C (anthems + statics)",
+  "base": "b74e7983",
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GeneralsEnforcer.json",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 702.12a", "CR 205.4a", "CR 205.3m", "CR 109.2", "CR 608.2h", "CR 111.1"],
+      "reason": "supertype+subtype anthem: gainAbility -> Each Legendary Human you control (Supertypes+Subtypes+Controller AND-filter) grants Indestructible static keyword; activated exile + ObjectHasCardType(It) conditional token all fully structured"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/SupertypeSubtypeKeywordGrantRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 702.12a", "CR 205.4a"],
+      "reason": "anchored two-capitalised-word grant with closed supertype vocab guard (Untapped/Equipped decline); keyword mapped via shared static-ability helper, no free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/ConditionalCreateTokenIfCardTypeEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 109.2", "CR 608.2h", "CR 111.1", "CR 205.3m"],
+      "reason": "ConditionalEffect(ObjectHasCardTypeCondition Subject=It) gating CreateTokenEffect; last-known-info citation matches, anchored, structured not free text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GavonyIronwright.json",
+      "verdict": "PASS",
+      "citations": ["CR 207.2c", "CR 611.3", "CR 109.5"],
+      "reason": "fateful-hour conditional anthem: modifyPT +1/+4 over Each creature you control ExcludeSelf, AsLongAsDuration(LifeTotal(you) <= 5); ability word recorded as label only"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/AsLongAsOtherCreaturesPTBuffRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 207.2c", "CR 109.5"],
+      "reason": "leading As-long-as anthem; condition via ConditionParser wrapped in AsLongAsDuration, ExcludeSelf mandatory Other, anchored, disjoint from LordPTBuffRule"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AdaptiveAutomaton.json",
+      "verdict": "PASS",
+      "citations": ["CR 607.1", "CR 613.1", "CR 611.3", "CR 614.12"],
+      "reason": "3 linked abilities: chooseCreatureType producer under When=asThisEnters (timing split, not baked-in), addType Self via ChosenSubtypeReference, new Other-anthem +1/+1 via structured ChosenCharacteristic=CreatureType (not free-text 'of the chosen type')"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/OtherChosenTypeAnthemModifyPTRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 607.1", "CR 613.1", "CR 611.3"],
+      "reason": "structured ChosenCharacteristicKind.CreatureType linked-variable reference + ExcludeSelf; anchored, disjoint from noncreature-source ChosenTypeAnthemModifyPTRule"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GlacialChasm.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.24a", "CR 508.1c", "CR 615.1", "CR 604.2"],
+      "reason": "all 4 abilities faithful: cumulative-upkeep trigger with CR-702.24a intervening-if (whitelisted OtherCondition debt, genuine InnerSanctum/PsychicVortex precedent), ETB-sac land, cantAttack Each creature you control, preventDamage All to You"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/CreaturesYouControlCantAttackRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 508.1c"],
+      "reason": "CantAttackEffect over Each creature Controller=You, no duration (always-on); anchored full-literal, disjoint from without-keyword sibling"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/PreventAllDamageToYouStaticRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 615.1", "CR 615.1a", "CR 604.2"],
+      "reason": "PreventDamageEffect All=true Target=You, no Source restriction, no duration; anchored full-literal, strips reminder"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/AbilityClassifier.cs#prevent-all-damage-to-you",
+      "verdict": "PASS",
+      "citations": ["CR 604.2"],
+      "reason": "pure-insertion Static intercept for 'Prevent all damage...to you' with word-boundary anchor (no trailing control) so it can't collide with creatures-you-control sibling; correctly classifies as static not imperative"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LinvalaKeeperOfSilence.json",
+      "verdict": "PASS",
+      "citations": ["CR 602.5", "CR 702.9b"],
+      "reason": "Flying evasion + total activation lock: CantActivateAbilitiesEffect over AffectedObjects creatures Controller=Opponent, NO ExceptManaAbilities carve-out (mana abilities included, matching oracle with no carve-out)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/OpponentCreaturesActivatedAbilitiesLockedRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 602.5"],
+      "reason": "creature-scoped opponent activation lock, no ExceptManaAbilities (total lock); anchored, disjoint from artifact/chosen-name siblings. Doc cites 602.5c (parent 602.5 is exact match) -- parent-vs-subrule imprecision, not a FAIL"
+    }
+  ]
+}

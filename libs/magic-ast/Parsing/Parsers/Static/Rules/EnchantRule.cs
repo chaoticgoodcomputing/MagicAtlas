@@ -87,6 +87,47 @@ public sealed class EnchantRule : IStaticRule
       return new ObjectFilter { CardTypes = [d.ToLowerInvariant()], Controller = controller };
     }
 
+    // Color-exclusion shape: "non<color> <type>" (e.g. "nonblack creature", Armor of
+    // Thorns) — CR 105.2c: the "non" prefix negates a color characteristic. Routed
+    // through the shared QualifierAxisMapper so the "non<color>" → ExcludedColors
+    // handling stays consistent with how the same negation is folded elsewhere
+    // (e.g. DestroyTargetNonblackCreatureEffectRule's ExcludedColors=["B"]).
+    var nonColorMatch = Regex.Match(
+      d,
+      @"^non(?<color>white|blue|black|red|green)\s+(?<type>creature|land|permanent|artifact|enchantment|planeswalker)$",
+      RegexOptions.IgnoreCase
+    );
+    if (nonColorMatch.Success)
+    {
+      var typeName = nonColorMatch.Groups["type"].Value.ToLowerInvariant();
+      var qualifier = "non" + nonColorMatch.Groups["color"].Value.ToLowerInvariant();
+      var baseFilter = new ObjectFilter { CardTypes = [typeName], Controller = controller };
+      return QualifierAxisMapper.Apply(baseFilter, [qualifier]);
+    }
+
+    // Card-type-exclusion shape: "non<type> <type>" (e.g. "nonland permanent",
+    // Detention Vortex) — CR 702.5a: the enchant ability restricts what the Aura
+    // can enchant; "non<type>" negates a card-TYPE characteristic (CR 109 vs the
+    // color negation above). Routed to ExcludedCardTypes, parallel to the "a
+    // nonland card" -> CardTypes=["card"] + ExcludedCardTypes=["land"] convention
+    // used throughout the codebase (see ObjectFilter.ExcludedCardTypes doc).
+    var nonTypeMatch = Regex.Match(
+      d,
+      @"^non(?<excludedType>creature|land|artifact|enchantment|planeswalker)\s+(?<type>creature|land|permanent|artifact|enchantment|planeswalker)$",
+      RegexOptions.IgnoreCase
+    );
+    if (nonTypeMatch.Success)
+    {
+      var excludedType = nonTypeMatch.Groups["excludedType"].Value.ToLowerInvariant();
+      var typeName = nonTypeMatch.Groups["type"].Value.ToLowerInvariant();
+      return new ObjectFilter
+      {
+        CardTypes = [typeName],
+        ExcludedCardTypes = [excludedType],
+        Controller = controller,
+      };
+    }
+
     // Disjunctive type shape: "typeA or typeB" (e.g. "artifact or creature").
     // Both halves must be recognised simple card types for the structured encoding.
     var orMatch = Regex.Match(d, @"^(?<a>[A-Za-z]+)\s+or\s+(?<b>[A-Za-z]+)$", RegexOptions.IgnoreCase);

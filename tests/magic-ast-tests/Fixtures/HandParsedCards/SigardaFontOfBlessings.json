@@ -1,0 +1,184 @@
+{
+  "Input": {
+    "Name": "Sigarda, Font of Blessings",
+    "ManaCost": "{2}{G}{W}",
+    "TypeLine": "Legendary Creature — Angel",
+    "OracleText": "Flying\nOther permanents you control have hexproof.\nYou may look at the top card of your library any time.\nYou may cast Angel spells and Human spells from the top of your library.",
+    "Power": "4",
+    "Toughness": "4",
+    "Colors": [
+      "G",
+      "W"
+    ],
+    "ColorIdentity": [
+      "G",
+      "W"
+    ],
+    "Keywords": [
+      "Flying"
+    ],
+    "Id": "cba71725-d6df-44d7-a93b-934573759711",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Sigarda, Font of Blessings",
+    "TypeLine": {
+      "Raw": "Legendary Creature — Angel",
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Angel"
+      ]
+    },
+    "Oracle": {
+      "RawText": "Flying\nOther permanents you control have hexproof.\nYou may look at the top card of your library any time.\nYou may cast Angel spells and Human spells from the top of your library.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Flying",
+          "Effects": [
+            {
+              "EffectType": "evasion",
+              "CanBeBlockedBy": {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Each",
+                "Filter": {
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Controller": "You",
+                  "ExcludeSelf": true
+                }
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Hexproof"
+                  }
+                ],
+                "KeywordSource": "Hexproof"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "lookAtTopCardAnyTime"
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "mayPlayFromLibrary",
+              "Cards": {
+                "Subtypes": [
+                  "Angel"
+                ],
+                "Zone": "Library",
+                "Controller": "You"
+              }
+            },
+            {
+              "EffectType": "mayPlayFromLibrary",
+              "Cards": {
+                "Subtypes": [
+                  "Human"
+                ],
+                "Zone": "Library",
+                "Controller": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{G}{W}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
+        ],
+        "ManaValue": 4,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G",
+          "W"
+        ]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
+      }
+    ]
+  }
+}

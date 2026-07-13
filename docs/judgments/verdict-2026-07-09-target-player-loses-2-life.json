@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MID/InfectiousHost.json",
+      "verdict": "PASS",
+      "citations": ["CR 119.3", "CR 603.2", "CR 700.4"],
+      "reason": "Input.OracleText byte-identical to oracle-cards.json; triggered Dies (IsSelf) + structured loseLife 2 to target player; no unparsed/UnstructuredEffect, no lossy merge; timing not baked into effect"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TargetPlayerLosesLifeRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 119.3", "CR 603.2"],
+      "reason": "emits structured LoseLifeEffect(Target player, literal amount); anchored ^...life$ pattern excludes the 'and you gain' sibling and 'that player' pronoun; cited CR 119.3 and 603.2 exist and match modeling"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/TargetPlayerLosesLifeRule.cs#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (reuses pre-existing loseLife node); loseLife already has a semantic PortWalk projection (PortGraph.cs -> emit:life:loss); no new projection decision owed"
+    }
+  ]
+}

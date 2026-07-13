@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/M21/ScorchSpitter.json",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 508.1b", "CR 109.1"],
+      "reason": "triggered Attacks(IsSelf) + dealDamage(amount 1, Target AttackedPlayerOrPlaneswalker, Source Self); byte-identical OracleText; no unparsed/free-text/lossy nodes"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/DealsDamageToAttackedPlayerOrPlaneswalkerRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 120.1", "CR 508.1b", "CR 109.1"],
+      "reason": "sound generalization: regex tail extended to accept it's/it is attacking alongside that creature is attacking for the same AttackedPlayerOrPlaneswalker reference; numeric-amount guard still excludes trample reminder; cited CR rules exist and match"
+    },
+    {
+      "target": "mast/scorch-spitter-it-deals-1-damage#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator (newAstNode=false); reuses pre-existing AttackedPlayerOrPlaneswalker reference, dealDamage effect, and Attacks trigger — no PortWalk projection decision required"
+    }
+  ]
+}

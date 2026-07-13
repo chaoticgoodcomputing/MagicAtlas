@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MirrorBox.json",
+      "verdict": "PASS",
+      "citations": ["CR 704.5j", "CR 201.2", "CR 205.4a", "CR 613.4c", "CR 611.3", "CR 110.4a"],
+      "reason": "all 3 abilities structured (legendRuleSuppression Each permanent you control 704.5j; legendary anthem modifyPT; same-name-count modifyPT via count-of SharesNameWith:It+ExcludeSelf, 201.2); no unparsed/free-text"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilterRelations.cs#SharesNameWith",
+      "verdict": "PASS",
+      "citations": ["CR 201.2"],
+      "reason": "new SharesNameWith axis added to BOTH soundness floors (UndecidedAxis + SupUndecidedAxis) so Intersects/Subsumes stay sound; parallels SharesCreatureTypeWith; additive nullable field, siblings serialize identically"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MyrelShieldOfArgive.json",
+      "verdict": "PASS",
+      "citations": ["CR 601.3a", "CR 602.5", "CR 111.2", "CR 105.1"],
+      "reason": "cantBeCast (opponent spells) + cantActivateAbilities (opponent artifact/creature/enchantment disjunction) sharing whitelisted OtherCondition 'During your turn' (genuine DragonlordDromoka precedent) + attack-trigger createToken X=Soldiers; token Colors:[C] is established corpus convention"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GimliOfTheGlitteringCaves.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.2", "CR 603.6a", "CR 205.4", "CR 702.4"],
+      "reason": "double strike + another-legendary-enters trigger (Legendary/You/ExcludeSelf) -> +1/+1 self counter + combat-damage Treasure; whitelisted AbilityText matches AncientCopperDragon precedent and is the standard verbatim Treasure reminder"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SilverquillSilencer.json",
+      "verdict": "PASS",
+      "citations": ["CR 614.12", "CR 607.1", "CR 119.3", "CR 121.1"],
+      "reason": "as-enters (When:asThisEnters + plain chooseCardName + additive nonland Filter) with structured consumer ChosenCharacteristic:CardName (linked ability, not free-text); composite they-lose-3/you-draw structured; Declaration of Naught byte-identical"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PrimevalProtector.json",
+      "verdict": "PASS",
+      "citations": ["CR 118.7"],
+      "reason": "costReduction Amount 1 PerObject {creature,Opponent} (118.7 not 118.9) + enters-trigger putCounters Each other creature you control; both shared-rule branches proven disjoint from existing for-each / subtype-each-other branches"
+    }
+  ]
+}

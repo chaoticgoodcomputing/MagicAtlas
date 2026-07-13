@@ -1,0 +1,94 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/AST/Effects/CardFlow/RevealTopMayPutSharesCreatureTypeRestToBottomEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 401.4", "CR 205.3m", "CR 701.20"],
+      "reason": "H05 remainder-to-bottom now cites CR 401.4 (multi-card library placement; exists, governs 'in a random order' bottom placement) — old wrong-topic CR 400.4 ('card types can't enter certain zones') removed"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/RevealTopMayPutSharesCreatureTypeRestToBottomTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 401.4"],
+      "reason": "triggered-rule doc-comment now cites CR 401.4 for the random-order bottom remainder (consistent with the effect node)"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#revealTopMayPutSharesCreatureTypeRestToBottom",
+      "verdict": "PASS",
+      "citations": ["CR 401.4"],
+      "reason": "coarse-projection reason re-cites CR 401.4; a consciously-inert library-visibility action, coarse is sensible (no flow rule reads reveal-partition ordering)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/SelfIsAlsoSubtypesRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 205.1b"],
+      "reason": "additive 'is also [subtype]' retention now cites CR 205.1b (verbatim: prior types retained via 'in addition'/'still a') — old CR 205.1a was the SET-replaces case, wrong semantics for additive retention"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/TapSingularSubtypeCostRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.26", "CR 701.26a"],
+      "reason": "H18 tap-other-permanent cost now cites CR 701.26 (Tap and Untap) / 701.26a (tap a permanent; only untapped can be tapped) — matches the tap cost; old wrong CR 701.20 (Reveal) removed"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Modification/LoseAbilityEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702"],
+      "reason": "H19 adds structured KeywordAbility? Keyword; AbilityText demoted to optional FreeTextField for genuine ability-scopes only — resolves the bare-keyword-as-free-text doctrine FAIL"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/AttachedModifyPTAndLosesKeywordRule.cs",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "BuildLoseKeyword routes an enum-parseable keyword to LoseAbilityEffect.Keyword, else falls back to AbilityText — bare keyword now structured"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MagebaneArmor.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.9"],
+      "reason": "loseAbility now carries structured \"Keyword\":\"Flying\" (not free-text AbilityText); the (MagebaneArmor, AbilityText) whitelist-freetext carve-out was removed"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AnimateDead.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "genuine ability-scope 'enchant creature card in a graveyard' correctly retains AbilityText (not enum-expressible) — unaffected by H19, whitelist entry justified"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/VraskaBetrayalsSting.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "genuine ability-scope 'all other abilities' correctly retains AbilityText — unaffected by H19, whitelist entry justified"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/YouDrawCardAndLoseLifeTriggeredRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 121.1", "CR 119.3"],
+      "reason": "anchored ^you draw N card(s) and lose M life$ (Priority 120 > DrawCards default 50) emits CompositeEffect[DrawCards,LoseLife]; cites CR 121.1 (draw) + CR 119.3 (lose life), both exist/match; anchoring excludes variable-X, 'each/target player draws', and 'mill...draw...lose' siblings"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/EOE/ElegyAcolyte.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.15", "CR 121.1", "CR 119.3"],
+      "reason": "back-propped: Lifelink + aggregate combat-damage trigger -> composite draw+lose; Void end-step createToken; no unparsed/UnstructuredEffect. Void InterveningIf OtherCondition is pre-existing PB-7 whitelisted debt, out of the lose-life scope"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/EOE/VoidforgedTitan.json",
+      "verdict": "PASS",
+      "citations": ["CR 121.1", "CR 119.3"],
+      "reason": "back-propped from lossy drawCards-only to composite draw+lose; no unparsed. The remaining (VoidforgedTitan, OtherCondition) whitelist entry is the pre-existing Void structured-condition bucket, justified"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilter.cs#SharesCreatureTypeWith",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "SharesCreatureTypeWith property now defined exactly once (line 146); the H05/H07 duplicate was removed"
+    },
+    {
+      "target": "libs/magic-ast/AST/References/ObjectFilterRelations.cs#SharesCreatureTypeWith",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "wired into both UndecidedAxis (518) and SupUndecidedAxis (855) — two axis-mapping call sites, not a duplicate property; correct"
+    }
+  ]
+}

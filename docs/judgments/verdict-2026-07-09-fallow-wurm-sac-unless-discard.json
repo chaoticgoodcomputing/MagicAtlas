@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MIR/FallowWurm.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.21a", "CR 701.9a", "CR 701.9b", "CR 118.5"],
+      "reason": "OracleText byte-identical to real card; fully structured triggered(Enters, creature/IsSelf) + preventable(sacrifice It) unless You discard land DiscardCost qty 1 (Random omitted=false, player-chosen per 701.9b); no unparsed/OtherX/free-text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/SacrificeItUnlessDiscardLandRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.21a", "CR 701.9a", "CR 118.5"],
+      "reason": "anchored regex; emits PreventableEffect(SacrificeEffect It, UnlessClause You + land DiscardCost qty 1); parallels landed SacrificeItUnlessDiscardRandomRule; all cited CR rules exist and match modeling"
+    },
+    {
+      "target": "mast/fallow-wurm-sac-unless-discard#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "newAstNode=false, shared=[]; reuses existing discard cost / preventable / sacrifice discriminators (land is a CardTypes filter value, not a new discriminator); no new PortWalk projection decision required"
+    }
+  ]
+}

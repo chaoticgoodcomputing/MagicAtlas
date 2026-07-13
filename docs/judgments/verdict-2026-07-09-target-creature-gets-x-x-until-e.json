@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/LGN/WirewoodPride.json",
+      "verdict": "PASS",
+      "citations": ["CR 107.3", "CR 613.4"],
+      "reason": "modifyPT on target creature; +X/+X modeled as CountQuantity over Subtypes:[Elf] Zone:Battlefield (no controller = all Elves), duration untilTime end-of-turn; no unparsed/free-text; oracle text byte-identical"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Spell/Rules/ModifyPTXCountSubtypeSpellRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 107.3", "CR 613.4", "CR 205.3m"],
+      "reason": "anchored rule emits ModifyPTEffect with same CountQuantity in both P/T modifiers (CR 107.3i); cited CR 107.3/613.4/205.3m all exist and match modeling; reuses existing nodes"
+    },
+    {
+      "target": "mast/target-creature-gets-x-x-until-e#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator introduced (newAstNode=false; reuses ModifyPTEffect/CountQuantity/UntilTimeDuration) — no PortWalk projection decision required by initiative 03"
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "Input": {
+    "Name": "Ingenious Infiltrator",
+    "ManaCost": "{2}{U}{B}",
+    "TypeLine": "Creature — Vedalken Ninja",
+    "OracleText": "Ninjutsu {U}{B} ({U}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nWhenever a Ninja you control deals combat damage to a player, draw a card.",
+    "Power": "2",
+    "Toughness": "3",
+    "Colors": ["B", "U"],
+    "ColorIdentity": ["B", "U"],
+    "Keywords": ["Ninjutsu"],
+    "Id": "919cd266-b796-4a1c-937f-76b565c82495",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Ingenious Infiltrator",
+    "TypeLine": {
+      "Raw": "Creature — Vedalken Ninja",
+      "Types": ["Creature"],
+      "Subtypes": ["Vedalken", "Ninja"]
+    },
+    "Oracle": {
+      "RawText": "Ninjutsu {U}{B} ({U}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nWhenever a Ninja you control deals combat damage to a player, draw a card.",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "KeywordSource": "Ninjutsu",
+          "Reminder": {
+            "Text": "({U}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "ninjutsu",
+              "Cost": {
+                "CostType": "mana",
+                "Symbols": [
+                  {
+                    "Kind": "colored",
+                    "Colors": ["U"]
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": ["B"]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Kind": "triggered",
+          "Trigger": {
+            "Timing": "Whenever",
+            "Event": "DealsCombatDamageToPlayer",
+            "Filter": {
+              "CardTypes": ["creature"],
+              "Subtypes": ["Ninja"],
+              "Controller": "You"
+            }
+          },
+          "Effects": [
+            {
+              "EffectType": "drawCards",
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Player": {
+                "Kind": "You"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{U}{B}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["U"]
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["B"]
+          }
+        ],
+        "ManaValue": 4
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["B", "U"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["B", "U"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
+      }
+    ]
+  }
+}

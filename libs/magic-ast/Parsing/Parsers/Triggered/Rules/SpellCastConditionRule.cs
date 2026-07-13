@@ -63,7 +63,15 @@ public sealed class SpellCastConditionRule : ITriggerConditionRule
     }
     else
     {
-      foreach (var word in new[] { "creature", "instant", "sorcery", "artifact", "enchantment" })
+      // "permanent"/"planeswalker"/"land"/"battle" added for the Defiler cycle
+      // (March of the Machine) — "Whenever you cast a red permanent spell, ..."
+      // (Defiler of Instinct). QualifierAxisMapper already recognises all five
+      // as bare CardTypes labels; only this word list needed to grow to reach it.
+      foreach (var word in new[]
+        {
+          "creature", "instant", "sorcery", "artifact", "enchantment",
+          "permanent", "planeswalker", "land", "battle",
+        })
       {
         if (Regex.IsMatch(lower, $@"\b{Regex.Escape(word)}\s+spell\b"))
         {

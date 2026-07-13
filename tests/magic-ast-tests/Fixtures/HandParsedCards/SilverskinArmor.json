@@ -1,0 +1,102 @@
+{
+  "Input": {
+    "Name": "Silverskin Armor",
+    "ManaCost": "{2}",
+    "TypeLine": "Artifact — Equipment",
+    "OracleText": "Equipped creature gets +1/+1 and is an artifact in addition to its other types.\nEquip {2}",
+    "Colors": [],
+    "ColorIdentity": [],
+    "Keywords": ["Equip"],
+    "Id": "d1dba839-bd1e-4ce8-ab90-005eb1f0102e",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Silverskin Armor",
+    "TypeLine": {
+      "Raw": "Artifact — Equipment",
+      "Types": ["Artifact"],
+      "Subtypes": ["Equipment"]
+    },
+    "Oracle": {
+      "RawText": "Equipped creature gets +1/+1 and is an artifact in addition to its other types.\nEquip {2}",
+      "Abilities": [
+        {
+          "Kind": "static",
+          "Effects": [
+            {
+              "EffectType": "modifyPT",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
+            },
+            {
+              "EffectType": "addType",
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "AddedCardTypes": ["artifact"]
+            }
+          ]
+        },
+        {
+          "Kind": "activated",
+          "KeywordSource": "Equip",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"],
+                  "Controller": "You"
+                }
+              }
+            }
+          ],
+          "Restrictions": ["OnlyAsSorcery"],
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
+        "ManaValue": 2
+      },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
+    ]
+  }
+}

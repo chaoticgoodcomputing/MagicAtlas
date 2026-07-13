@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NMS/CallOfTheWild.json",
+      "verdict": "PASS",
+      "citations": ["CR 701.20", "CR 400.7", "CR 404.1"],
+      "reason": "OracleText byte-identical to real card; activated {2}{G}{G} ability models reveal-top-then-route as one coupled effect (Player You, Filter CardTypes:[creature]); no unparsed/unstructured/free-text; correct semantics"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/CardFlow/RevealTopCardMatchToBattlefieldElseGraveyardEffect.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.20", "CR 400.7", "CR 404.1"],
+      "reason": "cited rules all exist and match (701.20a reveal, 400.7 zone-change new object, 404.1 graveyard=discard pile); coupled single-card reveal-and-route with structured ObjectFilter, minimal-fields sibling precedent, no free text"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Activated/Rules/RevealTopCardMatchToBattlefieldElseGraveyardEffectRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 701.20", "CR 400.7", "CR 404.1"],
+      "reason": "anchored single-effect rule at Priority 96; cited CR rules exist and match; emits structured Filter/Player, no lossy drop (parser correctness itself is NUnit's scope)"
+    },
+    {
+      "target": "libs/magic-ast/schema/ast-schema.json#RevealTopCardMatchToBattlefieldElseGraveyardEffect",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "sound generalization: registers new effect type with Fields [Filter, Player], IsUnparsed:false; hash regenerated consistently"
+    },
+    {
+      "target": "libs/mast-interaction/known-coarse-projections.json#revealTopCardMatchToBattlefieldElseGraveyard",
+      "verdict": "PASS",
+      "citations": ["CR 701.20", "CR 400.7", "CR 404.1"],
+      "reason": "sensible coarse projection consistent with the four already-coarse sibling library-cheat/reveal effects (topLookPutOntoBattlefield, putFromHandOntoBattlefield, revealTopMayPutMatchingRestToGraveyard, revealTopPutMatchingToHand); no flow rule consumes library-cheat-into-play yet, genuinely inert"
+    }
+  ]
+}

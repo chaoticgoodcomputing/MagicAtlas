@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GangOfDevils.json",
+      "verdict": "PASS",
+      "citations": ["CR 115.7f", "CR 601.2d", "CR 115.4", "CR 113.7"],
+      "reason": "Input.OracleText byte-identical to real Gang of Devils; no IUnparsed/UnstructuredEffect; dealDamage total 3 with Divided:true + AnyTarget UpTo(Min1,Max3) + Dies/IsSelf trigger correctly models 'deals 3 damage divided among one, two, or three targets'"
+    },
+    {
+      "target": "libs/magic-ast/AST/Effects/Damage/DealDamageEffect.cs#Divided",
+      "verdict": "PASS",
+      "citations": ["CR 115.7f", "CR 601.2d"],
+      "reason": "Sound shared generalization: nullable Divided facet records division-mode only (total split, not multiplied); both cited rules exist and their text matches the modeling"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/ItDealsDamageDividedAmongTargetsRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 115.7f", "CR 601.2d", "CR 115.4", "CR 113.8", "CR 113.7"],
+      "reason": "Doc-comment cites 'CR 113.8b' for 'it = the self-source pronoun (the permanent whose trigger fired)', but 113.8 governs the ability's CONTROLLER and has no subrules (113.8b absent from data); the rule that actually grounds 'the object whose ability triggered' is CR 113.7 (source). Wrong-rule + absent-subrule citation. The other three citations (115.7f, 601.2d, 115.4) and the modeling itself are correct."
+    },
+    {
+      "target": "libs/mast-interaction/PortWalkProjection.cs#DealDamageEffect.Divided",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "Initiative-03 projection: Divided is a boolean FACET on the pre-existing dealDamage effectType, not a new PortWalk dispatch discriminator; dealDamage already has a semantic projection (emit:damage:<combat>:<recipient>, damage-flow arm) that the divided case rides. Division-among-N-targets is a quantity/targeting nuance no flow rule reads as a distinct edge, so no new PortGraph case / coarse entry is warranted. Sensible."
+    }
+  ]
+}

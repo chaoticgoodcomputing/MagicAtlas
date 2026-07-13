@@ -1,0 +1,137 @@
+{
+  "Input": {
+    "Name": "Goblin Rimerunner",
+    "ManaCost": "{2}{R}",
+    "TypeLine": "Snow Creature — Goblin Warrior",
+    "OracleText": "{T}: Target creature can't block this turn.\n{S}: This creature gains haste until end of turn. ({S} can be paid with one mana from a snow source.)",
+    "Power": "2",
+    "Toughness": "2",
+    "Colors": ["R"],
+    "ColorIdentity": ["R"],
+    "Keywords": [],
+    "Id": "0254a437-5240-40ca-bf7b-d30b95942bf5",
+    "Layout": "normal"
+  },
+  "Output": {
+    "Name": "Goblin Rimerunner",
+    "TypeLine": {
+      "Raw": "Snow Creature — Goblin Warrior",
+      "Supertypes": ["Snow"],
+      "Types": ["Creature"],
+      "Subtypes": ["Goblin", "Warrior"]
+    },
+    "Oracle": {
+      "RawText": "{T}: Target creature can't block this turn.\n{S}: This creature gains haste until end of turn. ({S} can be paid with one mana from a snow source.)",
+      "Abilities": [
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "cantBlock",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": ["creature"]
+                }
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "IsManaAbility": false
+        },
+        {
+          "Kind": "activated",
+          "Costs": [
+            {
+              "CostType": "mana",
+              "Symbols": [
+                {
+                  "Kind": "snow"
+                }
+              ]
+            }
+          ],
+          "Effects": [
+            {
+              "EffectType": "gainAbility",
+              "Target": {
+                "Kind": "Self"
+              },
+              "GainedAbility": {
+                "Kind": "static",
+                "KeywordSource": "Haste",
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Haste"
+                  }
+                ]
+              },
+              "Duration": {
+                "DurationType": "untilTime",
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "End"
+                }
+              }
+            }
+          ],
+          "Reminder": {
+            "Text": "({S} can be paid with one mana from a snow source.)"
+          },
+          "IsManaAbility": false
+        }
+      ]
+    },
+    "Attributes": [
+      {
+        "Kind": "manaCost",
+        "Raw": "{2}{R}",
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": ["R"]
+          }
+        ],
+        "ManaValue": 3,
+        "IsVariable": false
+      },
+      {
+        "Kind": "colors",
+        "Colors": ["R"]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": ["R"]
+      },
+      {
+        "Kind": "creatureStats",
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
+      }
+    ]
+  }
+}

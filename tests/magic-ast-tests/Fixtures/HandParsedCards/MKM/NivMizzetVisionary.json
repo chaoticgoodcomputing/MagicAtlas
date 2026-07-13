@@ -46,7 +46,8 @@
           "Kind": "static",
           "Effects": [
             {
-              "EffectType": "noMaxHandSize"
+              "EffectType": "noMaxHandSize",
+              "Player": { "Kind": "You" }
             }
           ]
         },
