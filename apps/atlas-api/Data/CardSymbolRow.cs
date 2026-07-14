@@ -8,6 +8,7 @@ namespace MagicAtlas.Api.Data;
 /// A mana / card symbol from Scryfall's <c>/symbology</c> endpoint — e.g., <c>{W}</c>, <c>{2/U}</c>, <c>{T}</c>.
 /// The symbol key is the primary key; clients look up SVG URIs for rendering mana costs as pips.
 /// </summary>
+[TraxAllowAnonymous]
 [TraxQueryModel(
     Namespace = GraphQLNamespaces.Atlas,
     Description = "A card or mana symbol with its SVG rendering URI."

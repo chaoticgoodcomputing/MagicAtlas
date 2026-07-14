@@ -17,8 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
+    <!-- Pinned to 10.0.9 to satisfy Trax.Api 1.39.0's transitive EF Core floor
+         (Version="1.*" floats Trax forward; the old 10.0.3 pin tripped NU1605). -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.9" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
   </ItemGroup>
 

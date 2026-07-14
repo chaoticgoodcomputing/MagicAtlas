@@ -9,6 +9,7 @@ namespace MagicAtlas.Api.Data;
 /// One card can have multiple rows (one per ability: keyword, triggered, activated, etc.),
 /// so the primary key is synthetic and <see cref="CardId"/> is the link back.
 /// </summary>
+[TraxAllowAnonymous]
 [TraxQueryModel(
     Namespace = GraphQLNamespaces.Atlas,
     Description = "A 2D position for one ability fragment of a card in oracle-text embedding space."

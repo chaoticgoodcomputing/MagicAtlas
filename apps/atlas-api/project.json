@@ -24,10 +24,10 @@
       "dependsOn": ["^build"]
     },
     "db": {
-      "//": "One-shot: bring up the atlas Postgres (docker compose up -d). Terminates, so it is a valid dependsOn for serve and for downstream live-data targets.",
+      "//": "One-shot: bring up the atlas Postgres. Prefers docker, falls back to podman (this machine aliases docker=podman at the shell level, which nx's /bin/sh does not see). Terminates, so it is a valid dependsOn for serve and downstream live-data targets.",
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["docker compose up -d"],
+        "commands": ["if command -v docker >/dev/null 2>&1; then docker compose up -d; else podman compose up -d; fi"],
         "cwd": "apps/atlas-api",
         "parallel": false
       }
@@ -36,7 +36,7 @@
       "//": "Stop the Postgres container (keeps the volume). Add --volumes to also drop seeded data.",
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["docker compose down"],
+        "commands": ["if command -v docker >/dev/null 2>&1; then docker compose down; else podman compose down; fi"],
         "cwd": "apps/atlas-api",
         "parallel": false
       }

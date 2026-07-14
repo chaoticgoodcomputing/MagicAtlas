@@ -8,6 +8,7 @@ namespace MagicAtlas.Api.Data;
 /// A ruling (judge/WotC clarification) attached to a card's oracle identity.
 /// Rulings share across reprints — they key off <see cref="OracleId"/> rather than printing ID.
 /// </summary>
+[TraxAllowAnonymous]
 [TraxQueryModel(
     Namespace = GraphQLNamespaces.Atlas,
     Description = "A ruling attached to a card's oracle identity (shared across reprints)."

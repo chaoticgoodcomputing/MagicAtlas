@@ -7,6 +7,7 @@ namespace MagicAtlas.Api.Data;
 /// <summary>
 /// A Magic set (expansion, core, masters, commander, etc.) from Scryfall's <c>/sets</c> endpoint.
 /// </summary>
+[TraxAllowAnonymous]
 [TraxQueryModel(
     Namespace = GraphQLNamespaces.Atlas,
     Description = "A Magic: The Gathering set (expansion, masters, commander deck, etc.)."

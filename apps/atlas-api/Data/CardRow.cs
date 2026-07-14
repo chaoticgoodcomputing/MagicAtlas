@@ -9,6 +9,9 @@ namespace MagicAtlas.Api.Data;
 /// Nested data from the original record (legalities, image URIs, prices) is collapsed onto scalar
 /// columns; list-like fields (colors, types, keywords) are stored as Postgres jsonb.
 /// </summary>
+// Read-only public catalog: Trax 1.39+ requires every GraphQL-exposed query
+// model to state its auth posture explicitly.
+[TraxAllowAnonymous]
 [TraxQueryModel(
     Namespace = GraphQLNamespaces.Atlas,
     Description = "A Magic: The Gathering card (flattened projection of Scryfall oracle data)."
