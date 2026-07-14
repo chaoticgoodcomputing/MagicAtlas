@@ -55,8 +55,11 @@ public class ComboAnchorRow
     [Column("top_payoffs", TypeName = "jsonb")]
     public List<string> TopPayoffs { get; set; } = new();
 
-    /// <summary>The co-star neighborhood: cards that appear alongside this hub in the combos it blocks.</summary>
-    [Column("co_stars", TypeName = "jsonb")]
+    /// <summary>
+    /// The co-star neighborhood: cards that appear alongside this hub in the combos it blocks.
+    /// Mapped as an EF Core owned collection serialized to the <c>co_stars</c> jsonb column
+    /// (see <see cref="AtlasDbContext.OnModelCreating"/>) so nested GraphQL sub-selections project.
+    /// </summary>
     public List<ComboCoStarJson> CoStars { get; set; } = new();
 }
 

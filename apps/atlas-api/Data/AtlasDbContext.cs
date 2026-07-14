@@ -1,6 +1,4 @@
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace MagicAtlas.Api.Data;
 
@@ -85,15 +83,11 @@ public class AtlasDbContext : DbContext
         anchor.Property(a => a.Id).ValueGeneratedNever();
         anchor.HasIndex(a => a.CardId);
         anchor.HasIndex(a => a.PopularityMass);
-        // CoStars is a list of a custom type; Trax owns the Npgsql data source (no EnableDynamicJson),
-        // so serialize it to a JSON string ourselves — Npgsql writes string -> jsonb natively.
-        anchor.Property(a => a.CoStars).HasConversion(
-            v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
-            v => JsonSerializer.Deserialize<List<ComboCoStarJson>>(v, (JsonSerializerOptions?)null) ?? new List<ComboCoStarJson>(),
-            new ValueComparer<List<ComboCoStarJson>>(
-                (l, r) => JsonSerializer.Serialize(l, (JsonSerializerOptions?)null) == JsonSerializer.Serialize(r, (JsonSerializerOptions?)null),
-                v => v == null ? 0 : JsonSerializer.Serialize(v, (JsonSerializerOptions?)null).GetHashCode(),
-                v => JsonSerializer.Deserialize<List<ComboCoStarJson>>(JsonSerializer.Serialize(v, (JsonSerializerOptions?)null), (JsonSerializerOptions?)null) ?? new List<ComboCoStarJson>()));
+        // CoStars is a collection of a custom type. Map it as an EF Core owned collection
+        // serialized to a single JSON (jsonb) column via ToJson() — unlike a value-converted
+        // column, an owned-JSON mapping is projectable, so nested GraphQL sub-selections
+        // (coStars { card sharedCombos }) resolve instead of throwing on projection pushdown.
+        anchor.OwnsMany(a => a.CoStars, b => b.ToJson("co_stars"));
 
         var lattice = modelBuilder.Entity<FamilyLatticeRow>();
         lattice.HasKey(l => l.Id);
