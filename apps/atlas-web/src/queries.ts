@@ -151,3 +151,79 @@ export const SYMBOLS_QUERY = gql`
     }
   }
 `;
+
+// ── Atlas foundation: resource families, edges, archetypes, ports ────────────
+// These back the concept-explorer views through the hooks in data/atlas.ts.
+
+export const FAMILY_GRAPH_QUERY = gql`
+  query FamilyGraph {
+    discover {
+      atlas {
+        resourceFamilyRows(first: 100) {
+          totalCount
+          nodes { family cards labels }
+        }
+        resourceEdgeRows(first: 500) {
+          totalCount
+          nodes { fromFamily toFamily realizingCombos bestTier engine origin }
+        }
+      }
+    }
+  }
+`;
+
+export const ARCHETYPES_QUERY = gql`
+  query Archetypes {
+    discover {
+      atlas {
+        archetypeRows(order: { realizingCombos: DESC }, first: 100) {
+          totalCount
+          nodes { signature families familyCount realizingCombos bestTier greenFraction exampleCards }
+        }
+      }
+    }
+  }
+`;
+
+export const HEADLINE_STATS_QUERY = gql`
+  query HeadlineStats {
+    discover {
+      atlas {
+        cardRows(first: 1) { totalCount }
+        comboRows(first: 1) { totalCount }
+        portRows(first: 1) { totalCount }
+        resourceFamilyRows(first: 1) { totalCount }
+        resourceEdgeRows(first: 1) { totalCount }
+        archetypeRows(first: 1) { totalCount }
+      }
+    }
+  }
+`;
+
+// Top cards for a single family (Station Focus rail). Distinct card names are
+// derived client-side from the returned ports.
+export const FAMILY_CARDS_QUERY = gql`
+  query FamilyCards($family: String!) {
+    discover {
+      atlas {
+        portRows(where: { family: { eq: $family } }, first: 200) {
+          nodes { card family side }
+        }
+      }
+    }
+  }
+`;
+
+// Candidate ports on one side of a family set (Card Explorer emitter/consumer
+// columns). Family set already expanded to include super/subgroups.
+export const PORT_CANDIDATES_QUERY = gql`
+  query PortCandidates($families: [String!]!, $side: String!) {
+    discover {
+      atlas {
+        portRows(where: { side: { eq: $side }, family: { in: $families } }, first: 200) {
+          nodes { card family side }
+        }
+      }
+    }
+  }
+`;

@@ -104,6 +104,61 @@ export const FAM: Record<string, Family> = {
 export const FAMILY_KEYS = Object.keys(FAM);
 export const famHue = (f: string | null | undefined): string => (f && FAM[f]?.hue) || "#75798c";
 
+// ── Synthetic palette for live families absent from FAM ──────────────────────
+// The real resource-graph family set (resourceFamilyRows) differs from the
+// guessed families above — it carries blink/cast/etb/dice/phase/recur, and
+// drops card/mill/exile/cost/discard/recursion. `ensureFamily` merges a live
+// family into the palette: known families keep their hand-tuned hue + metro
+// coordinates; unknown ones get a deterministic hue (name-hash → HSL) and an
+// auto-laid-out coordinate on a ring around the map centre, then are registered
+// into FAM so `famHue` (which the views call directly) resolves them too.
+
+const FNV = (s: string): number => {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+};
+
+/** Deterministic, stable hue for a family name not in the hand-tuned palette. */
+export const synthFamilyHue = (name: string): string => {
+  const h = FNV(name) % 360;
+  return `hsl(${h} 58% 60%)`;
+};
+
+// Map centre + ring radii used to auto-place unknown families (viewBox 1120×660).
+const RING_CX = 560, RING_CY = 330, RING_RX = 250, RING_RY = 200;
+
+/**
+ * Return the palette entry for a live family, registering a synthesized one into
+ * FAM on first sight so it is shared across every `famHue` lookup. Idempotent.
+ */
+export function ensureFamily(name: string): Family {
+  const existing = FAM[name];
+  if (existing) return existing;
+  const hash = FNV(name);
+  const ang = (hash % 360) * (Math.PI / 180);
+  const synth: Family = {
+    name,
+    hue: synthFamilyHue(name),
+    cards: 0,
+    labels: 0,
+    x: Math.round(RING_CX + Math.cos(ang) * RING_RX),
+    y: Math.round(RING_CY + Math.sin(ang) * RING_RY),
+  };
+  FAM[name] = synth;
+  return synth;
+}
+
+/** Families g whose consume-supergroup subsumes `fam` (incl. fam itself). */
+export const supergroupsOf = (fam: string): string[] => {
+  const sups = [fam];
+  for (const [g, subs] of Object.entries(GROUPS)) if (subs.includes(fam)) sups.push(g);
+  return sups;
+};
+
 // ── Super/subgroup lattice — key = supergroup consume family ─────────────────
 //    "a creature dies" ⊇ "a creature is sacrificed"; card advantage ⊇ self-mill.
 export const GROUPS: Record<string, string[]> = {
