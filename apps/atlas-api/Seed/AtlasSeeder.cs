@@ -27,6 +27,12 @@ public sealed class AtlasSeeder
 
     private readonly string? _atlasPointsPath;
 
+    private readonly string? _cardPortsPath;
+    private readonly string? _resourceGraphPath;
+    private readonly string? _comboInstancesPath;
+    private readonly string? _archetypeCatalogPath;
+    private readonly string? _comboAnchorReportPath;
+
     public AtlasSeeder(
         IDbContextFactory<AtlasDbContext> dbFactory,
         IHttpClientFactory httpFactory,
@@ -39,6 +45,11 @@ public sealed class AtlasSeeder
         _logger = logger;
         _cardsBulkPath = Resolve(configuration["Atlas:ScryfallBulkPath"], env.ContentRootPath);
         _atlasPointsPath = Resolve(configuration["Atlas:AtlasPointsPath"], env.ContentRootPath);
+        _cardPortsPath = Resolve(configuration["Atlas:CardPortsPath"], env.ContentRootPath);
+        _resourceGraphPath = Resolve(configuration["Atlas:ResourceGraphPath"], env.ContentRootPath);
+        _comboInstancesPath = Resolve(configuration["Atlas:ComboInstancesPath"], env.ContentRootPath);
+        _archetypeCatalogPath = Resolve(configuration["Atlas:ArchetypeCatalogPath"], env.ContentRootPath);
+        _comboAnchorReportPath = Resolve(configuration["Atlas:ComboAnchorReportPath"], env.ContentRootPath);
     }
 
     private static string? Resolve(string? configured, string contentRoot) =>
@@ -55,6 +66,13 @@ public sealed class AtlasSeeder
         await SeedSetsAsync(ct);
         await SeedSymbolsAsync(ct);
         await SeedAtlasPointsAsync(ct);
+        await SeedPortsAsync(ct);
+        await SeedResourceFamiliesAsync(ct);
+        await SeedResourceEdgesAsync(ct);
+        await SeedCombosAsync(ct);
+        await SeedArchetypesAsync(ct);
+        await SeedComboAnchorsAsync(ct);
+        await SeedFamilyLatticeAsync(ct);
     }
 
     // ── Cards ────────────────────────────────────────────────────────────
@@ -348,6 +366,473 @@ public sealed class AtlasSeeder
         [JsonPropertyName("x")] public double X { get; set; }
         [JsonPropertyName("y")] public double Y { get; set; }
         [JsonPropertyName("text_type")] public string? TextType { get; set; }
+    }
+
+    // ── CardAtlas analytics datasets (D1–D4 + anchors + lattice) ─────────
+    //
+    // These datasets are pipeline output (the CardAtlasFlow in the test/atlas-flows project), NOT a
+    // Scryfall HTTP fetch, so every seeder is file-drop + skip-if-missing. Their JSON keys are camelCase
+    // (the reporting records use [SerializedLabel("camelCase")]) — the Web JSON defaults match camelCase
+    // case-insensitively, and each Raw DTO also pins [JsonPropertyName("camelCase")] explicitly.
+    // Rows that reference cards by name resolve name → CardRow.Id via a once-built map, like the cards
+    // seeder, so ports/anchors carry a joinable CardId Guid.
+
+    private async Task SeedPortsAsync(CancellationToken ct)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+        if (await db.Ports.AnyAsync(ct))
+        {
+            _logger.LogInformation("Ports already seeded ({Count} rows) — skipping.", await db.Ports.CountAsync(ct));
+            return;
+        }
+
+        if (!FileReady(_cardPortsPath, "Card ports")) return;
+
+        _logger.LogInformation("Seeding ports from {Path}...", _cardPortsPath);
+
+        var nameToId = await BuildCardNameMapAsync(db, ct);
+        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+
+        var perCardIndex = new Dictionary<string, int>(StringComparer.Ordinal);
+        var batch = new List<PortRow>(capacity: 1000);
+        var total = 0;
+
+        await using var stream = File.OpenRead(_cardPortsPath!);
+        await foreach (var raw in JsonSerializer.DeserializeAsyncEnumerable<RawPort>(stream, options, ct))
+        {
+            if (raw is null) continue;
+
+            var card = raw.Card ?? "";
+            var index = perCardIndex.TryGetValue(card, out var i) ? i : 0;
+            perCardIndex[card] = index + 1;
+
+            batch.Add(new PortRow
+            {
+                PortId = $"{Slug(card)}#{index}",
+                CardId = nameToId.TryGetValue(card, out var id) ? id : Guid.Empty,
+                Card = card,
+                Label = raw.Label ?? "",
+                Family = raw.Family ?? "",
+                Side = raw.Side ?? "",
+                Tier = raw.Tier,
+                OracleLineIndex = raw.OracleLineIndex ?? 0,
+                Spans = raw.Spans,
+            });
+
+            if (batch.Count >= 1000)
+            {
+                await FlushAsync(db, batch, ct);
+                total += batch.Count;
+                batch.Clear();
+            }
+        }
+
+        if (batch.Count > 0)
+        {
+            await FlushAsync(db, batch, ct);
+            total += batch.Count;
+        }
+
+        _logger.LogInformation("Ports: {Total} rows.", total);
+    }
+
+    private async Task SeedResourceFamiliesAsync(CancellationToken ct)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+        if (await db.ResourceFamilies.AnyAsync(ct))
+        {
+            _logger.LogInformation("Resource families already seeded ({Count} rows) — skipping.", await db.ResourceFamilies.CountAsync(ct));
+            return;
+        }
+
+        if (!FileReady(_resourceGraphPath, "Resource graph")) return;
+
+        _logger.LogInformation("Seeding resource families from {Path}...", _resourceGraphPath);
+
+        var graph = await ReadObjectAsync<RawResourceGraph>(_resourceGraphPath!, ct);
+        var rows = (graph?.Stations ?? new List<RawResourceStation>())
+            .Where(s => !string.IsNullOrWhiteSpace(s.Family))
+            .Select(s => new ResourceFamilyRow
+            {
+                Family = s.Family!,
+                Cards = s.Cards,
+                Labels = s.Labels,
+            })
+            .ToList();
+
+        db.ResourceFamilies.AddRange(rows);
+        await db.SaveChangesAsync(ct);
+        _logger.LogInformation("Resource families: {Total} rows.", rows.Count);
+    }
+
+    private async Task SeedResourceEdgesAsync(CancellationToken ct)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+        if (await db.ResourceEdges.AnyAsync(ct))
+        {
+            _logger.LogInformation("Resource edges already seeded ({Count} rows) — skipping.", await db.ResourceEdges.CountAsync(ct));
+            return;
+        }
+
+        if (!FileReady(_resourceGraphPath, "Resource graph")) return;
+
+        _logger.LogInformation("Seeding resource edges from {Path}...", _resourceGraphPath);
+
+        var graph = await ReadObjectAsync<RawResourceGraph>(_resourceGraphPath!, ct);
+        var rows = (graph?.Lines ?? new List<RawResourceLine>())
+            .Where(l => !string.IsNullOrWhiteSpace(l.From) && !string.IsNullOrWhiteSpace(l.To))
+            .Select(l => new ResourceEdgeRow
+            {
+                Id = $"{l.From}>{l.To}",
+                FromFamily = l.From!,
+                ToFamily = l.To!,
+                RealizingCombos = l.RealizingCombos,
+                BestTier = l.BestTier ?? "",
+                Engine = l.Engine,
+                Origin = l.Origin,
+            })
+            .ToList();
+
+        db.ResourceEdges.AddRange(rows);
+        await db.SaveChangesAsync(ct);
+        _logger.LogInformation("Resource edges: {Total} rows.", rows.Count);
+    }
+
+    private async Task SeedCombosAsync(CancellationToken ct)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+        if (await db.Combos.AnyAsync(ct))
+        {
+            _logger.LogInformation("Combos already seeded ({Count} rows) — skipping.", await db.Combos.CountAsync(ct));
+            return;
+        }
+
+        if (!FileReady(_comboInstancesPath, "Combo instances")) return;
+
+        _logger.LogInformation("Seeding combos from {Path}...", _comboInstancesPath);
+
+        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        var batch = new List<ComboRow>(capacity: 1000);
+        var total = 0;
+
+        await using var stream = File.OpenRead(_comboInstancesPath!);
+        await foreach (var raw in JsonSerializer.DeserializeAsyncEnumerable<RawCombo>(stream, options, ct))
+        {
+            if (raw is null || string.IsNullOrWhiteSpace(raw.ComboId)) continue;
+
+            batch.Add(new ComboRow
+            {
+                ComboId = raw.ComboId!,
+                Cards = raw.Cards ?? "",
+                CardCount = raw.CardCount,
+                FamilySignature = raw.FamilySignature ?? "",
+                FamilyRing = raw.FamilyRing ?? "",
+                Tier = raw.Tier ?? "",
+                Firable = raw.Firable,
+                Results = raw.Results ?? "",
+                Popularity = raw.Popularity,
+            });
+
+            if (batch.Count >= 1000)
+            {
+                await FlushAsync(db, batch, ct);
+                total += batch.Count;
+                batch.Clear();
+            }
+        }
+
+        if (batch.Count > 0)
+        {
+            await FlushAsync(db, batch, ct);
+            total += batch.Count;
+        }
+
+        _logger.LogInformation("Combos: {Total} rows.", total);
+    }
+
+    private async Task SeedArchetypesAsync(CancellationToken ct)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+        if (await db.Archetypes.AnyAsync(ct))
+        {
+            _logger.LogInformation("Archetypes already seeded ({Count} rows) — skipping.", await db.Archetypes.CountAsync(ct));
+            return;
+        }
+
+        if (!FileReady(_archetypeCatalogPath, "Archetype catalog")) return;
+
+        _logger.LogInformation("Seeding archetypes from {Path}...", _archetypeCatalogPath);
+
+        var catalog = await ReadObjectAsync<RawArchetypeCatalog>(_archetypeCatalogPath!, ct);
+        var rows = (catalog?.Entries ?? new List<RawArchetypeEntry>())
+            .Where(e => !string.IsNullOrWhiteSpace(e.Families))
+            // Signature = sorted Families join — the stable, order-independent archetype key.
+            .Select(e => new ArchetypeRow
+            {
+                Signature = SortedSignature(e.Families!),
+                Families = e.Families!,
+                FamilyCount = e.FamilyCount,
+                RealizingCombos = e.RealizingCombos,
+                BestTier = e.BestTier ?? "",
+                GreenFraction = e.GreenFraction,
+                ExampleCards = e.ExampleCards ?? "",
+                Results = e.Results ?? "",
+            })
+            // Guard against duplicate signatures (defensive; the catalog is already distinct by families).
+            .GroupBy(r => r.Signature)
+            .Select(g => g.First())
+            .ToList();
+
+        db.Archetypes.AddRange(rows);
+        await db.SaveChangesAsync(ct);
+        _logger.LogInformation("Archetypes: {Total} rows.", rows.Count);
+    }
+
+    private async Task SeedComboAnchorsAsync(CancellationToken ct)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+        if (await db.ComboAnchors.AnyAsync(ct))
+        {
+            _logger.LogInformation("Combo anchors already seeded ({Count} rows) — skipping.", await db.ComboAnchors.CountAsync(ct));
+            return;
+        }
+
+        if (!FileReady(_comboAnchorReportPath, "Combo anchor report")) return;
+
+        _logger.LogInformation("Seeding combo anchors from {Path}...", _comboAnchorReportPath);
+
+        var nameToId = await BuildCardNameMapAsync(db, ct);
+        var report = await ReadObjectAsync<RawComboAnchorReport>(_comboAnchorReportPath!, ct);
+
+        var rows = (report?.TopAnchors ?? new List<RawComboAnchor>())
+            .Where(a => !string.IsNullOrWhiteSpace(a.Card))
+            .GroupBy(a => a.Card!)
+            .Select(g => g.First())
+            .Select(a => new ComboAnchorRow
+            {
+                Id = a.Card!,
+                CardId = nameToId.TryGetValue(a.Card!, out var id) ? id : Guid.Empty,
+                Card = a.Card!,
+                TypeLine = a.TypeLine ?? "",
+                BlockReason = a.BlockReason ?? "",
+                BlockedComboCount = a.BlockedComboCount,
+                SoleBlockerCount = a.SoleBlockerCount,
+                PopularityMass = a.PopularityMass,
+                MaxComboPopularity = a.MaxComboPopularity,
+                TopPayoffs = a.TopPayoffs ?? new(),
+                CoStars = (a.CoStars ?? new List<RawComboCoStar>())
+                    .Select(c => new ComboCoStarJson
+                    {
+                        Card = c.Card ?? "",
+                        SharedCombos = c.SharedCombos,
+                        SharedPopularity = c.SharedPopularity,
+                        AlsoUnparsed = c.AlsoUnparsed,
+                    })
+                    .ToList(),
+            })
+            .ToList();
+
+        db.ComboAnchors.AddRange(rows);
+        await db.SaveChangesAsync(ct);
+        _logger.LogInformation("Combo anchors: {Total} rows.", rows.Count);
+    }
+
+    /// <summary>
+    /// The family super/subgroup lattice is authored (the family grammar in
+    /// <c>libs/mast-interaction/FamilyGrammar.cs</c>), not a pipeline dump — so it ships as the small
+    /// containment set the client currently hardcodes (<c>GROUPS = { death:["sacrifice"], card:["mill"] }</c>),
+    /// now served as data. Extend as the grammar's containment is promoted.
+    /// </summary>
+    private async Task SeedFamilyLatticeAsync(CancellationToken ct)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+        if (await db.FamilyLattices.AnyAsync(ct))
+        {
+            _logger.LogInformation("Family lattice already seeded ({Count} rows) — skipping.", await db.FamilyLattices.CountAsync(ct));
+            return;
+        }
+
+        var containments = new (string Family, string SubFamily)[]
+        {
+            ("death", "sacrifice"),
+            ("card", "mill"),
+        };
+
+        var rows = containments
+            .Select(c => new FamilyLatticeRow
+            {
+                Id = $"{c.Family}>{c.SubFamily}",
+                Family = c.Family,
+                SubFamily = c.SubFamily,
+            })
+            .ToList();
+
+        db.FamilyLattices.AddRange(rows);
+        await db.SaveChangesAsync(ct);
+        _logger.LogInformation("Family lattice: {Total} rows.", rows.Count);
+    }
+
+    // ── CardAtlas seeding helpers ────────────────────────────────────────
+
+    /// <summary>True if the dataset file is present; logs a skip note and returns false otherwise.</summary>
+    private bool FileReady(string? path, string label)
+    {
+        if (!string.IsNullOrWhiteSpace(path) && File.Exists(path)) return true;
+
+        _logger.LogInformation(
+            "{Label} file not found at '{Path}' — skipping. Run the CardAtlas pipeline to generate it.",
+            label, path ?? "<unset>");
+        return false;
+    }
+
+    /// <summary>Builds a name → CardRow.Id map once, so name-keyed datasets can carry a joinable Guid.</summary>
+    private static async Task<Dictionary<string, Guid>> BuildCardNameMapAsync(AtlasDbContext db, CancellationToken ct)
+    {
+        var map = new Dictionary<string, Guid>(StringComparer.Ordinal);
+        var pairs = await db.Cards
+            .AsNoTracking()
+            .Select(c => new { c.Name, c.Id })
+            .ToListAsync(ct);
+
+        foreach (var p in pairs)
+            map.TryAdd(p.Name, p.Id);
+
+        return map;
+    }
+
+    private static async Task<T?> ReadObjectAsync<T>(string path, CancellationToken ct)
+    {
+        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        await using var stream = File.OpenRead(path);
+        return await JsonSerializer.DeserializeAsync<T>(stream, options, ct);
+    }
+
+    /// <summary>A URL/id-safe slug for a card name: lowercase alphanumerics, other runs collapsed to '-'.</summary>
+    private static string Slug(string s)
+    {
+        var chars = new char[s.Length];
+        var n = 0;
+        var lastDash = false;
+        foreach (var ch in s)
+        {
+            if (char.IsLetterOrDigit(ch))
+            {
+                chars[n++] = char.ToLowerInvariant(ch);
+                lastDash = false;
+            }
+            else if (!lastDash && n > 0)
+            {
+                chars[n++] = '-';
+                lastDash = true;
+            }
+        }
+        var slug = new string(chars, 0, n).TrimEnd('-');
+        return slug.Length == 0 ? "card" : slug;
+    }
+
+    /// <summary>Sorted, comma-joined normalization of a family-signature string (order-independent key).</summary>
+    private static string SortedSignature(string families) =>
+        string.Join(", ", families
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .OrderBy(f => f, StringComparer.Ordinal));
+
+    // ── Raw CardAtlas DTOs (camelCase dumps) ─────────────────────────────
+
+    private sealed class RawPort
+    {
+        [JsonPropertyName("card")] public string? Card { get; set; }
+        [JsonPropertyName("label")] public string? Label { get; set; }
+        [JsonPropertyName("family")] public string? Family { get; set; }
+        [JsonPropertyName("side")] public string? Side { get; set; }
+        // §4 provenance / backfill fields — absent in the current dump, populated once those passes land.
+        [JsonPropertyName("tier")] public string? Tier { get; set; }
+        [JsonPropertyName("oracleLineIndex")] public int? OracleLineIndex { get; set; }
+        [JsonPropertyName("spans")] public int[][]? Spans { get; set; }
+    }
+
+    private sealed class RawResourceGraph
+    {
+        [JsonPropertyName("stations")] public List<RawResourceStation>? Stations { get; set; }
+        [JsonPropertyName("lines")] public List<RawResourceLine>? Lines { get; set; }
+    }
+
+    private sealed class RawResourceStation
+    {
+        [JsonPropertyName("family")] public string? Family { get; set; }
+        [JsonPropertyName("cards")] public int Cards { get; set; }
+        [JsonPropertyName("labels")] public int Labels { get; set; }
+    }
+
+    private sealed class RawResourceLine
+    {
+        [JsonPropertyName("from")] public string? From { get; set; }
+        [JsonPropertyName("to")] public string? To { get; set; }
+        [JsonPropertyName("realizingCombos")] public int RealizingCombos { get; set; }
+        [JsonPropertyName("bestTier")] public string? BestTier { get; set; }
+        [JsonPropertyName("engine")] public bool Engine { get; set; }
+        [JsonPropertyName("origin")] public string? Origin { get; set; }
+    }
+
+    private sealed class RawCombo
+    {
+        [JsonPropertyName("comboId")] public string? ComboId { get; set; }
+        [JsonPropertyName("cards")] public string? Cards { get; set; }
+        [JsonPropertyName("cardCount")] public int CardCount { get; set; }
+        [JsonPropertyName("familySignature")] public string? FamilySignature { get; set; }
+        [JsonPropertyName("familyRing")] public string? FamilyRing { get; set; }
+        [JsonPropertyName("tier")] public string? Tier { get; set; }
+        [JsonPropertyName("firable")] public bool Firable { get; set; }
+        [JsonPropertyName("results")] public string? Results { get; set; }
+        [JsonPropertyName("popularity")] public int Popularity { get; set; }
+    }
+
+    private sealed class RawArchetypeCatalog
+    {
+        [JsonPropertyName("entries")] public List<RawArchetypeEntry>? Entries { get; set; }
+    }
+
+    private sealed class RawArchetypeEntry
+    {
+        [JsonPropertyName("families")] public string? Families { get; set; }
+        [JsonPropertyName("familyCount")] public int FamilyCount { get; set; }
+        [JsonPropertyName("realizingCombos")] public int RealizingCombos { get; set; }
+        [JsonPropertyName("bestTier")] public string? BestTier { get; set; }
+        [JsonPropertyName("greenFraction")] public double GreenFraction { get; set; }
+        [JsonPropertyName("exampleCards")] public string? ExampleCards { get; set; }
+        [JsonPropertyName("results")] public string? Results { get; set; }
+    }
+
+    private sealed class RawComboAnchorReport
+    {
+        [JsonPropertyName("topAnchors")] public List<RawComboAnchor>? TopAnchors { get; set; }
+    }
+
+    private sealed class RawComboAnchor
+    {
+        [JsonPropertyName("card")] public string? Card { get; set; }
+        [JsonPropertyName("typeLine")] public string? TypeLine { get; set; }
+        [JsonPropertyName("blockReason")] public string? BlockReason { get; set; }
+        [JsonPropertyName("blockedComboCount")] public int BlockedComboCount { get; set; }
+        [JsonPropertyName("soleBlockerCount")] public int SoleBlockerCount { get; set; }
+        [JsonPropertyName("popularityMass")] public long PopularityMass { get; set; }
+        [JsonPropertyName("maxComboPopularity")] public int MaxComboPopularity { get; set; }
+        [JsonPropertyName("topPayoffs")] public List<string>? TopPayoffs { get; set; }
+        [JsonPropertyName("coStars")] public List<RawComboCoStar>? CoStars { get; set; }
+    }
+
+    private sealed class RawComboCoStar
+    {
+        [JsonPropertyName("card")] public string? Card { get; set; }
+        [JsonPropertyName("sharedCombos")] public int SharedCombos { get; set; }
+        [JsonPropertyName("sharedPopularity")] public long SharedPopularity { get; set; }
+        [JsonPropertyName("alsoUnparsed")] public bool AlsoUnparsed { get; set; }
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────

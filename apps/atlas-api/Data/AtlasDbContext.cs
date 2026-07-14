@@ -12,6 +12,15 @@ public class AtlasDbContext : DbContext
     public DbSet<CardSymbolRow> CardSymbols => Set<CardSymbolRow>();
     public DbSet<AtlasPointRow> AtlasPoints => Set<AtlasPointRow>();
 
+    // ── CardAtlas analytics read models (D1–D4 + combo anchors + family lattice) ──
+    public DbSet<PortRow> Ports => Set<PortRow>();
+    public DbSet<ResourceFamilyRow> ResourceFamilies => Set<ResourceFamilyRow>();
+    public DbSet<ResourceEdgeRow> ResourceEdges => Set<ResourceEdgeRow>();
+    public DbSet<ComboRow> Combos => Set<ComboRow>();
+    public DbSet<ArchetypeRow> Archetypes => Set<ArchetypeRow>();
+    public DbSet<ComboAnchorRow> ComboAnchors => Set<ComboAnchorRow>();
+    public DbSet<FamilyLatticeRow> FamilyLattices => Set<FamilyLatticeRow>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("atlas");
@@ -37,5 +46,47 @@ public class AtlasDbContext : DbContext
         atlasPoint.Property(a => a.Id).ValueGeneratedOnAdd();
         atlasPoint.HasIndex(a => a.CardId);
         atlasPoint.HasIndex(a => a.TextType);
+
+        // ── CardAtlas analytics read models — natural (non-generated) string keys ──
+        var port = modelBuilder.Entity<PortRow>();
+        port.HasKey(p => p.PortId);
+        port.Property(p => p.PortId).ValueGeneratedNever();
+        port.HasIndex(p => p.CardId);
+        port.HasIndex(p => p.Card);
+        port.HasIndex(p => p.Family);
+        port.HasIndex(p => p.Side);
+
+        var family = modelBuilder.Entity<ResourceFamilyRow>();
+        family.HasKey(f => f.Family);
+        family.Property(f => f.Family).ValueGeneratedNever();
+
+        var edge = modelBuilder.Entity<ResourceEdgeRow>();
+        edge.HasKey(e => e.Id);
+        edge.Property(e => e.Id).ValueGeneratedNever();
+        edge.HasIndex(e => e.FromFamily);
+        edge.HasIndex(e => e.ToFamily);
+
+        var combo = modelBuilder.Entity<ComboRow>();
+        combo.HasKey(c => c.ComboId);
+        combo.Property(c => c.ComboId).ValueGeneratedNever();
+        combo.HasIndex(c => c.FamilySignature);
+        combo.HasIndex(c => c.Tier);
+        combo.HasIndex(c => c.Popularity);
+
+        var archetype = modelBuilder.Entity<ArchetypeRow>();
+        archetype.HasKey(a => a.Signature);
+        archetype.Property(a => a.Signature).ValueGeneratedNever();
+        archetype.HasIndex(a => a.RealizingCombos);
+
+        var anchor = modelBuilder.Entity<ComboAnchorRow>();
+        anchor.HasKey(a => a.Id);
+        anchor.Property(a => a.Id).ValueGeneratedNever();
+        anchor.HasIndex(a => a.CardId);
+        anchor.HasIndex(a => a.PopularityMass);
+
+        var lattice = modelBuilder.Entity<FamilyLatticeRow>();
+        lattice.HasKey(l => l.Id);
+        lattice.Property(l => l.Id).ValueGeneratedNever();
+        lattice.HasIndex(l => l.Family);
     }
 }
