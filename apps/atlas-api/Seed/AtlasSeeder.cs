@@ -517,12 +517,16 @@ public sealed class AtlasSeeder
 
         var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
         var batch = new List<ComboRow>(capacity: 1000);
+        // combo-instances.json lists a combo once per realizing family ring, so the same comboId
+        // recurs; dedupe on the primary key or EF's change tracker rejects the second instance.
+        var seen = new HashSet<string>(StringComparer.Ordinal);
         var total = 0;
 
         await using var stream = File.OpenRead(_comboInstancesPath!);
         await foreach (var raw in JsonSerializer.DeserializeAsyncEnumerable<RawCombo>(stream, options, ct))
         {
             if (raw is null || string.IsNullOrWhiteSpace(raw.ComboId)) continue;
+            if (!seen.Add(raw.ComboId!)) continue;
 
             batch.Add(new ComboRow
             {
