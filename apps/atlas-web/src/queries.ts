@@ -214,6 +214,33 @@ export const FAMILY_CARDS_QUERY = gql`
   }
 `;
 
+// Deck Lens: resolve a decklist (card names) to directional port coverage, the
+// complete rings it already makes, and the near-miss closers one card away.
+// Backed by the live discover.atlas.analyzeDeck resolver.
+export const ANALYZE_DECK_QUERY = gql`
+  query AnalyzeDeck($cards: [String!]!) {
+    discover {
+      atlas {
+        analyzeDeck(cards: $cards) {
+          coverage {
+            family
+            note
+            emit { own subs { family count } }
+            consume { own subs { family count } }
+          }
+          rings { cards ring tier pop confidence }
+          nearMiss {
+            missing
+            ring
+            resultTier
+            cands { name evidence price score }
+          }
+        }
+      }
+    }
+  }
+`;
+
 // Candidate ports on one side of a family set (Card Explorer emitter/consumer
 // columns). Family set already expanded to include super/subgroups.
 export const PORT_CANDIDATES_QUERY = gql`

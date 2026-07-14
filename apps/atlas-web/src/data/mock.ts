@@ -131,23 +131,65 @@ export const synthFamilyHue = (name: string): string => {
 // Map centre + ring radii used to auto-place unknown families (viewBox 1120×660).
 const RING_CX = 560, RING_CY = 330, RING_RX = 250, RING_RY = 200;
 
+// Hand-placed metro coordinates for the live families with no tuned FAM entry.
+// The real resource-graph set is exactly 17:
+//   mana · etb · tap · cast · token · counter · sacrifice · death · phase · recur
+//   · damage · life · untap · copy · blink · combat · dice
+// The first group already has tuned FAM coords above; these six fill the gaps so
+// no two stations overlap on the 1120×660 viewBox (the tuned card/mill/exile/
+// cost/discard/recursion entries are NOT in the live set and never render, so
+// their coordinates are free real estate here). A quick pairwise check keeps
+// every station ≥ ~135 units from its nearest neighbour.
+const SYNTH_COORDS: Record<string, { x: number; y: number }> = {
+  cast: { x: 1000, y: 360 },
+  etb: { x: 470, y: 470 },
+  recur: { x: 300, y: 540 },
+  phase: { x: 180, y: 470 },
+  blink: { x: 130, y: 300 },
+  dice: { x: 1000, y: 550 },
+};
+
+// Minimum centre-to-centre separation used by the collision-aware fallback.
+const MIN_SEP = 78;
+
+/** Collision-aware ring placement for a family with no hand-tuned coordinate:
+ *  sweep the map on a golden-angle spiral, widening the ring each lap, until we
+ *  find a slot at least MIN_SEP from every already-registered station. Pure and
+ *  deterministic in `name` + the current FAM occupancy. */
+function placeClear(name: string): { x: number; y: number } {
+  const base = (FNV(name) % 360) * (Math.PI / 180);
+  for (let step = 0; step < 400; step++) {
+    const ang = base + step * 0.6180339887 * Math.PI * 2;
+    const grow = Math.floor(step / 12);
+    const rx = RING_RX + grow * 26;
+    const ry = RING_RY + grow * 20;
+    const x = Math.round(RING_CX + Math.cos(ang) * rx);
+    const y = Math.round(RING_CY + Math.sin(ang) * ry);
+    if (x < 40 || x > 1080 || y < 40 || y > 620) continue;
+    let clear = true;
+    for (const f of Object.values(FAM)) {
+      if (Math.hypot(f.x - x, f.y - y) < MIN_SEP) { clear = false; break; }
+    }
+    if (clear) return { x, y };
+  }
+  return {
+    x: Math.round(RING_CX + Math.cos(base) * RING_RX),
+    y: Math.round(RING_CY + Math.sin(base) * RING_RY),
+  };
+}
+
 /**
  * Return the palette entry for a live family, registering a synthesized one into
- * FAM on first sight so it is shared across every `famHue` lookup. Idempotent.
+ * FAM on first sight so it is shared across every `famHue` lookup. Known live
+ * families use a hand-tuned metro coordinate; any truly unknown family falls
+ * back to collision-aware ring placement so no two stations ever overlap.
+ * Idempotent; hue is always deterministic (name-hash → HSL).
  */
 export function ensureFamily(name: string): Family {
   const existing = FAM[name];
   if (existing) return existing;
-  const hash = FNV(name);
-  const ang = (hash % 360) * (Math.PI / 180);
-  const synth: Family = {
-    name,
-    hue: synthFamilyHue(name),
-    cards: 0,
-    labels: 0,
-    x: Math.round(RING_CX + Math.cos(ang) * RING_RX),
-    y: Math.round(RING_CY + Math.sin(ang) * RING_RY),
-  };
+  const { x, y } = SYNTH_COORDS[name] ?? placeClear(name);
+  const synth: Family = { name, hue: synthFamilyHue(name), cards: 0, labels: 0, x, y };
   FAM[name] = synth;
   return synth;
 }

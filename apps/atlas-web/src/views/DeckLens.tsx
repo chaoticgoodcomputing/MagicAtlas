@@ -10,13 +10,24 @@
 // no d3), everything else is HTML. All data comes through `useDeckAnalysis`.
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import {
   FAM, TIER, famHue,
   type CoverRow, type CoverSide, type NearMiss, type Ring, type Tier,
 } from "../data/mock";
-import { sampleDeck, useDeckAnalysis, type DeckState } from "../data/atlas";
+import { sampleDeck, useDeckAnalysis } from "../data/atlas";
 import { FamilyDot, SectionHead, SegControl, TierChip } from "../components/primitives";
+
+/** Parse a pasted decklist into bare card names: strip leading counts ("1x ",
+ *  "3 "), drop blank lines and placeholder rows ("… 87 more"). */
+function parseDeck(text: string): string[] {
+  return text
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0 && !l.startsWith("…") && !l.startsWith("..."))
+    .map((l) => l.replace(/^\d+\s*x?\s+/i, "").trim())
+    .filter((l) => l.length > 0);
+}
 
 // ── Coverage-chart geometry (data-independent) ───────────────────────────────
 const ROW_H = 34;
@@ -187,33 +198,30 @@ const cardStyle: CSSProperties = {
 };
 
 export default function DeckLens() {
-  const [state, setState] = useState<DeckState>("full");
   const [text, setText] = useState<string>(sampleDeck("full"));
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // The card names currently under analysis (drives the live query). Seeded from
+  // the dense sample so the view lands populated; re-set on Analyze / sample pick.
+  const [cards, setCards] = useState<string[]>(() => parseDeck(sampleDeck("full")));
+  const [sample, setSample] = useState<"sparse" | "full">("full");
 
-  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+  const { data, loading } = useDeckAnalysis(cards);
 
-  const analyze = (): void => {
-    setState("loading");
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => setState("full"), 900);
-  };
+  const analyze = (): void => setCards(parseDeck(text));
 
   const clear = (): void => {
-    if (timer.current) clearTimeout(timer.current);
-    setState("empty");
     setText("");
+    setCards([]);
   };
 
   const pick = (v: "sparse" | "full"): void => {
-    setState(v);
-    setText(sampleDeck(v));
+    const t = sampleDeck(v);
+    setSample(v);
+    setText(t);
+    setCards(parseDeck(t));
   };
 
-  // Hook is called unconditionally; the fallback arg is inert unless resolved.
-  const analysisState: "sparse" | "full" = state === "sparse" ? "sparse" : "full";
-  const { data } = useDeckAnalysis(analysisState);
-  const resolved = state === "sparse" || state === "full";
+  const empty = cards.length === 0;
+  const resolved = !empty && !loading;
 
   return (
     <div className="view-grid">
@@ -228,7 +236,7 @@ export default function DeckLens() {
           <h5 style={{ margin: 0, color: "var(--atlas-muted)" }}>Decklist</h5>
           <SegControl<"sparse" | "full">
             options={[{ value: "sparse", label: "Sparse" }, { value: "full", label: "Dense" }]}
-            value={analysisState}
+            value={sample}
             onChange={pick}
           />
         </div>
@@ -247,13 +255,13 @@ export default function DeckLens() {
       </div>
 
       {/* results */}
-      {state === "empty" && (
+      {empty && (
         <div className="panel">
           <div className="empty-state">Paste a decklist to begin</div>
         </div>
       )}
 
-      {state === "loading" && (
+      {!empty && loading && (
         <div className="panel">
           <div className="loading-state">
             <span className="ws-spin" />
@@ -275,10 +283,10 @@ export default function DeckLens() {
           {/* 2 · Complete rings */}
           <div className="panel">
             <h5 style={{ marginTop: 0, color: "var(--atlas-muted)" }}>Complete rings · {data.rings.length}</h5>
-            {data.rings.map((r: Ring) => {
+            {data.rings.map((r: Ring, i: number) => {
               const color = tierColor(r.tier);
               return (
-                <div key={r.cards} style={{ ...cardStyle, borderLeft: `3px solid ${color}` }}>
+                <div key={`${r.cards}|${r.ring}|${i}`} style={{ ...cardStyle, borderLeft: `3px solid ${color}` }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 6 }}>
                     <TierChip tier={r.tier} conf={r.conf} />
                     <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--atlas-muted)" }}>
@@ -297,10 +305,10 @@ export default function DeckLens() {
           {/* 3 · One card away (near-miss) */}
           <div className="panel">
             <h5 style={{ marginTop: 0, color: "var(--atlas-muted)" }}>One card away · {data.nearMiss.length}</h5>
-            {data.nearMiss.map((nm: NearMiss) => {
+            {data.nearMiss.map((nm: NearMiss, i: number) => {
               const color = tierColor(nm.resultTier);
               return (
-                <div key={nm.missing} style={cardStyle}>
+                <div key={`${nm.missing}|${i}`} style={cardStyle}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 7 }}>
                     <span style={{ fontSize: 12, color: "var(--color-text)" }}>
                       Missing: <em style={{ fontStyle: "normal", color: "var(--color-accent)" }}>{nm.missing}</em>

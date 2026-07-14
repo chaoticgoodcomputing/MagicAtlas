@@ -18,10 +18,9 @@
 //   useArchetypes    → archetypeRows(order: realizingCombos DESC)
 //   useHeadlineStats → totalCount of cards / combos / ports / families / edges / archetypes
 //   useCardNeighbours→ portRows filtered by family-set + side (emit/consume)
+//   useDeckAnalysis  → analyzeDeck(cards) — decklist → coverage/rings/near-miss
 //
 // STILL MOCK (no resolver yet):
-//   useDeckAnalysis  → needs the analyzeDeck resolver (Track C); joining 3.4k
-//                      combos client-side is a non-starter, so it stays mock.
 //   useOracle        → MAST oracle char-offset spans are dormant ([JsonIgnore]),
 //                      so there are no live port spans to highlight yet.
 //   useTiers         → the four fidelity tiers are display metadata, not data.
@@ -31,15 +30,17 @@ import { useMemo } from "react";
 import { useQuery } from "@apollo/client";
 
 import {
+  ANALYZE_DECK_QUERY,
   ARCHETYPES_QUERY, FAMILY_CARDS_QUERY, FAMILY_GRAPH_QUERY, HEADLINE_STATS_QUERY,
   PORT_CANDIDATES_QUERY,
 } from "../queries";
 import {
-  CARDPOOL, COVERAGE, DECKS, FAMCARDS, GROUPS, HEADLINE_STATS, NEARMISS, ORACLE,
-  PORTS, RINGS, TIERS,
+  CARDPOOL, DECKS, FAMCARDS, GROUPS, HEADLINE_STATS, ORACLE,
+  TIERS,
   edgeKey, ensureFamily, supergroupsOf,
-  type Archetype, type Candidate, type CoverRow, type Edge, type Family,
-  type NearMiss, type OracleCard, type Port, type Ring, type Tier,
+  type Archetype, type Candidate, type CoverRow, type CoverSide, type Edge,
+  type Family, type NearMiss, type NearMissCand, type OracleCard, type Ring,
+  type Tier,
 } from "./mock";
 
 /** Uniform result envelope so views can render loading/empty without caring
@@ -248,20 +249,89 @@ export function useCardNeighbours(cardName: string): AtlasResult<{
   };
 }
 
-// ── Deck resolver (Deck lens, Synergy web) ───────────────────────────────────
-export type DeckState = "empty" | "loading" | "sparse" | "full";
+// ── Deck resolver (Deck lens) ────────────────────────────────────────────────
+// LIVE. discover.atlas.analyzeDeck(cards) resolves a decklist server-side to
+// directional port coverage + the complete rings it already makes + the
+// near-miss closers one card away. The resolver rows map almost 1:1 onto the
+// view's CoverRow/Ring/NearMiss shapes; the only reshaping is:
+//   · coverage row `note` → the emit side's `note` (where the chart reads it),
+//     and `subs: {family,count}[]` → the view's `[family, count][]` tuples;
+//   · rings deduped by (cards, ring) keeping the highest-pop instance, and
+//     `confidence` → `conf`;
+//   · nearMiss capped to the strongest few closers.
 
-// STILL MOCK. Needs the analyzeDeck resolver (Track C) to resolve a decklist to
-// coverage + rings + near-miss closers server-side — joining the combo corpus on
-// the client is a non-starter.
-export function useDeckAnalysis(state: Exclude<DeckState, "empty" | "loading">): AtlasResult<{
+/** How many near-miss closers to surface (the resolver returns the full ranked
+ *  list; the UI only wants the top handful). */
+const NEAR_MISS_CAP = 8;
+
+interface DeckCoverSideRow { own: number; subs: { family: string; count: number }[]; }
+interface DeckCoverageRow {
+  family: string; note: string | null;
+  emit: DeckCoverSideRow; consume: DeckCoverSideRow;
+}
+interface DeckRingRow { cards: string; ring: string; tier: string; pop: number; confidence: number | null; }
+interface DeckNearMissRow {
+  missing: string; ring: string; resultTier: string;
+  cands: { name: string; evidence: string; price: string; score: number }[];
+}
+interface DeckAnalysisRow {
+  coverage: DeckCoverageRow[]; rings: DeckRingRow[]; nearMiss: DeckNearMissRow[];
+}
+
+const toCoverSide = (s: DeckCoverSideRow, note?: string | null): CoverSide => ({
+  own: s.own,
+  ...(s.subs.length ? { subs: s.subs.map((x): [string, number] => [x.family, x.count]) } : {}),
+  ...(note ? { note } : {}),
+});
+
+const EMPTY_DECK = { coverage: [] as CoverRow[], rings: [] as Ring[], nearMiss: [] as NearMiss[] };
+
+export function useDeckAnalysis(cards: string[]): AtlasResult<{
   coverage: CoverRow[];
   rings: Ring[];
   nearMiss: NearMiss[];
-  ports: Port[];
 }> {
-  const cov = state === "full" ? COVERAGE.dense : COVERAGE.sparse;
-  return ready({ coverage: cov, rings: RINGS[state], nearMiss: NEARMISS[state], ports: PORTS });
+  const { data, loading, error } = useQuery(ANALYZE_DECK_QUERY, {
+    variables: { cards },
+    skip: cards.length === 0,
+  });
+
+  const result = useMemo(() => {
+    const a: DeckAnalysisRow | undefined = data?.discover?.atlas?.analyzeDeck;
+    if (!a) return EMPTY_DECK;
+
+    // note rides on the EMIT side, which is where the coverage chart reads it.
+    const coverage: CoverRow[] = a.coverage.map((r): CoverRow => [
+      r.family, toCoverSide(r.emit, r.note), toCoverSide(r.consume),
+    ]);
+
+    // Collapse rings that share the same card pair + family ring (the resolver
+    // can emit several combos behind one visible line); keep the most-popular.
+    const seen = new Set<string>();
+    const rings: Ring[] = [];
+    for (const r of a.rings) {
+      const k = `${r.cards}|${r.ring}`;
+      if (seen.has(k)) continue;
+      seen.add(k);
+      rings.push({
+        cards: r.cards, ring: r.ring, tier: r.tier as Tier, pop: r.pop,
+        ...(r.confidence != null ? { conf: r.confidence } : {}),
+      });
+    }
+
+    const nearMiss: NearMiss[] = a.nearMiss.slice(0, NEAR_MISS_CAP).map((nm): NearMiss => ({
+      missing: nm.missing,
+      ring: nm.ring,
+      resultTier: nm.resultTier as Tier,
+      cands: nm.cands.map((c): NearMissCand => ({
+        name: c.name, evidence: c.evidence, price: c.price, score: c.score,
+      })),
+    }));
+
+    return { coverage, rings, nearMiss };
+  }, [data]);
+
+  return { data: result, loading, error: error ?? null };
 }
 
 export const sampleDeck = (state: "full" | "sparse") => DECKS[state];
