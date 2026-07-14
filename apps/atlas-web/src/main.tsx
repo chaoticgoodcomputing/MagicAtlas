@@ -4,6 +4,7 @@ import { ApolloProvider } from "@apollo/client";
 import { client } from "./apollo";
 import { App } from "./App";
 import "./styles.css";
+import "./design/nocturne.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

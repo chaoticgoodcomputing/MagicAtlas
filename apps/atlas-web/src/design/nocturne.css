@@ -1,0 +1,343 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Nocturne — design-system tokens + MagicAtlas concept layer.
+
+   The token block is a faithful port of the Nocturne design system
+   (claude.ai/design project "Nocturne"): a quiet, compact dark interface on a
+   near-neutral blue-grey ground, Inter medium, 8px radii, a single blurple
+   accent used as line + glow rather than a flood.
+
+   Below the tokens sits the MagicAtlas concept layer: the four fidelity
+   *tiers*, the seventeen resource-*family* hues, oracle-clause underlines and
+   the confidence meter — the visual language the Atlas Explorer concepts add
+   on top of Nocturne.
+   ══════════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --color-bg: #161826;
+  --color-surface: #232532;
+  --color-text: #e9e9ed;
+  --color-accent: #9184d9;
+  --color-accent-2: #a7a1db;
+  --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
+
+  /* Tonal ramps — OKLCH on one shared lightness scale. */
+  --color-neutral-100: #f3f5fe;
+  --color-neutral-200: #e4e7f5;
+  --color-neutral-300: #cfd3e5;
+  --color-neutral-400: #b2b6ca;
+  --color-neutral-500: #9397ab;
+  --color-neutral-600: #75798c;
+  --color-neutral-700: #595d6c;
+  --color-neutral-800: #3f424d;
+  --color-neutral-900: #292b31;
+
+  --color-accent-100: #f5f4ff;
+  --color-accent-200: #e7e5fe;
+  --color-accent-300: #d2cefd;
+  --color-accent-400: #b5abfc;
+  --color-accent-500: #968ae0;
+  --color-accent-600: #796cbf;
+  --color-accent-700: #5d5294;
+  --color-accent-800: #423a6a;
+  --color-accent-900: #2b2741;
+
+  --color-section: #262a60;
+  --color-section-glow: #353b80;
+  --color-section-ghost: #4c5397;
+
+  --font-heading: "Inter", system-ui, sans-serif;
+  --font-heading-weight: 500;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --space-1: 2.8px;
+  --space-2: 5.6px;
+  --space-3: 8.4px;
+  --space-4: 11.2px;
+  --space-6: 16.8px;
+  --space-8: 22.4px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  --shadow-sm: 0 0 0 1px #3f424d;
+  --shadow-md: 0 0 0 1px #595d6c, 0 6px 18px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 0 0 1px #9397ab, 0 16px 40px rgba(0, 0, 0, 0.65);
+
+  /* MagicAtlas concept grounds — a touch deeper than Nocturne's surface so the
+     d3 panels read as insets, matching the concept canvas. */
+  --atlas-bg: #12131f;
+  --atlas-panel: #1a1b28;
+  --atlas-panel-2: #141522;
+  --atlas-svg: #0d0e17;
+  --atlas-border: #23252f;
+  --atlas-border-soft: #1e1f2b;
+  --atlas-muted: #75798c;
+  --atlas-muted-2: #9397ab;
+  --atlas-ink: #0a0b12;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { color-scheme: dark; }
+
+body {
+  margin: 0;
+  background: var(--atlas-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  margin: 0 0 var(--space-2);
+}
+h1 { font-size: 42px; }
+h2 { font-size: 32px; }
+h3 { font-size: 25px; }
+h4 { font-size: 20px; }
+h5 { font-size: 16px; }
+h6 { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
+p { margin: 0 0 var(--space-3); }
+a { color: var(--color-accent); text-underline-offset: 3px; }
+a:hover { color: var(--color-accent-300); }
+img { display: block; max-width: 100%; }
+
+.text-muted { color: color-mix(in srgb, var(--color-text) 55%, transparent); }
+.ws-mono { font-family: var(--font-mono); }
+
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+
+/* — fading rule (a Nocturne signature) — */
+.hr {
+  height: 1px; border: 0; margin: var(--space-4) 0;
+  background: linear-gradient(to right,
+    transparent, var(--color-divider) 48px,
+    var(--color-divider) calc(100% - 48px), transparent);
+}
+
+/* — buttons — */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; text-decoration: none;
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 13px; line-height: 1.2; color: var(--color-text);
+  background: transparent; border: 1px solid transparent;
+  padding: calc(var(--space-2) * 0.85) var(--space-3);
+  border-radius: var(--radius-md);
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { color: var(--color-accent); border-color: var(--color-accent); }
+.btn-primary:hover { background: color-mix(in srgb, var(--color-accent) 12%, transparent); }
+.btn-primary:active { background: color-mix(in srgb, var(--color-accent) 22%, transparent); }
+.btn-secondary { border-color: var(--color-divider); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.btn-ghost { color: var(--color-accent); padding-inline: var(--space-1); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+.btn-icon { width: 34px; height: 34px; padding: 0; }
+.btn-block { width: 100%; margin-top: var(--space-2); }
+
+/* — form fields — */
+.field > label {
+  display: block; font-size: 12px; margin-bottom: 5px;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+.input {
+  width: 100%; min-height: 36px; padding: 6px 10px; font: inherit;
+  font-size: 14px; color: var(--color-text); caret-color: var(--color-accent);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+}
+.input:hover { border-color: color-mix(in srgb, var(--color-text) 45%, transparent); }
+.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
+textarea.input { min-height: 90px; resize: vertical; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.6; }
+
+/* — segmented control — */
+.seg {
+  display: inline-flex; overflow: hidden;
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+}
+.seg-opt {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; font-size: 13px; cursor: pointer; color: var(--color-text);
+  background: transparent; border: 0;
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+}
+.seg-opt + .seg-opt { border-left: 1px solid var(--color-divider); }
+.seg-opt.active { color: var(--color-accent); box-shadow: inset 0 0 0 1px var(--color-accent); }
+.seg-opt:not(.active):hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+
+/* — cards — */
+.card {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-surface);
+}
+.card-kicker { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); }
+.card-title { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 17px; line-height: 1.2; }
+.card-body { margin: 0; font-size: 13px; opacity: 0.8; flex: 1; }
+.card-meta { display: flex; align-items: center; gap: 6px; font-size: 11px; color: color-mix(in srgb, var(--color-text) 50%, transparent); }
+.elev-sm { box-shadow: var(--shadow-sm); }
+.elev-md { box-shadow: var(--shadow-md); }
+.elev-lg { box-shadow: var(--shadow-lg); }
+
+/* — tags — */
+.tag {
+  display: inline-flex; align-items: center; font-size: 11px;
+  letter-spacing: 0.02em; padding: 3px 10px; border-radius: calc(var(--radius-md) * 0.75);
+}
+.tag-accent { background: var(--color-accent-800); color: var(--color-accent-100); }
+.tag-neutral { background: var(--color-neutral-800); color: var(--color-neutral-100); }
+.tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); }
+
+/* — data table — */
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th {
+  text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  padding: var(--space-2); border-bottom: 1px solid transparent;
+}
+.table td { padding: var(--space-2); border-bottom: 1px solid transparent; }
+.table thead tr {
+  background: linear-gradient(to right, transparent, var(--color-divider) 48px,
+    var(--color-divider) calc(100% - 48px), transparent) no-repeat bottom / 100% 1px;
+}
+.table tbody tr {
+  background: linear-gradient(to right, transparent,
+    color-mix(in srgb, var(--color-text) 8%, transparent) 48px,
+    color-mix(in srgb, var(--color-text) 8%, transparent) calc(100% - 48px), transparent) no-repeat bottom / 100% 1px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MagicAtlas concept layer — tiers, families, oracle clauses, confidence.
+   Family hues are injected as CSS variables from mock.ts (see applyFamilyVars).
+   ══════════════════════════════════════════════════════════════════════ */
+
+.atlas-shell { min-height: 100vh; }
+
+.atlas-nav {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center; gap: var(--space-6);
+  padding: var(--space-3) var(--space-6);
+  background: color-mix(in srgb, var(--atlas-bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--atlas-border-soft);
+}
+.atlas-nav .brand { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 18px; margin-right: var(--space-2); }
+.atlas-nav .brand small { color: var(--atlas-muted); font-weight: 400; font-size: 11px; display: block; letter-spacing: 0.02em; }
+.atlas-nav .nav-links { display: flex; gap: 2px; flex-wrap: wrap; margin-right: auto; }
+.atlas-nav .nav-links button {
+  background: transparent; border: 1px solid transparent; color: var(--atlas-muted-2);
+  font: inherit; font-size: 13px; padding: 6px 12px; border-radius: var(--radius-md); cursor: pointer;
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+}
+.atlas-nav .nav-links button:hover { color: var(--color-text); background: color-mix(in srgb, var(--color-text) 6%, transparent); }
+.atlas-nav .nav-links button.active { color: var(--color-accent); box-shadow: inset 0 0 0 1px var(--color-accent-700); }
+
+.atlas-main { max-width: 1280px; margin: 0 auto; padding: var(--space-8) var(--space-6) 96px; }
+
+.panel {
+  background: var(--atlas-panel); border: 1px solid var(--atlas-border);
+  border-radius: var(--radius-lg); padding: var(--space-6);
+}
+.panel-svg {
+  background:
+    radial-gradient(120% 120% at 50% 0%, #101120 0%, #0a0b12 100%);
+  border: 1px solid var(--atlas-border-soft); border-radius: var(--radius-md);
+}
+.section-head { margin-bottom: var(--space-4); }
+.section-head .kicker { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent); margin-bottom: var(--space-1); }
+.section-head p { color: var(--atlas-muted-2); max-width: 62ch; }
+
+/* stat tiles */
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-3); }
+.stat-tile { background: var(--atlas-panel); border: 1px solid var(--atlas-border); border-radius: var(--radius-md); padding: var(--space-4) var(--space-6); }
+.stat-tile .value { font-family: var(--font-heading); font-size: 30px; line-height: 1; }
+.stat-tile .label { color: var(--atlas-muted); font-size: 12px; margin-top: var(--space-2); }
+
+/* — Tiers — the two-channel encoding —
+   Where hue is free, tier owns hue (chips, dots). Where hue is spent on a
+   family (metro/synergy lines), tier drops to texture + opacity in SVG. */
+.tier-dot { width: 11px; height: 11px; border-radius: 50%; flex: none; display: inline-block; }
+.tier-Green    { --tier-color: #3fbf7f; }
+.tier-Amber    { --tier-color: #E0A53C; }
+.tier-Inferred { --tier-color: #9184d9; }
+.tier-Declared { --tier-color: #7f8399; }
+
+.tier-chip {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 11px;
+  padding: 2px 10px; border-radius: 20px; white-space: nowrap;
+  font-family: var(--font-mono); letter-spacing: 0.01em;
+}
+.tier-chip.tier-Green    { background: color-mix(in srgb, #3fbf7f 12%, transparent); border: 1px solid color-mix(in srgb, #3fbf7f 40%, transparent); color: #b6f0d3; }
+.tier-chip.tier-Amber    { background: color-mix(in srgb, #E0A53C 12%, transparent); border: 1px solid color-mix(in srgb, #E0A53C 40%, transparent); color: #f2d69b; }
+.tier-chip.tier-Inferred {
+  background: repeating-linear-gradient(45deg, #221f33, #221f33 3px, #1c1a2b 3px, #1c1a2b 6px);
+  border: 1px dashed #5d5294; color: #cabfff;
+}
+.tier-chip.tier-Declared { background: transparent; border: 1px dotted #595d6c; color: #9397ab; }
+.tier-chip .tier-dot { width: 8px; height: 8px; background: var(--tier-color); }
+.tier-chip.tier-Inferred .tier-dot { background: transparent; border: 1.5px dashed #9184d9; }
+.tier-chip.tier-Declared .tier-dot { background: transparent; border: 1.5px dotted #75798c; }
+
+/* — confidence meter (Inferred only) — */
+.conf-meter {
+  position: relative; height: 8px; width: 100%; min-width: 60px; border-radius: 4px; overflow: hidden;
+  background: repeating-linear-gradient(45deg, #2a2740 0 4px, #211f33 4px 8px);
+  border: 1px solid #423a6a;
+}
+.conf-meter > span { position: absolute; inset: 0; background: linear-gradient(90deg, #5d5294, #9184d9); }
+
+/* — family chips / dots — */
+.fam-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.fam-chip {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
+  background: transparent; border: 1px solid var(--atlas-border); color: var(--atlas-muted-2);
+  font: inherit; font-size: 12px; padding: 4px 10px; border-radius: 20px;
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+}
+.fam-chip:hover { color: var(--color-text); border-color: var(--color-neutral-700); }
+.fam-chip.active { color: var(--color-text); }
+
+/* — oracle clause underlines — */
+.oracle-text { line-height: 1.85; font-size: 14px; }
+.oracle-seg { position: relative; }
+.oracle-seg.port {
+  border-bottom: 2px solid var(--seg-hue);
+  background: color-mix(in srgb, var(--seg-hue) 18%, transparent);
+  border-radius: 3px; padding: 0 3px; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.oracle-seg.port:hover { background: color-mix(in srgb, var(--seg-hue) 26%, transparent); }
+.oracle-seg.port.dim { background: color-mix(in srgb, var(--color-text) 7%, transparent); border-bottom-color: transparent; color: var(--atlas-muted); }
+.oracle-seg .port-tag {
+  font-family: var(--font-mono); font-size: 8.5px; vertical-align: super;
+  color: var(--seg-hue); margin-left: 2px; white-space: nowrap; letter-spacing: 0.02em;
+}
+.oracle-seg.port.dim .port-tag { color: var(--atlas-muted); }
+
+/* — animations — */
+@keyframes wsPulse { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.7; } }
+@keyframes wsSpin { to { transform: rotate(360deg); } }
+.ws-spin { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--atlas-border); border-top-color: var(--color-accent); animation: wsSpin 0.8s linear infinite; }
+
+/* — misc concept-view layout — */
+.view-grid { display: grid; gap: var(--space-6); }
+.two-col { display: grid; grid-template-columns: 1fr 340px; gap: var(--space-6); align-items: start; }
+@media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+.rail { display: flex; flex-direction: column; gap: var(--space-4); }
+.rail h5 { color: var(--atlas-muted); margin: 0; }
+.list-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 13px; border-bottom: 1px solid var(--atlas-border-soft); }
+.list-row:last-child { border-bottom: 0; }
+.empty-state { display: grid; place-items: center; min-height: 260px; color: var(--atlas-muted); text-align: center; padding: var(--space-8); }
+.loading-state { display: grid; place-items: center; min-height: 260px; gap: var(--space-3); color: var(--atlas-muted); }
