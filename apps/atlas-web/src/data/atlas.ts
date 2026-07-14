@@ -19,10 +19,12 @@
 //   useHeadlineStats → totalCount of cards / combos / ports / families / edges / archetypes
 //   useCardNeighbours→ portRows filtered by family-set + side (emit/consume)
 //   useDeckAnalysis  → analyzeDeck(cards) — decklist → coverage/rings/near-miss
+//   useOracle        → cardRows.oracleText + portRows.spans, reconstructed into
+//                      highlighted segments. Falls back to the hand-authored
+//                      ORACLE map until MAST's char offsets are reseeded (spans
+//                      are null on every port today → fallback is what renders).
 //
 // STILL MOCK (no resolver yet):
-//   useOracle        → MAST oracle char-offset spans are dormant ([JsonIgnore]),
-//                      so there are no live port spans to highlight yet.
 //   useTiers         → the four fidelity tiers are display metadata, not data.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -32,6 +34,7 @@ import { useQuery } from "@apollo/client";
 import {
   ANALYZE_DECK_QUERY,
   ARCHETYPES_QUERY, FAMILY_CARDS_QUERY, FAMILY_GRAPH_QUERY, HEADLINE_STATS_QUERY,
+  ORACLE_SPANS_QUERY,
   PORT_CANDIDATES_QUERY,
 } from "../queries";
 import {
@@ -39,8 +42,8 @@ import {
   TIERS,
   edgeKey, ensureFamily, supergroupsOf,
   type Archetype, type Candidate, type CoverRow, type CoverSide, type Edge,
-  type Family, type NearMiss, type NearMissCand, type OracleCard, type Ring,
-  type Tier,
+  type Family, type NearMiss, type NearMissCand, type OracleCard, type OracleSeg,
+  type Ring, type Side, type Tier,
 } from "./mock";
 
 /** Uniform result envelope so views can render loading/empty without caring
@@ -165,11 +168,88 @@ export function useStation(family: string): AtlasResult<{
 }
 
 // ── Card ports + oracle spans (Card explorer, Oracle showcase) ───────────────
-// STILL MOCK. MAST emits port structure but its oracle char-offset spans are
-// dormant ([JsonIgnore]); until they land there is no live span data to
-// highlight, so the hand-authored ORACLE segments stand in.
+// LIVE (with a mock fallback). The card's full newline-preserving oracleText
+// plus every port's char-offset spans reconstruct the highlighted segment list
+// OracleText.tsx consumes. Each port carries `spans: int[][]` — every [start,end)
+// pair is an offset into the *whole* oracleText (oracleLineIndex is carried but
+// the offsets are already absolute over the multi-line text, so we build one
+// flat segment list over the full string rather than per line).
+//
+// MAST's char offsets are dormant ([JsonIgnore]) until the pipeline is reseeded,
+// so `spans` is null on every port today. When no card resolves, or no port has
+// any span yet, we fall back to the hand-authored ORACLE map so the Card
+// Explorer / Design System keep rendering. After reseed, spanned cards switch to
+// live highlighting automatically; cards MAST hasn't spanned still fall back.
+
+interface OraclePortRow {
+  family: string;
+  side: string;
+  oracleLineIndex: number;
+  spans: number[][] | null;
+}
+interface OracleCardRow { oracleText: string | null; typeLine: string | null; }
+
+/** One resolved span: an absolute [start,end) range over the full oracle text,
+ *  tagged with the port family + role it highlights. */
+interface SpanEntry { start: number; end: number; role: Side; fam: string; }
+
+/** Split `text` at the (already family-tagged) spans into the alternating
+ *  plain/highlighted segment list OracleText renders. Overlapping spans keep the
+ *  first and skip the rest; out-of-range / empty spans are dropped defensively. */
+function segsFromSpans(text: string, entries: SpanEntry[]): OracleSeg[] {
+  const clean = entries
+    .filter((e) => e.start >= 0 && e.end <= text.length && e.start < e.end)
+    .sort((a, b) => a.start - b.start || a.end - b.end);
+
+  const segs: OracleSeg[] = [];
+  let cursor = 0;
+  for (const e of clean) {
+    if (e.start < cursor) continue; // overlaps a kept span — skip defensively
+    if (e.start > cursor) segs.push({ t: text.slice(cursor, e.start) });
+    segs.push({ t: text.slice(e.start, e.end), role: e.role, fam: e.fam });
+    cursor = e.end;
+  }
+  if (cursor < text.length) segs.push({ t: text.slice(cursor) });
+  return segs;
+}
+
+/** Build an OracleCard from live rows, or null if the card / its spans are not
+ *  available yet (signals the caller to fall back to the mock ORACLE map). */
+function oracleFromLive(
+  card: OracleCardRow | undefined,
+  ports: OraclePortRow[],
+): OracleCard | null {
+  const text = card?.oracleText;
+  if (!text) return null; // no live card → fall back
+
+  const entries: SpanEntry[] = [];
+  for (const p of ports) {
+    if (!p.spans) continue; // span-less port (dormant offsets) — nothing to draw
+    const role: Side = p.side === "emit" ? "emit" : "consume";
+    for (const span of p.spans) {
+      if (!span || span.length < 2) continue;
+      entries.push({ start: span[0], end: span[1], role, fam: p.family });
+    }
+  }
+  if (entries.length === 0) return null; // no spans anywhere → fall back
+
+  return { type: card.typeLine ?? "", segs: segsFromSpans(text, entries) };
+}
+
 export function useOracle(cardName: string): AtlasResult<OracleCard | null> {
-  return ready(ORACLE[cardName] ?? null);
+  const { data, loading, error } = useQuery(ORACLE_SPANS_QUERY, {
+    variables: { card: cardName },
+    skip: !cardName,
+  });
+
+  const oracle = useMemo<OracleCard | null>(() => {
+    const atlas = data?.discover?.atlas;
+    const card: OracleCardRow | undefined = atlas?.cardRows?.nodes?.[0];
+    const ports: OraclePortRow[] = atlas?.portRows?.nodes ?? [];
+    return oracleFromLive(card, ports) ?? ORACLE[cardName] ?? null;
+  }, [data, cardName]);
+
+  return { data: oracle, loading, error: error ?? null };
 }
 
 /** Live portRows have no tier yet; candidates surface at the neutral middle. */

@@ -241,6 +241,26 @@ export const ANALYZE_DECK_QUERY = gql`
   }
 `;
 
+// Oracle port spans for one card (Card Explorer / Oracle showcase). The card's
+// full newline-preserving oracle text plus every port's char-offset spans into
+// it; data/atlas.ts reconstructs the highlighted segment list. `spans` is
+// int[][] (each [start,end) an offset into oracleText) and is null until MAST's
+// offsets are reseeded — the hook falls back to the hand-authored ORACLE map.
+export const ORACLE_SPANS_QUERY = gql`
+  query OracleSpans($card: String!) {
+    discover {
+      atlas {
+        cardRows(where: { name: { eq: $card } }, first: 1) {
+          nodes { oracleText typeLine }
+        }
+        portRows(where: { card: { eq: $card } }, first: 50) {
+          nodes { family side oracleLineIndex spans }
+        }
+      }
+    }
+  }
+`;
+
 // Candidate ports on one side of a family set (Card Explorer emitter/consumer
 // columns). Family set already expanded to include super/subgroups.
 export const PORT_CANDIDATES_QUERY = gql`
