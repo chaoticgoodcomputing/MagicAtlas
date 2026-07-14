@@ -59,7 +59,24 @@ public sealed class OracleParser
     foreach (var clause in clauses)
     {
       var (clauseAbilities, clauseDiagnostics) = ParseClause(clause);
-      abilities.AddRange(clauseAbilities);
+
+      // Oracle-text provenance (upstream-atlas-data-plan §4): stamp each top-level
+      // ability with the originating clause's span + oracle line index so downstream
+      // consumers (port projection → Explorer span highlighting) can trace a port
+      // back to the exact substring that produced it. Non-destructive: a parser that
+      // already attributed a base span keeps it; UnparsedAbility's own serialized
+      // span is untouched (the `with` binds the base, in-memory SourceSpan). These
+      // fields are [JsonIgnore], so this does not perturb the parser gold fixtures.
+      var lineIndex = OracleLineIndexFor(oracleText, clause.SourceSpan.Start);
+      foreach (var ability in clauseAbilities)
+      {
+        var stamped = ability with
+        {
+          SourceSpan = ability.SourceSpan ?? clause.SourceSpan,
+          OracleLineIndex = lineIndex,
+        };
+        abilities.Add(stamped);
+      }
       diagnostics.AddRange(clauseDiagnostics);
 
       // Count parsed vs failed abilities. An ability is a failure if it IS an
@@ -120,6 +137,26 @@ public sealed class OracleParser
       .ToList();
 
     return (abilities, diagnostics);
+  }
+
+  /// <summary>
+  /// The 0-based oracle-text line index a clause starts on: the number of newline
+  /// characters in <paramref name="oracleText"/> before <paramref name="offset"/>.
+  /// Clause spans are offsets into the original (newline-preserving) oracle text,
+  /// so counting preceding newlines yields the paragraph/line the ability came from.
+  /// </summary>
+  private static int OracleLineIndexFor(string oracleText, int offset)
+  {
+    var bound = Math.Clamp(offset, 0, oracleText.Length);
+    var lines = 0;
+    for (var i = 0; i < bound; i++)
+    {
+      if (oracleText[i] == '\n')
+      {
+        lines++;
+      }
+    }
+    return lines;
   }
 
   /// <summary>

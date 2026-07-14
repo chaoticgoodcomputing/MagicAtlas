@@ -69,6 +69,22 @@ public sealed record PortNode
   public required string Identity { get; init; }
 
   /// <summary>
+  /// The oracle-text span of the ability this port was projected from (MAST
+  /// provenance — upstream-atlas-data-plan §4), when the projected ability JSON
+  /// carries a <c>SourceSpan</c>. <c>null</c> when absent (combat-presence and
+  /// predefined-token ports have no ability span; and until MAST span serialization
+  /// is enabled the projected JSON omits it). Additive and null-safe; not part of
+  /// <see cref="Identity"/>, so it never affects port de-duplication.
+  /// </summary>
+  public MagicAST.AST.TextSpan? SourceSpan { get; init; }
+
+  /// <summary>
+  /// The 0-based oracle-text line index of the projected ability, when the ability
+  /// JSON carries an <c>OracleLineIndex</c>; else 0.
+  /// </summary>
+  public int OracleLineIndex { get; init; }
+
+  /// <summary>
   /// Copy-token inheritance (copy-inheritance-scope.md, Decision 1/2): the parsed
   /// <see cref="MagicAST.AST.Effects.TokenCopy.CopyModification"/>s an <c>emit:copy</c> applies to the
   /// copy it creates — Kiki's <c>abilityAdder:haste</c>, Helm's <c>supertypeRemover:[Legendary]</c>,
@@ -314,6 +330,21 @@ public sealed class PortWalk
       if (requiresCounter is not null)
         for (var i = 0; i < consumes.Count; i++)
           consumes[i] = consumes[i] with { RequiresCounter = requiresCounter };
+
+      // Oracle-text provenance (upstream-atlas-data-plan §4): thread the projecting
+      // ability's SourceSpan + OracleLineIndex (populated by the MAST parser) onto
+      // every port it produced, so a port traces back to the exact oracle substring.
+      // Null-safe: when the ability JSON carries no span (the default until MAST span
+      // serialization is enabled) this is a no-op and the ports keep null/0.
+      var abilitySpan = ReadSpan(ability);
+      var abilityLine = ability["OracleLineIndex"]?.GetValue<int>() ?? 0;
+      if (abilitySpan is not null || abilityLine != 0)
+      {
+        for (var i = 0; i < consumes.Count; i++)
+          consumes[i] = consumes[i] with { SourceSpan = abilitySpan, OracleLineIndex = abilityLine };
+        for (var i = 0; i < emits.Count; i++)
+          emits[i] = emits[i] with { SourceSpan = abilitySpan, OracleLineIndex = abilityLine };
+      }
 
       ports.AddRange(consumes);
       ports.AddRange(emits);
@@ -990,6 +1021,23 @@ public sealed class PortWalk
 
   private static ObjectFilter? Filter(JsonNode? node) =>
     node?.Deserialize<ObjectFilter>(MagicAST.MagicASTJsonOptions.Strict);
+
+  /// <summary>
+  /// Read an ability's <c>SourceSpan</c> (MAST oracle-text provenance) from its JSON,
+  /// tolerating either PascalCase (<c>Start</c>/<c>Length</c>) or camelCase serialization.
+  /// <c>null</c> when the ability carries no span (the default until MAST span
+  /// serialization is enabled) or the span is malformed — never fabricated.
+  /// </summary>
+  private static MagicAST.AST.TextSpan? ReadSpan(JsonObject ability)
+  {
+    if (ability["SourceSpan"] is not JsonObject span)
+      return null;
+    var start = (span["Start"] ?? span["start"])?.GetValue<int>();
+    var length = (span["Length"] ?? span["length"])?.GetValue<int>();
+    if (start is null || length is null)
+      return null;
+    return new MagicAST.AST.TextSpan(start.Value, length.Value);
+  }
 
   /// <summary>The affected player of a life effect → an <see cref="ObjectFilter"/> subject the operator
   /// can tier. <c>You</c> → controller You; <c>Opponent</c>/<c>EachOpponent</c> → controller Opponent
