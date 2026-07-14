@@ -28,6 +28,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 using MagicAtlas.Api.Data;
+using MagicAtlas.Api.Resolvers;
 using MagicAtlas.Api.Seed;
 using Microsoft.EntityFrameworkCore;
 using Trax.Api.Extensions;
@@ -101,6 +102,10 @@ builder.Services.AddTraxGraphQL(graphql =>
             opts.IncludeTotalCount = true;
         }))
         .AddDbContext<AtlasDbContext>()
+        // ── P2 deck resolver (plan §3): computed candidates / analyzeDeck fields.
+        // Extends the Trax-generated "AtlasDiscoverQueries" object (the type behind
+        // discover.atlas) via a HotChocolate [ExtendObjectType] type extension.
+        .AddTypeExtension<AtlasDeckResolver>()
         .AllowIntrospection(_ => true)
 );
 
