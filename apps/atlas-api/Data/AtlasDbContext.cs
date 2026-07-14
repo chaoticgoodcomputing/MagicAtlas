@@ -1,4 +1,7 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MagicAtlas.Api.Data;
 
@@ -55,6 +58,19 @@ public class AtlasDbContext : DbContext
         port.HasIndex(p => p.Card);
         port.HasIndex(p => p.Family);
         port.HasIndex(p => p.Side);
+        // Spans is a jagged int[][] (list of [start,end) oracle offsets). Npgsql won't write a
+        // bare Int32[][] to jsonb without EnableDynamicJson (which Trax's data source doesn't opt
+        // into), so serialize it ourselves to a JSON string — Npgsql writes string -> jsonb. Unlike
+        // the nested CoStars case, spans is queried as a whole scalar list ([[Int]]) with no nested
+        // sub-selection, so the value converter doesn't break its GraphQL projection.
+        port.Property(p => p.Spans).HasConversion(
+            new ValueConverter<int[][]?, string?>(
+                v => v == null ? null : JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                v => v == null ? null : JsonSerializer.Deserialize<int[][]>(v, (JsonSerializerOptions?)null)),
+            new ValueComparer<int[][]?>(
+                (l, r) => JsonSerializer.Serialize(l, (JsonSerializerOptions?)null) == JsonSerializer.Serialize(r, (JsonSerializerOptions?)null),
+                v => v == null ? 0 : JsonSerializer.Serialize(v, (JsonSerializerOptions?)null).GetHashCode(),
+                v => v == null ? null : JsonSerializer.Deserialize<int[][]>(JsonSerializer.Serialize(v, (JsonSerializerOptions?)null), (JsonSerializerOptions?)null)));
 
         var family = modelBuilder.Entity<ResourceFamilyRow>();
         family.HasKey(f => f.Family);
