@@ -7,7 +7,8 @@ services:
       POSTGRES_PASSWORD: atlas
       POSTGRES_DB: atlas
     ports:
-      - "5432:5432"
+      # Host 55432 → container 5432, to avoid colliding with a stock local Postgres.
+      - "55432:5432"
     volumes:
       - atlas-pgdata:/var/lib/postgresql/data
 

@@ -5,7 +5,7 @@
   "sourceRoot": "apps/atlas-web/src",
   "targets": {
     "dev": {
-      "//": "Vite dev server for the concept explorer at localhost:5173. The concept surfaces run on the in-file sample corpus and need no backend; only the Embedding view talks to atlas-api (use dev:live for that).",
+      "//": "Vite dev server for the concept explorer at localhost:55173. The concept surfaces run on the in-file sample corpus and need no backend; only the Embedding view talks to atlas-api (use dev:live for that).",
       "executor": "nx:run-commands",
       "options": {
         "commands": ["vite"],
@@ -57,23 +57,14 @@
         "parallel": false
       }
     },
-    "db": {
-      "//": "One-shot: bring up the atlas-api Postgres in the background. Because it terminates, it is a valid dependsOn for any live-data target (unlike the long-running GraphQL server, which must be started separately).",
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": ["docker compose up -d"],
-        "cwd": "apps/atlas-api",
-        "parallel": false
-      }
-    },
     "dev:live": {
-      "//": "Dev server wired for the live Embedding view: ensures Postgres is up first (dependsOn db). Start the GraphQL API separately — `dotnet run --project apps/atlas-api` — since a long-running server cannot be a dependsOn. This is the template for future GQL/data-run dependencies: add one-shot targets and list them here.",
+      "//": "Dev server wired for the live Embedding view: ensures atlas-api's Postgres is up first (cross-project dependsOn atlas-api:db). Start the GraphQL API separately — `nx serve atlas-api` — since a long-running server cannot be a dependsOn. This is the template for future GQL/data-run dependencies: add one-shot targets and list them here.",
       "executor": "nx:run-commands",
       "options": {
         "commands": ["vite"],
         "cwd": "apps/atlas-web"
       },
-      "dependsOn": ["db"]
+      "dependsOn": [{ "projects": "atlas-api", "target": "db" }]
     }
   },
   "tags": ["type:app", "scope:web"]

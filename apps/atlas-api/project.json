@@ -1,0 +1,66 @@
+{
+  "name": "atlas-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/atlas-api",
+  "targets": {
+    "restore": {
+      "//": "Restore NuGet packages for the API.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet restore"],
+        "cwd": "apps/atlas-api",
+        "parallel": false
+      }
+    },
+    "build": {
+      "//": "Build the Trax + HotChocolate GraphQL API (net10.0).",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet build"],
+        "cwd": "apps/atlas-api",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
+    },
+    "db": {
+      "//": "One-shot: bring up the atlas Postgres (docker compose up -d). Terminates, so it is a valid dependsOn for serve and for downstream live-data targets.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["docker compose up -d"],
+        "cwd": "apps/atlas-api",
+        "parallel": false
+      }
+    },
+    "db:down": {
+      "//": "Stop the Postgres container (keeps the volume). Add --volumes to also drop seeded data.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["docker compose down"],
+        "cwd": "apps/atlas-api",
+        "parallel": false
+      }
+    },
+    "serve": {
+      "//": "Run the GraphQL server at http://localhost:55250/trax/graphql (self-seeds Scryfall on first run). dependsOn db brings Postgres up first; the server itself is long-running, so it can never be a dependsOn of anything else — depend on 'db' or a future one-shot 'data' target instead.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run"],
+        "cwd": "apps/atlas-api",
+        "parallel": false
+      },
+      "dependsOn": ["db"]
+    },
+    "watch": {
+      "//": "Hot-reload dev server (dotnet watch run) at :55250.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet watch run"],
+        "cwd": "apps/atlas-api",
+        "parallel": false
+      },
+      "dependsOn": ["db"]
+    }
+  },
+  "tags": ["type:app", "scope:api"]
+}

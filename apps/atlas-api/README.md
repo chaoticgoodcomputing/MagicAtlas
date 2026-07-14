@@ -24,9 +24,9 @@ dotnet run --project apps/atlas-api
 cd apps/atlas-web && pnpm install && pnpm dev
 ```
 
-- GraphQL IDE: <http://localhost:5250/trax/graphql>
-- Web UI: <http://localhost:5173>
-- Health: <http://localhost:5250/trax/health>
+- GraphQL IDE: <http://localhost:55250/trax/graphql>
+- Web UI: <http://localhost:55173>
+- Health: <http://localhost:55250/trax/health>
 
 ## Example queries
 
