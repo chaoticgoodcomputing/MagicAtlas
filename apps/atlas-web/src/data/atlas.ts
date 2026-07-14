@@ -17,7 +17,9 @@
 //   useStation       → live family graph + portRows (top cards per family)
 //   useArchetypes    → archetypeRows(order: realizingCombos DESC)
 //   useHeadlineStats → totalCount of cards / combos / ports / families / edges / archetypes
-//   useCardNeighbours→ portRows filtered by family-set + side (emit/consume)
+//   useCardNeighbours→ portRows filtered by family-set + side (emit/consume),
+//                      each candidate carrying its live fidelity `tier`
+//                      (empty/null → a neutral Amber fallback)
 //   useDeckAnalysis  → analyzeDeck(cards) — decklist → coverage/rings/near-miss
 //   useOracle        → cardRows.oracleText + portRows.spans, reconstructed into
 //                      highlighted segments. Falls back to the hand-authored
@@ -39,7 +41,7 @@ import {
 } from "../queries";
 import {
   CARDPOOL, DECKS, FAMCARDS, GROUPS, HEADLINE_STATS, ORACLE,
-  TIERS,
+  TIERS, tierRank,
   edgeKey, ensureFamily, supergroupsOf,
   type Archetype, type Candidate, type CoverRow, type CoverSide, type Edge,
   type Family, type NearMiss, type NearMissCand, type OracleCard, type OracleSeg,
@@ -252,29 +254,49 @@ export function useOracle(cardName: string): AtlasResult<OracleCard | null> {
   return { data: oracle, loading, error: error ?? null };
 }
 
-/** Live portRows have no tier yet; candidates surface at the neutral middle. */
-const CANDIDATE_TIER: Tier = "Amber";
+/** Neutral fallback for ports whose tier is empty/null (pre-reseed, or any port
+ *  MAST hasn't tiered): surface them at the middle of the ladder rather than
+ *  showing a blank tier. The tier ladder is Green < Amber < Inferred < Declared;
+ *  "Amber" is that neutral middle. */
+const FALLBACK_TIER: Tier = "Amber";
+
+/** The four known tiers, used to validate the live `tier` string before we cast
+ *  it — an unrecognized value falls back to FALLBACK_TIER too. */
+const KNOWN_TIERS = new Set<string>(["Green", "Amber", "Inferred", "Declared"]);
+
+/** Coerce a live port `tier` string (nullable, possibly "" or an unknown value)
+ *  into a valid Tier, falling back to the neutral middle so the UI never renders
+ *  a blank tier. */
+const tierOf = (raw: string | null | undefined): Tier =>
+  raw && KNOWN_TIERS.has(raw) ? (raw as Tier) : FALLBACK_TIER;
 
 /** Dedupe portRows into one Candidate per card, preferring an exact-family port
- *  over a super/subgroup one, and flagging lattice matches as `via`. */
+ *  over a super/subgroup one, and flagging lattice matches as `via`. Each
+ *  candidate carries the live port `tier` (defensively coerced), and the list is
+ *  sorted best-fidelity-first by tierRank, then the existing via/name tiebreak. */
 function candidatesFrom(
-  data: { discover?: { atlas?: { portRows?: { nodes?: { card: string; family: string }[] } } } } | undefined,
+  data: { discover?: { atlas?: { portRows?: { nodes?: { card: string; family: string; tier?: string | null }[] } } } } | undefined,
   queriedFam: string,
 ): Candidate[] {
   const nodes = data?.discover?.atlas?.portRows?.nodes ?? [];
-  const byCard = new Map<string, string>(); // card → chosen port family
+  const byCard = new Map<string, { family: string; tier: string | null }>(); // card → chosen port
   for (const n of nodes) {
     const cur = byCard.get(n.card);
-    if (cur === undefined || (cur !== queriedFam && n.family === queriedFam)) {
-      byCard.set(n.card, n.family);
+    if (cur === undefined || (cur.family !== queriedFam && n.family === queriedFam)) {
+      byCard.set(n.card, { family: n.family, tier: n.tier ?? null });
     }
   }
   return [...byCard.entries()]
-    .map(([card, port]): Candidate => ({
-      card, in: null, out: null, tier: CANDIDATE_TIER,
+    .map(([card, { family: port, tier }]): Candidate => ({
+      card, in: null, out: null, tier: tierOf(tier),
       via: port !== queriedFam, port,
     }))
-    .sort((a, b) => Number(a.via) - Number(b.via) || a.card.localeCompare(b.card));
+    .sort(
+      (a, b) =>
+        tierRank[a.tier] - tierRank[b.tier] ||
+        Number(a.via) - Number(b.via) ||
+        a.card.localeCompare(b.card),
+    );
 }
 
 /** Explorer left/right columns: emitters of what a card consumes, consumers of

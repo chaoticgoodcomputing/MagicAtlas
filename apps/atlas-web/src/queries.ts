@@ -263,12 +263,16 @@ export const ORACLE_SPANS_QUERY = gql`
 
 // Candidate ports on one side of a family set (Card Explorer emitter/consumer
 // columns). Family set already expanded to include super/subgroups.
+// `tier` is the port's fidelity tier (Green/Amber/Inferred/Declared); it is
+// nullable and stays null until the pipeline reseeds the backfilled tiers — the
+// hook falls back to a neutral tier so the UI never shows a blank one. The
+// PortRow schema exposes no `confidence` field, so none is selected here.
 export const PORT_CANDIDATES_QUERY = gql`
   query PortCandidates($families: [String!]!, $side: String!) {
     discover {
       atlas {
         portRows(where: { side: { eq: $side }, family: { in: $families } }, first: 200) {
-          nodes { card family side }
+          nodes { card family side tier }
         }
       }
     }
