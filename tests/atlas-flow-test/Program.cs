@@ -5,10 +5,12 @@ using Flowthru.Diagnostics;
 using Flowthru.Hosting;
 using Flowthru.Step.Python;
 using MagicAtlas.Data;
+using MagicAtlas.Flows.CardAtlas;
 using MagicAtlas.Flows.CardProcessing;
 using MagicAtlas.Flows.FineTune;
 using MagicAtlas.Flows.FineTuneEval;
 using MagicAtlas.Flows.Ingest;
+using MagicAtlas.Flows.InteractionTriage;
 using MagicAtlas.Flows.OracleEmbedding;
 using MagicAtlas.Flows.Reporting;
 using Microsoft.Extensions.Configuration;
@@ -87,6 +89,12 @@ public class Program
       Path.Combine(basePath, "..", "..", "libs", "atlas-flows")
     );
     var venvPath = Path.Combine(atlasFlowsRoot, ".venv");
+
+    // The promoted CardAtlas reconstruction reads the vendored MagicAST type ontology (curated in the
+    // standalone mtg-rules project's _03_Primary layer). Resolved off the atlas-flows sibling path.
+    var ontologyPath = Path.GetFullPath(
+      Path.Combine(atlasFlowsRoot, "..", "mtg-rules", "Data", "_03_Primary", "Datasets", "type-ontology.json")
+    );
 
     var configuration = new ConfigurationBuilder()
       .SetBasePath(basePath)
@@ -223,6 +231,31 @@ public class Program
           "Diagnostic: encodes the corpus + training-pair set under base AND fine-tuned "
             + "models and emits a base-vs-fine-tuned health scorecard "
             + "(geometry + per-source triplet margins). Run on demand."
+        );
+
+      // Promoted out of tests/magic-ast-tests (upstream-atlas-data-plan §0/§6 P0): the CardAtlas
+      // reporting layer (D1–D4) + the combo-anchor pick surface. Both read file-drop inputs from the
+      // _02_Intermediate / _07_ModelOutput layers (combos.json, card-inputs.json, parse-records.json)
+      // and write the headline dumps under _08_Reporting/dumps/ for the atlas-api seeder (plan §2 A).
+      flowthru
+        .RegisterFlow<Catalog>(
+          "CardAtlas",
+          catalog => CardAtlasFlow.Create(catalog, ontologyPath)
+        )
+        .WithDescription(
+          "The CardAtlas data layer (D1–D4) over the parse-ready CSB combo-card union: card↔port index "
+            + "(card-ports/card-meta), per-combo reconstructed loops (combo-instances), the resource "
+            + "subway map (resource-graph), and the realized archetype catalog (archetype-catalog)."
+        );
+
+      flowthru
+        .RegisterFlow<Catalog>(
+          "ComboAnchors",
+          ComboAnchorsFlow.Create
+        )
+        .WithDescription(
+          "The combo-anchored pick surface (combo-anchor-report): unparsed hub cards ranked by the "
+            + "combo-popularity value each gates. Needs a parse-records.json file-drop."
         );
     });
   }

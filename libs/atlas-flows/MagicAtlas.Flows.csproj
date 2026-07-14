@@ -15,6 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- The promoted CardAtlas reporting flow parses oracle text (MagicAST) and reconstructs the
+         port-graph interaction cycles (MagicAST.Interaction) that back the D1–D4 datasets. -->
+    <ProjectReference Include="../magic-ast/MagicAST.csproj" />
+    <ProjectReference Include="../mast-interaction/MagicAST.Interaction.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="pyproject.toml" />
     <None Include="Flows/**/*.py" />
   </ItemGroup>
