@@ -73,38 +73,148 @@ public static partial class CardPortsStep
       foreach (var name in unionNames)
       {
         var dto = byName[name];
-        var distinctPorts = GraphFor(name)
+        var portGroups = GraphFor(name)
           .Ports.GroupBy(p => p.Label, StringComparer.Ordinal)
-          .Select(g => g.First())
-          .OrderBy(p => p.Label, StringComparer.Ordinal)
+          .OrderBy(g => g.Key, StringComparer.Ordinal)
           .ToList();
-        foreach (var p in distinctPorts)
+        foreach (var g in portGroups)
+        {
+          var p = g.First();
           ports.Add(new CardPortRow
           {
             Card = name,
             Label = p.Label,
             Family = ResourceFamilies.Of(p.Label),
             Side = p.Label.StartsWith("emit:", StringComparison.Ordinal) ? "emit" : "consume",
+            Tier = TierOf(g),
             OracleLineIndex = p.OracleLineIndex,
             Spans = p.SourceSpan is MagicAST.AST.TextSpan s
               ? new[] { new[] { s.Start, s.End } }
               : null,
           });
+        }
         metas.Add(new CardMetaRow
         {
           Card = name,
           ColorIdentity = dto.ColorIdentity is { Count: > 0 } ci ? string.Concat(ci) : "",
           Cmc = DeriveCmc(dto.ManaCost),
           TypeLine = dto.TypeLine,
-          PortCount = distinctPorts.Count,
+          PortCount = portGroups.Count,
+        });
+      }
+
+      // ── Deliverable 2: Inferred / Declared statistical backfill ─────────────────────────────────────
+      // Cards catalogued in the combo corpus but with NO parsed ports (unparsed / unparseable) still need
+      // to be displayable (statistical-backfill-direction; the fidelity ladder's Inferred/Declared tiers).
+      // For each such card, infer its resource family from the MODAL family among its parse-ready combo
+      // co-stars' ports — tiered Inferred, with a confidence = the fraction of those co-stars sharing that
+      // family. A card with no usable co-star signal (no parse-ready co-star projecting a canonical family)
+      // is tiered Declared (catalogued only). These rows are ADDITIVE to the parsed index; FamilyRollupStep
+      // filters the backfill tiers back out, so they never inflate the realized D2/D3 analytics.
+      var coStars = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+      foreach (var combo in inputs.Combos)
+      {
+        var names = combo.Cards.Select(c => c.Name).Distinct(StringComparer.Ordinal).ToList();
+        foreach (var a in names)
+        {
+          if (!coStars.TryGetValue(a, out var set))
+            coStars[a] = set = new HashSet<string>(StringComparer.Ordinal);
+          foreach (var b in names)
+            if (!string.Equals(a, b, StringComparison.Ordinal))
+              set.Add(b);
+        }
+      }
+
+      var canonFamilies = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+      HashSet<string> CanonFamiliesOf(string name)
+      {
+        if (canonFamilies.TryGetValue(name, out var fs))
+          return fs;
+        fs = GraphFor(name)
+          .Ports.Select(p => ResourceFamilies.Of(p.Label))
+          .Where(ResourceFamilies.Canonical.Contains)
+          .ToHashSet(StringComparer.Ordinal);
+        canonFamilies[name] = fs;
+        return fs;
+      }
+
+      var backfillNames = inputs
+        .Combos.SelectMany(c => c.Cards.Select(card => card.Name))
+        .Distinct(StringComparer.Ordinal)
+        .Where(byName.ContainsKey)
+        .Where(n => !ParseReady(n))
+        .OrderBy(n => n, StringComparer.Ordinal)
+        .ToList();
+
+      var inferredCount = 0;
+      var declaredCount = 0;
+      foreach (var name in backfillNames)
+      {
+        var dto = byName[name];
+        var stars = coStars.TryGetValue(name, out var s)
+          ? s
+          : new HashSet<string>(StringComparer.Ordinal);
+        var parseReadyStars = stars.Where(x => byName.ContainsKey(x) && ParseReady(x)).ToList();
+
+        var votes = new Dictionary<string, int>(StringComparer.Ordinal);
+        foreach (var star in parseReadyStars)
+          foreach (var fam in CanonFamiliesOf(star))
+            votes[fam] = votes.TryGetValue(fam, out var v) ? v + 1 : 1;
+
+        if (parseReadyStars.Count > 0 && votes.Count > 0)
+        {
+          var modal = votes
+            .OrderByDescending(kv => kv.Value)
+            .ThenBy(kv => kv.Key, StringComparer.Ordinal)
+            .First();
+          ports.Add(new CardPortRow
+          {
+            Card = name,
+            Label = $"inferred:{modal.Key}",
+            Family = modal.Key,
+            Side = "", // inferred: side is unknown (no parsed emit/consume role)
+            Tier = "Inferred",
+            Confidence = Math.Round(modal.Value / (double)parseReadyStars.Count, 3),
+          });
+          inferredCount++;
+        }
+        else
+        {
+          ports.Add(new CardPortRow
+          {
+            Card = name,
+            Label = "declared",
+            Family = "", // no usable signal — catalogued only
+            Side = "",
+            Tier = "Declared",
+          });
+          declaredCount++;
+        }
+        metas.Add(new CardMetaRow
+        {
+          Card = name,
+          ColorIdentity = dto.ColorIdentity is { Count: > 0 } ci ? string.Concat(ci) : "",
+          Cmc = DeriveCmc(dto.ManaCost),
+          TypeLine = dto.TypeLine,
+          PortCount = 1,
         });
       }
 
       Console.Error.WriteLine(
         $"[CardPorts] {metas.Count} cards, {ports.Count} card-port rows over the parse-ready combo union"
+          + $" (+{inferredCount} inferred, +{declaredCount} declared backfill cards)"
       );
       return (metas, ports);
     };
+
+  /// <summary>Green/Amber tier for a distinct port label (upstream-atlas-data-plan §1.3): GREEN iff at
+  /// least one <see cref="PortNode"/> carrying the label fires unconditionally — not
+  /// <see cref="PortNode.Gated"/>, not <see cref="PortNode.TapGated"/>, and no
+  /// <see cref="PortNode.RequiresCounter"/>; else AMBER (a hard rate limit, a tap gate, a counter-gate,
+  /// or an intervening-if makes the mechanism conditional). Grouping by label first means the mechanism is
+  /// GREEN when it can fire unconditionally through <em>any</em> of the card's abilities that mint it.</summary>
+  private static string TierOf(IEnumerable<PortNode> sameLabel) =>
+    sameLabel.Any(p => !p.Gated && !p.TapGated && p.RequiresCounter is null) ? "Green" : "Amber";
 
   /// <summary>Mana value from a mana-cost string: <c>{3}{G}</c> → 4. Generic <c>{N}</c> adds N; a hybrid /
   /// phyrexian symbol (<c>{2/W}</c>, <c>{W/U}</c>, <c>{W/P}</c>) adds the max of its parts (numeric or 1);

@@ -416,6 +416,7 @@ public sealed class AtlasSeeder
                 Family = raw.Family ?? "",
                 Side = raw.Side ?? "",
                 Tier = raw.Tier,
+                Confidence = raw.Confidence,
                 OracleLineIndex = raw.OracleLineIndex ?? 0,
                 Spans = raw.Spans,
             });
@@ -757,6 +758,7 @@ public sealed class AtlasSeeder
         [JsonPropertyName("side")] public string? Side { get; set; }
         // §4 provenance / backfill fields — absent in the current dump, populated once those passes land.
         [JsonPropertyName("tier")] public string? Tier { get; set; }
+        [JsonPropertyName("confidence")] public double? Confidence { get; set; }
         [JsonPropertyName("oracleLineIndex")] public int? OracleLineIndex { get; set; }
         [JsonPropertyName("spans")] public int[][]? Spans { get; set; }
     }

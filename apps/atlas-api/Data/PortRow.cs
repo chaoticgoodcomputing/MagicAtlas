@@ -48,6 +48,11 @@ public class PortRow
     [Column("tier")]
     public string? Tier { get; set; }
 
+    /// <summary>Co-occurrence strength (0–1) for an <c>Inferred</c> port; null for parsed (Green/Amber)
+    /// and Declared rows.</summary>
+    [Column("confidence")]
+    public double? Confidence { get; set; }
+
     /// <summary>Index of the oracle-text line this port was minted from (§4 provenance).</summary>
     [Column("oracle_line_index")]
     public int OracleLineIndex { get; set; }

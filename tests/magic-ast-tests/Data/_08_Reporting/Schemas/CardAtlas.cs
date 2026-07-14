@@ -62,6 +62,20 @@ public partial record CardPortRow
   /// provenance); <c>null</c> when the port carries no source span.</summary>
   [SerializedLabel("spans")]
   public int[][]? Spans { get; init; }
+
+  /// <summary>Product fidelity tier (upstream-atlas-data-plan §1.3): <c>Green</c> = the port's mechanism
+  /// fires unconditionally; <c>Amber</c> = gated/conditional (a hard rate limit, a <c>{T}</c> tap gate,
+  /// a counter-gate, or an intervening-if); <c>Inferred</c> = statistically backfilled from the card's
+  /// combo co-stars (carries <see cref="Confidence"/>, no parsed span); <c>Declared</c> = catalogued
+  /// (appears in a combo) with no usable inference signal.</summary>
+  [SerializedLabel("tier")]
+  public required string Tier { get; init; }
+
+  /// <summary>Co-occurrence strength (0–1) of an <c>Inferred</c> port — the fraction of the card's
+  /// parse-ready combo co-stars that share the inferred family. <c>null</c> for parsed (Green/Amber) and
+  /// Declared rows.</summary>
+  [SerializedLabel("confidence")]
+  public double? Confidence { get; init; }
 }
 
 // ── D4 ComboInstances — per-combo reconstructed loops with named cards, tier, and result. ──────────

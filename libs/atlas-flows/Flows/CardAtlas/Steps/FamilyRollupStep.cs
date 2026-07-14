@@ -35,7 +35,10 @@ public static class FamilyRollupStep
       var combos = inputs.Combos.ToList();
 
       // ── D2 stations: canonical families, sized by distinct card mass (from D1). ──
+      // Realized ports only — the statistical-backfill tiers (Inferred/Declared) are additive display rows,
+      // not parsed mechanisms, so they never size the subway map (statistical-backfill-direction).
       var stations = ports
+        .Where(p => p.Tier is not ("Inferred" or "Declared"))
         .Where(p => ResourceFamilies.Canonical.Contains(p.Family))
         .GroupBy(p => p.Family, StringComparer.Ordinal)
         .Select(g => new ResourceStation
